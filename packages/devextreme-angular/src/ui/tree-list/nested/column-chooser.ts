@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-column-chooser',
+    selector: 'dxo-column-chooser-tree-list',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoColumnChooserComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColumnChooserTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -163,10 +163,10 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoColumnChooserComponent
+    DxoColumnChooserTreeListComponent
   ],
   exports: [
-    DxoColumnChooserComponent
+    DxoColumnChooserTreeListComponent
   ],
 })
-export class DxoColumnChooserModule { }
+export class DxoColumnChooserTreeListModule { }

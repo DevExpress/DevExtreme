@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-row',
+    selector: 'dxi-row-responsive-box',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiRowComponent extends CollectionNestedOption {
+export class DxiRowResponsiveBoxComponent extends CollectionNestedOption {
     @Input()
     get baseSize(): number | string {
         return this._getOption('baseSize');
@@ -81,10 +81,10 @@ export class DxiRowComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiRowComponent
+    DxiRowResponsiveBoxComponent
   ],
   exports: [
-    DxiRowComponent
+    DxiRowResponsiveBoxComponent
   ],
 })
-export class DxiRowModule { }
+export class DxiRowResponsiveBoxModule { }

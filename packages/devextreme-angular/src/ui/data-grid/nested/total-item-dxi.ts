@@ -23,12 +23,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-total-item',
+    selector: 'dxi-total-item-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiTotalItemComponent extends CollectionNestedOption {
+export class DxiTotalItemDataGridComponent extends CollectionNestedOption {
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
@@ -132,10 +132,10 @@ export class DxiTotalItemComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiTotalItemComponent
+    DxiTotalItemDataGridComponent
   ],
   exports: [
-    DxiTotalItemComponent
+    DxiTotalItemDataGridComponent
   ],
 })
-export class DxiTotalItemModule { }
+export class DxiTotalItemDataGridModule { }

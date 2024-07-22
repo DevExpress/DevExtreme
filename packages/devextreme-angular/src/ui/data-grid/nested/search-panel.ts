@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-search-panel',
+    selector: 'dxo-search-panel-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSearchPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSearchPanelDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get highlightCaseSensitive(): boolean {
         return this._getOption('highlightCaseSensitive');
@@ -124,10 +124,10 @@ export class DxoSearchPanelComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoSearchPanelComponent
+    DxoSearchPanelDataGridComponent
   ],
   exports: [
-    DxoSearchPanelComponent
+    DxoSearchPanelDataGridComponent
   ],
 })
-export class DxoSearchPanelModule { }
+export class DxoSearchPanelDataGridModule { }

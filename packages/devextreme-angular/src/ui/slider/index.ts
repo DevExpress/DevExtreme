@@ -43,9 +43,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoLabelModule } from 'devextreme-angular/ui/slider/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/slider/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/slider/nested';
+
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoLabelSliderModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoFormatSliderModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoTooltipSliderModule } from 'devextreme-angular/ui/slider/nested';
 
 
 
@@ -844,6 +850,9 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
+    DxoLabelSliderModule,
+    DxoFormatSliderModule,
+    DxoTooltipSliderModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -855,6 +864,9 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
+    DxoLabelSliderModule,
+    DxoFormatSliderModule,
+    DxoTooltipSliderModule,
     DxTemplateModule
   ]
 })

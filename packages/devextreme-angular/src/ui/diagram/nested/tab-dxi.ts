@@ -21,17 +21,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiCommandComponent } from './command-dxi';
-import { DxiGroupComponent } from './group-dxi';
+import { DxiCommandDiagramComponent } from './command-dxi';
+import { DxiGroupDiagramComponent } from './group-dxi';
 
 
 @Component({
-    selector: 'dxi-tab',
+    selector: 'dxi-tab-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiTabComponent extends CollectionNestedOption {
+export class DxiTabDiagramComponent extends CollectionNestedOption {
     @Input()
     get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');
@@ -62,16 +62,16 @@ export class DxiTabComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
+    @ContentChildren(forwardRef(() => DxiCommandDiagramComponent))
+    get commandsChildren(): QueryList<DxiCommandDiagramComponent> {
         return this._getOption('commands');
     }
     set commandsChildren(value) {
         this.setChildren('commands', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiGroupComponent))
-    get groupsChildren(): QueryList<DxiGroupComponent> {
+    @ContentChildren(forwardRef(() => DxiGroupDiagramComponent))
+    get groupsChildren(): QueryList<DxiGroupDiagramComponent> {
         return this._getOption('groups');
     }
     set groupsChildren(value) {
@@ -95,10 +95,10 @@ export class DxiTabComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiTabComponent
+    DxiTabDiagramComponent
   ],
   exports: [
-    DxiTabComponent
+    DxiTabDiagramComponent
   ],
 })
-export class DxiTabModule { }
+export class DxiTabDiagramModule { }

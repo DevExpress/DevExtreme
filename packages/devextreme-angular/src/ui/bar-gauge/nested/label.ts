@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label',
+    selector: 'dxo-label-bar-gauge',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLabelBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get connectorColor(): string | undefined {
         return this._getOption('connectorColor');
@@ -113,10 +113,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoLabelComponent
+    DxoLabelBarGaugeComponent
   ],
   exports: [
-    DxoLabelComponent
+    DxoLabelBarGaugeComponent
   ],
 })
-export class DxoLabelModule { }
+export class DxoLabelBarGaugeModule { }

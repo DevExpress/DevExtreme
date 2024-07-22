@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size',
+    selector: 'dxo-size-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSizeRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizeComponent extends NestedOption implements OnDestroy, OnInit 
 
 @NgModule({
   declarations: [
-    DxoSizeComponent
+    DxoSizeRangeSelectorComponent
   ],
   exports: [
-    DxoSizeComponent
+    DxoSizeRangeSelectorComponent
   ],
 })
-export class DxoSizeModule { }
+export class DxoSizeRangeSelectorModule { }

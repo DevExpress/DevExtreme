@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-crosshair',
+    selector: 'dxo-crosshair-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCrosshairComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCrosshairChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -121,10 +121,10 @@ export class DxoCrosshairComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoCrosshairComponent
+    DxoCrosshairChartComponent
   ],
   exports: [
-    DxoCrosshairComponent
+    DxoCrosshairChartComponent
   ],
 })
-export class DxoCrosshairModule { }
+export class DxoCrosshairChartModule { }

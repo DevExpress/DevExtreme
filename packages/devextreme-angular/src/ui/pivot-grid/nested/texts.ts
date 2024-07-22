@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-texts',
+    selector: 'dxo-texts-pivot-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTextsPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allFields(): string {
         return this._getOption('allFields');
@@ -239,10 +239,10 @@ export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoTextsComponent
+    DxoTextsPivotGridComponent
   ],
   exports: [
-    DxoTextsComponent
+    DxoTextsPivotGridComponent
   ],
 })
-export class DxoTextsModule { }
+export class DxoTextsPivotGridModule { }

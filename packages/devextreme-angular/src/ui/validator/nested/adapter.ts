@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-adapter',
+    selector: 'dxo-adapter-validator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAdapterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAdapterValidatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get applyValidationResults(): Function {
         return this._getOption('applyValidationResults');
@@ -103,10 +103,10 @@ export class DxoAdapterComponent extends NestedOption implements OnDestroy, OnIn
 
 @NgModule({
   declarations: [
-    DxoAdapterComponent
+    DxoAdapterValidatorComponent
   ],
   exports: [
-    DxoAdapterComponent
+    DxoAdapterValidatorComponent
   ],
 })
-export class DxoAdapterModule { }
+export class DxoAdapterValidatorModule { }

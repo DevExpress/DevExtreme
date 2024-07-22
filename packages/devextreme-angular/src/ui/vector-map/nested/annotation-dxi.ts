@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-annotation',
+    selector: 'dxi-annotation-vector-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiAnnotationComponent extends CollectionNestedOption {
+export class DxiAnnotationVectorMapComponent extends CollectionNestedOption {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -282,10 +282,10 @@ export class DxiAnnotationComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiAnnotationComponent
+    DxiAnnotationVectorMapComponent
   ],
   exports: [
-    DxiAnnotationComponent
+    DxiAnnotationVectorMapComponent
   ],
 })
-export class DxiAnnotationModule { }
+export class DxiAnnotationVectorMapModule { }

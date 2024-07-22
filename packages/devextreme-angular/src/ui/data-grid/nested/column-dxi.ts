@@ -29,17 +29,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiButtonComponent } from './button-dxi';
-import { DxiValidationRuleComponent } from './validation-rule-dxi';
+import { DxiButtonDataGridComponent } from './button-dxi';
+import { DxiValidationRuleDataGridComponent } from './validation-rule-dxi';
 
 
 @Component({
-    selector: 'dxi-column',
+    selector: 'dxi-column-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiColumnComponent extends CollectionNestedOption {
+export class DxiColumnDataGridComponent extends CollectionNestedOption {
     @Input()
     get alignment(): HorizontalAlignment | string | undefined {
         return this._getOption('alignment');
@@ -605,24 +605,24 @@ export class DxiColumnComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiButtonComponent))
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(forwardRef(() => DxiButtonDataGridComponent))
+    get buttonsChildren(): QueryList<DxiButtonDataGridComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
         this.setChildren('buttons', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiColumnComponent))
-    get columnsChildren(): QueryList<DxiColumnComponent> {
+    @ContentChildren(forwardRef(() => DxiColumnDataGridComponent))
+    get columnsChildren(): QueryList<DxiColumnDataGridComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
         this.setChildren('columns', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+    @ContentChildren(forwardRef(() => DxiValidationRuleDataGridComponent))
+    get validationRulesChildren(): QueryList<DxiValidationRuleDataGridComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
@@ -658,10 +658,10 @@ export class DxiColumnComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiColumnComponent
+    DxiColumnDataGridComponent
   ],
   exports: [
-    DxiColumnComponent
+    DxiColumnDataGridComponent
   ],
 })
-export class DxiColumnModule { }
+export class DxiColumnDataGridModule { }

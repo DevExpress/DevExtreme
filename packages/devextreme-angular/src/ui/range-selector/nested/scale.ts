@@ -25,16 +25,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiBreakComponent } from './break-dxi';
+import { DxiBreakRangeSelectorComponent } from './break-dxi';
 
 
 @Component({
-    selector: 'dxo-scale',
+    selector: 'dxo-scale-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoScaleRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregateByCategory(): boolean {
         return this._getOption('aggregateByCategory');
@@ -281,8 +281,8 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
 
-    @ContentChildren(forwardRef(() => DxiBreakComponent))
-    get breaksChildren(): QueryList<DxiBreakComponent> {
+    @ContentChildren(forwardRef(() => DxiBreakRangeSelectorComponent))
+    get breaksChildren(): QueryList<DxiBreakRangeSelectorComponent> {
         return this._getOption('breaks');
     }
     set breaksChildren(value) {
@@ -310,10 +310,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoScaleComponent
+    DxoScaleRangeSelectorComponent
   ],
   exports: [
-    DxoScaleComponent
+    DxoScaleRangeSelectorComponent
   ],
 })
-export class DxoScaleModule { }
+export class DxoScaleRangeSelectorModule { }

@@ -28,16 +28,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemComponent } from './item-dxi';
+import { DxiItemSplitterComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-splitter',
+    selector: 'dxo-splitter-splitter',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSplitterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSplitterSplitterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowKeyboardNavigation(): boolean {
         return this._getOption('allowKeyboardNavigation');
@@ -250,8 +250,8 @@ export class DxoSplitterComponent extends NestedOption implements OnDestroy, OnI
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(forwardRef(() => DxiItemSplitterComponent))
+    get itemsChildren(): QueryList<DxiItemSplitterComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -284,10 +284,10 @@ export class DxoSplitterComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoSplitterComponent
+    DxoSplitterSplitterComponent
   ],
   exports: [
-    DxoSplitterComponent
+    DxoSplitterSplitterComponent
   ],
 })
-export class DxoSplitterModule { }
+export class DxoSplitterSplitterModule { }

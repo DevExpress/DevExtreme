@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-aggregation',
+    selector: 'dxo-aggregation-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAggregationChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get calculate(): Function | undefined {
         return this._getOption('calculate');
@@ -80,10 +80,10 @@ export class DxoAggregationComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoAggregationComponent
+    DxoAggregationChartComponent
   ],
   exports: [
-    DxoAggregationComponent
+    DxoAggregationChartComponent
   ],
 })
-export class DxoAggregationModule { }
+export class DxoAggregationChartModule { }

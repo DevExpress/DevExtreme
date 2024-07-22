@@ -41,9 +41,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/tile-view/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/tile-view/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemTileViewModule } from 'devextreme-angular/ui/tile-view/nested';
+
+import { DxiItemTileViewComponent } from 'devextreme-angular/ui/tile-view/nested';
 
 
 
@@ -570,8 +574,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemTileViewComponent)
+    get itemsChildren(): QueryList<DxiItemTileViewComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -670,6 +674,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemTileViewModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -679,6 +684,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
   exports: [
     DxTileViewComponent,
     DxiItemModule,
+    DxiItemTileViewModule,
     DxTemplateModule
   ]
 })

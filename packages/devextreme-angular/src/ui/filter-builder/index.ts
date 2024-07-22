@@ -43,15 +43,24 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiCustomOperationModule } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxiFieldModule } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxoLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 
-import { DxiCustomOperationComponent } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxiFieldComponent } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
+import { DxiFieldModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoLookupModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiCustomOperationFilterBuilderModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxiFieldFilterBuilderModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFormatFilterBuilderModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoLookupFilterBuilderModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterOperationDescriptionsFilterBuilderModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoGroupOperationDescriptionsFilterBuilderModule } from 'devextreme-angular/ui/filter-builder/nested';
+
+import { DxiCustomOperationFilterBuilderComponent } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxiFieldFilterBuilderComponent } from 'devextreme-angular/ui/filter-builder/nested';
 
 
 
@@ -547,16 +556,16 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiCustomOperationComponent)
-    get customOperationsChildren(): QueryList<DxiCustomOperationComponent> {
+    @ContentChildren(DxiCustomOperationFilterBuilderComponent)
+    get customOperationsChildren(): QueryList<DxiCustomOperationFilterBuilderComponent> {
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
         this.setChildren('customOperations', value);
     }
 
-    @ContentChildren(DxiFieldComponent)
-    get fieldsChildren(): QueryList<DxiFieldComponent> {
+    @ContentChildren(DxiFieldFilterBuilderComponent)
+    get fieldsChildren(): QueryList<DxiFieldFilterBuilderComponent> {
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
@@ -680,6 +689,12 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoLookupModule,
     DxoFilterOperationDescriptionsModule,
     DxoGroupOperationDescriptionsModule,
+    DxiCustomOperationFilterBuilderModule,
+    DxiFieldFilterBuilderModule,
+    DxoFormatFilterBuilderModule,
+    DxoLookupFilterBuilderModule,
+    DxoFilterOperationDescriptionsFilterBuilderModule,
+    DxoGroupOperationDescriptionsFilterBuilderModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -694,6 +709,12 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoLookupModule,
     DxoFilterOperationDescriptionsModule,
     DxoGroupOperationDescriptionsModule,
+    DxiCustomOperationFilterBuilderModule,
+    DxiFieldFilterBuilderModule,
+    DxoFormatFilterBuilderModule,
+    DxoLookupFilterBuilderModule,
+    DxoFilterOperationDescriptionsFilterBuilderModule,
+    DxoGroupOperationDescriptionsFilterBuilderModule,
     DxTemplateModule
   ]
 })

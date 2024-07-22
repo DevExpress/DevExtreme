@@ -27,12 +27,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-file-uploader-options',
+    selector: 'dxo-file-uploader-options-html-editor',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileUploaderOptionsHtmlEditorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get abortUpload(): Function {
         return this._getOption('abortUpload');
@@ -583,10 +583,10 @@ export class DxoFileUploaderOptionsComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoFileUploaderOptionsComponent
+    DxoFileUploaderOptionsHtmlEditorComponent
   ],
   exports: [
-    DxoFileUploaderOptionsComponent
+    DxoFileUploaderOptionsHtmlEditorComponent
   ],
 })
-export class DxoFileUploaderOptionsModule { }
+export class DxoFileUploaderOptionsHtmlEditorModule { }

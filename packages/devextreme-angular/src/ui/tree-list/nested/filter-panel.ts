@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-filter-panel',
+    selector: 'dxo-filter-panel-tree-list',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterPanelTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customizeText(): Function {
         return this._getOption('customizeText');
@@ -100,10 +100,10 @@ export class DxoFilterPanelComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoFilterPanelComponent
+    DxoFilterPanelTreeListComponent
   ],
   exports: [
-    DxoFilterPanelComponent
+    DxoFilterPanelTreeListComponent
   ],
 })
-export class DxoFilterPanelModule { }
+export class DxoFilterPanelTreeListModule { }

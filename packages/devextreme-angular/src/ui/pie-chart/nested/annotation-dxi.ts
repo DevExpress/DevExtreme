@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-annotation',
+    selector: 'dxi-annotation-pie-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiAnnotationComponent extends CollectionNestedOption {
+export class DxiAnnotationPieChartComponent extends CollectionNestedOption {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -299,10 +299,10 @@ export class DxiAnnotationComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiAnnotationComponent
+    DxiAnnotationPieChartComponent
   ],
   exports: [
-    DxiAnnotationComponent
+    DxiAnnotationPieChartComponent
   ],
 })
-export class DxiAnnotationModule { }
+export class DxiAnnotationPieChartModule { }

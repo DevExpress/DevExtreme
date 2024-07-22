@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-position',
+    selector: 'dxo-position-select-box',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPositionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPositionSelectBoxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -114,10 +114,10 @@ export class DxoPositionComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoPositionComponent
+    DxoPositionSelectBoxComponent
   ],
   exports: [
-    DxoPositionComponent
+    DxoPositionSelectBoxComponent
   ],
 })
-export class DxoPositionModule { }
+export class DxoPositionSelectBoxModule { }

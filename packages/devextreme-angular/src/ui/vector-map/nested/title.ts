@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-title',
+    selector: 'dxo-title-vector-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTitleVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -129,10 +129,10 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoTitleComponent
+    DxoTitleVectorMapComponent
   ],
   exports: [
-    DxoTitleComponent
+    DxoTitleVectorMapComponent
   ],
 })
-export class DxoTitleModule { }
+export class DxoTitleVectorMapModule { }

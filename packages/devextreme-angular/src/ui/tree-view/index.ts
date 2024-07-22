@@ -42,12 +42,19 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/tree-view/nested';
-import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
-import { DxiButtonModule } from 'devextreme-angular/ui/tree-view/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoSearchEditorOptionsTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiButtonTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoOptionsTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
+
+import { DxiItemTreeViewComponent } from 'devextreme-angular/ui/tree-view/nested';
 
 
 
@@ -1134,8 +1141,8 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemTreeViewComponent)
+    get itemsChildren(): QueryList<DxiItemTreeViewComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -1270,6 +1277,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
+    DxiItemTreeViewModule,
+    DxoSearchEditorOptionsTreeViewModule,
+    DxiButtonTreeViewModule,
+    DxoOptionsTreeViewModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1282,6 +1293,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
+    DxiItemTreeViewModule,
+    DxoSearchEditorOptionsTreeViewModule,
+    DxiButtonTreeViewModule,
+    DxoOptionsTreeViewModule,
     DxTemplateModule
   ]
 })

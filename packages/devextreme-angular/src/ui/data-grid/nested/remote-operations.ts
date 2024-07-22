@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-remote-operations',
+    selector: 'dxo-remote-operations-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoRemoteOperationsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRemoteOperationsDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get filtering(): boolean {
         return this._getOption('filtering');
@@ -103,10 +103,10 @@ export class DxoRemoteOperationsComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoRemoteOperationsComponent
+    DxoRemoteOperationsDataGridComponent
   ],
   exports: [
-    DxoRemoteOperationsComponent
+    DxoRemoteOperationsDataGridComponent
   ],
 })
-export class DxoRemoteOperationsModule { }
+export class DxoRemoteOperationsDataGridModule { }

@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label',
+    selector: 'dxo-label-funnel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLabelFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -162,10 +162,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoLabelComponent
+    DxoLabelFunnelComponent
   ],
   exports: [
-    DxoLabelComponent
+    DxoLabelFunnelComponent
   ],
 })
-export class DxoLabelModule { }
+export class DxoLabelFunnelModule { }

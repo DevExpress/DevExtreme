@@ -25,12 +25,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-field',
+    selector: 'dxi-field-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiFieldComponent extends CollectionNestedOption {
+export class DxiFieldDataGridComponent extends CollectionNestedOption {
     @Input()
     get calculateFilterExpression(): Function {
         return this._getOption('calculateFilterExpression');
@@ -158,10 +158,10 @@ export class DxiFieldComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiFieldComponent
+    DxiFieldDataGridComponent
   ],
   exports: [
-    DxiFieldComponent
+    DxiFieldDataGridComponent
   ],
 })
-export class DxiFieldModule { }
+export class DxiFieldDataGridModule { }

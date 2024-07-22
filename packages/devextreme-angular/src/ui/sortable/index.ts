@@ -33,7 +33,11 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoCursorOffsetModule } from 'devextreme-angular/ui/sortable/nested';
+
+import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoCursorOffsetSortableModule } from 'devextreme-angular/ui/sortable/nested';
 
 
 
@@ -618,6 +622,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 @NgModule({
   imports: [
     DxoCursorOffsetModule,
+    DxoCursorOffsetSortableModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -627,6 +632,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
   exports: [
     DxSortableComponent,
     DxoCursorOffsetModule,
+    DxoCursorOffsetSortableModule,
     DxTemplateModule
   ]
 })

@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-mention',
+    selector: 'dxi-mention-html-editor',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiMentionComponent extends CollectionNestedOption {
+export class DxiMentionHtmlEditorComponent extends CollectionNestedOption {
     @Input()
     get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
         return this._getOption('dataSource');
@@ -123,10 +123,10 @@ export class DxiMentionComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiMentionComponent
+    DxiMentionHtmlEditorComponent
   ],
   exports: [
-    DxiMentionComponent
+    DxiMentionHtmlEditorComponent
   ],
 })
-export class DxiMentionModule { }
+export class DxiMentionHtmlEditorModule { }

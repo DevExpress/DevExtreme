@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-export',
+    selector: 'dxo-export-pivot-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoExportComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoExportPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -63,10 +63,10 @@ export class DxoExportComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoExportComponent
+    DxoExportPivotGridComponent
   ],
   exports: [
-    DxoExportComponent
+    DxoExportPivotGridComponent
   ],
 })
-export class DxoExportModule { }
+export class DxoExportPivotGridModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-context-toolbox',
+    selector: 'dxo-context-toolbox-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoContextToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextToolboxDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get category(): ShapeCategory | string {
         return this._getOption('category');
@@ -104,10 +104,10 @@ export class DxoContextToolboxComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoContextToolboxComponent
+    DxoContextToolboxDiagramComponent
   ],
   exports: [
-    DxoContextToolboxComponent
+    DxoContextToolboxDiagramComponent
   ],
 })
-export class DxoContextToolboxModule { }
+export class DxoContextToolboxDiagramModule { }

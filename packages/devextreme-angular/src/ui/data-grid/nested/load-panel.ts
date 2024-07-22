@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-load-panel',
+    selector: 'dxo-load-panel-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLoadPanelDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): Mode | boolean {
         return this._getOption('enabled');
@@ -128,10 +128,10 @@ export class DxoLoadPanelComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoLoadPanelComponent
+    DxoLoadPanelDataGridComponent
   ],
   exports: [
-    DxoLoadPanelComponent
+    DxoLoadPanelDataGridComponent
   ],
 })
-export class DxoLoadPanelModule { }
+export class DxoLoadPanelDataGridModule { }

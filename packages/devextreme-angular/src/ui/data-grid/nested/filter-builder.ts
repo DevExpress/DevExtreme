@@ -25,17 +25,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCustomOperationComponent } from './custom-operation-dxi';
-import { DxiFieldComponent } from './field-dxi';
+import { DxiCustomOperationDataGridComponent } from './custom-operation-dxi';
+import { DxiFieldDataGridComponent } from './field-dxi';
 
 
 @Component({
-    selector: 'dxo-filter-builder',
+    selector: 'dxo-filter-builder-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterBuilderDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -264,16 +264,16 @@ export class DxoFilterBuilderComponent extends NestedOption implements OnDestroy
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCustomOperationComponent))
-    get customOperationsChildren(): QueryList<DxiCustomOperationComponent> {
+    @ContentChildren(forwardRef(() => DxiCustomOperationDataGridComponent))
+    get customOperationsChildren(): QueryList<DxiCustomOperationDataGridComponent> {
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
         this.setChildren('customOperations', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiFieldComponent))
-    get fieldsChildren(): QueryList<DxiFieldComponent> {
+    @ContentChildren(forwardRef(() => DxiFieldDataGridComponent))
+    get fieldsChildren(): QueryList<DxiFieldDataGridComponent> {
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
@@ -306,10 +306,10 @@ export class DxoFilterBuilderComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoFilterBuilderComponent
+    DxoFilterBuilderDataGridComponent
   ],
   exports: [
-    DxoFilterBuilderComponent
+    DxoFilterBuilderDataGridComponent
   ],
 })
-export class DxoFilterBuilderModule { }
+export class DxoFilterBuilderDataGridModule { }

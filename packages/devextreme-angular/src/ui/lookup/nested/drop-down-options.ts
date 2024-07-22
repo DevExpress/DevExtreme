@@ -31,16 +31,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemComponent } from './toolbar-item-dxi';
+import { DxiToolbarItemLookupComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-drop-down-options',
+    selector: 'dxo-drop-down-options-lookup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownOptionsLookupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
@@ -394,8 +394,8 @@ export class DxoDropDownOptionsComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemComponent> {
+    @ContentChildren(forwardRef(() => DxiToolbarItemLookupComponent))
+    get toolbarItemsChildren(): QueryList<DxiToolbarItemLookupComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -431,10 +431,10 @@ export class DxoDropDownOptionsComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoDropDownOptionsComponent
+    DxoDropDownOptionsLookupComponent
   ],
   exports: [
-    DxoDropDownOptionsComponent
+    DxoDropDownOptionsLookupComponent
   ],
 })
-export class DxoDropDownOptionsModule { }
+export class DxoDropDownOptionsLookupModule { }

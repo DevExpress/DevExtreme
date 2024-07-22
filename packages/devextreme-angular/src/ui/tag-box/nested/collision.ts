@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision',
+    selector: 'dxo-collision-tag-box',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCollisionTagBoxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoCollisionComponent
+    DxoCollisionTagBoxComponent
   ],
   exports: [
-    DxoCollisionComponent
+    DxoCollisionTagBoxComponent
   ],
 })
-export class DxoCollisionModule { }
+export class DxoCollisionTagBoxModule { }

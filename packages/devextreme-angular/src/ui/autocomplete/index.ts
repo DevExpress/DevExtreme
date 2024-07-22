@@ -49,25 +49,44 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiButtonModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoToModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/autocomplete/nested';
 
-import { DxiButtonComponent } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiButtonAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoOptionsAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoDropDownOptionsAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAnimationAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoHideAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoFromAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoPositionAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAtAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoBoundaryOffsetAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoCollisionAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoMyAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoOffsetAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoToAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoShowAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxiToolbarItemAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxiItemAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+
+import { DxiButtonAutocompleteComponent } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxiItemAutocompleteComponent } from 'devextreme-angular/ui/autocomplete/nested';
 
 
 
@@ -1339,16 +1358,16 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(DxiButtonAutocompleteComponent)
+    get buttonsChildren(): QueryList<DxiButtonAutocompleteComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
         this.setChildren('buttons', value);
     }
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemAutocompleteComponent)
+    get itemsChildren(): QueryList<DxiItemAutocompleteComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -1532,6 +1551,22 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxoShowModule,
     DxiToolbarItemModule,
     DxiItemModule,
+    DxiButtonAutocompleteModule,
+    DxoOptionsAutocompleteModule,
+    DxoDropDownOptionsAutocompleteModule,
+    DxoAnimationAutocompleteModule,
+    DxoHideAutocompleteModule,
+    DxoFromAutocompleteModule,
+    DxoPositionAutocompleteModule,
+    DxoAtAutocompleteModule,
+    DxoBoundaryOffsetAutocompleteModule,
+    DxoCollisionAutocompleteModule,
+    DxoMyAutocompleteModule,
+    DxoOffsetAutocompleteModule,
+    DxoToAutocompleteModule,
+    DxoShowAutocompleteModule,
+    DxiToolbarItemAutocompleteModule,
+    DxiItemAutocompleteModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1556,6 +1591,22 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxoShowModule,
     DxiToolbarItemModule,
     DxiItemModule,
+    DxiButtonAutocompleteModule,
+    DxoOptionsAutocompleteModule,
+    DxoDropDownOptionsAutocompleteModule,
+    DxoAnimationAutocompleteModule,
+    DxoHideAutocompleteModule,
+    DxoFromAutocompleteModule,
+    DxoPositionAutocompleteModule,
+    DxoAtAutocompleteModule,
+    DxoBoundaryOffsetAutocompleteModule,
+    DxoCollisionAutocompleteModule,
+    DxoMyAutocompleteModule,
+    DxoOffsetAutocompleteModule,
+    DxoToAutocompleteModule,
+    DxoShowAutocompleteModule,
+    DxiToolbarItemAutocompleteModule,
+    DxiItemAutocompleteModule,
     DxTemplateModule
   ]
 })

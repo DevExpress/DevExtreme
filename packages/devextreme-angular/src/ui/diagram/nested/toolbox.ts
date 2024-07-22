@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGroupComponent } from './group-dxi';
+import { DxiGroupDiagramComponent } from './group-dxi';
 
 
 @Component({
-    selector: 'dxo-toolbox',
+    selector: 'dxo-toolbox-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoToolboxDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get groups(): Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }> {
         return this._getOption('groups');
@@ -79,8 +79,8 @@ export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnIn
     }
 
 
-    @ContentChildren(forwardRef(() => DxiGroupComponent))
-    get groupsChildren(): QueryList<DxiGroupComponent> {
+    @ContentChildren(forwardRef(() => DxiGroupDiagramComponent))
+    get groupsChildren(): QueryList<DxiGroupDiagramComponent> {
         return this._getOption('groups');
     }
     set groupsChildren(value) {
@@ -108,10 +108,10 @@ export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnIn
 
 @NgModule({
   declarations: [
-    DxoToolboxComponent
+    DxoToolboxDiagramComponent
   ],
   exports: [
-    DxoToolboxComponent
+    DxoToolboxDiagramComponent
   ],
 })
-export class DxoToolboxModule { }
+export class DxoToolboxDiagramModule { }

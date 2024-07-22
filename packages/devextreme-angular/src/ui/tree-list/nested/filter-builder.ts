@@ -25,17 +25,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCustomOperationComponent } from './custom-operation-dxi';
-import { DxiFieldComponent } from './field-dxi';
+import { DxiCustomOperationTreeListComponent } from './custom-operation-dxi';
+import { DxiFieldTreeListComponent } from './field-dxi';
 
 
 @Component({
-    selector: 'dxo-filter-builder',
+    selector: 'dxo-filter-builder-tree-list',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterBuilderTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -264,16 +264,16 @@ export class DxoFilterBuilderComponent extends NestedOption implements OnDestroy
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCustomOperationComponent))
-    get customOperationsChildren(): QueryList<DxiCustomOperationComponent> {
+    @ContentChildren(forwardRef(() => DxiCustomOperationTreeListComponent))
+    get customOperationsChildren(): QueryList<DxiCustomOperationTreeListComponent> {
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
         this.setChildren('customOperations', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiFieldComponent))
-    get fieldsChildren(): QueryList<DxiFieldComponent> {
+    @ContentChildren(forwardRef(() => DxiFieldTreeListComponent))
+    get fieldsChildren(): QueryList<DxiFieldTreeListComponent> {
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
@@ -306,10 +306,10 @@ export class DxoFilterBuilderComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoFilterBuilderComponent
+    DxoFilterBuilderTreeListComponent
   ],
   exports: [
-    DxoFilterBuilderComponent
+    DxoFilterBuilderTreeListComponent
   ],
 })
-export class DxoFilterBuilderModule { }
+export class DxoFilterBuilderTreeListModule { }

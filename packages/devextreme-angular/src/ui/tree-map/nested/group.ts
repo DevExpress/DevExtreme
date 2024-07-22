@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-group',
+    selector: 'dxo-group-tree-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGroupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGroupTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string, width?: number } {
         return this._getOption('border');
@@ -120,10 +120,10 @@ export class DxoGroupComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoGroupComponent
+    DxoGroupTreeMapComponent
   ],
   exports: [
-    DxoGroupComponent
+    DxoGroupTreeMapComponent
   ],
 })
-export class DxoGroupModule { }
+export class DxoGroupTreeMapModule { }

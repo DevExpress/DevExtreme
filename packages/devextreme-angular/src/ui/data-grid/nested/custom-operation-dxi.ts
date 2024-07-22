@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-custom-operation',
+    selector: 'dxi-custom-operation-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiCustomOperationComponent extends CollectionNestedOption {
+export class DxiCustomOperationDataGridComponent extends CollectionNestedOption {
     @Input()
     get calculateFilterExpression(): Function {
         return this._getOption('calculateFilterExpression');
@@ -114,10 +114,10 @@ export class DxiCustomOperationComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiCustomOperationComponent
+    DxiCustomOperationDataGridComponent
   ],
   exports: [
-    DxiCustomOperationComponent
+    DxiCustomOperationDataGridComponent
   ],
 })
-export class DxiCustomOperationModule { }
+export class DxiCustomOperationDataGridModule { }

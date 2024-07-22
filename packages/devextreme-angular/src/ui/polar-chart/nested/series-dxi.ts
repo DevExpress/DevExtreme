@@ -23,12 +23,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-series',
+    selector: 'dxi-series-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiSeriesComponent extends CollectionNestedOption {
+export class DxiSeriesPolarChartComponent extends CollectionNestedOption {
     @Input()
     get argumentField(): string {
         return this._getOption('argumentField');
@@ -268,10 +268,10 @@ export class DxiSeriesComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiSeriesComponent
+    DxiSeriesPolarChartComponent
   ],
   exports: [
-    DxiSeriesComponent
+    DxiSeriesPolarChartComponent
   ],
 })
-export class DxiSeriesModule { }
+export class DxiSeriesPolarChartModule { }

@@ -24,16 +24,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiValidationRuleComponent } from './validation-rule-dxi';
+import { DxiValidationRuleDataGridComponent } from './validation-rule-dxi';
 
 
 @Component({
-    selector: 'dxo-form-item',
+    selector: 'dxo-form-item-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormItemComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormItemDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -152,8 +152,8 @@ export class DxoFormItemComponent extends NestedOption implements OnDestroy, OnI
     }
 
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+    @ContentChildren(forwardRef(() => DxiValidationRuleDataGridComponent))
+    get validationRulesChildren(): QueryList<DxiValidationRuleDataGridComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
@@ -181,10 +181,10 @@ export class DxoFormItemComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoFormItemComponent
+    DxoFormItemDataGridComponent
   ],
   exports: [
-    DxoFormItemComponent
+    DxoFormItemDataGridComponent
   ],
 })
-export class DxoFormItemModule { }
+export class DxoFormItemDataGridModule { }

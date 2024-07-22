@@ -24,17 +24,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiValidationRuleComponent } from './validation-rule-dxi';
-import { DxiTabComponent } from './tab-dxi';
+import { DxiValidationRuleFormComponent } from './validation-rule-dxi';
+import { DxiTabFormComponent } from './tab-dxi';
 
 
 @Component({
-    selector: 'dxi-item',
+    selector: 'dxi-item-form',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemComponent extends CollectionNestedOption {
+export class DxiItemFormComponent extends CollectionNestedOption {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -297,24 +297,24 @@ export class DxiItemComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+    @ContentChildren(forwardRef(() => DxiValidationRuleFormComponent))
+    get validationRulesChildren(): QueryList<DxiValidationRuleFormComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
         this.setChildren('validationRules', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(forwardRef(() => DxiItemFormComponent))
+    get itemsChildren(): QueryList<DxiItemFormComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
         this.setChildren('items', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiTabComponent))
-    get tabsChildren(): QueryList<DxiTabComponent> {
+    @ContentChildren(forwardRef(() => DxiTabFormComponent))
+    get tabsChildren(): QueryList<DxiTabFormComponent> {
         return this._getOption('tabs');
     }
     set tabsChildren(value) {
@@ -338,10 +338,10 @@ export class DxiItemComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemComponent
+    DxiItemFormComponent
   ],
   exports: [
-    DxiItemComponent
+    DxiItemFormComponent
   ],
 })
-export class DxiItemModule { }
+export class DxiItemFormModule { }

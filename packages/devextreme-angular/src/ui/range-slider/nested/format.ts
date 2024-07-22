@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format',
+    selector: 'dxo-format-range-slider',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormatRangeSliderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoFormatComponent
+    DxoFormatRangeSliderComponent
   ],
   exports: [
-    DxoFormatComponent
+    DxoFormatRangeSliderComponent
   ],
 })
-export class DxoFormatModule { }
+export class DxoFormatRangeSliderModule { }

@@ -32,12 +32,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label',
+    selector: 'dxo-label-tree-list',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+export class DxoLabelTreeListComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
     @Input()
     get alignment(): HorizontalAlignment {
@@ -126,10 +126,10 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
 
 @NgModule({
   declarations: [
-    DxoLabelComponent
+    DxoLabelTreeListComponent
   ],
   exports: [
-    DxoLabelComponent
+    DxoLabelTreeListComponent
   ],
 })
-export class DxoLabelModule { }
+export class DxoLabelTreeListModule { }

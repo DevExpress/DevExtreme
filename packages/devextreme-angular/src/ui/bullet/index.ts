@@ -34,13 +34,23 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoMarginModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/bullet/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/bullet/nested';
+
+import { DxoMarginModule } from 'devextreme-angular/ui/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoMarginBulletModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoSizeBulletModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoTooltipBulletModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBorderBulletModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoFontBulletModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoFormatBulletModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoShadowBulletModule } from 'devextreme-angular/ui/bullet/nested';
 
 
 
@@ -548,6 +558,13 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
+    DxoMarginBulletModule,
+    DxoSizeBulletModule,
+    DxoTooltipBulletModule,
+    DxoBorderBulletModule,
+    DxoFontBulletModule,
+    DxoFormatBulletModule,
+    DxoShadowBulletModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -563,6 +580,13 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
+    DxoMarginBulletModule,
+    DxoSizeBulletModule,
+    DxoTooltipBulletModule,
+    DxoBorderBulletModule,
+    DxoFontBulletModule,
+    DxoFormatBulletModule,
+    DxoShadowBulletModule,
     DxTemplateModule
   ]
 })

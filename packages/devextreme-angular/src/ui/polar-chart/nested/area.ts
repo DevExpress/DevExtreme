@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-area',
+    selector: 'dxo-area-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAreaComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAreaPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get area(): any {
         return this._getOption('area');
@@ -298,10 +298,10 @@ export class DxoAreaComponent extends NestedOption implements OnDestroy, OnInit 
 
 @NgModule({
   declarations: [
-    DxoAreaComponent
+    DxoAreaPolarChartComponent
   ],
   exports: [
-    DxoAreaComponent
+    DxoAreaPolarChartComponent
   ],
 })
-export class DxoAreaModule { }
+export class DxoAreaPolarChartModule { }

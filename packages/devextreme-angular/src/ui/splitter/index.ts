@@ -41,10 +41,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/splitter/nested';
-import { DxoSplitterModule } from 'devextreme-angular/ui/splitter/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/splitter/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemSplitterModule } from 'devextreme-angular/ui/splitter/nested';
+import { DxoSplitterSplitterModule } from 'devextreme-angular/ui/splitter/nested';
+
+import { DxiItemSplitterComponent } from 'devextreme-angular/ui/splitter/nested';
 
 
 
@@ -423,8 +428,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemSplitterComponent)
+    get itemsChildren(): QueryList<DxiItemSplitterComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -519,6 +524,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
   imports: [
     DxiItemModule,
     DxoSplitterModule,
+    DxiItemSplitterModule,
+    DxoSplitterSplitterModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -529,6 +536,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     DxSplitterComponent,
     DxiItemModule,
     DxoSplitterModule,
+    DxiItemSplitterModule,
+    DxoSplitterSplitterModule,
     DxTemplateModule
   ]
 })

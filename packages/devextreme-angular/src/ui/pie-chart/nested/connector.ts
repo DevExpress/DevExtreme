@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-connector',
+    selector: 'dxo-connector-pie-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoConnectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoConnectorPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -79,10 +79,10 @@ export class DxoConnectorComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoConnectorComponent
+    DxoConnectorPieChartComponent
   ],
   exports: [
-    DxoConnectorComponent
+    DxoConnectorPieChartComponent
   ],
 })
-export class DxoConnectorModule { }
+export class DxoConnectorPieChartModule { }

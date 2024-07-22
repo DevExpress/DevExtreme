@@ -41,25 +41,47 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoItemModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoHoverStyleModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoHatchingModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoSelectionStyleModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoConnectorModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoLegendModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/funnel/nested';
+
+import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/nested';
+import { DxoItemModule } from 'devextreme-angular/ui/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/nested';
+import { DxoHoverStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoHatchingModule } from 'devextreme-angular/ui/nested';
+import { DxoSelectionStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxoConnectorModule } from 'devextreme-angular/ui/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoLegendModule } from 'devextreme-angular/ui/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAdaptiveLayoutFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoExportFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoItemFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoBorderFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoHoverStyleFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoHatchingFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoSelectionStyleFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoLabelFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoConnectorFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFontFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFormatFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoLegendFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoMarginFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoTitleFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoSubtitleFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoLoadingIndicatorFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoSizeFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoTooltipFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoShadowFunnelModule } from 'devextreme-angular/ui/funnel/nested';
 
 
 
@@ -902,6 +924,25 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     DxoSizeModule,
     DxoTooltipModule,
     DxoShadowModule,
+    DxoAdaptiveLayoutFunnelModule,
+    DxoExportFunnelModule,
+    DxoItemFunnelModule,
+    DxoBorderFunnelModule,
+    DxoHoverStyleFunnelModule,
+    DxoHatchingFunnelModule,
+    DxoSelectionStyleFunnelModule,
+    DxoLabelFunnelModule,
+    DxoConnectorFunnelModule,
+    DxoFontFunnelModule,
+    DxoFormatFunnelModule,
+    DxoLegendFunnelModule,
+    DxoMarginFunnelModule,
+    DxoTitleFunnelModule,
+    DxoSubtitleFunnelModule,
+    DxoLoadingIndicatorFunnelModule,
+    DxoSizeFunnelModule,
+    DxoTooltipFunnelModule,
+    DxoShadowFunnelModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -929,6 +970,25 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     DxoSizeModule,
     DxoTooltipModule,
     DxoShadowModule,
+    DxoAdaptiveLayoutFunnelModule,
+    DxoExportFunnelModule,
+    DxoItemFunnelModule,
+    DxoBorderFunnelModule,
+    DxoHoverStyleFunnelModule,
+    DxoHatchingFunnelModule,
+    DxoSelectionStyleFunnelModule,
+    DxoLabelFunnelModule,
+    DxoConnectorFunnelModule,
+    DxoFontFunnelModule,
+    DxoFormatFunnelModule,
+    DxoLegendFunnelModule,
+    DxoMarginFunnelModule,
+    DxoTitleFunnelModule,
+    DxoSubtitleFunnelModule,
+    DxoLoadingIndicatorFunnelModule,
+    DxoSizeFunnelModule,
+    DxoTooltipFunnelModule,
+    DxoShadowFunnelModule,
     DxTemplateModule
   ]
 })

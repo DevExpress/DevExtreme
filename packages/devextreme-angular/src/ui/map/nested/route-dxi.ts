@@ -21,16 +21,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiLocationComponent } from './location-dxi';
+import { DxiLocationMapComponent } from './location-dxi';
 
 
 @Component({
-    selector: 'dxi-route',
+    selector: 'dxi-route-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiRouteComponent extends CollectionNestedOption {
+export class DxiRouteMapComponent extends CollectionNestedOption {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -77,8 +77,8 @@ export class DxiRouteComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiLocationComponent))
-    get locationsChildren(): QueryList<DxiLocationComponent> {
+    @ContentChildren(forwardRef(() => DxiLocationMapComponent))
+    get locationsChildren(): QueryList<DxiLocationMapComponent> {
         return this._getOption('locations');
     }
     set locationsChildren(value) {
@@ -102,10 +102,10 @@ export class DxiRouteComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiRouteComponent
+    DxiRouteMapComponent
   ],
   exports: [
-    DxiRouteComponent
+    DxiRouteMapComponent
   ],
 })
-export class DxiRouteModule { }
+export class DxiRouteMapModule { }

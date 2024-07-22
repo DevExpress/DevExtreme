@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-selection-style',
+    selector: 'dxo-selection-style-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSelectionStyleRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number } {
         return this._getOption('border');
@@ -112,10 +112,10 @@ export class DxoSelectionStyleComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoSelectionStyleComponent
+    DxoSelectionStyleRangeSelectorComponent
   ],
   exports: [
-    DxoSelectionStyleComponent
+    DxoSelectionStyleRangeSelectorComponent
   ],
 })
-export class DxoSelectionStyleModule { }
+export class DxoSelectionStyleRangeSelectorModule { }

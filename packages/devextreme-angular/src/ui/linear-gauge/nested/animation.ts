@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation',
+    selector: 'dxo-animation-linear-gauge',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAnimationLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get duration(): number {
         return this._getOption('duration');
@@ -80,10 +80,10 @@ export class DxoAnimationComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoAnimationComponent
+    DxoAnimationLinearGaugeComponent
   ],
   exports: [
-    DxoAnimationComponent
+    DxoAnimationLinearGaugeComponent
   ],
 })
-export class DxoAnimationModule { }
+export class DxoAnimationLinearGaugeModule { }

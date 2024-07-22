@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-adaptive-layout',
+    selector: 'dxo-adaptive-layout-pie-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAdaptiveLayoutPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -79,10 +79,10 @@ export class DxoAdaptiveLayoutComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoAdaptiveLayoutComponent
+    DxoAdaptiveLayoutPieChartComponent
   ],
   exports: [
-    DxoAdaptiveLayoutComponent
+    DxoAdaptiveLayoutPieChartComponent
   ],
 })
-export class DxoAdaptiveLayoutModule { }
+export class DxoAdaptiveLayoutPieChartModule { }

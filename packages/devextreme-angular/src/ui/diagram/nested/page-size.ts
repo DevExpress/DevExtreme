@@ -24,16 +24,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemComponent } from './item-dxi';
+import { DxiItemDiagramComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-page-size',
+    selector: 'dxo-page-size-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPageSizeDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -77,8 +77,8 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(forwardRef(() => DxiItemDiagramComponent))
+    get itemsChildren(): QueryList<DxiItemDiagramComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -112,10 +112,10 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoPageSizeComponent
+    DxoPageSizeDiagramComponent
   ],
   exports: [
-    DxoPageSizeComponent
+    DxoPageSizeDiagramComponent
   ],
 })
-export class DxoPageSizeModule { }
+export class DxoPageSizeDiagramModule { }

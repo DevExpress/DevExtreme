@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-constant-line-style',
+    selector: 'dxo-constant-line-style-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoConstantLineStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoConstantLineStylePolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -88,10 +88,10 @@ export class DxoConstantLineStyleComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoConstantLineStyleComponent
+    DxoConstantLineStylePolarChartComponent
   ],
   exports: [
-    DxoConstantLineStyleComponent
+    DxoConstantLineStylePolarChartComponent
   ],
 })
-export class DxoConstantLineStyleModule { }
+export class DxoConstantLineStylePolarChartModule { }

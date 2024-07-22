@@ -33,15 +33,27 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/defer-rendering/nested';
-import { DxoToModule } from 'devextreme-angular/ui/defer-rendering/nested';
+
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAnimationDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoFromDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoPositionDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoAtDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoBoundaryOffsetDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoCollisionDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoMyDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoOffsetDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoToDeferRenderingModule } from 'devextreme-angular/ui/defer-rendering/nested';
 
 
 
@@ -493,6 +505,15 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoMyModule,
     DxoOffsetModule,
     DxoToModule,
+    DxoAnimationDeferRenderingModule,
+    DxoFromDeferRenderingModule,
+    DxoPositionDeferRenderingModule,
+    DxoAtDeferRenderingModule,
+    DxoBoundaryOffsetDeferRenderingModule,
+    DxoCollisionDeferRenderingModule,
+    DxoMyDeferRenderingModule,
+    DxoOffsetDeferRenderingModule,
+    DxoToDeferRenderingModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -510,6 +531,15 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoMyModule,
     DxoOffsetModule,
     DxoToModule,
+    DxoAnimationDeferRenderingModule,
+    DxoFromDeferRenderingModule,
+    DxoPositionDeferRenderingModule,
+    DxoAtDeferRenderingModule,
+    DxoBoundaryOffsetDeferRenderingModule,
+    DxoCollisionDeferRenderingModule,
+    DxoMyDeferRenderingModule,
+    DxoOffsetDeferRenderingModule,
+    DxoToDeferRenderingModule,
     DxTemplateModule
   ]
 })

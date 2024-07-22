@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-subtitle',
+    selector: 'dxo-subtitle-circular-gauge',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSubtitleCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -96,10 +96,10 @@ export class DxoSubtitleComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoSubtitleComponent
+    DxoSubtitleCircularGaugeComponent
   ],
   exports: [
-    DxoSubtitleComponent
+    DxoSubtitleCircularGaugeComponent
   ],
 })
-export class DxoSubtitleModule { }
+export class DxoSubtitleCircularGaugeModule { }

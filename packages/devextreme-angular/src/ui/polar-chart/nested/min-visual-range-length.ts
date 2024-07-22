@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-min-visual-range-length',
+    selector: 'dxo-min-visual-range-length-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMinVisualRangeLengthComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMinVisualRangeLengthPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -127,10 +127,10 @@ export class DxoMinVisualRangeLengthComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoMinVisualRangeLengthComponent
+    DxoMinVisualRangeLengthPolarChartComponent
   ],
   exports: [
-    DxoMinVisualRangeLengthComponent
+    DxoMinVisualRangeLengthPolarChartComponent
   ],
 })
-export class DxoMinVisualRangeLengthModule { }
+export class DxoMinVisualRangeLengthPolarChartModule { }

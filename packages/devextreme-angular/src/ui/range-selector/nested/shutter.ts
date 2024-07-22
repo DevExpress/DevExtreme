@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shutter',
+    selector: 'dxo-shutter-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShutterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoShutterRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -71,10 +71,10 @@ export class DxoShutterComponent extends NestedOption implements OnDestroy, OnIn
 
 @NgModule({
   declarations: [
-    DxoShutterComponent
+    DxoShutterRangeSelectorComponent
   ],
   exports: [
-    DxoShutterComponent
+    DxoShutterRangeSelectorComponent
   ],
 })
-export class DxoShutterModule { }
+export class DxoShutterRangeSelectorModule { }

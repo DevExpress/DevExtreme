@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-button',
+    selector: 'dxi-button-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiButtonComponent extends CollectionNestedOption {
+export class DxiButtonDataGridComponent extends CollectionNestedOption {
     @Input()
     get cssClass(): string {
         return this._getOption('cssClass');
@@ -122,10 +122,10 @@ export class DxiButtonComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiButtonComponent
+    DxiButtonDataGridComponent
   ],
   exports: [
-    DxiButtonComponent
+    DxiButtonDataGridComponent
   ],
 })
-export class DxiButtonModule { }
+export class DxiButtonDataGridModule { }

@@ -33,7 +33,11 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoCursorOffsetModule } from 'devextreme-angular/ui/draggable/nested';
+
+import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoCursorOffsetDraggableModule } from 'devextreme-angular/ui/draggable/nested';
 
 
 
@@ -477,6 +481,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
 @NgModule({
   imports: [
     DxoCursorOffsetModule,
+    DxoCursorOffsetDraggableModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -486,6 +491,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
   exports: [
     DxDraggableComponent,
     DxoCursorOffsetModule,
+    DxoCursorOffsetDraggableModule,
     DxTemplateModule
   ]
 })

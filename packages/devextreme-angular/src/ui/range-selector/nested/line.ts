@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-line',
+    selector: 'dxo-line-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLineRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoLineComponent extends NestedOption implements OnDestroy, OnInit 
 
 @NgModule({
   declarations: [
-    DxoLineComponent
+    DxoLineRangeSelectorComponent
   ],
   exports: [
-    DxoLineComponent
+    DxoLineRangeSelectorComponent
   ],
 })
-export class DxoLineModule { }
+export class DxoLineRangeSelectorModule { }

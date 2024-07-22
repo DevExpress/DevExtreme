@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-view',
+    selector: 'dxi-view-scheduler',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiViewComponent extends CollectionNestedOption {
+export class DxiViewSchedulerComponent extends CollectionNestedOption {
     @Input()
     get agendaDuration(): number {
         return this._getOption('agendaDuration');
@@ -243,10 +243,10 @@ export class DxiViewComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiViewComponent
+    DxiViewSchedulerComponent
   ],
   exports: [
-    DxiViewComponent
+    DxiViewSchedulerComponent
   ],
 })
-export class DxiViewModule { }
+export class DxiViewSchedulerModule { }

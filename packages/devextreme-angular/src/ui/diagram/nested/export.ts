@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-export',
+    selector: 'dxo-export-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoExportComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoExportDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get fileName(): string {
         return this._getOption('fileName');
@@ -63,10 +63,10 @@ export class DxoExportComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoExportComponent
+    DxoExportDiagramComponent
   ],
   exports: [
-    DxoExportComponent
+    DxoExportDiagramComponent
   ],
 })
-export class DxoExportModule { }
+export class DxoExportDiagramModule { }

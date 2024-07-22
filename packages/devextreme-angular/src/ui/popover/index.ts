@@ -43,22 +43,39 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoToModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoHideEventModule } from 'devextreme-angular/ui/popover/nested';
-import { DxoShowEventModule } from 'devextreme-angular/ui/popover/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
 
-import { DxiToolbarItemComponent } from 'devextreme-angular/ui/popover/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
+import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAnimationPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoHidePopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoFromPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoPositionPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoAtPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoBoundaryOffsetPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoCollisionPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoMyPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoOffsetPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoToPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoShowPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoHideEventPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoShowEventPopoverModule } from 'devextreme-angular/ui/popover/nested';
+import { DxiToolbarItemPopoverModule } from 'devextreme-angular/ui/popover/nested';
+
+import { DxiToolbarItemPopoverComponent } from 'devextreme-angular/ui/popover/nested';
 
 
 
@@ -775,8 +792,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
-    @ContentChildren(DxiToolbarItemComponent)
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemComponent> {
+    @ContentChildren(DxiToolbarItemPopoverComponent)
+    get toolbarItemsChildren(): QueryList<DxiToolbarItemPopoverComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -896,6 +913,20 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxoHideEventModule,
     DxoShowEventModule,
     DxiToolbarItemModule,
+    DxoAnimationPopoverModule,
+    DxoHidePopoverModule,
+    DxoFromPopoverModule,
+    DxoPositionPopoverModule,
+    DxoAtPopoverModule,
+    DxoBoundaryOffsetPopoverModule,
+    DxoCollisionPopoverModule,
+    DxoMyPopoverModule,
+    DxoOffsetPopoverModule,
+    DxoToPopoverModule,
+    DxoShowPopoverModule,
+    DxoHideEventPopoverModule,
+    DxoShowEventPopoverModule,
+    DxiToolbarItemPopoverModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -918,6 +949,20 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxoHideEventModule,
     DxoShowEventModule,
     DxiToolbarItemModule,
+    DxoAnimationPopoverModule,
+    DxoHidePopoverModule,
+    DxoFromPopoverModule,
+    DxoPositionPopoverModule,
+    DxoAtPopoverModule,
+    DxoBoundaryOffsetPopoverModule,
+    DxoCollisionPopoverModule,
+    DxoMyPopoverModule,
+    DxoOffsetPopoverModule,
+    DxoToPopoverModule,
+    DxoShowPopoverModule,
+    DxoHideEventPopoverModule,
+    DxoShowEventPopoverModule,
+    DxiToolbarItemPopoverModule,
     DxTemplateModule
   ]
 })

@@ -27,17 +27,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiConstantLineComponent } from './constant-line-dxi';
-import { DxiStripComponent } from './strip-dxi';
+import { DxiConstantLinePolarChartComponent } from './constant-line-dxi';
+import { DxiStripPolarChartComponent } from './strip-dxi';
 
 
 @Component({
-    selector: 'dxo-value-axis',
+    selector: 'dxo-value-axis-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoValueAxisComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoValueAxisPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -322,16 +322,16 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
     }
 
 
-    @ContentChildren(forwardRef(() => DxiConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiConstantLineComponent> {
+    @ContentChildren(forwardRef(() => DxiConstantLinePolarChartComponent))
+    get constantLinesChildren(): QueryList<DxiConstantLinePolarChartComponent> {
         return this._getOption('constantLines');
     }
     set constantLinesChildren(value) {
         this.setChildren('constantLines', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiStripComponent))
-    get stripsChildren(): QueryList<DxiStripComponent> {
+    @ContentChildren(forwardRef(() => DxiStripPolarChartComponent))
+    get stripsChildren(): QueryList<DxiStripPolarChartComponent> {
         return this._getOption('strips');
     }
     set stripsChildren(value) {
@@ -364,10 +364,10 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoValueAxisComponent
+    DxoValueAxisPolarChartComponent
   ],
   exports: [
-    DxoValueAxisComponent
+    DxoValueAxisPolarChartComponent
   ],
 })
-export class DxoValueAxisModule { }
+export class DxoValueAxisPolarChartModule { }

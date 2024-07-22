@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCommandComponent } from './command-dxi';
+import { DxiCommandDiagramComponent } from './command-dxi';
 
 
 @Component({
-    selector: 'dxo-view-toolbar',
+    selector: 'dxo-view-toolbar-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoViewToolbarDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');
@@ -55,8 +55,8 @@ export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
+    @ContentChildren(forwardRef(() => DxiCommandDiagramComponent))
+    get commandsChildren(): QueryList<DxiCommandDiagramComponent> {
         return this._getOption('commands');
     }
     set commandsChildren(value) {
@@ -84,10 +84,10 @@ export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoViewToolbarComponent
+    DxoViewToolbarDiagramComponent
   ],
   exports: [
-    DxoViewToolbarComponent
+    DxoViewToolbarDiagramComponent
   ],
 })
-export class DxoViewToolbarModule { }
+export class DxoViewToolbarDiagramModule { }

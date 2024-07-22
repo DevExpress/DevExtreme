@@ -40,30 +40,57 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoGeometryModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoRangeContainerModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoBackgroundColorModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxiRangeModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoColorModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoScaleModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoMinorTickModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoTickModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoSubvalueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoTextModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoValueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
+
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/nested';
+import { DxoGeometryModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/nested';
+import { DxoRangeContainerModule } from 'devextreme-angular/ui/nested';
+import { DxoBackgroundColorModule } from 'devextreme-angular/ui/nested';
+import { DxiRangeModule } from 'devextreme-angular/ui/nested';
+import { DxoColorModule } from 'devextreme-angular/ui/nested';
+import { DxoScaleModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoMinorTickModule } from 'devextreme-angular/ui/nested';
+import { DxoTickModule } from 'devextreme-angular/ui/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/nested';
+import { DxoSubvalueIndicatorModule } from 'devextreme-angular/ui/nested';
+import { DxoTextModule } from 'devextreme-angular/ui/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAnimationCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoExportCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoGeometryCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoLoadingIndicatorCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoFontCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoMarginCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoRangeContainerCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoBackgroundColorCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxiRangeCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoColorCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoScaleCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoLabelCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoFormatCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoMinorTickCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoTickCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoSizeCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoSubvalueIndicatorCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoTextCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoTitleCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoSubtitleCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoTooltipCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoBorderCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoShadowCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoValueIndicatorCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
 
 
 
@@ -723,6 +750,30 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     DxoBorderModule,
     DxoShadowModule,
     DxoValueIndicatorModule,
+    DxoAnimationCircularGaugeModule,
+    DxoExportCircularGaugeModule,
+    DxoGeometryCircularGaugeModule,
+    DxoLoadingIndicatorCircularGaugeModule,
+    DxoFontCircularGaugeModule,
+    DxoMarginCircularGaugeModule,
+    DxoRangeContainerCircularGaugeModule,
+    DxoBackgroundColorCircularGaugeModule,
+    DxiRangeCircularGaugeModule,
+    DxoColorCircularGaugeModule,
+    DxoScaleCircularGaugeModule,
+    DxoLabelCircularGaugeModule,
+    DxoFormatCircularGaugeModule,
+    DxoMinorTickCircularGaugeModule,
+    DxoTickCircularGaugeModule,
+    DxoSizeCircularGaugeModule,
+    DxoSubvalueIndicatorCircularGaugeModule,
+    DxoTextCircularGaugeModule,
+    DxoTitleCircularGaugeModule,
+    DxoSubtitleCircularGaugeModule,
+    DxoTooltipCircularGaugeModule,
+    DxoBorderCircularGaugeModule,
+    DxoShadowCircularGaugeModule,
+    DxoValueIndicatorCircularGaugeModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -755,6 +806,30 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     DxoBorderModule,
     DxoShadowModule,
     DxoValueIndicatorModule,
+    DxoAnimationCircularGaugeModule,
+    DxoExportCircularGaugeModule,
+    DxoGeometryCircularGaugeModule,
+    DxoLoadingIndicatorCircularGaugeModule,
+    DxoFontCircularGaugeModule,
+    DxoMarginCircularGaugeModule,
+    DxoRangeContainerCircularGaugeModule,
+    DxoBackgroundColorCircularGaugeModule,
+    DxiRangeCircularGaugeModule,
+    DxoColorCircularGaugeModule,
+    DxoScaleCircularGaugeModule,
+    DxoLabelCircularGaugeModule,
+    DxoFormatCircularGaugeModule,
+    DxoMinorTickCircularGaugeModule,
+    DxoTickCircularGaugeModule,
+    DxoSizeCircularGaugeModule,
+    DxoSubvalueIndicatorCircularGaugeModule,
+    DxoTextCircularGaugeModule,
+    DxoTitleCircularGaugeModule,
+    DxoSubtitleCircularGaugeModule,
+    DxoTooltipCircularGaugeModule,
+    DxoBorderCircularGaugeModule,
+    DxoShadowCircularGaugeModule,
+    DxoValueIndicatorCircularGaugeModule,
     DxTemplateModule
   ]
 })

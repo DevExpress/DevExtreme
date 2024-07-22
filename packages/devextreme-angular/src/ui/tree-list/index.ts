@@ -47,63 +47,121 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoColumnChooserModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoSearchModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoColumnFixingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTextsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiColumnModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiButtonModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoLookupModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFormItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoEditingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiChangeModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFormModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTabModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoButtonOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoPopupModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoToModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFilterBuilderModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiCustomOperationModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiFieldModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFilterBuilderPopupModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFilterPanelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoFilterRowModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoKeyboardNavigationModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoLoadPanelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoPagerModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoPagingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoRowDraggingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoCursorOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoScrollingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoSearchPanelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoSortingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoStateStoringModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoToolbarModule } from 'devextreme-angular/ui/tree-list/nested';
 
-import { DxiColumnComponent } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoColumnChooserModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoSearchModule } from 'devextreme-angular/ui/nested';
+import { DxoSelectionModule } from 'devextreme-angular/ui/nested';
+import { DxoColumnFixingModule } from 'devextreme-angular/ui/nested';
+import { DxoTextsModule } from 'devextreme-angular/ui/nested';
+import { DxiColumnModule } from 'devextreme-angular/ui/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
+import { DxoLookupModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/nested';
+import { DxiChangeModule } from 'devextreme-angular/ui/nested';
+import { DxoFormModule } from 'devextreme-angular/ui/nested';
+import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxiTabModule } from 'devextreme-angular/ui/nested';
+import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoPopupModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
+import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
+import { DxiFieldModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterBuilderPopupModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoFilterRowModule } from 'devextreme-angular/ui/nested';
+import { DxoOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoKeyboardNavigationModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoPagerModule } from 'devextreme-angular/ui/nested';
+import { DxoPagingModule } from 'devextreme-angular/ui/nested';
+import { DxoRemoteOperationsModule } from 'devextreme-angular/ui/nested';
+import { DxoRowDraggingModule } from 'devextreme-angular/ui/nested';
+import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
+import { DxoSearchPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoSortingModule } from 'devextreme-angular/ui/nested';
+import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
+import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoColumnChooserTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoPositionTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoAtTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoBoundaryOffsetTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoCollisionTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoMyTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoOffsetTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoSearchTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoSelectionTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoColumnFixingTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTextsTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiColumnTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiButtonTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoHeaderFilterTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoLookupTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFormatTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFormItemTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoLabelTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiValidationRuleTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoEditingTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiChangeTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFormTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoColCountByScreenTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiItemTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTabPanelOptionsTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTabTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoButtonOptionsTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoPopupTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoAnimationTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoHideTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFromTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoToTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoShowTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiToolbarItemTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFilterBuilderTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiCustomOperationTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiFieldTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFilterOperationDescriptionsTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoGroupOperationDescriptionsTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFilterBuilderPopupTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFilterPanelTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoFilterRowTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoOperationDescriptionsTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoKeyboardNavigationTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoLoadPanelTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoPagerTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoPagingTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoRemoteOperationsTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoRowDraggingTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoCursorOffsetTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoScrollingTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoSearchPanelTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoSortingTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoStateStoringTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoToolbarTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+
+import { DxiColumnTreeListComponent } from 'devextreme-angular/ui/tree-list/nested';
 
 
 
@@ -1954,8 +2012,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiColumnComponent)
-    get columnsChildren(): QueryList<DxiColumnComponent> {
+    @ContentChildren(DxiColumnTreeListComponent)
+    get columnsChildren(): QueryList<DxiColumnTreeListComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
@@ -2198,6 +2256,61 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoColumnChooserTreeListModule,
+    DxoPositionTreeListModule,
+    DxoAtTreeListModule,
+    DxoBoundaryOffsetTreeListModule,
+    DxoCollisionTreeListModule,
+    DxoMyTreeListModule,
+    DxoOffsetTreeListModule,
+    DxoSearchTreeListModule,
+    DxoSelectionTreeListModule,
+    DxoColumnFixingTreeListModule,
+    DxoTextsTreeListModule,
+    DxiColumnTreeListModule,
+    DxiButtonTreeListModule,
+    DxoHeaderFilterTreeListModule,
+    DxoLookupTreeListModule,
+    DxoFormatTreeListModule,
+    DxoFormItemTreeListModule,
+    DxoLabelTreeListModule,
+    DxiValidationRuleTreeListModule,
+    DxoEditingTreeListModule,
+    DxiChangeTreeListModule,
+    DxoFormTreeListModule,
+    DxoColCountByScreenTreeListModule,
+    DxiItemTreeListModule,
+    DxoTabPanelOptionsTreeListModule,
+    DxiTabTreeListModule,
+    DxoButtonOptionsTreeListModule,
+    DxoPopupTreeListModule,
+    DxoAnimationTreeListModule,
+    DxoHideTreeListModule,
+    DxoFromTreeListModule,
+    DxoToTreeListModule,
+    DxoShowTreeListModule,
+    DxiToolbarItemTreeListModule,
+    DxoFilterBuilderTreeListModule,
+    DxiCustomOperationTreeListModule,
+    DxiFieldTreeListModule,
+    DxoFilterOperationDescriptionsTreeListModule,
+    DxoGroupOperationDescriptionsTreeListModule,
+    DxoFilterBuilderPopupTreeListModule,
+    DxoFilterPanelTreeListModule,
+    DxoFilterRowTreeListModule,
+    DxoOperationDescriptionsTreeListModule,
+    DxoKeyboardNavigationTreeListModule,
+    DxoLoadPanelTreeListModule,
+    DxoPagerTreeListModule,
+    DxoPagingTreeListModule,
+    DxoRemoteOperationsTreeListModule,
+    DxoRowDraggingTreeListModule,
+    DxoCursorOffsetTreeListModule,
+    DxoScrollingTreeListModule,
+    DxoSearchPanelTreeListModule,
+    DxoSortingTreeListModule,
+    DxoStateStoringTreeListModule,
+    DxoToolbarTreeListModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -2261,6 +2374,61 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
+    DxoColumnChooserTreeListModule,
+    DxoPositionTreeListModule,
+    DxoAtTreeListModule,
+    DxoBoundaryOffsetTreeListModule,
+    DxoCollisionTreeListModule,
+    DxoMyTreeListModule,
+    DxoOffsetTreeListModule,
+    DxoSearchTreeListModule,
+    DxoSelectionTreeListModule,
+    DxoColumnFixingTreeListModule,
+    DxoTextsTreeListModule,
+    DxiColumnTreeListModule,
+    DxiButtonTreeListModule,
+    DxoHeaderFilterTreeListModule,
+    DxoLookupTreeListModule,
+    DxoFormatTreeListModule,
+    DxoFormItemTreeListModule,
+    DxoLabelTreeListModule,
+    DxiValidationRuleTreeListModule,
+    DxoEditingTreeListModule,
+    DxiChangeTreeListModule,
+    DxoFormTreeListModule,
+    DxoColCountByScreenTreeListModule,
+    DxiItemTreeListModule,
+    DxoTabPanelOptionsTreeListModule,
+    DxiTabTreeListModule,
+    DxoButtonOptionsTreeListModule,
+    DxoPopupTreeListModule,
+    DxoAnimationTreeListModule,
+    DxoHideTreeListModule,
+    DxoFromTreeListModule,
+    DxoToTreeListModule,
+    DxoShowTreeListModule,
+    DxiToolbarItemTreeListModule,
+    DxoFilterBuilderTreeListModule,
+    DxiCustomOperationTreeListModule,
+    DxiFieldTreeListModule,
+    DxoFilterOperationDescriptionsTreeListModule,
+    DxoGroupOperationDescriptionsTreeListModule,
+    DxoFilterBuilderPopupTreeListModule,
+    DxoFilterPanelTreeListModule,
+    DxoFilterRowTreeListModule,
+    DxoOperationDescriptionsTreeListModule,
+    DxoKeyboardNavigationTreeListModule,
+    DxoLoadPanelTreeListModule,
+    DxoPagerTreeListModule,
+    DxoPagingTreeListModule,
+    DxoRemoteOperationsTreeListModule,
+    DxoRowDraggingTreeListModule,
+    DxoCursorOffsetTreeListModule,
+    DxoScrollingTreeListModule,
+    DxoSearchPanelTreeListModule,
+    DxoSortingTreeListModule,
+    DxoStateStoringTreeListModule,
+    DxoToolbarTreeListModule,
     DxTemplateModule
   ]
 })

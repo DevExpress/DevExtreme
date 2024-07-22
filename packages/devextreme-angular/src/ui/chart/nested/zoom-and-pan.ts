@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-zoom-and-pan',
+    selector: 'dxo-zoom-and-pan-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoZoomAndPanChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowMouseWheel(): boolean {
         return this._getOption('allowMouseWheel');
@@ -112,10 +112,10 @@ export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoZoomAndPanComponent
+    DxoZoomAndPanChartComponent
   ],
   exports: [
-    DxoZoomAndPanComponent
+    DxoZoomAndPanChartComponent
   ],
 })
-export class DxoZoomAndPanModule { }
+export class DxoZoomAndPanChartModule { }

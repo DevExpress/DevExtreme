@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-indent',
+    selector: 'dxo-indent-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoIndentComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoIndentRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get left(): number | undefined {
         return this._getOption('left');
@@ -71,10 +71,10 @@ export class DxoIndentComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoIndentComponent
+    DxoIndentRangeSelectorComponent
   ],
   exports: [
-    DxoIndentComponent
+    DxoIndentRangeSelectorComponent
   ],
 })
-export class DxoIndentModule { }
+export class DxoIndentRangeSelectorModule { }

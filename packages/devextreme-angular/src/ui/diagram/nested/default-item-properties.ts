@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-default-item-properties',
+    selector: 'dxo-default-item-properties-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDefaultItemPropertiesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDefaultItemPropertiesDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get connectorLineEnd(): ConnectorLineEnd {
         return this._getOption('connectorLineEnd');
@@ -128,10 +128,10 @@ export class DxoDefaultItemPropertiesComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoDefaultItemPropertiesComponent
+    DxoDefaultItemPropertiesDiagramComponent
   ],
   exports: [
-    DxoDefaultItemPropertiesComponent
+    DxoDefaultItemPropertiesDiagramComponent
   ],
 })
-export class DxoDefaultItemPropertiesModule { }
+export class DxoDefaultItemPropertiesDiagramModule { }

@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-stackedarea',
+    selector: 'dxo-stackedarea-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoStackedareaComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoStackedareaChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoStackedareaComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoStackedareaComponent
+    DxoStackedareaChartComponent
   ],
   exports: [
-    DxoStackedareaComponent
+    DxoStackedareaChartComponent
   ],
 })
-export class DxoStackedareaModule { }
+export class DxoStackedareaChartModule { }

@@ -40,9 +40,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/multi-view/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/multi-view/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemMultiViewModule } from 'devextreme-angular/ui/multi-view/nested';
+
+import { DxiItemMultiViewComponent } from 'devextreme-angular/ui/multi-view/nested';
 
 
 
@@ -597,8 +601,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemMultiViewComponent)
+    get itemsChildren(): QueryList<DxiItemMultiViewComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -699,6 +703,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemMultiViewModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -708,6 +713,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
   exports: [
     DxMultiViewComponent,
     DxiItemModule,
+    DxiItemMultiViewModule,
     DxTemplateModule
   ]
 })

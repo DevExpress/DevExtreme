@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-validation',
+    selector: 'dxo-validation-gantt',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoValidationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoValidationGanttComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get autoUpdateParentTasks(): boolean {
         return this._getOption('autoUpdateParentTasks');
@@ -79,10 +79,10 @@ export class DxoValidationComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoValidationComponent
+    DxoValidationGanttComponent
   ],
   exports: [
-    DxoValidationComponent
+    DxoValidationGanttComponent
   ],
 })
-export class DxoValidationModule { }
+export class DxoValidationGanttModule { }

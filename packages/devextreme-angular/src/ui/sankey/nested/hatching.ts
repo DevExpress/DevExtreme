@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hatching',
+    selector: 'dxo-hatching-sankey',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHatchingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHatchingSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get direction(): HatchDirection {
         return this._getOption('direction');
@@ -88,10 +88,10 @@ export class DxoHatchingComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoHatchingComponent
+    DxoHatchingSankeyComponent
   ],
   exports: [
-    DxoHatchingComponent
+    DxoHatchingSankeyComponent
   ],
 })
-export class DxoHatchingModule { }
+export class DxoHatchingSankeyModule { }

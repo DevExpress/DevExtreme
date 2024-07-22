@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-common-pane-settings',
+    selector: 'dxo-common-pane-settings-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCommonPaneSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCommonPaneSettingsChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -72,10 +72,10 @@ export class DxoCommonPaneSettingsComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoCommonPaneSettingsComponent
+    DxoCommonPaneSettingsChartComponent
   ],
   exports: [
-    DxoCommonPaneSettingsComponent
+    DxoCommonPaneSettingsChartComponent
   ],
 })
-export class DxoCommonPaneSettingsModule { }
+export class DxoCommonPaneSettingsChartModule { }

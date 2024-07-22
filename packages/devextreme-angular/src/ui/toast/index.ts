@@ -33,17 +33,31 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoToModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/toast/nested';
+
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAnimationToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoHideToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoFromToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoPositionToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoAtToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoBoundaryOffsetToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoCollisionToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoMyToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoOffsetToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoShowToastModule } from 'devextreme-angular/ui/toast/nested';
 
 
 
@@ -769,6 +783,17 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoAnimationToastModule,
+    DxoHideToastModule,
+    DxoFromToastModule,
+    DxoPositionToastModule,
+    DxoAtToastModule,
+    DxoBoundaryOffsetToastModule,
+    DxoCollisionToastModule,
+    DxoMyToastModule,
+    DxoOffsetToastModule,
+    DxoToToastModule,
+    DxoShowToastModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -788,6 +813,17 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoAnimationToastModule,
+    DxoHideToastModule,
+    DxoFromToastModule,
+    DxoPositionToastModule,
+    DxoAtToastModule,
+    DxoBoundaryOffsetToastModule,
+    DxoCollisionToastModule,
+    DxoMyToastModule,
+    DxoOffsetToastModule,
+    DxoToToastModule,
+    DxoShowToastModule,
     DxTemplateModule
   ]
 })

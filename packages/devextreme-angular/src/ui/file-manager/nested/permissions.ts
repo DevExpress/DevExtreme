@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-permissions',
+    selector: 'dxo-permissions-file-manager',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPermissionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPermissionsFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get copy(): boolean {
         return this._getOption('copy');
@@ -111,10 +111,10 @@ export class DxoPermissionsComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoPermissionsComponent
+    DxoPermissionsFileManagerComponent
   ],
   exports: [
-    DxoPermissionsComponent
+    DxoPermissionsFileManagerComponent
   ],
 })
-export class DxoPermissionsModule { }
+export class DxoPermissionsFileManagerModule { }

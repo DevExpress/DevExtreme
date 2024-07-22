@@ -41,9 +41,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/tab-panel/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/tab-panel/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemTabPanelModule } from 'devextreme-angular/ui/tab-panel/nested';
+
+import { DxiItemTabPanelComponent } from 'devextreme-angular/ui/tab-panel/nested';
 
 
 
@@ -782,8 +786,8 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemTabPanelComponent)
+    get itemsChildren(): QueryList<DxiItemTabPanelComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -895,6 +899,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemTabPanelModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -904,6 +909,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
   exports: [
     DxTabPanelComponent,
     DxiItemModule,
+    DxiItemTabPanelModule,
     DxTemplateModule
   ]
 })

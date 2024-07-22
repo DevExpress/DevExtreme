@@ -24,12 +24,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item',
+    selector: 'dxi-item-menu',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemComponent extends CollectionNestedOption {
+export class DxiItemMenuComponent extends CollectionNestedOption {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -132,8 +132,8 @@ export class DxiItemComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(forwardRef(() => DxiItemMenuComponent))
+    get itemsChildren(): QueryList<DxiItemMenuComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -157,10 +157,10 @@ export class DxiItemComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemComponent
+    DxiItemMenuComponent
   ],
   exports: [
-    DxiItemComponent
+    DxiItemMenuComponent
   ],
 })
-export class DxiItemModule { }
+export class DxiItemMenuModule { }

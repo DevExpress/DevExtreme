@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-change',
+    selector: 'dxi-change-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiChangeComponent extends CollectionNestedOption {
+export class DxiChangeDataGridComponent extends CollectionNestedOption {
     @Input()
     get data(): any {
         return this._getOption('data');
@@ -90,10 +90,10 @@ export class DxiChangeComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiChangeComponent
+    DxiChangeDataGridComponent
   ],
   exports: [
-    DxiChangeComponent
+    DxiChangeDataGridComponent
   ],
 })
-export class DxiChangeModule { }
+export class DxiChangeDataGridModule { }

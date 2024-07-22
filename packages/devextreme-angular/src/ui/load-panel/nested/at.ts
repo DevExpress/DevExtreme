@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-at',
+    selector: 'dxo-at-load-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAtComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAtLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoAtComponent extends NestedOption implements OnDestroy, OnInit  {
 
 @NgModule({
   declarations: [
-    DxoAtComponent
+    DxoAtLoadPanelComponent
   ],
   exports: [
-    DxoAtComponent
+    DxoAtLoadPanelComponent
   ],
 })
-export class DxoAtModule { }
+export class DxoAtLoadPanelModule { }

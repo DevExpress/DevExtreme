@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-notifications',
+    selector: 'dxo-notifications-file-manager',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoNotificationsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoNotificationsFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get showPanel(): boolean {
         return this._getOption('showPanel');
@@ -71,10 +71,10 @@ export class DxoNotificationsComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoNotificationsComponent
+    DxoNotificationsFileManagerComponent
   ],
   exports: [
-    DxoNotificationsComponent
+    DxoNotificationsFileManagerComponent
   ],
 })
-export class DxoNotificationsModule { }
+export class DxoNotificationsFileManagerModule { }

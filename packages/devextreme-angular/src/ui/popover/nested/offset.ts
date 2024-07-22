@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-offset',
+    selector: 'dxo-offset-popover',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoOffsetPopoverComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoOffsetComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoOffsetComponent
+    DxoOffsetPopoverComponent
   ],
   exports: [
-    DxoOffsetComponent
+    DxoOffsetPopoverComponent
   ],
 })
-export class DxoOffsetModule { }
+export class DxoOffsetPopoverModule { }

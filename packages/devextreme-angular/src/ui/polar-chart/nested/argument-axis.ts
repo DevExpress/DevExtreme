@@ -24,17 +24,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiConstantLineComponent } from './constant-line-dxi';
-import { DxiStripComponent } from './strip-dxi';
+import { DxiConstantLinePolarChartComponent } from './constant-line-dxi';
+import { DxiStripPolarChartComponent } from './strip-dxi';
 
 
 @Component({
-    selector: 'dxo-argument-axis',
+    selector: 'dxo-argument-axis-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoArgumentAxisPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -289,16 +289,16 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
 
-    @ContentChildren(forwardRef(() => DxiConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiConstantLineComponent> {
+    @ContentChildren(forwardRef(() => DxiConstantLinePolarChartComponent))
+    get constantLinesChildren(): QueryList<DxiConstantLinePolarChartComponent> {
         return this._getOption('constantLines');
     }
     set constantLinesChildren(value) {
         this.setChildren('constantLines', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiStripComponent))
-    get stripsChildren(): QueryList<DxiStripComponent> {
+    @ContentChildren(forwardRef(() => DxiStripPolarChartComponent))
+    get stripsChildren(): QueryList<DxiStripPolarChartComponent> {
         return this._getOption('strips');
     }
     set stripsChildren(value) {
@@ -326,10 +326,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoArgumentAxisComponent
+    DxoArgumentAxisPolarChartComponent
   ],
   exports: [
-    DxoArgumentAxisComponent
+    DxoArgumentAxisPolarChartComponent
   ],
 })
-export class DxoArgumentAxisModule { }
+export class DxoArgumentAxisPolarChartModule { }

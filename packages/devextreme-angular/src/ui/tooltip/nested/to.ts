@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-to',
+    selector: 'dxo-to-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoToTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -96,10 +96,10 @@ export class DxoToComponent extends NestedOption implements OnDestroy, OnInit  {
 
 @NgModule({
   declarations: [
-    DxoToComponent
+    DxoToTooltipComponent
   ],
   exports: [
-    DxoToComponent
+    DxoToTooltipComponent
   ],
 })
-export class DxoToModule { }
+export class DxoToTooltipModule { }

@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip',
+    selector: 'dxo-tooltip-circular-gauge',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -186,10 +186,10 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
 
 @NgModule({
   declarations: [
-    DxoTooltipComponent
+    DxoTooltipCircularGaugeComponent
   ],
   exports: [
-    DxoTooltipComponent
+    DxoTooltipCircularGaugeComponent
   ],
 })
-export class DxoTooltipModule { }
+export class DxoTooltipCircularGaugeModule { }

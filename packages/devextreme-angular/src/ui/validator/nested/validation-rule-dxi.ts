@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-validation-rule',
+    selector: 'dxi-validation-rule-validator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiValidationRuleComponent extends CollectionNestedOption {
+export class DxiValidationRuleValidatorComponent extends CollectionNestedOption {
     @Input()
     get message(): string {
         return this._getOption('message');
@@ -138,10 +138,10 @@ export class DxiValidationRuleComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiValidationRuleComponent
+    DxiValidationRuleValidatorComponent
   ],
   exports: [
-    DxiValidationRuleComponent
+    DxiValidationRuleValidatorComponent
   ],
 })
-export class DxiValidationRuleModule { }
+export class DxiValidationRuleValidatorModule { }

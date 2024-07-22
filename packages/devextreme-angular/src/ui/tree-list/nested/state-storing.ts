@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-state-storing',
+    selector: 'dxo-state-storing-tree-list',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoStateStoringComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoStateStoringTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customLoad(): Function {
         return this._getOption('customLoad');
@@ -104,10 +104,10 @@ export class DxoStateStoringComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoStateStoringComponent
+    DxoStateStoringTreeListComponent
   ],
   exports: [
-    DxoStateStoringComponent
+    DxoStateStoringTreeListComponent
   ],
 })
-export class DxoStateStoringModule { }
+export class DxoStateStoringTreeListModule { }

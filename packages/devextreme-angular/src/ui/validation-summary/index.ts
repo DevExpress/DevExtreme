@@ -38,9 +38,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/validation-summary/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/validation-summary/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemValidationSummaryModule } from 'devextreme-angular/ui/validation-summary/nested';
+
+import { DxiItemValidationSummaryComponent } from 'devextreme-angular/ui/validation-summary/nested';
 
 
 
@@ -203,8 +207,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemValidationSummaryComponent)
+    get itemsChildren(): QueryList<DxiItemValidationSummaryComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -281,6 +285,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemValidationSummaryModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -290,6 +295,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
   exports: [
     DxValidationSummaryComponent,
     DxiItemModule,
+    DxiItemValidationSummaryModule,
     DxTemplateModule
   ]
 })

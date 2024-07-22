@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-grid-size',
+    selector: 'dxo-grid-size-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGridSizeDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get items(): Array<number> {
         return this._getOption('items');
@@ -84,10 +84,10 @@ export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoGridSizeComponent
+    DxoGridSizeDiagramComponent
   ],
   exports: [
-    DxoGridSizeComponent
+    DxoGridSizeDiagramComponent
   ],
 })
-export class DxoGridSizeModule { }
+export class DxoGridSizeDiagramModule { }

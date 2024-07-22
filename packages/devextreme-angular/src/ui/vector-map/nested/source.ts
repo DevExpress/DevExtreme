@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-source',
+    selector: 'dxo-source-vector-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSourceComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSourceVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get grouping(): string {
         return this._getOption('grouping');
@@ -71,10 +71,10 @@ export class DxoSourceComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoSourceComponent
+    DxoSourceVectorMapComponent
   ],
   exports: [
-    DxoSourceComponent
+    DxoSourceVectorMapComponent
   ],
 })
-export class DxoSourceModule { }
+export class DxoSourceVectorMapModule { }

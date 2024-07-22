@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-column-fixing',
+    selector: 'dxo-column-fixing-tree-list',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoColumnFixingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColumnFixingTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -71,10 +71,10 @@ export class DxoColumnFixingComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoColumnFixingComponent
+    DxoColumnFixingTreeListComponent
   ],
   exports: [
-    DxoColumnFixingComponent
+    DxoColumnFixingTreeListComponent
   ],
 })
-export class DxoColumnFixingModule { }
+export class DxoColumnFixingTreeListModule { }

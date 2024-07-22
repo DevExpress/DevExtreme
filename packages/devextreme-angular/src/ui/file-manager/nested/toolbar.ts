@@ -23,17 +23,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
-import { DxiItemComponent } from './item-dxi';
+import { DxiFileSelectionItemFileManagerComponent } from './file-selection-item-dxi';
+import { DxiItemFileManagerComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-toolbar',
+    selector: 'dxo-toolbar-file-manager',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoToolbarFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get fileSelectionItems(): Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem> {
         return this._getOption('fileSelectionItems');
@@ -56,16 +56,16 @@ export class DxoToolbarComponent extends NestedOption implements OnDestroy, OnIn
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFileSelectionItemComponent))
-    get fileSelectionItemsChildren(): QueryList<DxiFileSelectionItemComponent> {
+    @ContentChildren(forwardRef(() => DxiFileSelectionItemFileManagerComponent))
+    get fileSelectionItemsChildren(): QueryList<DxiFileSelectionItemFileManagerComponent> {
         return this._getOption('fileSelectionItems');
     }
     set fileSelectionItemsChildren(value) {
         this.setChildren('fileSelectionItems', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(forwardRef(() => DxiItemFileManagerComponent))
+    get itemsChildren(): QueryList<DxiItemFileManagerComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -93,10 +93,10 @@ export class DxoToolbarComponent extends NestedOption implements OnDestroy, OnIn
 
 @NgModule({
   declarations: [
-    DxoToolbarComponent
+    DxoToolbarFileManagerComponent
   ],
   exports: [
-    DxoToolbarComponent
+    DxoToolbarFileManagerComponent
   ],
 })
-export class DxoToolbarModule { }
+export class DxoToolbarFileManagerModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-state-storing',
+    selector: 'dxo-state-storing-pivot-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoStateStoringComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoStateStoringPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customLoad(): Function {
         return this._getOption('customLoad');
@@ -104,10 +104,10 @@ export class DxoStateStoringComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoStateStoringComponent
+    DxoStateStoringPivotGridComponent
   ],
   exports: [
-    DxoStateStoringComponent
+    DxoStateStoringPivotGridComponent
   ],
 })
-export class DxoStateStoringModule { }
+export class DxoStateStoringPivotGridModule { }

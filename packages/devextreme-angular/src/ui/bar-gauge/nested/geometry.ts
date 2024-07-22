@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-geometry',
+    selector: 'dxo-geometry-bar-gauge',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGeometryBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get endAngle(): number {
         return this._getOption('endAngle');
@@ -71,10 +71,10 @@ export class DxoGeometryComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoGeometryComponent
+    DxoGeometryBarGaugeComponent
   ],
   exports: [
-    DxoGeometryComponent
+    DxoGeometryBarGaugeComponent
   ],
 })
-export class DxoGeometryModule { }
+export class DxoGeometryBarGaugeModule { }

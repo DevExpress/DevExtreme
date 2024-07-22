@@ -25,16 +25,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFieldComponent } from './field-dxi';
+import { DxiFieldPivotGridComponent } from './field-dxi';
 
 
 @Component({
-    selector: 'dxo-data-source',
+    selector: 'dxo-data-source-pivot-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDataSourceComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataSourcePivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get fields(): Array<any | { allowCrossGroupCalculation?: boolean, allowExpandAll?: boolean, allowFiltering?: boolean, allowSorting?: boolean, allowSortingBySummary?: boolean, area?: string, areaIndex?: number, calculateCustomSummary?: Function, calculateSummaryValue?: Function, caption?: string, customizeText?: Function, dataField?: string, dataType?: string, displayFolder?: string, expanded?: boolean, filterType?: string, filterValues?: Array<any>, format?: format | string, groupIndex?: number, groupInterval?: number | string, groupName?: string, headerFilter?: { allowSearch?: boolean, height?: number, width?: number }, isMeasure?: boolean, precision?: number, runningTotal?: string, selector?: Function, showGrandTotals?: boolean, showTotals?: boolean, showValues?: boolean, sortBy?: string, sortBySummaryField?: string, sortBySummaryPath?: Array<number | string>, sortingMethod?: Function, sortOrder?: string, summaryDisplayMode?: string, summaryType?: string, visible?: boolean, width?: number, wordWrapEnabled?: boolean }> {
         return this._getOption('fields');
@@ -113,8 +113,8 @@ export class DxoDataSourceComponent extends NestedOption implements OnDestroy, O
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFieldComponent))
-    get fieldsChildren(): QueryList<DxiFieldComponent> {
+    @ContentChildren(forwardRef(() => DxiFieldPivotGridComponent))
+    get fieldsChildren(): QueryList<DxiFieldPivotGridComponent> {
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
@@ -127,7 +127,7 @@ export class DxoDataSourceComponent extends NestedOption implements OnDestroy, O
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
         if ((console) && (console.warn)) {
-            console.warn('The nested \'dxo-data-source\' component is deprecated in 17.2. ' +
+            console.warn('The nested \'dxo-data-source-pivot-grid\' component is deprecated in 17.2. ' +
                 'Use the \'dataSource\' option instead. ' +
                 'See:\nhttps://github.com/DevExpress/devextreme-angular/blob/master/CHANGELOG.md#17.2.3'
             );
@@ -148,10 +148,10 @@ export class DxoDataSourceComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoDataSourceComponent
+    DxoDataSourcePivotGridComponent
   ],
   exports: [
-    DxoDataSourceComponent
+    DxoDataSourcePivotGridComponent
   ],
 })
-export class DxoDataSourceModule { }
+export class DxoDataSourcePivotGridModule { }

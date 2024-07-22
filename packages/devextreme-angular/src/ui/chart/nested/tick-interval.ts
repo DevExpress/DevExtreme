@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tick-interval',
+    selector: 'dxo-tick-interval-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTickIntervalComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTickIntervalChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -127,10 +127,10 @@ export class DxoTickIntervalComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoTickIntervalComponent
+    DxoTickIntervalChartComponent
   ],
   exports: [
-    DxoTickIntervalComponent
+    DxoTickIntervalChartComponent
   ],
 })
-export class DxoTickIntervalModule { }
+export class DxoTickIntervalChartModule { }

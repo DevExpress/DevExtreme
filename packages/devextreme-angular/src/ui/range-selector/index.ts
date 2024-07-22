@@ -47,76 +47,149 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoBackgroundModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoImageModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoBehaviorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoChartModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoCommonSeriesSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoAggregationModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoAreaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoHatchingModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoConnectorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoPointModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoHeightModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoUrlModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoWidthModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoReductionModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoBarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoBubbleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoCandlestickModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoColorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoFullstackedareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoFullstackedbarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoFullstackedlineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoFullstackedsplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoFullstackedsplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoArgumentFormatModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoLineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangebarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoScatterModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoStackedareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoStackedbarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoStackedlineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoStackedsplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoStackedsplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoStepareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSteplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoStockModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoDataPrepareSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxiSeriesModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSeriesTemplateModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoValueAxisModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoIndentModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoScaleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoAggregationIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxiBreakModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoBreakStyleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoMarkerModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoMaxRangeModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoMinorTickModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoMinorTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoMinRangeModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoTickModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoShutterModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSliderHandleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSliderMarkerModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/range-selector/nested';
+
+import { DxoBackgroundModule } from 'devextreme-angular/ui/nested';
+import { DxoImageModule } from 'devextreme-angular/ui/nested';
+import { DxoBehaviorModule } from 'devextreme-angular/ui/nested';
+import { DxoChartModule } from 'devextreme-angular/ui/nested';
+import { DxoCommonSeriesSettingsModule } from 'devextreme-angular/ui/nested';
+import { DxoAggregationModule } from 'devextreme-angular/ui/nested';
+import { DxoAreaModule } from 'devextreme-angular/ui/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/nested';
+import { DxoHoverStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoHatchingModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxoConnectorModule } from 'devextreme-angular/ui/nested';
+import { DxoPointModule } from 'devextreme-angular/ui/nested';
+import { DxoHeightModule } from 'devextreme-angular/ui/nested';
+import { DxoUrlModule } from 'devextreme-angular/ui/nested';
+import { DxoWidthModule } from 'devextreme-angular/ui/nested';
+import { DxoSelectionStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoReductionModule } from 'devextreme-angular/ui/nested';
+import { DxoValueErrorBarModule } from 'devextreme-angular/ui/nested';
+import { DxoBarModule } from 'devextreme-angular/ui/nested';
+import { DxoBubbleModule } from 'devextreme-angular/ui/nested';
+import { DxoCandlestickModule } from 'devextreme-angular/ui/nested';
+import { DxoColorModule } from 'devextreme-angular/ui/nested';
+import { DxoFullstackedareaModule } from 'devextreme-angular/ui/nested';
+import { DxoFullstackedbarModule } from 'devextreme-angular/ui/nested';
+import { DxoFullstackedlineModule } from 'devextreme-angular/ui/nested';
+import { DxoFullstackedsplineModule } from 'devextreme-angular/ui/nested';
+import { DxoFullstackedsplineareaModule } from 'devextreme-angular/ui/nested';
+import { DxoArgumentFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoLineModule } from 'devextreme-angular/ui/nested';
+import { DxoRangeareaModule } from 'devextreme-angular/ui/nested';
+import { DxoRangebarModule } from 'devextreme-angular/ui/nested';
+import { DxoScatterModule } from 'devextreme-angular/ui/nested';
+import { DxoSplineModule } from 'devextreme-angular/ui/nested';
+import { DxoSplineareaModule } from 'devextreme-angular/ui/nested';
+import { DxoStackedareaModule } from 'devextreme-angular/ui/nested';
+import { DxoStackedbarModule } from 'devextreme-angular/ui/nested';
+import { DxoStackedlineModule } from 'devextreme-angular/ui/nested';
+import { DxoStackedsplineModule } from 'devextreme-angular/ui/nested';
+import { DxoStackedsplineareaModule } from 'devextreme-angular/ui/nested';
+import { DxoStepareaModule } from 'devextreme-angular/ui/nested';
+import { DxoSteplineModule } from 'devextreme-angular/ui/nested';
+import { DxoStockModule } from 'devextreme-angular/ui/nested';
+import { DxoDataPrepareSettingsModule } from 'devextreme-angular/ui/nested';
+import { DxiSeriesModule } from 'devextreme-angular/ui/nested';
+import { DxoSeriesTemplateModule } from 'devextreme-angular/ui/nested';
+import { DxoValueAxisModule } from 'devextreme-angular/ui/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/nested';
+import { DxoIndentModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/nested';
+import { DxoScaleModule } from 'devextreme-angular/ui/nested';
+import { DxoAggregationIntervalModule } from 'devextreme-angular/ui/nested';
+import { DxiBreakModule } from 'devextreme-angular/ui/nested';
+import { DxoBreakStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoMarkerModule } from 'devextreme-angular/ui/nested';
+import { DxoMaxRangeModule } from 'devextreme-angular/ui/nested';
+import { DxoMinorTickModule } from 'devextreme-angular/ui/nested';
+import { DxoMinorTickIntervalModule } from 'devextreme-angular/ui/nested';
+import { DxoMinRangeModule } from 'devextreme-angular/ui/nested';
+import { DxoTickModule } from 'devextreme-angular/ui/nested';
+import { DxoTickIntervalModule } from 'devextreme-angular/ui/nested';
+import { DxoShutterModule } from 'devextreme-angular/ui/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/nested';
+import { DxoSliderHandleModule } from 'devextreme-angular/ui/nested';
+import { DxoSliderMarkerModule } from 'devextreme-angular/ui/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoBackgroundRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoImageRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoBehaviorRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoChartRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoCommonSeriesSettingsRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoAggregationRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoAreaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoBorderRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoHoverStyleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoHatchingRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoLabelRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoConnectorRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoPointRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoHeightRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoUrlRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoWidthRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSelectionStyleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoReductionRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoValueErrorBarRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoBarRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoBubbleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoCandlestickRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoColorRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoFullstackedareaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoFullstackedbarRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoFullstackedlineRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoFullstackedsplineRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoFullstackedsplineareaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoArgumentFormatRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoFontRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoFormatRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoLineRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeareaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangebarRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoScatterRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSplineRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSplineareaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoStackedareaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoStackedbarRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoStackedlineRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoStackedsplineRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoStackedsplineareaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoStepareaRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSteplineRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoStockRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoDataPrepareSettingsRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxiSeriesRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSeriesTemplateRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoValueAxisRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoExportRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoIndentRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoLoadingIndicatorRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoMarginRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoScaleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoAggregationIntervalRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxiBreakRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoBreakStyleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoMarkerRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoMaxRangeRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoMinorTickRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoMinorTickIntervalRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoMinRangeRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoTickRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoTickIntervalRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoShutterRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSizeRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSliderHandleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSliderMarkerRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoTitleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoSubtitleRangeSelectorModule } from 'devextreme-angular/ui/range-selector/nested';
 
 
 
@@ -912,6 +985,76 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoSliderMarkerModule,
     DxoTitleModule,
     DxoSubtitleModule,
+    DxoBackgroundRangeSelectorModule,
+    DxoImageRangeSelectorModule,
+    DxoBehaviorRangeSelectorModule,
+    DxoChartRangeSelectorModule,
+    DxoCommonSeriesSettingsRangeSelectorModule,
+    DxoAggregationRangeSelectorModule,
+    DxoAreaRangeSelectorModule,
+    DxoBorderRangeSelectorModule,
+    DxoHoverStyleRangeSelectorModule,
+    DxoHatchingRangeSelectorModule,
+    DxoLabelRangeSelectorModule,
+    DxoConnectorRangeSelectorModule,
+    DxoPointRangeSelectorModule,
+    DxoHeightRangeSelectorModule,
+    DxoUrlRangeSelectorModule,
+    DxoWidthRangeSelectorModule,
+    DxoSelectionStyleRangeSelectorModule,
+    DxoReductionRangeSelectorModule,
+    DxoValueErrorBarRangeSelectorModule,
+    DxoBarRangeSelectorModule,
+    DxoBubbleRangeSelectorModule,
+    DxoCandlestickRangeSelectorModule,
+    DxoColorRangeSelectorModule,
+    DxoFullstackedareaRangeSelectorModule,
+    DxoFullstackedbarRangeSelectorModule,
+    DxoFullstackedlineRangeSelectorModule,
+    DxoFullstackedsplineRangeSelectorModule,
+    DxoFullstackedsplineareaRangeSelectorModule,
+    DxoArgumentFormatRangeSelectorModule,
+    DxoFontRangeSelectorModule,
+    DxoFormatRangeSelectorModule,
+    DxoLineRangeSelectorModule,
+    DxoRangeareaRangeSelectorModule,
+    DxoRangebarRangeSelectorModule,
+    DxoScatterRangeSelectorModule,
+    DxoSplineRangeSelectorModule,
+    DxoSplineareaRangeSelectorModule,
+    DxoStackedareaRangeSelectorModule,
+    DxoStackedbarRangeSelectorModule,
+    DxoStackedlineRangeSelectorModule,
+    DxoStackedsplineRangeSelectorModule,
+    DxoStackedsplineareaRangeSelectorModule,
+    DxoStepareaRangeSelectorModule,
+    DxoSteplineRangeSelectorModule,
+    DxoStockRangeSelectorModule,
+    DxoDataPrepareSettingsRangeSelectorModule,
+    DxiSeriesRangeSelectorModule,
+    DxoSeriesTemplateRangeSelectorModule,
+    DxoValueAxisRangeSelectorModule,
+    DxoExportRangeSelectorModule,
+    DxoIndentRangeSelectorModule,
+    DxoLoadingIndicatorRangeSelectorModule,
+    DxoMarginRangeSelectorModule,
+    DxoScaleRangeSelectorModule,
+    DxoAggregationIntervalRangeSelectorModule,
+    DxiBreakRangeSelectorModule,
+    DxoBreakStyleRangeSelectorModule,
+    DxoMarkerRangeSelectorModule,
+    DxoMaxRangeRangeSelectorModule,
+    DxoMinorTickRangeSelectorModule,
+    DxoMinorTickIntervalRangeSelectorModule,
+    DxoMinRangeRangeSelectorModule,
+    DxoTickRangeSelectorModule,
+    DxoTickIntervalRangeSelectorModule,
+    DxoShutterRangeSelectorModule,
+    DxoSizeRangeSelectorModule,
+    DxoSliderHandleRangeSelectorModule,
+    DxoSliderMarkerRangeSelectorModule,
+    DxoTitleRangeSelectorModule,
+    DxoSubtitleRangeSelectorModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -990,6 +1133,76 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoSliderMarkerModule,
     DxoTitleModule,
     DxoSubtitleModule,
+    DxoBackgroundRangeSelectorModule,
+    DxoImageRangeSelectorModule,
+    DxoBehaviorRangeSelectorModule,
+    DxoChartRangeSelectorModule,
+    DxoCommonSeriesSettingsRangeSelectorModule,
+    DxoAggregationRangeSelectorModule,
+    DxoAreaRangeSelectorModule,
+    DxoBorderRangeSelectorModule,
+    DxoHoverStyleRangeSelectorModule,
+    DxoHatchingRangeSelectorModule,
+    DxoLabelRangeSelectorModule,
+    DxoConnectorRangeSelectorModule,
+    DxoPointRangeSelectorModule,
+    DxoHeightRangeSelectorModule,
+    DxoUrlRangeSelectorModule,
+    DxoWidthRangeSelectorModule,
+    DxoSelectionStyleRangeSelectorModule,
+    DxoReductionRangeSelectorModule,
+    DxoValueErrorBarRangeSelectorModule,
+    DxoBarRangeSelectorModule,
+    DxoBubbleRangeSelectorModule,
+    DxoCandlestickRangeSelectorModule,
+    DxoColorRangeSelectorModule,
+    DxoFullstackedareaRangeSelectorModule,
+    DxoFullstackedbarRangeSelectorModule,
+    DxoFullstackedlineRangeSelectorModule,
+    DxoFullstackedsplineRangeSelectorModule,
+    DxoFullstackedsplineareaRangeSelectorModule,
+    DxoArgumentFormatRangeSelectorModule,
+    DxoFontRangeSelectorModule,
+    DxoFormatRangeSelectorModule,
+    DxoLineRangeSelectorModule,
+    DxoRangeareaRangeSelectorModule,
+    DxoRangebarRangeSelectorModule,
+    DxoScatterRangeSelectorModule,
+    DxoSplineRangeSelectorModule,
+    DxoSplineareaRangeSelectorModule,
+    DxoStackedareaRangeSelectorModule,
+    DxoStackedbarRangeSelectorModule,
+    DxoStackedlineRangeSelectorModule,
+    DxoStackedsplineRangeSelectorModule,
+    DxoStackedsplineareaRangeSelectorModule,
+    DxoStepareaRangeSelectorModule,
+    DxoSteplineRangeSelectorModule,
+    DxoStockRangeSelectorModule,
+    DxoDataPrepareSettingsRangeSelectorModule,
+    DxiSeriesRangeSelectorModule,
+    DxoSeriesTemplateRangeSelectorModule,
+    DxoValueAxisRangeSelectorModule,
+    DxoExportRangeSelectorModule,
+    DxoIndentRangeSelectorModule,
+    DxoLoadingIndicatorRangeSelectorModule,
+    DxoMarginRangeSelectorModule,
+    DxoScaleRangeSelectorModule,
+    DxoAggregationIntervalRangeSelectorModule,
+    DxiBreakRangeSelectorModule,
+    DxoBreakStyleRangeSelectorModule,
+    DxoMarkerRangeSelectorModule,
+    DxoMaxRangeRangeSelectorModule,
+    DxoMinorTickRangeSelectorModule,
+    DxoMinorTickIntervalRangeSelectorModule,
+    DxoMinRangeRangeSelectorModule,
+    DxoTickRangeSelectorModule,
+    DxoTickIntervalRangeSelectorModule,
+    DxoShutterRangeSelectorModule,
+    DxoSizeRangeSelectorModule,
+    DxoSliderHandleRangeSelectorModule,
+    DxoSliderMarkerRangeSelectorModule,
+    DxoTitleRangeSelectorModule,
+    DxoSubtitleRangeSelectorModule,
     DxTemplateModule
   ]
 })

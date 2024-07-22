@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tick',
+    selector: 'dxo-tick-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTickComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTickRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -79,10 +79,10 @@ export class DxoTickComponent extends NestedOption implements OnDestroy, OnInit 
 
 @NgModule({
   declarations: [
-    DxoTickComponent
+    DxoTickRangeSelectorComponent
   ],
   exports: [
-    DxoTickComponent
+    DxoTickRangeSelectorComponent
   ],
 })
-export class DxoTickModule { }
+export class DxoTickRangeSelectorModule { }

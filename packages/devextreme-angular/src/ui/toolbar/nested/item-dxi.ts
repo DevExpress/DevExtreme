@@ -30,12 +30,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item',
+    selector: 'dxi-item-toolbar',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiItemToolbarComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get cssClass(): string | undefined {
@@ -168,10 +168,10 @@ export class DxiItemComponent extends CollectionNestedOption implements AfterVie
 
 @NgModule({
   declarations: [
-    DxiItemComponent
+    DxiItemToolbarComponent
   ],
   exports: [
-    DxiItemComponent
+    DxiItemToolbarComponent
   ],
 })
-export class DxiItemModule { }
+export class DxiItemToolbarModule { }

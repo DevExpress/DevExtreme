@@ -24,12 +24,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-series',
+    selector: 'dxi-series-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiSeriesComponent extends CollectionNestedOption {
+export class DxiSeriesChartComponent extends CollectionNestedOption {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -373,10 +373,10 @@ export class DxiSeriesComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiSeriesComponent
+    DxiSeriesChartComponent
   ],
   exports: [
-    DxiSeriesComponent
+    DxiSeriesChartComponent
   ],
 })
-export class DxiSeriesModule { }
+export class DxiSeriesChartModule { }

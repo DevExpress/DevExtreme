@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hover-style',
+    selector: 'dxo-hover-style-tree-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHoverStyleTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -71,10 +71,10 @@ export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoHoverStyleComponent
+    DxoHoverStyleTreeMapComponent
   ],
   exports: [
-    DxoHoverStyleComponent
+    DxoHoverStyleTreeMapComponent
   ],
 })
-export class DxoHoverStyleModule { }
+export class DxoHoverStyleTreeMapModule { }

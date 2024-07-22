@@ -48,25 +48,44 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiButtonModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoToModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/drop-down-box/nested';
 
-import { DxiButtonComponent } from 'devextreme-angular/ui/drop-down-box/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiButtonDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoOptionsDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoDropDownOptionsDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoAnimationDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoHideDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoFromDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoPositionDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoAtDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoBoundaryOffsetDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoCollisionDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoMyDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoOffsetDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoToDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxoShowDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxiToolbarItemDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxiItemDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box/nested';
+
+import { DxiButtonDropDownBoxComponent } from 'devextreme-angular/ui/drop-down-box/nested';
+import { DxiItemDropDownBoxComponent } from 'devextreme-angular/ui/drop-down-box/nested';
 
 
 
@@ -1154,16 +1173,16 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(DxiButtonDropDownBoxComponent)
+    get buttonsChildren(): QueryList<DxiButtonDropDownBoxComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
         this.setChildren('buttons', value);
     }
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemDropDownBoxComponent)
+    get itemsChildren(): QueryList<DxiItemDropDownBoxComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -1334,6 +1353,22 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoShowModule,
     DxiToolbarItemModule,
     DxiItemModule,
+    DxiButtonDropDownBoxModule,
+    DxoOptionsDropDownBoxModule,
+    DxoDropDownOptionsDropDownBoxModule,
+    DxoAnimationDropDownBoxModule,
+    DxoHideDropDownBoxModule,
+    DxoFromDropDownBoxModule,
+    DxoPositionDropDownBoxModule,
+    DxoAtDropDownBoxModule,
+    DxoBoundaryOffsetDropDownBoxModule,
+    DxoCollisionDropDownBoxModule,
+    DxoMyDropDownBoxModule,
+    DxoOffsetDropDownBoxModule,
+    DxoToDropDownBoxModule,
+    DxoShowDropDownBoxModule,
+    DxiToolbarItemDropDownBoxModule,
+    DxiItemDropDownBoxModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1358,6 +1393,22 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoShowModule,
     DxiToolbarItemModule,
     DxiItemModule,
+    DxiButtonDropDownBoxModule,
+    DxoOptionsDropDownBoxModule,
+    DxoDropDownOptionsDropDownBoxModule,
+    DxoAnimationDropDownBoxModule,
+    DxoHideDropDownBoxModule,
+    DxoFromDropDownBoxModule,
+    DxoPositionDropDownBoxModule,
+    DxoAtDropDownBoxModule,
+    DxoBoundaryOffsetDropDownBoxModule,
+    DxoCollisionDropDownBoxModule,
+    DxoMyDropDownBoxModule,
+    DxoOffsetDropDownBoxModule,
+    DxoToDropDownBoxModule,
+    DxoShowDropDownBoxModule,
+    DxiToolbarItemDropDownBoxModule,
+    DxiItemDropDownBoxModule,
     DxTemplateModule
   ]
 })

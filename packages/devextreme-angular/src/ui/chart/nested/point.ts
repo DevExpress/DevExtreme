@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-point',
+    selector: 'dxo-point-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPointChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
@@ -136,10 +136,10 @@ export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoPointComponent
+    DxoPointChartComponent
   ],
   exports: [
-    DxoPointComponent
+    DxoPointChartComponent
   ],
 })
-export class DxoPointModule { }
+export class DxoPointChartModule { }

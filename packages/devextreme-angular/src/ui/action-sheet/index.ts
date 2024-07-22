@@ -42,9 +42,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/action-sheet/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/action-sheet/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemActionSheetModule } from 'devextreme-angular/ui/action-sheet/nested';
+
+import { DxiItemActionSheetComponent } from 'devextreme-angular/ui/action-sheet/nested';
 
 
 
@@ -499,8 +503,8 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemActionSheetComponent)
+    get itemsChildren(): QueryList<DxiItemActionSheetComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -596,6 +600,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemActionSheetModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -605,6 +610,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
   exports: [
     DxActionSheetComponent,
     DxiItemModule,
+    DxiItemActionSheetModule,
     DxTemplateModule
   ]
 })

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-colorizer',
+    selector: 'dxo-colorizer-tree-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoColorizerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColorizerTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get colorCodeField(): string | undefined {
         return this._getOption('colorCodeField');
@@ -105,10 +105,10 @@ export class DxoColorizerComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoColorizerComponent
+    DxoColorizerTreeMapComponent
   ],
   exports: [
-    DxoColorizerComponent
+    DxoColorizerTreeMapComponent
   ],
 })
-export class DxoColorizerModule { }
+export class DxoColorizerTreeMapModule { }

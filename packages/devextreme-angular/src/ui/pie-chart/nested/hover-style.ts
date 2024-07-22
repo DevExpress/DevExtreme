@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hover-style',
+    selector: 'dxo-hover-style-pie-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHoverStylePieChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
@@ -88,10 +88,10 @@ export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoHoverStyleComponent
+    DxoHoverStylePieChartComponent
   ],
   exports: [
-    DxoHoverStyleComponent
+    DxoHoverStylePieChartComponent
   ],
 })
-export class DxoHoverStyleModule { }
+export class DxoHoverStylePieChartModule { }

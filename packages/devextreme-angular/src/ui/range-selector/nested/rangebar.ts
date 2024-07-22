@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-rangebar',
+    selector: 'dxo-rangebar-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoRangebarComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangebarRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoRangebarComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoRangebarComponent
+    DxoRangebarRangeSelectorComponent
   ],
   exports: [
-    DxoRangebarComponent
+    DxoRangebarRangeSelectorComponent
   ],
 })
-export class DxoRangebarModule { }
+export class DxoRangebarRangeSelectorModule { }

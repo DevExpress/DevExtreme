@@ -31,12 +31,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-toolbar-item',
+    selector: 'dxi-toolbar-item-date-range-box',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiToolbarItemDateRangeBoxComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get cssClass(): string | undefined {
@@ -177,10 +177,10 @@ export class DxiToolbarItemComponent extends CollectionNestedOption implements A
 
 @NgModule({
   declarations: [
-    DxiToolbarItemComponent
+    DxiToolbarItemDateRangeBoxComponent
   ],
   exports: [
-    DxiToolbarItemComponent
+    DxiToolbarItemDateRangeBoxComponent
   ],
 })
-export class DxiToolbarItemModule { }
+export class DxiToolbarItemDateRangeBoxModule { }

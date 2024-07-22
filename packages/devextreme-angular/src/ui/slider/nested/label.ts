@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label',
+    selector: 'dxo-label-slider',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLabelSliderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get format(): Format | string {
         return this._getOption('format');
@@ -81,10 +81,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoLabelComponent
+    DxoLabelSliderComponent
   ],
   exports: [
-    DxoLabelComponent
+    DxoLabelSliderComponent
   ],
 })
-export class DxoLabelModule { }
+export class DxoLabelSliderModule { }

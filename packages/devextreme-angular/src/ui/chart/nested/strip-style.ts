@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-strip-style',
+    selector: 'dxo-strip-style-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoStripStyleChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment } {
         return this._getOption('label');
@@ -81,10 +81,10 @@ export class DxoStripStyleComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoStripStyleComponent
+    DxoStripStyleChartComponent
   ],
   exports: [
-    DxoStripStyleComponent
+    DxoStripStyleChartComponent
   ],
 })
-export class DxoStripStyleModule { }
+export class DxoStripStyleChartModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-projection',
+    selector: 'dxo-projection-vector-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoProjectionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoProjectionVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aspectRatio(): number {
         return this._getOption('aspectRatio');
@@ -79,10 +79,10 @@ export class DxoProjectionComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoProjectionComponent
+    DxoProjectionVectorMapComponent
   ],
   exports: [
-    DxoProjectionComponent
+    DxoProjectionVectorMapComponent
   ],
 })
-export class DxoProjectionModule { }
+export class DxoProjectionVectorMapModule { }

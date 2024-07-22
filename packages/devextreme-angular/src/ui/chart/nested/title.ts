@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-title',
+    selector: 'dxo-title-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTitleChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
@@ -137,10 +137,10 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoTitleComponent
+    DxoTitleChartComponent
   ],
   exports: [
-    DxoTitleComponent
+    DxoTitleChartComponent
   ],
 })
-export class DxoTitleModule { }
+export class DxoTitleChartModule { }

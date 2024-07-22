@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-selection-style',
+    selector: 'dxo-selection-style-tree-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSelectionStyleTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string, width?: number | undefined } {
         return this._getOption('border');
@@ -71,10 +71,10 @@ export class DxoSelectionStyleComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoSelectionStyleComponent
+    DxoSelectionStyleTreeMapComponent
   ],
   exports: [
-    DxoSelectionStyleComponent
+    DxoSelectionStyleTreeMapComponent
   ],
 })
-export class DxoSelectionStyleModule { }
+export class DxoSelectionStyleTreeMapModule { }

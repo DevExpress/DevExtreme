@@ -38,19 +38,35 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoDataSourceModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxiFieldModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoStoreModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoFieldChooserModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoFieldPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoSearchModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoLoadPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoScrollingModule } from 'devextreme-angular/ui/pivot-grid/nested';
-import { DxoStateStoringModule } from 'devextreme-angular/ui/pivot-grid/nested';
+
+import { DxoDataSourceModule } from 'devextreme-angular/ui/nested';
+import { DxiFieldModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
+import { DxoStoreModule } from 'devextreme-angular/ui/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldChooserModule } from 'devextreme-angular/ui/nested';
+import { DxoTextsModule } from 'devextreme-angular/ui/nested';
+import { DxoFieldPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoSearchModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
+import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
+import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoDataSourcePivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxiFieldPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoFormatPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoHeaderFilterPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoStorePivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoExportPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoFieldChooserPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoTextsPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoFieldPanelPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoSearchPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoLoadPanelPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoScrollingPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoStateStoringPivotGridModule } from 'devextreme-angular/ui/pivot-grid/nested';
 
 
 
@@ -890,6 +906,19 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoLoadPanelModule,
     DxoScrollingModule,
     DxoStateStoringModule,
+    DxoDataSourcePivotGridModule,
+    DxiFieldPivotGridModule,
+    DxoFormatPivotGridModule,
+    DxoHeaderFilterPivotGridModule,
+    DxoStorePivotGridModule,
+    DxoExportPivotGridModule,
+    DxoFieldChooserPivotGridModule,
+    DxoTextsPivotGridModule,
+    DxoFieldPanelPivotGridModule,
+    DxoSearchPivotGridModule,
+    DxoLoadPanelPivotGridModule,
+    DxoScrollingPivotGridModule,
+    DxoStateStoringPivotGridModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -911,6 +940,19 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoLoadPanelModule,
     DxoScrollingModule,
     DxoStateStoringModule,
+    DxoDataSourcePivotGridModule,
+    DxiFieldPivotGridModule,
+    DxoFormatPivotGridModule,
+    DxoHeaderFilterPivotGridModule,
+    DxoStorePivotGridModule,
+    DxoExportPivotGridModule,
+    DxoFieldChooserPivotGridModule,
+    DxoTextsPivotGridModule,
+    DxoFieldPanelPivotGridModule,
+    DxoSearchPivotGridModule,
+    DxoLoadPanelPivotGridModule,
+    DxoScrollingPivotGridModule,
+    DxoStateStoringPivotGridModule,
     DxTemplateModule
   ]
 })

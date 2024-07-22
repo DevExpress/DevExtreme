@@ -35,17 +35,31 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoToModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/load-panel/nested';
+
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAnimationLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoHideLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoFromLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoPositionLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoAtLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoBoundaryOffsetLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoCollisionLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoMyLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoOffsetLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoToLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoShowLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
 
 
 
@@ -729,6 +743,17 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoAnimationLoadPanelModule,
+    DxoHideLoadPanelModule,
+    DxoFromLoadPanelModule,
+    DxoPositionLoadPanelModule,
+    DxoAtLoadPanelModule,
+    DxoBoundaryOffsetLoadPanelModule,
+    DxoCollisionLoadPanelModule,
+    DxoMyLoadPanelModule,
+    DxoOffsetLoadPanelModule,
+    DxoToLoadPanelModule,
+    DxoShowLoadPanelModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -748,6 +773,17 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoAnimationLoadPanelModule,
+    DxoHideLoadPanelModule,
+    DxoFromLoadPanelModule,
+    DxoPositionLoadPanelModule,
+    DxoAtLoadPanelModule,
+    DxoBoundaryOffsetLoadPanelModule,
+    DxoCollisionLoadPanelModule,
+    DxoMyLoadPanelModule,
+    DxoOffsetLoadPanelModule,
+    DxoToLoadPanelModule,
+    DxoShowLoadPanelModule,
     DxTemplateModule
   ]
 })

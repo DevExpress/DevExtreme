@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-resource-assignments',
+    selector: 'dxo-resource-assignments-gantt',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoResourceAssignmentsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoResourceAssignmentsGanttComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
         return this._getOption('dataSource');
@@ -89,10 +89,10 @@ export class DxoResourceAssignmentsComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoResourceAssignmentsComponent
+    DxoResourceAssignmentsGanttComponent
   ],
   exports: [
-    DxoResourceAssignmentsComponent
+    DxoResourceAssignmentsGanttComponent
   ],
 })
-export class DxoResourceAssignmentsModule { }
+export class DxoResourceAssignmentsGanttModule { }

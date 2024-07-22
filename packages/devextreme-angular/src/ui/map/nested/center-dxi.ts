@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-center',
+    selector: 'dxi-center-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiCenterComponent extends CollectionNestedOption {
+export class DxiCenterMapComponent extends CollectionNestedOption {
     @Input()
     get lat(): number {
         return this._getOption('lat');
@@ -65,10 +65,10 @@ export class DxiCenterComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiCenterComponent
+    DxiCenterMapComponent
   ],
   exports: [
-    DxiCenterComponent
+    DxiCenterMapComponent
   ],
 })
-export class DxiCenterModule { }
+export class DxiCenterMapModule { }

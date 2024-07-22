@@ -40,10 +40,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAdapterModule } from 'devextreme-angular/ui/validator/nested';
-import { DxiValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 
-import { DxiValidationRuleComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
+import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAdapterValidatorModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidationRuleValidatorModule } from 'devextreme-angular/ui/validator/nested';
+
+import { DxiValidationRuleValidatorComponent } from 'devextreme-angular/ui/validator/nested';
 
 
 
@@ -238,8 +243,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 
 
-    @ContentChildren(DxiValidationRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+    @ContentChildren(DxiValidationRuleValidatorComponent)
+    get validationRulesChildren(): QueryList<DxiValidationRuleValidatorComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
@@ -334,6 +339,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
   imports: [
     DxoAdapterModule,
     DxiValidationRuleModule,
+    DxoAdapterValidatorModule,
+    DxiValidationRuleValidatorModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -344,6 +351,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     DxValidatorComponent,
     DxoAdapterModule,
     DxiValidationRuleModule,
+    DxoAdapterValidatorModule,
+    DxiValidationRuleValidatorModule,
     DxTemplateModule
   ]
 })

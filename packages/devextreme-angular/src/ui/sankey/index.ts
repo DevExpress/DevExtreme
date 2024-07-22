@@ -41,23 +41,43 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoLinkModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoHoverStyleModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoHatchingModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoNodeModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/sankey/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/sankey/nested';
+
+import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+import { DxoLinkModule } from 'devextreme-angular/ui/nested';
+import { DxoHoverStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoHatchingModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/nested';
+import { DxoNodeModule } from 'devextreme-angular/ui/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAdaptiveLayoutSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoExportSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoLabelSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoBorderSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoFontSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoShadowSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoLinkSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoHoverStyleSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoHatchingSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoLoadingIndicatorSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoMarginSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoNodeSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSizeSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoTitleSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSubtitleSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoTooltipSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoFormatSankeyModule } from 'devextreme-angular/ui/sankey/nested';
 
 
 
@@ -795,6 +815,23 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     DxoSubtitleModule,
     DxoTooltipModule,
     DxoFormatModule,
+    DxoAdaptiveLayoutSankeyModule,
+    DxoExportSankeyModule,
+    DxoLabelSankeyModule,
+    DxoBorderSankeyModule,
+    DxoFontSankeyModule,
+    DxoShadowSankeyModule,
+    DxoLinkSankeyModule,
+    DxoHoverStyleSankeyModule,
+    DxoHatchingSankeyModule,
+    DxoLoadingIndicatorSankeyModule,
+    DxoMarginSankeyModule,
+    DxoNodeSankeyModule,
+    DxoSizeSankeyModule,
+    DxoTitleSankeyModule,
+    DxoSubtitleSankeyModule,
+    DxoTooltipSankeyModule,
+    DxoFormatSankeyModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -820,6 +857,23 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     DxoSubtitleModule,
     DxoTooltipModule,
     DxoFormatModule,
+    DxoAdaptiveLayoutSankeyModule,
+    DxoExportSankeyModule,
+    DxoLabelSankeyModule,
+    DxoBorderSankeyModule,
+    DxoFontSankeyModule,
+    DxoShadowSankeyModule,
+    DxoLinkSankeyModule,
+    DxoHoverStyleSankeyModule,
+    DxoHatchingSankeyModule,
+    DxoLoadingIndicatorSankeyModule,
+    DxoMarginSankeyModule,
+    DxoNodeSankeyModule,
+    DxoSizeSankeyModule,
+    DxoTitleSankeyModule,
+    DxoSubtitleSankeyModule,
+    DxoTooltipSankeyModule,
+    DxoFormatSankeyModule,
     DxTemplateModule
   ]
 })

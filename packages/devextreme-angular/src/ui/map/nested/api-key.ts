@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-api-key',
+    selector: 'dxo-api-key-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoApiKeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoApiKeyMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bing(): string {
         return this._getOption('bing');
@@ -79,10 +79,10 @@ export class DxoApiKeyComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoApiKeyComponent
+    DxoApiKeyMapComponent
   ],
   exports: [
-    DxoApiKeyComponent
+    DxoApiKeyMapComponent
   ],
 })
-export class DxoApiKeyModule { }
+export class DxoApiKeyMapModule { }

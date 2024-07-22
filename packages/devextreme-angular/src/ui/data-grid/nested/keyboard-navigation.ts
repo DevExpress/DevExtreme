@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-keyboard-navigation',
+    selector: 'dxo-keyboard-navigation-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoKeyboardNavigationDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get editOnKeyPress(): boolean {
         return this._getOption('editOnKeyPress');
@@ -88,10 +88,10 @@ export class DxoKeyboardNavigationComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoKeyboardNavigationComponent
+    DxoKeyboardNavigationDataGridComponent
   ],
   exports: [
-    DxoKeyboardNavigationComponent
+    DxoKeyboardNavigationDataGridComponent
   ],
 })
-export class DxoKeyboardNavigationModule { }
+export class DxoKeyboardNavigationDataGridModule { }

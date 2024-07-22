@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-image',
+    selector: 'dxo-image-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoImageRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get location(): BackgroundImageLocation {
         return this._getOption('location');
@@ -88,10 +88,10 @@ export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoImageComponent
+    DxoImageRangeSelectorComponent
   ],
   exports: [
-    DxoImageComponent
+    DxoImageRangeSelectorComponent
   ],
 })
-export class DxoImageModule { }
+export class DxoImageRangeSelectorModule { }

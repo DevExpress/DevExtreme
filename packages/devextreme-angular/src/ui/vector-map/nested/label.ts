@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label',
+    selector: 'dxo-label-vector-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLabelVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get dataField(): string {
         return this._getOption('dataField');
@@ -80,10 +80,10 @@ export class DxoLabelComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoLabelComponent
+    DxoLabelVectorMapComponent
   ],
   exports: [
-    DxoLabelComponent
+    DxoLabelVectorMapComponent
   ],
 })
-export class DxoLabelModule { }
+export class DxoLabelVectorMapModule { }

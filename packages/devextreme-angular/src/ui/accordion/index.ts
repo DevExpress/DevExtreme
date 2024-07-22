@@ -40,9 +40,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/accordion/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/accordion/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemAccordionModule } from 'devextreme-angular/ui/accordion/nested';
+
+import { DxiItemAccordionComponent } from 'devextreme-angular/ui/accordion/nested';
 
 
 
@@ -705,8 +709,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemAccordionComponent)
+    get itemsChildren(): QueryList<DxiItemAccordionComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -817,6 +821,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemAccordionModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -826,6 +831,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
   exports: [
     DxAccordionComponent,
     DxiItemModule,
+    DxiItemAccordionModule,
     DxTemplateModule
   ]
 })

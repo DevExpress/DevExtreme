@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-common-axis-settings',
+    selector: 'dxo-common-axis-settings-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCommonAxisSettingsPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -176,10 +176,10 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoCommonAxisSettingsComponent
+    DxoCommonAxisSettingsPolarChartComponent
   ],
   exports: [
-    DxoCommonAxisSettingsComponent
+    DxoCommonAxisSettingsPolarChartComponent
   ],
 })
-export class DxoCommonAxisSettingsModule { }
+export class DxoCommonAxisSettingsPolarChartModule { }

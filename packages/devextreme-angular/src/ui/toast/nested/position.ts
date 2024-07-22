@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-position',
+    selector: 'dxo-position-toast',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPositionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPositionToastComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -114,10 +114,10 @@ export class DxoPositionComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoPositionComponent
+    DxoPositionToastComponent
   ],
   exports: [
-    DxoPositionComponent
+    DxoPositionToastComponent
   ],
 })
-export class DxoPositionModule { }
+export class DxoPositionToastModule { }

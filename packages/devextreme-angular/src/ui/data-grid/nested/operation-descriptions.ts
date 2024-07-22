@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-operation-descriptions',
+    selector: 'dxo-operation-descriptions-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoOperationDescriptionsDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get between(): string {
         return this._getOption('between');
@@ -143,10 +143,10 @@ export class DxoOperationDescriptionsComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoOperationDescriptionsComponent
+    DxoOperationDescriptionsDataGridComponent
   ],
   exports: [
-    DxoOperationDescriptionsComponent
+    DxoOperationDescriptionsDataGridComponent
   ],
 })
-export class DxoOperationDescriptionsModule { }
+export class DxoOperationDescriptionsDataGridModule { }

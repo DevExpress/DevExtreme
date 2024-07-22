@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-legend',
+    selector: 'dxo-legend-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLegendComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLegendPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');
@@ -241,10 +241,10 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoLegendComponent
+    DxoLegendPolarChartComponent
   ],
   exports: [
-    DxoLegendComponent
+    DxoLegendPolarChartComponent
   ],
 })
-export class DxoLegendModule { }
+export class DxoLegendPolarChartModule { }

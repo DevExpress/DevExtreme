@@ -21,16 +21,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiCommandComponent } from './command-dxi';
+import { DxiCommandDiagramComponent } from './command-dxi';
 
 
 @Component({
-    selector: 'dxi-group',
+    selector: 'dxi-group-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiGroupComponent extends CollectionNestedOption {
+export class DxiGroupDiagramComponent extends CollectionNestedOption {
     @Input()
     get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');
@@ -85,8 +85,8 @@ export class DxiGroupComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
+    @ContentChildren(forwardRef(() => DxiCommandDiagramComponent))
+    get commandsChildren(): QueryList<DxiCommandDiagramComponent> {
         return this._getOption('commands');
     }
     set commandsChildren(value) {
@@ -110,10 +110,10 @@ export class DxiGroupComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiGroupComponent
+    DxiGroupDiagramComponent
   ],
   exports: [
-    DxiGroupComponent
+    DxiGroupDiagramComponent
   ],
 })
-export class DxiGroupModule { }
+export class DxiGroupDiagramModule { }

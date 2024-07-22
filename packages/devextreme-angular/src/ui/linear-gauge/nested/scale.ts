@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scale',
+    selector: 'dxo-scale-linear-gauge',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoScaleLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -162,10 +162,10 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoScaleComponent
+    DxoScaleLinearGaugeComponent
   ],
   exports: [
-    DxoScaleComponent
+    DxoScaleLinearGaugeComponent
   ],
 })
-export class DxoScaleModule { }
+export class DxoScaleLinearGaugeModule { }

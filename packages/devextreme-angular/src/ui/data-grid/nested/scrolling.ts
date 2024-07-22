@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scrolling',
+    selector: 'dxo-scrolling-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoScrollingDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get columnRenderingMode(): DataRenderMode {
         return this._getOption('columnRenderingMode');
@@ -130,10 +130,10 @@ export class DxoScrollingComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoScrollingComponent
+    DxoScrollingDataGridComponent
   ],
   exports: [
-    DxoScrollingComponent
+    DxoScrollingDataGridComponent
   ],
 })
-export class DxoScrollingModule { }
+export class DxoScrollingDataGridModule { }

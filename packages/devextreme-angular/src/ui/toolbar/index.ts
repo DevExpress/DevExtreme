@@ -41,9 +41,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/toolbar/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/toolbar/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemToolbarModule } from 'devextreme-angular/ui/toolbar/nested';
+
+import { DxiItemToolbarComponent } from 'devextreme-angular/ui/toolbar/nested';
 
 
 
@@ -410,8 +414,8 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemToolbarComponent)
+    get itemsChildren(): QueryList<DxiItemToolbarComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -502,6 +506,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemToolbarModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -511,6 +516,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
   exports: [
     DxToolbarComponent,
     DxiItemModule,
+    DxiItemToolbarModule,
     DxTemplateModule
   ]
 })

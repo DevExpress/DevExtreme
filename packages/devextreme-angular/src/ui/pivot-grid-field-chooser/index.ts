@@ -38,9 +38,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
-import { DxoSearchModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
-import { DxoTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
+import { DxoSearchModule } from 'devextreme-angular/ui/nested';
+import { DxoTextsModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoHeaderFilterPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoSearchPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoTextsPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
 
 
@@ -612,6 +618,9 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     DxoHeaderFilterModule,
     DxoSearchModule,
     DxoTextsModule,
+    DxoHeaderFilterPivotGridFieldChooserModule,
+    DxoSearchPivotGridFieldChooserModule,
+    DxoTextsPivotGridFieldChooserModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -623,6 +632,9 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     DxoHeaderFilterModule,
     DxoSearchModule,
     DxoTextsModule,
+    DxoHeaderFilterPivotGridFieldChooserModule,
+    DxoSearchPivotGridFieldChooserModule,
+    DxoTextsPivotGridFieldChooserModule,
     DxTemplateModule
   ]
 })

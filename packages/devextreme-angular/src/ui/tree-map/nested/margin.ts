@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-margin',
+    selector: 'dxo-margin-tree-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarginComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMarginTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -87,10 +87,10 @@ export class DxoMarginComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoMarginComponent
+    DxoMarginTreeMapComponent
   ],
   exports: [
-    DxoMarginComponent
+    DxoMarginTreeMapComponent
   ],
 })
-export class DxoMarginModule { }
+export class DxoMarginTreeMapModule { }

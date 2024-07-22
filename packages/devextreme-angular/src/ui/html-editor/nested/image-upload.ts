@@ -24,16 +24,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTabComponent } from './tab-dxi';
+import { DxiTabHtmlEditorComponent } from './tab-dxi';
 
 
 @Component({
-    selector: 'dxo-image-upload',
+    selector: 'dxo-image-upload-html-editor',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoImageUploadComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoImageUploadHtmlEditorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get fileUploaderOptions(): dxFileUploaderOptions {
         return this._getOption('fileUploaderOptions');
@@ -80,8 +80,8 @@ export class DxoImageUploadComponent extends NestedOption implements OnDestroy, 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTabComponent))
-    get tabsChildren(): QueryList<DxiTabComponent> {
+    @ContentChildren(forwardRef(() => DxiTabHtmlEditorComponent))
+    get tabsChildren(): QueryList<DxiTabHtmlEditorComponent> {
         return this._getOption('tabs');
     }
     set tabsChildren(value) {
@@ -109,10 +109,10 @@ export class DxoImageUploadComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoImageUploadComponent
+    DxoImageUploadHtmlEditorComponent
   ],
   exports: [
-    DxoImageUploadComponent
+    DxoImageUploadHtmlEditorComponent
   ],
 })
-export class DxoImageUploadModule { }
+export class DxoImageUploadHtmlEditorModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-marker',
+    selector: 'dxo-marker-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarkerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMarkerRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get label(): { customizeText?: Function, format?: Format | string | undefined } {
         return this._getOption('label');
@@ -104,10 +104,10 @@ export class DxoMarkerComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoMarkerComponent
+    DxoMarkerRangeSelectorComponent
   ],
   exports: [
-    DxoMarkerComponent
+    DxoMarkerRangeSelectorComponent
   ],
 })
-export class DxoMarkerModule { }
+export class DxoMarkerRangeSelectorModule { }

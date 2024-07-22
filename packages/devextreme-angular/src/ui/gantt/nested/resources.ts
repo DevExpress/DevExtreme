@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-resources',
+    selector: 'dxo-resources-gantt',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoResourcesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoResourcesGanttComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get colorExpr(): Function | string {
         return this._getOption('colorExpr');
@@ -89,10 +89,10 @@ export class DxoResourcesComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoResourcesComponent
+    DxoResourcesGanttComponent
   ],
   exports: [
-    DxoResourcesComponent
+    DxoResourcesGanttComponent
   ],
 })
-export class DxoResourcesModule { }
+export class DxoResourcesGanttModule { }

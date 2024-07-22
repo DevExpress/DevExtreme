@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-horizontal-line',
+    selector: 'dxo-horizontal-line-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHorizontalLineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHorizontalLineChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -105,10 +105,10 @@ export class DxoHorizontalLineComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoHorizontalLineComponent
+    DxoHorizontalLineChartComponent
   ],
   exports: [
-    DxoHorizontalLineComponent
+    DxoHorizontalLineChartComponent
   ],
 })
-export class DxoHorizontalLineModule { }
+export class DxoHorizontalLineChartModule { }

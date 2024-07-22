@@ -40,9 +40,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/gallery/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/gallery/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiItemGalleryModule } from 'devextreme-angular/ui/gallery/nested';
+
+import { DxiItemGalleryComponent } from 'devextreme-angular/ui/gallery/nested';
 
 
 
@@ -717,8 +721,8 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemGalleryComponent)
+    get itemsChildren(): QueryList<DxiItemGalleryComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -825,6 +829,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiItemGalleryModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -834,6 +839,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
   exports: [
     DxGalleryComponent,
     DxiItemModule,
+    DxiItemGalleryModule,
     DxTemplateModule
   ]
 })

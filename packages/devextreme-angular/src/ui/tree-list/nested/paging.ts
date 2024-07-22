@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-paging',
+    selector: 'dxo-paging-tree-list',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPagingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPagingTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -100,10 +100,10 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoPagingComponent
+    DxoPagingTreeListComponent
   ],
   exports: [
-    DxoPagingComponent
+    DxoPagingTreeListComponent
   ],
 })
-export class DxoPagingModule { }
+export class DxoPagingTreeListModule { }

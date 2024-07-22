@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-search',
+    selector: 'dxo-search-tree-list',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSearchComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSearchTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -96,10 +96,10 @@ export class DxoSearchComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoSearchComponent
+    DxoSearchTreeListComponent
   ],
   exports: [
-    DxoSearchComponent
+    DxoSearchTreeListComponent
   ],
 })
-export class DxoSearchModule { }
+export class DxoSearchTreeListModule { }

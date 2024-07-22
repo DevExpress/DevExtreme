@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-texts',
+    selector: 'dxo-texts-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTextsDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get fix(): string {
         return this._getOption('fix');
@@ -359,10 +359,10 @@ export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoTextsComponent
+    DxoTextsDataGridComponent
   ],
   exports: [
-    DxoTextsComponent
+    DxoTextsDataGridComponent
   ],
 })
-export class DxoTextsModule { }
+export class DxoTextsDataGridModule { }

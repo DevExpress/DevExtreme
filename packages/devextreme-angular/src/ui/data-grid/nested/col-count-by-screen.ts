@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-col-count-by-screen',
+    selector: 'dxo-col-count-by-screen-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoColCountByScreenComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColCountByScreenDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get lg(): number | undefined {
         return this._getOption('lg');
@@ -87,10 +87,10 @@ export class DxoColCountByScreenComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoColCountByScreenComponent
+    DxoColCountByScreenDataGridComponent
   ],
   exports: [
-    DxoColCountByScreenComponent
+    DxoColCountByScreenDataGridComponent
   ],
 })
-export class DxoColCountByScreenModule { }
+export class DxoColCountByScreenDataGridModule { }

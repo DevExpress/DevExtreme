@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-sort-by-group-summary-info',
+    selector: 'dxi-sort-by-group-summary-info-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
+export class DxiSortByGroupSummaryInfoDataGridComponent extends CollectionNestedOption {
     @Input()
     get groupColumn(): string | undefined {
         return this._getOption('groupColumn');
@@ -74,10 +74,10 @@ export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiSortByGroupSummaryInfoComponent
+    DxiSortByGroupSummaryInfoDataGridComponent
   ],
   exports: [
-    DxiSortByGroupSummaryInfoComponent
+    DxiSortByGroupSummaryInfoDataGridComponent
   ],
 })
-export class DxiSortByGroupSummaryInfoModule { }
+export class DxiSortByGroupSummaryInfoDataGridModule { }

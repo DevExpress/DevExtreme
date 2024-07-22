@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-texts',
+    selector: 'dxo-texts-gantt',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTextsGanttComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get cancel(): string {
         return this._getOption('cancel');
@@ -79,10 +79,10 @@ export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit
 
 @NgModule({
   declarations: [
-    DxoTextsComponent
+    DxoTextsGanttComponent
   ],
   exports: [
-    DxoTextsComponent
+    DxoTextsGanttComponent
   ],
 })
-export class DxoTextsModule { }
+export class DxoTextsGanttModule { }

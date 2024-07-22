@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-range',
+    selector: 'dxi-range-circular-gauge',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiRangeComponent extends CollectionNestedOption {
+export class DxiRangeCircularGaugeComponent extends CollectionNestedOption {
     @Input()
     get color(): ChartsColor | string {
         return this._getOption('color');
@@ -74,10 +74,10 @@ export class DxiRangeComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiRangeComponent
+    DxiRangeCircularGaugeComponent
   ],
   exports: [
-    DxiRangeComponent
+    DxiRangeCircularGaugeComponent
   ],
 })
-export class DxiRangeModule { }
+export class DxiRangeCircularGaugeModule { }

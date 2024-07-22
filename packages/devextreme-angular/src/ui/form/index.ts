@@ -38,15 +38,25 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoColCountByScreenModule } from 'devextreme-angular/ui/form/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/form/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/form/nested';
-import { DxiValidationRuleModule } from 'devextreme-angular/ui/form/nested';
-import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
-import { DxiTabModule } from 'devextreme-angular/ui/form/nested';
-import { DxoButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/form/nested';
+import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
+import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxiTabModule } from 'devextreme-angular/ui/nested';
+import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoColCountByScreenFormModule } from 'devextreme-angular/ui/form/nested';
+import { DxiItemFormModule } from 'devextreme-angular/ui/form/nested';
+import { DxoLabelFormModule } from 'devextreme-angular/ui/form/nested';
+import { DxiValidationRuleFormModule } from 'devextreme-angular/ui/form/nested';
+import { DxoTabPanelOptionsFormModule } from 'devextreme-angular/ui/form/nested';
+import { DxiTabFormModule } from 'devextreme-angular/ui/form/nested';
+import { DxoButtonOptionsFormModule } from 'devextreme-angular/ui/form/nested';
+
+import { DxiItemFormComponent } from 'devextreme-angular/ui/form/nested';
 
 
 
@@ -797,8 +807,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemFormComponent)
+    get itemsChildren(): QueryList<DxiItemFormComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -911,6 +921,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoColCountByScreenFormModule,
+    DxiItemFormModule,
+    DxoLabelFormModule,
+    DxiValidationRuleFormModule,
+    DxoTabPanelOptionsFormModule,
+    DxiTabFormModule,
+    DxoButtonOptionsFormModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -926,6 +943,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoColCountByScreenFormModule,
+    DxiItemFormModule,
+    DxoLabelFormModule,
+    DxiValidationRuleFormModule,
+    DxoTabPanelOptionsFormModule,
+    DxiTabFormModule,
+    DxoButtonOptionsFormModule,
     DxTemplateModule
   ]
 })

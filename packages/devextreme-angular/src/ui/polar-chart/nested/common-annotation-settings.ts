@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-common-annotation-settings',
+    selector: 'dxo-common-annotation-settings-polar-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCommonAnnotationSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCommonAnnotationSettingsPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -312,10 +312,10 @@ export class DxoCommonAnnotationSettingsComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoCommonAnnotationSettingsComponent
+    DxoCommonAnnotationSettingsPolarChartComponent
   ],
   exports: [
-    DxoCommonAnnotationSettingsComponent
+    DxoCommonAnnotationSettingsPolarChartComponent
   ],
 })
-export class DxoCommonAnnotationSettingsModule { }
+export class DxoCommonAnnotationSettingsPolarChartModule { }

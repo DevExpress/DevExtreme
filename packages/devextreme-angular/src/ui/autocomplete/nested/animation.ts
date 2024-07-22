@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation',
+    selector: 'dxo-animation-autocomplete',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAnimationAutocompleteComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoAnimationComponent
+    DxoAnimationAutocompleteComponent
   ],
   exports: [
-    DxoAnimationComponent
+    DxoAnimationAutocompleteComponent
   ],
 })
-export class DxoAnimationModule { }
+export class DxoAnimationAutocompleteModule { }

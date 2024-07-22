@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-strip',
+    selector: 'dxi-strip-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiStripComponent extends CollectionNestedOption {
+export class DxiStripChartComponent extends CollectionNestedOption {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -99,10 +99,10 @@ export class DxiStripComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiStripComponent
+    DxiStripChartComponent
   ],
   exports: [
-    DxiStripComponent
+    DxiStripChartComponent
   ],
 })
-export class DxiStripModule { }
+export class DxiStripChartModule { }

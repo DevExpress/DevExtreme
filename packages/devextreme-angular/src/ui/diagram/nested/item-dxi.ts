@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item',
+    selector: 'dxi-item-diagram',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemComponent extends CollectionNestedOption {
+export class DxiItemDiagramComponent extends CollectionNestedOption {
     @Input()
     get icon(): string {
         return this._getOption('icon');
@@ -107,10 +107,10 @@ export class DxiItemComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemComponent
+    DxiItemDiagramComponent
   ],
   exports: [
-    DxiItemComponent
+    DxiItemDiagramComponent
   ],
 })
-export class DxiItemModule { }
+export class DxiItemDiagramModule { }

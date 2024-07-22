@@ -27,16 +27,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemComponent } from './item-dxi';
+import { DxiItemBoxComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-box',
+    selector: 'dxo-box-box',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBoxBoxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get align(): Distribution {
         return this._getOption('align');
@@ -215,9 +215,9 @@ export class DxoBoxComponent extends NestedOption implements OnDestroy, OnInit  
 
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
     protected get _optionPath() {
@@ -225,8 +225,8 @@ export class DxoBoxComponent extends NestedOption implements OnDestroy, OnInit  
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(forwardRef(() => DxiItemBoxComponent))
+    get itemsChildren(): QueryList<DxiItemBoxComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -259,10 +259,10 @@ export class DxoBoxComponent extends NestedOption implements OnDestroy, OnInit  
 
 @NgModule({
   declarations: [
-    DxoBoxComponent
+    DxoBoxBoxComponent
   ],
   exports: [
-    DxoBoxComponent
+    DxoBoxBoxComponent
   ],
 })
-export class DxoBoxModule { }
+export class DxoBoxBoxModule { }

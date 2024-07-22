@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-editing',
+    selector: 'dxo-editing-scheduler',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoEditingSchedulerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowAdding(): boolean {
         return this._getOption('allowAdding');
@@ -103,10 +103,10 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
 
 @NgModule({
   declarations: [
-    DxoEditingComponent
+    DxoEditingSchedulerComponent
   ],
   exports: [
-    DxoEditingComponent
+    DxoEditingSchedulerComponent
   ],
 })
-export class DxoEditingModule { }
+export class DxoEditingSchedulerModule { }

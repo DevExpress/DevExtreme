@@ -40,14 +40,22 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
-import { DxoEditingModule } from 'devextreme-angular/ui/scheduler/nested';
-import { DxiResourceModule } from 'devextreme-angular/ui/scheduler/nested';
-import { DxoScrollingModule } from 'devextreme-angular/ui/scheduler/nested';
-import { DxiViewModule } from 'devextreme-angular/ui/scheduler/nested';
 
-import { DxiResourceComponent } from 'devextreme-angular/ui/scheduler/nested';
-import { DxiViewComponent } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/nested';
+import { DxiResourceModule } from 'devextreme-angular/ui/nested';
+import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
+import { DxiViewModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAppointmentDraggingSchedulerModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoEditingSchedulerModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiResourceSchedulerModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoScrollingSchedulerModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiViewSchedulerModule } from 'devextreme-angular/ui/scheduler/nested';
+
+import { DxiResourceSchedulerComponent } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiViewSchedulerComponent } from 'devextreme-angular/ui/scheduler/nested';
 
 
 
@@ -1416,16 +1424,16 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
-    @ContentChildren(DxiResourceComponent)
-    get resourcesChildren(): QueryList<DxiResourceComponent> {
+    @ContentChildren(DxiResourceSchedulerComponent)
+    get resourcesChildren(): QueryList<DxiResourceSchedulerComponent> {
         return this._getOption('resources');
     }
     set resourcesChildren(value) {
         this.setChildren('resources', value);
     }
 
-    @ContentChildren(DxiViewComponent)
-    get viewsChildren(): QueryList<DxiViewComponent> {
+    @ContentChildren(DxiViewSchedulerComponent)
+    get viewsChildren(): QueryList<DxiViewSchedulerComponent> {
         return this._getOption('views');
     }
     set viewsChildren(value) {
@@ -1582,6 +1590,11 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
+    DxoAppointmentDraggingSchedulerModule,
+    DxoEditingSchedulerModule,
+    DxiResourceSchedulerModule,
+    DxoScrollingSchedulerModule,
+    DxiViewSchedulerModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1595,6 +1608,11 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiResourceModule,
     DxoScrollingModule,
     DxiViewModule,
+    DxoAppointmentDraggingSchedulerModule,
+    DxoEditingSchedulerModule,
+    DxiResourceSchedulerModule,
+    DxoScrollingSchedulerModule,
+    DxiViewSchedulerModule,
     DxTemplateModule
   ]
 })

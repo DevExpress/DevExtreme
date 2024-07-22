@@ -23,12 +23,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-legend',
+    selector: 'dxi-legend-vector-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiLegendComponent extends CollectionNestedOption {
+export class DxiLegendVectorMapComponent extends CollectionNestedOption {
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');
@@ -252,10 +252,10 @@ export class DxiLegendComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiLegendComponent
+    DxiLegendVectorMapComponent
   ],
   exports: [
-    DxiLegendComponent
+    DxiLegendVectorMapComponent
   ],
 })
-export class DxiLegendModule { }
+export class DxiLegendVectorMapModule { }

@@ -43,58 +43,110 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiAnnotationModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoImageModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoArgumentAxisModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiConstantLineModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoConstantLineStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoGridModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoMinorGridModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoMinorTickModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoMinorTickIntervalModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiStripModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoStripStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoTickModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoTickIntervalModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoCommonAnnotationSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoCommonAxisSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoCommonSeriesSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoAreaModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoHoverStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoHatchingModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoConnectorModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPointModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoSelectionStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoValueErrorBarModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoBarModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoColorModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoArgumentFormatModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoLineModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoScatterModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoStackedbarModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoDataPrepareSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoLegendModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiSeriesModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoSeriesTemplateModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoValueAxisModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoMinVisualRangeLengthModule } from 'devextreme-angular/ui/polar-chart/nested';
 
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/nested';
+import { DxoImageModule } from 'devextreme-angular/ui/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+import { DxoArgumentAxisModule } from 'devextreme-angular/ui/nested';
+import { DxiConstantLineModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/nested';
+import { DxoConstantLineStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoGridModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoMinorGridModule } from 'devextreme-angular/ui/nested';
+import { DxoMinorTickModule } from 'devextreme-angular/ui/nested';
+import { DxoMinorTickIntervalModule } from 'devextreme-angular/ui/nested';
+import { DxiStripModule } from 'devextreme-angular/ui/nested';
+import { DxoStripStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoTickModule } from 'devextreme-angular/ui/nested';
+import { DxoTickIntervalModule } from 'devextreme-angular/ui/nested';
+import { DxoCommonAnnotationSettingsModule } from 'devextreme-angular/ui/nested';
+import { DxoCommonAxisSettingsModule } from 'devextreme-angular/ui/nested';
+import { DxoCommonSeriesSettingsModule } from 'devextreme-angular/ui/nested';
+import { DxoAreaModule } from 'devextreme-angular/ui/nested';
+import { DxoHoverStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoHatchingModule } from 'devextreme-angular/ui/nested';
+import { DxoConnectorModule } from 'devextreme-angular/ui/nested';
+import { DxoPointModule } from 'devextreme-angular/ui/nested';
+import { DxoSelectionStyleModule } from 'devextreme-angular/ui/nested';
+import { DxoValueErrorBarModule } from 'devextreme-angular/ui/nested';
+import { DxoBarModule } from 'devextreme-angular/ui/nested';
+import { DxoColorModule } from 'devextreme-angular/ui/nested';
+import { DxoArgumentFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoLineModule } from 'devextreme-angular/ui/nested';
+import { DxoScatterModule } from 'devextreme-angular/ui/nested';
+import { DxoStackedbarModule } from 'devextreme-angular/ui/nested';
+import { DxoDataPrepareSettingsModule } from 'devextreme-angular/ui/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/nested';
+import { DxoLegendModule } from 'devextreme-angular/ui/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
+import { DxiSeriesModule } from 'devextreme-angular/ui/nested';
+import { DxoSeriesTemplateModule } from 'devextreme-angular/ui/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoValueAxisModule } from 'devextreme-angular/ui/nested';
+import { DxoMinVisualRangeLengthModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxoAdaptiveLayoutPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoAnimationPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxiAnnotationPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoBorderPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoFontPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoImagePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoShadowPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoArgumentAxisPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxiConstantLinePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoLabelPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoConstantLineStylePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoGridPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoFormatPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoMinorGridPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoMinorTickPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoMinorTickIntervalPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxiStripPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoStripStylePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoTickPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoTickIntervalPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoCommonAnnotationSettingsPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoCommonAxisSettingsPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoCommonSeriesSettingsPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoAreaPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoHoverStylePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoHatchingPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoConnectorPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPointPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoSelectionStylePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoValueErrorBarPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoBarPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoColorPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoArgumentFormatPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoLinePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoScatterPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoStackedbarPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoDataPrepareSettingsPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoExportPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoLegendPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoMarginPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoTitlePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoSubtitlePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoLoadingIndicatorPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxiSeriesPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoSeriesTemplatePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoSizePolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoTooltipPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoValueAxisPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoMinVisualRangeLengthPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+
+import { DxiAnnotationPolarChartComponent } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxiSeriesPolarChartComponent } from 'devextreme-angular/ui/polar-chart/nested';
 
 
 
@@ -1046,16 +1098,16 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 
 
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiAnnotationComponent> {
+    @ContentChildren(DxiAnnotationPolarChartComponent)
+    get annotationsChildren(): QueryList<DxiAnnotationPolarChartComponent> {
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
         this.setChildren('annotations', value);
     }
 
-    @ContentChildren(DxiSeriesComponent)
-    get seriesChildren(): QueryList<DxiSeriesComponent> {
+    @ContentChildren(DxiSeriesPolarChartComponent)
+    get seriesChildren(): QueryList<DxiSeriesPolarChartComponent> {
         return this._getOption('series');
     }
     set seriesChildren(value) {
@@ -1235,6 +1287,55 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     DxoTooltipModule,
     DxoValueAxisModule,
     DxoMinVisualRangeLengthModule,
+    DxoAdaptiveLayoutPolarChartModule,
+    DxoAnimationPolarChartModule,
+    DxiAnnotationPolarChartModule,
+    DxoBorderPolarChartModule,
+    DxoFontPolarChartModule,
+    DxoImagePolarChartModule,
+    DxoShadowPolarChartModule,
+    DxoArgumentAxisPolarChartModule,
+    DxiConstantLinePolarChartModule,
+    DxoLabelPolarChartModule,
+    DxoConstantLineStylePolarChartModule,
+    DxoGridPolarChartModule,
+    DxoFormatPolarChartModule,
+    DxoMinorGridPolarChartModule,
+    DxoMinorTickPolarChartModule,
+    DxoMinorTickIntervalPolarChartModule,
+    DxiStripPolarChartModule,
+    DxoStripStylePolarChartModule,
+    DxoTickPolarChartModule,
+    DxoTickIntervalPolarChartModule,
+    DxoCommonAnnotationSettingsPolarChartModule,
+    DxoCommonAxisSettingsPolarChartModule,
+    DxoCommonSeriesSettingsPolarChartModule,
+    DxoAreaPolarChartModule,
+    DxoHoverStylePolarChartModule,
+    DxoHatchingPolarChartModule,
+    DxoConnectorPolarChartModule,
+    DxoPointPolarChartModule,
+    DxoSelectionStylePolarChartModule,
+    DxoValueErrorBarPolarChartModule,
+    DxoBarPolarChartModule,
+    DxoColorPolarChartModule,
+    DxoArgumentFormatPolarChartModule,
+    DxoLinePolarChartModule,
+    DxoScatterPolarChartModule,
+    DxoStackedbarPolarChartModule,
+    DxoDataPrepareSettingsPolarChartModule,
+    DxoExportPolarChartModule,
+    DxoLegendPolarChartModule,
+    DxoMarginPolarChartModule,
+    DxoTitlePolarChartModule,
+    DxoSubtitlePolarChartModule,
+    DxoLoadingIndicatorPolarChartModule,
+    DxiSeriesPolarChartModule,
+    DxoSeriesTemplatePolarChartModule,
+    DxoSizePolarChartModule,
+    DxoTooltipPolarChartModule,
+    DxoValueAxisPolarChartModule,
+    DxoMinVisualRangeLengthPolarChartModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1292,6 +1393,55 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     DxoTooltipModule,
     DxoValueAxisModule,
     DxoMinVisualRangeLengthModule,
+    DxoAdaptiveLayoutPolarChartModule,
+    DxoAnimationPolarChartModule,
+    DxiAnnotationPolarChartModule,
+    DxoBorderPolarChartModule,
+    DxoFontPolarChartModule,
+    DxoImagePolarChartModule,
+    DxoShadowPolarChartModule,
+    DxoArgumentAxisPolarChartModule,
+    DxiConstantLinePolarChartModule,
+    DxoLabelPolarChartModule,
+    DxoConstantLineStylePolarChartModule,
+    DxoGridPolarChartModule,
+    DxoFormatPolarChartModule,
+    DxoMinorGridPolarChartModule,
+    DxoMinorTickPolarChartModule,
+    DxoMinorTickIntervalPolarChartModule,
+    DxiStripPolarChartModule,
+    DxoStripStylePolarChartModule,
+    DxoTickPolarChartModule,
+    DxoTickIntervalPolarChartModule,
+    DxoCommonAnnotationSettingsPolarChartModule,
+    DxoCommonAxisSettingsPolarChartModule,
+    DxoCommonSeriesSettingsPolarChartModule,
+    DxoAreaPolarChartModule,
+    DxoHoverStylePolarChartModule,
+    DxoHatchingPolarChartModule,
+    DxoConnectorPolarChartModule,
+    DxoPointPolarChartModule,
+    DxoSelectionStylePolarChartModule,
+    DxoValueErrorBarPolarChartModule,
+    DxoBarPolarChartModule,
+    DxoColorPolarChartModule,
+    DxoArgumentFormatPolarChartModule,
+    DxoLinePolarChartModule,
+    DxoScatterPolarChartModule,
+    DxoStackedbarPolarChartModule,
+    DxoDataPrepareSettingsPolarChartModule,
+    DxoExportPolarChartModule,
+    DxoLegendPolarChartModule,
+    DxoMarginPolarChartModule,
+    DxoTitlePolarChartModule,
+    DxoSubtitlePolarChartModule,
+    DxoLoadingIndicatorPolarChartModule,
+    DxiSeriesPolarChartModule,
+    DxoSeriesTemplatePolarChartModule,
+    DxoSizePolarChartModule,
+    DxoTooltipPolarChartModule,
+    DxoValueAxisPolarChartModule,
+    DxoMinVisualRangeLengthPolarChartModule,
     DxTemplateModule
   ]
 })

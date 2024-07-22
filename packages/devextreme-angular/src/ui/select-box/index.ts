@@ -49,25 +49,44 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiButtonModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoToModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/select-box/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/select-box/nested';
 
-import { DxiButtonComponent } from 'devextreme-angular/ui/select-box/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/select-box/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiButtonSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoOptionsSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoDropDownOptionsSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoAnimationSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoHideSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoFromSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoPositionSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoAtSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoBoundaryOffsetSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoCollisionSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoMySelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoOffsetSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoToSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoShowSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxiToolbarItemSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxiItemSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+
+import { DxiButtonSelectBoxComponent } from 'devextreme-angular/ui/select-box/nested';
+import { DxiItemSelectBoxComponent } from 'devextreme-angular/ui/select-box/nested';
 
 
 
@@ -1489,16 +1508,16 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(DxiButtonSelectBoxComponent)
+    get buttonsChildren(): QueryList<DxiButtonSelectBoxComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
         this.setChildren('buttons', value);
     }
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemSelectBoxComponent)
+    get itemsChildren(): QueryList<DxiItemSelectBoxComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -1690,6 +1709,22 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoShowModule,
     DxiToolbarItemModule,
     DxiItemModule,
+    DxiButtonSelectBoxModule,
+    DxoOptionsSelectBoxModule,
+    DxoDropDownOptionsSelectBoxModule,
+    DxoAnimationSelectBoxModule,
+    DxoHideSelectBoxModule,
+    DxoFromSelectBoxModule,
+    DxoPositionSelectBoxModule,
+    DxoAtSelectBoxModule,
+    DxoBoundaryOffsetSelectBoxModule,
+    DxoCollisionSelectBoxModule,
+    DxoMySelectBoxModule,
+    DxoOffsetSelectBoxModule,
+    DxoToSelectBoxModule,
+    DxoShowSelectBoxModule,
+    DxiToolbarItemSelectBoxModule,
+    DxiItemSelectBoxModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1714,6 +1749,22 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoShowModule,
     DxiToolbarItemModule,
     DxiItemModule,
+    DxiButtonSelectBoxModule,
+    DxoOptionsSelectBoxModule,
+    DxoDropDownOptionsSelectBoxModule,
+    DxoAnimationSelectBoxModule,
+    DxoHideSelectBoxModule,
+    DxoFromSelectBoxModule,
+    DxoPositionSelectBoxModule,
+    DxoAtSelectBoxModule,
+    DxoBoundaryOffsetSelectBoxModule,
+    DxoCollisionSelectBoxModule,
+    DxoMySelectBoxModule,
+    DxoOffsetSelectBoxModule,
+    DxoToSelectBoxModule,
+    DxoShowSelectBoxModule,
+    DxiToolbarItemSelectBoxModule,
+    DxiItemSelectBoxModule,
     DxTemplateModule
   ]
 })

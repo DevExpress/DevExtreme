@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-min-range',
+    selector: 'dxo-min-range-range-selector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMinRangeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMinRangeRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -127,10 +127,10 @@ export class DxoMinRangeComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoMinRangeComponent
+    DxoMinRangeRangeSelectorComponent
   ],
   exports: [
-    DxoMinRangeComponent
+    DxoMinRangeRangeSelectorComponent
   ],
 })
-export class DxoMinRangeModule { }
+export class DxoMinRangeRangeSelectorModule { }

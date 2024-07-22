@@ -45,11 +45,17 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiButtonModule } from 'devextreme-angular/ui/number-box/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/number-box/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/number-box/nested';
 
-import { DxiButtonComponent } from 'devextreme-angular/ui/number-box/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiButtonNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoOptionsNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoFormatNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
+
+import { DxiButtonNumberBoxComponent } from 'devextreme-angular/ui/number-box/nested';
 
 
 
@@ -989,8 +995,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(DxiButtonNumberBoxComponent)
+    get buttonsChildren(): QueryList<DxiButtonNumberBoxComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
@@ -1136,6 +1142,9 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
+    DxiButtonNumberBoxModule,
+    DxoOptionsNumberBoxModule,
+    DxoFormatNumberBoxModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1147,6 +1156,9 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
+    DxiButtonNumberBoxModule,
+    DxoOptionsNumberBoxModule,
+    DxoFormatNumberBoxModule,
     DxTemplateModule
   ]
 })

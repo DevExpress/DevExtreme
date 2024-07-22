@@ -28,18 +28,18 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiBreakComponent } from './break-dxi';
-import { DxiConstantLineComponent } from './constant-line-dxi';
-import { DxiStripComponent } from './strip-dxi';
+import { DxiBreakChartComponent } from './break-dxi';
+import { DxiConstantLineChartComponent } from './constant-line-dxi';
+import { DxiStripChartComponent } from './strip-dxi';
 
 
 @Component({
-    selector: 'dxo-argument-axis',
+    selector: 'dxo-argument-axis-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoArgumentAxisChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregateByCategory(): boolean {
         return this._getOption('aggregateByCategory');
@@ -459,24 +459,24 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
 
-    @ContentChildren(forwardRef(() => DxiBreakComponent))
-    get breaksChildren(): QueryList<DxiBreakComponent> {
+    @ContentChildren(forwardRef(() => DxiBreakChartComponent))
+    get breaksChildren(): QueryList<DxiBreakChartComponent> {
         return this._getOption('breaks');
     }
     set breaksChildren(value) {
         this.setChildren('breaks', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiConstantLineComponent> {
+    @ContentChildren(forwardRef(() => DxiConstantLineChartComponent))
+    get constantLinesChildren(): QueryList<DxiConstantLineChartComponent> {
         return this._getOption('constantLines');
     }
     set constantLinesChildren(value) {
         this.setChildren('constantLines', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiStripComponent))
-    get stripsChildren(): QueryList<DxiStripComponent> {
+    @ContentChildren(forwardRef(() => DxiStripChartComponent))
+    get stripsChildren(): QueryList<DxiStripChartComponent> {
         return this._getOption('strips');
     }
     set stripsChildren(value) {
@@ -510,10 +510,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoArgumentAxisComponent
+    DxoArgumentAxisChartComponent
   ],
   exports: [
-    DxoArgumentAxisComponent
+    DxoArgumentAxisChartComponent
   ],
 })
-export class DxoArgumentAxisModule { }
+export class DxoArgumentAxisChartModule { }

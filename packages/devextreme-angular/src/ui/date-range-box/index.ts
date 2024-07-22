@@ -48,25 +48,45 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiButtonModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoCalendarOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDisplayFormatModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoToModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/date-range-box/nested';
 
-import { DxiButtonComponent } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoCalendarOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoDisplayFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoToModule } from 'devextreme-angular/ui/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiButtonDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoOptionsDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoCalendarOptionsDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDisplayFormatDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDropDownOptionsDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoAnimationDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoHideDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoFromDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoPositionDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoAtDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoBoundaryOffsetDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoCollisionDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoMyDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoOffsetDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoToDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoShowDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxiToolbarItemDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+
+import { DxiButtonDateRangeBoxComponent } from 'devextreme-angular/ui/date-range-box/nested';
 
 
 
@@ -1482,8 +1502,8 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(DxiButtonDateRangeBoxComponent)
+    get buttonsChildren(): QueryList<DxiButtonDateRangeBoxComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
@@ -1670,6 +1690,23 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     DxoToModule,
     DxoShowModule,
     DxiToolbarItemModule,
+    DxiButtonDateRangeBoxModule,
+    DxoOptionsDateRangeBoxModule,
+    DxoCalendarOptionsDateRangeBoxModule,
+    DxoDisplayFormatDateRangeBoxModule,
+    DxoDropDownOptionsDateRangeBoxModule,
+    DxoAnimationDateRangeBoxModule,
+    DxoHideDateRangeBoxModule,
+    DxoFromDateRangeBoxModule,
+    DxoPositionDateRangeBoxModule,
+    DxoAtDateRangeBoxModule,
+    DxoBoundaryOffsetDateRangeBoxModule,
+    DxoCollisionDateRangeBoxModule,
+    DxoMyDateRangeBoxModule,
+    DxoOffsetDateRangeBoxModule,
+    DxoToDateRangeBoxModule,
+    DxoShowDateRangeBoxModule,
+    DxiToolbarItemDateRangeBoxModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1695,6 +1732,23 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     DxoToModule,
     DxoShowModule,
     DxiToolbarItemModule,
+    DxiButtonDateRangeBoxModule,
+    DxoOptionsDateRangeBoxModule,
+    DxoCalendarOptionsDateRangeBoxModule,
+    DxoDisplayFormatDateRangeBoxModule,
+    DxoDropDownOptionsDateRangeBoxModule,
+    DxoAnimationDateRangeBoxModule,
+    DxoHideDateRangeBoxModule,
+    DxoFromDateRangeBoxModule,
+    DxoPositionDateRangeBoxModule,
+    DxoAtDateRangeBoxModule,
+    DxoBoundaryOffsetDateRangeBoxModule,
+    DxoCollisionDateRangeBoxModule,
+    DxoMyDateRangeBoxModule,
+    DxoOffsetDateRangeBoxModule,
+    DxoToDateRangeBoxModule,
+    DxoShowDateRangeBoxModule,
+    DxiToolbarItemDateRangeBoxModule,
     DxTemplateModule
   ]
 })

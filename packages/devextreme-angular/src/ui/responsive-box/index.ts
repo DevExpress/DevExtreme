@@ -40,14 +40,21 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiColModule } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiRowModule } from 'devextreme-angular/ui/responsive-box/nested';
 
-import { DxiColComponent } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiRowComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiColModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxiLocationModule } from 'devextreme-angular/ui/nested';
+import { DxiRowModule } from 'devextreme-angular/ui/nested';
+
+
+import { DxiColResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiItemResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiLocationResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiRowResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
+
+import { DxiColResponsiveBoxComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiItemResponsiveBoxComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiRowResponsiveBoxComponent } from 'devextreme-angular/ui/responsive-box/nested';
 
 
 
@@ -434,24 +441,24 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 
 
-    @ContentChildren(DxiColComponent)
-    get colsChildren(): QueryList<DxiColComponent> {
+    @ContentChildren(DxiColResponsiveBoxComponent)
+    get colsChildren(): QueryList<DxiColResponsiveBoxComponent> {
         return this._getOption('cols');
     }
     set colsChildren(value) {
         this.setChildren('cols', value);
     }
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiItemResponsiveBoxComponent)
+    get itemsChildren(): QueryList<DxiItemResponsiveBoxComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
         this.setChildren('items', value);
     }
 
-    @ContentChildren(DxiRowComponent)
-    get rowsChildren(): QueryList<DxiRowComponent> {
+    @ContentChildren(DxiRowResponsiveBoxComponent)
+    get rowsChildren(): QueryList<DxiRowResponsiveBoxComponent> {
         return this._getOption('rows');
     }
     set rowsChildren(value) {
@@ -550,6 +557,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     DxiItemModule,
     DxiLocationModule,
     DxiRowModule,
+    DxiColResponsiveBoxModule,
+    DxiItemResponsiveBoxModule,
+    DxiLocationResponsiveBoxModule,
+    DxiRowResponsiveBoxModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -562,6 +573,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     DxiItemModule,
     DxiLocationModule,
     DxiRowModule,
+    DxiColResponsiveBoxModule,
+    DxiItemResponsiveBoxModule,
+    DxiLocationResponsiveBoxModule,
+    DxiRowResponsiveBoxModule,
     DxTemplateModule
   ]
 })

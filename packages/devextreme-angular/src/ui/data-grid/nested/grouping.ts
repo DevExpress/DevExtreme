@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-grouping',
+    selector: 'dxo-grouping-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGroupingDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowCollapsing(): boolean {
         return this._getOption('allowCollapsing');
@@ -96,10 +96,10 @@ export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoGroupingComponent
+    DxoGroupingDataGridComponent
   ],
   exports: [
-    DxoGroupingComponent
+    DxoGroupingDataGridComponent
   ],
 })
-export class DxoGroupingModule { }
+export class DxoGroupingDataGridModule { }

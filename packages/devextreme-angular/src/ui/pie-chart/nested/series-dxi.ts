@@ -23,12 +23,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-series',
+    selector: 'dxi-series-pie-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiSeriesComponent extends CollectionNestedOption {
+export class DxiSeriesPieChartComponent extends CollectionNestedOption {
     @Input()
     get argumentField(): string {
         return this._getOption('argumentField');
@@ -180,10 +180,10 @@ export class DxiSeriesComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiSeriesComponent
+    DxiSeriesPieChartComponent
   ],
   exports: [
-    DxiSeriesComponent
+    DxiSeriesPieChartComponent
   ],
 })
-export class DxiSeriesModule { }
+export class DxiSeriesPieChartModule { }

@@ -30,12 +30,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-master-detail',
+    selector: 'dxo-master-detail-data-grid',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoMasterDetailComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+export class DxoMasterDetailDataGridComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
     @Input()
     get autoExpandAll(): boolean {
@@ -100,10 +100,10 @@ export class DxoMasterDetailComponent extends NestedOption implements AfterViewI
 
 @NgModule({
   declarations: [
-    DxoMasterDetailComponent
+    DxoMasterDetailDataGridComponent
   ],
   exports: [
-    DxoMasterDetailComponent
+    DxoMasterDetailDataGridComponent
   ],
 })
-export class DxoMasterDetailModule { }
+export class DxoMasterDetailDataGridModule { }

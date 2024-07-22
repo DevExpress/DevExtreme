@@ -28,16 +28,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemComponent } from './item-dxi';
+import { DxiItemDataGridComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-tab-panel-options',
+    selector: 'dxo-tab-panel-options-data-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTabPanelOptionsDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -408,8 +408,8 @@ export class DxoTabPanelOptionsComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(forwardRef(() => DxiItemDataGridComponent))
+    get itemsChildren(): QueryList<DxiItemDataGridComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -444,10 +444,10 @@ export class DxoTabPanelOptionsComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoTabPanelOptionsComponent
+    DxoTabPanelOptionsDataGridComponent
   ],
   exports: [
-    DxoTabPanelOptionsComponent
+    DxoTabPanelOptionsDataGridComponent
   ],
 })
-export class DxoTabPanelOptionsModule { }
+export class DxoTabPanelOptionsDataGridModule { }

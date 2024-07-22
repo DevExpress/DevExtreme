@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-background',
+    selector: 'dxo-background-vector-map',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBackgroundComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBackgroundVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get borderColor(): string {
         return this._getOption('borderColor');
@@ -71,10 +71,10 @@ export class DxoBackgroundComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoBackgroundComponent
+    DxoBackgroundVectorMapComponent
   ],
   exports: [
-    DxoBackgroundComponent
+    DxoBackgroundVectorMapComponent
   ],
 })
-export class DxoBackgroundModule { }
+export class DxoBackgroundVectorMapModule { }
