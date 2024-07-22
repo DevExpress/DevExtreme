@@ -126,10 +126,10 @@ importers:
         specifier: ^2.6.12
         version: 2.6.12
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-angular/npm/dist
       rxjs:
         specifier: 7.8.1
@@ -232,10 +232,10 @@ importers:
         specifier: 4.1.54
         version: 4.1.54
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
         specifier: 3.0.0
@@ -247,16 +247,16 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       devextreme-dist:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 1.7.1
         version: 1.7.1
       devextreme-react:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-react/npm
       devextreme-vue:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-vue/npm
       dx-systemjs-vue-browser:
         specifier: 1.1.1
@@ -521,10 +521,10 @@ importers:
   apps/react:
     dependencies:
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-react/npm
       react:
         specifier: ~18.0.0
@@ -567,10 +567,10 @@ importers:
   apps/react-storybook:
     dependencies:
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-react/npm
     devDependencies:
       '@storybook/addon-essentials':
@@ -613,10 +613,10 @@ importers:
   apps/vue:
     dependencies:
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-vue:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-vue/npm
       vue:
         specifier: 3.2.47
@@ -692,7 +692,7 @@ importers:
         specifier: 7.0.3
         version: 7.0.3
       devextreme:
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-cldr-data:
         specifier: 1.0.3
@@ -734,7 +734,7 @@ importers:
         specifier: 3.5.29
         version: 3.5.29
       devextreme:
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       jquery:
         specifier: 3.7.1
@@ -758,13 +758,13 @@ importers:
         specifier: 4.9.1
         version: 4.9.1
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@2.5.0(encoding@0.1.13))
       devextreme-testcafe-models:
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/testcafe-models
       minimist:
         specifier: 1.2.8
@@ -1243,7 +1243,7 @@ importers:
         specifier: 16.2.14
         version: 16.2.14(chokidar@3.6.0)
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../devextreme/artifacts/npm/devextreme
       devextreme-schematics:
         specifier: '*'
@@ -1386,7 +1386,7 @@ importers:
   packages/devextreme-react:
     dependencies:
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../devextreme/artifacts/npm/devextreme
       prop-types:
         specifier: ^15.8.1
@@ -1584,7 +1584,7 @@ importers:
   packages/devextreme-vue:
     dependencies:
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../devextreme/artifacts/npm/devextreme
     devDependencies:
       '@vue/compiler-sfc':
@@ -1652,7 +1652,7 @@ importers:
         version: 2.5.0(encoding@0.1.13)
     devDependencies:
       devextreme:
-        specifier: ~24.2.0
+        specifier: workspace:~24.2.0
         version: link:../devextreme/artifacts/npm/devextreme
 
 packages:
