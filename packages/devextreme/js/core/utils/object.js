@@ -45,14 +45,14 @@ const assignValueToProperty = function(target, property, value, extendComplexObj
     } else if(!assignByReference && Array.isArray(value)) {
         target[property] = value.map(item => {
             let itemTarget = item;
-            if(!assignByReference) {
-                if(Array.isArray(item)) {
-                    itemTarget = [];
-                }
-                if(isObject(item)) {
-                    itemTarget = {};
-                }
+
+            if(Array.isArray(item)) {
+                itemTarget = [];
             }
+            if(isObject(item)) {
+                itemTarget = {};
+            }
+
             return deepExtendArraySafe(itemTarget, item, extendComplexObject, assignByReference, shouldCopyUndefined);
         });
     } else {
