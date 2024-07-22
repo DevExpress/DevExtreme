@@ -6,7 +6,9 @@ import type { Column, DataRow } from '../columns_controller/types';
 import { asInferno, View } from '../core/view';
 import { createWidgetWrapper } from '../core/widget_wrapper';
 import { DataController } from '../data_controller/data_controller';
+import { OptionsController } from '../options_controller/options_controller';
 import { Card } from './card';
+import { NoData } from './no_data';
 
 export const CLASSES = {
   content: 'dx-cardview-content',
@@ -26,10 +28,17 @@ export class ContentView extends View {
   );
 
   public vdom = computed(
-    (items: DataRow[], isLoading: boolean) => (
+    (items, isLoading, noDataText) => (
       <>
-        {<LoadPanel visible={isLoading}></LoadPanel>}
         <div className={CLASSES.content}>
+          {<LoadPanel visible={isLoading}></LoadPanel>}
+          {
+            (!isLoading && items.length === 0) && (
+              <NoData
+                text={noDataText}
+              ></NoData>
+            )
+          }
           {items.map((item) => (
             <Card row={item}></Card>
           ))}
@@ -39,14 +48,16 @@ export class ContentView extends View {
     [
       this.items,
       this.dataController.isLoading,
+      this.options.oneWay('noDataText'),
     ],
   );
 
-  static dependencies = [DataController, ColumnsController] as const;
+  static dependencies = [DataController, ColumnsController, OptionsController] as const;
 
   constructor(
     private readonly dataController: DataController,
     private readonly columnsController: ColumnsController,
+    private readonly options: OptionsController,
   ) {
     super();
   }

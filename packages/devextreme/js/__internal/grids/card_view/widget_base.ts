@@ -69,7 +69,7 @@ class CardView extends Widget<Properties> {
   protected _getDefaultOptions() {
     return {
       // @ts-expect-error
-      ...super._getDefaultOptions(),
+      ...super._getDefaultOptions() as {},
       paging: {
         pageSize: 5,
         pageIndex: 0,

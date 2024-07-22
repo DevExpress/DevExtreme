@@ -31,10 +31,8 @@ export class DataController {
     [this.options.oneWay('paging')],
   );
 
-  // @ts-expect-error
   public readonly pageIndex = this.options.twoWay('paging.pageIndex');
 
-  // @ts-expect-error
   public readonly pageSize = this.options.twoWay('paging.pageSize');
 
   private readonly _items = state<unknown[]>([]);

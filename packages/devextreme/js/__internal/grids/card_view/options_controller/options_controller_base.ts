@@ -1,4 +1,4 @@
-// @ts-nocheck
+import type { PropertyType as PropertyTypeBase } from '@js/core';
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
@@ -6,6 +6,19 @@ import type {
   Gettable, Observable, Subscribable, Updatable,
 } from '@ts/core/reactive';
 import { computed, state } from '@ts/core/reactive';
+
+type SubsGets<T> = Subscribable<T> & Gettable<T>;
+type SubsUpts<T> = Subscribable<T> & Updatable<T>;
+
+type PropertyType<TProps, TProp extends string> =
+  PropertyTypeBase<TProps, TProp> extends never
+    ? never
+    : PropertyTypeBase<TProps, TProp> | undefined;
+
+type PropertyWithDefaults<TProps, TDefaults, TProp extends string> =
+  PropertyType<TDefaults, TProp> extends never
+    ? PropertyType<TProps, TProp>
+    : NonNullable<PropertyType<TProps, TProp>> | PropertyTypeBase<TDefaults, TProp>;
 
 function cloneObjectValue<T extends Record<string, unknown> | unknown[]>(
   value: T,
@@ -29,19 +42,34 @@ function updateImmutable<T extends Record<string, unknown> | unknown[]>(
   return ret;
 }
 
-export class OptionsController<TProps> {
+function getValue<T>(obj: unknown, path: string): T {
+  let v: any = obj;
+  for (const pathPart of getPathParts(path)) {
+    v = v?.[pathPart];
+  }
+
+  return v;
+}
+
+export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
   private readonly isControlledMode = false;
 
   private readonly props: Observable<TProps>;
+
+  private readonly defaults: TDefaultProps;
 
   static dependencies = [Component];
 
   constructor(
     private readonly component: Component<TProps>,
   ) {
+    // @ts-expect-error
     this.props = state(component.option());
+    // @ts-expect-error
+    this.defaults = component._getDefaultOptions();
     component.on('optionChanged', (e: ChangedOptionInfo) => {
       const pathParts = getPathParts(e.fullName);
+      // @ts-expect-error
       this.props.update((oldValue) => updateImmutable(
         // @ts-expect-error
         oldValue,
@@ -51,31 +79,32 @@ export class OptionsController<TProps> {
     });
   }
 
-  oneWay<TProp extends keyof TProps>(name: TProp): Subscribable<TProps[TProp]> & Gettable<TProps[TProp]> {
-    const obs = computed((props) => {
-      let v: any = props;
-      // @ts-expect-error
-      for (const pathPart of getPathParts(name)) {
-        v = v?.[pathPart];
-      }
-      return v;
-    }, [this.props]);
+  oneWay<TProp extends string>(
+    name: TProp,
+  ): SubsGets<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
+    const obs = computed(
+      (props) => getValue(props, name) ?? getValue(this.defaults, name),
+      [this.props],
+    );
 
-    return obs;
+    return obs as any;
   }
 
-  twoWay<TProp extends keyof TProps>(name: TProp): Subscribable<TProps[TProp]> & Updatable<TProps[TProp]> {
-    const obs = state<TProps[TProp]>(this.component.option(name));
-    this.oneWay(name).subscribe(obs.update.bind(obs));
+  twoWay<TProp extends string>(
+    name: TProp,
+  ): SubsUpts<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
+    const obs = state(this.component.option(name));
+    this.oneWay(name).subscribe(obs.update.bind(obs) as any);
     return {
-      subscribe: obs.subscribe.bind(obs),
-      update: (value: TProps[TProp]): void => {
+      subscribe: obs.subscribe.bind(obs) as any,
+      update: (value): void => {
         const callbackName = `on${name}Change`;
-        const callback = this.component.option(callbackName);
+        const callback = this.component.option(callbackName) as any;
         const isControlled = this.isControlledMode && this.component.option(name) !== undefined;
         if (isControlled) {
           callback?.(value);
         } else {
+          // @ts-expect-error
           this.component.option(name, value);
           callback?.(value);
         }

@@ -1,0 +1,17 @@
+import { Component, type InfernoNode } from 'inferno';
+
+export interface NoDataProperties {
+  text?: string;
+}
+
+export const CLASSES = {
+  noData: 'dx-cardview-nodata',
+};
+
+export class NoData extends Component<NoDataProperties> {
+  render(): InfernoNode {
+    return <span className={CLASSES.noData}>
+      { this.props.text ?? 'No Data'}
+    </span>;
+  }
+}
