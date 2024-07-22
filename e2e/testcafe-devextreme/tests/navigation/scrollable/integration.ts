@@ -35,6 +35,7 @@ fixture.disablePageReloads`Integration_DataGrid`
       },
       width: 300,
       columnFixing: {
+        // @ts-expect-error private option
         legacyMode: true,
       },
       columns: [
