@@ -357,7 +357,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     } = position.info.appointment;
     const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
     const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
-    const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute');
+    const skippedMinutes = getSkippedHoursInRange(
+      startDate,
+      normalizedEndDate,
+      appointment.allDay,
+      this.viewDataProvider,
+    ) * 60;
+
+    const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute') - skippedMinutes;
 
     const height = durationInMinutes * this._getMinuteHeight();
 
