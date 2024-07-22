@@ -352,3 +352,14 @@ $datagrid-text-stub-background-image-path: null !default;
   }
 }
 
+.dx-editor-cell .dx-texteditor {
+  .dx-tag-container,
+  .dx-texteditor-input {
+    min-height: auto;
+    height: 100%;
+  }
+
+  .dx-tag-container {
+    padding: 10px 0;
+  }
+}
