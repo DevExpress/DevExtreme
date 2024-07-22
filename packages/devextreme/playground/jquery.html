@@ -19,113 +19,6 @@
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-
-    <style>
-        .dx-chat {
-            display: flex;
-            flex-direction: column;
-            width: 480px;
-            height: 660px;
-            padding: 20px;
-            border-radius: 24px;
-            box-shadow:
-                0px 0px 2px 0px #0000001F,
-                0px 4px 8px 0px #00000014;
-        }
-
-        .dx-chat-header {
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            padding-bottom: 4px;
-        }
-
-        .dx-chat-header-text {
-            margin: 0;
-        }
-
-        .dx-chat-message-list {
-            box-sizing: border-box;
-            flex: 1;
-            overflow: auto;
-        }
-
-        .dx-chat-message-list-content {
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-            margin: 0;
-            overflow-y: auto;
-        }
-
-        .dx-chat-message-group {
-            display: grid;
-            align-items: start;
-            margin: 10px;
-        }
-
-        .dx-chat-message-group-alignment-start {
-            justify-items: start;
-            grid-template-columns: 50px 1fr;
-        }
-
-        .dx-chat-message-group-alignment-end {
-            justify-items: end;
-        }
-
-        .dx-chat-message-group-information {
-            display: flex;
-            grid-row: 1;
-        }
-
-        .dx-chat-message-group-alignment-start .dx-chat-message-group-information {
-            grid-column: 2;
-        }
-
-        .dx-chat-message-time,
-        .dx-chat-message-name {
-            font-size: 12px;
-            color: #a9a9a9;
-        }
-
-        .dx-chat-message-name {
-            margin-right: 8px;
-        }
-
-        .dx-chat-message-avatar {
-            grid-row: span 3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgb(135, 135, 135);
-        }
-
-        .dx-chat-message-bubble {
-            margin: 0;
-            padding: 0;
-        }
-
-        .dx-chat-message-group-alignment-start .dx-chat-message-bubble {
-            grid-column: 2;
-        }
-
-        .dx-chat-message-box {
-            display: flex;
-            align-items: center;
-        }
-
-        .dx-chat-message-box-text-area {
-            flex-grow: 1;
-            height: 40px;
-        }
-
-        .dx-chat-message-box-button {
-            margin-left: 8px;
-        }
-    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -151,10 +44,13 @@
 
             const now = Date.now()
 
-            const messages = Array.from({ length: 20 }, (_, i) => {
+            const messages = Array.from({ length: 30 }, (_, i) => {
                 const item = {
                     timestamp: String(now + i),
-                    author: i % 3 === 0 ? userSecond : userFirst,
+                    author: i % 4 === 0 ? userFirst : userSecond,
+                    // author: i % 2 === 0 ? userFirst : userSecond,
+                    // author: i % 4 === 0 ? userSecond : userFirst,
+                    // author: i % 2 === 0 ? userSecond : userFirst,
                     text: String(Math.random() + i),
                 }
 

@@ -15,6 +15,8 @@ const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_AVATAR_LETTERS_CLASS = 'dx-chat-message-avatar-letters';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
+const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
+const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 
 export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
   messages?: Message[];
@@ -22,8 +24,6 @@ export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
 }
 
 class MessageGroup extends Widget<MessageGroupOptions> {
-  _messageBubble?: MessageBubble;
-
   _getDefaultOptions(): MessageGroupOptions {
     return {
       ...super._getDefaultOptions(),
@@ -58,12 +58,25 @@ class MessageGroup extends Widget<MessageGroupOptions> {
   }
 
   _renderMessageBubbles(messages): void {
-    messages.forEach((message) => {
-      this._messageBubble = this._createComponent($('<div>'), MessageBubble, {
+    messages.forEach((message, index) => {
+      const messageBubble: MessageBubble = this._createComponent($('<div>'), MessageBubble, {
         text: message.text,
       });
 
-      $(this._messageBubble.element()).appendTo(this.element());
+      const $element = $(messageBubble.element());
+
+      const isFirst = index === 0;
+      const isLast = index === messages.length - 1;
+
+      if (isFirst) {
+        $element.addClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS);
+      }
+
+      if (isLast) {
+        $element.addClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
+      }
+
+      $element.appendTo(this.element());
     });
   }
 
