@@ -5,14 +5,13 @@ import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
+import Avatar from './chat_avatar';
 import MessageBubble from './chat_message_bubble';
 
 const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS = 'dx-chat-message-group-alignment-start';
 const CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS = 'dx-chat-message-group-alignment-end';
 const CHAT_MESSAGE_GROUP_INFORMATION_CLASS = 'dx-chat-message-group-information';
-const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
-const CHAT_MESSAGE_AVATAR_LETTERS_CLASS = 'dx-chat-message-avatar-letters';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
 const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
@@ -24,6 +23,8 @@ export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
 }
 
 class MessageGroup extends Widget<MessageGroupOptions> {
+  _avatar?: Avatar;
+
   _getDefaultOptions(): MessageGroupOptions {
     return {
       ...super._getDefaultOptions(),
@@ -57,8 +58,13 @@ class MessageGroup extends Widget<MessageGroupOptions> {
 
     if (alignment === 'start') {
       const authorName = (messages as any)?.[0].author.name;
+      const initials = `${authorName.charAt(0).toUpperCase()}`;
 
-      this._renderAvatar(authorName);
+      this._avatar = this._createComponent($('<div>'), Avatar, {
+        text: initials,
+      });
+
+      $(this._avatar.element()).appendTo(this.element());
     }
 
     this._renderMessageGroupInformation(messages?.[0]);
@@ -114,19 +120,6 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     this._renderTime(timestamp, $messageGroupInformation);
 
     $messageGroupInformation.appendTo(this.element());
-  }
-
-  _renderAvatar(authorName: string): void {
-    const $avatar = $('<div>').addClass(CHAT_MESSAGE_AVATAR_CLASS);
-
-    const initials = `${authorName.charAt(0).toUpperCase()}`;
-
-    $('<div>')
-      .addClass(CHAT_MESSAGE_AVATAR_LETTERS_CLASS)
-      .text(initials)
-      .appendTo($avatar);
-
-    $avatar.appendTo(this.element());
   }
 
   _optionChanged(args: Record<string, unknown>): void {
