@@ -524,20 +524,12 @@ class Splitter extends CollectionWidget<Properties> {
           event,
           handleElement: getPublicElement<HTMLElement>($resizeHandle),
         };
-
-        this._getAction(RESIZE_EVENT.onResizeEnd)(eventArgs);
-
-        if (eventArgs.cancel) {
-          // @ts-expect-error ts-error
-          event.cancel = true;
-          return;
-        }
-
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._feedbackDeferred?.resolve();
         this._toggleActiveState($resizeHandle, false);
 
         this._updateItemSizes();
+        this._getAction(RESIZE_EVENT.onResizeEnd)(eventArgs);
       },
     };
   }
