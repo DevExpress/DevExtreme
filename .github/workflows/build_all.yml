@@ -1,7 +1,9 @@
 name: Pack all DevExtreme npm packages
 
 on:
-  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [24_2]
 
 jobs:
   build:
@@ -42,12 +44,12 @@ jobs:
           pnpm install
 
       - name: Build npm packages
-        run: pnpm run all:pack
+        run: pnpm run all:build
 
       - name: Copy build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: devextreme-npm-packages
           path: |
-            npm/*.tgz
+            artifacts/npm/*.tgz
           retention-days: 1
