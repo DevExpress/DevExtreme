@@ -31,7 +31,7 @@ const CHAT_MESSAGE_AVATAR_LETTERS_CLASS = 'dx-chat-message-avatar-letters';
 const TEXTAREA_CLASS = 'dx-textarea';
 const BUTTON_CLASS = 'dx-button';
 
-const MOCK_CHAT_HEADER_TEXT = 'Chat title';
+const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 
 const moduleConfig = {
@@ -42,7 +42,7 @@ const moduleConfig = {
         };
 
         const userFirst = {
-            id: Math.random(),
+            id: MOCK_COMPANION_USER_ID,
             name: 'First',
         };
 
@@ -92,7 +92,6 @@ const moduleConfig = {
         ];
 
         const options = {
-            title: MOCK_CHAT_HEADER_TEXT,
             items: messages,
         };
 
@@ -105,12 +104,6 @@ QUnit.module('Render', moduleConfig, () => {
         const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
 
         assert.strictEqual($header.length, 1);
-    });
-
-    QUnit.test('Header should have correct text', function(assert) {
-        const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
-
-        assert.strictEqual($header.text(), MOCK_CHAT_HEADER_TEXT);
     });
 
     QUnit.test('Header text element should be rendered', function(assert) {
@@ -147,6 +140,13 @@ QUnit.module('Render', moduleConfig, () => {
         const $messageListContent = this.$element.find(`.${CHAT_MESSAGE_LIST_CONTENT_CLASS}`);
 
         assert.strictEqual($messageListContent.length, 1);
+    });
+
+    QUnit.test('Message list content should be rendered if items is empty', function(assert) {
+        this.instance.option({ items: [] });
+        const $messageListContent = this.$element.find(`.${CHAT_MESSAGE_LIST_CONTENT_CLASS}`);
+
+        assert.strictEqual($messageListContent.length, 0);
     });
 
     QUnit.test('Message groups should be rendered', function(assert) {

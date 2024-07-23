@@ -55,10 +55,10 @@ class MessageList extends Widget<MessageListOptions> {
 
     const $content = $('<ul>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
 
-    let currentMessageGroupUserId = (items?.[0] as any)?.author.id;
+    let currentMessageGroupUserId = (items[0] as any)?.author.id;
     let currentMessageGroupItems: any = [];
 
-    items?.forEach((item, index) => {
+    items.forEach((item, index) => {
       const id = (item as any)?.author.id;
 
       if (id === currentMessageGroupUserId) {

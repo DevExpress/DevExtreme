@@ -72,6 +72,8 @@ class Chat extends Widget<Properties> {
         this._chatHeader?.option(name, (value as string));
         break;
       case 'items':
+        this._invalidate();
+        break;
       case 'onMessageSend':
         break;
       default:
