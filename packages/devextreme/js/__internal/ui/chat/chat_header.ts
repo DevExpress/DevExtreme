@@ -1,45 +1,50 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Properties } from '@js/core/dom_component';
+import DOMComponent from '@js/core/dom_component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-
-import Widget from '../widget';
 
 const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 
-export interface ChatHeaderOptions extends WidgetOptions<ChatHeader> {
+export interface ChatHeaderProperties extends Properties {
   title?: string;
 }
 
-class ChatHeader extends Widget<ChatHeaderOptions> {
-  private _$headerText?: dxElementWrapper;
+class ChatHeader extends DOMComponent<ChatHeaderProperties> {
+  private _$text?: dxElementWrapper;
 
-  _getDefaultOptions(): ChatHeaderOptions {
+  _getDefaultOptions(): ChatHeaderProperties {
     return {
+      // @ts-expect-error
       ...super._getDefaultOptions(),
       ...{
         title: '',
       },
-    };
+    } as ChatHeaderProperties;
+  }
+
+  _init(): void {
+    // @ts-expect-error
+    super._init();
+
+    $(this.element()).addClass(CHAT_HEADER_CLASS);
   }
 
   _initMarkup(): void {
-    $(this.element()).addClass(CHAT_HEADER_CLASS);
-
+    // @ts-expect-error
     super._initMarkup();
 
-    const { title } = this.option();
-
-    this._$headerText = $('<p>')
-      .addClass(CHAT_HEADER_TEXT_CLASS)
-      .text((title as any))
-      .appendTo(this.element());
+    this._renderText();
   }
 
-  _updateTitle(value: any): void {
-    this._$headerText?.text(value);
+  _renderText(): void {
+    const { title } = this.option();
+
+    this._$text = $('<p>')
+      .addClass(CHAT_HEADER_TEXT_CLASS)
+      // @ts-expect-error
+      .text(title)
+      .appendTo(this.element());
   }
 
   _optionChanged(args: Record<string, unknown>): void {
@@ -47,9 +52,11 @@ class ChatHeader extends Widget<ChatHeaderOptions> {
 
     switch (name) {
       case 'title':
-        this._updateTitle(value);
+        // @ts-expect-error
+        this._$text?.text(value);
         break;
       default:
+        // @ts-expect-error
         super._optionChanged(args);
     }
   }
