@@ -1,4 +1,4 @@
-name: Pack all DevExtreme npm packages
+name: Build and pack DevExtreme npm packages
 
 on:
   pull_request:

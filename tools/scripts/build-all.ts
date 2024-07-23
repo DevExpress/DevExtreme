@@ -22,7 +22,7 @@ const injectDescriptions = () => {
 
     sh.pushd(DOCUMENTATION_TEMP_DIR);
     sh.exec('npm i');
-    sh.exec(`npm run update-topics --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
+    sh.exec(`npm run update-topics -- --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
     sh.popd();
 
     sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
