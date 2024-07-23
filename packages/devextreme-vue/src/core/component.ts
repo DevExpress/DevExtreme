@@ -81,6 +81,7 @@ function initBaseComponent() {
     render(): VNode {
       const thisComponent = this as any as IBaseComponent;
       const children: VNode[] = [];
+      const dxClasses = pickOutDxClasses(this.$el);
       if (thisComponent.$_config.cleanNested) {
         thisComponent.$_config.cleanNested();
       }
@@ -90,7 +91,7 @@ function initBaseComponent() {
       return h(
         'div',
         {
-          ...getAttrs(this.$attrs, this.dxClasses),
+          ...getAttrs(this.$attrs, dxClasses),
         },
         children,
       );
@@ -147,7 +148,6 @@ function initBaseComponent() {
       const thisComponent = this as any as IBaseComponent;
       const instance = thisComponent.$_instance;
 
-      this.dxClasses = [];
       if (instance) {
         triggerHandler(this.$el, DX_REMOVE_EVENT);
         instance.dispose();
@@ -299,12 +299,15 @@ function cleanWidgetNode(node: Node) {
   return removedNodes;
 }
 
-function pickOutDxClasses(el: Element, attr: any, dxClasses: string[]) {
-  el.classList.forEach((item: string) => {
-    if (attr.class && attr.class.indexOf(item) === -1) {
-      dxClasses.push(item);
+function pickOutDxClasses(el: Element) {
+  const actualDxClasses: string[] = [];
+  el && el.classList.forEach((item: string) => {
+    if (item.startsWith('dx-')) {
+      actualDxClasses.push(item);
     }
   });
+
+  return actualDxClasses;
 }
 
 function restoreNodes(el: Element, nodes: Element[]) {
@@ -340,9 +343,7 @@ function initDxComponent() {
 
       this.$_createWidget(this.$el);
       thisComponent.$_instance.endUpdate();
-
       restoreNodes(this.$el, nodes);
-      pickOutDxClasses(this.$el, this.$attrs, this.dxClasses);
 
       if (this.$slots && this.$slots.default) {
         getChildren(thisComponent).forEach((child: VNode) => {
