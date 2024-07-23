@@ -44,13 +44,12 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
 }
 
 const includeAttrs = ['id', 'class', 'style'];
-const dxClasses: string[] = [];
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
 });
 
-function getAttrs(attrs) {
+function getAttrs(attrs, dxClasses: string[]) {
   const attributes = {};
   includeAttrs.forEach((attr) => {
     const attrValue = attrs[attr];
@@ -69,6 +68,7 @@ function initBaseComponent() {
     data() {
       return {
         eventBus: CreateCallback(),
+        dxClasses: [],
       };
     },
 
@@ -90,7 +90,7 @@ function initBaseComponent() {
       return h(
         'div',
         {
-          ...getAttrs(this.$attrs),
+          ...getAttrs(this.$attrs, this.dxClasses),
         },
         children,
       );
@@ -146,6 +146,8 @@ function initBaseComponent() {
     beforeUnmount(): void {
       const thisComponent = this as any as IBaseComponent;
       const instance = thisComponent.$_instance;
+      
+      this.dxClasses = [];
       if (instance) {
         triggerHandler(this.$el, DX_REMOVE_EVENT);
         instance.dispose();
@@ -297,7 +299,7 @@ function cleanWidgetNode(node: Node) {
   return removedNodes;
 }
 
-function pickOutDxClasses(el: Element, attr: any) {
+function pickOutDxClasses(el: Element, attr: any, dxClasses: string[]) {
   el.classList.forEach((item: string) => {
     if (attr.class && attr.class.indexOf(item) === -1) {
       dxClasses.push(item);
@@ -340,7 +342,7 @@ function initDxComponent() {
       thisComponent.$_instance.endUpdate();
 
       restoreNodes(this.$el, nodes);
-      pickOutDxClasses(this.$el, this.$attrs);
+      pickOutDxClasses(this.$el, this.$attrs, this.dxClasses);
 
       if (this.$slots && this.$slots.default) {
         getChildren(thisComponent).forEach((child: VNode) => {
