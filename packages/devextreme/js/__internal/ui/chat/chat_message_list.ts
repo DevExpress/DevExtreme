@@ -47,9 +47,13 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _renderMessageListContent(): void {
-    const $content = $('<ul>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
-
     const { items } = this.option();
+
+    if (!items?.length) {
+      return;
+    }
+
+    const $content = $('<ul>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
 
     let currentMessageGroupUserId = (items?.[0] as any)?.author.id;
     let currentMessageGroupItems: any = [];
