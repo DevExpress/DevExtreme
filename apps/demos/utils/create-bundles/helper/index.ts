@@ -195,7 +195,7 @@ export const copyMetadata = () => {
   const ganttCssPath = join(nodeModulesPath, 'devexpress-gantt', 'dist', 'dx-gantt.css');
   copySync(ganttCssPath, join(destinationCss, 'dx-gantt.css'));
 
-  const sourceData = join(demosRootDir, '..', 'data');
+  const sourceData = join(demosRootDir, 'data');
   const destinationData = join(destinationPublishDir, 'data');
   copySync(sourceData, destinationData);
 };
