@@ -2914,6 +2914,7 @@ QUnit.module('View\'s focus', {
             width: 500,
             columnWidth: 70,
             dataSource: generateData(),
+            columnFixing: { legacyMode: true },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -2964,6 +2965,7 @@ QUnit.module('View\'s focus', {
             width: 500,
             columnWidth: 70,
             dataSource: generateData(),
+            columnFixing: { legacyMode: true },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -3015,6 +3017,9 @@ QUnit.module('View\'s focus', {
                 useNative: false,
                 columnRenderingMode: 'virtual',
             },
+            columnFixing: {
+                legacyMode: true
+            },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -3064,6 +3069,9 @@ QUnit.module('View\'s focus', {
                 useNative: false,
                 columnRenderingMode: 'virtual',
             },
+            columnFixing: {
+                legacyMode: true
+            },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -3112,6 +3120,9 @@ QUnit.module('View\'s focus', {
                 useNative: false,
                 columnRenderingMode: 'virtual',
             },
+            columnFixing: {
+                legacyMode: true
+            },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -3159,6 +3170,9 @@ QUnit.module('View\'s focus', {
             scrolling: {
                 useNative: false,
                 columnRenderingMode: 'virtual',
+            },
+            columnFixing: {
+                legacyMode: true
             },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
@@ -3211,6 +3225,7 @@ QUnit.module('View\'s focus', {
                     useNative: false,
                     columnRenderingMode: 'virtual',
                 },
+                columnFixing: { legacyMode: true },
                 customizeColumns: function(columns) {
                     columns[0].fixed = true;
                     columns[16].fixedPosition = 'right';
@@ -3255,6 +3270,7 @@ QUnit.module('View\'s focus', {
                     useNative: false,
                     columnRenderingMode: 'virtual',
                 },
+                columnFixing: { legacyMode: true },
                 customizeColumns: function(columns) {
                     columns[0].fixed = true;
                     columns[1].fixed = true;
@@ -3302,6 +3318,7 @@ QUnit.module('View\'s focus', {
                     useNative: false,
                     columnRenderingMode: 'virtual',
                 },
+                columnFixing: { legacyMode: true },
                 customizeColumns: function(columns) {
                     columns[0].fixed = true;
                     columns[16].fixedPosition = 'right';
@@ -3344,6 +3361,7 @@ QUnit.module('View\'s focus', {
                     useNative: false,
                     columnRenderingMode: 'virtual',
                 },
+                columnFixing: { legacyMode: true },
                 customizeColumns: function(columns) {
                     columns[0].fixed = true;
                     columns[1].fixed = true;
@@ -3389,6 +3407,9 @@ QUnit.module('View\'s focus', {
             scrolling: {
                 useNative: false,
                 columnRenderingMode: 'virtual',
+            },
+            columnFixing: {
+                legacyMode: true
             },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
@@ -3437,6 +3458,9 @@ QUnit.module('View\'s focus', {
             scrolling: {
                 useNative: false,
                 columnRenderingMode: 'virtual',
+            },
+            columnFixing: {
+                legacyMode: true
             },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
@@ -3490,6 +3514,9 @@ QUnit.module('View\'s focus', {
                 useNative: false,
                 columnRenderingMode: 'virtual',
             },
+            columnFixing: {
+                legacyMode: true
+            },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -3538,6 +3565,9 @@ QUnit.module('View\'s focus', {
             scrolling: {
                 useNative: false,
                 columnRenderingMode: 'virtual',
+            },
+            columnFixing: {
+                legacyMode: true
             },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
@@ -3589,6 +3619,9 @@ QUnit.module('View\'s focus', {
                 useNative: false,
                 columnRenderingMode: 'virtual',
             },
+            columnFixing: {
+                legacyMode: true
+            },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -3635,6 +3668,9 @@ QUnit.module('View\'s focus', {
             scrolling: {
                 useNative: false,
                 columnRenderingMode: 'virtual',
+            },
+            columnFixing: {
+                legacyMode: true
             },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
@@ -3686,6 +3722,9 @@ QUnit.module('View\'s focus', {
                 useNative: false,
                 columnRenderingMode: 'virtual',
             },
+            columnFixing: {
+                legacyMode: true
+            },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
                 columns[16].fixedPosition = 'right';
@@ -3733,6 +3772,9 @@ QUnit.module('View\'s focus', {
             scrolling: {
                 useNative: false,
                 columnRenderingMode: 'virtual',
+            },
+            columnFixing: {
+                legacyMode: true
             },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
@@ -4258,6 +4300,9 @@ QUnit.module('View\'s focus', {
                 { id: 3, name: 'name 3' },
                 { id: 4, name: 'name 4' },
             ],
+            columnFixing: {
+                legacyMode: true
+            },
             columns: [{
                 dataField: 'id',
                 fixed: true,
@@ -4505,6 +4550,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
+            columnFixing: {
+                legacyMode: true
+            },
             columns: ['field1', { dataField: 'field2', groupIndex: 0 }, { dataField: 'field3', groupIndex: 1 }, { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 store: [
@@ -4570,6 +4618,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         // arrange
         const dataGrid = createDataGrid({
             loadingTimeout: null,
+            columnFixing: {
+                legacyMode: true
+            },
             columns: ['field1', { dataField: 'field2', groupIndex: 0 }, { dataField: 'field3' }, { dataField: 'field4' }, { dataField: 'fixedField', fixed: true, fixedPosition: 'right' }],
             dataSource: {
                 store: [

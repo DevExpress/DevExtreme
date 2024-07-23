@@ -108,7 +108,8 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
                 }
             },
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             }
         });
 
@@ -135,7 +136,8 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
                 showDragIcons: true
             },
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             scrolling: {
                 useNative: true,
@@ -167,7 +169,8 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
                 showDragIcons: true
             },
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             scrolling: {
                 useNative: true
