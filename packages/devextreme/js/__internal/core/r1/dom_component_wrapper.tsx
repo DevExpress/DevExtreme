@@ -61,6 +61,10 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
     return normalizeProps(vNode) as VNode;
   }
 
+  componentWillUpdate(nextProps: DomComponentWrapperProps, nextState, context): void {
+    super.componentWillUpdate(nextProps, nextState, context);
+  }
+
   createEffects(): InfernoEffect[] {
     return [
       new InfernoEffect(this.setupWidget, []),
