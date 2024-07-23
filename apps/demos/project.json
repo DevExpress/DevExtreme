@@ -28,7 +28,7 @@
       },
       "dependsOn": [
         // NOTE: uncomment me when the NX cache is fixed to work in GHA
-        // "devextreme-main:build"
+        // "devextreme:build"
       ],
       "inputs": [
         { "env": "STRATEGY" },

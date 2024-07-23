@@ -58,7 +58,7 @@ jobs:
         pnpm install
 
     - name: Build
-      run: pnpx nx build devextreme-main
+      run: pnpx nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
