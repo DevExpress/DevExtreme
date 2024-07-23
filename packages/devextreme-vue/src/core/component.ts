@@ -44,6 +44,7 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
 }
 
 const includeAttrs = ['id', 'class', 'style'];
+const dxClasses: string[] = [];
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
@@ -54,7 +55,7 @@ function getAttrs(attrs) {
   includeAttrs.forEach((attr) => {
     const attrValue = attrs[attr];
     if (attrValue) {
-      attributes[attr] = attrValue;
+      attributes[attr] = attr === 'class' && dxClasses.length ? `${attrValue} ${dxClasses.join(' ')}` : attrValue;
     }
   });
 
@@ -296,6 +297,14 @@ function cleanWidgetNode(node: Node) {
   return removedNodes;
 }
 
+function pickOutDxClasses(el: Element, attr: any) {
+  el.classList.forEach((item: string) => {
+    if (attr.class && attr.class.indexOf(item) === -1) {
+      dxClasses.push(item);
+    }
+  });
+}
+
 function restoreNodes(el: Element, nodes: Element[]) {
   nodes.forEach((node) => {
     el.appendChild(node);
@@ -331,6 +340,8 @@ function initDxComponent() {
       thisComponent.$_instance.endUpdate();
 
       restoreNodes(this.$el, nodes);
+      pickOutDxClasses(this.$el, this.$attrs);
+
       if (this.$slots && this.$slots.default) {
         getChildren(thisComponent).forEach((child: VNode) => {
           const childExtenton = child as any as IExtension;
