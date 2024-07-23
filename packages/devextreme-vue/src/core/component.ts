@@ -81,7 +81,7 @@ function initBaseComponent() {
     render(): VNode {
       const thisComponent = this as any as IBaseComponent;
       const children: VNode[] = [];
-      const dxClasses = pickOutDxClasses(this.$el);
+      const dxClasses = pickOutDxClasses(this.$el) || [];
       if (thisComponent.$_config.cleanNested) {
         thisComponent.$_config.cleanNested();
       }
@@ -300,14 +300,7 @@ function cleanWidgetNode(node: Node) {
 }
 
 function pickOutDxClasses(el: Element) {
-  const actualDxClasses: string[] = [];
-  el && el.classList.forEach((item: string) => {
-    if (item.startsWith('dx-')) {
-      actualDxClasses.push(item);
-    }
-  });
-
-  return actualDxClasses;
+  return el && Array.from(el.classList).filter((item: string) => item.startsWith('dx-'));
 }
 
 function restoreNodes(el: Element, nodes: Element[]) {
