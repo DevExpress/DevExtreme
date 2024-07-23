@@ -39,8 +39,6 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
 
   private prevProps: ComponentProps | null = null;
 
-  private readonly effects: any = null;
-
   get config(): any {
     const { id } = (ConfigContext as any);
     if (this.context[id]) {
