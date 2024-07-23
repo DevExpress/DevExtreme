@@ -9,9 +9,9 @@ $chat-information-font-size: 12px;
 $chat-information-color: #707070;
 $chat-avatar-size: 32px;
 $chat-bubble-background-color-primary: #EBF3FC;
-$chat-bubble-background-color-socondary: #F5F5F5;
+$chat-bubble-background-color-secondary: #F5F5F5;
 $chat-bubble-border-radius: 12px;
-$chat-textarea-height: 40px;
+$chat-text-area-height: 40px;
 
 .dx-chat {
   display: flex;
@@ -98,7 +98,7 @@ $chat-textarea-height: 40px;
   padding: 8px 12px;
   max-width: 90%;
   border-radius: $chat-bubble-border-radius;
-  background-color: $chat-bubble-background-color-socondary;
+  background-color: $chat-bubble-background-color-secondary;
 }
 
 .dx-chat-message-group-alignment-start .dx-chat-message-bubble.dx-chat-message-bubble-first {
@@ -158,7 +158,7 @@ $chat-textarea-height: 40px;
 
 .dx-chat .dx-chat-message-box-text-area {
   flex-grow: 1;
-  height: $chat-textarea-height;
+  height: $chat-text-area-height;
 }
 
 .dx-chat-message-box-button {
