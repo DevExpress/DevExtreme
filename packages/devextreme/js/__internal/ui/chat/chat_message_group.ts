@@ -58,10 +58,9 @@ class MessageGroup extends Widget<MessageGroupOptions> {
 
     if (alignment === 'start') {
       const authorName = (messages as any)?.[0].author.name;
-      const initials = `${authorName.charAt(0).toUpperCase()}`;
 
       this._avatar = this._createComponent($('<div>'), Avatar, {
-        text: initials,
+        name: authorName,
       });
 
       $(this._avatar.element()).appendTo(this.element());

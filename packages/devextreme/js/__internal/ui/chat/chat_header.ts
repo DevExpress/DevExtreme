@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
@@ -13,6 +14,8 @@ export interface ChatHeaderOptions extends WidgetOptions<ChatHeader> {
 }
 
 class ChatHeader extends Widget<ChatHeaderOptions> {
+  private _$headerText?: dxElementWrapper;
+
   _getDefaultOptions(): ChatHeaderOptions {
     return {
       ...super._getDefaultOptions(),
@@ -29,14 +32,14 @@ class ChatHeader extends Widget<ChatHeaderOptions> {
 
     const { title } = this.option();
 
-    $('<p>')
+    this._$headerText = $('<p>')
       .addClass(CHAT_HEADER_TEXT_CLASS)
       .text((title as any))
       .appendTo(this.element());
   }
 
   _updateTitle(value: any): void {
-    $(`.${CHAT_HEADER_TEXT_CLASS}`).text(value);
+    this._$headerText?.text(value);
   }
 
   _optionChanged(args: Record<string, unknown>): void {

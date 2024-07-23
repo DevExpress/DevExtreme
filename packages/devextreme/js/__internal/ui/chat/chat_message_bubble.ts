@@ -31,16 +31,11 @@ class MessageBubble extends Widget<MessageBubbleOptions> {
     super._initMarkup();
   }
 
-  _updateText(value: any): void {
-    $(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).text(value);
-  }
-
   _optionChanged(args: Record<string, unknown>): void {
-    const { name, value } = args;
+    const { name } = args;
 
     switch (name) {
       case 'text':
-        this._updateText(value);
         break;
       default:
         super._optionChanged(args);

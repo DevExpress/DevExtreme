@@ -8,7 +8,7 @@ const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_AVATAR_LETTERS_CLASS = 'dx-chat-message-avatar-letters';
 
 export interface AvatarOptions extends WidgetOptions<Avatar> {
-  text?: string;
+  name?: string;
 }
 
 class Avatar extends Widget<AvatarOptions> {
@@ -16,9 +16,15 @@ class Avatar extends Widget<AvatarOptions> {
     return {
       ...super._getDefaultOptions(),
       ...{
-        text: '',
+        name: '',
       },
     };
+  }
+
+  _getAvatarInitials(name: string): string {
+    const initials = `${name.charAt(0).toUpperCase()}`;
+
+    return initials;
   }
 
   _initMarkup(): void {
@@ -26,7 +32,9 @@ class Avatar extends Widget<AvatarOptions> {
 
     super._initMarkup();
 
-    const { text } = this.option();
+    const { name } = this.option();
+
+    const text = this._getAvatarInitials((name as any));
 
     $('<div>')
       .addClass(CHAT_MESSAGE_AVATAR_LETTERS_CLASS)
