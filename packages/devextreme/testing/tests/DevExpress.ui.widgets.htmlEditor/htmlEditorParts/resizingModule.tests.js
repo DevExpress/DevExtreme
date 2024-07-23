@@ -131,6 +131,59 @@ module('Resizing module', moduleConfig, () => {
         assert.deepEqual(resizingInstance.allowedTargets, ['video'], '\'allowedTargets\' option has been applied');
     });
 
+    QUnit.module('moduleResizing runtime change', () => {
+        test('to { enabled: true } should render resize frame and attach events (T1241439)', function(assert) {
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            this.attachSpies(resizingInstance);
+            resizingInstance.option('mediaResizing', { enabled: true });
+
+            assert.ok(resizingInstance.enabled, '\'enabled\' option has been applied');
+            assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 1, 'There is resize frame element');
+            assert.ok(this.attachEventsSpy.calledOnce, 'events has been attached');
+            assert.ok(this.detachEventsSpy.notCalled, 'events hasn\'t detached');
+        });
+
+        test('to { enabled: false } should remove resize frame and detach events (T1241439)', function(assert) {
+            this.options.enabled = true;
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            this.attachSpies(resizingInstance);
+
+            resizingInstance.option('mediaResizing', { enabled: false });
+            assert.notOk(resizingInstance.enabled, '\'enabled\' option should be disabled');
+            assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 0, 'There should be no resize frame element');
+            assert.ok(this.detachEventsSpy.calledOnce, 'Events should be detached once.');
+        });
+
+        test('should not cause errors when repeatedly disabling enabled option (T1241439)', function(assert) {
+            this.options.enabled = true;
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            this.attachSpies(resizingInstance);
+            try {
+                resizingInstance.option('mediaResizing', { enabled: false });
+                resizingInstance.option('enabled', false);
+
+                assert.ok(this.detachEventsSpy.calledOnce, 'events has been detached');
+                assert.ok(true, 'No errors should occur when disabling multiple times');
+            } catch(e) {
+                assert.ok(false, 'errors have been encountered when disabling multiple times');
+            }
+        });
+
+        test('should not cause errors and attach excess listeners when repeatedly enabling enabled option (T1241439)', function(assert) {
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            this.attachSpies(resizingInstance);
+            try {
+                resizingInstance.option('mediaResizing', { enabled: true });
+                resizingInstance.option('enabled', true);
+
+                assert.ok(this.attachEventsSpy.calledOnce, 'events has been attached');
+                assert.ok(true, 'no error occurs when enabling multiple times');
+            } catch(e) {
+                assert.ok(false, 'errors have been encountered when enabling multiple times');
+            }
+        });
+    });
+
     test('click on an image with default module options', function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 

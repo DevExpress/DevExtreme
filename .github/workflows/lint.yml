@@ -171,8 +171,8 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Lint CSS
-      working-directory: ./packages/devextreme
-      run: npx nx lint-css
+      working-directory: ./packages/devextreme-scss
+      run: npx nx lint
 
   package_lock:
     runs-on: devextreme-shr2

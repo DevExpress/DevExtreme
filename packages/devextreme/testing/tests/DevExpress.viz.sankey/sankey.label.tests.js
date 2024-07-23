@@ -3,6 +3,9 @@ const common = require('./commonParts/common.js');
 const createSankey = common.createSankey;
 const environment = common.environment;
 
+const getHorizontalOffset = labels => labels.map(label => label.children[0].attr.lastCall.args[0].translateX);
+const getVerticalOffset = labels => labels.map(label => label.children[0].attr.lastCall.args[0].translateY);
+
 QUnit.module('Node labels', environment);
 
 QUnit.test('Create label group on initialization', function(assert) {
@@ -204,8 +207,8 @@ QUnit.test('Labels offsets', function(assert) {
         }
     });
 
-    const x = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
-    const y = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; });
+    const x = getHorizontalOffset(this.labels());
+    const y = getVerticalOffset(this.labels());
 
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -215,13 +218,33 @@ QUnit.test('Labels offsets', function(assert) {
         }
     });
 
-    const xOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
-    const yOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; });
+    const xOffset = getHorizontalOffset(this.labels());
+    const yOffset = getVerticalOffset(this.labels());
     const xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]];
     const yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
 
     assert.deepEqual(xDifference, [20, 20, -20], 'horizontal offset applied'); // labels in last cascade are moved to other side (-10)
     assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
+});
+
+QUnit.test('label horizontalOffset option runtime change should update the layout (T1243009)', function(assert) {
+    const instance = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        label: {
+            horizontalOffset: 0,
+        }
+    });
+
+    const initialX = getHorizontalOffset(this.labels());
+
+    instance.option('label', {
+        horizontalOffset: 30,
+    });
+
+    const updatedX = getHorizontalOffset(this.labels());
+    const xDifference = [updatedX[0] - initialX[0], updatedX[1] - initialX[1], updatedX[2] - initialX[2]];
+
+    assert.deepEqual(xDifference, [30, 30, -30], 'horizontal offset applied');
 });
 
 // T669620

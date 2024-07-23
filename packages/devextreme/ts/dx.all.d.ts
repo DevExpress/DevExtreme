@@ -6361,9 +6361,9 @@ declare module DevExpress.data {
         };
   }
   /**
-   * [descr:Utils.query(array)]
+   * [descr:Utils.query(array, queryOptions)]
    */
-  export function query(array: Array<any>): Query;
+  export function query(array: Array<any>, queryOptions?: any): Query;
   /**
    * [descr:Utils.query(url, queryOptions)]
    */
@@ -25611,11 +25611,10 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ResizeEndEvent]
      */
-    export type ResizeEndEvent<TKey = any> = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<
-        dxSplitter<TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > &
+    export type ResizeEndEvent<TKey = any> = DevExpress.events.NativeEventInfo<
+      dxSplitter<TKey>,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > &
       ResizeInfo;
     /**
      * [descr:_ui_splitter_ResizeEvent]
