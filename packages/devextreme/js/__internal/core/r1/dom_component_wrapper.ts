@@ -1,4 +1,5 @@
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { BaseInfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { ComponentClass } from '@js/core/dom_component';
 import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 import { getUpdatedOptions } from '@js/renovation/ui/common/utils/get_updated_options';
@@ -8,11 +9,11 @@ import { createRef, createVNode, normalizeProps } from 'inferno';
 
 import type DomComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
+import { ConfigContext } from '../../../renovation/common/config_context';
 
 interface ComponentProps {
   className?: string;
   itemTemplate?: string | (() => string | HTMLElement);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   valueChange?: EventCallback<any>;
 }
 
@@ -36,9 +37,36 @@ export class DomComponentWrapper extends BaseInfernoComponent<DomComponentWrappe
 
   private prevProps: ComponentProps | null = null;
 
+  private readonly effects: any = null;
+
+  get config(): any {
+    const { id } = (ConfigContext as any);
+    if (this.context[id]) {
+      return this.context[id];
+    }
+    return (ConfigContext as any).defaultValue;
+  }
+
   render(): VNode {
     const vNode = createVNode(1, 'div', this.props.componentProps.className, null, 1, extend({}, this.props), null, this.widgetRef);
     return normalizeProps(vNode) as VNode;
+  }
+
+  createEffects(): InfernoEffect[] {
+    return [
+      new InfernoEffect(this.setupWidget, []),
+      new InfernoEffect(
+        this.updateWidget,
+        [
+          this.props.componentProps,
+          this.config,
+          this.props.templateNames,
+        ],
+      )];
+  }
+
+  updateEffects(): void {
+    this.effects[1]?.update([this.props.componentProps, this.config, this.props.templateNames]);
   }
 
   setupWidget(): DisposeEffectReturn {
