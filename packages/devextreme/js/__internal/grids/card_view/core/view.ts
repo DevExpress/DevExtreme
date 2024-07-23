@@ -9,8 +9,6 @@ export abstract class View {
 
   public readonly abstract vdom: InfernoNode | Subscribable<InfernoNode>;
 
-  public lockedVdom = state<InfernoNode>(undefined as any);
-
   public render(root: Element): void {
     toSubscribable(this.vdom).subscribe((node: InfernoNode) => {
       render(node, root);

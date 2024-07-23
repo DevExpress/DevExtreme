@@ -7,4 +7,6 @@ export interface CardView extends GridBase {
 
 export interface Properties extends GridBaseOptions<CardView> {
   toolbarItems?: (ToolbarItem | string)[];
+
+  searchText?: string;
 }

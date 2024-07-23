@@ -18,6 +18,7 @@ import { HeadersView } from './headers/view';
 import { MainView } from './main_view';
 import { OptionsController } from './options_controller/options_controller';
 import { PagerView } from './pager';
+import { Search } from './search/controller';
 
 class CardView extends Widget<Properties> {
   private diContext!: DIContext;
@@ -38,6 +39,8 @@ class CardView extends Widget<Properties> {
 
   private headerPanelView!: HeaderPanelView;
 
+  private search!: Search;
+
   protected _init() {
     // @ts-expect-error
     super._init();
@@ -54,6 +57,7 @@ class CardView extends Widget<Properties> {
     this.diContext.register(ColumnsChooser);
     this.diContext.register(ColumnsDraggingController);
     this.diContext.register(HeadersView);
+    this.diContext.register(Search);
     this.diContext.registerInstance(OptionsController, new OptionsController(this));
 
     this.columnsChooser = this.diContext.get(ColumnsChooser);
@@ -64,6 +68,7 @@ class CardView extends Widget<Properties> {
     // this.editingController = this.diContext.get(EditingController);
     this.contentView = this.diContext.get(ContentView);
     this.pagerView = this.diContext.get(PagerView);
+    this.search = this.diContext.get(Search);
   }
 
   protected _getDefaultOptions() {
