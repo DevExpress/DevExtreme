@@ -53,13 +53,6 @@ class ChatHeader extends Widget<ChatHeaderOptions> {
         super._optionChanged(args);
     }
   }
-
-  _clean(): void {
-    this._$headerText?.remove();
-    this._$headerText = undefined;
-
-    super._clean();
-  }
 }
 
 export default ChatHeader;
