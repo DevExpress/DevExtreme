@@ -146,7 +146,7 @@ function initBaseComponent() {
     beforeUnmount(): void {
       const thisComponent = this as any as IBaseComponent;
       const instance = thisComponent.$_instance;
-      
+
       this.dxClasses = [];
       if (instance) {
         triggerHandler(this.$el, DX_REMOVE_EVENT);
