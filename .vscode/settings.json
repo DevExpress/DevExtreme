@@ -1,4 +1,5 @@
 {
+    "testcafeTestRunner.workspaceRoot": "./e2e/testcafe-devextreme",
     "jest.autoRun": {
         "watch": true,
     },
