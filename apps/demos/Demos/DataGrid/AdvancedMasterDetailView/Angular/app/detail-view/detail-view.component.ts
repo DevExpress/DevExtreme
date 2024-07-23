@@ -12,8 +12,8 @@ if (window && window.config.packageConfigPaths) {
 
 @Component({
   selector: 'detail-view',
-  templateUrl: `.${modulePrefix}/detail-view/detail-view.component.html`,
-  styleUrls: [`.${modulePrefix}/detail-view/detail-view.component.css`],
+  templateUrl: `.${modulePrefix && (modulePrefix + '/detail-view')}/detail-view.component.html`,
+  styleUrls: [`.${modulePrefix && (modulePrefix + '/detail-view')}/detail-view.component.css`],
   providers: [],
 })
 export class DetailViewComponent implements AfterViewInit {
