@@ -1,5 +1,9 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseInfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
+import {
+  hasTemplate, InfernoComponent, InfernoEffect, renderTemplate,
+} from '@devextreme/runtime/inferno';
 import type { ComponentClass } from '@js/core/dom_component';
 import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 import { getUpdatedOptions } from '@js/renovation/ui/common/utils/get_updated_options';
@@ -24,11 +28,9 @@ export interface DomComponentWrapperProps {
   componentProps: ComponentProps;
 }
 
-export class DomComponentWrapper extends BaseInfernoComponent<DomComponentWrapperProps> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperProps> {
   public state: any = {};
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public refs: any = null;
 
   private readonly widgetRef = createRef();
@@ -45,6 +47,15 @@ export class DomComponentWrapper extends BaseInfernoComponent<DomComponentWrappe
       return this.context[id];
     }
     return (ConfigContext as any).defaultValue;
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.widgetRef = createRef();
+    this.getInstance = this.getInstance.bind(this);
+    this.setupWidget = this.setupWidget.bind(this);
+    this.updateWidget = this.updateWidget.bind(this);
   }
 
   render(): VNode {
@@ -66,13 +77,13 @@ export class DomComponentWrapper extends BaseInfernoComponent<DomComponentWrappe
   }
 
   updateEffects(): void {
-    this.effects[1]?.update([this.props.componentProps, this.config, this.props.templateNames]);
+    this._effects[1]?.update([this.props.componentProps, this.config, this.props.templateNames]);
   }
 
   setupWidget(): DisposeEffectReturn {
     const current = this.widgetRef.current as HTMLDivElement;
     // eslint-disable-next-line new-cap
-    const componentInstance = new this.props.componentType(current, this.props.componentProps);
+    const componentInstance = new this.props.componentType(current, this.properties);
     this.instance = componentInstance;
     return () => {
       componentInstance.dispose();
@@ -84,7 +95,7 @@ export class DomComponentWrapper extends BaseInfernoComponent<DomComponentWrappe
     if (!this.instance) {
       return;
     }
-    const updatedOptions = getUpdatedOptions(this.prevProps ?? {}, this.props.componentProps);
+    const updatedOptions = getUpdatedOptions(this.prevProps ?? {}, this.properties);
     if (updatedOptions.length) {
       this.instance.beginUpdate();
       updatedOptions.forEach((_ref2) => {
@@ -96,6 +107,42 @@ export class DomComponentWrapper extends BaseInfernoComponent<DomComponentWrappe
       });
       this.instance.endUpdate();
     }
-    this.prevProps = this.props.componentProps;
+    this.prevProps = this.properties;
+  }
+
+  get properties(): any {
+    const normalizedProps = normalizeProps(this.props.componentProps);
+    const {
+      valueChange,
+    } = normalizedProps;
+    const properties = extend({
+      rtlEnabled: this.config?.rtlEnabled,
+      isRenovated: true,
+    }, normalizedProps);
+    if (valueChange) {
+      properties.onValueChanged = (_ref3): any => {
+        const {
+          value,
+        } = _ref3;
+        return valueChange(value);
+      };
+    }
+    const templates = this.props.templateNames as any;
+    templates.forEach((name) => {
+      if (hasTemplate(name, properties, this)) {
+        properties[name] = (item, index, container): any => {
+          renderTemplate((this.props.componentProps as any)[name], {
+            item,
+            index,
+            container,
+          }, this);
+        };
+      }
+    });
+    return properties;
+  }
+
+  getInstance(): any {
+    return this.instance;
   }
 }
