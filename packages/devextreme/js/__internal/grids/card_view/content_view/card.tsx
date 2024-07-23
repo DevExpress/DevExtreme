@@ -1,8 +1,6 @@
-import { shallowEquals } from '@ts/core/r1/utils';
+import type { DataRow } from '@ts/grids/grid_core_new/columns_controller/types';
+import { PureComponent } from '@ts/grids/grid_core_new/core/pure_component';
 import type { InfernoNode } from 'inferno';
-import { Component } from 'inferno';
-
-import type { DataRow } from '../columns_controller/types';
 
 export const CLASSES = {
   card: 'dx-cardview-card',
@@ -13,12 +11,6 @@ export const CLASSES = {
 
 export interface CardProps {
   row: DataRow;
-}
-
-class PureComponent<P = {}, S = {}> extends Component<P, S> {
-  shouldComponentUpdate(nextProps: P): boolean {
-    return !shallowEquals(this.props, nextProps as any);
-  }
 }
 
 export class Card extends PureComponent<CardProps> {

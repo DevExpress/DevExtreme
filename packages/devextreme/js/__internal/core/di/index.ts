@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+interface AbstractType<T> extends Function {
+  prototype: T;
+}
+
 type Constructor<T, TDeps extends readonly any[]> = new(...deps: TDeps) => T;
 
 interface DIItem<T, TDeps extends readonly any[]> extends Constructor<T, TDeps> {
-  dependencies: readonly [...{ [P in keyof TDeps]: Constructor<TDeps[P], readonly any[]> }];
+  dependencies: readonly [...{ [P in keyof TDeps]: AbstractType<TDeps[P]> }];
 }
 
 export class DIContext {
@@ -14,6 +19,13 @@ export class DIContext {
 
   private readonly antiRecursionSet = new Set();
 
+  public register<TId, TFabric extends TId, TDeps extends readonly any[]>(
+    id: AbstractType<TId>,
+    fabric: DIItem<TFabric, TDeps>,
+  ): void;
+  public register<T, TDeps extends readonly any[]>(
+    idAndFabric: DIItem<T, TDeps>,
+  ): void;
   public register<T, TDeps extends readonly any[]>(
     id: DIItem<T, TDeps>,
     fabric?: DIItem<T, TDeps>,
@@ -23,15 +35,15 @@ export class DIContext {
     this.fabrics.set(id, fabric);
   }
 
-  public registerInstance<T, TDeps extends readonly any[]>(
-    id: Constructor<T, TDeps>,
+  public registerInstance<T>(
+    id: AbstractType<T>,
     instance: T,
   ): void {
     this.instances.set(id, instance);
   }
 
-  public get<T, TDeps extends readonly any[]>(
-    id: Constructor<T, TDeps>,
+  public get<T>(
+    id: AbstractType<T>,
   ): T {
     if (this.instances.get(id)) {
       return this.instances.get(id) as T;

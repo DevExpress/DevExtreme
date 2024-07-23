@@ -24,6 +24,6 @@ export class MyView extends Component<{}, State> {
   }
 
   render() {
-    return <div>{this.state.count}</div>;
+    return <div>{this.state?.count}</div>;
   }
 }

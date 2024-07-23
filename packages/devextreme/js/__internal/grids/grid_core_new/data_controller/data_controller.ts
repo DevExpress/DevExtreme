@@ -48,7 +48,7 @@ export class DataController {
   public readonly isLoading: Subscribable<boolean> = this._isLoading;
 
   public readonly pageCount = computed(
-    (totalCount, pageSize) => Math.ceil(totalCount / pageSize),
+    (totalCount, pageSize) => Math.ceil(totalCount / pageSize!),
     [this.totalCount, this.pageSize],
   );
 
@@ -82,9 +82,9 @@ export class DataController {
 
     effect(
       (pageIndex, pageSize, dataSource) => {
-        dataSource.pageIndex(pageIndex);
+        dataSource.pageIndex(pageIndex!);
         dataSource.requireTotalCount(true);
-        dataSource.pageSize(pageSize);
+        dataSource.pageSize(pageSize!);
         dataSource.load();
       },
       [this.pageIndex, this.pageSize, this.dataSource],

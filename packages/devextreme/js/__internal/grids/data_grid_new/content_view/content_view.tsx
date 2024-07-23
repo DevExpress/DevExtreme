@@ -8,7 +8,6 @@ import { createWidgetWrapper } from '@ts/grids/grid_core_new/core/widget_wrapper
 import { DataController } from '@ts/grids/grid_core_new/data_controller/data_controller';
 
 import { OptionsController } from '../options_controller';
-import { Card } from './card';
 
 export const CLASSES = {
   content: 'dx-cardview-content',
@@ -39,9 +38,17 @@ export class ContentView extends View {
               ></NoData>
             )
           }
-          {items.map((item) => (
-            <Card row={item}></Card>
-          ))}
+          <table>
+          <tbody>
+              {items.map((item) => (
+                <tr>
+                  {item.cells.map((cell) => (
+                    <td>{cell.value}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </>
     ),
