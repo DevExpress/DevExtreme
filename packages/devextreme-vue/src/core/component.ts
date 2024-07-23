@@ -68,7 +68,6 @@ function initBaseComponent() {
     data() {
       return {
         eventBus: CreateCallback(),
-        dxClasses: [],
       };
     },
 
