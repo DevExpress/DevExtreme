@@ -7,7 +7,7 @@ import { createWidget } from '../../helpers/createWidget';
 fixture.disablePageReloads`Tagbox Columns`.page(
   url(__dirname, '../container.html'),
 );
-
+// T1228720
 test('Datagrid tagbox column should not look broken', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -28,8 +28,6 @@ test('Datagrid tagbox column should not look broken', async (t) => {
     allowColumnResizing: true,
     dataSource: [
       { id: 1, items: [1, 2, 3, 4, 5] },
-      { id: 2, items: [4, 8] },
-      { id: 3, items: [3, 6, 9] },
     ],
     columns: ['id', {
       dataField: 'items',
@@ -66,7 +64,7 @@ test('Datagrid tagbox column should not look broken', async (t) => {
           (itemId) => options.column.lookup!.calculateCellValue!(itemId),
         );
         const text = vals.join(', ');
-        // @ts-expect-error test
+        // @ts-expect-error text
         container.text(text || noBreakSpace).attr('title', text);
       },
     }],
