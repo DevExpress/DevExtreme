@@ -1,6 +1,6 @@
 {
   "name": "devextreme-main",
-  "version": "24.1.3",
+  "version": "24.1.4",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.13",
-    "devexpress-diagram": "2.2.8",
+    "devexpress-diagram": "2.2.10",
     "devexpress-gantt": "4.1.56",
     "devextreme-quill": "1.7.1",
     "showdown": "^2.1.0",
@@ -143,9 +143,7 @@
     "staged-git-files": "1.3.0",
     "string-replace-loader": "3.1.0",
     "stylelint": "15.11.0",
-    "stylelint-config-standard-scss": "9.0.0",
     "stylelint-devextreme": "0.0.6",
-    "stylelint-scss": "5.3.1",
     "systemjs": "0.19.41",
     "systemjs-plugin-babel": "0.0.25",
     "systemjs-plugin-css": "0.1.37",
@@ -168,10 +166,9 @@
   "scripts": {
     "preinstall": "node build/preinstall.js",
     "clean": "gulp clean",
-    "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts lint-texts",
+    "lint": "npm-run-all -p -c lint-js lint-ts lint-renovation lint-dts lint-texts",
     "lint-js": "eslint --quiet --ext .js .",
     "lint-ts": "eslint --quiet --ext .tsx,.ts --ignore-pattern /js/renovation/ --ignore-pattern /testing/renovation/ --ignore-pattern *.d.ts .",
-    "lint-css": "stylelint scss",
     "lint-renovation": "eslint --quiet --ext .tsx,.ts ./js/renovation",
     "lint-dts": "eslint js --ext .d.ts --ignore-pattern /js/renovation/",
     "lint-staged": "lint-staged",
@@ -203,7 +200,6 @@
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-jest": "jest --no-coverage --runInBand",
     "test-jest:watch": "jest --watch",
-    "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "tcd-update": "tcd-update"
   },

@@ -416,6 +416,9 @@ export const MockTranslator = function(data) {
             }
             return result;
         },
+        toValue: function(data) {
+            return data;
+        },
         translateSpecialCase: function(specialCase) {
             currentAssert().ok(specialCase !== undefined && specialCase !== null, 'Verification of value that was passed to Translator (translateSpecialCase)');
             const result = innerData.specialCases[specialCase];

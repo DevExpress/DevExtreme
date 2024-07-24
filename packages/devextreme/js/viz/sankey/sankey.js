@@ -60,6 +60,7 @@ const dxSankey = baseWidget.inherit({
         sortData: 'DATA_SOURCE',
         alignment: 'DATA_SOURCE',
         node: 'BUILD_LAYOUT',
+        label: 'LABELS',
         link: 'BUILD_LAYOUT',
         palette: 'BUILD_LAYOUT',
         paletteExtensionMode: 'BUILD_LAYOUT'

@@ -3,6 +3,7 @@ import VectorMap, {
   ITooltipProps,
   Layer,
   Tooltip,
+  VectorMapTypes,
 } from 'devextreme-react/vector-map';
 
 import Button from 'devextreme-react/button';
@@ -19,9 +20,10 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
   return null;
 };
 
-const markerClick = ({ target, component }) => {
-  if (target?.layer.type === 'marker') {
-    component.center(target.coordinates()).zoomFactor(10);
+const markerClick = (e: VectorMapTypes.ClickEvent) => {
+  if (e.target?.layer.type === 'marker') {
+    e.component.center(e.target.coordinates());
+    e.component.zoomFactor(10);
   }
 };
 
