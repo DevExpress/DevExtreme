@@ -49,7 +49,8 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
 
     switch (name) {
       case 'title':
-        this._$text?.text((value as string));
+        // @ts-expect-error
+        this._$text?.text(value);
         break;
       default:
         // @ts-expect-error

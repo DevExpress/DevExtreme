@@ -67,7 +67,8 @@ class Chat extends Widget<Properties> {
 
     switch (name) {
       case 'title':
-        this._chatHeader?.option(name, (value as string));
+        // @ts-expect-error
+        this._chatHeader?.option(name, value);
         break;
       case 'items':
         this._invalidate();
