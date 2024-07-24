@@ -4,7 +4,7 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import Widget from '../widget';
 
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
-const CHAT_MESSAGE_AVATAR_LETTERS_CLASS = 'dx-chat-message-avatar-letters';
+const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
 export interface AvatarOptions extends WidgetOptions<Avatar> {
   name?: string;
@@ -29,17 +29,17 @@ class Avatar extends Widget<AvatarOptions> {
 
     super._initMarkup();
 
-    const $letters = $('<div>').addClass(CHAT_MESSAGE_AVATAR_LETTERS_CLASS);
+    const $initials = $('<div>').addClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS);
 
     const { name } = this.option();
 
     if (name) {
       const text = this._getAvatarInitials(name);
 
-      $letters.text(text);
+      $initials.text(text);
     }
 
-    $letters.appendTo(this.element());
+    $initials.appendTo(this.element());
   }
 
   _optionChanged(args: Record<string, unknown>): void {
