@@ -440,7 +440,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         box-shadow: none;
       }
 
-      .dx-texteditor-input {
+      &:not(.dx-tagbox) .dx-texteditor-input {
         background: $datagrid-editor-bg;
         font-size: $fluent-grid-base-cell-font-size;
         height: $fluent-grid-base-cell-height;
@@ -466,7 +466,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
 
-      .dx-tag-container {
+      &:not(.dx-tagbox) .dx-tag-container {
         min-height: $fluent-grid-base-cell-height;
         padding: 0;
       }

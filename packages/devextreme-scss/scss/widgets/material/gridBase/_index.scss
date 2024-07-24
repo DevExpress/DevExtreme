@@ -418,7 +418,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         box-shadow: none;
       }
 
-      .dx-texteditor-input {
+      &:not(.dx-tagbox) .dx-texteditor-input {
         background: $datagrid-editor-bg;
         font-size: $material-grid-base-cell-font-size;
         height: $material-grid-base-cell-height;
@@ -444,7 +444,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         }
       }
 
-      .dx-tag-container {
+      &:not(.dx-tagbox) .dx-tag-container {
         min-height: $material-grid-base-cell-height;
         padding: 0;
       }

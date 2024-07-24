@@ -351,15 +351,3 @@ $datagrid-text-stub-background-image-path: null !default;
     outline-offset: -2px;
   }
 }
-
-.dx-tagbox.dx-texteditor {
-  .dx-tag-container,
-  .dx-texteditor-input {
-    min-height: auto;
-    height: 100%;
-  }
-
-  .dx-tag-container {
-    padding: 10px 0;
-  }
-}
