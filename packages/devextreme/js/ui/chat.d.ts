@@ -106,6 +106,12 @@ export type Message = {
 export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
+     * @default undefined
+     * @public
+     */
+    user?: User;
+    /**
+     * @docid
      * @default ''
      * @public
      */
