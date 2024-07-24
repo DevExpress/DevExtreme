@@ -22,7 +22,6 @@ interface ComponentProps {
 }
 
 export interface DomComponentWrapperProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   componentType: ComponentClass<any>;
   templateNames: string[];
   componentProps: ComponentProps;
