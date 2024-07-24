@@ -49,12 +49,12 @@ config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
 });
 
-function getAttrs(attrs) {
+function getAttrs(attrs, dxClasses: string[]) {
   const attributes = {};
   includeAttrs.forEach((attr) => {
     const attrValue = attrs[attr];
     if (attrValue) {
-      attributes[attr] = attrValue;
+      attributes[attr] = attr === 'class' && dxClasses.length ? `${attrValue} ${dxClasses.join(' ')}` : attrValue;
     }
   });
 
@@ -80,6 +80,7 @@ function initBaseComponent() {
     render(): VNode {
       const thisComponent = this as any as IBaseComponent;
       const children: VNode[] = [];
+      const dxClasses = pickOutDxClasses(this.$el) || [];
       if (thisComponent.$_config.cleanNested) {
         thisComponent.$_config.cleanNested();
       }
@@ -89,7 +90,7 @@ function initBaseComponent() {
       return h(
         'div',
         {
-          ...getAttrs(this.$attrs),
+          ...getAttrs(this.$attrs, dxClasses),
         },
         children,
       );
@@ -145,6 +146,7 @@ function initBaseComponent() {
     beforeUnmount(): void {
       const thisComponent = this as any as IBaseComponent;
       const instance = thisComponent.$_instance;
+
       if (instance) {
         triggerHandler(this.$el, DX_REMOVE_EVENT);
         instance.dispose();
@@ -296,6 +298,10 @@ function cleanWidgetNode(node: Node) {
   return removedNodes;
 }
 
+function pickOutDxClasses(el: Element) {
+  return el && Array.from(el.classList).filter((item: string) => item.startsWith('dx-'));
+}
+
 function restoreNodes(el: Element, nodes: Element[]) {
   nodes.forEach((node) => {
     el.appendChild(node);
@@ -329,8 +335,8 @@ function initDxComponent() {
 
       this.$_createWidget(this.$el);
       thisComponent.$_instance.endUpdate();
-
       restoreNodes(this.$el, nodes);
+
       if (this.$slots && this.$slots.default) {
         getChildren(thisComponent).forEach((child: VNode) => {
           const childExtenton = child as any as IExtension;
