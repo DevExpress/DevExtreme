@@ -6,7 +6,7 @@ import { createDemoLayout, getDestinationPathByDemo, getSourcePathByDemo } from 
 interface Bundler {
   framework: Framework;
   getBuildOptions(demo: Demo): BuildOptions;
-  buildDemo(demo: Demo): Promise<void>;
+  buildDemo(demo: Demo, res): Promise<void>;
 }
 
 export abstract class ESBundler implements Bundler {
@@ -18,9 +18,10 @@ export abstract class ESBundler implements Bundler {
     this.framework = framework;
   }
 
-  buildDemo = async (demo: Demo): Promise<void> => {
+  buildDemo = async (demo: Demo, res): Promise<void> => {
     const sourceDemoPath = getSourcePathByDemo(demo, this.framework);
     if (!existsSync(sourceDemoPath)) {
+      res();
       return;
     }
 
@@ -35,5 +36,6 @@ export abstract class ESBundler implements Bundler {
     await build(options);
 
     createDemoLayout(demo, this.framework);
+    res();
   };
 }
