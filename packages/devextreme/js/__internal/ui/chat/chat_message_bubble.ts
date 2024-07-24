@@ -13,9 +13,7 @@ class MessageBubble extends Widget<MessageBubbleOptions> {
   _getDefaultOptions(): MessageBubbleOptions {
     return {
       ...super._getDefaultOptions(),
-      ...{
-        text: '',
-      },
+      text: '',
     };
   }
 

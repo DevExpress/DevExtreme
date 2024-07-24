@@ -18,10 +18,8 @@ class MessageList extends Widget<MessageListOptions> {
   _getDefaultOptions(): MessageListOptions {
     return {
       ...super._getDefaultOptions(),
-      ...{
-        items: [],
-        currentUserId: '',
-      },
+      items: [],
+      currentUserId: '',
     };
   }
 

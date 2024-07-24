@@ -14,9 +14,7 @@ class Avatar extends Widget<AvatarOptions> {
   _getDefaultOptions(): AvatarOptions {
     return {
       ...super._getDefaultOptions(),
-      ...{
-        name: '',
-      },
+      name: '',
     };
   }
 

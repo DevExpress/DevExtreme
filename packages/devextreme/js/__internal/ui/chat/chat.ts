@@ -21,11 +21,9 @@ class Chat extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      ...{
-        title: '',
-        items: [],
-        onMessageSend: undefined,
-      },
+      title: '',
+      items: [],
+      onMessageSend: undefined,
     };
   }
 

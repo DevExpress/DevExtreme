@@ -17,9 +17,7 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
     return {
       // @ts-expect-error
       ...super._getDefaultOptions(),
-      ...{
-        title: '',
-      },
+      title: '',
     } as ChatHeaderProperties;
   }
 

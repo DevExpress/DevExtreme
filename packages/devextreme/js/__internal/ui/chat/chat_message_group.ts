@@ -27,10 +27,8 @@ class MessageGroup extends Widget<MessageGroupOptions> {
   _getDefaultOptions(): MessageGroupOptions {
     return {
       ...super._getDefaultOptions(),
-      ...{
-        messages: [],
-        alignment: 'start',
-      },
+      messages: [],
+      alignment: 'start',
     };
   }
 
