@@ -18,7 +18,7 @@ const img = (buffer, ext) => {
 };
 
 const handler = (_, svgEncoding, fileName) => {
-    const relativePath = path.join(__dirname, '..', '..', fileName);
+    const relativePath = path.join(__dirname, '..', '..', '..', 'devextreme-scss', fileName);
     const filePath = path.resolve(relativePath);
     const ext = filePath.split('.').pop();
     const data = fs.readFileSync(filePath);
