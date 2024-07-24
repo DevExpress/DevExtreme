@@ -73,7 +73,7 @@ const Chat = memo(
 // Item
 type IAuthorProps = React.PropsWithChildren<{
   avatarUrl?: string;
-  id?: number;
+  id?: number | string;
   name?: string;
 }>
 const _componentAuthor = memo(
@@ -106,6 +106,23 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   ExpectedChildren: {
     author: { optionName: "author", isCollectionItem: false }
   },
+})
+
+// owners:
+// Chat
+type IUserProps = React.PropsWithChildren<{
+  avatarUrl?: string;
+  id?: number | string;
+  name?: string;
+}>
+const _componentUser = memo(
+  (props: IUserProps) => {
+    return React.createElement(NestedOption<IUserProps>, { ...props });
+  }
+);
+
+const User: typeof _componentUser & IElementDescriptor = Object.assign(_componentUser, {
+  OptionName: "user",
 })
 
 export default Chat;
