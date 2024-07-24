@@ -42,7 +42,8 @@ class Chat extends Widget<Properties> {
 
     const $header = $('<div>').appendTo(this.element());
 
-    this._chatHeader = this._createComponent($header, ChatHeader, { title: title ?? '' });
+    // @ts-expect-error
+    this._chatHeader = this._createComponent($header, ChatHeader, { title });
   }
 
   _renderMessageList(): void {
