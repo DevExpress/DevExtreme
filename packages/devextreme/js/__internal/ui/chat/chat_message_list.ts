@@ -89,6 +89,7 @@ class MessageList extends Widget<MessageListOptions> {
     switch (name) {
       case 'items':
       case 'currentUserId':
+        this._invalidate();
         break;
       default:
         super._optionChanged(args);
