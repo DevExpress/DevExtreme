@@ -207,6 +207,10 @@ safeSizeTest('The cross-component drag and drop rows should work when there are 
           id: 8, name: 'Name 8', age: 14,
         },
       ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
       rowDragging: {
         group: 'shared',
@@ -240,6 +244,10 @@ safeSizeTest('The cross-component drag and drop rows should work when there are 
           id: 8, name: 'Name 8', age: 14,
         },
       ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
       rowDragging: {
         group: 'shared',
@@ -304,6 +312,10 @@ safeSizeTest('The cross-component drag and drop rows should not block rows', asy
           id: 8, name: 'Name 8', age: 14,
         },
       ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
       rowDragging: {
         group: 'shared',
@@ -337,6 +349,10 @@ safeSizeTest('The cross-component drag and drop rows should not block rows', asy
           id: 8, name: 'Name 8', age: 15,
         },
       ],
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [{ dataField: 'id', fixed: true }, 'name', 'age'],
       rowDragging: {
         group: 'shared',

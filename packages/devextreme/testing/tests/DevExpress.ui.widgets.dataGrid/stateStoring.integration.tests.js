@@ -390,6 +390,9 @@ QUnit.module('State storing', baseModuleConfig, () => {
                 dataField: 'field1',
                 fixed: true
             }, 'field2', 'field3', 'field4', 'field5'],
+            columnFixing: {
+                legacyMode: true
+            },
             showBorders: true,
             editing: {
                 allowAdding: true

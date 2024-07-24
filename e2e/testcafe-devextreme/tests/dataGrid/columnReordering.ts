@@ -44,6 +44,10 @@ test('The column reordering should work correctly when there is a fixed column w
       field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
     },
   ],
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
   columns: [
     {
       dataField: 'field1',
