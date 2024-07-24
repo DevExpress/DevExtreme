@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import $ from '@js/core/renderer';
 import type { Message } from '@js/ui/chat';
@@ -53,18 +52,18 @@ class MessageList extends Widget<MessageListOptions> {
       return;
     }
 
-    const $content = $('<ul>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
+    const $content = $('<div>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
 
-    let currentMessageGroupUserId = (items[0] as any)?.author.id;
-    let currentMessageGroupItems: any = [];
+    let currentMessageGroupUserId = items[0]?.author?.id;
+    let currentMessageGroupItems: Message[] = [];
 
     items.forEach((item, index) => {
-      const id = (item as any)?.author.id;
+      const id = item?.author?.id;
 
       if (id === currentMessageGroupUserId) {
         currentMessageGroupItems.push(item);
       } else {
-        this._messageGroup = this._createComponent($('<li>'), MessageGroup, {
+        this._messageGroup = this._createComponent($('<div>'), MessageGroup, {
           messages: currentMessageGroupItems,
           alignment: this._messageGroupAlignment(currentMessageGroupUserId),
         });
@@ -77,7 +76,7 @@ class MessageList extends Widget<MessageListOptions> {
       }
 
       if (items.length - 1 === index) {
-        this._messageGroup = this._createComponent($('<li>'), MessageGroup, {
+        this._messageGroup = this._createComponent($('<div>'), MessageGroup, {
           messages: currentMessageGroupItems,
           alignment: this._messageGroupAlignment(currentMessageGroupUserId),
         });
@@ -96,6 +95,7 @@ class MessageList extends Widget<MessageListOptions> {
       case 'items':
         break;
       case 'currentUserId':
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.option(name, (value as any));
         break;
       default:

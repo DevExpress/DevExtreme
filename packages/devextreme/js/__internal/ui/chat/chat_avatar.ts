@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
@@ -22,7 +21,7 @@ class Avatar extends Widget<AvatarOptions> {
   }
 
   _getAvatarInitials(name: string): string {
-    const initials = `${name.charAt(0).toUpperCase()}`;
+    const initials = name.charAt(0).toUpperCase();
 
     return initials;
   }
@@ -32,21 +31,24 @@ class Avatar extends Widget<AvatarOptions> {
 
     super._initMarkup();
 
+    const $letters = $('<div>').addClass(CHAT_MESSAGE_AVATAR_LETTERS_CLASS);
+
     const { name } = this.option();
 
-    const text = this._getAvatarInitials((name as any));
+    if (name) {
+      const text = this._getAvatarInitials(name);
 
-    $('<div>')
-      .addClass(CHAT_MESSAGE_AVATAR_LETTERS_CLASS)
-      .text((text as any))
-      .appendTo(this.element());
+      $letters.text(text);
+    }
+
+    $letters.appendTo(this.element());
   }
 
   _optionChanged(args: Record<string, unknown>): void {
     const { name } = args;
 
     switch (name) {
-      case 'text':
+      case 'name':
         break;
       default:
         super._optionChanged(args);

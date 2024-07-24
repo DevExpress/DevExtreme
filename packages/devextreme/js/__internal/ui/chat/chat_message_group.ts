@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import $ from '@js/core/renderer';
 import type { Message } from '@js/ui/chat';
@@ -18,8 +17,8 @@ const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 
 export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
-  messages?: Message[];
-  alignment?: 'start' | 'end';
+  messages: Message[];
+  alignment: 'start' | 'end';
 }
 
 class MessageGroup extends Widget<MessageGroupOptions> {
@@ -57,7 +56,7 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     super._initMarkup();
 
     if (alignment === 'start') {
-      const authorName = (messages as any)?.[0].author.name;
+      const authorName = messages[0].author?.name;
 
       this._avatar = this._createComponent($('<div>'), Avatar, {
         name: authorName,

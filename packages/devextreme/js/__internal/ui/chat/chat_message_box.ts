@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import $ from '@js/core/renderer';
 import Button from '@js/ui/button';
 
+import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
 import Widget from '../widget';
 
@@ -9,9 +9,9 @@ const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class MessageBox extends Widget<any> {
-  // TODO chech ts
-  _textArea?: any;
+  _textArea?: dxTextArea;
 
   _button?: Button;
 

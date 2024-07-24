@@ -40,7 +40,7 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
   _renderText(): void {
     const { title } = this.option();
 
-    this._$text = $('<p>')
+    this._$text = $('<div>')
       .addClass(CHAT_HEADER_TEXT_CLASS)
       // @ts-expect-error
       .text(title)
