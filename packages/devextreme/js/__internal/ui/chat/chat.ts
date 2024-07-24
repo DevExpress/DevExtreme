@@ -9,8 +9,6 @@ import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
 
-const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
-
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
 
@@ -23,6 +21,7 @@ class Chat extends Widget<Properties> {
       ...super._getDefaultOptions(),
       title: '',
       items: [],
+      user: undefined,
       onMessageSend: undefined,
     };
   }
@@ -47,13 +46,14 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items } = this.option();
+    const { items, user } = this.option();
 
+    const currentUserId = user?.id;
     const $messageList = $('<div>').appendTo(this.element());
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
-      currentUserId: MOCK_CURRENT_USER_ID,
+      currentUserId,
     });
   }
 
@@ -71,6 +71,7 @@ class Chat extends Widget<Properties> {
         // @ts-expect-error
         this._chatHeader?.option(name, value);
         break;
+      case 'user':
       case 'items':
         this._invalidate();
         break;

@@ -52,7 +52,7 @@
         <div id="chat"></div>
         <script>
             const MOCK_CHAT_HEADER_TEXT = 'Chat title';
-            const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID'
+            const MOCK_CURRENT_USER_ID = Math.random()
 
             const userFirst = {
                 id: Math.random(),
@@ -80,9 +80,12 @@
                 const dxChat = $("#chat").dxChat({
                     title: MOCK_CHAT_HEADER_TEXT,
                     items: messages,
+                    user: userSecond,
                 }).dxChat('instance');
 
-                dxChat.option({ title: 'CUSTOM' });
+                setTimeout(() => {
+                    dxChat.option({ user: userFirst });
+                }, 5000);
             });
         </script>
     </div>
