@@ -83,6 +83,51 @@ QUnit.module('Chat initialization', moduleConfig, () => {
     QUnit.test('Chat should be initialized with correct type', function(assert) {
         assert.ok(this.instance instanceof Chat);
     });
+
+    QUnit.test('currentUserId in message list should be equal chat user id', function(assert) {
+        const messageList = this.instance._messageList;
+
+        const chatUserId = this.instance.option('user.id');
+        const messageListUserId = messageList.option('currentUserId');
+
+        assert.strictEqual(chatUserId, messageListUserId);
+    });
+
+    QUnit.test('currentUserId in message list should be changed when user has been changed in runtime', function(assert) {
+        const newId = 'new id';
+
+        this.instance.option({ user: { id: newId } });
+
+        const { currentUserId } = this.instance._messageList.option();
+
+        assert.strictEqual(currentUserId, newId);
+    });
+
+    QUnit.test('items in message list should be changed when items has been changed in runtime', function(assert) {
+        const newItems = [];
+
+        this.instance.option({ items: newItems });
+
+        const { items } = this.instance._messageList.option();
+
+        assert.strictEqual(items, newItems);
+    });
+
+    QUnit.test('Message list should run invalidate after changing user in runtime', function(assert) {
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        this.instance.option({ user: {} });
+
+        assert.strictEqual(invalidateStub.callCount, 1);
+    });
+
+    QUnit.test('Message list should run invalidate after changing items in runtime', function(assert) {
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        this.instance.option({ items: [] });
+
+        assert.strictEqual(invalidateStub.callCount, 1);
+    });
 });
 
 QUnit.module('Header', moduleConfig, () => {
@@ -139,5 +184,22 @@ QUnit.module('Message group', moduleConfig, () => {
         const $bubble = $messageGroup.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).eq(0);
 
         assert.strictEqual($bubble.text(), 'userFirst');
+    });
+});
+
+QUnit.module('Default options', () => {
+    QUnit.test('There is an user id by default if user has not been set', function(assert) {
+        const instance = $('#chat').dxChat().dxChat('instance');
+
+        const { user } = instance.option();
+
+        // eslint-disable-next-line no-prototype-builtins
+        assert.strictEqual(user.hasOwnProperty('id'), true);
+    });
+
+    QUnit.test('User id should be generate as a string if user has not been set', function(assert) {
+        const instance = $('#chat').dxChat().dxChat('instance');
+
+        assert.strictEqual(typeof instance.option('user.id') === 'string', true);
     });
 });
