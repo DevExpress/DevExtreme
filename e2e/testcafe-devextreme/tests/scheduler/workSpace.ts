@@ -1,6 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler, { CLASS } from 'devextreme-testcafe-models/scheduler';
+import Button from 'devextreme-testcafe-models/button';
 import { extend } from 'devextreme/core/utils/extend';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
@@ -362,19 +363,11 @@ test('[T716993]: should has horizontal scrollbar with multiple resources and fix
 });
 
 test('Scheduler appointments should change color on update resources', async (t) => {
-  await t.wait(2000);
-
-  await t.eval(() => {
-    // @ts-expect-error instance
-    const schedulerWidget = $('#container').dxScheduler('instance');
-    schedulerWidget.option('resources', [{
-      fieldExpr: 'resource',
-      dataSource: [{ id: 1, text: 'new res 1', color: 'pink' }],
-    }]);
-    schedulerWidget.getDataSource().reload();
-  });
-
+  const button = new Button('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.click(button.element);
+
   await takeScreenshot('scheduler-appointments-should-update-color.png');
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => {
@@ -395,5 +388,16 @@ test('Scheduler appointments should change color on update resources', async (t)
       fieldExpr: 'resource',
       dataSource: [{ id: 1, text: 'res 1', color: 'red' }],
     }],
-  });
+  }, '#otherContainer');
+  await createWidget('dxButton', {
+    text: 'Change resources',
+    onClick() {
+      const schedulerWidget = ($('#otherContainer') as any).dxScheduler('instance');
+      schedulerWidget.option('resources', [{
+        fieldExpr: 'resource',
+        dataSource: [{ id: 1, text: 'new res 1', color: 'pink' }],
+      }]);
+      schedulerWidget.getDataSource().reload();
+    },
+  }, '#container');
 });
