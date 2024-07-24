@@ -7,7 +7,7 @@ const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 
 export interface ChatHeaderProperties extends Properties {
-  title?: string;
+  title: string;
 }
 
 class ChatHeader extends DOMComponent<ChatHeaderProperties> {
@@ -42,7 +42,6 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
 
     this._$text = $('<div>')
       .addClass(CHAT_HEADER_TEXT_CLASS)
-      // @ts-expect-error
       .text(title)
       .appendTo(this.element());
   }
@@ -52,8 +51,7 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
 
     switch (name) {
       case 'title':
-        // @ts-expect-error
-        this._$text?.text(value);
+        this._$text?.text((value as string));
         break;
       default:
         // @ts-expect-error
