@@ -60,7 +60,6 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoColorizerTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
 import { DxoExportTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
 import { DxoGroupTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
@@ -78,6 +77,8 @@ import { DxoSubtitleTreeMapModule } from 'devextreme-angular/ui/tree-map/nested'
 import { DxoTooltipTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
 import { DxoFormatTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
 import { DxoShadowTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
+
+
 
 
 
@@ -757,6 +758,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -896,40 +899,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
   ],
   exports: [
     DxTreeMapComponent,
-    DxoColorizerModule,
-    DxoExportModule,
-    DxoGroupModule,
-    DxoBorderModule,
-    DxoHoverStyleModule,
-    DxoLabelModule,
-    DxoFontModule,
-    DxoSelectionStyleModule,
-    DxoLoadingIndicatorModule,
-    DxoSizeModule,
-    DxoTileModule,
-    DxoTitleModule,
-    DxoMarginModule,
-    DxoSubtitleModule,
-    DxoTooltipModule,
-    DxoFormatModule,
-    DxoShadowModule,
-    DxoColorizerTreeMapModule,
-    DxoExportTreeMapModule,
-    DxoGroupTreeMapModule,
-    DxoBorderTreeMapModule,
-    DxoHoverStyleTreeMapModule,
-    DxoLabelTreeMapModule,
-    DxoFontTreeMapModule,
-    DxoSelectionStyleTreeMapModule,
-    DxoLoadingIndicatorTreeMapModule,
-    DxoSizeTreeMapModule,
-    DxoTileTreeMapModule,
-    DxoTitleTreeMapModule,
-    DxoMarginTreeMapModule,
-    DxoSubtitleTreeMapModule,
-    DxoTooltipTreeMapModule,
-    DxoFormatTreeMapModule,
-    DxoShadowTreeMapModule,
+    DxoColorizerModule,DxoExportModule,DxoGroupModule,DxoBorderModule,DxoHoverStyleModule,DxoLabelModule,DxoFontModule,DxoSelectionStyleModule,DxoLoadingIndicatorModule,DxoSizeModule,DxoTileModule,DxoTitleModule,DxoMarginModule,DxoSubtitleModule,DxoTooltipModule,DxoFormatModule,DxoShadowModule,
+    DxoColorizerTreeMapModule,DxoExportTreeMapModule,DxoGroupTreeMapModule,DxoBorderTreeMapModule,DxoHoverStyleTreeMapModule,DxoLabelTreeMapModule,DxoFontTreeMapModule,DxoSelectionStyleTreeMapModule,DxoLoadingIndicatorTreeMapModule,DxoSizeTreeMapModule,DxoTileTreeMapModule,DxoTitleTreeMapModule,DxoMarginTreeMapModule,DxoSubtitleTreeMapModule,DxoTooltipTreeMapModule,DxoFormatTreeMapModule,DxoShadowTreeMapModule,
     DxTemplateModule
   ]
 })

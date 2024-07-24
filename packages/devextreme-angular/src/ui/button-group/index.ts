@@ -41,8 +41,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemButtonGroupModule } from 'devextreme-angular/ui/button-group/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemButtonGroupComponent } from 'devextreme-angular/ui/button-group/nested';
 
@@ -495,12 +497,29 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemButtonGroupComponent)
-    get itemsChildren(): QueryList<DxiItemButtonGroupComponent> {
+    get itemsNewChildren(): QueryList<DxiItemButtonGroupComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

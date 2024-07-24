@@ -56,7 +56,6 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationPopupModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoHidePopupModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoFromPopupModule } from 'devextreme-angular/ui/popup/nested';
@@ -69,6 +68,9 @@ import { DxoOffsetPopupModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoToPopupModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoShowPopupModule } from 'devextreme-angular/ui/popup/nested';
 import { DxiToolbarItemPopupModule } from 'devextreme-angular/ui/popup/nested';
+
+
+import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiToolbarItemPopupComponent } from 'devextreme-angular/ui/popup/nested';
 
@@ -931,12 +933,29 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
+    hasNewtoolbarItems: boolean = false;
+
     @ContentChildren(DxiToolbarItemPopupComponent)
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemPopupComponent> {
+    get toolbarItemsNewChildren(): QueryList<DxiToolbarItemPopupComponent> {
+        return this._getOption('toolbarItems');
+    }
+    set toolbarItemsNewChildren(value) {
+        this.hasNewtoolbarItems = value.length > 0;
+        this.setChildren('toolbarItems', value);
+    }
+
+
+
+    @ContentChildren(DxiToolbarItemComponent)
+    get toolbarItemsChildren(): QueryList<DxiToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
+        if (this.hasNewtoolbarItems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('toolbarItems', value);
+        }
     }
 
 
@@ -1079,30 +1098,8 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
   ],
   exports: [
     DxPopupComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
-    DxoAnimationPopupModule,
-    DxoHidePopupModule,
-    DxoFromPopupModule,
-    DxoPositionPopupModule,
-    DxoAtPopupModule,
-    DxoBoundaryOffsetPopupModule,
-    DxoCollisionPopupModule,
-    DxoMyPopupModule,
-    DxoOffsetPopupModule,
-    DxoToPopupModule,
-    DxoShowPopupModule,
-    DxiToolbarItemPopupModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,
+    DxoAnimationPopupModule,DxoHidePopupModule,DxoFromPopupModule,DxoPositionPopupModule,DxoAtPopupModule,DxoBoundaryOffsetPopupModule,DxoCollisionPopupModule,DxoMyPopupModule,DxoOffsetPopupModule,DxoToPopupModule,DxoShowPopupModule,DxiToolbarItemPopupModule,
     DxTemplateModule
   ]
 })

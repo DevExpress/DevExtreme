@@ -215,9 +215,9 @@ export class DxoBoxBoxComponent extends NestedOption implements OnDestroy, OnIni
 
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
     protected get _optionPath() {

@@ -67,7 +67,6 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiButtonDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoOptionsDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoCalendarOptionsDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
@@ -85,6 +84,9 @@ import { DxoOffsetDateRangeBoxModule } from 'devextreme-angular/ui/date-range-bo
 import { DxoToDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoShowDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxiToolbarItemDateRangeBoxModule } from 'devextreme-angular/ui/date-range-box/nested';
+
+
+import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonDateRangeBoxComponent } from 'devextreme-angular/ui/date-range-box/nested';
 
@@ -1502,12 +1504,29 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
+    hasNewbuttons: boolean = false;
+
     @ContentChildren(DxiButtonDateRangeBoxComponent)
-    get buttonsChildren(): QueryList<DxiButtonDateRangeBoxComponent> {
+    get buttonsNewChildren(): QueryList<DxiButtonDateRangeBoxComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsNewChildren(value) {
+        this.hasNewbuttons = value.length > 0;
+        this.setChildren('buttons', value);
+    }
+
+
+
+    @ContentChildren(DxiButtonComponent)
+    get buttonsChildren(): QueryList<DxiButtonComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setChildren('buttons', value);
+        if (this.hasNewbuttons && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('buttons', value);
+        }
     }
 
 
@@ -1715,40 +1734,8 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
   ],
   exports: [
     DxDateRangeBoxComponent,
-    DxiButtonModule,
-    DxoOptionsModule,
-    DxoCalendarOptionsModule,
-    DxoDisplayFormatModule,
-    DxoDropDownOptionsModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
-    DxiButtonDateRangeBoxModule,
-    DxoOptionsDateRangeBoxModule,
-    DxoCalendarOptionsDateRangeBoxModule,
-    DxoDisplayFormatDateRangeBoxModule,
-    DxoDropDownOptionsDateRangeBoxModule,
-    DxoAnimationDateRangeBoxModule,
-    DxoHideDateRangeBoxModule,
-    DxoFromDateRangeBoxModule,
-    DxoPositionDateRangeBoxModule,
-    DxoAtDateRangeBoxModule,
-    DxoBoundaryOffsetDateRangeBoxModule,
-    DxoCollisionDateRangeBoxModule,
-    DxoMyDateRangeBoxModule,
-    DxoOffsetDateRangeBoxModule,
-    DxoToDateRangeBoxModule,
-    DxoShowDateRangeBoxModule,
-    DxiToolbarItemDateRangeBoxModule,
+    DxiButtonModule,DxoOptionsModule,DxoCalendarOptionsModule,DxoDisplayFormatModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,
+    DxiButtonDateRangeBoxModule,DxoOptionsDateRangeBoxModule,DxoCalendarOptionsDateRangeBoxModule,DxoDisplayFormatDateRangeBoxModule,DxoDropDownOptionsDateRangeBoxModule,DxoAnimationDateRangeBoxModule,DxoHideDateRangeBoxModule,DxoFromDateRangeBoxModule,DxoPositionDateRangeBoxModule,DxoAtDateRangeBoxModule,DxoBoundaryOffsetDateRangeBoxModule,DxoCollisionDateRangeBoxModule,DxoMyDateRangeBoxModule,DxoOffsetDateRangeBoxModule,DxoToDateRangeBoxModule,DxoShowDateRangeBoxModule,DxiToolbarItemDateRangeBoxModule,
     DxTemplateModule
   ]
 })

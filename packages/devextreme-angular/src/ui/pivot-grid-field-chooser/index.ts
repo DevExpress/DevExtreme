@@ -43,10 +43,11 @@ import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoHeaderFilterPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 import { DxoSearchPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 import { DxoTextsPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+
+
 
 
 
@@ -533,6 +534,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -629,12 +632,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
   ],
   exports: [
     DxPivotGridFieldChooserComponent,
-    DxoHeaderFilterModule,
-    DxoSearchModule,
-    DxoTextsModule,
-    DxoHeaderFilterPivotGridFieldChooserModule,
-    DxoSearchPivotGridFieldChooserModule,
-    DxoTextsPivotGridFieldChooserModule,
+    DxoHeaderFilterModule,DxoSearchModule,DxoTextsModule,
+    DxoHeaderFilterPivotGridFieldChooserModule,DxoSearchPivotGridFieldChooserModule,DxoTextsPivotGridFieldChooserModule,
     DxTemplateModule
   ]
 })

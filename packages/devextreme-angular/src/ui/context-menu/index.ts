@@ -61,7 +61,6 @@ import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowSubmenuModeModule } from 'devextreme-angular/ui/nested';
 import { DxoDelayModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationContextMenuModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoHideContextMenuModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoFromContextMenuModule } from 'devextreme-angular/ui/context-menu/nested';
@@ -77,6 +76,9 @@ import { DxiItemContextMenuModule } from 'devextreme-angular/ui/context-menu/nes
 import { DxoShowEventContextMenuModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoShowSubmenuModeContextMenuModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoDelayContextMenuModule } from 'devextreme-angular/ui/context-menu/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemContextMenuComponent } from 'devextreme-angular/ui/context-menu/nested';
 
@@ -827,12 +829,29 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemContextMenuComponent)
-    get itemsChildren(): QueryList<DxiItemContextMenuComponent> {
+    get itemsNewChildren(): QueryList<DxiItemContextMenuComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -978,36 +997,8 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
   ],
   exports: [
     DxContextMenuComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiItemModule,
-    DxoShowEventModule,
-    DxoShowSubmenuModeModule,
-    DxoDelayModule,
-    DxoAnimationContextMenuModule,
-    DxoHideContextMenuModule,
-    DxoFromContextMenuModule,
-    DxoPositionContextMenuModule,
-    DxoAtContextMenuModule,
-    DxoBoundaryOffsetContextMenuModule,
-    DxoCollisionContextMenuModule,
-    DxoMyContextMenuModule,
-    DxoOffsetContextMenuModule,
-    DxoToContextMenuModule,
-    DxoShowContextMenuModule,
-    DxiItemContextMenuModule,
-    DxoShowEventContextMenuModule,
-    DxoShowSubmenuModeContextMenuModule,
-    DxoDelayContextMenuModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiItemModule,DxoShowEventModule,DxoShowSubmenuModeModule,DxoDelayModule,
+    DxoAnimationContextMenuModule,DxoHideContextMenuModule,DxoFromContextMenuModule,DxoPositionContextMenuModule,DxoAtContextMenuModule,DxoBoundaryOffsetContextMenuModule,DxoCollisionContextMenuModule,DxoMyContextMenuModule,DxoOffsetContextMenuModule,DxoToContextMenuModule,DxoShowContextMenuModule,DxiItemContextMenuModule,DxoShowEventContextMenuModule,DxoShowSubmenuModeContextMenuModule,DxoDelayContextMenuModule,
     DxTemplateModule
   ]
 })

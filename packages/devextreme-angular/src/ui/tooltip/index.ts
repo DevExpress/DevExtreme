@@ -50,7 +50,6 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationTooltipModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoHideTooltipModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoFromTooltipModule } from 'devextreme-angular/ui/tooltip/nested';
@@ -64,6 +63,8 @@ import { DxoToTooltipModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoShowTooltipModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoHideEventTooltipModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoShowEventTooltipModule } from 'devextreme-angular/ui/tooltip/nested';
+
+
 
 
 
@@ -655,6 +656,8 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -749,32 +752,8 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxTooltipComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxoHideEventModule,
-    DxoShowEventModule,
-    DxoAnimationTooltipModule,
-    DxoHideTooltipModule,
-    DxoFromTooltipModule,
-    DxoPositionTooltipModule,
-    DxoAtTooltipModule,
-    DxoBoundaryOffsetTooltipModule,
-    DxoCollisionTooltipModule,
-    DxoMyTooltipModule,
-    DxoOffsetTooltipModule,
-    DxoToTooltipModule,
-    DxoShowTooltipModule,
-    DxoHideEventTooltipModule,
-    DxoShowEventTooltipModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxoHideEventModule,DxoShowEventModule,
+    DxoAnimationTooltipModule,DxoHideTooltipModule,DxoFromTooltipModule,DxoPositionTooltipModule,DxoAtTooltipModule,DxoBoundaryOffsetTooltipModule,DxoCollisionTooltipModule,DxoMyTooltipModule,DxoOffsetTooltipModule,DxoToTooltipModule,DxoShowTooltipModule,DxoHideEventTooltipModule,DxoShowEventTooltipModule,
     DxTemplateModule
   ]
 })

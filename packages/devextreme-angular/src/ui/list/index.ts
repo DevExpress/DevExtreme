@@ -52,7 +52,6 @@ import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoItemDraggingListModule } from 'devextreme-angular/ui/list/nested';
 import { DxoCursorOffsetListModule } from 'devextreme-angular/ui/list/nested';
 import { DxiItemListModule } from 'devextreme-angular/ui/list/nested';
@@ -60,6 +59,10 @@ import { DxiMenuItemListModule } from 'devextreme-angular/ui/list/nested';
 import { DxoSearchEditorOptionsListModule } from 'devextreme-angular/ui/list/nested';
 import { DxiButtonListModule } from 'devextreme-angular/ui/list/nested';
 import { DxoOptionsListModule } from 'devextreme-angular/ui/list/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiMenuItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemListComponent } from 'devextreme-angular/ui/list/nested';
 import { DxiMenuItemListComponent } from 'devextreme-angular/ui/list/nested';
@@ -1329,20 +1332,52 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemListComponent)
-    get itemsChildren(): QueryList<DxiItemListComponent> {
+    get itemsNewChildren(): QueryList<DxiItemListComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
         this.setChildren('items', value);
     }
 
+    hasNewmenuItems: boolean = false;
+
     @ContentChildren(DxiMenuItemListComponent)
-    get menuItemsChildren(): QueryList<DxiMenuItemListComponent> {
+    get menuItemsNewChildren(): QueryList<DxiMenuItemListComponent> {
+        return this._getOption('menuItems');
+    }
+    set menuItemsNewChildren(value) {
+        this.hasNewmenuItems = value.length > 0;
+        this.setChildren('menuItems', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiMenuItemComponent)
+    get menuItemsChildren(): QueryList<DxiMenuItemComponent> {
         return this._getOption('menuItems');
     }
     set menuItemsChildren(value) {
-        this.setChildren('menuItems', value);
+        if (this.hasNewmenuItems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('menuItems', value);
+        }
     }
 
 
@@ -1509,20 +1544,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
   ],
   exports: [
     DxListComponent,
-    DxoItemDraggingModule,
-    DxoCursorOffsetModule,
-    DxiItemModule,
-    DxiMenuItemModule,
-    DxoSearchEditorOptionsModule,
-    DxiButtonModule,
-    DxoOptionsModule,
-    DxoItemDraggingListModule,
-    DxoCursorOffsetListModule,
-    DxiItemListModule,
-    DxiMenuItemListModule,
-    DxoSearchEditorOptionsListModule,
-    DxiButtonListModule,
-    DxoOptionsListModule,
+    DxoItemDraggingModule,DxoCursorOffsetModule,DxiItemModule,DxiMenuItemModule,DxoSearchEditorOptionsModule,DxiButtonModule,DxoOptionsModule,
+    DxoItemDraggingListModule,DxoCursorOffsetListModule,DxiItemListModule,DxiMenuItemListModule,DxoSearchEditorOptionsListModule,DxiButtonListModule,DxoOptionsListModule,
     DxTemplateModule
   ]
 })

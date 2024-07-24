@@ -45,9 +45,11 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemSplitterModule } from 'devextreme-angular/ui/splitter/nested';
 import { DxoSplitterSplitterModule } from 'devextreme-angular/ui/splitter/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemSplitterComponent } from 'devextreme-angular/ui/splitter/nested';
 
@@ -428,12 +430,29 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemSplitterComponent)
-    get itemsChildren(): QueryList<DxiItemSplitterComponent> {
+    get itemsNewChildren(): QueryList<DxiItemSplitterComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -534,10 +553,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
   ],
   exports: [
     DxSplitterComponent,
-    DxiItemModule,
-    DxoSplitterModule,
-    DxiItemSplitterModule,
-    DxoSplitterSplitterModule,
+    DxiItemModule,DxoSplitterModule,
+    DxiItemSplitterModule,DxoSplitterSplitterModule,
     DxTemplateModule
   ]
 })

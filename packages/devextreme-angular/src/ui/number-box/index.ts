@@ -50,10 +50,12 @@ import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiButtonNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoOptionsNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoFormatNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
+
+
+import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonNumberBoxComponent } from 'devextreme-angular/ui/number-box/nested';
 
@@ -995,12 +997,29 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
+    hasNewbuttons: boolean = false;
+
     @ContentChildren(DxiButtonNumberBoxComponent)
-    get buttonsChildren(): QueryList<DxiButtonNumberBoxComponent> {
+    get buttonsNewChildren(): QueryList<DxiButtonNumberBoxComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsNewChildren(value) {
+        this.hasNewbuttons = value.length > 0;
+        this.setChildren('buttons', value);
+    }
+
+
+
+    @ContentChildren(DxiButtonComponent)
+    get buttonsChildren(): QueryList<DxiButtonComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setChildren('buttons', value);
+        if (this.hasNewbuttons && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('buttons', value);
+        }
     }
 
 
@@ -1153,12 +1172,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
   ],
   exports: [
     DxNumberBoxComponent,
-    DxiButtonModule,
-    DxoOptionsModule,
-    DxoFormatModule,
-    DxiButtonNumberBoxModule,
-    DxoOptionsNumberBoxModule,
-    DxoFormatNumberBoxModule,
+    DxiButtonModule,DxoOptionsModule,DxoFormatModule,
+    DxiButtonNumberBoxModule,DxoOptionsNumberBoxModule,DxoFormatNumberBoxModule,
     DxTemplateModule
   ]
 })

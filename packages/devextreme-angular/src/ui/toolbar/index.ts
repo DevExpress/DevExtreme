@@ -44,8 +44,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemToolbarModule } from 'devextreme-angular/ui/toolbar/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemToolbarComponent } from 'devextreme-angular/ui/toolbar/nested';
 
@@ -414,12 +416,29 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemToolbarComponent)
-    get itemsChildren(): QueryList<DxiItemToolbarComponent> {
+    get itemsNewChildren(): QueryList<DxiItemToolbarComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

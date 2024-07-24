@@ -62,7 +62,6 @@ import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAdaptiveLayoutFunnelModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoExportFunnelModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoItemFunnelModule } from 'devextreme-angular/ui/funnel/nested';
@@ -82,6 +81,8 @@ import { DxoLoadingIndicatorFunnelModule } from 'devextreme-angular/ui/funnel/ne
 import { DxoSizeFunnelModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoTooltipFunnelModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoShadowFunnelModule } from 'devextreme-angular/ui/funnel/nested';
+
+
 
 
 
@@ -805,6 +806,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -951,44 +954,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
   ],
   exports: [
     DxFunnelComponent,
-    DxoAdaptiveLayoutModule,
-    DxoExportModule,
-    DxoItemModule,
-    DxoBorderModule,
-    DxoHoverStyleModule,
-    DxoHatchingModule,
-    DxoSelectionStyleModule,
-    DxoLabelModule,
-    DxoConnectorModule,
-    DxoFontModule,
-    DxoFormatModule,
-    DxoLegendModule,
-    DxoMarginModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoLoadingIndicatorModule,
-    DxoSizeModule,
-    DxoTooltipModule,
-    DxoShadowModule,
-    DxoAdaptiveLayoutFunnelModule,
-    DxoExportFunnelModule,
-    DxoItemFunnelModule,
-    DxoBorderFunnelModule,
-    DxoHoverStyleFunnelModule,
-    DxoHatchingFunnelModule,
-    DxoSelectionStyleFunnelModule,
-    DxoLabelFunnelModule,
-    DxoConnectorFunnelModule,
-    DxoFontFunnelModule,
-    DxoFormatFunnelModule,
-    DxoLegendFunnelModule,
-    DxoMarginFunnelModule,
-    DxoTitleFunnelModule,
-    DxoSubtitleFunnelModule,
-    DxoLoadingIndicatorFunnelModule,
-    DxoSizeFunnelModule,
-    DxoTooltipFunnelModule,
-    DxoShadowFunnelModule,
+    DxoAdaptiveLayoutModule,DxoExportModule,DxoItemModule,DxoBorderModule,DxoHoverStyleModule,DxoHatchingModule,DxoSelectionStyleModule,DxoLabelModule,DxoConnectorModule,DxoFontModule,DxoFormatModule,DxoLegendModule,DxoMarginModule,DxoTitleModule,DxoSubtitleModule,DxoLoadingIndicatorModule,DxoSizeModule,DxoTooltipModule,DxoShadowModule,
+    DxoAdaptiveLayoutFunnelModule,DxoExportFunnelModule,DxoItemFunnelModule,DxoBorderFunnelModule,DxoHoverStyleFunnelModule,DxoHatchingFunnelModule,DxoSelectionStyleFunnelModule,DxoLabelFunnelModule,DxoConnectorFunnelModule,DxoFontFunnelModule,DxoFormatFunnelModule,DxoLegendFunnelModule,DxoMarginFunnelModule,DxoTitleFunnelModule,DxoSubtitleFunnelModule,DxoLoadingIndicatorFunnelModule,DxoSizeFunnelModule,DxoTooltipFunnelModule,DxoShadowFunnelModule,
     DxTemplateModule
   ]
 })

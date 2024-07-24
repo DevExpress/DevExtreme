@@ -45,13 +45,17 @@ import { DxiLocationModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxiRouteModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoApiKeyMapModule } from 'devextreme-angular/ui/map/nested';
 import { DxiCenterMapModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMarkerMapModule } from 'devextreme-angular/ui/map/nested';
 import { DxiLocationMapModule } from 'devextreme-angular/ui/map/nested';
 import { DxoTooltipMapModule } from 'devextreme-angular/ui/map/nested';
 import { DxiRouteMapModule } from 'devextreme-angular/ui/map/nested';
+
+
+import { DxiCenterComponent } from 'devextreme-angular/ui/nested';
+import { DxiMarkerComponent } from 'devextreme-angular/ui/nested';
+import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiCenterMapComponent } from 'devextreme-angular/ui/map/nested';
 import { DxiMarkerMapComponent } from 'devextreme-angular/ui/map/nested';
@@ -590,28 +594,75 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
 
 
+    hasNewcenter: boolean = false;
+
     @ContentChildren(DxiCenterMapComponent)
-    get centerChildren(): QueryList<DxiCenterMapComponent> {
+    get centerNewChildren(): QueryList<DxiCenterMapComponent> {
         return this._getOption('center');
     }
-    set centerChildren(value) {
+    set centerNewChildren(value) {
+        this.hasNewcenter = value.length > 0;
         this.setChildren('center', value);
     }
 
+    hasNewmarkers: boolean = false;
+
     @ContentChildren(DxiMarkerMapComponent)
-    get markersChildren(): QueryList<DxiMarkerMapComponent> {
+    get markersNewChildren(): QueryList<DxiMarkerMapComponent> {
         return this._getOption('markers');
     }
-    set markersChildren(value) {
+    set markersNewChildren(value) {
+        this.hasNewmarkers = value.length > 0;
         this.setChildren('markers', value);
     }
 
+    hasNewroutes: boolean = false;
+
     @ContentChildren(DxiRouteMapComponent)
-    get routesChildren(): QueryList<DxiRouteMapComponent> {
+    get routesNewChildren(): QueryList<DxiRouteMapComponent> {
+        return this._getOption('routes');
+    }
+    set routesNewChildren(value) {
+        this.hasNewroutes = value.length > 0;
+        this.setChildren('routes', value);
+    }
+
+
+
+    @ContentChildren(DxiCenterComponent)
+    get centerChildren(): QueryList<DxiCenterComponent> {
+        return this._getOption('center');
+    }
+    set centerChildren(value) {
+        if (this.hasNewcenter && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('center', value);
+        }
+    }
+
+    @ContentChildren(DxiMarkerComponent)
+    get markersChildren(): QueryList<DxiMarkerComponent> {
+        return this._getOption('markers');
+    }
+    set markersChildren(value) {
+        if (this.hasNewmarkers && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('markers', value);
+        }
+    }
+
+    @ContentChildren(DxiRouteComponent)
+    get routesChildren(): QueryList<DxiRouteComponent> {
         return this._getOption('routes');
     }
     set routesChildren(value) {
-        this.setChildren('routes', value);
+        if (this.hasNewroutes && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('routes', value);
+        }
     }
 
 
@@ -728,18 +779,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
   ],
   exports: [
     DxMapComponent,
-    DxoApiKeyModule,
-    DxiCenterModule,
-    DxiMarkerModule,
-    DxiLocationModule,
-    DxoTooltipModule,
-    DxiRouteModule,
-    DxoApiKeyMapModule,
-    DxiCenterMapModule,
-    DxiMarkerMapModule,
-    DxiLocationMapModule,
-    DxoTooltipMapModule,
-    DxiRouteMapModule,
+    DxoApiKeyModule,DxiCenterModule,DxiMarkerModule,DxiLocationModule,DxoTooltipModule,DxiRouteModule,
+    DxoApiKeyMapModule,DxiCenterMapModule,DxiMarkerMapModule,DxiLocationMapModule,DxoTooltipMapModule,DxiRouteMapModule,
     DxTemplateModule
   ]
 })

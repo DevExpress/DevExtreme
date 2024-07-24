@@ -48,11 +48,13 @@ import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoSearchEditorOptionsTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxiButtonTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoOptionsTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemTreeViewComponent } from 'devextreme-angular/ui/tree-view/nested';
 
@@ -1141,12 +1143,29 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemTreeViewComponent)
-    get itemsChildren(): QueryList<DxiItemTreeViewComponent> {
+    get itemsNewChildren(): QueryList<DxiItemTreeViewComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -1289,14 +1308,8 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
   ],
   exports: [
     DxTreeViewComponent,
-    DxiItemModule,
-    DxoSearchEditorOptionsModule,
-    DxiButtonModule,
-    DxoOptionsModule,
-    DxiItemTreeViewModule,
-    DxoSearchEditorOptionsTreeViewModule,
-    DxiButtonTreeViewModule,
-    DxoOptionsTreeViewModule,
+    DxiItemModule,DxoSearchEditorOptionsModule,DxiButtonModule,DxoOptionsModule,
+    DxiItemTreeViewModule,DxoSearchEditorOptionsTreeViewModule,DxiButtonTreeViewModule,DxoOptionsTreeViewModule,
     DxTemplateModule
   ]
 })

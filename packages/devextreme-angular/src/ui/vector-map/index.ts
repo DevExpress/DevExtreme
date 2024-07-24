@@ -65,7 +65,6 @@ import { DxoProjectionModule } from 'devextreme-angular/ui/nested';
 import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiAnnotationVectorMapModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoBorderVectorMapModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoFontVectorMapModule } from 'devextreme-angular/ui/vector-map/nested';
@@ -86,6 +85,11 @@ import { DxoLoadingIndicatorVectorMapModule } from 'devextreme-angular/ui/vector
 import { DxoProjectionVectorMapModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoSizeVectorMapModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoTooltipVectorMapModule } from 'devextreme-angular/ui/vector-map/nested';
+
+
+import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
+import { DxiLayerComponent } from 'devextreme-angular/ui/nested';
+import { DxiLegendComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiAnnotationVectorMapComponent } from 'devextreme-angular/ui/vector-map/nested';
 import { DxiLayerVectorMapComponent } from 'devextreme-angular/ui/vector-map/nested';
@@ -765,28 +769,75 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
+    hasNewannotations: boolean = false;
+
     @ContentChildren(DxiAnnotationVectorMapComponent)
-    get annotationsChildren(): QueryList<DxiAnnotationVectorMapComponent> {
+    get annotationsNewChildren(): QueryList<DxiAnnotationVectorMapComponent> {
         return this._getOption('annotations');
     }
-    set annotationsChildren(value) {
+    set annotationsNewChildren(value) {
+        this.hasNewannotations = value.length > 0;
         this.setChildren('annotations', value);
     }
 
+    hasNewlayers: boolean = false;
+
     @ContentChildren(DxiLayerVectorMapComponent)
-    get layersChildren(): QueryList<DxiLayerVectorMapComponent> {
+    get layersNewChildren(): QueryList<DxiLayerVectorMapComponent> {
         return this._getOption('layers');
     }
-    set layersChildren(value) {
+    set layersNewChildren(value) {
+        this.hasNewlayers = value.length > 0;
         this.setChildren('layers', value);
     }
 
+    hasNewlegends: boolean = false;
+
     @ContentChildren(DxiLegendVectorMapComponent)
-    get legendsChildren(): QueryList<DxiLegendVectorMapComponent> {
+    get legendsNewChildren(): QueryList<DxiLegendVectorMapComponent> {
+        return this._getOption('legends');
+    }
+    set legendsNewChildren(value) {
+        this.hasNewlegends = value.length > 0;
+        this.setChildren('legends', value);
+    }
+
+
+
+    @ContentChildren(DxiAnnotationComponent)
+    get annotationsChildren(): QueryList<DxiAnnotationComponent> {
+        return this._getOption('annotations');
+    }
+    set annotationsChildren(value) {
+        if (this.hasNewannotations && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('annotations', value);
+        }
+    }
+
+    @ContentChildren(DxiLayerComponent)
+    get layersChildren(): QueryList<DxiLayerComponent> {
+        return this._getOption('layers');
+    }
+    set layersChildren(value) {
+        if (this.hasNewlayers && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('layers', value);
+        }
+    }
+
+    @ContentChildren(DxiLegendComponent)
+    get legendsChildren(): QueryList<DxiLegendComponent> {
         return this._getOption('legends');
     }
     set legendsChildren(value) {
-        this.setChildren('legends', value);
+        if (this.hasNewlegends && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('legends', value);
+        }
     }
 
 
@@ -945,46 +996,8 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
   ],
   exports: [
     DxVectorMapComponent,
-    DxiAnnotationModule,
-    DxoBorderModule,
-    DxoFontModule,
-    DxoImageModule,
-    DxoShadowModule,
-    DxoBackgroundModule,
-    DxoCommonAnnotationSettingsModule,
-    DxoControlBarModule,
-    DxoExportModule,
-    DxiLayerModule,
-    DxoLabelModule,
-    DxiLegendModule,
-    DxoMarginModule,
-    DxoSourceModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoLoadingIndicatorModule,
-    DxoProjectionModule,
-    DxoSizeModule,
-    DxoTooltipModule,
-    DxiAnnotationVectorMapModule,
-    DxoBorderVectorMapModule,
-    DxoFontVectorMapModule,
-    DxoImageVectorMapModule,
-    DxoShadowVectorMapModule,
-    DxoBackgroundVectorMapModule,
-    DxoCommonAnnotationSettingsVectorMapModule,
-    DxoControlBarVectorMapModule,
-    DxoExportVectorMapModule,
-    DxiLayerVectorMapModule,
-    DxoLabelVectorMapModule,
-    DxiLegendVectorMapModule,
-    DxoMarginVectorMapModule,
-    DxoSourceVectorMapModule,
-    DxoTitleVectorMapModule,
-    DxoSubtitleVectorMapModule,
-    DxoLoadingIndicatorVectorMapModule,
-    DxoProjectionVectorMapModule,
-    DxoSizeVectorMapModule,
-    DxoTooltipVectorMapModule,
+    DxiAnnotationModule,DxoBorderModule,DxoFontModule,DxoImageModule,DxoShadowModule,DxoBackgroundModule,DxoCommonAnnotationSettingsModule,DxoControlBarModule,DxoExportModule,DxiLayerModule,DxoLabelModule,DxiLegendModule,DxoMarginModule,DxoSourceModule,DxoTitleModule,DxoSubtitleModule,DxoLoadingIndicatorModule,DxoProjectionModule,DxoSizeModule,DxoTooltipModule,
+    DxiAnnotationVectorMapModule,DxoBorderVectorMapModule,DxoFontVectorMapModule,DxoImageVectorMapModule,DxoShadowVectorMapModule,DxoBackgroundVectorMapModule,DxoCommonAnnotationSettingsVectorMapModule,DxoControlBarVectorMapModule,DxoExportVectorMapModule,DxiLayerVectorMapModule,DxoLabelVectorMapModule,DxiLegendVectorMapModule,DxoMarginVectorMapModule,DxoSourceVectorMapModule,DxoTitleVectorMapModule,DxoSubtitleVectorMapModule,DxoLoadingIndicatorVectorMapModule,DxoProjectionVectorMapModule,DxoSizeVectorMapModule,DxoTooltipVectorMapModule,
     DxTemplateModule
   ]
 })

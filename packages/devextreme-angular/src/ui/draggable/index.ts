@@ -36,8 +36,9 @@ import {
 
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoCursorOffsetDraggableModule } from 'devextreme-angular/ui/draggable/nested';
+
+
 
 
 
@@ -424,6 +425,8 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+
+
 
 
 

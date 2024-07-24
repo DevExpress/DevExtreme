@@ -47,7 +47,6 @@ import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
 import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoColCountByScreenFormModule } from 'devextreme-angular/ui/form/nested';
 import { DxiItemFormModule } from 'devextreme-angular/ui/form/nested';
 import { DxoLabelFormModule } from 'devextreme-angular/ui/form/nested';
@@ -55,6 +54,9 @@ import { DxiValidationRuleFormModule } from 'devextreme-angular/ui/form/nested';
 import { DxoTabPanelOptionsFormModule } from 'devextreme-angular/ui/form/nested';
 import { DxiTabFormModule } from 'devextreme-angular/ui/form/nested';
 import { DxoButtonOptionsFormModule } from 'devextreme-angular/ui/form/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemFormComponent } from 'devextreme-angular/ui/form/nested';
 
@@ -807,12 +809,29 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemFormComponent)
-    get itemsChildren(): QueryList<DxiItemFormComponent> {
+    get itemsNewChildren(): QueryList<DxiItemFormComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -936,20 +955,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
   ],
   exports: [
     DxFormComponent,
-    DxoColCountByScreenModule,
-    DxiItemModule,
-    DxoLabelModule,
-    DxiValidationRuleModule,
-    DxoTabPanelOptionsModule,
-    DxiTabModule,
-    DxoButtonOptionsModule,
-    DxoColCountByScreenFormModule,
-    DxiItemFormModule,
-    DxoLabelFormModule,
-    DxiValidationRuleFormModule,
-    DxoTabPanelOptionsFormModule,
-    DxiTabFormModule,
-    DxoButtonOptionsFormModule,
+    DxoColCountByScreenModule,DxiItemModule,DxoLabelModule,DxiValidationRuleModule,DxoTabPanelOptionsModule,DxiTabModule,DxoButtonOptionsModule,
+    DxoColCountByScreenFormModule,DxiItemFormModule,DxoLabelFormModule,DxiValidationRuleFormModule,DxoTabPanelOptionsFormModule,DxiTabFormModule,DxoButtonOptionsFormModule,
     DxTemplateModule
   ]
 })

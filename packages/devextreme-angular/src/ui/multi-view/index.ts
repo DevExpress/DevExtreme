@@ -43,8 +43,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemMultiViewModule } from 'devextreme-angular/ui/multi-view/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemMultiViewComponent } from 'devextreme-angular/ui/multi-view/nested';
 
@@ -601,12 +603,29 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemMultiViewComponent)
-    get itemsChildren(): QueryList<DxiItemMultiViewComponent> {
+    get itemsNewChildren(): QueryList<DxiItemMultiViewComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

@@ -50,8 +50,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemRadioGroupModule } from 'devextreme-angular/ui/radio-group/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemRadioGroupComponent } from 'devextreme-angular/ui/radio-group/nested';
 
@@ -693,12 +695,29 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemRadioGroupComponent)
-    get itemsChildren(): QueryList<DxiItemRadioGroupComponent> {
+    get itemsNewChildren(): QueryList<DxiItemRadioGroupComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

@@ -43,8 +43,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemAccordionModule } from 'devextreme-angular/ui/accordion/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemAccordionComponent } from 'devextreme-angular/ui/accordion/nested';
 
@@ -709,12 +711,29 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemAccordionComponent)
-    get itemsChildren(): QueryList<DxiItemAccordionComponent> {
+    get itemsNewChildren(): QueryList<DxiItemAccordionComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

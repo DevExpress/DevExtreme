@@ -57,7 +57,6 @@ import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationBarGaugeModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoExportBarGaugeModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoGeometryBarGaugeModule } from 'devextreme-angular/ui/bar-gauge/nested';
@@ -74,6 +73,8 @@ import { DxoLoadingIndicatorBarGaugeModule } from 'devextreme-angular/ui/bar-gau
 import { DxoSizeBarGaugeModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoTooltipBarGaugeModule } from 'devextreme-angular/ui/bar-gauge/nested';
 import { DxoShadowBarGaugeModule } from 'devextreme-angular/ui/bar-gauge/nested';
+
+
 
 
 
@@ -721,6 +722,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -856,38 +859,8 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
   ],
   exports: [
     DxBarGaugeComponent,
-    DxoAnimationModule,
-    DxoExportModule,
-    DxoGeometryModule,
-    DxoLabelModule,
-    DxoFontModule,
-    DxoFormatModule,
-    DxoLegendModule,
-    DxoBorderModule,
-    DxoItemTextFormatModule,
-    DxoMarginModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoLoadingIndicatorModule,
-    DxoSizeModule,
-    DxoTooltipModule,
-    DxoShadowModule,
-    DxoAnimationBarGaugeModule,
-    DxoExportBarGaugeModule,
-    DxoGeometryBarGaugeModule,
-    DxoLabelBarGaugeModule,
-    DxoFontBarGaugeModule,
-    DxoFormatBarGaugeModule,
-    DxoLegendBarGaugeModule,
-    DxoBorderBarGaugeModule,
-    DxoItemTextFormatBarGaugeModule,
-    DxoMarginBarGaugeModule,
-    DxoTitleBarGaugeModule,
-    DxoSubtitleBarGaugeModule,
-    DxoLoadingIndicatorBarGaugeModule,
-    DxoSizeBarGaugeModule,
-    DxoTooltipBarGaugeModule,
-    DxoShadowBarGaugeModule,
+    DxoAnimationModule,DxoExportModule,DxoGeometryModule,DxoLabelModule,DxoFontModule,DxoFormatModule,DxoLegendModule,DxoBorderModule,DxoItemTextFormatModule,DxoMarginModule,DxoTitleModule,DxoSubtitleModule,DxoLoadingIndicatorModule,DxoSizeModule,DxoTooltipModule,DxoShadowModule,
+    DxoAnimationBarGaugeModule,DxoExportBarGaugeModule,DxoGeometryBarGaugeModule,DxoLabelBarGaugeModule,DxoFontBarGaugeModule,DxoFormatBarGaugeModule,DxoLegendBarGaugeModule,DxoBorderBarGaugeModule,DxoItemTextFormatBarGaugeModule,DxoMarginBarGaugeModule,DxoTitleBarGaugeModule,DxoSubtitleBarGaugeModule,DxoLoadingIndicatorBarGaugeModule,DxoSizeBarGaugeModule,DxoTooltipBarGaugeModule,DxoShadowBarGaugeModule,
     DxTemplateModule
   ]
 })

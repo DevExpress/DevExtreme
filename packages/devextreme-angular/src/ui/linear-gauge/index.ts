@@ -67,7 +67,6 @@ import { DxoBorderModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationLinearGaugeModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoExportLinearGaugeModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoGeometryLinearGaugeModule } from 'devextreme-angular/ui/linear-gauge/nested';
@@ -93,6 +92,8 @@ import { DxoTooltipLinearGaugeModule } from 'devextreme-angular/ui/linear-gauge/
 import { DxoBorderLinearGaugeModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoShadowLinearGaugeModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoValueIndicatorLinearGaugeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+
+
 
 
 
@@ -620,6 +621,8 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -765,56 +768,8 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
   ],
   exports: [
     DxLinearGaugeComponent,
-    DxoAnimationModule,
-    DxoExportModule,
-    DxoGeometryModule,
-    DxoLoadingIndicatorModule,
-    DxoFontModule,
-    DxoMarginModule,
-    DxoRangeContainerModule,
-    DxoBackgroundColorModule,
-    DxiRangeModule,
-    DxoColorModule,
-    DxoWidthModule,
-    DxoScaleModule,
-    DxoLabelModule,
-    DxoFormatModule,
-    DxoMinorTickModule,
-    DxoTickModule,
-    DxoSizeModule,
-    DxoSubvalueIndicatorModule,
-    DxoTextModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoTooltipModule,
-    DxoBorderModule,
-    DxoShadowModule,
-    DxoValueIndicatorModule,
-    DxoAnimationLinearGaugeModule,
-    DxoExportLinearGaugeModule,
-    DxoGeometryLinearGaugeModule,
-    DxoLoadingIndicatorLinearGaugeModule,
-    DxoFontLinearGaugeModule,
-    DxoMarginLinearGaugeModule,
-    DxoRangeContainerLinearGaugeModule,
-    DxoBackgroundColorLinearGaugeModule,
-    DxiRangeLinearGaugeModule,
-    DxoColorLinearGaugeModule,
-    DxoWidthLinearGaugeModule,
-    DxoScaleLinearGaugeModule,
-    DxoLabelLinearGaugeModule,
-    DxoFormatLinearGaugeModule,
-    DxoMinorTickLinearGaugeModule,
-    DxoTickLinearGaugeModule,
-    DxoSizeLinearGaugeModule,
-    DxoSubvalueIndicatorLinearGaugeModule,
-    DxoTextLinearGaugeModule,
-    DxoTitleLinearGaugeModule,
-    DxoSubtitleLinearGaugeModule,
-    DxoTooltipLinearGaugeModule,
-    DxoBorderLinearGaugeModule,
-    DxoShadowLinearGaugeModule,
-    DxoValueIndicatorLinearGaugeModule,
+    DxoAnimationModule,DxoExportModule,DxoGeometryModule,DxoLoadingIndicatorModule,DxoFontModule,DxoMarginModule,DxoRangeContainerModule,DxoBackgroundColorModule,DxiRangeModule,DxoColorModule,DxoWidthModule,DxoScaleModule,DxoLabelModule,DxoFormatModule,DxoMinorTickModule,DxoTickModule,DxoSizeModule,DxoSubvalueIndicatorModule,DxoTextModule,DxoTitleModule,DxoSubtitleModule,DxoTooltipModule,DxoBorderModule,DxoShadowModule,DxoValueIndicatorModule,
+    DxoAnimationLinearGaugeModule,DxoExportLinearGaugeModule,DxoGeometryLinearGaugeModule,DxoLoadingIndicatorLinearGaugeModule,DxoFontLinearGaugeModule,DxoMarginLinearGaugeModule,DxoRangeContainerLinearGaugeModule,DxoBackgroundColorLinearGaugeModule,DxiRangeLinearGaugeModule,DxoColorLinearGaugeModule,DxoWidthLinearGaugeModule,DxoScaleLinearGaugeModule,DxoLabelLinearGaugeModule,DxoFormatLinearGaugeModule,DxoMinorTickLinearGaugeModule,DxoTickLinearGaugeModule,DxoSizeLinearGaugeModule,DxoSubvalueIndicatorLinearGaugeModule,DxoTextLinearGaugeModule,DxoTitleLinearGaugeModule,DxoSubtitleLinearGaugeModule,DxoTooltipLinearGaugeModule,DxoBorderLinearGaugeModule,DxoShadowLinearGaugeModule,DxoValueIndicatorLinearGaugeModule,
     DxTemplateModule
   ]
 })

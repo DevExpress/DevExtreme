@@ -114,7 +114,6 @@ import { DxoValueFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiTotalItemModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoColumnChooserDataGridModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoPositionDataGridModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoAtDataGridModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -180,7 +179,9 @@ import { DxoValueFormatDataGridModule } from 'devextreme-angular/ui/data-grid/ne
 import { DxiTotalItemDataGridModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoToolbarDataGridModule } from 'devextreme-angular/ui/data-grid/nested';
 
-import { DxiColumnComponent } from "devextreme-angular/ui/nested";
+
+import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
+import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiColumnDataGridComponent } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiSortByGroupSummaryInfoDataGridComponent } from 'devextreme-angular/ui/data-grid/nested';
@@ -206,7 +207,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.accessKey]
-
+    
      */
     @Input()
     get accessKey(): string | undefined {
@@ -219,7 +220,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
-
+    
      */
     @Input()
     get activeStateEnabled(): boolean {
@@ -232,7 +233,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.allowColumnReordering]
-
+    
      */
     @Input()
     get allowColumnReordering(): boolean {
@@ -245,7 +246,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.allowColumnResizing]
-
+    
      */
     @Input()
     get allowColumnResizing(): boolean {
@@ -258,7 +259,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.autoNavigateToFocusedRow]
-
+    
      */
     @Input()
     get autoNavigateToFocusedRow(): boolean {
@@ -271,7 +272,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.cacheEnabled]
-
+    
      */
     @Input()
     get cacheEnabled(): boolean {
@@ -284,7 +285,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.cellHintEnabled]
-
+    
      */
     @Input()
     get cellHintEnabled(): boolean {
@@ -297,7 +298,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnAutoWidth]
-
+    
      */
     @Input()
     get columnAutoWidth(): boolean {
@@ -310,7 +311,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnChooser]
-
+    
      */
     @Input()
     get columnChooser(): { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
@@ -323,7 +324,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnFixing]
-
+    
      */
     @Input()
     get columnFixing(): { enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } } {
@@ -336,7 +337,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnHidingEnabled]
-
+    
      */
     @Input()
     get columnHidingEnabled(): boolean {
@@ -349,7 +350,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnMinWidth]
-
+    
      */
     @Input()
     get columnMinWidth(): number | undefined {
@@ -362,7 +363,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnResizingMode]
-
+    
      */
     @Input()
     get columnResizingMode(): ColumnResizeMode {
@@ -375,7 +376,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.columns]
-
+    
      */
     @Input()
     get columns(): Array<dxDataGridColumn | string> {
@@ -388,7 +389,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.columnWidth]
-
+    
      */
     @Input()
     get columnWidth(): Mode | number | undefined {
@@ -401,7 +402,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.customizeColumns]
-
+    
      */
     @Input()
     get customizeColumns(): Function {
@@ -414,7 +415,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.dataRowTemplate]
-
+    
      */
     @Input()
     get dataRowTemplate(): any {
@@ -427,7 +428,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.dataSource]
-
+    
      */
     @Input()
     get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
@@ -440,7 +441,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
-
+    
      */
     @Input()
     get dateSerializationFormat(): string {
@@ -453,7 +454,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.disabled]
-
+    
      */
     @Input()
     get disabled(): boolean {
@@ -466,7 +467,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.editing]
-
+    
      */
     @Input()
     get editing(): { allowAdding?: boolean, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
@@ -479,7 +480,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-
+    
      */
     @Input()
     get elementAttr(): any {
@@ -492,7 +493,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.errorRowEnabled]
-
+    
      */
     @Input()
     get errorRowEnabled(): boolean {
@@ -505,7 +506,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.export]
-
+    
      */
     @Input()
     get export(): { allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<DataGridExportFormat | string>, texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string } } {
@@ -518,7 +519,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterBuilder]
-
+    
      */
     @Input()
     get filterBuilder(): dxFilterBuilderOptions {
@@ -531,7 +532,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterBuilderPopup]
-
+    
      */
     @Input()
     get filterBuilderPopup(): dxPopupOptions {
@@ -544,7 +545,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterPanel]
-
+    
      */
     @Input()
     get filterPanel(): { customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean } {
@@ -557,7 +558,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterRow]
-
+    
      */
     @Input()
     get filterRow(): { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
@@ -570,7 +571,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterSyncEnabled]
-
+    
      */
     @Input()
     get filterSyncEnabled(): Mode | boolean {
@@ -583,7 +584,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.filterValue]
-
+    
      */
     @Input()
     get filterValue(): any {
@@ -596,7 +597,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedColumnIndex]
-
+    
      */
     @Input()
     get focusedColumnIndex(): number {
@@ -609,7 +610,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowEnabled]
-
+    
      */
     @Input()
     get focusedRowEnabled(): boolean {
@@ -622,7 +623,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowIndex]
-
+    
      */
     @Input()
     get focusedRowIndex(): number {
@@ -635,7 +636,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.focusedRowKey]
-
+    
      */
     @Input()
     get focusedRowKey(): any | undefined {
@@ -648,7 +649,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.grouping]
-
+    
      */
     @Input()
     get grouping(): { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: GroupExpandMode, texts?: { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } } {
@@ -661,7 +662,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.groupPanel]
-
+    
      */
     @Input()
     get groupPanel(): { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: Mode | boolean } {
@@ -674,7 +675,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.headerFilter]
-
+    
      */
     @Input()
     get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string } {
@@ -687,7 +688,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.height]
-
+    
      */
     @Input()
     get height(): number | Function | string | undefined {
@@ -700,7 +701,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.highlightChanges]
-
+    
      */
     @Input()
     get highlightChanges(): boolean {
@@ -713,7 +714,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hint]
-
+    
      */
     @Input()
     get hint(): string | undefined {
@@ -726,7 +727,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.hoverStateEnabled]
-
+    
      */
     @Input()
     get hoverStateEnabled(): boolean {
@@ -739,7 +740,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.keyboardNavigation]
-
+    
      */
     @Input()
     get keyboardNavigation(): { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection } {
@@ -752,7 +753,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.keyExpr]
-
+    
      */
     @Input()
     get keyExpr(): string | undefined | Array<string> {
@@ -765,7 +766,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.loadPanel]
-
+    
      */
     @Input()
     get loadPanel(): { enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
@@ -778,7 +779,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.masterDetail]
-
+    
      */
     @Input()
     get masterDetail(): { autoExpandAll?: boolean, enabled?: boolean, template?: any } {
@@ -791,7 +792,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.noDataText]
-
+    
      */
     @Input()
     get noDataText(): string {
@@ -804,7 +805,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.pager]
-
+    
      */
     @Input()
     get pager(): { allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean } {
@@ -817,7 +818,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.paging]
-
+    
      */
     @Input()
     get paging(): { enabled?: boolean, pageIndex?: number, pageSize?: number } {
@@ -830,7 +831,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.remoteOperations]
-
+    
      */
     @Input()
     get remoteOperations(): Mode | boolean | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } {
@@ -843,7 +844,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.renderAsync]
-
+    
      */
     @Input()
     get renderAsync(): boolean {
@@ -856,7 +857,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.repaintChangesOnly]
-
+    
      */
     @Input()
     get repaintChangesOnly(): boolean {
@@ -869,7 +870,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.rowAlternationEnabled]
-
+    
      */
     @Input()
     get rowAlternationEnabled(): boolean {
@@ -882,7 +883,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.rowDragging]
-
+    
      */
     @Input()
     get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
@@ -895,9 +896,9 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.rowTemplate]
-
+    
      * @deprecated [depNote:dxDataGridOptions.rowTemplate]
-
+    
      */
     @Input()
     get rowTemplate(): any {
@@ -910,7 +911,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
-
+    
      */
     @Input()
     get rtlEnabled(): boolean {
@@ -923,7 +924,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.scrolling]
-
+    
      */
     @Input()
     get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean } {
@@ -936,7 +937,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.searchPanel]
-
+    
      */
     @Input()
     get searchPanel(): { highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string } {
@@ -949,7 +950,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.selectedRowKeys]
-
+    
      */
     @Input()
     get selectedRowKeys(): Array<any> {
@@ -962,7 +963,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.selection]
-
+    
      */
     @Input()
     get selection(): { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, showCheckBoxesMode?: SelectionColumnDisplayMode } {
@@ -975,7 +976,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.selectionFilter]
-
+    
      */
     @Input()
     get selectionFilter(): any {
@@ -988,7 +989,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showBorders]
-
+    
      */
     @Input()
     get showBorders(): boolean {
@@ -1001,7 +1002,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showColumnHeaders]
-
+    
      */
     @Input()
     get showColumnHeaders(): boolean {
@@ -1014,7 +1015,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showColumnLines]
-
+    
      */
     @Input()
     get showColumnLines(): boolean {
@@ -1027,7 +1028,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.showRowLines]
-
+    
      */
     @Input()
     get showRowLines(): boolean {
@@ -1040,7 +1041,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.sortByGroupSummaryInfo]
-
+    
      */
     @Input()
     get sortByGroupSummaryInfo(): Array<any | { groupColumn?: string | undefined, sortOrder?: SortOrder | string | undefined, summaryItem?: number | string | undefined }> {
@@ -1053,7 +1054,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.sorting]
-
+    
      */
     @Input()
     get sorting(): { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean } {
@@ -1066,7 +1067,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.stateStoring]
-
+    
      */
     @Input()
     get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
@@ -1079,7 +1080,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.summary]
-
+    
      */
     @Input()
     get summary(): { calculateCustomSummary?: Function, groupItems?: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>, recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> } {
@@ -1092,7 +1093,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.syncLookupFilterValues]
-
+    
      */
     @Input()
     get syncLookupFilterValues(): boolean {
@@ -1105,7 +1106,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.tabIndex]
-
+    
      */
     @Input()
     get tabIndex(): number {
@@ -1118,7 +1119,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:dxDataGridOptions.toolbar]
-
+    
      */
     @Input()
     get toolbar(): dxDataGridToolbar | undefined {
@@ -1131,7 +1132,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.twoWayBindingEnabled]
-
+    
      */
     @Input()
     get twoWayBindingEnabled(): boolean {
@@ -1144,7 +1145,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:WidgetOptions.visible]
-
+    
      */
     @Input()
     get visible(): boolean {
@@ -1157,7 +1158,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:DOMComponentOptions.width]
-
+    
      */
     @Input()
     get width(): number | Function | string | undefined {
@@ -1170,7 +1171,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
      * [descr:GridBaseOptions.wordWrapEnabled]
-
+    
      */
     @Input()
     get wordWrapEnabled(): boolean {
@@ -1181,880 +1182,907 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     }
 
     /**
-
+    
      * [descr:dxDataGridOptions.onAdaptiveDetailRowPreparing]
-
-
+    
+    
      */
     @Output() onAdaptiveDetailRowPreparing: EventEmitter<AdaptiveDetailRowPreparingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onCellClick]
-
-
+    
+    
      */
     @Output() onCellClick: EventEmitter<CellClickEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onCellDblClick]
-
-
+    
+    
      */
     @Output() onCellDblClick: EventEmitter<CellDblClickEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onCellHoverChanged]
-
-
+    
+    
      */
     @Output() onCellHoverChanged: EventEmitter<CellHoverChangedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onCellPrepared]
-
-
+    
+    
      */
     @Output() onCellPrepared: EventEmitter<CellPreparedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onContentReady]
-
-
+    
+    
      */
     @Output() onContentReady: EventEmitter<ContentReadyEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onContextMenuPreparing]
-
-
+    
+    
      */
     @Output() onContextMenuPreparing: EventEmitter<ContextMenuPreparingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onDataErrorOccurred]
-
-
+    
+    
      */
     @Output() onDataErrorOccurred: EventEmitter<DataErrorOccurredEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onDisposing]
-
-
+    
+    
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onEditCanceled]
-
-
+    
+    
      */
     @Output() onEditCanceled: EventEmitter<EditCanceledEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onEditCanceling]
-
-
+    
+    
      */
     @Output() onEditCanceling: EventEmitter<EditCancelingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onEditingStart]
-
-
+    
+    
      */
     @Output() onEditingStart: EventEmitter<EditingStartEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onEditorPrepared]
-
-
+    
+    
      */
     @Output() onEditorPrepared: EventEmitter<EditorPreparedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onEditorPreparing]
-
-
+    
+    
      */
     @Output() onEditorPreparing: EventEmitter<EditorPreparingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onExporting]
-
-
+    
+    
      */
     @Output() onExporting: EventEmitter<ExportingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onFocusedCellChanged]
-
-
+    
+    
      */
     @Output() onFocusedCellChanged: EventEmitter<FocusedCellChangedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onFocusedCellChanging]
-
-
+    
+    
      */
     @Output() onFocusedCellChanging: EventEmitter<FocusedCellChangingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onFocusedRowChanged]
-
-
+    
+    
      */
     @Output() onFocusedRowChanged: EventEmitter<FocusedRowChangedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onFocusedRowChanging]
-
-
+    
+    
      */
     @Output() onFocusedRowChanging: EventEmitter<FocusedRowChangingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onInitialized]
-
-
+    
+    
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onInitNewRow]
-
-
+    
+    
      */
     @Output() onInitNewRow: EventEmitter<InitNewRowEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onKeyDown]
-
-
+    
+    
      */
     @Output() onKeyDown: EventEmitter<KeyDownEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onOptionChanged]
-
-
+    
+    
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowClick]
-
-
+    
+    
      */
     @Output() onRowClick: EventEmitter<RowClickEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowCollapsed]
-
-
+    
+    
      */
     @Output() onRowCollapsed: EventEmitter<RowCollapsedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowCollapsing]
-
-
+    
+    
      */
     @Output() onRowCollapsing: EventEmitter<RowCollapsingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowDblClick]
-
-
+    
+    
      */
     @Output() onRowDblClick: EventEmitter<RowDblClickEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowExpanded]
-
-
+    
+    
      */
     @Output() onRowExpanded: EventEmitter<RowExpandedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowExpanding]
-
-
+    
+    
      */
     @Output() onRowExpanding: EventEmitter<RowExpandingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowInserted]
-
-
+    
+    
      */
     @Output() onRowInserted: EventEmitter<RowInsertedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowInserting]
-
-
+    
+    
      */
     @Output() onRowInserting: EventEmitter<RowInsertingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowPrepared]
-
-
+    
+    
      */
     @Output() onRowPrepared: EventEmitter<RowPreparedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowRemoved]
-
-
+    
+    
      */
     @Output() onRowRemoved: EventEmitter<RowRemovedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowRemoving]
-
-
+    
+    
      */
     @Output() onRowRemoving: EventEmitter<RowRemovingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowUpdated]
-
-
+    
+    
      */
     @Output() onRowUpdated: EventEmitter<RowUpdatedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowUpdating]
-
-
+    
+    
      */
     @Output() onRowUpdating: EventEmitter<RowUpdatingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onRowValidating]
-
-
+    
+    
      */
     @Output() onRowValidating: EventEmitter<RowValidatingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onSaved]
-
-
+    
+    
      */
     @Output() onSaved: EventEmitter<SavedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onSaving]
-
-
+    
+    
      */
     @Output() onSaving: EventEmitter<SavingEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onSelectionChanged]
-
-
+    
+    
      */
     @Output() onSelectionChanged: EventEmitter<SelectionChangedEvent>;
 
     /**
-
+    
      * [descr:dxDataGridOptions.onToolbarPreparing]
-
-
+    
+    
      */
     @Output() onToolbarPreparing: EventEmitter<ToolbarPreparingEvent>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() accessKeyChange: EventEmitter<string | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() activeStateEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() allowColumnReorderingChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() allowColumnResizingChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() autoNavigateToFocusedRowChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() cacheEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() cellHintEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnAutoWidthChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnHidingEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnMinWidthChange: EventEmitter<number | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnResizingModeChange: EventEmitter<ColumnResizeMode>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnsChange: EventEmitter<Array<dxDataGridColumn | string>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() columnWidthChange: EventEmitter<Mode | number | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() customizeColumnsChange: EventEmitter<Function>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() dataRowTemplateChange: EventEmitter<any>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() dateSerializationFormatChange: EventEmitter<string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() editingChange: EventEmitter<{ allowAdding?: boolean, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, newRowPosition?: NewRowPosition, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() elementAttrChange: EventEmitter<any>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() errorRowEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() exportChange: EventEmitter<{ allowExportSelectedData?: boolean, enabled?: boolean, formats?: Array<DataGridExportFormat | string>, texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string } }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() filterBuilderChange: EventEmitter<dxFilterBuilderOptions>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() filterPanelChange: EventEmitter<{ customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() filterRowChange: EventEmitter<{ applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() filterSyncEnabledChange: EventEmitter<Mode | boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() filterValueChange: EventEmitter<any>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() focusedColumnIndexChange: EventEmitter<number>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() focusedRowEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() focusedRowIndexChange: EventEmitter<number>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() focusedRowKeyChange: EventEmitter<any | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() groupingChange: EventEmitter<{ allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: GroupExpandMode, texts?: { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() groupPanelChange: EventEmitter<{ allowColumnDragging?: boolean, emptyPanelText?: string, visible?: Mode | boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() headerFilterChange: EventEmitter<{ allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() heightChange: EventEmitter<number | Function | string | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() highlightChangesChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() hoverStateEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() keyboardNavigationChange: EventEmitter<{ editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() keyExprChange: EventEmitter<string | undefined | Array<string>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() loadPanelChange: EventEmitter<{ enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() masterDetailChange: EventEmitter<{ autoExpandAll?: boolean, enabled?: boolean, template?: any }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() noDataTextChange: EventEmitter<string>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() pagerChange: EventEmitter<{ allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() pagingChange: EventEmitter<{ enabled?: boolean, pageIndex?: number, pageSize?: number }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() remoteOperationsChange: EventEmitter<Mode | boolean | { filtering?: boolean, grouping?: boolean, groupPaging?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() renderAsyncChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() rowAlternationEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() rowTemplateChange: EventEmitter<any>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: DataGridScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() searchPanelChange: EventEmitter<{ highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() selectedRowKeysChange: EventEmitter<Array<any>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, showCheckBoxesMode?: SelectionColumnDisplayMode }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() selectionFilterChange: EventEmitter<any>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() showBordersChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() showColumnHeadersChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() showColumnLinesChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() showRowLinesChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() sortByGroupSummaryInfoChange: EventEmitter<Array<any | { groupColumn?: string | undefined, sortOrder?: SortOrder | string | undefined, summaryItem?: number | string | undefined }>>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() sortingChange: EventEmitter<{ ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() summaryChange: EventEmitter<{ calculateCustomSummary?: Function, groupItems?: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>, recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> }>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() syncLookupFilterValuesChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() toolbarChange: EventEmitter<dxDataGridToolbar | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() twoWayBindingEnabledChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() widthChange: EventEmitter<number | Function | string | undefined>;
 
     /**
-
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-
+    
      */
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
 
-    @ContentChildren(DxiColumnComponent)
-    get columnsOldChildren(): QueryList<DxiColumnComponent> {
+
+
+
+    hasNewcolumns: boolean = false;
+
+    @ContentChildren(DxiColumnDataGridComponent)
+    get columnsNewChildren(): QueryList<DxiColumnDataGridComponent> {
         return this._getOption('columns');
     }
-    set columnsOldChildren(value) {
+    set columnsNewChildren(value) {
+        this.hasNewcolumns = value.length > 0;
         this.setChildren('columns', value);
     }
 
-    @ContentChildren(DxiColumnDataGridComponent)
-    get columnsChildren(): QueryList<DxiColumnDataGridComponent> {
+    hasNewsortByGroupSummaryInfo: boolean = false;
+
+    @ContentChildren(DxiSortByGroupSummaryInfoDataGridComponent)
+    get sortByGroupSummaryInfoNewChildren(): QueryList<DxiSortByGroupSummaryInfoDataGridComponent> {
+        return this._getOption('sortByGroupSummaryInfo');
+    }
+    set sortByGroupSummaryInfoNewChildren(value) {
+        this.hasNewsortByGroupSummaryInfo = value.length > 0;
+        this.setChildren('sortByGroupSummaryInfo', value);
+    }
+
+
+
+    @ContentChildren(DxiColumnComponent)
+    get columnsChildren(): QueryList<DxiColumnComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        this.setChildren('columns', value);
+        if (this.hasNewcolumns && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('columns', value);
+        }
     }
 
-    @ContentChildren(DxiSortByGroupSummaryInfoDataGridComponent)
-    get sortByGroupSummaryInfoChildren(): QueryList<DxiSortByGroupSummaryInfoDataGridComponent> {
+    @ContentChildren(DxiSortByGroupSummaryInfoComponent)
+    get sortByGroupSummaryInfoChildren(): QueryList<DxiSortByGroupSummaryInfoComponent> {
         return this._getOption('sortByGroupSummaryInfo');
     }
     set sortByGroupSummaryInfoChildren(value) {
-        this.setChildren('sortByGroupSummaryInfo', value);
+        if (this.hasNewsortByGroupSummaryInfo && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('sortByGroupSummaryInfo', value);
+        }
     }
 
 
@@ -2376,134 +2404,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
   ],
   exports: [
     DxDataGridComponent,
-    DxoColumnChooserModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoSearchModule,
-    DxoSelectionModule,
-    DxoColumnFixingModule,
-    DxoTextsModule,
-    DxiColumnModule,
-    DxiButtonModule,
-    DxoHeaderFilterModule,
-    DxoLookupModule,
-    DxoFormatModule,
-    DxoFormItemModule,
-    DxoLabelModule,
-    DxiValidationRuleModule,
-    DxoEditingModule,
-    DxiChangeModule,
-    DxoFormModule,
-    DxoColCountByScreenModule,
-    DxiItemModule,
-    DxoTabPanelOptionsModule,
-    DxiTabModule,
-    DxoButtonOptionsModule,
-    DxoPopupModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
-    DxoExportModule,
-    DxoFilterBuilderModule,
-    DxiCustomOperationModule,
-    DxiFieldModule,
-    DxoFilterOperationDescriptionsModule,
-    DxoGroupOperationDescriptionsModule,
-    DxoFilterBuilderPopupModule,
-    DxoFilterPanelModule,
-    DxoFilterRowModule,
-    DxoOperationDescriptionsModule,
-    DxoGroupingModule,
-    DxoGroupPanelModule,
-    DxoKeyboardNavigationModule,
-    DxoLoadPanelModule,
-    DxoMasterDetailModule,
-    DxoPagerModule,
-    DxoPagingModule,
-    DxoRemoteOperationsModule,
-    DxoRowDraggingModule,
-    DxoCursorOffsetModule,
-    DxoScrollingModule,
-    DxoSearchPanelModule,
-    DxiSortByGroupSummaryInfoModule,
-    DxoSortingModule,
-    DxoStateStoringModule,
-    DxoSummaryModule,
-    DxiGroupItemModule,
-    DxoValueFormatModule,
-    DxiTotalItemModule,
-    DxoToolbarModule,
-    DxoColumnChooserDataGridModule,
-    DxoPositionDataGridModule,
-    DxoAtDataGridModule,
-    DxoBoundaryOffsetDataGridModule,
-    DxoCollisionDataGridModule,
-    DxoMyDataGridModule,
-    DxoOffsetDataGridModule,
-    DxoSearchDataGridModule,
-    DxoSelectionDataGridModule,
-    DxoColumnFixingDataGridModule,
-    DxoTextsDataGridModule,
-    DxiColumnDataGridModule,
-    DxiButtonDataGridModule,
-    DxoHeaderFilterDataGridModule,
-    DxoLookupDataGridModule,
-    DxoFormatDataGridModule,
-    DxoFormItemDataGridModule,
-    DxoLabelDataGridModule,
-    DxiValidationRuleDataGridModule,
-    DxoEditingDataGridModule,
-    DxiChangeDataGridModule,
-    DxoFormDataGridModule,
-    DxoColCountByScreenDataGridModule,
-    DxiItemDataGridModule,
-    DxoTabPanelOptionsDataGridModule,
-    DxiTabDataGridModule,
-    DxoButtonOptionsDataGridModule,
-    DxoPopupDataGridModule,
-    DxoAnimationDataGridModule,
-    DxoHideDataGridModule,
-    DxoFromDataGridModule,
-    DxoToDataGridModule,
-    DxoShowDataGridModule,
-    DxiToolbarItemDataGridModule,
-    DxoExportDataGridModule,
-    DxoFilterBuilderDataGridModule,
-    DxiCustomOperationDataGridModule,
-    DxiFieldDataGridModule,
-    DxoFilterOperationDescriptionsDataGridModule,
-    DxoGroupOperationDescriptionsDataGridModule,
-    DxoFilterBuilderPopupDataGridModule,
-    DxoFilterPanelDataGridModule,
-    DxoFilterRowDataGridModule,
-    DxoOperationDescriptionsDataGridModule,
-    DxoGroupingDataGridModule,
-    DxoGroupPanelDataGridModule,
-    DxoKeyboardNavigationDataGridModule,
-    DxoLoadPanelDataGridModule,
-    DxoMasterDetailDataGridModule,
-    DxoPagerDataGridModule,
-    DxoPagingDataGridModule,
-    DxoRemoteOperationsDataGridModule,
-    DxoRowDraggingDataGridModule,
-    DxoCursorOffsetDataGridModule,
-    DxoScrollingDataGridModule,
-    DxoSearchPanelDataGridModule,
-    DxiSortByGroupSummaryInfoDataGridModule,
-    DxoSortingDataGridModule,
-    DxoStateStoringDataGridModule,
-    DxoSummaryDataGridModule,
-    DxiGroupItemDataGridModule,
-    DxoValueFormatDataGridModule,
-    DxiTotalItemDataGridModule,
-    DxoToolbarDataGridModule,
+    DxoColumnChooserModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoSearchModule,DxoSelectionModule,DxoColumnFixingModule,DxoTextsModule,DxiColumnModule,DxiButtonModule,DxoHeaderFilterModule,DxoLookupModule,DxoFormatModule,DxoFormItemModule,DxoLabelModule,DxiValidationRuleModule,DxoEditingModule,DxiChangeModule,DxoFormModule,DxoColCountByScreenModule,DxiItemModule,DxoTabPanelOptionsModule,DxiTabModule,DxoButtonOptionsModule,DxoPopupModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxoExportModule,DxoFilterBuilderModule,DxiCustomOperationModule,DxiFieldModule,DxoFilterOperationDescriptionsModule,DxoGroupOperationDescriptionsModule,DxoFilterBuilderPopupModule,DxoFilterPanelModule,DxoFilterRowModule,DxoOperationDescriptionsModule,DxoGroupingModule,DxoGroupPanelModule,DxoKeyboardNavigationModule,DxoLoadPanelModule,DxoMasterDetailModule,DxoPagerModule,DxoPagingModule,DxoRemoteOperationsModule,DxoRowDraggingModule,DxoCursorOffsetModule,DxoScrollingModule,DxoSearchPanelModule,DxiSortByGroupSummaryInfoModule,DxoSortingModule,DxoStateStoringModule,DxoSummaryModule,DxiGroupItemModule,DxoValueFormatModule,DxiTotalItemModule,DxoToolbarModule,
+    DxoColumnChooserDataGridModule,DxoPositionDataGridModule,DxoAtDataGridModule,DxoBoundaryOffsetDataGridModule,DxoCollisionDataGridModule,DxoMyDataGridModule,DxoOffsetDataGridModule,DxoSearchDataGridModule,DxoSelectionDataGridModule,DxoColumnFixingDataGridModule,DxoTextsDataGridModule,DxiColumnDataGridModule,DxiButtonDataGridModule,DxoHeaderFilterDataGridModule,DxoLookupDataGridModule,DxoFormatDataGridModule,DxoFormItemDataGridModule,DxoLabelDataGridModule,DxiValidationRuleDataGridModule,DxoEditingDataGridModule,DxiChangeDataGridModule,DxoFormDataGridModule,DxoColCountByScreenDataGridModule,DxiItemDataGridModule,DxoTabPanelOptionsDataGridModule,DxiTabDataGridModule,DxoButtonOptionsDataGridModule,DxoPopupDataGridModule,DxoAnimationDataGridModule,DxoHideDataGridModule,DxoFromDataGridModule,DxoToDataGridModule,DxoShowDataGridModule,DxiToolbarItemDataGridModule,DxoExportDataGridModule,DxoFilterBuilderDataGridModule,DxiCustomOperationDataGridModule,DxiFieldDataGridModule,DxoFilterOperationDescriptionsDataGridModule,DxoGroupOperationDescriptionsDataGridModule,DxoFilterBuilderPopupDataGridModule,DxoFilterPanelDataGridModule,DxoFilterRowDataGridModule,DxoOperationDescriptionsDataGridModule,DxoGroupingDataGridModule,DxoGroupPanelDataGridModule,DxoKeyboardNavigationDataGridModule,DxoLoadPanelDataGridModule,DxoMasterDetailDataGridModule,DxoPagerDataGridModule,DxoPagingDataGridModule,DxoRemoteOperationsDataGridModule,DxoRowDraggingDataGridModule,DxoCursorOffsetDataGridModule,DxoScrollingDataGridModule,DxoSearchPanelDataGridModule,DxiSortByGroupSummaryInfoDataGridModule,DxoSortingDataGridModule,DxoStateStoringDataGridModule,DxoSummaryDataGridModule,DxiGroupItemDataGridModule,DxoValueFormatDataGridModule,DxiTotalItemDataGridModule,DxoToolbarDataGridModule,
     DxTemplateModule
   ]
 })

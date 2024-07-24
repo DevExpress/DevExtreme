@@ -43,8 +43,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemGalleryModule } from 'devextreme-angular/ui/gallery/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemGalleryComponent } from 'devextreme-angular/ui/gallery/nested';
 
@@ -721,12 +723,29 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemGalleryComponent)
-    get itemsChildren(): QueryList<DxiItemGalleryComponent> {
+    get itemsNewChildren(): QueryList<DxiItemGalleryComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

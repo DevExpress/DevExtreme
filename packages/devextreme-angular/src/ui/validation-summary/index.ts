@@ -41,8 +41,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemValidationSummaryModule } from 'devextreme-angular/ui/validation-summary/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemValidationSummaryComponent } from 'devextreme-angular/ui/validation-summary/nested';
 
@@ -207,12 +209,29 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemValidationSummaryComponent)
-    get itemsChildren(): QueryList<DxiItemValidationSummaryComponent> {
+    get itemsNewChildren(): QueryList<DxiItemValidationSummaryComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

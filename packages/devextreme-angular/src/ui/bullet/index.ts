@@ -43,7 +43,6 @@ import { DxoFontModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoMarginBulletModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoSizeBulletModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoTooltipBulletModule } from 'devextreme-angular/ui/bullet/nested';
@@ -51,6 +50,8 @@ import { DxoBorderBulletModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoFontBulletModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoFormatBulletModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoShadowBulletModule } from 'devextreme-angular/ui/bullet/nested';
+
+
 
 
 
@@ -497,6 +498,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -573,20 +576,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxBulletComponent,
-    DxoMarginModule,
-    DxoSizeModule,
-    DxoTooltipModule,
-    DxoBorderModule,
-    DxoFontModule,
-    DxoFormatModule,
-    DxoShadowModule,
-    DxoMarginBulletModule,
-    DxoSizeBulletModule,
-    DxoTooltipBulletModule,
-    DxoBorderBulletModule,
-    DxoFontBulletModule,
-    DxoFormatBulletModule,
-    DxoShadowBulletModule,
+    DxoMarginModule,DxoSizeModule,DxoTooltipModule,DxoBorderModule,DxoFontModule,DxoFormatModule,DxoShadowModule,
+    DxoMarginBulletModule,DxoSizeBulletModule,DxoTooltipBulletModule,DxoBorderBulletModule,DxoFontBulletModule,DxoFormatBulletModule,DxoShadowBulletModule,
     DxTemplateModule
   ]
 })

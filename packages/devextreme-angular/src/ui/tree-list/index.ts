@@ -104,7 +104,6 @@ import { DxoSortingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoColumnChooserTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoPositionTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoAtTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -160,6 +159,9 @@ import { DxoSearchPanelTreeListModule } from 'devextreme-angular/ui/tree-list/ne
 import { DxoSortingTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoStateStoringTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoToolbarTreeListModule } from 'devextreme-angular/ui/tree-list/nested';
+
+
+import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiColumnTreeListComponent } from 'devextreme-angular/ui/tree-list/nested';
 
@@ -2012,12 +2014,29 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
 
 
+    hasNewcolumns: boolean = false;
+
     @ContentChildren(DxiColumnTreeListComponent)
-    get columnsChildren(): QueryList<DxiColumnTreeListComponent> {
+    get columnsNewChildren(): QueryList<DxiColumnTreeListComponent> {
+        return this._getOption('columns');
+    }
+    set columnsNewChildren(value) {
+        this.hasNewcolumns = value.length > 0;
+        this.setChildren('columns', value);
+    }
+
+
+
+    @ContentChildren(DxiColumnComponent)
+    get columnsChildren(): QueryList<DxiColumnComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        this.setChildren('columns', value);
+        if (this.hasNewcolumns && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('columns', value);
+        }
     }
 
 
@@ -2319,116 +2338,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
   ],
   exports: [
     DxTreeListComponent,
-    DxoColumnChooserModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoSearchModule,
-    DxoSelectionModule,
-    DxoColumnFixingModule,
-    DxoTextsModule,
-    DxiColumnModule,
-    DxiButtonModule,
-    DxoHeaderFilterModule,
-    DxoLookupModule,
-    DxoFormatModule,
-    DxoFormItemModule,
-    DxoLabelModule,
-    DxiValidationRuleModule,
-    DxoEditingModule,
-    DxiChangeModule,
-    DxoFormModule,
-    DxoColCountByScreenModule,
-    DxiItemModule,
-    DxoTabPanelOptionsModule,
-    DxiTabModule,
-    DxoButtonOptionsModule,
-    DxoPopupModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
-    DxoFilterBuilderModule,
-    DxiCustomOperationModule,
-    DxiFieldModule,
-    DxoFilterOperationDescriptionsModule,
-    DxoGroupOperationDescriptionsModule,
-    DxoFilterBuilderPopupModule,
-    DxoFilterPanelModule,
-    DxoFilterRowModule,
-    DxoOperationDescriptionsModule,
-    DxoKeyboardNavigationModule,
-    DxoLoadPanelModule,
-    DxoPagerModule,
-    DxoPagingModule,
-    DxoRemoteOperationsModule,
-    DxoRowDraggingModule,
-    DxoCursorOffsetModule,
-    DxoScrollingModule,
-    DxoSearchPanelModule,
-    DxoSortingModule,
-    DxoStateStoringModule,
-    DxoToolbarModule,
-    DxoColumnChooserTreeListModule,
-    DxoPositionTreeListModule,
-    DxoAtTreeListModule,
-    DxoBoundaryOffsetTreeListModule,
-    DxoCollisionTreeListModule,
-    DxoMyTreeListModule,
-    DxoOffsetTreeListModule,
-    DxoSearchTreeListModule,
-    DxoSelectionTreeListModule,
-    DxoColumnFixingTreeListModule,
-    DxoTextsTreeListModule,
-    DxiColumnTreeListModule,
-    DxiButtonTreeListModule,
-    DxoHeaderFilterTreeListModule,
-    DxoLookupTreeListModule,
-    DxoFormatTreeListModule,
-    DxoFormItemTreeListModule,
-    DxoLabelTreeListModule,
-    DxiValidationRuleTreeListModule,
-    DxoEditingTreeListModule,
-    DxiChangeTreeListModule,
-    DxoFormTreeListModule,
-    DxoColCountByScreenTreeListModule,
-    DxiItemTreeListModule,
-    DxoTabPanelOptionsTreeListModule,
-    DxiTabTreeListModule,
-    DxoButtonOptionsTreeListModule,
-    DxoPopupTreeListModule,
-    DxoAnimationTreeListModule,
-    DxoHideTreeListModule,
-    DxoFromTreeListModule,
-    DxoToTreeListModule,
-    DxoShowTreeListModule,
-    DxiToolbarItemTreeListModule,
-    DxoFilterBuilderTreeListModule,
-    DxiCustomOperationTreeListModule,
-    DxiFieldTreeListModule,
-    DxoFilterOperationDescriptionsTreeListModule,
-    DxoGroupOperationDescriptionsTreeListModule,
-    DxoFilterBuilderPopupTreeListModule,
-    DxoFilterPanelTreeListModule,
-    DxoFilterRowTreeListModule,
-    DxoOperationDescriptionsTreeListModule,
-    DxoKeyboardNavigationTreeListModule,
-    DxoLoadPanelTreeListModule,
-    DxoPagerTreeListModule,
-    DxoPagingTreeListModule,
-    DxoRemoteOperationsTreeListModule,
-    DxoRowDraggingTreeListModule,
-    DxoCursorOffsetTreeListModule,
-    DxoScrollingTreeListModule,
-    DxoSearchPanelTreeListModule,
-    DxoSortingTreeListModule,
-    DxoStateStoringTreeListModule,
-    DxoToolbarTreeListModule,
+    DxoColumnChooserModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoSearchModule,DxoSelectionModule,DxoColumnFixingModule,DxoTextsModule,DxiColumnModule,DxiButtonModule,DxoHeaderFilterModule,DxoLookupModule,DxoFormatModule,DxoFormItemModule,DxoLabelModule,DxiValidationRuleModule,DxoEditingModule,DxiChangeModule,DxoFormModule,DxoColCountByScreenModule,DxiItemModule,DxoTabPanelOptionsModule,DxiTabModule,DxoButtonOptionsModule,DxoPopupModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxoFilterBuilderModule,DxiCustomOperationModule,DxiFieldModule,DxoFilterOperationDescriptionsModule,DxoGroupOperationDescriptionsModule,DxoFilterBuilderPopupModule,DxoFilterPanelModule,DxoFilterRowModule,DxoOperationDescriptionsModule,DxoKeyboardNavigationModule,DxoLoadPanelModule,DxoPagerModule,DxoPagingModule,DxoRemoteOperationsModule,DxoRowDraggingModule,DxoCursorOffsetModule,DxoScrollingModule,DxoSearchPanelModule,DxoSortingModule,DxoStateStoringModule,DxoToolbarModule,
+    DxoColumnChooserTreeListModule,DxoPositionTreeListModule,DxoAtTreeListModule,DxoBoundaryOffsetTreeListModule,DxoCollisionTreeListModule,DxoMyTreeListModule,DxoOffsetTreeListModule,DxoSearchTreeListModule,DxoSelectionTreeListModule,DxoColumnFixingTreeListModule,DxoTextsTreeListModule,DxiColumnTreeListModule,DxiButtonTreeListModule,DxoHeaderFilterTreeListModule,DxoLookupTreeListModule,DxoFormatTreeListModule,DxoFormItemTreeListModule,DxoLabelTreeListModule,DxiValidationRuleTreeListModule,DxoEditingTreeListModule,DxiChangeTreeListModule,DxoFormTreeListModule,DxoColCountByScreenTreeListModule,DxiItemTreeListModule,DxoTabPanelOptionsTreeListModule,DxiTabTreeListModule,DxoButtonOptionsTreeListModule,DxoPopupTreeListModule,DxoAnimationTreeListModule,DxoHideTreeListModule,DxoFromTreeListModule,DxoToTreeListModule,DxoShowTreeListModule,DxiToolbarItemTreeListModule,DxoFilterBuilderTreeListModule,DxiCustomOperationTreeListModule,DxiFieldTreeListModule,DxoFilterOperationDescriptionsTreeListModule,DxoGroupOperationDescriptionsTreeListModule,DxoFilterBuilderPopupTreeListModule,DxoFilterPanelTreeListModule,DxoFilterRowTreeListModule,DxoOperationDescriptionsTreeListModule,DxoKeyboardNavigationTreeListModule,DxoLoadPanelTreeListModule,DxoPagerTreeListModule,DxoPagingTreeListModule,DxoRemoteOperationsTreeListModule,DxoRowDraggingTreeListModule,DxoCursorOffsetTreeListModule,DxoScrollingTreeListModule,DxoSearchPanelTreeListModule,DxoSortingTreeListModule,DxoStateStoringTreeListModule,DxoToolbarTreeListModule,
     DxTemplateModule
   ]
 })

@@ -64,7 +64,6 @@ import { DxoToolboxModule } from 'devextreme-angular/ui/nested';
 import { DxoViewToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoZoomLevelModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoContextMenuDiagramModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiCommandDiagramModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiItemDiagramModule } from 'devextreme-angular/ui/diagram/nested';
@@ -87,6 +86,9 @@ import { DxiGroupDiagramModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoToolboxDiagramModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoViewToolbarDiagramModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoZoomLevelDiagramModule } from 'devextreme-angular/ui/diagram/nested';
+
+
+import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiCustomShapeDiagramComponent } from 'devextreme-angular/ui/diagram/nested';
 
@@ -911,12 +913,29 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
+    hasNewcustomShapes: boolean = false;
+
     @ContentChildren(DxiCustomShapeDiagramComponent)
-    get customShapesChildren(): QueryList<DxiCustomShapeDiagramComponent> {
+    get customShapesNewChildren(): QueryList<DxiCustomShapeDiagramComponent> {
+        return this._getOption('customShapes');
+    }
+    set customShapesNewChildren(value) {
+        this.hasNewcustomShapes = value.length > 0;
+        this.setChildren('customShapes', value);
+    }
+
+
+
+    @ContentChildren(DxiCustomShapeComponent)
+    get customShapesChildren(): QueryList<DxiCustomShapeComponent> {
         return this._getOption('customShapes');
     }
     set customShapesChildren(value) {
-        this.setChildren('customShapes', value);
+        if (this.hasNewcustomShapes && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('customShapes', value);
+        }
     }
 
 
@@ -1076,50 +1095,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
   ],
   exports: [
     DxDiagramComponent,
-    DxoContextMenuModule,
-    DxiCommandModule,
-    DxiItemModule,
-    DxoContextToolboxModule,
-    DxiCustomShapeModule,
-    DxiConnectionPointModule,
-    DxoDefaultItemPropertiesModule,
-    DxoEdgesModule,
-    DxoEditingModule,
-    DxoExportModule,
-    DxoGridSizeModule,
-    DxoHistoryToolbarModule,
-    DxoMainToolbarModule,
-    DxoNodesModule,
-    DxoAutoLayoutModule,
-    DxoPageSizeModule,
-    DxoPropertiesPanelModule,
-    DxiTabModule,
-    DxiGroupModule,
-    DxoToolboxModule,
-    DxoViewToolbarModule,
-    DxoZoomLevelModule,
-    DxoContextMenuDiagramModule,
-    DxiCommandDiagramModule,
-    DxiItemDiagramModule,
-    DxoContextToolboxDiagramModule,
-    DxiCustomShapeDiagramModule,
-    DxiConnectionPointDiagramModule,
-    DxoDefaultItemPropertiesDiagramModule,
-    DxoEdgesDiagramModule,
-    DxoEditingDiagramModule,
-    DxoExportDiagramModule,
-    DxoGridSizeDiagramModule,
-    DxoHistoryToolbarDiagramModule,
-    DxoMainToolbarDiagramModule,
-    DxoNodesDiagramModule,
-    DxoAutoLayoutDiagramModule,
-    DxoPageSizeDiagramModule,
-    DxoPropertiesPanelDiagramModule,
-    DxiTabDiagramModule,
-    DxiGroupDiagramModule,
-    DxoToolboxDiagramModule,
-    DxoViewToolbarDiagramModule,
-    DxoZoomLevelDiagramModule,
+    DxoContextMenuModule,DxiCommandModule,DxiItemModule,DxoContextToolboxModule,DxiCustomShapeModule,DxiConnectionPointModule,DxoDefaultItemPropertiesModule,DxoEdgesModule,DxoEditingModule,DxoExportModule,DxoGridSizeModule,DxoHistoryToolbarModule,DxoMainToolbarModule,DxoNodesModule,DxoAutoLayoutModule,DxoPageSizeModule,DxoPropertiesPanelModule,DxiTabModule,DxiGroupModule,DxoToolboxModule,DxoViewToolbarModule,DxoZoomLevelModule,
+    DxoContextMenuDiagramModule,DxiCommandDiagramModule,DxiItemDiagramModule,DxoContextToolboxDiagramModule,DxiCustomShapeDiagramModule,DxiConnectionPointDiagramModule,DxoDefaultItemPropertiesDiagramModule,DxoEdgesDiagramModule,DxoEditingDiagramModule,DxoExportDiagramModule,DxoGridSizeDiagramModule,DxoHistoryToolbarDiagramModule,DxoMainToolbarDiagramModule,DxoNodesDiagramModule,DxoAutoLayoutDiagramModule,DxoPageSizeDiagramModule,DxoPropertiesPanelDiagramModule,DxiTabDiagramModule,DxiGroupDiagramModule,DxoToolboxDiagramModule,DxoViewToolbarDiagramModule,DxoZoomLevelDiagramModule,
     DxTemplateModule
   ]
 })

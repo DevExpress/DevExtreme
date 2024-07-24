@@ -46,11 +46,15 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiLocationModule } from 'devextreme-angular/ui/nested';
 import { DxiRowModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiColResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiItemResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiLocationResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiRowResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box/nested';
+
+
+import { DxiColComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiRowComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiColResponsiveBoxComponent } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiItemResponsiveBoxComponent } from 'devextreme-angular/ui/responsive-box/nested';
@@ -441,28 +445,75 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 
 
+    hasNewcols: boolean = false;
+
     @ContentChildren(DxiColResponsiveBoxComponent)
-    get colsChildren(): QueryList<DxiColResponsiveBoxComponent> {
+    get colsNewChildren(): QueryList<DxiColResponsiveBoxComponent> {
         return this._getOption('cols');
     }
-    set colsChildren(value) {
+    set colsNewChildren(value) {
+        this.hasNewcols = value.length > 0;
         this.setChildren('cols', value);
     }
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemResponsiveBoxComponent)
-    get itemsChildren(): QueryList<DxiItemResponsiveBoxComponent> {
+    get itemsNewChildren(): QueryList<DxiItemResponsiveBoxComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
         this.setChildren('items', value);
     }
 
+    hasNewrows: boolean = false;
+
     @ContentChildren(DxiRowResponsiveBoxComponent)
-    get rowsChildren(): QueryList<DxiRowResponsiveBoxComponent> {
+    get rowsNewChildren(): QueryList<DxiRowResponsiveBoxComponent> {
+        return this._getOption('rows');
+    }
+    set rowsNewChildren(value) {
+        this.hasNewrows = value.length > 0;
+        this.setChildren('rows', value);
+    }
+
+
+
+    @ContentChildren(DxiColComponent)
+    get colsChildren(): QueryList<DxiColComponent> {
+        return this._getOption('cols');
+    }
+    set colsChildren(value) {
+        if (this.hasNewcols && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('cols', value);
+        }
+    }
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiRowComponent)
+    get rowsChildren(): QueryList<DxiRowComponent> {
         return this._getOption('rows');
     }
     set rowsChildren(value) {
-        this.setChildren('rows', value);
+        if (this.hasNewrows && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('rows', value);
+        }
     }
 
 
@@ -569,14 +620,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
   ],
   exports: [
     DxResponsiveBoxComponent,
-    DxiColModule,
-    DxiItemModule,
-    DxiLocationModule,
-    DxiRowModule,
-    DxiColResponsiveBoxModule,
-    DxiItemResponsiveBoxModule,
-    DxiLocationResponsiveBoxModule,
-    DxiRowResponsiveBoxModule,
+    DxiColModule,DxiItemModule,DxiLocationModule,DxiRowModule,
+    DxiColResponsiveBoxModule,DxiItemResponsiveBoxModule,DxiLocationResponsiveBoxModule,DxiRowResponsiveBoxModule,
     DxTemplateModule
   ]
 })

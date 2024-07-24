@@ -45,8 +45,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemActionSheetModule } from 'devextreme-angular/ui/action-sheet/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemActionSheetComponent } from 'devextreme-angular/ui/action-sheet/nested';
 
@@ -503,12 +505,29 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemActionSheetComponent)
-    get itemsChildren(): QueryList<DxiItemActionSheetComponent> {
+    get itemsNewChildren(): QueryList<DxiItemActionSheetComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

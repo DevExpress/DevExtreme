@@ -36,8 +36,9 @@ import {
 
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoCursorOffsetSortableModule } from 'devextreme-angular/ui/sortable/nested';
+
+
 
 
 
@@ -556,6 +557,8 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+
+
 
 
 

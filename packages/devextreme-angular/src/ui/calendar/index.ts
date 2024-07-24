@@ -50,6 +50,7 @@ import {
 
 
 
+
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxCalendarComponent),
@@ -840,6 +841,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -969,6 +972,8 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
   ],
   exports: [
     DxCalendarComponent,
+    
+    
     DxTemplateModule
   ]
 })

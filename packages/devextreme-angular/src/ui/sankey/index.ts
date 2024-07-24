@@ -60,7 +60,6 @@ import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAdaptiveLayoutSankeyModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoExportSankeyModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoLabelSankeyModule } from 'devextreme-angular/ui/sankey/nested';
@@ -78,6 +77,8 @@ import { DxoTitleSankeyModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSubtitleSankeyModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoTooltipSankeyModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoFormatSankeyModule } from 'devextreme-angular/ui/sankey/nested';
+
+
 
 
 
@@ -701,6 +702,8 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -840,40 +843,8 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
   ],
   exports: [
     DxSankeyComponent,
-    DxoAdaptiveLayoutModule,
-    DxoExportModule,
-    DxoLabelModule,
-    DxoBorderModule,
-    DxoFontModule,
-    DxoShadowModule,
-    DxoLinkModule,
-    DxoHoverStyleModule,
-    DxoHatchingModule,
-    DxoLoadingIndicatorModule,
-    DxoMarginModule,
-    DxoNodeModule,
-    DxoSizeModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoTooltipModule,
-    DxoFormatModule,
-    DxoAdaptiveLayoutSankeyModule,
-    DxoExportSankeyModule,
-    DxoLabelSankeyModule,
-    DxoBorderSankeyModule,
-    DxoFontSankeyModule,
-    DxoShadowSankeyModule,
-    DxoLinkSankeyModule,
-    DxoHoverStyleSankeyModule,
-    DxoHatchingSankeyModule,
-    DxoLoadingIndicatorSankeyModule,
-    DxoMarginSankeyModule,
-    DxoNodeSankeyModule,
-    DxoSizeSankeyModule,
-    DxoTitleSankeyModule,
-    DxoSubtitleSankeyModule,
-    DxoTooltipSankeyModule,
-    DxoFormatSankeyModule,
+    DxoAdaptiveLayoutModule,DxoExportModule,DxoLabelModule,DxoBorderModule,DxoFontModule,DxoShadowModule,DxoLinkModule,DxoHoverStyleModule,DxoHatchingModule,DxoLoadingIndicatorModule,DxoMarginModule,DxoNodeModule,DxoSizeModule,DxoTitleModule,DxoSubtitleModule,DxoTooltipModule,DxoFormatModule,
+    DxoAdaptiveLayoutSankeyModule,DxoExportSankeyModule,DxoLabelSankeyModule,DxoBorderSankeyModule,DxoFontSankeyModule,DxoShadowSankeyModule,DxoLinkSankeyModule,DxoHoverStyleSankeyModule,DxoHatchingSankeyModule,DxoLoadingIndicatorSankeyModule,DxoMarginSankeyModule,DxoNodeSankeyModule,DxoSizeSankeyModule,DxoTitleSankeyModule,DxoSubtitleSankeyModule,DxoTooltipSankeyModule,DxoFormatSankeyModule,
     DxTemplateModule
   ]
 })

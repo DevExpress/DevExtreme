@@ -44,9 +44,11 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemBoxModule } from 'devextreme-angular/ui/box/nested';
 import { DxoBoxBoxModule } from 'devextreme-angular/ui/box/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemBoxComponent } from 'devextreme-angular/ui/box/nested';
 
@@ -415,12 +417,29 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemBoxComponent)
-    get itemsChildren(): QueryList<DxiItemBoxComponent> {
+    get itemsNewChildren(): QueryList<DxiItemBoxComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -518,10 +537,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
   ],
   exports: [
     DxBoxComponent,
-    DxiItemModule,
-    DxoBoxModule,
-    DxiItemBoxModule,
-    DxoBoxBoxModule,
+    DxiItemModule,DxoBoxModule,
+    DxiItemBoxModule,DxoBoxBoxModule,
     DxTemplateModule
   ]
 })

@@ -39,6 +39,7 @@ import {
 
 
 
+
 /**
  * [descr:dxScrollView]
 
@@ -416,6 +417,8 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -473,6 +476,8 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxScrollViewComponent,
+    
+    
     DxTemplateModule
   ]
 })

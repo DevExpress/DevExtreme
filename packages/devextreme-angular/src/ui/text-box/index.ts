@@ -48,9 +48,11 @@ import {
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiButtonTextBoxModule } from 'devextreme-angular/ui/text-box/nested';
 import { DxoOptionsTextBoxModule } from 'devextreme-angular/ui/text-box/nested';
+
+
+import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonTextBoxComponent } from 'devextreme-angular/ui/text-box/nested';
 
@@ -1012,12 +1014,29 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
+    hasNewbuttons: boolean = false;
+
     @ContentChildren(DxiButtonTextBoxComponent)
-    get buttonsChildren(): QueryList<DxiButtonTextBoxComponent> {
+    get buttonsNewChildren(): QueryList<DxiButtonTextBoxComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsNewChildren(value) {
+        this.hasNewbuttons = value.length > 0;
+        this.setChildren('buttons', value);
+    }
+
+
+
+    @ContentChildren(DxiButtonComponent)
+    get buttonsChildren(): QueryList<DxiButtonComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        this.setChildren('buttons', value);
+        if (this.hasNewbuttons && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('buttons', value);
+        }
     }
 
 
@@ -1169,10 +1188,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
   ],
   exports: [
     DxTextBoxComponent,
-    DxiButtonModule,
-    DxoOptionsModule,
-    DxiButtonTextBoxModule,
-    DxoOptionsTextBoxModule,
+    DxiButtonModule,DxoOptionsModule,
+    DxiButtonTextBoxModule,DxoOptionsTextBoxModule,
     DxTemplateModule
   ]
 })

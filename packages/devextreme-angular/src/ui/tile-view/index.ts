@@ -44,8 +44,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemTileViewModule } from 'devextreme-angular/ui/tile-view/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemTileViewComponent } from 'devextreme-angular/ui/tile-view/nested';
 
@@ -574,12 +576,29 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemTileViewComponent)
-    get itemsChildren(): QueryList<DxiItemTileViewComponent> {
+    get itemsNewChildren(): QueryList<DxiItemTileViewComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

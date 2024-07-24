@@ -61,7 +61,6 @@ import { DxoTasksModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoValidationModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiColumnGanttModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoFormatGanttModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoHeaderFilterGanttModule } from 'devextreme-angular/ui/gantt/nested';
@@ -81,6 +80,10 @@ import { DxiStripLineGanttModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoTasksGanttModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoToolbarGanttModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoValidationGanttModule } from 'devextreme-angular/ui/gantt/nested';
+
+
+import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
+import { DxiStripLineComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiColumnGanttComponent } from 'devextreme-angular/ui/gantt/nested';
 import { DxiStripLineGanttComponent } from 'devextreme-angular/ui/gantt/nested';
@@ -1174,20 +1177,52 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
+    hasNewcolumns: boolean = false;
+
     @ContentChildren(DxiColumnGanttComponent)
-    get columnsChildren(): QueryList<DxiColumnGanttComponent> {
+    get columnsNewChildren(): QueryList<DxiColumnGanttComponent> {
         return this._getOption('columns');
     }
-    set columnsChildren(value) {
+    set columnsNewChildren(value) {
+        this.hasNewcolumns = value.length > 0;
         this.setChildren('columns', value);
     }
 
+    hasNewstripLines: boolean = false;
+
     @ContentChildren(DxiStripLineGanttComponent)
-    get stripLinesChildren(): QueryList<DxiStripLineGanttComponent> {
+    get stripLinesNewChildren(): QueryList<DxiStripLineGanttComponent> {
+        return this._getOption('stripLines');
+    }
+    set stripLinesNewChildren(value) {
+        this.hasNewstripLines = value.length > 0;
+        this.setChildren('stripLines', value);
+    }
+
+
+
+    @ContentChildren(DxiColumnComponent)
+    get columnsChildren(): QueryList<DxiColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        if (this.hasNewcolumns && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('columns', value);
+        }
+    }
+
+    @ContentChildren(DxiStripLineComponent)
+    get stripLinesChildren(): QueryList<DxiStripLineComponent> {
         return this._getOption('stripLines');
     }
     set stripLinesChildren(value) {
-        this.setChildren('stripLines', value);
+        if (this.hasNewstripLines && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('stripLines', value);
+        }
     }
 
 
@@ -1369,44 +1404,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
   ],
   exports: [
     DxGanttComponent,
-    DxiColumnModule,
-    DxoFormatModule,
-    DxoHeaderFilterModule,
-    DxoSearchModule,
-    DxoContextMenuModule,
-    DxiItemModule,
-    DxoDependenciesModule,
-    DxoEditingModule,
-    DxoFilterRowModule,
-    DxoOperationDescriptionsModule,
-    DxoTextsModule,
-    DxoResourceAssignmentsModule,
-    DxoResourcesModule,
-    DxoScaleTypeRangeModule,
-    DxoSortingModule,
-    DxiStripLineModule,
-    DxoTasksModule,
-    DxoToolbarModule,
-    DxoValidationModule,
-    DxiColumnGanttModule,
-    DxoFormatGanttModule,
-    DxoHeaderFilterGanttModule,
-    DxoSearchGanttModule,
-    DxoContextMenuGanttModule,
-    DxiItemGanttModule,
-    DxoDependenciesGanttModule,
-    DxoEditingGanttModule,
-    DxoFilterRowGanttModule,
-    DxoOperationDescriptionsGanttModule,
-    DxoTextsGanttModule,
-    DxoResourceAssignmentsGanttModule,
-    DxoResourcesGanttModule,
-    DxoScaleTypeRangeGanttModule,
-    DxoSortingGanttModule,
-    DxiStripLineGanttModule,
-    DxoTasksGanttModule,
-    DxoToolbarGanttModule,
-    DxoValidationGanttModule,
+    DxiColumnModule,DxoFormatModule,DxoHeaderFilterModule,DxoSearchModule,DxoContextMenuModule,DxiItemModule,DxoDependenciesModule,DxoEditingModule,DxoFilterRowModule,DxoOperationDescriptionsModule,DxoTextsModule,DxoResourceAssignmentsModule,DxoResourcesModule,DxoScaleTypeRangeModule,DxoSortingModule,DxiStripLineModule,DxoTasksModule,DxoToolbarModule,DxoValidationModule,
+    DxiColumnGanttModule,DxoFormatGanttModule,DxoHeaderFilterGanttModule,DxoSearchGanttModule,DxoContextMenuGanttModule,DxiItemGanttModule,DxoDependenciesGanttModule,DxoEditingGanttModule,DxoFilterRowGanttModule,DxoOperationDescriptionsGanttModule,DxoTextsGanttModule,DxoResourceAssignmentsGanttModule,DxoResourcesGanttModule,DxoScaleTypeRangeGanttModule,DxoSortingGanttModule,DxiStripLineGanttModule,DxoTasksGanttModule,DxoToolbarGanttModule,DxoValidationGanttModule,
     DxTemplateModule
   ]
 })

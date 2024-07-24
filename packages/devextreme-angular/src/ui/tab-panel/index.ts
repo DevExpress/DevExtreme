@@ -44,8 +44,10 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiItemTabPanelModule } from 'devextreme-angular/ui/tab-panel/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemTabPanelComponent } from 'devextreme-angular/ui/tab-panel/nested';
 
@@ -786,12 +788,29 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemTabPanelComponent)
-    get itemsChildren(): QueryList<DxiItemTabPanelComponent> {
+    get itemsNewChildren(): QueryList<DxiItemTabPanelComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 

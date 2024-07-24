@@ -48,10 +48,11 @@ import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoLabelRangeSliderModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoFormatRangeSliderModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoTooltipRangeSliderModule } from 'devextreme-angular/ui/range-slider/nested';
+
+
 
 
 
@@ -795,6 +796,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -926,12 +929,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
   ],
   exports: [
     DxRangeSliderComponent,
-    DxoLabelModule,
-    DxoFormatModule,
-    DxoTooltipModule,
-    DxoLabelRangeSliderModule,
-    DxoFormatRangeSliderModule,
-    DxoTooltipRangeSliderModule,
+    DxoLabelModule,DxoFormatModule,DxoTooltipModule,
+    DxoLabelRangeSliderModule,DxoFormatRangeSliderModule,DxoTooltipRangeSliderModule,
     DxTemplateModule
   ]
 })

@@ -66,7 +66,6 @@ import { DxoBorderModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoExportCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoGeometryCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
@@ -91,6 +90,8 @@ import { DxoTooltipCircularGaugeModule } from 'devextreme-angular/ui/circular-ga
 import { DxoBorderCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoShadowCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoValueIndicatorCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+
+
 
 
 
@@ -638,6 +639,8 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -782,54 +785,8 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
   ],
   exports: [
     DxCircularGaugeComponent,
-    DxoAnimationModule,
-    DxoExportModule,
-    DxoGeometryModule,
-    DxoLoadingIndicatorModule,
-    DxoFontModule,
-    DxoMarginModule,
-    DxoRangeContainerModule,
-    DxoBackgroundColorModule,
-    DxiRangeModule,
-    DxoColorModule,
-    DxoScaleModule,
-    DxoLabelModule,
-    DxoFormatModule,
-    DxoMinorTickModule,
-    DxoTickModule,
-    DxoSizeModule,
-    DxoSubvalueIndicatorModule,
-    DxoTextModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoTooltipModule,
-    DxoBorderModule,
-    DxoShadowModule,
-    DxoValueIndicatorModule,
-    DxoAnimationCircularGaugeModule,
-    DxoExportCircularGaugeModule,
-    DxoGeometryCircularGaugeModule,
-    DxoLoadingIndicatorCircularGaugeModule,
-    DxoFontCircularGaugeModule,
-    DxoMarginCircularGaugeModule,
-    DxoRangeContainerCircularGaugeModule,
-    DxoBackgroundColorCircularGaugeModule,
-    DxiRangeCircularGaugeModule,
-    DxoColorCircularGaugeModule,
-    DxoScaleCircularGaugeModule,
-    DxoLabelCircularGaugeModule,
-    DxoFormatCircularGaugeModule,
-    DxoMinorTickCircularGaugeModule,
-    DxoTickCircularGaugeModule,
-    DxoSizeCircularGaugeModule,
-    DxoSubvalueIndicatorCircularGaugeModule,
-    DxoTextCircularGaugeModule,
-    DxoTitleCircularGaugeModule,
-    DxoSubtitleCircularGaugeModule,
-    DxoTooltipCircularGaugeModule,
-    DxoBorderCircularGaugeModule,
-    DxoShadowCircularGaugeModule,
-    DxoValueIndicatorCircularGaugeModule,
+    DxoAnimationModule,DxoExportModule,DxoGeometryModule,DxoLoadingIndicatorModule,DxoFontModule,DxoMarginModule,DxoRangeContainerModule,DxoBackgroundColorModule,DxiRangeModule,DxoColorModule,DxoScaleModule,DxoLabelModule,DxoFormatModule,DxoMinorTickModule,DxoTickModule,DxoSizeModule,DxoSubvalueIndicatorModule,DxoTextModule,DxoTitleModule,DxoSubtitleModule,DxoTooltipModule,DxoBorderModule,DxoShadowModule,DxoValueIndicatorModule,
+    DxoAnimationCircularGaugeModule,DxoExportCircularGaugeModule,DxoGeometryCircularGaugeModule,DxoLoadingIndicatorCircularGaugeModule,DxoFontCircularGaugeModule,DxoMarginCircularGaugeModule,DxoRangeContainerCircularGaugeModule,DxoBackgroundColorCircularGaugeModule,DxiRangeCircularGaugeModule,DxoColorCircularGaugeModule,DxoScaleCircularGaugeModule,DxoLabelCircularGaugeModule,DxoFormatCircularGaugeModule,DxoMinorTickCircularGaugeModule,DxoTickCircularGaugeModule,DxoSizeCircularGaugeModule,DxoSubvalueIndicatorCircularGaugeModule,DxoTextCircularGaugeModule,DxoTitleCircularGaugeModule,DxoSubtitleCircularGaugeModule,DxoTooltipCircularGaugeModule,DxoBorderCircularGaugeModule,DxoShadowCircularGaugeModule,DxoValueIndicatorCircularGaugeModule,
     DxTemplateModule
   ]
 })

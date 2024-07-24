@@ -67,7 +67,6 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiButtonSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoOptionsSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoDropDownOptionsSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
@@ -84,6 +83,10 @@ import { DxoToSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoShowSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxiToolbarItemSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxiItemSelectBoxModule } from 'devextreme-angular/ui/select-box/nested';
+
+
+import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonSelectBoxComponent } from 'devextreme-angular/ui/select-box/nested';
 import { DxiItemSelectBoxComponent } from 'devextreme-angular/ui/select-box/nested';
@@ -1508,20 +1511,52 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
+    hasNewbuttons: boolean = false;
+
     @ContentChildren(DxiButtonSelectBoxComponent)
-    get buttonsChildren(): QueryList<DxiButtonSelectBoxComponent> {
+    get buttonsNewChildren(): QueryList<DxiButtonSelectBoxComponent> {
         return this._getOption('buttons');
     }
-    set buttonsChildren(value) {
+    set buttonsNewChildren(value) {
+        this.hasNewbuttons = value.length > 0;
         this.setChildren('buttons', value);
     }
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemSelectBoxComponent)
-    get itemsChildren(): QueryList<DxiItemSelectBoxComponent> {
+    get itemsNewChildren(): QueryList<DxiItemSelectBoxComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiButtonComponent)
+    get buttonsChildren(): QueryList<DxiButtonComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsChildren(value) {
+        if (this.hasNewbuttons && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('buttons', value);
+        }
+    }
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -1733,38 +1768,8 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
   ],
   exports: [
     DxSelectBoxComponent,
-    DxiButtonModule,
-    DxoOptionsModule,
-    DxoDropDownOptionsModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
-    DxiItemModule,
-    DxiButtonSelectBoxModule,
-    DxoOptionsSelectBoxModule,
-    DxoDropDownOptionsSelectBoxModule,
-    DxoAnimationSelectBoxModule,
-    DxoHideSelectBoxModule,
-    DxoFromSelectBoxModule,
-    DxoPositionSelectBoxModule,
-    DxoAtSelectBoxModule,
-    DxoBoundaryOffsetSelectBoxModule,
-    DxoCollisionSelectBoxModule,
-    DxoMySelectBoxModule,
-    DxoOffsetSelectBoxModule,
-    DxoToSelectBoxModule,
-    DxoShowSelectBoxModule,
-    DxiToolbarItemSelectBoxModule,
-    DxiItemSelectBoxModule,
+    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxiItemModule,
+    DxiButtonSelectBoxModule,DxoOptionsSelectBoxModule,DxoDropDownOptionsSelectBoxModule,DxoAnimationSelectBoxModule,DxoHideSelectBoxModule,DxoFromSelectBoxModule,DxoPositionSelectBoxModule,DxoAtSelectBoxModule,DxoBoundaryOffsetSelectBoxModule,DxoCollisionSelectBoxModule,DxoMySelectBoxModule,DxoOffsetSelectBoxModule,DxoToSelectBoxModule,DxoShowSelectBoxModule,DxiToolbarItemSelectBoxModule,DxiItemSelectBoxModule,
     DxTemplateModule
   ]
 })

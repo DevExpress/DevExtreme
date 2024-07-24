@@ -44,9 +44,11 @@ import {
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAdapterValidatorModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidationRuleValidatorModule } from 'devextreme-angular/ui/validator/nested';
+
+
+import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiValidationRuleValidatorComponent } from 'devextreme-angular/ui/validator/nested';
 
@@ -243,12 +245,29 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 
 
+    hasNewvalidationRules: boolean = false;
+
     @ContentChildren(DxiValidationRuleValidatorComponent)
-    get validationRulesChildren(): QueryList<DxiValidationRuleValidatorComponent> {
+    get validationRulesNewChildren(): QueryList<DxiValidationRuleValidatorComponent> {
+        return this._getOption('validationRules');
+    }
+    set validationRulesNewChildren(value) {
+        this.hasNewvalidationRules = value.length > 0;
+        this.setChildren('validationRules', value);
+    }
+
+
+
+    @ContentChildren(DxiValidationRuleComponent)
+    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
-        this.setChildren('validationRules', value);
+        if (this.hasNewvalidationRules && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('validationRules', value);
+        }
     }
 
 
@@ -349,10 +368,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
   ],
   exports: [
     DxValidatorComponent,
-    DxoAdapterModule,
-    DxiValidationRuleModule,
-    DxoAdapterValidatorModule,
-    DxiValidationRuleValidatorModule,
+    DxoAdapterModule,DxiValidationRuleModule,
+    DxoAdapterValidatorModule,DxiValidationRuleValidatorModule,
     DxTemplateModule
   ]
 })

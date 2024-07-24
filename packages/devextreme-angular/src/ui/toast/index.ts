@@ -46,7 +46,6 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationToastModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoHideToastModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoFromToastModule } from 'devextreme-angular/ui/toast/nested';
@@ -58,6 +57,8 @@ import { DxoMyToastModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoOffsetToastModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToToastModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoShowToastModule } from 'devextreme-angular/ui/toast/nested';
+
+
 
 
 
@@ -709,6 +710,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -802,28 +805,8 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxToastComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxoAnimationToastModule,
-    DxoHideToastModule,
-    DxoFromToastModule,
-    DxoPositionToastModule,
-    DxoAtToastModule,
-    DxoBoundaryOffsetToastModule,
-    DxoCollisionToastModule,
-    DxoMyToastModule,
-    DxoOffsetToastModule,
-    DxoToToastModule,
-    DxoShowToastModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
+    DxoAnimationToastModule,DxoHideToastModule,DxoFromToastModule,DxoPositionToastModule,DxoAtToastModule,DxoBoundaryOffsetToastModule,DxoCollisionToastModule,DxoMyToastModule,DxoOffsetToastModule,DxoToToastModule,DxoShowToastModule,
     DxTemplateModule
   ]
 })

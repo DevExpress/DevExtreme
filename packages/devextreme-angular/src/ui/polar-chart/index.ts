@@ -94,7 +94,6 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoValueAxisModule } from 'devextreme-angular/ui/nested';
 import { DxoMinVisualRangeLengthModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAdaptiveLayoutPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoAnimationPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxiAnnotationPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
@@ -144,6 +143,10 @@ import { DxoSizePolarChartModule } from 'devextreme-angular/ui/polar-chart/neste
 import { DxoTooltipPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoValueAxisPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoMinVisualRangeLengthPolarChartModule } from 'devextreme-angular/ui/polar-chart/nested';
+
+
+import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
+import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiAnnotationPolarChartComponent } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxiSeriesPolarChartComponent } from 'devextreme-angular/ui/polar-chart/nested';
@@ -1098,20 +1101,52 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 
 
+    hasNewannotations: boolean = false;
+
     @ContentChildren(DxiAnnotationPolarChartComponent)
-    get annotationsChildren(): QueryList<DxiAnnotationPolarChartComponent> {
+    get annotationsNewChildren(): QueryList<DxiAnnotationPolarChartComponent> {
         return this._getOption('annotations');
     }
-    set annotationsChildren(value) {
+    set annotationsNewChildren(value) {
+        this.hasNewannotations = value.length > 0;
         this.setChildren('annotations', value);
     }
 
+    hasNewseries: boolean = false;
+
     @ContentChildren(DxiSeriesPolarChartComponent)
-    get seriesChildren(): QueryList<DxiSeriesPolarChartComponent> {
+    get seriesNewChildren(): QueryList<DxiSeriesPolarChartComponent> {
+        return this._getOption('series');
+    }
+    set seriesNewChildren(value) {
+        this.hasNewseries = value.length > 0;
+        this.setChildren('series', value);
+    }
+
+
+
+    @ContentChildren(DxiAnnotationComponent)
+    get annotationsChildren(): QueryList<DxiAnnotationComponent> {
+        return this._getOption('annotations');
+    }
+    set annotationsChildren(value) {
+        if (this.hasNewannotations && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('annotations', value);
+        }
+    }
+
+    @ContentChildren(DxiSeriesComponent)
+    get seriesChildren(): QueryList<DxiSeriesComponent> {
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        this.setChildren('series', value);
+        if (this.hasNewseries && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('series', value);
+        }
     }
 
 
@@ -1344,104 +1379,8 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
   ],
   exports: [
     DxPolarChartComponent,
-    DxoAdaptiveLayoutModule,
-    DxoAnimationModule,
-    DxiAnnotationModule,
-    DxoBorderModule,
-    DxoFontModule,
-    DxoImageModule,
-    DxoShadowModule,
-    DxoArgumentAxisModule,
-    DxiConstantLineModule,
-    DxoLabelModule,
-    DxoConstantLineStyleModule,
-    DxoGridModule,
-    DxoFormatModule,
-    DxoMinorGridModule,
-    DxoMinorTickModule,
-    DxoMinorTickIntervalModule,
-    DxiStripModule,
-    DxoStripStyleModule,
-    DxoTickModule,
-    DxoTickIntervalModule,
-    DxoCommonAnnotationSettingsModule,
-    DxoCommonAxisSettingsModule,
-    DxoCommonSeriesSettingsModule,
-    DxoAreaModule,
-    DxoHoverStyleModule,
-    DxoHatchingModule,
-    DxoConnectorModule,
-    DxoPointModule,
-    DxoSelectionStyleModule,
-    DxoValueErrorBarModule,
-    DxoBarModule,
-    DxoColorModule,
-    DxoArgumentFormatModule,
-    DxoLineModule,
-    DxoScatterModule,
-    DxoStackedbarModule,
-    DxoDataPrepareSettingsModule,
-    DxoExportModule,
-    DxoLegendModule,
-    DxoMarginModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoLoadingIndicatorModule,
-    DxiSeriesModule,
-    DxoSeriesTemplateModule,
-    DxoSizeModule,
-    DxoTooltipModule,
-    DxoValueAxisModule,
-    DxoMinVisualRangeLengthModule,
-    DxoAdaptiveLayoutPolarChartModule,
-    DxoAnimationPolarChartModule,
-    DxiAnnotationPolarChartModule,
-    DxoBorderPolarChartModule,
-    DxoFontPolarChartModule,
-    DxoImagePolarChartModule,
-    DxoShadowPolarChartModule,
-    DxoArgumentAxisPolarChartModule,
-    DxiConstantLinePolarChartModule,
-    DxoLabelPolarChartModule,
-    DxoConstantLineStylePolarChartModule,
-    DxoGridPolarChartModule,
-    DxoFormatPolarChartModule,
-    DxoMinorGridPolarChartModule,
-    DxoMinorTickPolarChartModule,
-    DxoMinorTickIntervalPolarChartModule,
-    DxiStripPolarChartModule,
-    DxoStripStylePolarChartModule,
-    DxoTickPolarChartModule,
-    DxoTickIntervalPolarChartModule,
-    DxoCommonAnnotationSettingsPolarChartModule,
-    DxoCommonAxisSettingsPolarChartModule,
-    DxoCommonSeriesSettingsPolarChartModule,
-    DxoAreaPolarChartModule,
-    DxoHoverStylePolarChartModule,
-    DxoHatchingPolarChartModule,
-    DxoConnectorPolarChartModule,
-    DxoPointPolarChartModule,
-    DxoSelectionStylePolarChartModule,
-    DxoValueErrorBarPolarChartModule,
-    DxoBarPolarChartModule,
-    DxoColorPolarChartModule,
-    DxoArgumentFormatPolarChartModule,
-    DxoLinePolarChartModule,
-    DxoScatterPolarChartModule,
-    DxoStackedbarPolarChartModule,
-    DxoDataPrepareSettingsPolarChartModule,
-    DxoExportPolarChartModule,
-    DxoLegendPolarChartModule,
-    DxoMarginPolarChartModule,
-    DxoTitlePolarChartModule,
-    DxoSubtitlePolarChartModule,
-    DxoLoadingIndicatorPolarChartModule,
-    DxiSeriesPolarChartModule,
-    DxoSeriesTemplatePolarChartModule,
-    DxoSizePolarChartModule,
-    DxoTooltipPolarChartModule,
-    DxoValueAxisPolarChartModule,
-    DxoMinVisualRangeLengthPolarChartModule,
+    DxoAdaptiveLayoutModule,DxoAnimationModule,DxiAnnotationModule,DxoBorderModule,DxoFontModule,DxoImageModule,DxoShadowModule,DxoArgumentAxisModule,DxiConstantLineModule,DxoLabelModule,DxoConstantLineStyleModule,DxoGridModule,DxoFormatModule,DxoMinorGridModule,DxoMinorTickModule,DxoMinorTickIntervalModule,DxiStripModule,DxoStripStyleModule,DxoTickModule,DxoTickIntervalModule,DxoCommonAnnotationSettingsModule,DxoCommonAxisSettingsModule,DxoCommonSeriesSettingsModule,DxoAreaModule,DxoHoverStyleModule,DxoHatchingModule,DxoConnectorModule,DxoPointModule,DxoSelectionStyleModule,DxoValueErrorBarModule,DxoBarModule,DxoColorModule,DxoArgumentFormatModule,DxoLineModule,DxoScatterModule,DxoStackedbarModule,DxoDataPrepareSettingsModule,DxoExportModule,DxoLegendModule,DxoMarginModule,DxoTitleModule,DxoSubtitleModule,DxoLoadingIndicatorModule,DxiSeriesModule,DxoSeriesTemplateModule,DxoSizeModule,DxoTooltipModule,DxoValueAxisModule,DxoMinVisualRangeLengthModule,
+    DxoAdaptiveLayoutPolarChartModule,DxoAnimationPolarChartModule,DxiAnnotationPolarChartModule,DxoBorderPolarChartModule,DxoFontPolarChartModule,DxoImagePolarChartModule,DxoShadowPolarChartModule,DxoArgumentAxisPolarChartModule,DxiConstantLinePolarChartModule,DxoLabelPolarChartModule,DxoConstantLineStylePolarChartModule,DxoGridPolarChartModule,DxoFormatPolarChartModule,DxoMinorGridPolarChartModule,DxoMinorTickPolarChartModule,DxoMinorTickIntervalPolarChartModule,DxiStripPolarChartModule,DxoStripStylePolarChartModule,DxoTickPolarChartModule,DxoTickIntervalPolarChartModule,DxoCommonAnnotationSettingsPolarChartModule,DxoCommonAxisSettingsPolarChartModule,DxoCommonSeriesSettingsPolarChartModule,DxoAreaPolarChartModule,DxoHoverStylePolarChartModule,DxoHatchingPolarChartModule,DxoConnectorPolarChartModule,DxoPointPolarChartModule,DxoSelectionStylePolarChartModule,DxoValueErrorBarPolarChartModule,DxoBarPolarChartModule,DxoColorPolarChartModule,DxoArgumentFormatPolarChartModule,DxoLinePolarChartModule,DxoScatterPolarChartModule,DxoStackedbarPolarChartModule,DxoDataPrepareSettingsPolarChartModule,DxoExportPolarChartModule,DxoLegendPolarChartModule,DxoMarginPolarChartModule,DxoTitlePolarChartModule,DxoSubtitlePolarChartModule,DxoLoadingIndicatorPolarChartModule,DxiSeriesPolarChartModule,DxoSeriesTemplatePolarChartModule,DxoSizePolarChartModule,DxoTooltipPolarChartModule,DxoValueAxisPolarChartModule,DxoMinVisualRangeLengthPolarChartModule,
     DxTemplateModule
   ]
 })

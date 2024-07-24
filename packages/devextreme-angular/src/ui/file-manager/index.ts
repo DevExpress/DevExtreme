@@ -48,7 +48,6 @@ import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxiFileSelectionItemModule } from 'devextreme-angular/ui/nested';
 import { DxoUploadModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoContextMenuFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxiItemFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoItemViewFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
@@ -59,6 +58,8 @@ import { DxoPermissionsFileManagerModule } from 'devextreme-angular/ui/file-mana
 import { DxoToolbarFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxiFileSelectionItemFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoUploadFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
+
+
 
 
 
@@ -845,6 +846,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -986,26 +989,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
   ],
   exports: [
     DxFileManagerComponent,
-    DxoContextMenuModule,
-    DxiItemModule,
-    DxoItemViewModule,
-    DxoDetailsModule,
-    DxiColumnModule,
-    DxoNotificationsModule,
-    DxoPermissionsModule,
-    DxoToolbarModule,
-    DxiFileSelectionItemModule,
-    DxoUploadModule,
-    DxoContextMenuFileManagerModule,
-    DxiItemFileManagerModule,
-    DxoItemViewFileManagerModule,
-    DxoDetailsFileManagerModule,
-    DxiColumnFileManagerModule,
-    DxoNotificationsFileManagerModule,
-    DxoPermissionsFileManagerModule,
-    DxoToolbarFileManagerModule,
-    DxiFileSelectionItemFileManagerModule,
-    DxoUploadFileManagerModule,
+    DxoContextMenuModule,DxiItemModule,DxoItemViewModule,DxoDetailsModule,DxiColumnModule,DxoNotificationsModule,DxoPermissionsModule,DxoToolbarModule,DxiFileSelectionItemModule,DxoUploadModule,
+    DxoContextMenuFileManagerModule,DxiItemFileManagerModule,DxoItemViewFileManagerModule,DxoDetailsFileManagerModule,DxiColumnFileManagerModule,DxoNotificationsFileManagerModule,DxoPermissionsFileManagerModule,DxoToolbarFileManagerModule,DxiFileSelectionItemFileManagerModule,DxoUploadFileManagerModule,
     DxTemplateModule
   ]
 })

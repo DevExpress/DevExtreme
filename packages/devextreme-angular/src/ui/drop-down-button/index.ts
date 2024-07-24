@@ -57,7 +57,6 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoDropDownOptionsDropDownButtonModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxoAnimationDropDownButtonModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxoHideDropDownButtonModule } from 'devextreme-angular/ui/drop-down-button/nested';
@@ -72,6 +71,9 @@ import { DxoToDropDownButtonModule } from 'devextreme-angular/ui/drop-down-butto
 import { DxoShowDropDownButtonModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxiToolbarItemDropDownButtonModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxiItemDropDownButtonModule } from 'devextreme-angular/ui/drop-down-button/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemDropDownButtonComponent } from 'devextreme-angular/ui/drop-down-button/nested';
 
@@ -832,12 +834,29 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemDropDownButtonComponent)
-    get itemsChildren(): QueryList<DxiItemDropDownButtonComponent> {
+    get itemsNewChildren(): QueryList<DxiItemDropDownButtonComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -978,34 +997,8 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
   ],
   exports: [
     DxDropDownButtonComponent,
-    DxoDropDownOptionsModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
-    DxiItemModule,
-    DxoDropDownOptionsDropDownButtonModule,
-    DxoAnimationDropDownButtonModule,
-    DxoHideDropDownButtonModule,
-    DxoFromDropDownButtonModule,
-    DxoPositionDropDownButtonModule,
-    DxoAtDropDownButtonModule,
-    DxoBoundaryOffsetDropDownButtonModule,
-    DxoCollisionDropDownButtonModule,
-    DxoMyDropDownButtonModule,
-    DxoOffsetDropDownButtonModule,
-    DxoToDropDownButtonModule,
-    DxoShowDropDownButtonModule,
-    DxiToolbarItemDropDownButtonModule,
-    DxiItemDropDownButtonModule,
+    DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxiItemModule,
+    DxoDropDownOptionsDropDownButtonModule,DxoAnimationDropDownButtonModule,DxoHideDropDownButtonModule,DxoFromDropDownButtonModule,DxoPositionDropDownButtonModule,DxoAtDropDownButtonModule,DxoBoundaryOffsetDropDownButtonModule,DxoCollisionDropDownButtonModule,DxoMyDropDownButtonModule,DxoOffsetDropDownButtonModule,DxoToDropDownButtonModule,DxoShowDropDownButtonModule,DxiToolbarItemDropDownButtonModule,DxiItemDropDownButtonModule,
     DxTemplateModule
   ]
 })

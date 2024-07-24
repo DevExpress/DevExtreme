@@ -59,7 +59,6 @@ import { DxoShowFirstSubmenuModeModule } from 'devextreme-angular/ui/nested';
 import { DxoDelayModule } from 'devextreme-angular/ui/nested';
 import { DxoShowSubmenuModeModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationMenuModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoHideMenuModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoFromMenuModule } from 'devextreme-angular/ui/menu/nested';
@@ -75,6 +74,9 @@ import { DxiItemMenuModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoShowFirstSubmenuModeMenuModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoDelayMenuModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoShowSubmenuModeMenuModule } from 'devextreme-angular/ui/menu/nested';
+
+
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiItemMenuComponent } from 'devextreme-angular/ui/menu/nested';
 
@@ -795,12 +797,29 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 
 
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemMenuComponent)
-    get itemsChildren(): QueryList<DxiItemMenuComponent> {
+    get itemsNewChildren(): QueryList<DxiItemMenuComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -944,36 +963,8 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
   ],
   exports: [
     DxMenuComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiItemModule,
-    DxoShowFirstSubmenuModeModule,
-    DxoDelayModule,
-    DxoShowSubmenuModeModule,
-    DxoAnimationMenuModule,
-    DxoHideMenuModule,
-    DxoFromMenuModule,
-    DxoPositionMenuModule,
-    DxoAtMenuModule,
-    DxoBoundaryOffsetMenuModule,
-    DxoCollisionMenuModule,
-    DxoMyMenuModule,
-    DxoOffsetMenuModule,
-    DxoToMenuModule,
-    DxoShowMenuModule,
-    DxiItemMenuModule,
-    DxoShowFirstSubmenuModeMenuModule,
-    DxoDelayMenuModule,
-    DxoShowSubmenuModeMenuModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiItemModule,DxoShowFirstSubmenuModeModule,DxoDelayModule,DxoShowSubmenuModeModule,
+    DxoAnimationMenuModule,DxoHideMenuModule,DxoFromMenuModule,DxoPositionMenuModule,DxoAtMenuModule,DxoBoundaryOffsetMenuModule,DxoCollisionMenuModule,DxoMyMenuModule,DxoOffsetMenuModule,DxoToMenuModule,DxoShowMenuModule,DxiItemMenuModule,DxoShowFirstSubmenuModeMenuModule,DxoDelayMenuModule,DxoShowSubmenuModeMenuModule,
     DxTemplateModule
   ]
 })

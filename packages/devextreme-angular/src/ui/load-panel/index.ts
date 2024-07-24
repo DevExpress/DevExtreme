@@ -48,7 +48,6 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxoAnimationLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoHideLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoFromLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
@@ -60,6 +59,8 @@ import { DxoMyLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoOffsetLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoToLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoShowLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+
+
 
 
 
@@ -671,6 +672,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -762,28 +765,8 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxLoadPanelComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxoAnimationLoadPanelModule,
-    DxoHideLoadPanelModule,
-    DxoFromLoadPanelModule,
-    DxoPositionLoadPanelModule,
-    DxoAtLoadPanelModule,
-    DxoBoundaryOffsetLoadPanelModule,
-    DxoCollisionLoadPanelModule,
-    DxoMyLoadPanelModule,
-    DxoOffsetLoadPanelModule,
-    DxoToLoadPanelModule,
-    DxoShowLoadPanelModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
+    DxoAnimationLoadPanelModule,DxoHideLoadPanelModule,DxoFromLoadPanelModule,DxoPositionLoadPanelModule,DxoAtLoadPanelModule,DxoBoundaryOffsetLoadPanelModule,DxoCollisionLoadPanelModule,DxoMyLoadPanelModule,DxoOffsetLoadPanelModule,DxoToLoadPanelModule,DxoShowLoadPanelModule,
     DxTemplateModule
   ]
 })

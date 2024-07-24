@@ -67,7 +67,6 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-
 import { DxiButtonAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoOptionsAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoDropDownOptionsAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
@@ -84,6 +83,10 @@ import { DxoToAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nest
 import { DxoShowAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxiToolbarItemAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxiItemAutocompleteModule } from 'devextreme-angular/ui/autocomplete/nested';
+
+
+import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonAutocompleteComponent } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxiItemAutocompleteComponent } from 'devextreme-angular/ui/autocomplete/nested';
@@ -1358,20 +1361,52 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
+    hasNewbuttons: boolean = false;
+
     @ContentChildren(DxiButtonAutocompleteComponent)
-    get buttonsChildren(): QueryList<DxiButtonAutocompleteComponent> {
+    get buttonsNewChildren(): QueryList<DxiButtonAutocompleteComponent> {
         return this._getOption('buttons');
     }
-    set buttonsChildren(value) {
+    set buttonsNewChildren(value) {
+        this.hasNewbuttons = value.length > 0;
         this.setChildren('buttons', value);
     }
 
+    hasNewitems: boolean = false;
+
     @ContentChildren(DxiItemAutocompleteComponent)
-    get itemsChildren(): QueryList<DxiItemAutocompleteComponent> {
+    get itemsNewChildren(): QueryList<DxiItemAutocompleteComponent> {
+        return this._getOption('items');
+    }
+    set itemsNewChildren(value) {
+        this.hasNewitems = value.length > 0;
+        this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiButtonComponent)
+    get buttonsChildren(): QueryList<DxiButtonComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsChildren(value) {
+        if (this.hasNewbuttons && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('buttons', value);
+        }
+    }
+
+    @ContentChildren(DxiItemComponent)
+    get itemsChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        this.setChildren('items', value);
+        if (this.hasNewitems && value.length > 0) {
+            console.log('Use only one type of nested items');
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -1575,38 +1610,8 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
   ],
   exports: [
     DxAutocompleteComponent,
-    DxiButtonModule,
-    DxoOptionsModule,
-    DxoDropDownOptionsModule,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
-    DxiItemModule,
-    DxiButtonAutocompleteModule,
-    DxoOptionsAutocompleteModule,
-    DxoDropDownOptionsAutocompleteModule,
-    DxoAnimationAutocompleteModule,
-    DxoHideAutocompleteModule,
-    DxoFromAutocompleteModule,
-    DxoPositionAutocompleteModule,
-    DxoAtAutocompleteModule,
-    DxoBoundaryOffsetAutocompleteModule,
-    DxoCollisionAutocompleteModule,
-    DxoMyAutocompleteModule,
-    DxoOffsetAutocompleteModule,
-    DxoToAutocompleteModule,
-    DxoShowAutocompleteModule,
-    DxiToolbarItemAutocompleteModule,
-    DxiItemAutocompleteModule,
+    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxiItemModule,
+    DxiButtonAutocompleteModule,DxoOptionsAutocompleteModule,DxoDropDownOptionsAutocompleteModule,DxoAnimationAutocompleteModule,DxoHideAutocompleteModule,DxoFromAutocompleteModule,DxoPositionAutocompleteModule,DxoAtAutocompleteModule,DxoBoundaryOffsetAutocompleteModule,DxoCollisionAutocompleteModule,DxoMyAutocompleteModule,DxoOffsetAutocompleteModule,DxoToAutocompleteModule,DxoShowAutocompleteModule,DxiToolbarItemAutocompleteModule,DxiItemAutocompleteModule,
     DxTemplateModule
   ]
 })
