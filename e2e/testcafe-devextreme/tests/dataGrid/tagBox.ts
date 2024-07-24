@@ -23,10 +23,6 @@ test('Datagrid tagbox column should not look broken', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  const items = Array.from({ length: 10 }, (_, index) => ({
-    id: index + 1,
-    text: `item ${index + 1}`,
-  }));
   await createWidget('dxDataGrid', {
     showBorders: true,
     allowColumnResizing: true,
@@ -38,7 +34,10 @@ test('Datagrid tagbox column should not look broken', async (t) => {
     columns: ['id', {
       dataField: 'items',
       lookup: {
-        dataSource: items,
+        dataSource: Array.from({ length: 10 }, (_, index) => ({
+          id: index + 1,
+          text: `item ${index + 1}`,
+        })),
         valueExpr: 'id',
         displayExpr: 'text',
       },
