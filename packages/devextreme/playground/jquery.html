@@ -49,13 +49,40 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="chat"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            const MOCK_CHAT_HEADER_TEXT = 'Chat title';
+            const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID'
+
+            const userFirst = {
+                id: Math.random(),
+                name: 'First',
+            }
+
+            const userSecond = {
+                id: MOCK_CURRENT_USER_ID,
+                name: 'Second',
+            }
+
+            const now = Date.now()
+
+            const messages = Array.from({ length: 30 }, (_, i) => {
+                const item = {
+                    timestamp: String(now + i),
+                    author: i % 4 === 0 ? userFirst : userSecond,
+                    text: String(Math.random()),
+                }
+
+                return item
+            })
+
+            $(() => {
+                const dxChat = $("#chat").dxChat({
+                    title: MOCK_CHAT_HEADER_TEXT,
+                    items: messages,
+                }).dxChat('instance');
+
+                dxChat.option({ title: 'CUSTOM' });
             });
         </script>
     </div>
