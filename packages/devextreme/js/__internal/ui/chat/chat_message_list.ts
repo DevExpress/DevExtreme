@@ -84,14 +84,11 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _optionChanged(args: Record<string, unknown>): void {
-    const { name, value } = args;
+    const { name } = args;
 
     switch (name) {
       case 'items':
-        break;
       case 'currentUserId':
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.option(name, (value as any));
         break;
       default:
         super._optionChanged(args);
