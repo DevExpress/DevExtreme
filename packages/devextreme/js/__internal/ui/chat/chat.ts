@@ -1,4 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/chat';
 
@@ -21,7 +22,7 @@ class Chat extends Widget<Properties> {
       ...super._getDefaultOptions(),
       title: '',
       items: [],
-      user: undefined,
+      user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };
   }
@@ -48,7 +49,7 @@ class Chat extends Widget<Properties> {
   _renderMessageList(): void {
     const { items, user } = this.option();
 
-    const currentUserId = user?.id ?? Math.random();
+    const currentUserId = user?.id;
     const $messageList = $('<div>').appendTo(this.element());
 
     this._messageList = this._createComponent($messageList, MessageList, {

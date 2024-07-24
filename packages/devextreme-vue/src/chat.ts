@@ -82,7 +82,7 @@ const DxAuthor = createConfigurationComponent({
   },
   props: {
     avatarUrl: String,
-    id: Number,
+    id: [Number, String],
     name: String
   }
 });
@@ -118,7 +118,7 @@ const DxUser = createConfigurationComponent({
   },
   props: {
     avatarUrl: String,
-    id: Number,
+    id: [Number, String],
     name: String
   }
 });

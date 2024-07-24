@@ -17,10 +17,10 @@ export abstract class DxoUser extends NestedOption {
         this._setOption('avatarUrl', value);
     }
 
-    get id(): number | undefined {
+    get id(): number | string | undefined {
         return this._getOption('id');
     }
-    set id(value: number | undefined) {
+    set id(value: number | string | undefined) {
         this._setOption('id', value);
     }
 
