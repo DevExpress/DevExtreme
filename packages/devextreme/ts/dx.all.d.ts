@@ -9454,6 +9454,10 @@ declare module DevExpress.ui {
    */
   export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
+     * [descr:dxChatOptions.user]
+     */
+    user?: DevExpress.ui.dxChat.User;
+    /**
      * [descr:dxChatOptions.title]
      */
     title?: string;
