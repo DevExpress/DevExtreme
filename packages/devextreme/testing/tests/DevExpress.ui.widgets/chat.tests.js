@@ -9,7 +9,7 @@ const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
-const CHAT_MESSAGE_AVATAR_LETTERS_CLASS = 'dx-chat-message-avatar-letters';
+const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
@@ -115,7 +115,7 @@ QUnit.module('Message group', moduleConfig, () => {
 
     QUnit.test('Avatar should have correct text', function(assert) {
         const $messageGroup = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`).eq(0);
-        const $avatarText = $messageGroup.find(`.${CHAT_MESSAGE_AVATAR_LETTERS_CLASS}`);
+        const $avatarText = $messageGroup.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
 
         assert.strictEqual($avatarText.text(), 'F');
     });

@@ -26,7 +26,7 @@ const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
-const CHAT_MESSAGE_AVATAR_LETTERS_CLASS = 'dx-chat-message-avatar-letters';
+const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const BUTTON_CLASS = 'dx-button';
@@ -164,7 +164,7 @@ QUnit.module('Render', moduleConfig, () => {
 
     QUnit.test('Avatar initials element should be rendered in avatar', function(assert) {
         const $avatar = this.$element.find(`.${CHAT_MESSAGE_AVATAR_CLASS}`).eq(0);
-        const $initials = $avatar.find(`.${CHAT_MESSAGE_AVATAR_LETTERS_CLASS}`);
+        const $initials = $avatar.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
 
         assert.strictEqual($initials.length, 1);
     });
