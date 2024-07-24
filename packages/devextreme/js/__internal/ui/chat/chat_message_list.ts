@@ -12,7 +12,7 @@ const CHAT_MESSAGE_LIST_CONTENT_CLASS = 'dx-chat-message-list-content';
 
 export interface MessageListOptions extends WidgetOptions<MessageList> {
   items?: Message[];
-  currentUserId?: number | undefined;
+  currentUserId?: number | string;
 }
 
 class MessageList extends Widget<MessageListOptions> {

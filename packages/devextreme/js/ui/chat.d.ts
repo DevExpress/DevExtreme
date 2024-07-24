@@ -50,7 +50,7 @@ export type User = {
      * @default undefined
      * @public
      */
-    id?: number;
+    id?: number | string;
     /**
      * @docid
      * @default ''
