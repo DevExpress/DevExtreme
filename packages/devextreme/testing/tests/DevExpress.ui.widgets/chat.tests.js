@@ -16,6 +16,14 @@ const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 const NOW = '1721747399083';
 
+const getDateTimeString = (timestamp) => {
+    const options = { hour: '2-digit', minute: '2-digit', hour12: false };
+    const dateTime = new Date(Number(timestamp));
+    const dateTimeString = dateTime.toLocaleTimeString(undefined, options);
+
+    return dateTimeString;
+};
+
 QUnit.testStart(() => {
     const markup = '<div id="chat"></div>';
 
@@ -116,7 +124,7 @@ QUnit.module('Message group', moduleConfig, () => {
         const $messageGroup = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`).eq(0);
         const $time = $messageGroup.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
 
-        assert.strictEqual($time.text(), '19:09');
+        assert.strictEqual($time.text(), getDateTimeString(NOW));
     });
 
     QUnit.test('Message group user name should be correct', function(assert) {
