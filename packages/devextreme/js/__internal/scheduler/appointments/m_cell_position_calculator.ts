@@ -111,13 +111,13 @@ class BaseStrategy {
     );
 
     const groupEdgeIndices = this.viewDataProvider.getGroupEdgeIndices(validGroupIndex);
-    const vMin = this.getCellPosition(
+    const { top: vMin } = this.getCellPosition(
       {
         columnIndex: positionByMap.columnIndex,
         rowIndex: groupEdgeIndices.firstRowIndex,
       },
       inAllDayRow && !this.isVerticalGrouping,
-    ).top;
+    );
 
     const timeShift = inAllDayRow
       ? 0
