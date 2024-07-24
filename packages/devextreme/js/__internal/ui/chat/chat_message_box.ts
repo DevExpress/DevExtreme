@@ -25,22 +25,22 @@ class MessageBox extends Widget<any> {
   }
 
   _renderTextArea(): void {
-    this._textArea = this._createComponent($('<div>'), TextArea, {});
-
-    $(this._textArea.element())
+    const $textArea = $('<div>')
       .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
       .appendTo(this.element());
+
+    this._textArea = this._createComponent($textArea, TextArea, {});
   }
 
   _renderButton(): void {
-    this._button = this._createComponent($('<div>'), Button, {
+    const $button = $('<div>')
+      .addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS)
+      .appendTo(this.element());
+
+    this._button = this._createComponent($button, Button, {
       icon: 'send',
       stylingMode: 'text',
     });
-
-    $(this._button.element())
-      .addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS)
-      .appendTo(this.element());
   }
 }
 

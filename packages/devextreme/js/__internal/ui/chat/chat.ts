@@ -42,26 +42,26 @@ class Chat extends Widget<Properties> {
   _renderHeader(): void {
     const { title } = this.option();
 
-    this._chatHeader = this._createComponent($('<div>'), ChatHeader, { title });
+    const $header = $('<div>').appendTo(this.element());
 
-    $(this._chatHeader.element()).appendTo(this.element());
+    this._chatHeader = this._createComponent($header, ChatHeader, { title });
   }
 
   _renderMessageList(): void {
     const { items } = this.option();
 
-    this._messageList = this._createComponent($('<div>'), MessageList, {
+    const $messageList = $('<div>').appendTo(this.element());
+
+    this._messageList = this._createComponent($messageList, MessageList, {
       items,
       currentUserId: MOCK_CURRENT_USER_ID,
     });
-
-    $(this._messageList.element()).appendTo(this.element());
   }
 
   _renderMessageBox(): void {
-    this._messageBox = this._createComponent($('<div>'), MessageBox, {});
+    const $messageBox = $('<div>').appendTo(this.element());
 
-    $(this._messageBox.element()).appendTo(this.element());
+    this._messageBox = this._createComponent($messageBox, MessageBox, {});
   }
 
   _optionChanged(args: Record<string, unknown>): void {

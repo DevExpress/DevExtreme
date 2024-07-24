@@ -15,8 +15,6 @@ export interface MessageListOptions extends WidgetOptions<MessageList> {
 }
 
 class MessageList extends Widget<MessageListOptions> {
-  _messageGroup?: MessageGroup;
-
   _getDefaultOptions(): MessageListOptions {
     return {
       ...super._getDefaultOptions(),
@@ -45,6 +43,15 @@ class MessageList extends Widget<MessageListOptions> {
     return this._isCurrentUser(id) ? 'end' : 'start';
   }
 
+  _createMessageGroupComponent(items, userId): void {
+    const $messageGroup = $('<div>').appendTo(this.element());
+
+    this._createComponent($messageGroup, MessageGroup, {
+      messages: items,
+      alignment: this._messageGroupAlignment(userId),
+    });
+  }
+
   _renderMessageListContent(): void {
     const { items } = this.option();
 
@@ -63,12 +70,7 @@ class MessageList extends Widget<MessageListOptions> {
       if (id === currentMessageGroupUserId) {
         currentMessageGroupItems.push(item);
       } else {
-        this._messageGroup = this._createComponent($('<div>'), MessageGroup, {
-          messages: currentMessageGroupItems,
-          alignment: this._messageGroupAlignment(currentMessageGroupUserId),
-        });
-
-        $(this._messageGroup.element()).appendTo(this.element());
+        this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
 
         currentMessageGroupUserId = id;
         currentMessageGroupItems = [];
@@ -76,12 +78,7 @@ class MessageList extends Widget<MessageListOptions> {
       }
 
       if (items.length - 1 === index) {
-        this._messageGroup = this._createComponent($('<div>'), MessageGroup, {
-          messages: currentMessageGroupItems,
-          alignment: this._messageGroupAlignment(currentMessageGroupUserId),
-        });
-
-        $(this._messageGroup.element()).appendTo(this.element());
+        this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
       }
     });
 

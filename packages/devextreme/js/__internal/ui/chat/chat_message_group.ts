@@ -58,11 +58,11 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     if (alignment === 'start') {
       const authorName = messages[0].author?.name;
 
-      this._avatar = this._createComponent($('<div>'), Avatar, {
+      const $avatar = $('<div>').appendTo(this.element());
+
+      this._avatar = this._createComponent($avatar, Avatar, {
         name: authorName,
       });
-
-      $(this._avatar.element()).appendTo(this.element());
     }
 
     this._renderMessageGroupInformation(messages?.[0]);
@@ -71,24 +71,24 @@ class MessageGroup extends Widget<MessageGroupOptions> {
 
   _renderMessageBubbles(messages): void {
     messages.forEach((message, index) => {
-      const messageBubble: MessageBubble = this._createComponent($('<div>'), MessageBubble, {
-        text: message.text,
-      });
-
-      const $element = $(messageBubble.element());
+      const $bubble = $('<div>');
 
       const isFirst = index === 0;
       const isLast = index === messages.length - 1;
 
       if (isFirst) {
-        $element.addClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS);
+        $bubble.addClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS);
       }
 
       if (isLast) {
-        $element.addClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
+        $bubble.addClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
       }
 
-      $element.appendTo(this.element());
+      $bubble.appendTo(this.element());
+
+      this._createComponent($bubble, MessageBubble, {
+        text: message.text,
+      });
     });
   }
 
