@@ -34,6 +34,10 @@ fixture.disablePageReloads`Integration_DataGrid`
         useNative,
       },
       width: 300,
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [
         { dataField: 'field1', fixed: true },
         { dataField: 'field2' },

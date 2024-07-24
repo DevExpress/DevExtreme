@@ -369,7 +369,10 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 useNative: false,
                 showScrollbar: 'always'
             },
-            columns: [{ dataField: 'column1', fixed: true }, 'column2']
+            columns: [{ dataField: 'column1', fixed: true }, 'column2'],
+            columnFixing: {
+                legacyMode: true
+            }
         });
 
         const scrollable = dataGrid.getScrollable();
@@ -533,6 +536,9 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             width: 1000,
             scrolling: {
                 useNative: true,
+            },
+            columnFixing: {
+                legacyMode: true
             },
             columns: [{
                 dataField: 'CompanyName',
@@ -826,6 +832,9 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             dataSource: [{}],
             loadingTimeout: null,
             columnAutoWidth: true,
+            columnFixing: {
+                legacyMode: true
+            },
             columns: ['field1', 'field2', {
                 type: 'buttons',
                 fixed: true,
@@ -966,6 +975,9 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 useNative: false
             },
             columnAutoWidth: true,
+            columnFixing: {
+                legacyMode: true
+            },
             dataSource: [{ field1: 'test test test', field2: 'test test test', field3: 'test test test', field4: 'test test test' }]
         });
         const dataGrid = $dataGrid.dxDataGrid('instance');
@@ -1032,7 +1044,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             columns: [{ dataField: 'field1', width: 200 }, { dataField: 'field2', width: 200 }, { dataField: 'field3', width: 200 }, { dataField: 'fixedField', width: '200px', fixed: true, fixedPosition: 'right' }],
             dataSource: {
@@ -1420,6 +1433,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             },
             columnFixing: {
                 enabled: true,
+                legacyMode: true
             },
             columns: [
                 {

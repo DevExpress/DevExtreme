@@ -89,7 +89,10 @@ QUnit.module('DataGrid markup', {
     QUnit.test('markup with fixed column', function(assert) {
         const $element = $('#dataGrid').dxDataGrid({
             dataSource: [{ id: 1, name: 'Alex' }],
-            columns: ['id', { dataField: 'name', fixed: true }]
+            columns: ['id', { dataField: 'name', fixed: true }],
+            columnFixing: {
+                legacyMode: true
+            },
         });
 
         this.clock.tick(30);

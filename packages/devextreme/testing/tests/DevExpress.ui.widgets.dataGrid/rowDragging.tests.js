@@ -155,7 +155,8 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
                 showScrollbar: 'onScroll'
             },
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             }
         });
 
@@ -169,7 +170,8 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.deepEqual(processedOptions, {
             dataSource: [{ id: 1, parentId: 0 }],
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             columns: [
                 {

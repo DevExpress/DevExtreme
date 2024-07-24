@@ -39,6 +39,9 @@ test('TreeList - Expand/collapse mechanism breaks after dragging action in the s
     height: 200,
     wordWrapEnabled: true,
     showBorders: true,
+    columnFixing: {
+      legacyMode: true,
+    },
     columns: [
       {
         dataField: 'test',
