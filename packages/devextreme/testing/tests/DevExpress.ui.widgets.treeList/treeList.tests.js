@@ -104,7 +104,10 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             columns: [{ dataField: 'name', fixed: true }, 'age'],
             dataSource: [
                 { id: 1, parentId: 0, name: 'Name 1', age: 19 }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         });
 
         this.clock.tick(10);
@@ -2127,6 +2130,9 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
                 dataField: 'id',
                 fixed: true
             }, 'field'],
+            columnFixing: {
+                legacyMode: true
+            },
             dataSource: [{
                 id: 1,
                 parentId: 0,
