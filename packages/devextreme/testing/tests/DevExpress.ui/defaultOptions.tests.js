@@ -1336,6 +1336,7 @@ testComponentDefaults(ColorBox,
 testComponentDefaults(Chat,
     {},
     {
+        title: '',
         onMessageSend: null,
     }
 );
