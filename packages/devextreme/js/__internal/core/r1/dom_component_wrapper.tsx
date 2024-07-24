@@ -8,8 +8,8 @@ import type { ComponentClass } from '@js/core/dom_component';
 import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 import { getUpdatedOptions } from '@js/renovation/ui/common/utils/get_updated_options';
 import type { DisposeEffectReturn } from '@js/renovation/utils/effect_return';
-import type { VNode } from 'inferno';
-import { createRef, createVNode, normalizeProps } from 'inferno';
+import type { RefObject } from 'inferno';
+import { createRef, normalizeProps } from 'inferno';
 
 import type DomComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
@@ -33,13 +33,20 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
 
   public refs: any = null;
 
-  private readonly widgetRef = createRef();
+  private readonly widgetRef: RefObject<HTMLDivElement> = createRef();
 
   private instance: DomComponent | null = null;
 
   private prevProps: ComponentProps | null = null;
 
-  get config(): any {
+  constructor(props) {
+    super(props);
+    this.getInstance = this.getInstance.bind(this);
+    this.setupWidget = this.setupWidget.bind(this);
+    this.updateWidget = this.updateWidget.bind(this);
+  }
+
+  getConfig(): any {
     const { id } = (ConfigContext as any);
     if (this.context[id]) {
       return this.context[id];
@@ -47,18 +54,14 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
     return (ConfigContext as any).defaultValue;
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.widgetRef = createRef();
-    this.getInstance = this.getInstance.bind(this);
-    this.setupWidget = this.setupWidget.bind(this);
-    this.updateWidget = this.updateWidget.bind(this);
-  }
-
-  render(): VNode {
-    const vNode = createVNode(1, 'div', this.props.componentProps.className, null, 1, extend({}, this.props), null, this.widgetRef);
-    return normalizeProps(vNode) as VNode;
+  render(): JSX.Element {
+    return (
+      <div
+        ref={this.widgetRef}
+        className={this.props.componentProps.className}
+        {...this.props}
+      />
+    );
   }
 
   componentWillUpdate(nextProps: DomComponentWrapperProps, nextState, context): void {
@@ -72,20 +75,21 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
         this.updateWidget,
         [
           this.props.componentProps,
-          this.config,
+          this.getConfig(),
           this.props.templateNames,
         ],
       )];
   }
 
   updateEffects(): void {
-    this._effects[1]?.update([this.props.componentProps, this.config, this.props.templateNames]);
+    const dependency = [this.props.componentProps, this.getConfig(), this.props.templateNames];
+    this._effects[1]?.update(dependency);
   }
 
   setupWidget(): DisposeEffectReturn {
     const current = this.widgetRef.current as HTMLDivElement;
     // eslint-disable-next-line new-cap
-    const componentInstance = new this.props.componentType(current, this.properties);
+    const componentInstance = new this.props.componentType(current, this.getProperties());
     this.instance = componentInstance;
     return () => {
       componentInstance.dispose();
@@ -97,7 +101,7 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
     if (!this.instance) {
       return;
     }
-    const updatedOptions = getUpdatedOptions(this.prevProps ?? {}, this.properties);
+    const updatedOptions = getUpdatedOptions(this.prevProps ?? {}, this.getProperties());
     if (updatedOptions.length) {
       this.instance.beginUpdate();
       updatedOptions.forEach((_ref2) => {
@@ -109,16 +113,16 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
       });
       this.instance.endUpdate();
     }
-    this.prevProps = this.properties;
+    this.prevProps = this.getProperties();
   }
 
-  get properties(): any {
+  getProperties(): any {
     const normalizedProps = normalizeProps(this.props.componentProps);
     const {
       valueChange,
     } = normalizedProps;
     const properties = extend({
-      rtlEnabled: this.config?.rtlEnabled,
+      rtlEnabled: this.getConfig()?.rtlEnabled,
       isRenovated: true,
     }, normalizedProps);
     if (valueChange) {
