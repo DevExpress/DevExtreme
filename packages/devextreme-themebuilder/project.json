@@ -3,9 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme-themebuilder",
   "projectType": "library",
-  "implicitDependencies": [
-    "devextreme"
-  ],
   "targets": {
     "build": {
       "executor": "nx:run-script",
@@ -21,7 +18,8 @@
         "{projectRoot}/src/data/metadata",
         "{projectRoot}/src/data/scss",
         "{workspaceRoot}/packages/devextreme-scss/scss/**/*.scss"
-      ]
+      ],
+      "cache": false
     },
     "test": {
       "executor": "nx:run-script",
@@ -37,7 +35,7 @@
       "outputs": [
         "{projectRoot}/coverage"
       ],
-      "cache": true
+      "cache": false
     }
   },
   "tags": []
