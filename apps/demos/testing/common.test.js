@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { glob } from 'glob';
 import { ClientFunction } from 'testcafe';
 import { join } from 'path';
@@ -21,6 +22,8 @@ import {
 
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
+
+import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
@@ -301,9 +304,20 @@ const SKIPPED_TESTS = {
       }
     }
 
-    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-
-    runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`)
+    const isGitHubDemos = process.env.ISGITHUBDEMOS;
+    let pageURL = '';
+    const theme = process.env.THEME.replace('generic.', '');
+    if (isGitHubDemos) {
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
+    } else {
+      changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+    }
+    // remove when tests enabled not only for datagrid
+    if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
+      return;
+    }
+    runTestAtPage(test, pageURL)
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);

@@ -2,6 +2,7 @@ import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
+import { gitHubIgnored } from './github-ignored-list';
 
 const settings = {
   concurrency: undefined,
@@ -316,17 +317,31 @@ export function runTestAtPage(test, demoUrl) {
   return executor.page(demoUrl);
 }
 
-export function runManualTestCore(testObject, product, demo, framework, callback) {
-  changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
+
+export function runManualTestCore(testObject, widget, demo, framework, callback) {
+  const isGitHubDemos = process.env.ISGITHUBDEMOS;
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
-
-  if (!shouldRunTest(framework, index, product, demo, SKIPPED_TESTS)) {
+  
+  if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }
 
-  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
+  let testURL = '';
+
+  if (isGitHubDemos) {
+    if (widget !== 'DataGrid' || gitHubIgnored.includes(demo)) {
+      return;
+    }
+    const theme = process.env.THEME.replace('generic.', '');
+    testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
+  } else {
+    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
+    testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
+  }
+  
+  const test = testObject.page(testURL);
 
   test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
@@ -339,7 +354,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   });
 
   if (settings.explicitTests) {
-    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
+    if (shouldRunTestExplicitlyInternal(framework, widget, demo)) {
       callback(test.only);
     }
     return;
@@ -348,17 +363,17 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   callback(test);
 }
 
-export function runManualTest(product, demo, framework, callback) {
+export function runManualTest(widget, demo, framework, callback) {
   if (process.env.STRATEGY === 'accessibility') {
     return;
   }
 
   if (Array.isArray(framework)) {
     framework.forEach((i) => {
-      runManualTestCore(test, product, demo, i, callback);
+      runManualTestCore(test, widget, demo, i, callback);
     });
   } else {
-    runManualTestCore(test, product, demo, framework, callback);
+    runManualTestCore(test, widget, demo, framework, callback);
   }
 }
 

@@ -4,7 +4,7 @@
   line-height: 0;
 }
 
-.long-title {
+#long-title {
   position: absolute;
   top: -5px;
   left: 0;
@@ -12,7 +12,7 @@
   z-index: 1;
 }
 
-.long-title h3 {
+#long-title h3 {
   font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
   font-weight: 200;
   font-size: 28px;
