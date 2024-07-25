@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Chat from 'ui/chat';
 import fx from 'animation/fx';
+import TextArea from '__internal/ui/m_text_area';
 
 import 'generic_light.css!';
 
@@ -11,6 +12,8 @@ const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
+const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
+const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
@@ -344,6 +347,123 @@ QUnit.module('renderMessage', moduleConfig, () => {
         const lastBubble = $bubbles[$bubbles.length - 1];
 
         assert.strictEqual($(lastBubble).text(), text);
+    });
+});
+
+QUnit.module('onMessageSend', moduleConfig, () => {
+    QUnit.test('New message should be created after clicking the send button if there is text', function(assert) {
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        const textArea = TextArea.getInstance($textArea);
+
+        textArea.option({ value: text });
+        $button.trigger('dxclick');
+
+        const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+        const bubble = $bubbles[$bubbles.length - 1];
+
+        assert.strictEqual($(bubble).text(), text);
+    });
+
+    QUnit.test('TextArea text should be empty after clicking the send button if there is text', function(assert) {
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        const textArea = TextArea.getInstance($textArea);
+
+        textArea.option({ value: text });
+        $button.trigger('dxclick');
+
+        const textAreaText = textArea.option('text');
+
+        assert.strictEqual(textAreaText, '');
+    });
+
+    QUnit.test('onMessageSend should be called after clicking the send button if there is text', function(assert) {
+        const onMessageSend = sinon.spy();
+
+        this.instance.option({ onMessageSend });
+
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        const textArea = TextArea.getInstance($textArea);
+
+        textArea.option({ value: text });
+        $button.trigger('dxclick');
+
+        assert.strictEqual(onMessageSend.callCount, 1);
+    });
+
+    QUnit.test('onMessageSend should be get correct object after clicking the send button if there is text', function(assert) {
+        this.instance.option({
+            onMessageSend: (e) => {
+                ['component', 'element', 'event', 'message'].forEach(prop => {
+                    // eslint-disable-next-line no-prototype-builtins
+                    assert.strictEqual(e.hasOwnProperty(prop), true);
+                });
+            },
+        });
+
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        const textArea = TextArea.getInstance($textArea);
+
+        textArea.option({ value: text });
+        $button.trigger('dxclick');
+    });
+
+    QUnit.test('New message should be correct after clicking the send button if there is text', function(assert) {
+        this.instance.option({
+            onMessageSend: ({ message }) => {
+                ['author', 'timestamp', 'text'].forEach(prop => {
+                    // eslint-disable-next-line no-prototype-builtins
+                    assert.strictEqual(message.hasOwnProperty(prop), true);
+                });
+            },
+        });
+
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        const textArea = TextArea.getInstance($textArea);
+
+        textArea.option({ value: text });
+        $button.trigger('dxclick');
+    });
+
+    QUnit.test('New message should not be created after clicking the send button if there is no text', function(assert) {
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 3);
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 3);
+    });
+
+    QUnit.test('onMessageSend should not be called after clicking the send button if there is no text', function(assert) {
+        const onMessageSend = sinon.spy();
+
+        this.instance.option({ onMessageSend });
+
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(onMessageSend.callCount, 0);
     });
 });
 
