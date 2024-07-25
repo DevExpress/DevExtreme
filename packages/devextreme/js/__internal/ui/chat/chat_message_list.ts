@@ -72,13 +72,13 @@ class MessageList extends Widget<MessageListOptions> {
   _renderMessageListContent(): void {
     const { items } = this.option();
 
-    if (!items?.length) {
-      return;
-    }
-
     this._$content = $('<div>')
       .addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS)
       .appendTo(this.element());
+
+    if (!items?.length) {
+      return;
+    }
 
     let currentMessageGroupUserId = items[0]?.author?.id;
     let currentMessageGroupItems: Message[] = [];
@@ -118,6 +118,12 @@ class MessageList extends Widget<MessageListOptions> {
     }
 
     this._createMessageGroupComponent([message], sender.id);
+  }
+
+  _clean(): void {
+    this._messageGroups = [];
+
+    super._clean();
   }
 
   _optionChanged(args: Record<string, unknown>): void {
