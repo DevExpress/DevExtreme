@@ -1,4 +1,4 @@
-name: Publish Demos to GH Pages
+name: Publish Demos to gh-pages branch
 
 on:
   workflow_dispatch:
