@@ -9,7 +9,7 @@ import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 import { getUpdatedOptions } from '@js/renovation/ui/common/utils/get_updated_options';
 import type { DisposeEffectReturn } from '@js/renovation/utils/effect_return';
 import type { RefObject } from 'inferno';
-import { createRef, normalizeProps } from 'inferno';
+import { createRef } from 'inferno';
 
 import type DomComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
@@ -26,6 +26,15 @@ export interface DomComponentWrapperProps {
   templateNames: string[];
   componentProps: ComponentProps;
 }
+
+const normalizeProps = (props: ComponentProps): ComponentProps => Object
+  .keys(props).reduce((accumulator, key) => {
+    if (props[key] !== undefined) {
+      accumulator[key] = props[key];
+    }
+
+    return accumulator;
+  }, {});
 
 export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperProps> {
   public state: any = {};
