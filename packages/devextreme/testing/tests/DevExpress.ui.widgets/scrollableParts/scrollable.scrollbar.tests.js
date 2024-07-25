@@ -569,6 +569,22 @@ QUnit.test('scrollbar add active class when thumb is clicked', function(assert) 
     assert.equal($scrollbar.hasClass(SCROLLBAR_ACTIVE_CLASS), false, 'active class was not attached after mouse up');
 });
 
+QUnit.test('preventDefault should be called when the thumb is clicked cancels the default selection behavior', function(assert) {
+    const $scrollable = $('#scrollable').dxScrollable({
+        useNative: false,
+        showScrollbar: 'onHover',
+        scrollByThumb: true
+    });
+
+    const $thumb = $scrollable.find(`.${SCROLLABLE_SCROLL_CLASS}`);
+
+    const mouse = pointerMock($thumb).start();
+
+    mouse.down();
+
+    assert.strictEqual(mouse.lastEvent().isDefaultPrevented(), true, 'default action is prevented for dxpointerdown on a thumb click');
+});
+
 QUnit.test('scrollbar add active class when click on scrollbar area', function(assert) {
     const SCROLLBAR_ACTIVE_CLASS = SCROLLABLE_SCROLLBAR_ACTIVE_CLASS;
 
