@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Message } from '@js/ui/chat';
+import type { Message, User } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
@@ -15,12 +16,22 @@ export interface MessageListOptions extends WidgetOptions<MessageList> {
 }
 
 class MessageList extends Widget<MessageListOptions> {
+  _messageGroups?: MessageGroup[];
+
+  private _$content?: dxElementWrapper;
+
   _getDefaultOptions(): MessageListOptions {
     return {
       ...super._getDefaultOptions(),
       items: [],
       currentUserId: undefined,
     };
+  }
+
+  _init(): void {
+    super._init();
+
+    this._messageGroups = [];
   }
 
   _initMarkup(): void {
@@ -42,12 +53,20 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _createMessageGroupComponent(items, userId): void {
-    const $messageGroup = $('<div>').appendTo(this.element());
+    if (!this._$content) {
+      return;
+    }
 
-    this._createComponent($messageGroup, MessageGroup, {
-      messages: items,
+    const $messageGroup = $('<div>').appendTo(this._$content);
+
+    const options = {
+      items,
       alignment: this._messageGroupAlignment(userId),
-    });
+    };
+
+    const messageGroup = this._createComponent($messageGroup, MessageGroup, options);
+
+    this._messageGroups?.push(messageGroup);
   }
 
   _renderMessageListContent(): void {
@@ -57,7 +76,9 @@ class MessageList extends Widget<MessageListOptions> {
       return;
     }
 
-    const $content = $('<div>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
+    this._$content = $('<div>')
+      .addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS)
+      .appendTo(this.element());
 
     let currentMessageGroupUserId = items[0]?.author?.id;
     let currentMessageGroupItems: Message[] = [];
@@ -79,8 +100,24 @@ class MessageList extends Widget<MessageListOptions> {
         this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
       }
     });
+  }
 
-    $content.appendTo(this.element());
+  _renderMessage(message: Message, newItems: Message[], sender: User): void {
+    this._setOptionWithoutOptionChange('items', newItems);
+
+    const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
+
+    if (lastMessageGroup) {
+      const lastMessageGroupUserId = lastMessageGroup.option('items')[0].author?.id;
+
+      if (sender.id === lastMessageGroupUserId) {
+        lastMessageGroup._renderMessage(message);
+
+        return;
+      }
+    }
+
+    this._createMessageGroupComponent([message], sender.id);
   }
 
   _optionChanged(args: Record<string, unknown>): void {

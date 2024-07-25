@@ -1,7 +1,7 @@
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
-import type { Properties } from '@js/ui/chat';
+import type { Message, Properties, User } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
@@ -87,6 +87,16 @@ class Chat extends Widget<Properties> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  renderMessage(message: Message, sender: User): void {
+    const { items } = this.option();
+
+    const newItems = items ? [...items, message] : [message];
+
+    this._setOptionWithoutOptionChange('items', newItems);
+
+    this._messageList?._renderMessage(message, newItems, sender);
   }
 }
 
