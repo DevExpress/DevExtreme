@@ -361,7 +361,7 @@ test('[T716993]: should has horizontal scrollbar with multiple resources and fix
 }).after(async () => {
   await removeStylesheetRulesFromPage();
 });
-
+// T1243679
 test('Scheduler appointments should change color on update resources', async (t) => {
   const button = new Button('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
