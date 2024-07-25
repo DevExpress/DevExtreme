@@ -155,6 +155,13 @@ gulp.task('npm.content', gulp.series(
     return gulp.src([`${cmpConfig.outputPath}/**/collection.json`, ...npmConfig.content])
       .pipe(gulp.dest(npmConfig.distPath));
   },
+  (cb) => {
+    const pkgPath = path.join(buildConfig.npm.distPath, 'package.json')
+    const pkg = require(pkgPath);
+    delete pkg.publishConfig;
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+    cb();
+  }
 ));
 
 gulp.task('npm.pack', gulp.series(
