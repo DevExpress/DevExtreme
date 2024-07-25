@@ -100,6 +100,10 @@ const createDataGrid = async ({
         count: 7,
       },
     ],
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     columns: [
       {
         dataField: 'group',

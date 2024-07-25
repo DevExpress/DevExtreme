@@ -207,10 +207,11 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         showBorders: true,
         height: 800,
         renderAsync: true,
-        // @ts-expect-error private option
         templatesRenderAsynchronously: true,
         columnFixing: {
           enabled: true,
+          // @ts-expect-error private option
+          legacyMode: true,
         },
         masterDetail: {
           enabled: true,

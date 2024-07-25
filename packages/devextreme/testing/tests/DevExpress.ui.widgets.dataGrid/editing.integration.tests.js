@@ -993,6 +993,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 mode: 'row',
                 allowUpdating: true,
                 useIcons: true
+            },
+            columnFixing: {
+                legacyMode: true
             }
         }).dxDataGrid('instance');
 
@@ -1821,7 +1824,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                         mode: editMode.toLowerCase(),
                         allowUpdating: true
                     },
-                    columnFixing: { enabled: true }
+                    columnFixing: { enabled: true, legacyMode: true }
                 });
 
                 this.clock.tick(10);
@@ -3655,6 +3658,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
                     dataSource: [{ field1: 'test1', field2: 'test2', field3: 'test3' }],
                     repaintChangesOnly: true,
                     columns: [{ dataField: 'field1', fixed: true, groupIndex: 0 }, 'field2', 'field3'],
+                    columnFixing: {
+                        legacyMode: true
+                    },
                     editing: {
                         mode: editMode,
                         allowAdding: true
@@ -5466,6 +5472,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 mode: 'cell',
                 allowUpdating: true
             },
+            columnFixing: {
+                legacyMode: true
+            },
             columns: [
                 {
                     dataField: 'Test',
@@ -5550,6 +5559,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             columns: [{ dataField: 'id', fixed: true }, { dataField: 'name' }],
+            columnFixing: {
+                legacyMode: true
+            },
             editing: {
                 mode: 'cell',
                 allowUpdating: true
@@ -5588,7 +5600,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             loadingTimeout: null,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             columns: [{ dataField: 'field1', width: 200 }, { dataField: 'field2', width: 200 }, { dataField: 'field3', width: 200 }, { dataField: 'fixedField', width: '200px', fixed: true, fixedPosition: 'right' }],
             dataSource: {
@@ -6542,6 +6555,9 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
             editing: {
                 allowUpdating: true,
                 mode: 'batch'
+            },
+            columnFixing: {
+                legacyMode: true
             }
         }).dxDataGrid('instance');
 

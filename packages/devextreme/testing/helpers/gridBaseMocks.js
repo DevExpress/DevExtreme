@@ -1053,6 +1053,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
         }
 
+        that.options.columnFixing = that.options.columnFixing || {};
+        that.options.columnFixing.legacyMode = true;
+
         that._createComponent = function(element, component, config) {
             config = config || {};
 

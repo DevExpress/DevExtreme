@@ -29,6 +29,10 @@ const getGridConfig = (needFixedColumnOnLeft = true): Properties => ({
       id: 1, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a',
     },
   ],
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
   columns: [
     { dataField: 'column1', fixed: needFixedColumnOnLeft },
     { dataField: 'column2', fixed: needFixedColumnOnLeft },

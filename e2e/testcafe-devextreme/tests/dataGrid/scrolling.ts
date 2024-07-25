@@ -130,6 +130,10 @@ safeSizeTest('DataGrid should not reset its left scroll position on window resiz
   scrolling: {
     columnRenderingMode: 'virtual',
   },
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
   customizeColumns(columns) {
     columns[0].fixed = true;
     columns[1].fixed = true;
@@ -172,6 +176,10 @@ safeSizeTest('DataGrid should not reset its right scroll position on window resi
   rtlEnabled: true,
   scrolling: {
     columnRenderingMode: 'virtual',
+  },
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
   },
   customizeColumns(columns) {
     columns[0].fixedPosition = 'right';
@@ -1045,6 +1053,8 @@ safeSizeTest('The scroll position of a fixed table should be synchronized with t
   },
   columnFixing: {
     enabled: true,
+    // @ts-expect-error private option
+    legacyMode: true,
   },
   columns: [{
     type: 'buttons',
@@ -1446,6 +1456,10 @@ test.meta({ unstable: true })('New virtual mode. Navigation to the last row if n
 //       width: 800,
 //       renderAsync: false,
 //       templatesRenderAsynchronously: true,
+//       columnFixing: {
+//          // @ts-expect-error private option
+//          legacyMode: true,
+//       },
 //       customizeColumns(columns) {
 //         columns[0].width = 70;
 //         columns[0].fixed = true;
