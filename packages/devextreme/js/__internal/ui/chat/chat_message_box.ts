@@ -74,12 +74,11 @@ class MessageBox extends Widget<MessageBoxProperties> {
   }
 
   _buttonClickHandler(e: ClickEvent): void {
-    const { onSendButtonClick } = this.option();
     // @ts-expect-error
     // eslint-disable-next-line no-unsafe-optional-chaining
     const { text } = this._textArea?.option();
 
-    if (!onSendButtonClick || !text) {
+    if (!text) {
       return;
     }
 
