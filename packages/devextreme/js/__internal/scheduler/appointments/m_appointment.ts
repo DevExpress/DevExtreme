@@ -179,7 +179,12 @@ export class Appointment extends DOMComponent {
   }
 
   _getGroupText() {
-    const groupText = (this.option('groupTexts') as string[]).join(', ');
+    const groupTexts = this.option('groupTexts') as string[];
+    if (!groupTexts.length) {
+      return '';
+    }
+
+    const groupText = groupTexts.join(', ');
     // @ts-expect-error
     return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
   }

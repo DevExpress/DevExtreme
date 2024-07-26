@@ -554,6 +554,9 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   _getGroupTexts(groupIndex, loadedResources) {
+    if (!loadedResources?.length) {
+      return [];
+    }
     const idPath = getPathToLeaf(groupIndex, loadedResources);
     const textPath = idPath.map(
       (id, index) => loadedResources[index].items
