@@ -92,6 +92,7 @@ const moduleConfig = {
         ];
 
         const options = {
+            user: userSecond,
             items: messages,
         };
 
