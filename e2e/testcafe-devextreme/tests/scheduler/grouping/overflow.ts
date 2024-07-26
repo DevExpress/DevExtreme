@@ -3,13 +3,13 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
-fixture`Scheduler: Grouping overflow`
+fixture.disablePageReloads`Scheduler: Grouping overflow`
   .page(url(__dirname, '../../container.html'));
 
 ['week', 'month'].forEach((viewType) => {
   ['vertical', 'horizontal'].forEach((groupOrientation) => {
     ['hidden', 'allDay'].forEach((allDayPanelMode) => {
-      [[9, 14, 60], [0, 24, 180]].forEach(([startDayHour, endDayHour, cellDuration]) => {
+      [[9, 14, 60], [0, 24, 360]].forEach(([startDayHour, endDayHour, cellDuration]) => {
         const allParams = `${viewType} ${groupOrientation} ${allDayPanelMode} ${startDayHour} ${endDayHour}`;
         test(`Long appointments should not overflow group view (${allParams})`, async (t) => {
           const scheduler = new Scheduler('#container');
