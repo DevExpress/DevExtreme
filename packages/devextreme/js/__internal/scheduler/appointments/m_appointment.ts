@@ -2,6 +2,7 @@
 import { move } from '@js/animation/translator';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -84,6 +85,7 @@ export class Appointment extends DOMComponent {
     switch (args.name) {
       case 'data':
       case 'groupIndex':
+      case 'groupTexts':
       case 'geometry':
       case 'allowDrag':
       case 'allowResize':
@@ -140,6 +142,7 @@ export class Appointment extends DOMComponent {
     super._render();
 
     this._renderAppointmentGeometry();
+    this._renderAriaLabel();
     this._renderEmptyClass();
     this._renderReducedAppointment();
     this._renderAllDayClass();
@@ -173,6 +176,22 @@ export class Appointment extends DOMComponent {
         this.coloredElement.addClass(APPOINTMENT_HAS_RESOURCE_COLOR_CLASS);
       }
     });
+  }
+
+  _getGroupText() {
+    const groupText = (this.option('groupTexts') as string[]).join(', ');
+    // @ts-expect-error
+    return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
+  }
+
+  _renderAriaLabel() {
+    // @ts-expect-error
+    const $element: dxElementWrapper = this.$element();
+
+    const ariaLabel = [
+      this._getGroupText(),
+    ].join(';');
+    $element.attr('aria-label', ariaLabel);
   }
 
   _renderAppointmentGeometry() {
