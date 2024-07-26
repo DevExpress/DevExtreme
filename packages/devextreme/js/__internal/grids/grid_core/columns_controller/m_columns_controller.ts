@@ -1271,12 +1271,12 @@ export class ColumnsController extends modules.Controller {
             const { isExpanded } = sortParameters[i];
 
             if (selector === column.dataField
-                                  || selector === column.name
-                                  || selector === column.displayField
-                                  || selector === column.selector
-                                  || selector === column.calculateCellValue
-                                  || selector === column.calculateGroupValue
-                                  || selector === column.calculateDisplayValue
+              || selector === column.name
+              || selector === column.displayField
+              || selector === column.selector
+              || selector === column.calculateCellValue
+              || selector === column.calculateGroupValue
+              || selector === column.calculateDisplayValue
             ) {
               if (fromDataSource) {
                 column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
@@ -1713,6 +1713,7 @@ export class ColumnsController extends modules.Controller {
             }
             if (isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
               if (that.valueExpr) {
+                // @ts-expect-error
                 const dataSourceOptions = normalizeDataSourceOptions(dataSource);
                 dataSourceOptions.paginate = false;
                 dataSource = new DataSource(dataSourceOptions);

@@ -154,6 +154,7 @@ const GroupedEditStrategy = EditStrategy.inherit({
     const group = dataController.group();
 
     if (group) {
+      // @ts-expect-error
       return storeHelper.queryByOptions(query(items), { group }).toArray();
     }
 
