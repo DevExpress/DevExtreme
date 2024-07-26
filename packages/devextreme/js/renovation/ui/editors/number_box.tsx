@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, TwoWay, React, Event,
 } from '@devextreme-generator/declarations';
 import LegacyNumberBox from '../../../ui/number_box';
-import { DomComponentWrapper } from '../common/dom_component_wrapper';
+import { DomComponentWrapper } from '../../../__internal/core/r1/dom_component_wrapper';
 import { EventCallback } from '../common/event_callback';
 import { EditorProps } from './common/editor';
 import { EditorStateProps } from './common/editor_state_props';
