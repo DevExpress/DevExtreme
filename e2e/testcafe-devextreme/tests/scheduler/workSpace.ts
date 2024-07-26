@@ -327,7 +327,7 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
       });
     })
       .after(async () => {
-        await changeTheme(theme);
+        await changeTheme(Themes.genericLight);
       });
   });
 });
