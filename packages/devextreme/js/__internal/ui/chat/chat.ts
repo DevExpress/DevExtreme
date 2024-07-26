@@ -5,6 +5,7 @@ import type { Message, Properties, User } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
+import type { MessageBoxProperties } from './chat_message_box';
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
@@ -61,7 +62,30 @@ class Chat extends Widget<Properties> {
   _renderMessageBox(): void {
     const $messageBox = $('<div>').appendTo(this.element());
 
-    this._messageBox = this._createComponent($messageBox, MessageBox, {});
+    const configuration: MessageBoxProperties = {
+      onSendButtonClick: (text) => {
+        this._sendButtonClickHandler(text);
+      },
+    };
+
+    this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
+  }
+
+  _sendButtonClickHandler(text: string): void {
+    const { user } = this.option();
+
+    const message: Message = {
+      timestamp: String(Date.now()),
+      author: user,
+      text,
+    };
+
+    // @ts-expect-error
+    this.renderMessage(message, user);
+
+    /**
+     * RUN onMessageSend
+     */
   }
 
   _optionChanged(args: Record<string, unknown>): void {
