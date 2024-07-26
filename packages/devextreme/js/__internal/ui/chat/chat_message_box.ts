@@ -20,11 +20,20 @@ class MessageBox extends Widget<MessageBoxProperties> {
 
   _button?: Button;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _sendButtonClickAction?: any;
+
   _getDefaultOptions(): MessageBoxProperties {
     return {
       ...super._getDefaultOptions(),
       onSendButtonClick: undefined,
     };
+  }
+
+  _init(): void {
+    super._init();
+
+    this._initSendButtonClickAction();
   }
 
   _initMarkup(): void {
@@ -44,21 +53,6 @@ class MessageBox extends Widget<MessageBoxProperties> {
     this._textArea = this._createComponent($textArea, TextArea, {});
   }
 
-  _buttonClickHandler(): void {
-    const { onSendButtonClick } = this.option();
-    // @ts-expect-error
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    const { text } = this._textArea?.option();
-
-    if (!onSendButtonClick || !text) {
-      return;
-    }
-
-    onSendButtonClick(text);
-
-    this._textArea?.option({ value: '' });
-  }
-
   _renderButton(): void {
     const $button = $('<div>')
       .addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS)
@@ -73,6 +67,36 @@ class MessageBox extends Widget<MessageBoxProperties> {
     };
 
     this._button = this._createComponent($button, Button, configuration);
+  }
+
+  _initSendButtonClickAction(): void {
+    this._sendButtonClickAction = this._createActionByOption('onSendButtonClick');
+  }
+
+  _buttonClickHandler(): void {
+    const { onSendButtonClick } = this.option();
+    // @ts-expect-error
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    const { text } = this._textArea?.option();
+
+    if (!onSendButtonClick || !text) {
+      return;
+    }
+
+    this._sendButtonClickAction(text);
+    this._textArea?.option({ value: '' });
+  }
+
+  _optionChanged(args: Record<string, unknown>): void {
+    const { name } = args;
+
+    switch (name) {
+      case 'onSendButtonClick':
+        this._initSendButtonClickAction();
+        break;
+      default:
+        super._optionChanged(args);
+    }
   }
 }
 

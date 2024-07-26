@@ -71,13 +71,15 @@ class Chat extends Widget<Properties> {
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
   }
 
-  _sendButtonClickHandler(text: string): void {
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  _sendButtonClickHandler(action: any): void {
     const { user } = this.option();
 
     const message: Message = {
       timestamp: String(Date.now()),
       author: user,
-      text,
+      text: action.actionValue,
     };
 
     // @ts-expect-error
