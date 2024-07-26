@@ -18,6 +18,9 @@ class Chat extends Widget<Properties> {
 
   _messageList?: MessageList;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _messageSendAction?: any;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -26,6 +29,12 @@ class Chat extends Widget<Properties> {
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };
+  }
+
+  _init(): void {
+    super._init();
+
+    this._initMessageSendAction();
   }
 
   _initMarkup(): void {
@@ -71,6 +80,10 @@ class Chat extends Widget<Properties> {
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
   }
 
+  _initMessageSendAction(): void {
+    this._messageSendAction = this._createActionByOption('onMessageSend');
+  }
+
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   _sendButtonClickHandler(action: any): void {
@@ -84,10 +97,7 @@ class Chat extends Widget<Properties> {
 
     // @ts-expect-error
     this.renderMessage(message, user);
-
-    /**
-     * RUN onMessageSend
-     */
+    this._messageSendAction({ message });
   }
 
   _optionChanged(args: Record<string, unknown>): void {
@@ -107,6 +117,7 @@ class Chat extends Widget<Properties> {
         this._messageList?.option(name, value);
         break;
       case 'onMessageSend':
+        this._initMessageSendAction();
         break;
       default:
         super._optionChanged(args);
