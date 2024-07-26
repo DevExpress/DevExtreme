@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import { DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent } from 'devextreme/ui/chat';
+import { DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent, User } from 'devextreme/ui/chat';
 
 import DxChat from 'devextreme/ui/chat';
 
@@ -39,6 +39,7 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
+import { DxoUserModule } from 'devextreme-angular/ui/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -153,6 +154,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.user]
+    
+     */
+    @Input()
+    get user(): User {
+        return this._getOption('user');
+    }
+    set user(value: User) {
+        this._setOption('user', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.visible]
     
      */
@@ -263,6 +277,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() userChange: EventEmitter<User>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() visibleChange: EventEmitter<boolean>;
 
     /**
@@ -307,6 +328,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'itemsChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'titleChange' },
+            { emit: 'userChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
         ]);
@@ -357,6 +379,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   imports: [
     DxiItemModule,
     DxoAuthorModule,
+    DxoUserModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -367,6 +390,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxChatComponent,
     DxiItemModule,
     DxoAuthorModule,
+    DxoUserModule,
     DxTemplateModule
   ]
 })

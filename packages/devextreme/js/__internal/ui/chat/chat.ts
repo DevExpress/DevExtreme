@@ -22,7 +22,6 @@ class Chat extends Widget<Properties> {
       ...super._getDefaultOptions(),
       title: '',
       items: [],
-      // @ts-expect-error
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };
@@ -48,7 +47,6 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    // @ts-expect-error
     const { items, user } = this.option();
 
     const currentUserId = user?.id;
