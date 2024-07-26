@@ -180,7 +180,7 @@ export class Appointment extends DOMComponent {
 
   _getGroupText() {
     const groupTexts = this.option('groupTexts') as string[];
-    if (!groupTexts.length) {
+    if (!groupTexts?.length) {
       return '';
     }
 
