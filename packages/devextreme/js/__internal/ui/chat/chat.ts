@@ -88,6 +88,7 @@ class Chat extends Widget<Properties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   _sendButtonClickHandler(action: any): void {
     const { text, event } = action;
+    // @ts-expect-error
     const { user } = this.option();
 
     const message: Message = {
@@ -96,7 +97,6 @@ class Chat extends Widget<Properties> {
       text,
     };
 
-    // @ts-expect-error
     this.renderMessage(message, user);
     this._messageSendAction({ message, event });
   }
