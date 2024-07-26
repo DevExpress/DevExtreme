@@ -342,12 +342,6 @@ const DropDownEditor = TextBox.inherit({
       model: data,
       container: getPublicElement($templateWrapper),
       onRendered: () => {
-        const isRenderedInRoot = !!this.$element().find($templateWrapper).length;
-
-        if (!isRenderedInRoot) {
-          return;
-        }
-
         const $input = this._input();
 
         if (!$input.length) {
