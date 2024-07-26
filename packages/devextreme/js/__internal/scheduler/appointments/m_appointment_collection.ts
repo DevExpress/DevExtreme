@@ -606,6 +606,8 @@ class SchedulerAppointments extends CollectionWidget {
         cellHeight: this.invoke('getCellHeight'),
         resizableConfig: this._resizableConfig(rawAppointment, settings),
         groups: this.option('groups'),
+        partIndex: settings.partIndex,
+        partTotalCount: settings.partTotalCount,
 
         getAppointmentColor: this.option('getAppointmentColor'),
         getResourceDataAccessors: this.option('getResourceDataAccessors'),
