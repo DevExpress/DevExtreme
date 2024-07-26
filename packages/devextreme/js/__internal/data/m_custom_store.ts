@@ -1,17 +1,22 @@
-import $ from '../core/renderer';
+import config from '@js/core/config';
+import $ from '@js/core/renderer';
+// @ts-expect-error
+import { Deferred, fromPromise, when } from '@js/core/utils/deferred';
+import { isFunction } from '@js/core/utils/type';
+import Store from '@js/data/abstract_store';
+import arrayQuery from '@js/data/array_query';
+import { applyBatch } from '@js/data/array_utils';
+// @ts-expect-error
+import { errors } from '@js/data/errors';
+import storeHelper from '@js/data/store_helper';
 import {
-    keysEqual,
-    XHR_ERROR_UNLOAD,
-    errorMessageFromXhr as errorMessageFromXhrUtility
-} from './utils';
-import { applyBatch } from './array_utils';
-import { isFunction } from '../core/utils/type';
-import config from '../core/config';
-import { errors } from './errors';
-import Store from './abstract_store';
-import arrayQuery from './array_query';
-import storeHelper from './store_helper';
-import { Deferred, when, fromPromise } from '../core/utils/deferred';
+  // @ts-expect-error
+  errorMessageFromXhr as errorMessageFromXhrUtility,
+  // @ts-expect-error
+  keysEqual,
+  // @ts-expect-error
+  XHR_ERROR_UNLOAD,
+} from '@js/data/utils';
 
 const TOTAL_COUNT = 'totalCount';
 const LOAD = 'load';
@@ -21,371 +26,382 @@ const UPDATE = 'update';
 const REMOVE = 'remove';
 
 function isPromise(obj) {
-    return obj && isFunction(obj.then);
+  return obj && isFunction(obj.then);
 }
 
 function trivialPromise(value) {
-    return new Deferred().resolve(value).promise();
+  // @ts-expect-error
+  return new Deferred().resolve(value).promise();
 }
 
 function ensureRequiredFuncOption(name, obj) {
-    if(!isFunction(obj)) {
-        throw errors.Error('E4011', name);
-    }
+  if (!isFunction(obj)) {
+    throw errors.Error('E4011', name);
+  }
 }
 
 function throwInvalidUserFuncResult(name) {
-    throw errors.Error('E4012', name);
+  throw errors.Error('E4012', name);
 }
 
 function createUserFuncFailureHandler(pendingDeferred) {
-    function errorMessageFromXhr(promiseArguments) {
-        const xhr = promiseArguments[0];
-        const textStatus = promiseArguments[1];
+  function errorMessageFromXhr(promiseArguments) {
+    const xhr = promiseArguments[0];
+    const textStatus = promiseArguments[1];
 
-        if(!xhr || !xhr.getResponseHeader) {
-            return null;
-        }
-
-        return errorMessageFromXhrUtility(xhr, textStatus);
+    if (!xhr || !xhr.getResponseHeader) {
+      return null;
     }
 
-    return function(arg) {
-        let error;
+    return errorMessageFromXhrUtility(xhr, textStatus);
+  }
 
-        if(arg instanceof Error) {
-            error = arg;
-        } else {
-            error = new Error(errorMessageFromXhr(arguments) || arg && String(arg) || 'Unknown error');
-        }
+  return function (arg) {
+    let error;
 
-        if(error.message !== XHR_ERROR_UNLOAD) {
-            pendingDeferred.reject(error);
-        }
-    };
+    if (arg instanceof Error) {
+      error = arg;
+    } else {
+      error = new Error(errorMessageFromXhr(arguments) || arg && String(arg) || 'Unknown error');
+    }
+
+    if (error.message !== XHR_ERROR_UNLOAD) {
+      pendingDeferred.reject(error);
+    }
+  };
 }
 
 function invokeUserLoad(store, options) {
-    const userFunc = store._loadFunc;
-    let userResult;
+  const userFunc = store._loadFunc;
+  let userResult;
 
-    ensureRequiredFuncOption(LOAD, userFunc);
-    userResult = userFunc.apply(store, [options]);
+  ensureRequiredFuncOption(LOAD, userFunc);
+  userResult = userFunc.apply(store, [options]);
 
-    if(Array.isArray(userResult)) {
-        userResult = trivialPromise(userResult);
-    } else if(userResult === null || userResult === undefined) {
-        userResult = trivialPromise([]);
-    } else {
-        if(!isPromise(userResult)) {
-            throwInvalidUserFuncResult(LOAD);
-        }
-    }
+  if (Array.isArray(userResult)) {
+    userResult = trivialPromise(userResult);
+  } else if (userResult === null || userResult === undefined) {
+    userResult = trivialPromise([]);
+  } else if (!isPromise(userResult)) {
+    throwInvalidUserFuncResult(LOAD);
+  }
 
-    return fromPromise(userResult);
+  return fromPromise(userResult);
 }
 
 function invokeUserTotalCountFunc(store, options) {
-    const userFunc = store._totalCountFunc;
-    let userResult;
+  const userFunc = store._totalCountFunc;
+  let userResult;
 
-    if(!isFunction(userFunc)) {
-        throw errors.Error('E4021');
+  if (!isFunction(userFunc)) {
+    throw errors.Error('E4021');
+  }
+
+  userResult = userFunc.apply(store, [options]);
+
+  if (!isPromise(userResult)) {
+    userResult = Number(userResult);
+    if (!isFinite(userResult)) {
+      throwInvalidUserFuncResult(TOTAL_COUNT);
     }
+    userResult = trivialPromise(userResult);
+  }
 
-    userResult = userFunc.apply(store, [options]);
-
-    if(!isPromise(userResult)) {
-        userResult = Number(userResult);
-        if(!isFinite(userResult)) {
-            throwInvalidUserFuncResult(TOTAL_COUNT);
-        }
-        userResult = trivialPromise(userResult);
-    }
-
-    return fromPromise(userResult);
+  return fromPromise(userResult);
 }
 
 function invokeUserByKeyFunc(store, key, extraOptions) {
-    const userFunc = store._byKeyFunc;
-    let userResult;
+  const userFunc = store._byKeyFunc;
+  let userResult;
 
-    ensureRequiredFuncOption(BY_KEY, userFunc);
-    userResult = userFunc.apply(store, [key, extraOptions]);
+  ensureRequiredFuncOption(BY_KEY, userFunc);
+  userResult = userFunc.apply(store, [key, extraOptions]);
 
-    if(!isPromise(userResult)) {
-        userResult = trivialPromise(userResult);
-    }
+  if (!isPromise(userResult)) {
+    userResult = trivialPromise(userResult);
+  }
 
-    return fromPromise(userResult);
+  return fromPromise(userResult);
 }
 
 function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
-    if(store.__rawData) {
-        continuation(store.__rawData);
-    } else {
-        const loadPromise = store.__rawDataPromise || invokeUserLoad(store, userFuncOptions);
+  if (store.__rawData) {
+    continuation(store.__rawData);
+  } else {
+    const loadPromise = store.__rawDataPromise || invokeUserLoad(store, userFuncOptions);
 
-        if(store._cacheRawData) {
-            store.__rawDataPromise = loadPromise;
-        }
-
-        loadPromise
-            .always(function() {
-                delete store.__rawDataPromise;
-            })
-            .done(function(rawData) {
-                if(store._cacheRawData) {
-                    store.__rawData = rawData;
-                }
-                continuation(rawData);
-            })
-            .fail((error) => {
-                const userFuncFailureHandler = createUserFuncFailureHandler(pendingDeferred);
-
-                store._errorHandler?.(error);
-                userFuncFailureHandler(error);
-            });
+    if (store._cacheRawData) {
+      store.__rawDataPromise = loadPromise;
     }
+
+    loadPromise
+      .always(() => {
+        delete store.__rawDataPromise;
+      })
+      .done((rawData) => {
+        if (store._cacheRawData) {
+          store.__rawData = rawData;
+        }
+        continuation(rawData);
+      })
+      .fail((error) => {
+        const userFuncFailureHandler = createUserFuncFailureHandler(pendingDeferred);
+
+        store._errorHandler?.(error);
+        userFuncFailureHandler(error);
+      });
+  }
 }
 
 function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
-    options = options || { };
+  options = options || {};
 
-    const userFuncOptions = { };
-    if('userData' in options) {
-        userFuncOptions.userData = options.userData;
+  const userFuncOptions = {};
+  if ('userData' in options) {
+    // @ts-expect-error
+    userFuncOptions.userData = options.userData;
+  }
+
+  runRawLoad(pendingDeferred, store, userFuncOptions, (rawData) => {
+    const rawDataQuery = arrayQuery(rawData, { errorHandler: store._errorHandler });
+    let itemsQuery;
+    let totalCountQuery;
+    const waitList = [];
+
+    let items;
+    let totalCount;
+
+    if (!countOnly) {
+      // @ts-expect-error
+      itemsQuery = storeHelper.queryByOptions(rawDataQuery, options);
+      if (itemsQuery === rawDataQuery) {
+        items = rawData.slice(0);
+      } else {
+        // @ts-expect-error
+        waitList.push(itemsQuery.enumerate().done((asyncResult) => {
+          items = asyncResult;
+        }));
+      }
     }
 
-    runRawLoad(pendingDeferred, store, userFuncOptions, function(rawData) {
-        const rawDataQuery = arrayQuery(rawData, { errorHandler: store._errorHandler });
-        let itemsQuery;
-        let totalCountQuery;
-        const waitList = [];
+    if (options.requireTotalCount || countOnly) {
+      totalCountQuery = storeHelper.queryByOptions(rawDataQuery, options, true);
+      if (totalCountQuery === rawDataQuery) {
+        totalCount = rawData.length;
+      } else {
+        // @ts-expect-error
+        waitList.push(totalCountQuery.count().done((asyncResult) => {
+          totalCount = asyncResult;
+        }));
+      }
+    }
 
-        let items;
-        let totalCount;
-
-        if(!countOnly) {
-            itemsQuery = storeHelper.queryByOptions(rawDataQuery, options);
-            if(itemsQuery === rawDataQuery) {
-                items = rawData.slice(0);
-            } else {
-                waitList.push(itemsQuery.enumerate().done(function(asyncResult) {
-                    items = asyncResult;
-                }));
-            }
+    when.apply($, waitList)
+      .done(() => {
+        if (countOnly) {
+          pendingDeferred.resolve(totalCount);
+        } else if (options.requireTotalCount) {
+          pendingDeferred.resolve(items, { totalCount });
+        } else {
+          pendingDeferred.resolve(items);
         }
-
-        if(options.requireTotalCount || countOnly) {
-            totalCountQuery = storeHelper.queryByOptions(rawDataQuery, options, true);
-            if(totalCountQuery === rawDataQuery) {
-                totalCount = rawData.length;
-            } else {
-                waitList.push(totalCountQuery.count().done(function(asyncResult) {
-                    totalCount = asyncResult;
-                }));
-            }
-        }
-
-        when.apply($, waitList)
-            .done(function() {
-                if(countOnly) {
-                    pendingDeferred.resolve(totalCount);
-                } else if(options.requireTotalCount) {
-                    pendingDeferred.resolve(items, { totalCount: totalCount });
-                } else {
-                    pendingDeferred.resolve(items);
-                }
-            })
-            .fail(function(x) {
-                pendingDeferred.reject(x);
-            });
-    });
+      })
+      .fail((x) => {
+        pendingDeferred.reject(x);
+      });
+  });
 }
 
 function runRawLoadWithKey(pendingDeferred, store, key) {
-    runRawLoad(pendingDeferred, store, {}, function(rawData) {
-        const keyExpr = store.key();
-        let item;
+  runRawLoad(pendingDeferred, store, {}, (rawData) => {
+    const keyExpr = store.key();
+    let item;
 
-        for(let i = 0, len = rawData.length; i < len; i++) {
-            item = rawData[i];
-            if(keysEqual(keyExpr, store.keyOf(rawData[i]), key)) {
-                pendingDeferred.resolve(item);
-                return;
-            }
-        }
-
-        pendingDeferred.reject(errors.Error('E4009'));
-    });
-}
-
-const CustomStore = Store.inherit({
-    ctor: function(options) {
-        options = options || {};
-
-        this.callBase(options);
-
-        this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === 'raw';
-
-        this._loadMode = options.loadMode;
-
-        this._cacheRawData = options.cacheRawData !== false;
-
-        this._loadFunc = options[LOAD];
-
-        this._totalCountFunc = options[TOTAL_COUNT];
-
-        this._byKeyFunc = options[BY_KEY];
-
-        this._insertFunc = options[INSERT];
-
-        this._updateFunc = options[UPDATE];
-
-        this._removeFunc = options[REMOVE];
-    },
-
-    _clearCache() {
-        delete this.__rawData;
-    },
-
-    createQuery: function() {
-        throw errors.Error('E4010');
-    },
-
-    clearRawDataCache: function() {
-        this._clearCache();
-    },
-
-    _totalCountImpl: function(options) {
-        let d = new Deferred();
-
-        if(this._loadMode === 'raw' && !this._totalCountFunc) {
-            runRawLoadWithQuery(d, this, options, true);
-        } else {
-            invokeUserTotalCountFunc(this, options)
-                .done(function(count) { d.resolve(Number(count)); })
-                .fail(createUserFuncFailureHandler(d));
-            d = this._addFailHandlers(d);
-        }
-
-        return d.promise();
-    },
-
-    _pushImpl: function(changes) {
-        if(this.__rawData) {
-            applyBatch({
-                keyInfo: this,
-                data: this.__rawData,
-                changes
-            });
-        }
-    },
-
-    _loadImpl: function(options) {
-        let d = new Deferred();
-
-        if(this._loadMode === 'raw') {
-            runRawLoadWithQuery(d, this, options, false);
-        } else {
-            invokeUserLoad(this, options)
-                .done(function(data, extra) { d.resolve(data, extra); })
-                .fail(createUserFuncFailureHandler(d));
-            d = this._addFailHandlers(d);
-        }
-
-        return d.promise();
-    },
-
-    _byKeyImpl: function(key, extraOptions) {
-        const d = new Deferred();
-
-        if(this._byKeyViaLoad()) {
-            this._requireKey();
-            runRawLoadWithKey(d, this, key);
-        } else {
-            invokeUserByKeyFunc(this, key, extraOptions)
-                .done(function(obj) { d.resolve(obj); })
-                .fail(createUserFuncFailureHandler(d));
-        }
-
-        return d.promise();
-    },
-
-    _byKeyViaLoad: function() {
-        return this._loadMode === 'raw' && !this._byKeyFunc;
-    },
-
-    _insertImpl: function(values) {
-        const that = this;
-        const userFunc = that._insertFunc;
-        let userResult;
-        const d = new Deferred();
-
-        ensureRequiredFuncOption(INSERT, userFunc);
-        userResult = userFunc.apply(that, [values]); // should return key or data
-
-        if(!isPromise(userResult)) {
-            userResult = trivialPromise(userResult);
-        }
-
-        fromPromise(userResult)
-            .done(function(serverResponse) {
-                if(config().useLegacyStoreResult) {
-                    d.resolve(values, serverResponse);
-                } else {
-                    d.resolve(serverResponse || values, that.keyOf(serverResponse));
-                }
-            })
-            .fail(createUserFuncFailureHandler(d));
-
-        return d.promise();
-    },
-
-    _updateImpl: function(key, values) {
-        const userFunc = this._updateFunc;
-        let userResult;
-        const d = new Deferred();
-
-        ensureRequiredFuncOption(UPDATE, userFunc);
-        userResult = userFunc.apply(this, [key, values]);
-
-        if(!isPromise(userResult)) {
-            userResult = trivialPromise(userResult);
-        }
-
-        fromPromise(userResult)
-            .done(function(serverResponse) {
-                if(config().useLegacyStoreResult) {
-                    d.resolve(key, values);
-                } else {
-                    d.resolve(serverResponse || values, key);
-                }
-            })
-            .fail(createUserFuncFailureHandler(d));
-
-        return d.promise();
-    },
-
-    _removeImpl: function(key) {
-        const userFunc = this._removeFunc;
-        let userResult;
-        const d = new Deferred();
-
-        ensureRequiredFuncOption(REMOVE, userFunc);
-        userResult = userFunc.apply(this, [key]);
-
-        if(!isPromise(userResult)) {
-            userResult = trivialPromise();
-        }
-
-        fromPromise(userResult)
-            .done(function() { d.resolve(key); })
-            .fail(createUserFuncFailureHandler(d));
-
-        return d.promise();
+    for (let i = 0, len = rawData.length; i < len; i++) {
+      item = rawData[i];
+      if (keysEqual(keyExpr, store.keyOf(rawData[i]), key)) {
+        pendingDeferred.resolve(item);
+        return;
+      }
     }
+
+    pendingDeferred.reject(errors.Error('E4009'));
+  });
+}
+// @ts-expect-error
+const CustomStore = Store.inherit({
+  ctor(options) {
+    options = options || {};
+
+    this.callBase(options);
+
+    this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === 'raw';
+
+    this._loadMode = options.loadMode;
+
+    this._cacheRawData = options.cacheRawData !== false;
+
+    this._loadFunc = options[LOAD];
+
+    this._totalCountFunc = options[TOTAL_COUNT];
+
+    this._byKeyFunc = options[BY_KEY];
+
+    this._insertFunc = options[INSERT];
+
+    this._updateFunc = options[UPDATE];
+
+    this._removeFunc = options[REMOVE];
+  },
+
+  _clearCache() {
+    delete this.__rawData;
+  },
+
+  createQuery() {
+    throw errors.Error('E4010');
+  },
+
+  clearRawDataCache() {
+    this._clearCache();
+  },
+
+  _totalCountImpl(options) {
+    // @ts-expect-error
+    let d = new Deferred();
+
+    if (this._loadMode === 'raw' && !this._totalCountFunc) {
+      runRawLoadWithQuery(d, this, options, true);
+    } else {
+      invokeUserTotalCountFunc(this, options)
+        .done((count) => { d.resolve(Number(count)); })
+        .fail(createUserFuncFailureHandler(d));
+      d = this._addFailHandlers(d);
+    }
+
+    return d.promise();
+  },
+
+  _pushImpl(changes) {
+    if (this.__rawData) {
+      // @ts-expect-error
+      applyBatch({
+        keyInfo: this,
+        data: this.__rawData,
+        changes,
+      });
+    }
+  },
+
+  _loadImpl(options) {
+    // @ts-expect-error
+    let d = new Deferred();
+
+    if (this._loadMode === 'raw') {
+      runRawLoadWithQuery(d, this, options, false);
+    } else {
+      invokeUserLoad(this, options)
+        .done((data, extra) => { d.resolve(data, extra); })
+        .fail(createUserFuncFailureHandler(d));
+      d = this._addFailHandlers(d);
+    }
+
+    return d.promise();
+  },
+
+  _byKeyImpl(key, extraOptions) {
+    // @ts-expect-error
+    const d = new Deferred();
+
+    if (this._byKeyViaLoad()) {
+      this._requireKey();
+      runRawLoadWithKey(d, this, key);
+    } else {
+      invokeUserByKeyFunc(this, key, extraOptions)
+        .done((obj) => { d.resolve(obj); })
+        .fail(createUserFuncFailureHandler(d));
+    }
+
+    return d.promise();
+  },
+
+  _byKeyViaLoad() {
+    return this._loadMode === 'raw' && !this._byKeyFunc;
+  },
+
+  _insertImpl(values) {
+    const that = this;
+    const userFunc = that._insertFunc;
+    let userResult;
+    // @ts-expect-error
+    const d = new Deferred();
+
+    ensureRequiredFuncOption(INSERT, userFunc);
+    userResult = userFunc.apply(that, [values]); // should return key or data
+
+    if (!isPromise(userResult)) {
+      userResult = trivialPromise(userResult);
+    }
+
+    fromPromise(userResult)
+      .done((serverResponse) => {
+        if (config().useLegacyStoreResult) {
+          d.resolve(values, serverResponse);
+        } else {
+          d.resolve(serverResponse || values, that.keyOf(serverResponse));
+        }
+      })
+      .fail(createUserFuncFailureHandler(d));
+
+    return d.promise();
+  },
+
+  _updateImpl(key, values) {
+    const userFunc = this._updateFunc;
+    let userResult;
+    // @ts-expect-error
+    const d = new Deferred();
+
+    ensureRequiredFuncOption(UPDATE, userFunc);
+    userResult = userFunc.apply(this, [key, values]);
+
+    if (!isPromise(userResult)) {
+      userResult = trivialPromise(userResult);
+    }
+
+    fromPromise(userResult)
+      .done((serverResponse) => {
+        if (config().useLegacyStoreResult) {
+          d.resolve(key, values);
+        } else {
+          d.resolve(serverResponse || values, key);
+        }
+      })
+      .fail(createUserFuncFailureHandler(d));
+
+    return d.promise();
+  },
+
+  _removeImpl(key) {
+    const userFunc = this._removeFunc;
+    let userResult;
+    // @ts-expect-error
+    const d = new Deferred();
+
+    ensureRequiredFuncOption(REMOVE, userFunc);
+    userResult = userFunc.apply(this, [key]);
+
+    if (!isPromise(userResult)) {
+      // @ts-expect-error
+      userResult = trivialPromise();
+    }
+
+    fromPromise(userResult)
+      .done(() => { d.resolve(key); })
+      .fail(createUserFuncFailureHandler(d));
+
+    return d.promise();
+  },
 });
 
 export default CustomStore;
