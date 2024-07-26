@@ -1,5 +1,5 @@
 import $ from '@js/core/renderer';
-import type { Properties as ButtonProperties } from '@js/ui/button';
+import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 
 import type dxTextArea from '../../../ui/text_area';
@@ -61,8 +61,8 @@ class MessageBox extends Widget<MessageBoxProperties> {
     const configuration: ButtonProperties = {
       icon: 'send',
       stylingMode: 'text',
-      onClick: (): void => {
-        this._buttonClickHandler();
+      onClick: (e): void => {
+        this._buttonClickHandler(e);
       },
     };
 
@@ -73,7 +73,7 @@ class MessageBox extends Widget<MessageBoxProperties> {
     this._sendButtonClickAction = this._createActionByOption('onSendButtonClick');
   }
 
-  _buttonClickHandler(): void {
+  _buttonClickHandler(e: ClickEvent): void {
     const { onSendButtonClick } = this.option();
     // @ts-expect-error
     // eslint-disable-next-line no-unsafe-optional-chaining
@@ -83,7 +83,7 @@ class MessageBox extends Widget<MessageBoxProperties> {
       return;
     }
 
-    this._sendButtonClickAction(text);
+    this._sendButtonClickAction({ text, event: e.event });
     this._textArea?.option({ value: '' });
   }
 
