@@ -620,6 +620,7 @@ class Scheduler extends Widget<any> {
         this._dataAccessors.resources = createExpressions(this.option('resources'));
         this.agendaResourceProcessor.initializeState(this.option('resources'));
         this.updateInstances();
+        this.option('resourceLoaderMap').clear();
 
         this._postponeResourceLoading().done((resources) => {
           this._appointments.option('items', []);
