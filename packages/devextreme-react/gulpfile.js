@@ -122,11 +122,11 @@ gulp.task(NPM_BUILD, gulp.series(
     NPM_CLEAN,
     gulp.parallel(
         NPM_LICENSE,
-        NPM_PACKAGE,
         NPM_README,
         NPM_BUILD_ESM,
         NPM_BUILD_CJS
-    )
+    ),
+    NPM_PACKAGE
 ));
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(

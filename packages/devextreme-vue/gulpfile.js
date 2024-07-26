@@ -92,11 +92,11 @@ gulp.task(
   gulp.series(
     gulp.parallel(
       NPM_LICENSE,
-      NPM_PACKAGE,
       NPM_README,
       NPM_BUILD_ESM,
       NPM_BUILD_CJS
-    )
+    ),
+    NPM_PACKAGE
   )
 );
 
