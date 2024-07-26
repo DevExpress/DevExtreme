@@ -158,10 +158,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get user(): User | undefined {
+    get user(): User {
         return this._getOption('user');
     }
-    set user(value: User | undefined) {
+    set user(value: User) {
         this._setOption('user', value);
     }
 
@@ -277,7 +277,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() userChange: EventEmitter<User | undefined>;
+    @Output() userChange: EventEmitter<User>;
 
     /**
     
