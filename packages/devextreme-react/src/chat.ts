@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, User } from "devextreme/ui/chat";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -50,8 +50,7 @@ const Chat = memo(
       }), []);
 
       const expectedChildren = useMemo(() => ({
-        item: { optionName: "items", isCollectionItem: true },
-        user: { optionName: "user", isCollectionItem: false }
+        item: { optionName: "items", isCollectionItem: true }
       }), []);
 
       return (
@@ -74,7 +73,7 @@ const Chat = memo(
 // Item
 type IAuthorProps = React.PropsWithChildren<{
   avatarUrl?: string;
-  id?: number | string;
+  id?: number;
   name?: string;
 }>
 const _componentAuthor = memo(
@@ -90,7 +89,7 @@ const Author: typeof _componentAuthor & IElementDescriptor = Object.assign(_comp
 // owners:
 // Chat
 type IItemProps = React.PropsWithChildren<{
-  author?: ChatUser;
+  author?: User;
   text?: string;
   timestamp?: string;
   typing?: boolean;
@@ -109,23 +108,6 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   },
 })
 
-// owners:
-// Chat
-type IUserProps = React.PropsWithChildren<{
-  avatarUrl?: string;
-  id?: number | string;
-  name?: string;
-}>
-const _componentUser = memo(
-  (props: IUserProps) => {
-    return React.createElement(NestedOption<IUserProps>, { ...props });
-  }
-);
-
-const User: typeof _componentUser & IElementDescriptor = Object.assign(_componentUser, {
-  OptionName: "user",
-})
-
 export default Chat;
 export {
   Chat,
@@ -134,9 +116,7 @@ export {
   Author,
   IAuthorProps,
   Item,
-  IItemProps,
-  User,
-  IUserProps
+  IItemProps
 };
 import type * as ChatTypes from 'devextreme/ui/chat_types';
 export { ChatTypes };
