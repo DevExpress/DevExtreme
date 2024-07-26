@@ -1456,8 +1456,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('resources');
     }
     set resourcesChildren(value) {
-        if (this.hasNewresources && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewresources) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('resources', value);
         }
@@ -1468,8 +1470,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('views');
     }
     set viewsChildren(value) {
-        if (this.hasNewviews && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewviews) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('views', value);
         }

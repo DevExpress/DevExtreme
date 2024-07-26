@@ -1672,8 +1672,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        if (this.hasNewbuttons && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewbuttons) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('buttons', value);
         }
@@ -1684,8 +1686,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        if (this.hasNewitems && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewitems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('items', value);
         }

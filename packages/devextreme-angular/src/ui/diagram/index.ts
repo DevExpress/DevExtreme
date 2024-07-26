@@ -931,8 +931,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
         return this._getOption('customShapes');
     }
     set customShapesChildren(value) {
-        if (this.hasNewcustomShapes && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewcustomShapes) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('customShapes', value);
         }

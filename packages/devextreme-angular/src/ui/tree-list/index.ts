@@ -2032,8 +2032,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        if (this.hasNewcolumns && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewcolumns) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('columns', value);
         }

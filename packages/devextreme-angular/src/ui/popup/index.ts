@@ -951,8 +951,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
-        if (this.hasNewtoolbarItems && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewtoolbarItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('toolbarItems', value);
         }

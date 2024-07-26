@@ -634,8 +634,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('center');
     }
     set centerChildren(value) {
-        if (this.hasNewcenter && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewcenter) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('center', value);
         }
@@ -646,8 +648,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('markers');
     }
     set markersChildren(value) {
-        if (this.hasNewmarkers && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewmarkers) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('markers', value);
         }
@@ -658,8 +662,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
         return this._getOption('routes');
     }
     set routesChildren(value) {
-        if (this.hasNewroutes && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewroutes) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('routes', value);
         }

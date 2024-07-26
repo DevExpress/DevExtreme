@@ -263,8 +263,10 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
-        if (this.hasNewvalidationRules && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewvalidationRules) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('validationRules', value);
         }

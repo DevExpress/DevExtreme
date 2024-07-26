@@ -448,8 +448,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        if (this.hasNewitems && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewitems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('items', value);
         }

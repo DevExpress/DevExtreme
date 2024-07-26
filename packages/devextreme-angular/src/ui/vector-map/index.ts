@@ -809,8 +809,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        if (this.hasNewannotations && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewannotations) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('annotations', value);
         }
@@ -821,8 +823,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('layers');
     }
     set layersChildren(value) {
-        if (this.hasNewlayers && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewlayers) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('layers', value);
         }
@@ -833,8 +837,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
         return this._getOption('legends');
     }
     set legendsChildren(value) {
-        if (this.hasNewlegends && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewlegends) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('legends', value);
         }

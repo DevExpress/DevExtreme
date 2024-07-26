@@ -1361,8 +1361,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        if (this.hasNewitems && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewitems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('items', value);
         }
@@ -1373,8 +1375,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
         return this._getOption('menuItems');
     }
     set menuItemsChildren(value) {
-        if (this.hasNewmenuItems && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewmenuItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('menuItems', value);
         }

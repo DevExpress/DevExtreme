@@ -1522,8 +1522,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
-        if (this.hasNewbuttons && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewbuttons) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('buttons', value);
         }

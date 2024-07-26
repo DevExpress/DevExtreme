@@ -588,8 +588,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
-        if (this.hasNewcustomOperations && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewcustomOperations) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('customOperations', value);
         }
@@ -600,8 +602,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
-        if (this.hasNewfields && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewfields) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('fields', value);
         }

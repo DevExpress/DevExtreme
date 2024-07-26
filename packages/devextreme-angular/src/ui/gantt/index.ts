@@ -1206,8 +1206,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        if (this.hasNewcolumns && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewcolumns) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('columns', value);
         }
@@ -1218,8 +1220,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
         return this._getOption('stripLines');
     }
     set stripLinesChildren(value) {
-        if (this.hasNewstripLines && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewstripLines) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('stripLines', value);
         }

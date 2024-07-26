@@ -2066,8 +2066,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('columns');
     }
     set columnsChildren(value) {
-        if (this.hasNewcolumns && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewcolumns) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('columns', value);
         }
@@ -2078,8 +2080,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         return this._getOption('sortByGroupSummaryInfo');
     }
     set sortByGroupSummaryInfoChildren(value) {
-        if (this.hasNewsortByGroupSummaryInfo && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewsortByGroupSummaryInfo) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('sortByGroupSummaryInfo', value);
         }

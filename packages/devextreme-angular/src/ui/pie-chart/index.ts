@@ -1000,8 +1000,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
-        if (this.hasNewannotations && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewannotations) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('annotations', value);
         }
@@ -1012,8 +1014,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
         return this._getOption('series');
     }
     set seriesChildren(value) {
-        if (this.hasNewseries && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewseries) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('series', value);
         }

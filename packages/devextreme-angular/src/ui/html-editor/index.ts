@@ -864,8 +864,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
         return this._getOption('mentions');
     }
     set mentionsChildren(value) {
-        if (this.hasNewmentions && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewmentions) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('mentions', value);
         }

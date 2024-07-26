@@ -485,8 +485,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         return this._getOption('cols');
     }
     set colsChildren(value) {
-        if (this.hasNewcols && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewcols) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('cols', value);
         }
@@ -497,8 +499,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         return this._getOption('items');
     }
     set itemsChildren(value) {
-        if (this.hasNewitems && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewitems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('items', value);
         }
@@ -509,8 +513,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
         return this._getOption('rows');
     }
     set rowsChildren(value) {
-        if (this.hasNewrows && value.length > 0) {
-            console.log('Use only one type of nested items');
+        if (this.hasNewrows) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
         } else {
             this.setChildren('rows', value);
         }
