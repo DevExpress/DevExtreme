@@ -30500,7 +30500,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:User.id]
      */
-    id?: number | string;
+    id?: number;
     /**
      * [descr:User.name]
      */

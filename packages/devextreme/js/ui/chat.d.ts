@@ -50,7 +50,7 @@ export type User = {
      * @default undefined
      * @public
      */
-    id?: number | string;
+    id?: number;
     /**
      * @docid
      * @default ''
@@ -104,12 +104,6 @@ export type Message = {
  * @docid
  */
 export interface dxChatOptions extends WidgetOptions<dxChat> {
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    user?: User;
     /**
      * @docid
      * @default ''
