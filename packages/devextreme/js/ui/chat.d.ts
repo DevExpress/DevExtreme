@@ -47,10 +47,10 @@ export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEven
 export type User = {
     /**
      * @docid
-     * @default string
+     * @default undefined
      * @public
      */
-    id?: number | string;
+    id?: number;
     /**
      * @docid
      * @default ''
@@ -104,12 +104,6 @@ export type Message = {
  * @docid
  */
 export interface dxChatOptions extends WidgetOptions<dxChat> {
-    /**
-     * @docid
-     * @default { id: string } // guid
-     * @public
-     */
-    user?: User;
     /**
      * @docid
      * @default ''
