@@ -87,13 +87,13 @@ class Chat extends Widget<Properties> {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
   _sendButtonClickHandler(action: any): void {
-    const { actionValue, event } = action;
+    const { text, event } = action;
     const { user } = this.option();
 
     const message: Message = {
       timestamp: String(Date.now()),
       author: user,
-      text: actionValue,
+      text,
     };
 
     // @ts-expect-error
