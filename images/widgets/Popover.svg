@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+<path opacity="0.5" fill="#337AB7" d="M57,45v2c0,0.5-0.5,1-1,1H38l-6,6l-6.5-6H8c-0.5,0-1-0.5-1-1v-2H4v4c0,1.1,0.9,2,2,2h17.3
+	l8.7,8l8-8h18c1.1,0,2-0.9,2-2v-4H57z"/>
+<path fill="#337AB7" d="M60,8H4c-1.1,0-2,0.9-2,2v36c0,1.1,0.9,2,2,2h19.3l8.7,8l8-8h20c1.1,0,2-0.9,2-2V10C62,8.9,61.1,8,60,8z
+	 M59,44c0,0.5-0.5,1-1,1H38l-6,6l-6.5-6H6c-0.5,0-1-0.5-1-1V12c0-0.5,0.5-1,1-1h52c0.5,0,1,0.5,1,1V44z"/>
+<circle fill="#337AB7" cx="22" cy="29" r="3"/>
+<circle fill="#337AB7" cx="32" cy="29" r="3"/>
+<circle fill="#337AB7" cx="42" cy="29" r="3"/>
+</svg>

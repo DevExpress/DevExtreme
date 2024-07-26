@@ -1,0 +1,591 @@
+{
+    "page": {
+        "width": 8391,
+        "height": 11906,
+        "pageColor": "white",
+        "pageWidth": 8391,
+        "pageHeight": 11906,
+        "pageLandscape": false,
+        "gridSize": 180,
+        "showGrid": true,
+        "snapToGrid": true,
+        "units": 1
+    },
+    "connectors": [
+        {
+            "key": "19",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 4860,
+                    "y": 1620
+                },
+                {
+                    "x": 4860,
+                    "y": 2160
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "0",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "1",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "20",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 4860,
+                    "y": 3240
+                },
+                {
+                    "x": 4860,
+                    "y": 5040
+                },
+                {
+                    "x": 3780,
+                    "y": 5040
+                },
+                {
+                    "x": 2700,
+                    "y": 5580
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "1",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "2",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "21",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 4860,
+                    "y": 3240
+                },
+                {
+                    "x": 4860,
+                    "y": 5040
+                },
+                {
+                    "x": 7020,
+                    "y": 5040
+                },
+                {
+                    "x": 7020,
+                    "y": 5580
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "1",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "3",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "22",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 2700,
+                    "y": 6660
+                },
+                {
+                    "x": 1980,
+                    "y": 7560
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "2",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "5",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "23",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 2700,
+                    "y": 6660
+                },
+                {
+                    "x": 3240,
+                    "y": 7560
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "2",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "6",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "24",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 2700,
+                    "y": 6660
+                },
+                {
+                    "x": 720,
+                    "y": 7560
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "2",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "4",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "25",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 2700,
+                    "y": 6660
+                },
+                {
+                    "x": 4500,
+                    "y": 7560
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "2",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "7",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "27",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 6300,
+                    "y": 8640
+                },
+                {
+                    "x": 6300,
+                    "y": 9000
+                },
+                {
+                    "x": 6300,
+                    "y": 9540
+                },
+                {
+                    "x": 6012,
+                    "y": 9540
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "9",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "10",
+            "endConnectionPointIndex": 1
+        },
+        {
+            "key": "28",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 6300,
+                    "y": 8640
+                },
+                {
+                    "x": 6300,
+                    "y": 9000
+                },
+                {
+                    "x": 6300,
+                    "y": 10980
+                },
+                {
+                    "x": 6012,
+                    "y": 10980
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "9",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "11",
+            "endConnectionPointIndex": 1
+        },
+        {
+            "key": "29",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 7020,
+                    "y": 6660
+                },
+                {
+                    "x": 6300,
+                    "y": 7560
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "3",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "9",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "30",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 4320,
+                    "y": 2700
+                },
+                {
+                    "x": 2592,
+                    "y": 2700
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "1",
+            "beginConnectionPointIndex": 3,
+            "endItemKey": "12",
+            "endConnectionPointIndex": 1
+        },
+        {
+            "key": "31",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 5400,
+                    "y": 2700
+                },
+                {
+                    "x": 7128,
+                    "y": 2700
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "1",
+            "beginConnectionPointIndex": 1,
+            "endItemKey": "13",
+            "endConnectionPointIndex": 3
+        },
+        {
+            "key": "32",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 2160,
+                    "y": 3240
+                },
+                {
+                    "x": 2160,
+                    "y": 3780
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "12",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "14",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "33",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 2160,
+                    "y": 3240
+                },
+                {
+                    "x": 3600,
+                    "y": 3780
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "12",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "15",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "34",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 7020,
+                    "y": 6660
+                },
+                {
+                    "x": 7740,
+                    "y": 7560
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "3",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "16",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "35",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 7740,
+                    "y": 8640
+                },
+                {
+                    "x": 7740,
+                    "y": 9000
+                }
+            ],
+            "properties": {
+                "lineOption": 0,
+                "endLineEnding": 0
+            },
+            "beginItemKey": "16",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "17",
+            "endConnectionPointIndex": 0
+        },
+        {
+            "key": "36",
+            "locked": false,
+            "zIndex": 0,
+            "points": [
+                {
+                    "x": 2160,
+                    "y": 3240
+                },
+                {
+                    "x": 720,
+                    "y": 3780
+                }
+            ],
+            "properties": { "endLineEnding": 0 },
+            "beginItemKey": "12",
+            "beginConnectionPointIndex": 2,
+            "endItemKey": "18",
+            "endConnectionPointIndex": 0
+        }
+    ],
+    "shapes": [
+        {
+            "key": "0",
+            "locked": false,
+            "zIndex": 0,
+            "type": "internet",
+            "text": "Internet",
+            "x": 4320,
+            "y": 540,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "1",
+            "locked": false,
+            "zIndex": 0,
+            "type": "router",
+            "text": "Router",
+            "x": 4320,
+            "y": 2160,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "2",
+            "locked": false,
+            "zIndex": 0,
+            "type": "switch",
+            "text": "Switch",
+            "x": 2160,
+            "y": 5580,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "3",
+            "locked": false,
+            "zIndex": 0,
+            "type": "switch",
+            "text": "Switch",
+            "x": 6480,
+            "y": 5580,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "4",
+            "locked": false,
+            "zIndex": 0,
+            "type": "pc",
+            "text": "PC",
+            "x": 180,
+            "y": 7560,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "5",
+            "locked": false,
+            "zIndex": 0,
+            "type": "pc",
+            "text": "PC",
+            "x": 1440,
+            "y": 7560,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "6",
+            "locked": false,
+            "zIndex": 0,
+            "type": "pc",
+            "text": "PC",
+            "x": 2700,
+            "y": 7560,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "7",
+            "locked": false,
+            "zIndex": 0,
+            "type": "pc",
+            "text": "PC",
+            "x": 3960,
+            "y": 7560,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "9",
+            "locked": false,
+            "zIndex": 0,
+            "type": "pc",
+            "text": "PC",
+            "x": 5760,
+            "y": 7560,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "10",
+            "locked": false,
+            "zIndex": 0,
+            "type": "printer",
+            "text": "Printer",
+            "x": 5040,
+            "y": 9000,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "11",
+            "locked": false,
+            "zIndex": 0,
+            "type": "scaner",
+            "text": "Scaner",
+            "x": 5040,
+            "y": 10440,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "12",
+            "locked": false,
+            "zIndex": 0,
+            "type": "wifi",
+            "text": "Wi Fi",
+            "x": 1620,
+            "y": 2160,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "13",
+            "locked": false,
+            "zIndex": 0,
+            "type": "server",
+            "text": "Server",
+            "x": 7020,
+            "y": 2160,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "14",
+            "locked": false,
+            "zIndex": 0,
+            "type": "laptop",
+            "text": "Laptop",
+            "x": 1620,
+            "y": 3780,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "15",
+            "locked": false,
+            "zIndex": 0,
+            "type": "mobile",
+            "text": "Mobile",
+            "x": 3060,
+            "y": 3780,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "16",
+            "locked": false,
+            "zIndex": 0,
+            "type": "pc",
+            "text": "PC",
+            "x": 7200,
+            "y": 7560,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "17",
+            "locked": false,
+            "zIndex": 0,
+            "type": "phone",
+            "text": "Phone",
+            "x": 7200,
+            "y": 9000,
+            "width": 1080,
+            "height": 1080
+        },
+        {
+            "key": "18",
+            "locked": false,
+            "zIndex": 0,
+            "type": "laptop",
+            "text": "Laptop",
+            "x": 180,
+            "y": 3780,
+            "width": 1080,
+            "height": 1080
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+#scroll,#list{position:absolute;left:0;top:0;bottom:0;width:240px}.item{color:var(--dx-color-text);background-color:var(--dx-component-color-bg);box-sizing:border-box;padding:10px 20px;margin-bottom:10px}#scheduler{margin-left:270px}.dx-draggable-source{opacity:.5}.dx-draggable-dragging>*{box-shadow:0 1px 3px #0000001a,0 6px 8px #0003}
