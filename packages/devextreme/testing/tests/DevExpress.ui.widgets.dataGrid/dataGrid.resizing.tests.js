@@ -105,7 +105,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 caption: 'FirstName',
                 width: '200',
                 fixed: true
-            }, 'LastName']
+            }, 'LastName'],
+            columnFixing: {
+                legacyMode: true
+            }
         }).dxDataGrid('instance');
 
         // assert

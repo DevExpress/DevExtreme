@@ -556,6 +556,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 columns[99].fixed = true;
                 columns[99].fixedPosition = 'right';
             },
+            columnFixing: {
+                legacyMode: true
+            },
             columnWidth: 100,
             scrolling: {
                 columnRenderingMode: 'virtual',
@@ -606,6 +609,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 columns[99].fixedPosition = 'right';
             },
             columnWidth: 100,
+            columnFixing: {
+                legacyMode: true
+            },
             scrolling: {
                 columnRenderingMode: 'virtual',
                 useNative: false,
@@ -849,7 +855,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 }
             },
             scrolling: { mode: 'virtual' },
-            columnFixing: { enabled: true },
+            columnFixing: { enabled: true, legacyMode: true },
             columns: [
                 { dataField: 'field1', width: 100, groupIndex: 0 },
                 { dataField: 'field2', width: 100, groupIndex: 1 },
@@ -992,6 +998,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 rowPageSize: 2,
                 rowRenderingMode: 'virtual',
                 updateTimeout: 0
+            },
+            columnFixing: {
+                legacyMode: true
             },
             columns: [{
                 dataField: 'someValue1',
@@ -3351,6 +3360,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 useNative: false
             },
+            columnFixing: {
+                legacyMode: true
+            },
             columns: [{ dataField: 'name', fixed: true }, 'id']
         });
 
@@ -4543,7 +4555,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 enabled: true,
                 template: (container) => $('<div>').appendTo(container).dxDataGrid({
                     columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
-                    columnFixing: { enabled: true },
+                    columnFixing: { enabled: true, legacyMode: true },
                     columnAutoWidth: true,
                     keyExpr: 'id',
                     dataSource: [{ id: 1 }, { id: 2 }]
@@ -5867,6 +5879,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 { dataField: 'id', fixed: true },
                 { dataField: 'name' }
             ],
+            columnFixing: {
+                legacyMode: true
+            },
             scrolling: {
                 mode: 'virtual',
                 useNative: false
@@ -6096,6 +6111,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 { dataField: 'lastName', dataType: 'string', width: 200 },
                 { name: 'fixedColumns', width: 70, fixed: true, fixedPosition: 'right' },
             ],
+            columnFixing: {
+                legacyMode: true
+            },
             stateStoring: {
                 enabled: true,
                 storageKey: 'datagridState',
@@ -6210,7 +6228,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             width: 600,
             dataSource: data,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             customizeColumns(columns) {
                 columns[0].groupIndex = 0;
@@ -6266,7 +6285,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             width: 600,
             dataSource: data,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             customizeColumns(columns) {
                 columns[0].groupIndex = 0;
@@ -6331,7 +6351,8 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: data,
             keyExpr: 'id',
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             customizeColumns(columns) {
                 columns[0].fixed = true;

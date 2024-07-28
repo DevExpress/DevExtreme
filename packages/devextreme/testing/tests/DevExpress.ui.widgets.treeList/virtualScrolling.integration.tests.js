@@ -186,6 +186,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             scrolling: {
                 useNative: false
             },
+            columnFixing: {
+                legacyMode: true
+            }
         }).dxTreeList('instance');
 
         this.clock.tick(300);
