@@ -6,7 +6,6 @@ const header = require('gulp-header');
 const ts = require('gulp-typescript');
 const config = require('./build.config');
 const path = require('path');
-const pkg = require('./package.json');
 const generateReactComponents = require('devextreme-internal-tools').generateReactComponents;
 
 const GENERATE = 'generate';
@@ -58,9 +57,12 @@ gulp.task(NPM_CLEAN, (c) =>
     del(config.npm.dist, c)
 );
 
-gulp.task(NPM_PACKAGE, gulp.series(
-    () => gulp.src(config.npm.package).pipe(gulp.dest(config.npm.dist))
-));
+gulp.task(NPM_PACKAGE, (done) => {
+    const pkg = require('./package.json');
+    delete pkg.publishConfig;
+    fs.writeFileSync(path.join(config.npm.dist, 'package.json'), JSON.stringify(pkg, null, 2))
+    done();
+});
 
 gulp.task(NPM_LICENSE, gulp.series(
     () => gulp.src(config.npm.license).pipe(gulp.dest(config.npm.dist))
@@ -120,11 +122,11 @@ gulp.task(NPM_BUILD, gulp.series(
     NPM_CLEAN,
     gulp.parallel(
         NPM_LICENSE,
-        NPM_PACKAGE,
         NPM_README,
         NPM_BUILD_ESM,
         NPM_BUILD_CJS
-    )
+    ),
+    NPM_PACKAGE
 ));
 
 gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
