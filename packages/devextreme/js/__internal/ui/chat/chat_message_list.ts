@@ -113,11 +113,20 @@ class MessageList extends Widget<MessageListOptions> {
       if (sender.id === lastMessageGroupUserId) {
         lastMessageGroup._renderMessage(message);
 
+        this._scrollContentToLastMessage();
+
         return;
       }
     }
 
     this._createMessageGroupComponent([message], sender.id);
+    this._scrollContentToLastMessage();
+  }
+
+  _scrollContentToLastMessage(): void {
+    const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
+
+    lastMessageGroup?.element()[0].scrollIntoView(true);
   }
 
   _clean(): void {
