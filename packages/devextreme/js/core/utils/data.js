@@ -195,7 +195,9 @@ export const toComparable = function(value, caseSensitive, options = {}) {
         if(options?.collatorOptions?.sensitivity === 'base') {
             const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
-            value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+            value = options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
+
+            return value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
         }
 
         return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
