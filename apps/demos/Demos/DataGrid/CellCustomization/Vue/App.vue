@@ -10,6 +10,7 @@
     >
       <DxSorting mode="none"/>
       <DxPaging :page-size="10"/>
+      <DxPager :visible="true"/>
       <DxColumn
         :width="110"
         data-field="date"
@@ -50,7 +51,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxSorting, DxPaging,
+  DxDataGrid, DxColumn, DxSorting, DxPaging, DxPager,
 } from 'devextreme-vue/data-grid';
 
 import DiffCell from './DiffCell.vue';

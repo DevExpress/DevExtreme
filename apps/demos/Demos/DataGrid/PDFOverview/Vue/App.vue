@@ -18,6 +18,7 @@
 
       <DxGrouping :auto-expand-all="true"/>
       <DxPaging :page-size="10"/>
+      <DxPager :visible="true"/>
       <DxSelection mode="multiple"/>
       <DxExport
         :enabled="true"
@@ -36,6 +37,7 @@ import {
   DxSelection,
   DxPaging,
   DxDataGridTypes,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';

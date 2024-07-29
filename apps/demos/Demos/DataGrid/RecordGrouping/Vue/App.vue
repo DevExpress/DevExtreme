@@ -20,6 +20,7 @@
       <DxGroupPanel :visible="true"/>
       <DxGrouping :auto-expand-all="autoExpandAll"/>
       <DxPaging :page-size="10"/>
+      <DxPager :visible="true"/>
       <DxSearchPanel :visible="true"/>
     </DxDataGrid>
 
@@ -45,6 +46,7 @@ import {
   DxGroupPanel,
   DxSearchPanel,
   DxPaging,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import { customers } from './data.ts';
 

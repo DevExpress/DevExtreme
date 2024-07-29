@@ -8,6 +8,7 @@
       :enabled="true"
       :page-size="15"
     />
+    <DxPager :visible="true"/>
     <DxHeaderFilter :visible="true"/>
     <DxSearchPanel :visible="true"/>
     <DxEditing
@@ -99,6 +100,7 @@ import {
   DxLookup,
   DxRequiredRule,
   DxDataGridTypes,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import EmployeeDropDownBoxComponent from './EmployeeDropDownBoxComponent.vue';

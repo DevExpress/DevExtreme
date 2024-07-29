@@ -27,6 +27,7 @@
       />
 
       <DxPaging :page-size="10"/>
+      <DxPager :visible="true"/>
       <DxSelection
         :select-all-mode="allMode"
         :show-check-boxes-mode="checkBoxesMode"
@@ -68,6 +69,7 @@ import {
   DxPaging,
   DxSelection,
   DxFilterRow,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import themes from 'devextreme/ui/themes';
 import { sales } from './data.ts';

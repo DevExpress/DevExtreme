@@ -31,6 +31,7 @@
     />
     <DxPaging :page-size="12"/>
     <DxPager
+      :visible="true"
       :show-page-size-selector="true"
       :allowed-page-sizes="[8, 12, 20]"
     />

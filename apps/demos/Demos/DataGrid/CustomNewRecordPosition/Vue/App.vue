@@ -11,6 +11,7 @@
       <DxScrolling
         :mode="scrollingMode"
       />
+      <DxPager :visible="true"/>
       <DxEditing
         mode="row"
         :allow-adding="true"
@@ -86,7 +87,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxDataGrid, {
-  DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling, DxDataGridTypes,
+  DxColumn, DxEditing, DxValidationRule, DxButton, DxToolbar, DxItem, DxScrolling, DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import Guid from 'devextreme/core/guid';

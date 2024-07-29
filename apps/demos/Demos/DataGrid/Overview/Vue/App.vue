@@ -58,6 +58,7 @@
     />
     <DxGrouping :auto-expand-all="false"/>
     <DxPager
+      :visible="true"
       :allowed-page-sizes="pageSizes"
       :show-page-size-selector="true"
     />
