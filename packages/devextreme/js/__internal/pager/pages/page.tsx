@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 
 import { format } from '../../../core/utils/string';
 import messageLocalization from '../../../localization/message';
+import type { EventCallback } from '../../core/r1/event_callback';
 import { combineClasses } from '../../core/r1/utils/render_utils';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
@@ -27,11 +27,6 @@ export class Page extends BaseInfernoComponent<PagePropsInterface> {
   public state: any = {};
 
   public refs: any = null;
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
 
   getLabel(): string {
     return format(messageLocalization.getFormatter('dxPager-page'), this.getValue()) as string;

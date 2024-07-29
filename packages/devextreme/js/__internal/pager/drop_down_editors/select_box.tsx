@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 
 import type Store from '../../../data/abstract_store';
 import type DataSource from '../../../data/data_source';
 import type { Options as DataSourceOptions } from '../../../data/data_source';
 import LegacySelectBox from '../../../ui/select_box';
 import { DomComponentWrapper } from '../../core/r1/dom_component_wrapper';
+import type { EventCallback } from '../../core/r1/event_callback';
 import type { EditorLabelProps } from '../editors/common/editor_label_props';
 import { EditorLabelDefaultProps } from '../editors/common/editor_label_props';
 import type { EditorPropsType } from '../editors/common/editor_props';

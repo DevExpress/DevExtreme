@@ -11,7 +11,7 @@ export interface BasePagerProps {
   lightModeEnabled?: boolean;
   displayMode?: DisplayMode;
   maxPagesCount?: number;
-  pageCount?: number;
+  pageCount: number;
   pagesCountText?: string;
   visible?: boolean;
   hasKnownLastPage?: boolean;

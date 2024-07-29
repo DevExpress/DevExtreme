@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
-import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
+import type { EventCallback } from '../../core/r1/event_callback';
 import type { EffectReturn } from '../../core/r1/utils/effect_return';
 import { subscribeToClickEvent } from '../../core/r1/utils/subscribe_to_event';
 import { KeyboardActionContext } from './keyboard_action_context';
