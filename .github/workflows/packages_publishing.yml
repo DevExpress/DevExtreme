@@ -71,18 +71,18 @@ jobs:
           BUILD_INTERNAL_PACKAGE: true
         run: pnpm run all:build
 
-      - name: Clone deps scanner
-        uses: actions/checkout@v4
-        with:
-          repository: DevExpress/npmdeps-scanner
-          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
-          path: deps-scanner
-
-      - name: Run deps scanner
-        run: |
-          ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
-          mkdir -p ./artifacts/deps-scanner
-          cp reportGithub.json ./artifacts/deps-scanner/
+#      - name: Clone deps scanner
+#        uses: actions/checkout@v4
+#        with:
+#          repository: DevExpress/npmdeps-scanner
+#          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
+#          path: deps-scanner
+#
+#      - name: Run deps scanner
+#        run: |
+#          ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+#          mkdir -p ./artifacts/deps-scanner
+#          cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
@@ -174,7 +174,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
-          pnpm publish --quiet --ignore-scripts --registry https://npm.pkg.github.com;
+          pnpm publish --no-git-checks --quiet --ignore-scripts --registry https://npm.pkg.github.com;
 
       - name: Move 'daily' tag
         if: ${{ env.MOVE_DAILY_TAG == 'true' }}
@@ -185,7 +185,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          pnpm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily --registry=https://npm.pkg.github.com
 
       - name: Move 'stable' tag
         if: ${{ env.MOVE_STABLE_TAG == 'true' }}
@@ -196,7 +196,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          pnpm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable --registry=https://npm.pkg.github.com
 
 
   notify:
