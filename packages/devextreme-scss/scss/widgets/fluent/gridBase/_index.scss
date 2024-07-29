@@ -83,7 +83,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
     }
-
+    
+    .dx-editor-cell .dx-editor-with-menu,
     .dx-editor-with-menu {
       .dx-menu-item-content {
         display: flex;
@@ -440,7 +441,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         box-shadow: none;
       }
 
-      .dx-texteditor-input {
+      &:not(.dx-tagbox) .dx-texteditor-input {
         background: $datagrid-editor-bg;
         font-size: $fluent-grid-base-cell-font-size;
         height: $fluent-grid-base-cell-height;
@@ -450,15 +451,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         padding-top: 0;
         padding-bottom: 0;
         margin-top: 0;
-      }
-
-      &.dx-tagbox .dx-texteditor-input {
-        background: initial;
-        font-size: initial;
-        height: initial;
-        line-height: initial;
-        padding: initial;
-        margin-top: initial;
       }
 
       .dx-placeholder::before {
@@ -475,13 +467,9 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
 
-      .dx-tag-container {
+      &:not(.dx-tagbox) .dx-tag-container {
         min-height: $fluent-grid-base-cell-height;
         padding: 0;
-      }
-
-      &.dx-tagbox .dx-tag-container {
-        min-height: initial;
       }
 
       &:not(.dx-editor-filled):not(.dx-editor-outlined) {

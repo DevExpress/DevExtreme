@@ -74,6 +74,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
     }
 
+    .dx-editor-cell .dx-editor-with-menu,
     .dx-editor-with-menu {
       .dx-menu-item-content {
         display: flex;
@@ -418,7 +419,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         box-shadow: none;
       }
 
-      .dx-texteditor-input {
+      &:not(.dx-tagbox) .dx-texteditor-input {
         background: $datagrid-editor-bg;
         font-size: $material-grid-base-cell-font-size;
         height: $material-grid-base-cell-height;
@@ -428,15 +429,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         padding-top: 0;
         padding-bottom: 0;
         margin-top: 0;
-      }
-
-      &.dx-tagbox .dx-texteditor-input {
-        background: initial;
-        font-size: initial;
-        height: initial;
-        line-height: initial;
-        padding: initial;
-        margin-top: initial;
       }
 
       .dx-placeholder::before {
@@ -453,13 +445,9 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         }
       }
 
-      .dx-tag-container {
+      &:not(.dx-tagbox) .dx-tag-container {
         min-height: $material-grid-base-cell-height;
         padding: 0;
-      }
-
-      &.dx-tagbox .dx-tag-container {
-        min-height: initial;
       }
 
       &:not(.dx-editor-filled):not(.dx-editor-outlined) {
