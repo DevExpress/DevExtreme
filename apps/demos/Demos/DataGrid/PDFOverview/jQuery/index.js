@@ -17,6 +17,9 @@ $(() => {
     paging: {
       pageSize: 10,
     },
+    pager: {
+      visible: true,
+    },
     columns: [
       'CompanyName',
       'Phone',

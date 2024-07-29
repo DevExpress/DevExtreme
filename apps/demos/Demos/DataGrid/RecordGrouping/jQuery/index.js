@@ -14,6 +14,9 @@ $(() => {
     paging: {
       pageSize: 10,
     },
+    pager: {
+      visible: true,
+    },
     groupPanel: {
       visible: true,
     },

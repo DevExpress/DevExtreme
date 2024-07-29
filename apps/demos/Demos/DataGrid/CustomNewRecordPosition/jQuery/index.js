@@ -15,6 +15,9 @@ $(() => {
       useIcons: true,
       newRowPosition: 'viewportTop',
     },
+    pager: {
+      visible: true,
+    },
     remoteOperations: true,
     columns: [
       {

@@ -47,6 +47,7 @@ $(() => {
       pageSize: 12,
     },
     pager: {
+      visible: true,
       showPageSizeSelector: true,
       allowedPageSizes: [8, 12, 20],
     },

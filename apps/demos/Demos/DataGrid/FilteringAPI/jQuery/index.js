@@ -27,6 +27,9 @@ $(() => {
         'ResponsibleEmployee/Employee_Full_Name',
       ],
     },
+    pager: {
+      visible: true,
+    },
     columnAutoWidth: true,
     showBorders: true,
     columns: [

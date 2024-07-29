@@ -25,6 +25,9 @@ $(() => {
       allowUpdating: true,
       allowDeleting: true,
     },
+    pager: {
+      visible: true,
+    },
     repaintChangesOnly: true,
     onOptionChanged(e) {
       if (e.name === 'editing') {

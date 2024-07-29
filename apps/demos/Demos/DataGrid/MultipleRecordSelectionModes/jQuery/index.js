@@ -9,6 +9,9 @@ $(() => {
     paging: {
       pageSize: 10,
     },
+    pager: {
+      visible: true,
+    },
     filterRow: {
       visible: true,
     },
