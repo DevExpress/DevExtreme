@@ -7,7 +7,7 @@ import {
   InternalState, RefObject, Ref,
 } from '@devextreme-generator/declarations';
 
-import { Page } from './page';
+import { Page } from '../../../../__internal/pager/pages/page';
 import { PAGER_INFO_CLASS } from '../info';
 import { NumberBox } from '../../../../__internal/pager/editors/number_box';
 import messageLocalization from '../../../../localization/message';

@@ -5,7 +5,7 @@ import {
   Consumer,
   Mutable,
 } from '@devextreme-generator/declarations';
-import { Page, PagePropsInterface } from './page';
+import { Page, PagePropsInterface } from '../../../../__internal/pager/pages/page';
 import { InternalPagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
