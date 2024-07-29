@@ -11,7 +11,7 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 
-import { InfoText } from './info';
+import { InfoText } from '../../../__internal/pager/info';
 import { PageIndexSelector } from './pages/page_index_selector';
 import { PageSizeSelector } from './page_size/selector';
 import {
