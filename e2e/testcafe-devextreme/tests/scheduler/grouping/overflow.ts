@@ -10,13 +10,14 @@ fixture.disablePageReloads`Scheduler: Grouping overflow`
   ['vertical', 'horizontal'].forEach((groupOrientation) => {
     ['hidden', 'allDay'].forEach((allDayPanelMode) => {
       [[9, 14, 60], [0, 24, 360]].forEach(([startDayHour, endDayHour, cellDuration]) => {
-        const allParams = `${viewType} ${groupOrientation} ${allDayPanelMode} ${startDayHour} ${endDayHour}`;
+        const allParams = `${viewType}-${groupOrientation}-${allDayPanelMode}-${startDayHour}-${endDayHour}`;
+
         test(`Long appointments should not overflow group view (${allParams})`, async (t) => {
           const scheduler = new Scheduler('#container');
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
           await t
-            .expect(await takeScreenshot(`group-overflow (${allParams}).png`, scheduler.element))
+            .expect(await takeScreenshot(`group-overflow-(${allParams}).png`, scheduler.element))
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
