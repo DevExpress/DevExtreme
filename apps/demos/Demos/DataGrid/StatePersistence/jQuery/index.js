@@ -21,6 +21,7 @@ $(() => {
       storageKey: 'storage',
     },
     pager: {
+      visible: true,
       showPageSizeSelector: true,
       allowedPageSizes: [5, 10, 20],
     },
