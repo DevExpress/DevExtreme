@@ -2,6 +2,7 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
+import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps, DefaultProps } from '../types';
 import type { CellBaseProps } from './cell';
@@ -50,7 +51,7 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
     } = this.props;
     const cellSizeHorizontalClass = renderUtils
       .getCellSizeHorizontalClass(viewType, crossScrollingEnabled);
-    const cellClasses = renderUtils.combineClasses({
+    const cellClasses = combineClasses({
       'dx-scheduler-header-panel-cell': true,
       [cellSizeHorizontalClass]: true,
       'dx-scheduler-header-panel-current-time-cell': today,

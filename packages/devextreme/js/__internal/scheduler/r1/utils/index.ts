@@ -16,7 +16,6 @@ import {
   addHeightToStyle,
   addToStyles,
   addWidthToStyle,
-  combineClasses,
   getCellSizeHorizontalClass,
   getCellSizeVerticalClass,
   getGroupCellClasses,
@@ -138,7 +137,6 @@ export const renderUtils = {
   addWidthToStyle,
   addHeightToStyle,
   getGroupCellClasses,
-  combineClasses,
   getCellSizeHorizontalClass,
   getCellSizeVerticalClass,
 };

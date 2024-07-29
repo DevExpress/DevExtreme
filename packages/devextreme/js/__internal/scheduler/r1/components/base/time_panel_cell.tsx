@@ -2,6 +2,7 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
+import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps } from '../types';
 import type { CellBaseProps } from './cell';
@@ -63,7 +64,7 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
 
     const cellSizeVerticalClass = renderUtils
       .getCellSizeVerticalClass(false);
-    const classes = renderUtils.combineClasses({
+    const classes = combineClasses({
       'dx-scheduler-time-panel-cell': true,
       [cellSizeVerticalClass]: true,
       'dx-scheduler-time-panel-current-time-cell': !!highlighted,

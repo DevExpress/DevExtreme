@@ -3,8 +3,8 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
+import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { ViewCellData } from '../../types';
-import { renderUtils } from '../../utils/index';
 import type { DataCellTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 import { AllDayPanelCell } from './all_day_panel_cell';
 import { Row } from './row';
@@ -42,7 +42,7 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
       isVerticalGroupOrientation,
       dataCellTemplate,
     } = this.props;
-    const classes = renderUtils.combineClasses({
+    const classes = combineClasses({
       'dx-scheduler-all-day-table-row': true,
       [className ?? '']: !!className,
     });
