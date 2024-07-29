@@ -12,7 +12,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { InfoText } from '../../../__internal/pager/info';
-import { PageIndexSelector } from './pages/page_index_selector';
+import { PageIndexSelector } from '../../../__internal/pager/pages/page_index_selector';
 import { PageSizeSelector } from './page_size/selector';
 import {
   PAGER_PAGES_CLASS, PAGER_PAGE_INDEXES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS,

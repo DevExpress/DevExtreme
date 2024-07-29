@@ -19,7 +19,7 @@ export interface BasePagerProps {
   showPageSizes?: boolean;
   pageSizes?: (number | 'all')[];
   rtlEnabled?: boolean;
-  showNavigationButtons?: boolean;
+  showNavigationButtons: boolean;
   totalCount?: number;
   label?: string;
   onKeyDown?: EventCallback<Event>;
