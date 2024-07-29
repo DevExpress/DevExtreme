@@ -8,7 +8,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { LightButton, LightButtonProps } from '../../../../__internal/pager/common/light_button';
-import { PagesLarge } from './large';
+import { PagesLarge } from '../../../../__internal/pager/pages/large';
 import { PagesSmall } from '../../../../__internal/pager/pages/small';
 import { InternalPagerProps } from '../common/pager_props';
 import {

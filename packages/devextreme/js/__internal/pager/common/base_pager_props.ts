@@ -10,7 +10,7 @@ export interface BasePagerProps {
   infoText?: string;
   lightModeEnabled?: boolean;
   displayMode?: DisplayMode;
-  maxPagesCount?: number;
+  maxPagesCount: number;
   pageCount: number;
   pagesCountText?: string;
   visible?: boolean;
