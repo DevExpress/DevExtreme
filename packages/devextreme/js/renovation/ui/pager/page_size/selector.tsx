@@ -5,7 +5,7 @@ import {
 
 import { FullPageSize } from '../common/types';
 import { PageSizeSmall } from '../../../../__internal/pager/page_size/small';
-import { PageSizeLarge } from './large';
+import { PageSizeLarge } from '../../../../__internal/pager/page_size/large';
 import { InternalPagerProps } from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
