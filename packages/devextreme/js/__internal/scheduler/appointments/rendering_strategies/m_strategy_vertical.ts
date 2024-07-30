@@ -203,9 +203,12 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
     const minHeight = this.getAppointmentMinSize();
     const {
-      vMax,
       hMax,
+      vMax,
+      vMin,
     } = appointmentSettings;
+
+    const maxHeight = this.isVirtualScrolling ? vMax : vMax - vMin;
 
     const hasTailPart = this.options.endViewDate > appointmentSettings.info.appointment.endDate;
     let left = Math.round(appointmentSettings.left + offset);
@@ -215,7 +218,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     while (tailHeight > 0 && left < hMax) {
       tailHeight = Math.max(minHeight, tailHeight);
       columnIndex += cellsDiff;
-      const height = Math.min(tailHeight, vMax);
+      const height = Math.min(tailHeight, maxHeight);
 
       result.push({
         ...appointmentSettings,
@@ -229,7 +232,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       });
 
       left += offset;
-      tailHeight -= vMax;
+      tailHeight -= maxHeight;
     }
 
     if (hasTailPart && result.length > 0) {
