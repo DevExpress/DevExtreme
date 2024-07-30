@@ -1,11 +1,14 @@
-import type { Subscription } from '@js/__internal/core/reactive/subscription';
+/* eslint-disable spellcheck/spell-checker */
 import type { Subscribable } from '@ts/core/reactive';
 import { state, toSubscribable } from '@ts/core/reactive';
+import type { Subscription } from '@ts/core/reactive/subscription';
 import type { InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';
 
 export abstract class View {
   private canUpdate = true;
+
+  private inferno: undefined | ReturnType<typeof asInferno>;
 
   public readonly abstract vdom: InfernoNode | Subscribable<InfernoNode>;
 
@@ -18,9 +21,14 @@ export abstract class View {
   public setCanUpdate(v: boolean): void {
     this.canUpdate = v;
   }
+
+  public asInferno(): ReturnType<typeof asInferno> {
+    // eslint-disable-next-line no-return-assign
+    return this.inferno ??= asInferno(this);
+  }
 }
 
-export function asInferno(view: View) {
+function asInferno(view: View) {
   interface State {
     vdom: InfernoNode;
   }

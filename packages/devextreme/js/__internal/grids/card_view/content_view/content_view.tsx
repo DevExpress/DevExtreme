@@ -1,20 +1,16 @@
-import dxLoadPanel from '@js/ui/load_panel';
 import { computed } from '@ts/core/reactive';
 import { ColumnsController } from '@ts/grids/grid_core_new/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/grid_core_new/columns_controller/types';
-import { NoData } from '@ts/grids/grid_core_new/content_view/no_data';
 import { View } from '@ts/grids/grid_core_new/core/view';
-import { createWidgetWrapper } from '@ts/grids/grid_core_new/core/widget_wrapper';
 import { DataController } from '@ts/grids/grid_core_new/data_controller/data_controller';
 
+import { ContentStatusView } from '../../grid_core_new/content_view/content_status_view';
 import { OptionsController } from '../options_controller';
 import { Card } from './card';
 
 export const CLASSES = {
   content: 'dx-cardview-content',
 };
-
-const LoadPanel = createWidgetWrapper(dxLoadPanel);
 
 export class ContentView extends View {
   private readonly items = computed(
@@ -28,36 +24,31 @@ export class ContentView extends View {
   );
 
   public vdom = computed(
-    (items, isLoading, noDataText) => (
-      <>
+    (items) => {
+      const ContentStatus = this.contentStatus.asInferno();
+      return <>
         <div className={CLASSES.content}>
-          {<LoadPanel visible={isLoading}></LoadPanel>}
-          {
-            (!isLoading && items.length === 0) && (
-              <NoData
-                text={noDataText}
-              ></NoData>
-            )
-          }
+          <ContentStatus/>
           {items.map((item) => (
             <Card row={item}></Card>
           ))}
         </div>
-      </>
-    ),
+      </>;
+    },
     [
       this.items,
-      this.dataController.isLoading,
-      this.options.oneWay('noDataText'),
     ],
   );
 
-  static dependencies = [DataController, ColumnsController, OptionsController] as const;
+  static dependencies = [
+    DataController, ColumnsController, OptionsController, ContentStatusView,
+  ] as const;
 
   constructor(
     private readonly dataController: DataController,
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
+    private readonly contentStatus: ContentStatusView,
   ) {
     super();
   }

@@ -24,5 +24,9 @@ export function createWidgetWrapper<
     componentDidUpdate(): void {
       this.component.option(this.props);
     }
+
+    componentWillUnmount(): void {
+      this.component.dispose();
+    }
   };
 }
