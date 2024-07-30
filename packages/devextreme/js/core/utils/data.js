@@ -191,6 +191,7 @@ export const toComparable = function(value, caseSensitive, options = {}) {
     }
 
     const isCaseSensitive = options?.collatorOptions?.sensitivity === 'case' || caseSensitive;
+
     if(!isCaseSensitive && typeof value === 'string') {
         if(options?.collatorOptions?.sensitivity === 'base') {
             const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
