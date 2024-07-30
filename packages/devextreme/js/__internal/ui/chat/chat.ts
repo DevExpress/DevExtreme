@@ -47,6 +47,8 @@ class Chat extends Widget<Properties> {
     this._renderHeader();
     this._renderMessageList();
     this._renderMessageBox();
+
+    this._scrollMessageListContent();
   }
 
   _renderHeader(): void {
@@ -106,6 +108,10 @@ class Chat extends Widget<Properties> {
     this.renderMessage(message, user);
     // @ts-expect-error
     this._messageSendAction?.({ message, event });
+  }
+
+  _scrollMessageListContent(): void {
+    this._messageList?._scrollContentToLastMessage();
   }
 
   _optionChanged(args: Record<string, unknown>): void {
