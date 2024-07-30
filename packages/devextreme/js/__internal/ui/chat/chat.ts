@@ -1,4 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/chat';
 
@@ -8,8 +9,6 @@ import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
-
-const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
@@ -23,6 +22,8 @@ class Chat extends Widget<Properties> {
       ...super._getDefaultOptions(),
       title: '',
       items: [],
+      // @ts-expect-error
+      user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };
   }
@@ -47,13 +48,15 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items } = this.option();
+    // @ts-expect-error
+    const { items, user } = this.option();
 
+    const currentUserId = user?.id;
     const $messageList = $('<div>').appendTo(this.element());
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
-      currentUserId: MOCK_CURRENT_USER_ID,
+      currentUserId,
     });
   }
 
@@ -71,8 +74,13 @@ class Chat extends Widget<Properties> {
         // @ts-expect-error
         this._chatHeader?.option(name, value);
         break;
+      case 'user':
+        // @ts-expect-error
+        this._messageList?.option('currentUserId', value.id);
+        break;
       case 'items':
-        this._invalidate();
+        // @ts-expect-error
+        this._messageList?.option(name, value);
         break;
       case 'onMessageSend':
         break;
