@@ -9,6 +9,7 @@ const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
@@ -184,6 +185,165 @@ QUnit.module('Message group', moduleConfig, () => {
         const $bubble = $messageGroup.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).eq(0);
 
         assert.strictEqual($bubble.text(), 'userFirst');
+    });
+});
+
+QUnit.module('renderMessage', moduleConfig, () => {
+    QUnit.test('Chat items should be updated after renderMessage has been called', function(assert) {
+        const author = {
+            id: MOCK_CURRENT_USER_ID,
+        };
+
+        const newMessage = {
+            author,
+            timestamp: NOW,
+            text: 'NEW MESSAGE',
+        };
+
+        this.instance.renderMessage(newMessage, author);
+
+        const { items } = this.instance.option();
+        const lastItem = items[items.length - 1];
+
+        assert.strictEqual(lastItem, newMessage);
+    });
+
+    QUnit.test('Message List items should be updated after renderMessage has been called', function(assert) {
+        const author = {
+            id: MOCK_CURRENT_USER_ID,
+        };
+
+        const newMessage = {
+            author,
+            timestamp: NOW,
+            text: 'NEW MESSAGE',
+        };
+
+        this.instance.renderMessage(newMessage, author);
+
+        const { items } = this.instance._messageList.option();
+        const lastItem = items[items.length - 1];
+
+        assert.strictEqual(lastItem, newMessage);
+    });
+
+    QUnit.test('Last Message Group items should be updated if its user ids are equal with new message', function(assert) {
+        const author = {
+            id: MOCK_CURRENT_USER_ID,
+        };
+
+        const newMessage = {
+            author,
+            timestamp: NOW,
+            text: 'NEW MESSAGE',
+        };
+
+        const messageGroups = this.instance._messageList._messageGroups;
+        const lastMessageGroup = messageGroups[messageGroups.length - 1];
+        const lastMessageGroupElement = lastMessageGroup.element();
+
+        assert.strictEqual($(lastMessageGroupElement).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 1);
+
+        this.instance.renderMessage(newMessage, author);
+
+        const { items: messages } = lastMessageGroup.option();
+        const lastMessage = messages[messages.length - 1];
+
+        assert.strictEqual(lastMessage, newMessage);
+        assert.strictEqual($(lastMessageGroupElement).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 2);
+    });
+
+    QUnit.test('Message Group should be created if its user ids are not equal with new message', function(assert) {
+        const author = {
+            id: MOCK_COMPANION_USER_ID,
+        };
+
+        const newMessage = {
+            author,
+            timestamp: NOW,
+            text: 'NEW MESSAGE',
+        };
+
+        const getMessageGroupElements = () => this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+        const messageGroups = this.instance._messageList._messageGroups;
+
+        assert.strictEqual(messageGroups.length, 2);
+        assert.strictEqual(getMessageGroupElements().length, 2);
+
+        this.instance.renderMessage(newMessage, author);
+
+        assert.strictEqual(messageGroups.length, 3);
+        assert.strictEqual(getMessageGroupElements().length, 3);
+    });
+
+    QUnit.test('Message Group should be created if items are empty', function(assert) {
+        this.instance.option({ items: [] });
+
+        const author = {
+            id: MOCK_CURRENT_USER_ID,
+        };
+
+        const newMessage = {
+            author,
+            timestamp: NOW,
+            text: 'NEW MESSAGE',
+        };
+
+        const getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+        assert.strictEqual(getMessageGroups().length, 0);
+
+        this.instance.renderMessage(newMessage, author);
+
+        assert.strictEqual(getMessageGroups().length, 1);
+    });
+
+    QUnit.test('Last class should be deleted from last bubble after renderMessage', function(assert) {
+        const author = {
+            id: MOCK_CURRENT_USER_ID,
+        };
+
+        const newMessage = {
+            author,
+            timestamp: NOW,
+            text: 'NEW MESSAGE',
+        };
+
+        const getLastMessageGroupBubbles = () => {
+            const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const lastMessageGroup = messageGroups[messageGroups.length - 1];
+            const $bubbles = $(lastMessageGroup).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+            return $bubbles;
+        };
+
+        let $bubbles = getLastMessageGroupBubbles();
+        assert.strictEqual($bubbles.eq($bubbles.length - 1).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), true);
+
+        this.instance.renderMessage(newMessage, author);
+
+        $bubbles = getLastMessageGroupBubbles();
+        assert.strictEqual($bubbles.eq($bubbles.length - 2).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), false);
+    });
+
+
+    QUnit.test('New bubble should be rendered after renderMessage with correct text', function(assert) {
+        const text = 'NEW MESSAGE';
+        const author = { id: MOCK_CURRENT_USER_ID };
+        const newMessage = {
+            author,
+            timestamp: NOW,
+            text,
+        };
+
+        this.instance.renderMessage(newMessage, author);
+
+        const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+        const lastMessageGroup = messageGroups[messageGroups.length - 1];
+        const $bubbles = $(lastMessageGroup).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+        const lastBubble = $bubbles[$bubbles.length - 1];
+
+        assert.strictEqual($(lastBubble).text(), text);
     });
 });
 
