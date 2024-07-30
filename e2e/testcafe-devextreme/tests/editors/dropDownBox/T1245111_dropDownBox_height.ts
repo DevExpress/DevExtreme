@@ -2,13 +2,14 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Grid on Drop Down Box`.page(
   url(__dirname, '../../container.html'),
 );
 
 // T1245111
-test('DataGrid on dropDownBox should appear correctly on window resize', async (t) => {
+safeSizeTest('DataGrid on dropDownBox should appear correctly on window resize', async (t) => {
   const dropDownBox = Selector('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
