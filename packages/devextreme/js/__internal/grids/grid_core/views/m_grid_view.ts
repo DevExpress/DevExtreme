@@ -604,7 +604,7 @@ export class ResizingController extends modules.ViewController {
 
   private _getGroupElement() {
     // @ts-expect-error
-    return this.component.$element().children().get(0);
+    return this.component.$element().children().children().get(0);
   }
 
   public updateSize(rootElement) {
