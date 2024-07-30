@@ -123,7 +123,7 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     $messageGroupInformation.appendTo(this.element());
   }
 
-  _removePrevBubbleLastClass(): void {
+  _updateLastBubbleClasses(): void {
     const $bubbles = $(this.element()).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
     const $lastBubble = $bubbles.eq($bubbles.length - 1);
 
@@ -137,7 +137,7 @@ class MessageGroup extends Widget<MessageGroupOptions> {
 
     this._setOptionWithoutOptionChange('items', newItems);
 
-    this._removePrevBubbleLastClass();
+    this._updateLastBubbleClasses();
     this._renderMessageBubble(message, newItems.length - 1, newItems.length);
   }
 
