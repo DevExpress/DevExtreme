@@ -17,7 +17,7 @@ export interface BasePagerProps {
   hasKnownLastPage?: boolean;
   pagesNavigatorVisible?: boolean | 'auto';
   showPageSizes?: boolean;
-  pageSizes?: (number | 'all')[];
+  pageSizes: (number | 'all')[];
   rtlEnabled?: boolean;
   showNavigationButtons: boolean;
   totalCount?: number;
