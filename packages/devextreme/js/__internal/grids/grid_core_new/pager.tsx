@@ -32,7 +32,7 @@ export class PagerView extends View {
         pageSize={pageSize}
         pageSizeChange={this.dataController.pageSize.update}
         gridCompatibility={false}
-        pageSizes={[1, 2, 5]}
+        pageSizes={[2, 6, 18]}
         pageCount={pageCount}
       ></Pager>
     </div>,

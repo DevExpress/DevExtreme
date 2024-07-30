@@ -77,7 +77,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
       paging: {
-        pageSize: 5,
+        pageSize: 6,
         pageIndex: 0,
       },
     };

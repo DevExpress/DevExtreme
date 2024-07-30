@@ -21,9 +21,6 @@ export class ContentStatusView extends View {
       <>
         { isLoading && <LoadPanel visible={true} /> }
         { isNoData && <NoData text={noDataText} /> }
-        <div>
-          asdasdasd {noDataText}
-        </div>
       </>
     ),
     [
