@@ -3,6 +3,7 @@ import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Grid on Drop Down Box`.page(
   url(__dirname, '../../container.html'),
@@ -15,9 +16,7 @@ safeSizeTest('DataGrid on dropDownBox should appear correctly on window resize',
 
   await t.click(dropDownBox);
   await t.resizeWindow(800, 800);
-  await t
-    .expect(await takeScreenshot('T1245111-dropDownBox-resize.png'))
-    .ok();
+  await testScreenshot(t, takeScreenshot, 'T1245111-dropDownBox-resize.png');
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
