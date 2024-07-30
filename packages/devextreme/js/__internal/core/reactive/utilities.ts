@@ -2,7 +2,7 @@
 import { interruptableComputed, Observable, toSubscribable } from './core';
 import { type Subscription, SubscriptionBag } from './subscription';
 import type {
-  Gettable, MaybeSubscribable, Subscribable, Updatable,
+  Gettable, MapMaybeSubscribable, MaybeSubscribable, Subscribable, Updatable,
 } from './types';
 
 export function state<T>(value: T): Subscribable<T> & Updatable<T> & Gettable<T> {
@@ -91,4 +91,10 @@ export function iif<T>(
   });
 
   return obs;
+}
+
+export function combine<T>(
+  obj: MapMaybeSubscribable<T>,
+): Subscribable<T> & Gettable<T> {
+  throw new Error('not implemented');
 }

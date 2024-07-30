@@ -1,7 +1,7 @@
 import ButtonWidget from '@js/ui/button';
 import PagerWidget from '@js/ui/pager';
-import { computed, Subscribable } from '@ts/core/reactive';
-import { InfernoNode } from 'inferno';
+import { computed } from '@ts/core/reactive';
+import { render } from 'inferno';
 
 import { View } from './core/view';
 import { createWidgetWrapper } from './core/widget_wrapper';
@@ -22,11 +22,10 @@ interface PagerProps {
 }
 
 const Pager = createWidgetWrapper<PagerProps, any>(PagerWidget);
-const Button = createWidgetWrapper(ButtonWidget);
 
 export class PagerView extends View {
   public vdom = computed(
-    (pageIndex, pageSize, totalCount, pageCount) => <div>
+    (pageIndex, pageSize, pageCount) => <div>
       <Pager
         pageIndex={pageIndex}
         pageIndexChange={this.dataController.pageIndex.update}
@@ -40,7 +39,6 @@ export class PagerView extends View {
     [
       this.dataController.pageIndex,
       this.dataController.pageSize,
-      this.dataController.totalCount,
       this.dataController.pageCount,
     ],
   );
