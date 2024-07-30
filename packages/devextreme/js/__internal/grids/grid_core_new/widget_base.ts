@@ -7,7 +7,7 @@ import { ColumnsChooser } from '@ts/grids/grid_core_new/columns_chooser/columns_
 import { ColumnsController } from '@ts/grids/grid_core_new/columns_controller/columns_controller';
 import { ColumnsDraggingController } from '@ts/grids/grid_core_new/columns_dragging/columns_dragging';
 import { DataController } from '@ts/grids/grid_core_new/data_controller/data_controller';
-import type { EditingController } from '@ts/grids/grid_core_new/editing/controller';
+import { EditingController } from '@ts/grids/grid_core_new/editing/controller';
 import { HeaderPanelController } from '@ts/grids/grid_core_new/header_panel/controller';
 import { HeaderPanelView } from '@ts/grids/grid_core_new/header_panel/view';
 import { HeadersView } from '@ts/grids/grid_core_new/headers/view';
@@ -24,7 +24,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
 
   private columnsController!: ColumnsController;
 
-  private readonly editingController!: EditingController;
+  private editingController!: EditingController;
 
   private pagerView!: PagerView;
 
@@ -42,7 +42,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(ColumnsController);
     this.diContext.register(HeaderPanelController);
     this.diContext.register(HeaderPanelView);
-    // this.diContext.register(EditingController);
+    this.diContext.register(EditingController);
     this.diContext.register(PagerView);
     this.diContext.register(MainView);
     this.diContext.register(ColumnsChooser);
@@ -58,7 +58,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.columnsController = this.diContext.get(ColumnsController);
     this.headerPanelController = this.diContext.get(HeaderPanelController);
     this.headerPanelView = this.diContext.get(HeaderPanelView);
-    // this.editingController = this.diContext.get(EditingController);
+    this.editingController = this.diContext.get(EditingController);
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
   }
