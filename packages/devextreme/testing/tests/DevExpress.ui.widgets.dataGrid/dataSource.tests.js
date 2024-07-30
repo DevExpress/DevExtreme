@@ -7742,9 +7742,9 @@ QUnit.module('DataSource with diacritical marks', {
 
                 if(sensitivity === 'base') {
                     // assert
-                    assert.strictEqual(dataSource.items().length, 1, 'item count');
+                    assert.strictEqual(dataSource.items().length, 3, 'item count');
                     assert.deepEqual(dataSource.items()[0], { id: 1, city: 'izmir' }, 'first item');
-                    assert.deepEqual(dataSource.items()[1], { id: 1, city: 'İzmir' }, 'first item');
+                    assert.deepEqual(dataSource.items()[1], { id: 2, city: 'İzmir' }, 'first item');
                     assert.deepEqual(dataSource.items()[2], { id: 3, city: 'İZMİR' }, 'first item');
                 } else {
                     // assert
