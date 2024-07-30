@@ -117,7 +117,7 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     const { timestamp, author } = message;
     const $messageGroupInformation = $('<div>').addClass(CHAT_MESSAGE_GROUP_INFORMATION_CLASS);
 
-    this._renderName(author.name, $messageGroupInformation);
+    this._renderName(author?.name, $messageGroupInformation);
     this._renderTime(timestamp, $messageGroupInformation);
 
     $messageGroupInformation.appendTo(this.element());

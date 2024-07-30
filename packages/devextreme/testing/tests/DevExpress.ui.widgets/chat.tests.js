@@ -21,6 +21,14 @@ const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 const NOW = '1721747399083';
+const userFirst = {
+    id: MOCK_COMPANION_USER_ID,
+    name: 'First',
+};
+const userSecond = {
+    id: MOCK_CURRENT_USER_ID,
+    name: 'Second',
+};
 
 const getDateTimeString = (timestamp) => {
     const options = { hour: '2-digit', minute: '2-digit', hour12: false };
@@ -28,6 +36,20 @@ const getDateTimeString = (timestamp) => {
     const dateTimeString = dateTime.toLocaleTimeString(undefined, options);
 
     return dateTimeString;
+};
+
+const generateMessages = (length) => {
+    const messages = Array.from({ length }, (_, i) => {
+        const item = {
+            timestamp: NOW,
+            author: i % 4 === 0 ? userFirst : userSecond,
+            text: String(Math.random()),
+        };
+
+        return item;
+    });
+
+    return messages;
 };
 
 QUnit.testStart(() => {
@@ -43,16 +65,6 @@ const moduleConfig = {
         const init = (options = {}) => {
             this.$element = $('#chat').dxChat(options);
             this.instance = this.$element.dxChat('instance');
-        };
-
-        const userFirst = {
-            id: MOCK_COMPANION_USER_ID,
-            name: 'First',
-        };
-
-        const userSecond = {
-            id: MOCK_CURRENT_USER_ID,
-            name: 'Second',
         };
 
         const messages = [
@@ -133,6 +145,44 @@ QUnit.module('Chat initialization', moduleConfig, () => {
         this.instance.option({ items: [] });
 
         assert.strictEqual(invalidateStub.callCount, 1);
+    });
+
+    QUnit.test('Last message should be into view', function(assert) {
+        const messages = generateMessages(31);
+
+        this.instance.option({ items: messages });
+
+        const $messages = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+        const lastMessage = $messages[$messages.length - 1];
+        const lastMessageOffset = Math.ceil($(lastMessage).offset().top);
+
+        assert.strictEqual(lastMessageOffset, -9459);
+    });
+
+    [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
+        const isCurrentUser = id === MOCK_CURRENT_USER_ID;
+        const textName = `Last message should be into view after render new message from ${isCurrentUser ? 'current user' : 'companion'}`;
+
+        QUnit.test(textName, function(assert) {
+            const messages = generateMessages(31);
+
+            this.instance.option({ items: messages });
+
+            const author = { id };
+            const newMessage = {
+                author,
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.renderMessage(newMessage, author);
+
+            const $messages = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+            const lastMessage = $messages[$messages.length - 1];
+            const lastMessageOffset = Math.ceil($(lastMessage).offset().top);
+
+            assert.strictEqual(lastMessageOffset, isCurrentUser ? -9459 : -9463);
+        });
     });
 });
 
