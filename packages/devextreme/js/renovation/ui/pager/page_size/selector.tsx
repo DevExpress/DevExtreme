@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { FullPageSize } from '../common/types';
-import { PageSizeSmall } from './small';
+import { PageSizeSmall } from '../../../../__internal/pager/page_size/small';
 import { PageSizeLarge } from './large';
 import { InternalPagerProps } from '../common/pager_props';
 import messageLocalization from '../../../../localization/message';
