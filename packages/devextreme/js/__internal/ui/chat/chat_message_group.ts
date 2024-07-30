@@ -89,9 +89,9 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     });
   }
 
-  _renderMessageBubbles(messages): void {
-    messages.forEach((message, index) => {
-      this._renderMessageBubble(message, index, messages.length);
+  _renderMessageBubbles(items): void {
+    items.forEach((message, index) => {
+      this._renderMessageBubble(message, index, items.length);
     });
   }
 
