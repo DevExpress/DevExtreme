@@ -11,7 +11,6 @@ const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
-const CHAT_MESSAGE_LIST_CONTENT_CLASS = 'dx-chat-message-list-content';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
@@ -265,7 +264,7 @@ QUnit.module('renderMessage', moduleConfig, () => {
             text: 'NEW MESSAGE',
         };
 
-        const getMessageGroupElements = () => $(`.${CHAT_MESSAGE_LIST_CONTENT_CLASS}`).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+        const getMessageGroupElements = () => this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
         const messageGroups = this.instance._messageList._messageGroups;
 
         assert.strictEqual(messageGroups.length, 2);
@@ -290,7 +289,7 @@ QUnit.module('renderMessage', moduleConfig, () => {
             text: 'NEW MESSAGE',
         };
 
-        const getMessageGroups = () => $(`.${CHAT_MESSAGE_LIST_CONTENT_CLASS}`).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+        const getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
 
         assert.strictEqual(getMessageGroups().length, 0);
 
@@ -311,7 +310,7 @@ QUnit.module('renderMessage', moduleConfig, () => {
         };
 
         const getLastMessageGroupBubbles = () => {
-            const messageGroups = $(`.${CHAT_MESSAGE_LIST_CONTENT_CLASS}`).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
             const lastMessageGroup = messageGroups[messageGroups.length - 1];
             const $bubbles = $(lastMessageGroup).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
 
@@ -339,7 +338,7 @@ QUnit.module('renderMessage', moduleConfig, () => {
 
         this.instance.renderMessage(newMessage, author);
 
-        const messageGroups = $(`.${CHAT_MESSAGE_LIST_CONTENT_CLASS}`).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+        const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
         const lastMessageGroup = messageGroups[messageGroups.length - 1];
         const $bubbles = $(lastMessageGroup).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
         const lastBubble = $bubbles[$bubbles.length - 1];
