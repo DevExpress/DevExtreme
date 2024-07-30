@@ -15,7 +15,7 @@ test('DataGrid on dropDownBox should appear correctly on window resize', async (
   await t.click(dropDownBox);
   await t.resizeWindow(800, 800);
   await t
-    .expect(await takeScreenshot('T1245111-dropDownBox-resize.png', dropDownBox))
+    .expect(await takeScreenshot('T1245111-dropDownBox-resize.png'))
     .ok();
   await t
     .expect(compareResults.isValid())
