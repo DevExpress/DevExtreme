@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
-import { createWidget } from '../../helpers/createWidget';
-import { getData } from './helpers/generateDataSourceData';
-import url from '../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import { createWidget } from '../../../helpers/createWidget';
+import { getData } from '../helpers/generateDataSourceData';
+import url from '../../../helpers/getPageUrl';
 
 const DATA_GRID_SELECTOR = '#container';
 
