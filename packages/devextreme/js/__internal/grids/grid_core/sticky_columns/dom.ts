@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { CLASSES, StickyPosition } from './const';
 
+const getStickyColumnPosition = (
+  { fixed, fixedPosition }: { fixed: boolean; fixedPosition: string },
+): string => {
+  if (!fixed) {
+    return '';
+  }
+
+  return fixedPosition || StickyPosition.Left;
+};
+
 const addLeftStickyColumnClasses = ($cell, stickyColumn, stickyColumns): void => {
   const lastLeftStickyColumn = [...stickyColumns]
     .reverse()
-    .find((col) => col.fixedPosition === StickyPosition.Left);
+    .find((col) => getStickyColumnPosition(col) === StickyPosition.Left);
 
   $cell.addClass(CLASSES.leftStickyColumn);
 
@@ -15,7 +25,7 @@ const addLeftStickyColumnClasses = ($cell, stickyColumn, stickyColumns): void =>
 
 const addRightStickyColumnClasses = ($cell, stickyColumn, stickyColumns): void => {
   const firstRightStickyColumn = stickyColumns
-    .find((col) => col.fixedPosition === StickyPosition.Right);
+    .find((col) => getStickyColumnPosition(col) === StickyPosition.Right);
 
   $cell.addClass(CLASSES.rightStickyColumn);
 
@@ -25,7 +35,9 @@ const addRightStickyColumnClasses = ($cell, stickyColumn, stickyColumns): void =
 };
 
 const addStickyColumnClasses = ($cell, stickyColumn, stickyColumns): void => {
-  switch (stickyColumn.fixedPosition) {
+  const fixedPosition = getStickyColumnPosition(stickyColumn);
+
+  switch (fixedPosition) {
     case StickyPosition.Right:
       addRightStickyColumnClasses($cell, stickyColumn, stickyColumns);
       break;
