@@ -36,7 +36,7 @@ class Chat extends Widget<Properties> {
   _init(): void {
     super._init();
 
-    this._initMessageSendAction();
+    this._createMessageSendAction();
   }
 
   _initMarkup(): void {
@@ -83,7 +83,7 @@ class Chat extends Widget<Properties> {
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
   }
 
-  _initMessageSendAction(): void {
+  _createMessageSendAction(): void {
     this._messageSendAction = this._createActionByOption(
       'onMessageSend',
       { excludeValidators: ['disabled', 'readOnly'] },
@@ -105,7 +105,7 @@ class Chat extends Widget<Properties> {
 
     this.renderMessage(message, user);
     // @ts-expect-error
-    this._messageSendAction({ message, event });
+    this._messageSendAction?.({ message, event });
   }
 
   _optionChanged(args: Record<string, unknown>): void {
@@ -125,7 +125,7 @@ class Chat extends Widget<Properties> {
         this._messageList?.option(name, value);
         break;
       case 'onMessageSend':
-        this._initMessageSendAction();
+        this._createMessageSendAction();
         break;
       default:
         super._optionChanged(args);
