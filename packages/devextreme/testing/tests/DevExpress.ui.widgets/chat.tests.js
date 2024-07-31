@@ -1,8 +1,9 @@
 import $ from 'jquery';
 import Chat from 'ui/chat';
 import fx from 'animation/fx';
-import TextArea from '__internal/ui/m_text_area';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
 
 import 'generic_light.css!';
 
@@ -13,7 +14,6 @@ const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
-const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -415,19 +415,22 @@ QUnit.module('onMessageSend', moduleConfig, () => {
     });
 
     QUnit.test('onMessageSend should be get correct object after clicking the send button if there is text', function(assert) {
-        this.instance.option({
-            onMessageSend: (e) => {
-                ['component', 'element', 'event', 'message'].forEach(prop => {
-                    // eslint-disable-next-line no-prototype-builtins
-                    assert.strictEqual(e.hasOwnProperty(prop), true);
-                });
-            },
-        });
+        assert.expect(5);
 
         const text = 'new text message';
 
         const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        this.instance.option({
+            onMessageSend: ({ component, element, event, message }) => {
+                assert.strictEqual(component, this.instance, 'component field is correct');
+                assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                assert.strictEqual(event.target, $button.get(0), 'event field is correct');
+                assert.strictEqual(message.text, text, 'message field is correct');
+            },
+        });
 
         keyboardMock($textArea).focus().type(text);
 
@@ -435,19 +438,23 @@ QUnit.module('onMessageSend', moduleConfig, () => {
     });
 
     QUnit.test('New message should be correct after clicking the send button if there is text', function(assert) {
-        this.instance.option({
-            onMessageSend: ({ message }) => {
-                ['author', 'timestamp', 'text'].forEach(prop => {
-                    // eslint-disable-next-line no-prototype-builtins
-                    assert.strictEqual(message.hasOwnProperty(prop), true);
-                });
-            },
-        });
+        assert.expect(3);
 
         const text = 'new text message';
 
         const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        this.instance.option({
+            onMessageSend: ({ message }) => {
+                const { author, text: messageText } = message;
+
+                assert.strictEqual(author, this.instance.option('user'), 'author field is correct');
+                // eslint-disable-next-line no-prototype-builtins
+                assert.strictEqual(message.hasOwnProperty('timestamp'), true, 'timestamp field is set');
+                assert.strictEqual(messageText, text, 'text field is correct');
+            },
+        });
 
         keyboardMock($textArea).focus().type(text);
 
