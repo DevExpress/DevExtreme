@@ -79,7 +79,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
   .dx-sticky-columns {
     .dx-column-lines > td {
-        border-right: none;
+      border-right: none;
     }
   
     .dx-treelist-table .dx-row .dx-last-left-sticky-column {
@@ -305,7 +305,6 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
       &:last-child {
         border-left: none;
-        border-right: $treelist-border;
       }
     }
   }
