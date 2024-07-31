@@ -144,6 +144,7 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
 
     .dx-column-lines > td {
       border-left: $datagrid-border;
+      border-right: $datagrid-border;
     }
 
     .dx-error-row {
@@ -1002,6 +1003,10 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
         padding-left: 34px;
       }
     }
+  }
+
+  .dx-#{$widget-name}-rowsview.dx-sticky-columns .dx-row:not(.dx-row-lines) > td {
+    padding-top: $generic-grid-base-cell-padding + 1px;
   }
 
   .dx-rtl {
