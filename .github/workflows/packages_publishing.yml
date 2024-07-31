@@ -174,7 +174,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
-          pnpm publish --quiet --ignore-scripts --registry https://npm.pkg.github.com;
+          pnpm publish --no-git-checks --quiet --ignore-scripts --registry https://npm.pkg.github.com;
 
       - name: Move 'daily' tag
         if: ${{ env.MOVE_DAILY_TAG == 'true' }}
@@ -185,7 +185,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          pnpm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily --registry=https://npm.pkg.github.com
 
       - name: Move 'stable' tag
         if: ${{ env.MOVE_STABLE_TAG == 'true' }}
@@ -196,7 +196,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-          pnpm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable
+          pnpm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable --registry=https://npm.pkg.github.com
 
 
   notify:
