@@ -2,9 +2,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../helpers/getPageUrl';
-import { changeTheme } from '../../helpers/changeTheme';
 import { createWidget } from '../../helpers/createWidget';
-import { Themes } from '../../helpers/themes';
+import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Tagbox Columns`.page(
   url(__dirname, '../container.html'),
@@ -15,12 +14,11 @@ test('Datagrid tagbox column should not look broken', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
     .click(dataGrid.getDataCell(0, 1).element)
-    .expect(await takeScreenshot('T1228720-grid-tagbox-on-edit.png', dataGrid.element))
+    .expect(await testScreenshot(t, takeScreenshot, 'T1228720-grid-tagbox-on-edit.png', { element: dataGrid.element }))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme(Themes.materialBlue);
   await createWidget('dxDataGrid', {
     showBorders: true,
     allowColumnResizing: true,
@@ -50,6 +48,4 @@ test('Datagrid tagbox column should not look broken', async (t) => {
     }],
     editing: { mode: 'batch', allowUpdating: true },
   });
-}).after(async () => {
-  await changeTheme(Themes.genericLight);
 });
