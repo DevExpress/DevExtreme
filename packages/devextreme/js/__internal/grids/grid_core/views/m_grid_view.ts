@@ -604,7 +604,7 @@ export class ResizingController extends modules.ViewController {
 
   private _getGroupElement() {
     // @ts-expect-error
-    return this.component.$element().children().children().get(0);
+    return this.component.$element().children().get(0);
   }
 
   public updateSize(rootElement) {
@@ -939,7 +939,7 @@ export class GridView extends modules.View {
     if (!this._a11yGeneralStatusElement) {
       this._a11yGeneralStatusElement = A11yStatusContainerComponent({});
       this._a11yGeneralStatusElement.attr(E2E_ATTRIBUTES.a11yStatusContainer, 'true');
-      this._rootElement.append(this._a11yGeneralStatusElement);
+      $groupElement.append(this._a11yGeneralStatusElement);
     }
 
     this._renderViews($groupElement);
