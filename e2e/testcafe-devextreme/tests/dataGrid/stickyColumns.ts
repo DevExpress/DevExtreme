@@ -69,12 +69,12 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshot(`sticky-columns-with-left-position-1(showRowLines_=_${showRowLines}_showColumnLines_=_${showColumnLines}_showBorders_=_${showBorders}_rtlEnabled_=_${rtlEnabled}_rowAlternationEnabled_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`left-position-1(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`sticky-columns-with-left-position-2(showRowLines_=_${showRowLines}_showColumnLines_=_${showColumnLines}_showBorders_=_${showBorders}_rtlEnabled_=_${rtlEnabled}_rowAlternationEnabled_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`left-position-2(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -100,12 +100,12 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshot(`sticky-columns-with-right-position-1(showRowLines_=_${showRowLines}_showColumnLines_=_${showColumnLines}_showBorders_=_${showBorders}_rtlEnabled_=_${rtlEnabled}_rowAlternationEnabled_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`right-position-1(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`sticky-columns-with-right-position-2(showRowLines_=_${showRowLines}_showColumnLines_=_${showColumnLines}_showBorders_=_${showBorders}_rtlEnabled_=_${rtlEnabled}_rowAlternationEnabled_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`right-position-2(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
@@ -131,12 +131,12 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await takeScreenshot(`sticky-columns-with-left-right-positions-1(showRowLines_=_${showRowLines}_showColumnLines_=_${showColumnLines}_showBorders_=_${showBorders}_rtlEnabled_=_${rtlEnabled}_rowAlternationEnabled_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`left-right-positions-1(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
       await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
 
-      await takeScreenshot(`sticky-columns-with-left-right-positions-2(showRowLines_=_${showRowLines}_showColumnLines_=_${showColumnLines}_showBorders_=_${showBorders}_rtlEnabled_=_${rtlEnabled}_rowAlternationEnabled_=_${rowAlternationEnabled}).png`, dataGrid.element);
+      await takeScreenshot(`left-right-positions-2(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       await t
         .expect(compareResults.isValid())
