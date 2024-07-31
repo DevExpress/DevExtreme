@@ -1,24 +1,19 @@
-import {
-  Component,
-  JSXComponent,
-  Provider,
-} from '@devextreme-generator/declarations';
-
-import * as config_context from './config_context';
-
-export const viewFunction = (viewModel: ConfigProvider): JSX.Element => viewModel.props.children;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 
 export interface ConfigProviderProps {
-  rtlEnabled: boolean;
+  rtlEnabled?: boolean;
   children: JSX.Element;
 }
 
-@Component({ defaultOptionRules: null, view: viewFunction })
-export class ConfigProvider extends JSXComponent<ConfigProviderProps, 'rtlEnabled' | 'children'>() {
-  @Provider(config_context.ConfigContext)
-  get config(): config_context.ConfigContextValue {
-    return {
-      rtlEnabled: this.props.rtlEnabled,
-    };
+export const ConfigProviderDefaultProps = {};
+export class ConfigProvider extends BaseInfernoComponent<ConfigProviderProps> {
+  public state: any = {};
+
+  render(): JSX.Element {
+    return (
+      this.props.children
+    );
   }
 }
+ConfigProvider.defaultProps = ConfigProviderDefaultProps;

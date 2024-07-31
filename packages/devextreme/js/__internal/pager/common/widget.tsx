@@ -489,7 +489,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   applyCssTextEffect(): void {
     const { cssText } = this.props;
 
-    if (cssText !== '' && this.widgetElementRef?.current) {
+    if (cssText !== undefined && cssText !== '' && this.widgetElementRef?.current) {
       this.widgetElementRef.current.style.cssText = cssText;
     }
   }
