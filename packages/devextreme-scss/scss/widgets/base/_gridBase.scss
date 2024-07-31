@@ -17,9 +17,11 @@
 
 // NOTE: a11y aria-live container must be visible to allow screen readers read it
 .dx-gridbase-a11y-status-container {
-  width: 0;
-  height: 0;
-  overflow: hidden;
+  position: fixed;
+  left: 0;
+  top: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: polygon(0 0);
 }
 
 @mixin grid-base($widget-name) {
