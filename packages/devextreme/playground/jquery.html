@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>DevExtreme jQuery Example</title>
+    <head>
+        <title>DevExtreme jQuery Example</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <script type="text/javascript">
-        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+        <script type="text/javascript">
+            const currentThemeId =
+                localStorage.getItem("currentThemeId") || "light";
 
-        const link = document.createElement("link");
-        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
-        link.type = "text/css";
-        link.rel = "stylesheet";
+            const link = document.createElement("link");
+            link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+            link.type = "text/css";
+            link.rel = "stylesheet";
 
-        document.getElementsByTagName("head")[0].appendChild(link);
-    </script>
+            document.getElementsByTagName("head")[0].appendChild(link);
+        </script>
 
-    <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
-    <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+        <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+        <!-- HtmlEditor -->
+        <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
 
-    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+        <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
@@ -30,7 +31,7 @@
     <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
 
-    <!--
+        <!--
     <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
@@ -38,26 +39,40 @@
     <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
     -->
 
-    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./themeSelector.js"></script>
-    <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-</head>
-<body class="dx-surface">
-    <div role="main">
-        <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
-
-        <select id="theme-selector" style="display: block;">
-        </select>
-        <br />
-        <div id="button"></div>
-        <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+        <script
+            type="text/javascript"
+            src="../artifacts/js/dx.all.debug.js"
+            charset="utf-8"
+        ></script>
+        <script type="text/javascript" src="./themeSelector.js"></script>
+        <script
+            type="text/javascript"
+            src="../../../node_modules/axe-core/axe.min.js"
+        ></script>
+    </head>
+    <body class="dx-surface">
+        <div role="main">
+            <div id="container"></div>
+            <select id="theme-selector" style="display: block"></select>
+            <br />
+            <script>
+                $(() => {
+                    $("#container").dxDropDownBox({
+                        dataSource: [...new Array(100)].map((_, index) => ({
+                            Value: index + 1,
+                            Text: `item ${index + 1}`,
+                        })),
+                        dropDownOptions: {
+                            width: "auto",
+                        },
+                        contentTemplate(e) {
+                            return $("<div>").dxDataGrid({
+                                dataSource: e.component.getDataSource(),
+                            });
+                        },
+                    });
                 });
-            });
-        </script>
-    </div>
-</body>
+            </script>
+        </div>
+    </body>
 </html>

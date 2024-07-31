@@ -445,7 +445,7 @@ export const getSkippedHoursInRange = (
   }
 
   const startDateHours = startDate.getHours();
-  const endDateHours = endDate.getHours() + (endDate.getTime() % HOUR_IN_MS) / HOUR_IN_MS;
+  const endDateHours = endDate.getHours() + Math.ceil(endDate.getTime() % HOUR_IN_MS);
 
   if (viewDataProvider.isSkippedDate(startDate)) {
     if (isAllDay) {
