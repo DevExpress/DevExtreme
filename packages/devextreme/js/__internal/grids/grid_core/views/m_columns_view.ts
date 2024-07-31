@@ -1183,6 +1183,33 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIndex;
   }
 
+  protected setCellProperties(styleProps, columnIndex) {
+    const $tableElement = this.getTableElement();
+
+    if (!$tableElement?.length) {
+      return;
+    }
+
+    const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
+
+    for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+      const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
+
+      if (visibleIndex >= 0) {
+        const $row = $rows.eq(rowIndex);
+        const $cell = $row.hasClass(GROUP_ROW_CLASS)
+          ? $row.find(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+          : $row.find('td').eq(visibleIndex);
+
+        if ($cell.length) {
+          const cell = $cell.get(0) as HTMLElement;
+
+          Object.assign(cell.style, styleProps);
+        }
+      }
+    }
+  }
+
   protected setColumnWidths({ widths, optionNames }: any): void {
     const $tableElement = this.getTableElement();
 
@@ -1205,28 +1232,15 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       Also check _createCell method because min-width, width and max-width are also set there.
       */
       if (needToSetCellWidths && column.width && !column.command) {
+        const styleProps: any = {};
         const width = getWidthStyle(column.visibleWidth || column.width);
         const minWidth = getWidthStyle(column.minWidth || width);
 
-        const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
+        styleProps.width = column.width === 'auto' ? '' : width;
+        styleProps.maxWidth = styleProps.width;
+        styleProps.minWidth = minWidth;
 
-        for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
-          const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
-
-          if (visibleIndex >= 0) {
-            const $row = $rows.eq(rowIndex);
-            const $cell = $row.hasClass(GROUP_ROW_CLASS)
-              ? $row.find(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
-              : $row.find('td').eq(visibleIndex);
-
-            if ($cell.length) {
-              const cell = $cell.get(0) as HTMLElement;
-
-              setCellWidth(cell, column, width);
-              cell.style.minWidth = minWidth;
-            }
-          }
-        }
+        this.setCellProperties(styleProps, columnIndex);
       }
 
       const colWidth = normalizeWidth(widths[columnIndex]);
