@@ -4,12 +4,12 @@ import type { EventCallback } from '../../core/r1/event_callback';
 export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 export interface BasePagerProps {
-  gridCompatibility?: boolean;
+  gridCompatibility: boolean;
   className?: string;
   showInfo?: boolean;
   infoText?: string;
   lightModeEnabled?: boolean;
-  displayMode?: DisplayMode;
+  displayMode: DisplayMode;
   maxPagesCount: number;
   pageCount: number;
   pagesCountText?: string;
@@ -21,7 +21,7 @@ export interface BasePagerProps {
   rtlEnabled?: boolean;
   showNavigationButtons: boolean;
   totalCount?: number;
-  label?: string;
+  label: string;
   onKeyDown?: EventCallback<Event>;
 }
 

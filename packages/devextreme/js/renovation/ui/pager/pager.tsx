@@ -5,9 +5,9 @@ import {
 
 import { ResizableContainer } from './resizable_container';
 import { PagerProps, InternalPagerProps } from './common/pager_props';
-import { PagerContent } from './content';
+import { PagerContent } from '../../../__internal/pager/content';
 import { GridPagerWrapper } from '../../component_wrapper/grid_pager';
-import { combineClasses } from '../../utils/combine_classes';
+import { combineClasses } from '../../../__internal/core/r1/utils/render_utils';
 
 export const viewFunction = ({
   pagerProps,
