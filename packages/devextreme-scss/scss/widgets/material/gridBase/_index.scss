@@ -221,6 +221,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
     .dx-column-lines > td {
       border-left: $datagrid-border;
+      border-right: $datagrid-border;
     }
 
     .dx-error-row {
@@ -1060,6 +1061,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           }
         }
       }
+    }
+
+    &.dx-sticky-columns .dx-row:not(.dx-row-lines) > td {
+      padding-top: $material-grid-base-cell-vertical-padding + 1;
     }
   }
 

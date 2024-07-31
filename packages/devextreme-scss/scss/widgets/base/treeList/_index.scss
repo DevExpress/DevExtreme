@@ -76,6 +76,28 @@ $treelist-row-error-color: $datagrid-row-error-color;
   .dx-command-drag .dx-treelist-drag-icon {
     @include dx-icon(dragvertical);
   }
+
+  .dx-sticky-columns {
+    .dx-column-lines > td {
+        border-right: none;
+    }
+  
+    .dx-treelist-table .dx-row .dx-last-left-sticky-column {
+      border-right: 2px solid $treelist-border-color;
+
+      & + td {
+        border-left: none;
+      }
+    }
+  
+    .dx-treelist-table .dx-row .dx-first-right-sticky-column {
+      border-left: 2px solid $treelist-border-color;
+    }
+  }
+
+  .dx-left-sticky-column, .dx-right-sticky-column {
+    background-color: $treelist-base-background-color;
+  }
 }
 
 .dx-treelist-container {
@@ -283,6 +305,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
       &:last-child {
         border-left: none;
+        border-right: $treelist-border;
       }
     }
   }
