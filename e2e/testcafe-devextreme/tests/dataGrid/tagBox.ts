@@ -13,7 +13,6 @@ fixture.disablePageReloads`Tagbox Columns`.page(
 test('Datagrid tagbox column should not look broken', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await changeTheme(Themes.materialBlue);
   await t
     .click(dataGrid.getDataCell(0, 1).element)
     .expect(await takeScreenshot('T1228720-grid-tagbox-on-edit.png', dataGrid.element))
@@ -21,6 +20,7 @@ test('Datagrid tagbox column should not look broken', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await changeTheme(Themes.materialBlue);
   await createWidget('dxDataGrid', {
     showBorders: true,
     allowColumnResizing: true,
