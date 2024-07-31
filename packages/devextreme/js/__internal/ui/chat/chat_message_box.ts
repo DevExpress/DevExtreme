@@ -12,7 +12,7 @@ const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 
 export interface MessageBoxProperties {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSendButtonClick?: any;
+  onMessageSend?: any;
 }
 
 class MessageBox extends Widget<MessageBoxProperties> {
@@ -21,19 +21,19 @@ class MessageBox extends Widget<MessageBoxProperties> {
   _button?: Button;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _sendButtonClickAction?: any;
+  _messageSendAction?: any;
 
   _getDefaultOptions(): MessageBoxProperties {
     return {
       ...super._getDefaultOptions(),
-      onSendButtonClick: undefined,
+      onMessageSend: undefined,
     };
   }
 
   _init(): void {
     super._init();
 
-    this._initSendButtonClickAction();
+    this._initMessageSendAction();
   }
 
   _initMarkup(): void {
@@ -69,8 +69,11 @@ class MessageBox extends Widget<MessageBoxProperties> {
     this._button = this._createComponent($button, Button, configuration);
   }
 
-  _initSendButtonClickAction(): void {
-    this._sendButtonClickAction = this._createActionByOption('onSendButtonClick');
+  _initMessageSendAction(): void {
+    this._messageSendAction = this._createActionByOption(
+      'onMessageSend',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
   }
 
   _buttonClickHandler(e: ClickEvent): void {
@@ -82,16 +85,16 @@ class MessageBox extends Widget<MessageBoxProperties> {
       return;
     }
 
-    this._sendButtonClickAction({ text, event: e.event });
-    this._textArea?.option({ value: '' });
+    this._messageSendAction({ text, event: e.event });
+    this._textArea?.reset();
   }
 
   _optionChanged(args: Record<string, unknown>): void {
     const { name } = args;
 
     switch (name) {
-      case 'onSendButtonClick':
-        this._initSendButtonClickAction();
+      case 'onMessageSend':
+        this._initMessageSendAction();
         break;
       default:
         super._optionChanged(args);

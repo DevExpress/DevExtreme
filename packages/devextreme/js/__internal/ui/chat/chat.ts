@@ -1,7 +1,9 @@
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
-import type { Message, Properties, User } from '@js/ui/chat';
+import type {
+  Message, MessageSendEvent, Properties, User,
+} from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
@@ -18,8 +20,7 @@ class Chat extends Widget<Properties> {
 
   _messageList?: MessageList;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _messageSendAction?: any;
+  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -74,8 +75,8 @@ class Chat extends Widget<Properties> {
     const $messageBox = $('<div>').appendTo(this.element());
 
     const configuration: MessageBoxProperties = {
-      onSendButtonClick: (text) => {
-        this._sendButtonClickHandler(text);
+      onMessageSend: (text) => {
+        this._messageSendHandler(text);
       },
     };
 
@@ -83,12 +84,15 @@ class Chat extends Widget<Properties> {
   }
 
   _initMessageSendAction(): void {
-    this._messageSendAction = this._createActionByOption('onMessageSend');
+    this._messageSendAction = this._createActionByOption(
+      'onMessageSend',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
   }
 
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  _sendButtonClickHandler(action: any): void {
+  _messageSendHandler(action: any): void {
     const { text, event } = action;
     // @ts-expect-error
     const { user } = this.option();
@@ -100,6 +104,7 @@ class Chat extends Widget<Properties> {
     };
 
     this.renderMessage(message, user);
+    // @ts-expect-error
     this._messageSendAction({ message, event });
   }
 

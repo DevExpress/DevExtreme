@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Chat from 'ui/chat';
 import fx from 'animation/fx';
 import TextArea from '__internal/ui/m_text_area';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'generic_light.css!';
 
@@ -14,6 +15,7 @@ const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
@@ -351,15 +353,29 @@ QUnit.module('renderMessage', moduleConfig, () => {
 });
 
 QUnit.module('onMessageSend', moduleConfig, () => {
+    QUnit.test('onMessageSend should be called when the send button was clicked if there is text', function(assert) {
+        const onMessageSend = sinon.spy();
+
+        const $element = $('#chat').dxChat({ onMessageSend });
+
+        const $textArea = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = $element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        keyboardMock($textArea).focus().type('new text message');
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(onMessageSend.callCount, 1);
+    });
+
     QUnit.test('New message should be created after clicking the send button if there is text', function(assert) {
         const text = 'new text message';
 
-        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
 
-        const textArea = TextArea.getInstance($textArea);
+        keyboardMock($textArea).focus().type(text);
 
-        textArea.option({ value: text });
         $button.trigger('dxclick');
 
         const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
@@ -371,17 +387,14 @@ QUnit.module('onMessageSend', moduleConfig, () => {
     QUnit.test('TextArea text should be empty after clicking the send button if there is text', function(assert) {
         const text = 'new text message';
 
-        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
 
-        const textArea = TextArea.getInstance($textArea);
+        keyboardMock($textArea).focus().type(text);
 
-        textArea.option({ value: text });
         $button.trigger('dxclick');
 
-        const textAreaText = textArea.option('text');
-
-        assert.strictEqual(textAreaText, '');
+        assert.strictEqual(this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0).value, '');
     });
 
     QUnit.test('onMessageSend should be called after clicking the send button if there is text', function(assert) {
@@ -391,12 +404,11 @@ QUnit.module('onMessageSend', moduleConfig, () => {
 
         const text = 'new text message';
 
-        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
 
-        const textArea = TextArea.getInstance($textArea);
+        keyboardMock($textArea).focus().type(text);
 
-        textArea.option({ value: text });
         $button.trigger('dxclick');
 
         assert.strictEqual(onMessageSend.callCount, 1);
@@ -414,12 +426,11 @@ QUnit.module('onMessageSend', moduleConfig, () => {
 
         const text = 'new text message';
 
-        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
 
-        const textArea = TextArea.getInstance($textArea);
+        keyboardMock($textArea).focus().type(text);
 
-        textArea.option({ value: text });
         $button.trigger('dxclick');
     });
 
@@ -435,12 +446,11 @@ QUnit.module('onMessageSend', moduleConfig, () => {
 
         const text = 'new text message';
 
-        const $textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
 
-        const textArea = TextArea.getInstance($textArea);
+        keyboardMock($textArea).focus().type(text);
 
-        textArea.option({ value: text });
         $button.trigger('dxclick');
     });
 
