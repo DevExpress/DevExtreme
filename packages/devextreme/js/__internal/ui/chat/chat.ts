@@ -20,7 +20,7 @@ class Chat extends Widget<Properties> {
 
   _messageList?: MessageList;
 
-  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
+  _messageSendAction?: (e: MessageSendEvent) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -75,8 +75,8 @@ class Chat extends Widget<Properties> {
     const $messageBox = $('<div>').appendTo(this.element());
 
     const configuration: MessageBoxProperties = {
-      onMessageSend: (text) => {
-        this._messageSendHandler(text);
+      onMessageSend: (e) => {
+        this._messageSendHandler(e);
       },
     };
 
@@ -90,10 +90,8 @@ class Chat extends Widget<Properties> {
     );
   }
 
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-  _messageSendHandler(action: any): void {
-    const { text, event } = action;
+  _messageSendHandler(e: MessageSendEvent): void {
+    const { text, event } = e;
     // @ts-expect-error
     const { user } = this.option();
 

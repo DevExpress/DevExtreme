@@ -61,7 +61,7 @@ class MessageBox extends Widget<MessageBoxProperties> {
       icon: 'send',
       stylingMode: 'text',
       onClick: (e): void => {
-        this._buttonClickHandler(e);
+        this._sendHandler(e);
       },
     });
   }
@@ -73,7 +73,7 @@ class MessageBox extends Widget<MessageBoxProperties> {
     );
   }
 
-  _buttonClickHandler(e: ClickEvent): void {
+  _sendHandler(e: ClickEvent): void {
     const text = this._textArea?.option('text');
 
     if (!text) {
