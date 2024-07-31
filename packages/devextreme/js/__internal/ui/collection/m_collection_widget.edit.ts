@@ -47,6 +47,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       keyExpr: null,
       selectedIndex: NOT_EXISTING_INDEX,
       selectedItem: null,
+      onSelectionChanging: null,
       onSelectionChanged: null,
       onItemReordered: null,
       onItemDeleting: null,
@@ -132,6 +133,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       mode: this.option('selectionMode'),
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
+      onSelectionChanging(args) {
+        that._fireSelectionChangingEvent(args);
+      },
       onSelectionChanged(args) {
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
           that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
@@ -473,6 +477,23 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     })({ addedItems, removedItems });
   },
 
+  _fireSelectionChangingEvent(args) {
+    this._createActionByOption('onSelectionChanging', {
+      excludeValidators: ['disabled', 'readOnly'],
+    })(args);
+
+    if (args.cancel instanceof Promise) {
+      args.cancel.then((cancel) => {
+        args.cancel = cancel;
+        if (!cancel) {
+          this._selection.onSelectionChanged();
+        }
+      });
+    } else if (!args.cancel) {
+      this._selection.onSelectionChanged();
+    }
+  },
+
   _updateSelection: noop,
 
   _setAriaSelectionAttribute($target, value) {
@@ -530,6 +551,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         break;
       case 'selectByClick':
       case 'onSelectionChanged':
+      case 'onSelectionChanging':
       case 'onItemDeleting':
       case 'onItemDeleted':
       case 'onItemReordered':

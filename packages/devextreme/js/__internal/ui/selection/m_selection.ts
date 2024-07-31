@@ -42,6 +42,7 @@ export default class Selection {
       selectedItems: [],
       selectionFilter: [],
       maxFilterLengthInRequest: 0,
+      onSelectionChanging: noop,
       onSelectionChanged: noop,
       key: noop,
       keyOf(item) { return item; },
@@ -121,6 +122,10 @@ export default class Selection {
 
   _setSelectedItems(keys, items) {
     this._selectionStrategy.setSelectedItems(keys, items);
+  }
+
+  onSelectionChanging() {
+    this._selectionStrategy.onSelectionChanging();
   }
 
   onSelectionChanged() {
