@@ -4,6 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../helpers/getPageUrl';
 import { changeTheme } from '../../helpers/changeTheme';
 import { createWidget } from '../../helpers/createWidget';
+import { Themes } from '../../helpers/themes';
 
 fixture.disablePageReloads`Tagbox Columns`.page(
   url(__dirname, '../container.html'),
@@ -12,7 +13,7 @@ fixture.disablePageReloads`Tagbox Columns`.page(
 test('Datagrid tagbox column should not look broken', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await changeTheme('material.blue.light');
+  await changeTheme(Themes.materialBlue);
   await t
     .click(dataGrid.getDataCell(0, 1).element)
     .expect(await takeScreenshot('T1228720-grid-tagbox-on-edit.png', dataGrid.element))
@@ -49,4 +50,6 @@ test('Datagrid tagbox column should not look broken', async (t) => {
     }],
     editing: { mode: 'batch', allowUpdating: true },
   });
+}).after(async () => {
+  await changeTheme(Themes.genericLight);
 });
