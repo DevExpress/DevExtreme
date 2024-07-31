@@ -24,7 +24,7 @@ import { Widget } from '../../../__internal/pager/common/widget';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 import { registerKeyboardAction } from '../../../ui/shared/accessibility';
 import { EventCallback } from '../common/event_callback';
-import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
+import { KeyboardActionContext, KeyboardActionContextType } from '../../../__internal/pager/common/keyboard_action_context';
 
 export const viewFunction = ({
   widgetRootElementRef,

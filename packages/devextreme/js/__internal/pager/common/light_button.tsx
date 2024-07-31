@@ -5,7 +5,7 @@ import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
 import type { EventCallback } from '../../core/r1/event_callback';
-import type { EffectReturn } from '../../core/r1/utils/effect_return';
+import type { DisposeEffectReturn, EffectReturn } from '../../core/r1/utils/effect_return';
 import { subscribeToClickEvent } from '../../core/r1/utils/subscribe_to_event';
 import { KeyboardActionContext } from './keyboard_action_context';
 
@@ -32,15 +32,15 @@ export class LightButton extends InfernoComponent<LightButtonProps> {
 
   private readonly widgetRef: RefObject<HTMLDivElement> = createRef();
 
-  /* istanbul ignore next: WA for Angular */
-  get componentProps(): LightButtonProps {
-    return this.props;
-  }
-
   constructor(props) {
     super(props);
     this.keyboardEffect = this.keyboardEffect.bind(this);
     this.subscribeToClick = this.subscribeToClick.bind(this);
+  }
+
+  /* istanbul ignore next: WA for Angular */
+  getComponentProps(): LightButtonProps {
+    return this.props;
   }
 
   getKeyboardContext(): any {
@@ -66,11 +66,11 @@ export class LightButton extends InfernoComponent<LightButtonProps> {
     this._effects[1]?.update([this.props.onClick]);
   }
 
-  keyboardEffect(): EffectReturn {
+  keyboardEffect(): DisposeEffectReturn {
     return this.getKeyboardContext().registerKeyboardAction(
       this.widgetRef.current,
       this.props.onClick,
-    ) as EffectReturn;
+    ) as DisposeEffectReturn;
   }
 
   subscribeToClick(): EffectReturn {

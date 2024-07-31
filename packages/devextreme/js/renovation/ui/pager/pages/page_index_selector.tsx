@@ -14,7 +14,7 @@ import { InternalPagerProps } from '../common/pager_props';
 import {
   ConfigContextValue,
   ConfigContext,
-} from '../../../common/config_context';
+} from '../../../../__internal/core/r1/config_context';
 import messageLocalization from '../../../../localization/message';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';

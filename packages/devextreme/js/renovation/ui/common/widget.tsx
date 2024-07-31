@@ -33,7 +33,7 @@ import { extend } from '../../../core/utils/extend';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import { BaseWidgetProps } from './base_props';
 import { EffectReturn } from '../../utils/effect_return';
-import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../__internal/core/r1/config_context';
 import { ConfigProvider } from '../../common/config_provider';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../utils/resolve_rtl';
 import resizeCallbacks from '../../../core/utils/resize_callbacks';

@@ -7,7 +7,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { Page, PagePropsInterface } from '../../../../__internal/pager/pages/page';
 import { InternalPagerProps } from '../common/pager_props';
-import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../../__internal/core/r1/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 export const viewFunction = ({ pages }: PagesLarge): JSX.Element => {

@@ -12,7 +12,7 @@ import { createRef } from 'inferno';
 
 import type DomComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
-import { ConfigContext } from '../../../renovation/common/config_context';
+import { ConfigContext } from './config_context';
 import type { EventCallback } from './event_callback';
 
 interface ComponentProps {
@@ -55,11 +55,11 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
   }
 
   getConfig(): any {
-    const { id } = (ConfigContext as any);
+    const { id } = ConfigContext;
     if (this.context[id]) {
       return this.context[id];
     }
-    return (ConfigContext as any).defaultValue;
+    return ConfigContext.defaultValue;
   }
 
   render(): JSX.Element {
