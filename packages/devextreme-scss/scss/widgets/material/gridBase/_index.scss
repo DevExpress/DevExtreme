@@ -74,20 +74,11 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
     }
 
-    .dx-datagrid-filter-row .dx-editor-with-menu,
-    .dx-editor-with-menu {
+    .dx-#{$widget-name}-filter-row .dx-editor-with-menu {
       .dx-menu-item-content {
         display: flex;
         justify-content: center;
         align-items: center;
-
-        .dx-icon {
-          @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
-
-          &.dx-icon-filter-operation-default {
-            margin-top: 2px;
-          }
-        }
       }
 
       .dx-texteditor {
