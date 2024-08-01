@@ -27,7 +27,7 @@ export class ContentView extends View {
     (items) => {
       const ContentStatus = this.contentStatus.asInferno();
       return <>
-        <div className={CLASSES.content}>
+        <div className={CLASSES.content} tabIndex={0}>
           <ContentStatus/>
           {items.map((item) => (
             <Card row={item}></Card>
