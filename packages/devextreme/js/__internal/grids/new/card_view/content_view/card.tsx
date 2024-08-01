@@ -1,5 +1,5 @@
-import type { DataRow } from '@ts/grids/grid_core_new/columns_controller/types';
-import { PureComponent } from '@ts/grids/grid_core_new/core/pure_component';
+import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
+import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
 import type { InfernoNode } from 'inferno';
 
 export const CLASSES = {

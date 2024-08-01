@@ -1,11 +1,12 @@
 import { computed } from '@ts/core/reactive';
-import { ColumnsController } from '@ts/grids/grid_core_new/columns_controller/columns_controller';
-import type { Column } from '@ts/grids/grid_core_new/columns_controller/types';
-import { View } from '@ts/grids/grid_core_new/core/view';
-import { DataController } from '@ts/grids/grid_core_new/data_controller/data_controller';
+import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
+import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
+import { ContentStatusView } from '@ts/grids/new/grid_core/content_view/content_status_view';
+import { View } from '@ts/grids/new/grid_core/core/view';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 
-import { ContentStatusView } from '../../grid_core_new/content_view/content_status_view';
 import { OptionsController } from '../options_controller';
+import { Card } from './card';
 
 export const CLASSES = {
   content: 'dx-cardview-content',
@@ -28,17 +29,9 @@ export class ContentView extends View {
       return <>
         <div className={CLASSES.content}>
           <ContentStatus/>
-          <table>
-          <tbody>
-              {items.map((item) => (
-                <tr>
-                  {item.cells.map((cell) => (
-                    <td>{cell.value}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {items.map((item) => (
+            <Card row={item}></Card>
+          ))}
         </div>
       </>;
     },
@@ -48,12 +41,13 @@ export class ContentView extends View {
   );
 
   static dependencies = [
-    DataController, ColumnsController, ContentStatusView,
+    DataController, ColumnsController, OptionsController, ContentStatusView,
   ] as const;
 
   constructor(
     private readonly dataController: DataController,
     private readonly columnsController: ColumnsController,
+    private readonly options: OptionsController,
     private readonly contentStatus: ContentStatusView,
   ) {
     super();

@@ -1,5 +1,5 @@
 import type { Properties } from '@js/ui/card_view';
-import { OptionsController } from '@ts/grids/grid_core_new/options_controller/options_controller_base';
+import { OptionsController } from '@ts/grids/new/grid_core/options_controller/options_controller_base';
 
 import type CardView from './widget_base';
 

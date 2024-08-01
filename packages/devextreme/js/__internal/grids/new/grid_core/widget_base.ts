@@ -3,17 +3,17 @@ import browser from '@js/core/utils/browser';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di';
-import { ColumnsChooser } from '@ts/grids/grid_core_new/columns_chooser/columns_chooser';
-import { ColumnsController } from '@ts/grids/grid_core_new/columns_controller/columns_controller';
-import { ColumnsDraggingController } from '@ts/grids/grid_core_new/columns_dragging/columns_dragging';
-import { DataController } from '@ts/grids/grid_core_new/data_controller/data_controller';
-import { EditingController } from '@ts/grids/grid_core_new/editing/controller';
-import { HeaderPanelController } from '@ts/grids/grid_core_new/header_panel/controller';
-import { HeaderPanelView } from '@ts/grids/grid_core_new/header_panel/view';
-import { HeadersView } from '@ts/grids/grid_core_new/headers/view';
-import { MainView } from '@ts/grids/grid_core_new/main_view';
-import { PagerView } from '@ts/grids/grid_core_new/pager';
-import { Search } from '@ts/grids/grid_core_new/search/controller';
+import { ColumnsChooser } from '@ts/grids/new/grid_core/columns_chooser/columns_chooser';
+import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
+import { ColumnsDraggingController } from '@ts/grids/new/grid_core/columns_dragging/columns_dragging';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
+import { EditingController } from '@ts/grids/new/grid_core/editing/controller';
+import { HeaderPanelController } from '@ts/grids/new/grid_core/header_panel/controller';
+import { HeaderPanelView } from '@ts/grids/new/grid_core/header_panel/view';
+import { HeadersView } from '@ts/grids/new/grid_core/headers/view';
+import { MainView } from '@ts/grids/new/grid_core/main_view';
+import { PagerView } from '@ts/grids/new/grid_core/pager';
+import { Search } from '@ts/grids/new/grid_core/search/controller';
 
 import { ContentStatusView } from './content_view/content_status_view';
 
