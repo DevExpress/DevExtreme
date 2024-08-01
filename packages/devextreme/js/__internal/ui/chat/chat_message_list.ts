@@ -136,14 +136,14 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _scrollContentToLastMessageGroup(): void {
-    if (!this._messageGroups || this._messageGroups.length === 0) {
+    if (!this._messageGroups || this._messageGroups.length === 0 || !this._scrollable) {
       return;
     }
 
     const lastMessageGroup = this._messageGroups[this._messageGroups.length - 1];
     const element = lastMessageGroup.$element()[0];
 
-    this._scrollable?.scrollToElement(element);
+    this._scrollable.scrollToElement(element);
   }
 
   _clean(): void {

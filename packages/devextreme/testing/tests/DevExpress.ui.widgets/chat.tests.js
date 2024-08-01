@@ -15,6 +15,7 @@ const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const SCROLLABLE_CLASS = 'dx-scrollable';
@@ -523,6 +524,13 @@ QUnit.module('Default options', moduleConfig, () => {
 });
 
 QUnit.module('Scrolling', moduleConfig, () => {
+    QUnit.test('Scrollable should be rendered into Message List', function(assert) {
+        const $messageList = this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`);
+        const $scrollable = $messageList.children(`.${SCROLLABLE_CLASS}`);
+
+        assert.strictEqual($scrollable.length, 1);
+    });
+
     QUnit.test('Scrollable should be scrolled to last message group after init', function(assert) {
         this.reinit({ items: generateMessages(31) });
 
