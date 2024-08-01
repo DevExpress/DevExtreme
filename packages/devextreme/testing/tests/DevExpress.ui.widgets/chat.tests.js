@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import Chat from 'ui/chat';
 import fx from 'animation/fx';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
 
 import 'generic_light.css!';
 
@@ -11,6 +14,8 @@ const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
+const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
@@ -344,6 +349,138 @@ QUnit.module('renderMessage', moduleConfig, () => {
         const lastBubble = $bubbles[$bubbles.length - 1];
 
         assert.strictEqual($(lastBubble).text(), text);
+    });
+});
+
+QUnit.module('onMessageSend', moduleConfig, () => {
+    QUnit.test('onMessageSend should be called when the send button was clicked if there is text', function(assert) {
+        const onMessageSend = sinon.spy();
+
+        const $element = $('#chat').dxChat({ onMessageSend });
+
+        const $textArea = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = $element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        keyboardMock($textArea).focus().type('new text message');
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(onMessageSend.callCount, 1);
+    });
+
+    QUnit.test('New message should be created after clicking the send button if there is text', function(assert) {
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        keyboardMock($textArea).focus().type(text);
+
+        $button.trigger('dxclick');
+
+        const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+        const bubble = $bubbles[$bubbles.length - 1];
+
+        assert.strictEqual($(bubble).text(), text);
+    });
+
+    QUnit.test('TextArea text should be empty after clicking the send button if there is text', function(assert) {
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        keyboardMock($textArea).focus().type(text);
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`).get(0).value, '');
+    });
+
+    QUnit.test('onMessageSend should be called after clicking the send button if there is text', function(assert) {
+        const onMessageSend = sinon.spy();
+
+        this.instance.option({ onMessageSend });
+
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        keyboardMock($textArea).focus().type(text);
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(onMessageSend.callCount, 1);
+    });
+
+    QUnit.test('onMessageSend should be get correct object after clicking the send button if there is text', function(assert) {
+        assert.expect(5);
+
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        this.instance.option({
+            onMessageSend: ({ component, element, event, message }) => {
+                assert.strictEqual(component, this.instance, 'component field is correct');
+                assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                assert.strictEqual(event.target, $button.get(0), 'event field is correct');
+                assert.strictEqual(message.text, text, 'message field is correct');
+            },
+        });
+
+        keyboardMock($textArea).focus().type(text);
+
+        $button.trigger('dxclick');
+    });
+
+    QUnit.test('New message should be correct after clicking the send button if there is text', function(assert) {
+        assert.expect(3);
+
+        const text = 'new text message';
+
+        const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        this.instance.option({
+            onMessageSend: ({ message }) => {
+                const { author, text: messageText } = message;
+
+                assert.strictEqual(author, this.instance.option('user'), 'author field is correct');
+                // eslint-disable-next-line no-prototype-builtins
+                assert.strictEqual(message.hasOwnProperty('timestamp'), true, 'timestamp field is set');
+                assert.strictEqual(messageText, text, 'text field is correct');
+            },
+        });
+
+        keyboardMock($textArea).focus().type(text);
+
+        $button.trigger('dxclick');
+    });
+
+    QUnit.test('New message should not be created after clicking the send button if there is no text', function(assert) {
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 3);
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 3);
+    });
+
+    QUnit.test('onMessageSend should not be called after clicking the send button if there is no text', function(assert) {
+        const onMessageSend = sinon.spy();
+
+        this.instance.option({ onMessageSend });
+
+        const $button = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+
+        $button.trigger('dxclick');
+
+        assert.strictEqual(onMessageSend.callCount, 0);
     });
 });
 
