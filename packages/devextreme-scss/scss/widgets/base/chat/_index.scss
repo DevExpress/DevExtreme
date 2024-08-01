@@ -14,8 +14,8 @@ $chat-bubble-border-radius: 12px;
 $chat-text-area-height: 40px;
 
 .dx-chat {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 24px 1fr minmax(40px, auto);
   width: $chat-width;
   height: $chat-height;
   padding: $chat-padding;

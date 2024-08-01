@@ -40,6 +40,7 @@ class MessageList extends Widget<MessageListOptions> {
     super._initMarkup();
 
     this._renderMessageListContent();
+    this._scrollContentToLastMessage();
   }
 
   _isCurrentUser(id): boolean {
@@ -113,11 +114,21 @@ class MessageList extends Widget<MessageListOptions> {
       if (sender.id === lastMessageGroupUserId) {
         lastMessageGroup._renderMessage(message);
 
+        this._scrollContentToLastMessage();
+
         return;
       }
     }
 
     this._createMessageGroupComponent([message], sender.id);
+    this._scrollContentToLastMessage();
+  }
+
+  _scrollContentToLastMessage(): void {
+    const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
+    const element = lastMessageGroup?.$element()[0];
+
+    element?.scrollIntoView(true);
   }
 
   _clean(): void {
