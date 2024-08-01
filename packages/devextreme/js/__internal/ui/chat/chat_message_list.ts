@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { hasWindow } from '@js/core/utils/window';
 import type { Message, User } from '@js/ui/chat';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
@@ -136,7 +137,9 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _scrollContentToLastMessageGroup(): void {
-    if (!this._messageGroups || this._messageGroups.length === 0 || !this._scrollable) {
+    if (
+      !this._messageGroups || this._messageGroups.length === 0 || !this._scrollable || !hasWindow()
+    ) {
       return;
     }
 
