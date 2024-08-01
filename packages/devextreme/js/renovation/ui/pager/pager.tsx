@@ -3,7 +3,7 @@ import {
   JSXComponent,
 } from '@devextreme-generator/declarations';
 
-import { ResizableContainer } from './resizable_container';
+import { ResizableContainer } from '../../../__internal/pager/resizable_container';
 import { PagerProps, InternalPagerProps } from './common/pager_props';
 import { PagerContent } from '../../../__internal/pager/content';
 import { GridPagerWrapper } from '../../component_wrapper/grid_pager';
