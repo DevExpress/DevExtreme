@@ -1,0 +1,12 @@
+@use 'colors' as *;
+
+.dx-cardview-content {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.dx-cardview-card {
+  width: 300px;
+  border: 1px solid $cardview-color;
+}
