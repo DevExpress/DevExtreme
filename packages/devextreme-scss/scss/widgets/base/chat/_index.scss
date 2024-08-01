@@ -30,14 +30,10 @@ $chat-text-area-height: 40px;
   padding-bottom: 4px;
 }
 
-.dx-chat-header-text {
-  margin: 0;
-}
-
 .dx-chat-message-list {
   box-sizing: border-box;
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .dx-chat-message-list-content {
@@ -45,14 +41,13 @@ $chat-text-area-height: 40px;
   flex-direction: column;
   padding: 0;
   margin: 0;
-  overflow-y: auto;
 }
 
 .dx-chat-message-group {
   display: grid;
   align-items: start;
   row-gap: 4px;
-  margin: 24px 0;
+  padding: 24px 0;
 }
 
 .dx-chat-message-group-alignment-start {

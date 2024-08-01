@@ -2,6 +2,8 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Message, User } from '@js/ui/chat';
+import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
+import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
@@ -19,6 +21,8 @@ class MessageList extends Widget<MessageListOptions> {
   _messageGroups?: MessageGroup[];
 
   private _$content?: dxElementWrapper;
+
+  private _scrollable?: dxScrollable<unknown>;
 
   _getDefaultOptions(): MessageListOptions {
     return {
@@ -39,6 +43,7 @@ class MessageList extends Widget<MessageListOptions> {
 
     super._initMarkup();
 
+    this._renderScrollable();
     this._renderMessageListContent();
     this._scrollContentToLastMessage();
   }
@@ -70,12 +75,18 @@ class MessageList extends Widget<MessageListOptions> {
     this._messageGroups?.push(messageGroup);
   }
 
+  _renderScrollable(): void {
+    this._scrollable = this._createComponent('<div>', Scrollable, {});
+    this.$element().append(this._scrollable.$element());
+  }
+
   _renderMessageListContent(): void {
     const { items } = this.option();
 
     this._$content = $('<div>')
       .addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS)
-      .appendTo(this.element());
+      // @ts-expect-error
+      .appendTo(this._scrollable?.$content());
 
     if (!items?.length) {
       return;
@@ -128,7 +139,7 @@ class MessageList extends Widget<MessageListOptions> {
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
     const element = lastMessageGroup?.$element()[0];
 
-    element?.scrollIntoView(true);
+    this._scrollable?.scrollToElement(element);
   }
 
   _clean(): void {
