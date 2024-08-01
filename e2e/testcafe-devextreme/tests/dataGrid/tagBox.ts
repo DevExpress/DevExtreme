@@ -19,7 +19,7 @@ fixture.disablePageReloads`Tagbox Columns`.page(
         .click(dataGrid.getDataCell(0, 1).element)
         .expect(
           await takeScreenshot(
-            `T1228720-grid-tagbox-on-edit-${theme}.png`,
+            `T1228720-grid-tagbox-on-edit_(${theme}).png`,
             dataGrid.element,
           ),
         )
