@@ -8,7 +8,7 @@ import url from '../../../helpers/getPageUrl';
 const DATA_GRID_SELECTOR = '#container';
 
 fixture`FixedColumns`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const borderConfigs = [
   {
