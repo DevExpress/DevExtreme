@@ -33,11 +33,11 @@ export default class SelectionStrategy {
     this.options[name] = value;
   }
 
-  onSelectionChanging() {
+  onSelectionChanging(args) {
     const cancel = false;
     const onSelectionChanging = this.options.onSelectionChanging || noop;
 
-    onSelectionChanging({ cancel });
+    onSelectionChanging({ ...args, cancel });
   }
 
   onSelectionChanged() {

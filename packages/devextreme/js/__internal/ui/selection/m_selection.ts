@@ -124,8 +124,8 @@ export default class Selection {
     this._selectionStrategy.setSelectedItems(keys, items);
   }
 
-  onSelectionChanging() {
-    this._selectionStrategy.onSelectionChanging();
+  onSelectionChanging(args) {
+    this._selectionStrategy.onSelectionChanging(args);
   }
 
   onSelectionChanged() {

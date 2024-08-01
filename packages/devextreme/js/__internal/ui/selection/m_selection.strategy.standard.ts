@@ -259,7 +259,7 @@ export default class StandardStrategy extends SelectionStrategy {
         that._warnOnIncorrectKeys(keys);
       }
       /// #ENDDEBUG
-      that.onSelectionChanging();
+      that.onSelectionChanged();
     });
 
     return deferred;

@@ -137,10 +137,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         that._fireSelectionChangingEvent(args);
       },
       onSelectionChanged(args) {
-        if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-          that._updateSelectedItems(args);
-        }
+        that._selection.onSelectionChanging(args);
       },
       filter: that._getCombinedFilter.bind(that),
       totalCount() {
@@ -486,11 +483,17 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       args.cancel.then((cancel) => {
         args.cancel = cancel;
         if (!cancel) {
-          this._selection.onSelectionChanged();
+          if (args.addedItemKeys.length || args.removedItemKeys.length) {
+            this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+            this._updateSelectedItems(args);
+          }
         }
       });
     } else if (!args.cancel) {
-      this._selection.onSelectionChanged();
+      if (args.addedItemKeys.length || args.removedItemKeys.length) {
+        this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+        this._updateSelectedItems(args);
+      }
     }
   },
 
