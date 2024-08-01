@@ -15,12 +15,15 @@ const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const SCROLLABLE_CLASS = 'dx-scrollable';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 const NOW = '1721747399083';
+const TOP_OFFSET = 1713.5;
 const userFirst = {
     id: MOCK_COMPANION_USER_ID,
     name: 'First',
@@ -65,6 +68,12 @@ const moduleConfig = {
         const init = (options = {}) => {
             this.$element = $('#chat').dxChat(options);
             this.instance = this.$element.dxChat('instance');
+        };
+
+        this.reinit = (options) => {
+            this.instance.dispose();
+
+            init(options);
         };
 
         const messages = [
@@ -145,44 +154,6 @@ QUnit.module('Chat initialization', moduleConfig, () => {
         this.instance.option({ items: [] });
 
         assert.strictEqual(invalidateStub.callCount, 1);
-    });
-
-    QUnit.test('Last message should be into view', function(assert) {
-        const messages = generateMessages(31);
-
-        this.instance.option({ items: messages });
-
-        const $messages = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-        const lastMessage = $messages[$messages.length - 1];
-        const lastMessageOffset = Math.ceil($(lastMessage).offset().top);
-
-        assert.strictEqual(lastMessageOffset, -9459);
-    });
-
-    [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
-        const isCurrentUser = id === MOCK_CURRENT_USER_ID;
-        const textName = `Last message should be into view after render new message from ${isCurrentUser ? 'current user' : 'companion'}`;
-
-        QUnit.test(textName, function(assert) {
-            const messages = generateMessages(31);
-
-            this.instance.option({ items: messages });
-
-            const author = { id };
-            const newMessage = {
-                author,
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            };
-
-            this.instance.renderMessage(newMessage, author);
-
-            const $messages = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-            const lastMessage = $messages[$messages.length - 1];
-            const lastMessageOffset = Math.ceil($(lastMessage).offset().top);
-
-            assert.strictEqual(lastMessageOffset, isCurrentUser ? -9459 : -9463);
-        });
     });
 });
 
@@ -534,7 +505,7 @@ QUnit.module('onMessageSend', moduleConfig, () => {
     });
 });
 
-QUnit.module('Default options', () => {
+QUnit.module('Default options', moduleConfig, () => {
     QUnit.test('There is an user id by default if user has not been set', function(assert) {
         const instance = $('#chat').dxChat().dxChat('instance');
 
@@ -548,5 +519,54 @@ QUnit.module('Default options', () => {
         const instance = $('#chat').dxChat().dxChat('instance');
 
         assert.strictEqual(typeof instance.option('user.id') === 'string', true);
+    });
+});
+
+QUnit.module('Scrolling', moduleConfig, () => {
+    QUnit.test('Scrollable should be scrolled to last message group after init', function(assert) {
+        this.reinit({ items: generateMessages(31) });
+
+        const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+        const scrollTop = scrollable.scrollTop();
+
+        assert.strictEqual(scrollTop === TOP_OFFSET, true);
+    });
+
+    QUnit.test('Scrollable should be scrolled to last message group if items canged in runtime', function(assert) {
+        this.instance.option({ items: generateMessages(31) });
+
+        const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+        const scrollTop = scrollable.scrollTop();
+
+        assert.strictEqual(scrollTop === TOP_OFFSET, true);
+    });
+
+    [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
+        const isCurrentUser = id === MOCK_CURRENT_USER_ID;
+        const textName = `Scrollable should be scrolled to last message group after render ${isCurrentUser ? 'current user' : 'companion'} message`;
+
+        QUnit.test(textName, function(assert) {
+            assert.expect(1);
+
+            this.reinit({ items: generateMessages(31) });
+
+            const author = { id };
+            const newMessage = {
+                author,
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+            scrollable.scrollToElement = ($item) => {
+                const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+                const lastMessageGroup = messageGroups[messageGroups.length - 1];
+
+                assert.strictEqual($item, lastMessageGroup);
+            };
+
+            this.instance.renderMessage(newMessage, author);
+        });
     });
 });

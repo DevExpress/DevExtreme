@@ -30,6 +30,7 @@ const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const BUTTON_CLASS = 'dx-button';
+const SCROLLABLE_CLASS = 'dx-scrollable';
 
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
@@ -203,6 +204,15 @@ QUnit.module('Render', moduleConfig, () => {
         const $bubbles = $messageGroup.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
 
         assert.strictEqual($bubbles.length, 3);
+    });
+
+    QUnit.module('Scrolling', moduleConfig, () => {
+        QUnit.test('Scrollable should be rendered into Message List', function(assert) {
+            const $messageList = this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`);
+            const $scrollable = $messageList.children(`.${SCROLLABLE_CLASS}`);
+
+            assert.strictEqual($scrollable.length, 1);
+        });
     });
 });
 
