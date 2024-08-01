@@ -3,7 +3,6 @@ import { isDefined } from '@js/core/utils/type';
 import type { Item as BaseToolbarItem } from '@js/ui/toolbar';
 import { computed, state } from '@ts/core/reactive';
 
-import { MAX_SAFE_INTEGER } from '../../grid_core/columns_controller/const';
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
 
@@ -22,8 +21,8 @@ export class HeaderPanelController {
     (defaultItems, userItems) => {
       const defaultOrderedItems = Object.values(defaultItems)
         .sort((a, b) => {
-          const aIndex = a.name ? DEFAULT_TOOLBAR_ITEMS.indexOf(a.name as any) : MAX_SAFE_INTEGER;
-          const bIndex = b.name ? DEFAULT_TOOLBAR_ITEMS.indexOf(b.name as any) : MAX_SAFE_INTEGER;
+          const aIndex = a.name ? DEFAULT_TOOLBAR_ITEMS.indexOf(a.name) : Number.MAX_SAFE_INTEGER;
+          const bIndex = b.name ? DEFAULT_TOOLBAR_ITEMS.indexOf(b.name) : Number.MAX_SAFE_INTEGER;
           return bIndex - aIndex;
         });
 
