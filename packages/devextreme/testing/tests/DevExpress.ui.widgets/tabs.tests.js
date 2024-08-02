@@ -422,6 +422,100 @@ QUnit.module('General', () => {
 });
 
 QUnit.module('Tab select action', () => {
+    QUnit.module('onSelectionChanging', {
+        beforeEach() {
+            this.onSelectionChangingSpy = sinon.spy();
+            this.onSelectionChangedSpy = sinon.spy();
+            this.clock = sinon.useFakeTimers();
+
+            this.$tabs = $('#tabs').dxTabs({
+                items: [
+                    { text: '0' },
+                    { text: '1' },
+                    { text: '2' },
+                    { text: '3' }
+                ],
+                onSelectionChanging: this.onSelectionChangingSpy,
+                onSelectionChanged: this.onSelectionChangedSpy,
+                selectedIndex: 0
+            });
+            this.tabInstance = this.$tabs.dxTabs('instance');
+        },
+        afterEach() {
+            this.clock.restore();
+        }
+    }, () => {
+        QUnit.test('cancelling selection event synchronously', function(assert) {
+            this.onSelectionChangingSpy = sinon.spy(function(e) {
+                e.cancel = true;
+            });
+
+            this.tabInstance.option('onSelectionChanging', this.onSelectionChangingSpy);
+            this.$item = this.$tabs.find('.dx-tab').eq(1);
+            this.$item.trigger('dxclick');
+
+            assert.strictEqual(this.onSelectionChangingSpy.callCount, 1, 'onSelectionChanging should be called');
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'onSelectionChanged should not be called');
+            assert.ok(this.onSelectionChangingSpy.getCall(0).args[0].cancel, 'e.cancel should be set to true');
+            assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 when cancelled');
+        });
+
+        QUnit.test('cancelling selection event asynchronously', function(assert) {
+            this.onSelectionChangingSpy = sinon.spy(function(e) {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(true);
+                    }, 5000);
+                });
+            });
+
+            this.tabInstance.option('onSelectionChanging', this.onSelectionChangingSpy);
+            this.$item = this.$tabs.find('.dx-tab').eq(1);
+            this.$item.trigger('dxclick');
+
+            this.clock.tick(6000);
+            this.onSelectionChangingSpy.getCall(0).args[0].cancel.then((cancel) => {
+                assert.strictEqual(this.onSelectionChangingSpy.callCount, 1, 'onSelectionChanging should be called');
+                assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'onSelectionChanged should not be called');
+                assert.ok(cancel, 'e.cancel should be set to true');
+                assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 when cancelled');
+            });
+            this.clock.tick(6000);
+        });
+
+        QUnit.test('default to false when e.cancel is not updated', function(assert) {
+
+            this.tabInstance.option('onSelectionChanging', this.onSelectionChangingSpy);
+            this.$item = this.$tabs.find('.dx-tab').eq(1);
+            this.$item.trigger('dxclick');
+
+            assert.strictEqual(this.onSelectionChangingSpy.callCount, 2, 'onSelectionChanging should be called');
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 1, 'onSelectionChanged should be called');
+            assert.notOk(this.onSelectionChangingSpy.getCall(0).args[0].cancel, 'e.cancel should be set to false');
+            assert.strictEqual(this.tabInstance.option('selectedIndex'), 1, 'selectedIndex should move to index 1');
+        });
+
+        QUnit.test('immediate cancellation should override promise', function(assert) {
+            this.onSelectionChangingSpy = sinon.spy(function(e) {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(false);
+                    }, 5000);
+                });
+                e.cancel = true;
+            });
+
+            this.tabInstance.option('onSelectionChanging', this.onSelectionChangingSpy);
+            this.$item = this.$tabs.find('.dx-tab').eq(1);
+            this.$item.trigger('dxclick');
+
+            assert.strictEqual(this.onSelectionChangingSpy.callCount, 1, 'onSelectionChanging should be called');
+            assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'onSelectionChanged should not be called');
+            assert.ok(this.onSelectionChangingSpy.getCall(0).args[0].cancel, 'e.cancel should be set to true');
+            assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 when cancelled');
+        });
+    });
+
     QUnit.test('should not be triggered when is already selected', function(assert) {
         let count = 0;
 
