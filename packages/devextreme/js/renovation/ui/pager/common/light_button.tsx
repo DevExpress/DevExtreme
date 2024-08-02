@@ -4,7 +4,7 @@ import {
 import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
 import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
 import { EventCallback } from '../../common/event_callback';
-import { KeyboardActionContext, KeyboardActionContextType } from './keyboard_action_context';
+import { KeyboardActionContext, KeyboardActionContextType } from '../../../../__internal/pager/common/keyboard_action_context';
 
 export const viewFunction = ({
   widgetRef,

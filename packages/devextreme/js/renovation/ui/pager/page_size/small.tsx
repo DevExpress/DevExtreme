@@ -10,7 +10,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import messageLocalization from '../../../../localization/message';
-import { SelectBox } from '../../../../__internal/pager/drop_down_editors/select_box';
+import { SelectBox } from '../../editors/drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { FullPageSize } from '../common/types';
 import { getElementMinWidth } from '../utils/get_element_width';

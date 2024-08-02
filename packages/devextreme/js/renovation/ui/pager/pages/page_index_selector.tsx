@@ -7,9 +7,9 @@ import {
   Consumer,
 } from '@devextreme-generator/declarations';
 
-import { LightButton, LightButtonProps } from '../../../../__internal/pager/common/light_button';
-import { PagesLarge } from '../../../../__internal/pager/pages/large';
-import { PagesSmall } from '../../../../__internal/pager/pages/small';
+import { LightButton, LightButtonProps } from '../common/light_button';
+import { PagesLarge } from './large';
+import { PagesSmall } from './small';
 import { InternalPagerProps } from '../common/pager_props';
 import {
   ConfigContextValue,

@@ -8,7 +8,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
-import { LightButton } from '../../../../__internal/pager/common/light_button';
+import { LightButton } from '../common/light_button';
 import { FullPageSize } from '../common/types';
 import { InternalPagerProps } from '../common/pager_props';
 import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS, FIRST_CHILD_CLASS } from '../common/consts';

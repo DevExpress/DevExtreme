@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from '@devextreme-generator/declarations';
 
-import { LightButton } from '../../../../__internal/pager/common/light_button';
+import { LightButton } from '../common/light_button';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { combineClasses } from '../../../utils/combine_classes';
 import { EventCallback } from '../../common/event_callback';
