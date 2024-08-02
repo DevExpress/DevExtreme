@@ -7,6 +7,7 @@ import DataGrid, {
   Toolbar,
   Item,
   Scrolling,
+  Pager,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Guid from 'devextreme/core/guid';
@@ -52,6 +53,7 @@ const App = () => {
         onRowInserted={onRowInserted}
       >
         <Scrolling mode={scrollingMode} />
+        <Pager visible={true} />
 
         <Editing
           mode="row"

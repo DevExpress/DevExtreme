@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, Sorting, Paging } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Sorting, Paging, Pager } from 'devextreme-react/data-grid';
 import { weekData } from './data.js';
 import DiffCell from './DiffCell.js';
 import ChartCell from './ChartCell.js';
@@ -15,6 +15,7 @@ const App = () => (
   >
     <Sorting mode="none" />
     <Paging defaultPageSize={10} />
+    <Pager visible={true} />
     <Column
       dataField="date"
       width={110}
