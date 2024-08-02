@@ -242,7 +242,7 @@ const SortIterator = Iterator.inherit({
 const compileCriteria = (function() {
     let langParams = {};
 
-    const _toComparable = (value) => toComparable(value, false, langParams);
+    const _toComparable = (value, caseSensitivity = false) => toComparable(value, caseSensitivity, langParams);
 
     const compileUniformEqualsCriteria = (crit) => {
         const getter = compileGetter(crit[0][0]);
@@ -309,9 +309,8 @@ const compileCriteria = (function() {
         crit = normalizeBinaryCriterion(crit);
         const getter = compileGetter(crit[0]);
         const op = crit[1];
-        let value = crit[2];
-
-        value = _toComparable(value);
+        const origValue = crit[2];
+        const value = _toComparable(origValue);
 
         const compare = (obj, operatorFn) => {
             obj = _toComparable(getter(obj));
@@ -320,9 +319,9 @@ const compileCriteria = (function() {
 
         switch(op.toLowerCase()) {
             case '=':
-                return compileEquals(getter, value);
+                return compileEquals(getter, origValue);
             case '<>':
-                return compileEquals(getter, value, true);
+                return compileEquals(getter, origValue, true);
             case '>':
                 return (obj) => compare(obj, (a, b) => a > b);
             case '<':
@@ -332,7 +331,14 @@ const compileCriteria = (function() {
             case '<=':
                 return (obj) => compare(obj, (a, b) => a <= b);
             case 'startswith':
-                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) === 0; };
+                return function(obj) {
+                    const objValue = _toComparable(toString(getter(obj)));
+                    const result = objValue.indexOf(value) === 0;
+                    /* eslint-disable-next-line no-undef */
+                    const compareResult = new Intl.Collator(langParams.locale, { sensitivity: 'base', usage: 'search' }).compare(_toComparable(value, true), objValue);
+
+                    return result || (compareResult === 0 || compareResult === -1);
+                };
             case 'endswith':
                 return function(obj) {
                     const getterValue = _toComparable(toString(getter(obj)));
@@ -356,14 +362,24 @@ const compileCriteria = (function() {
 
     function compileEquals(getter, value, negate) {
         return function(obj) {
-            obj = _toComparable(getter(obj));
-            // eslint-disable-next-line eqeqeq
-            let result = useStrictComparison(value) ? obj === value : obj == value;
+            let result;
 
-            if(negate) {
-                result = !result;
+            obj = getter(obj);
+
+            if(typeof obj === 'string' && typeof value === 'string' && langParams?.locale) {
+                /* eslint-disable-next-line no-undef */
+                const compareResult = new Intl.Collator(langParams.locale, { sensitivity: 'base', usage: 'search' }).compare(_toComparable(value, true), _toComparable(obj, true));
+
+                result = compareResult === 0;
+            } else {
+                obj = _toComparable(getter(obj));
+                value = _toComparable(value);
+
+                // eslint-disable-next-line eqeqeq
+                result = useStrictComparison(value) ? obj === value : obj == value;
             }
-            return result;
+
+            return negate ? !result : result;
         };
     }
 

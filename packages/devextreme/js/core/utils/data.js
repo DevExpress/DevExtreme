@@ -190,14 +190,17 @@ export const toComparable = function(value, caseSensitive, options = {}) {
         return value.valueOf();
     }
 
-    const isCaseSensitive = options?.collatorOptions?.sensitivity === 'case' || caseSensitive;
-    if(!isCaseSensitive && typeof value === 'string') {
-        if(options?.collatorOptions?.sensitivity === 'base') {
-            const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
+    const collatorSensitivity = options?.collatorOptions?.sensitivity;
 
-            value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
-        }
+    if(typeof value === 'string' && collatorSensitivity === 'base') {
+        const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
+        value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+    }
+
+    const isCaseSensitive = collatorSensitivity === 'case' || caseSensitive;
+
+    if(typeof value === 'string' && !isCaseSensitive) {
         return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
     }
 
