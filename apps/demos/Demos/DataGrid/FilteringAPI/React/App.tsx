@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DataGrid, { Column, DataGridRef } from 'devextreme-react/data-grid';
+import DataGrid, { Column, DataGridRef, Pager, } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import 'devextreme/data/odata/store';
 
@@ -63,6 +63,7 @@ const App = () => {
         columnAutoWidth={true}
         showBorders={true}
       >
+        <Pager visible={true} />
         <Column
           dataField="Task_ID"
           width={80} />
