@@ -261,7 +261,6 @@ export default class StandardStrategy extends SelectionStrategy {
       /// #ENDDEBUG
       that.onSelectionChanged();
     });
-
     return deferred;
   }
 

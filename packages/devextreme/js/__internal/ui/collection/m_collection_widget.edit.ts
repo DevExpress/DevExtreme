@@ -134,10 +134,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
       onSelectionChanging(args) {
-        that._fireSelectionChangingEvent(args);
+        if (!that._selectionChangingInProgress) {
+          that._selectionChangingInProgress = true;
+          that._fireSelectionChangingEvent(args);
+          that._selectionChangingInProgress = false;
+        }
       },
       onSelectionChanged(args) {
-        that._selection.onSelectionChanging(args);
+        if (!that._selectionChangingInProgress) {
+          that._selection.onSelectionChanging(args);
+        }
       },
       filter: that._getCombinedFilter.bind(that),
       totalCount() {
