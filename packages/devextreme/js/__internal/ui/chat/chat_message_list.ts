@@ -77,7 +77,7 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _renderScrollable(): void {
-    this._scrollable = this._createComponent('<div>', Scrollable, {});
+    this._scrollable = this._createComponent('<div>', Scrollable, { useNative: true });
     this.$element().append(this._scrollable.$element());
   }
 
@@ -137,9 +137,7 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _scrollContentToLastMessageGroup(): void {
-    if (
-      !this._messageGroups || this._messageGroups.length === 0 || !this._scrollable || !hasWindow()
-    ) {
+    if (!(this._messageGroups?.length && this._scrollable && hasWindow())) {
       return;
     }
 

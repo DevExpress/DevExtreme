@@ -32,8 +32,7 @@ $chat-text-area-height: 40px;
 
 .dx-chat-message-list {
   box-sizing: border-box;
-  flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .dx-chat-message-list-content {
