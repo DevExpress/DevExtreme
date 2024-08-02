@@ -194,11 +194,15 @@ export class Appointment extends DOMComponent {
     const startDateText = this._localizeDate(this._getStartDate());
     const endDateText = this._localizeDate(this._getEndDate());
 
+    const dateText = startDateText === endDateText
+      ? `${startDateText}`
+      : `${startDateText} - ${endDateText}`;
+
     // @ts-expect-error
     const { partIndex, partTotalCount } = this.option();
     const partText = isDefined(partIndex) ? ` (${partIndex + 1}/${partTotalCount})` : '';
 
-    return `${startDateText} - ${endDateText}${partText}`;
+    return `${dateText}${partText}`;
   }
 
   _renderAriaLabel() {
@@ -210,8 +214,8 @@ export class Appointment extends DOMComponent {
       this._getGroupText(),
     ]
       .filter((label) => !!label)
-      .join(';');
-    $element.attr('aria-label', ariaLabel);
+      .join(', ');
+    $element.attr('aria-label', `${ariaLabel}, `);
   }
 
   _renderAppointmentGeometry() {

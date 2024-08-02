@@ -33,7 +33,7 @@ fixture.disablePageReloads`a11y - appointment`
 
     await t
       .expect(attrs['aria-label'])
-      .eql('February 1, 2021 - February 1, 2021;Group: resource1');
+      .eql('February 1, 2021, Group: resource1, ');
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: [{
@@ -64,7 +64,7 @@ fixture.disablePageReloads`a11y - appointment`
 
     await t
       .expect(attrs['aria-label'])
-      .eql('February 1, 2021 - February 1, 2021;Group: resource11, resource21');
+      .eql('February 1, 2021, Group: resource11, resource21, ');
   }).before(async () => {
     await createWidget('dxScheduler', {
       dataSource: [{
@@ -103,9 +103,9 @@ fixture.disablePageReloads`a11y - appointment`
     startDate: new Date(2021, 1, 1, 12),
     endDate: new Date(2021, 1, 3, 13),
     labels: [
-      'February 1, 2021 - February 3, 2021 (1/3)',
-      'February 1, 2021 - February 3, 2021 (2/3)',
-      'February 1, 2021 - February 3, 2021 (3/3)',
+      'February 1, 2021 - February 3, 2021 (1/3), ',
+      'February 1, 2021 - February 3, 2021 (2/3), ',
+      'February 1, 2021 - February 3, 2021 (3/3), ',
     ],
   },
   {
@@ -113,9 +113,9 @@ fixture.disablePageReloads`a11y - appointment`
     startDate: new Date(2021, 1, 1, 12),
     endDate: new Date(2021, 1, 17, 13),
     labels: [
-      'February 1, 2021 - February 17, 2021 (1/3)',
-      'February 1, 2021 - February 17, 2021 (2/3)',
-      'February 1, 2021 - February 17, 2021 (3/3)',
+      'February 1, 2021 - February 17, 2021 (1/3), ',
+      'February 1, 2021 - February 17, 2021 (2/3), ',
+      'February 1, 2021 - February 17, 2021 (3/3), ',
     ],
   },
 ].forEach(({
