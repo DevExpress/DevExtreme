@@ -5,6 +5,7 @@ import DataGrid, {
   HeaderFilter,
   Search,
   SearchPanel,
+  Pager,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
@@ -120,6 +121,7 @@ const App = () => {
           width={240}
           placeholder="Search..."
         />
+        <Pager visible={true} />
         <Column
           dataField="OrderNumber"
           width={140}
