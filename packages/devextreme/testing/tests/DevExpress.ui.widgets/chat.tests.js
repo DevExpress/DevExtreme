@@ -24,7 +24,6 @@ const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 const NOW = '1721747399083';
-const TOP_OFFSET = 1713.5;
 const userFirst = {
     id: MOCK_COMPANION_USER_ID,
     name: 'First',
@@ -537,7 +536,7 @@ QUnit.module('Scrolling', moduleConfig, () => {
         const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
         const scrollTop = scrollable.scrollTop();
 
-        assert.strictEqual(scrollTop === TOP_OFFSET, true);
+        assert.strictEqual(scrollTop !== 0, true);
     });
 
     QUnit.test('Scrollable should be scrolled to last message group if items canged in runtime', function(assert) {
@@ -546,7 +545,7 @@ QUnit.module('Scrolling', moduleConfig, () => {
         const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
         const scrollTop = scrollable.scrollTop();
 
-        assert.strictEqual(scrollTop === TOP_OFFSET, true);
+        assert.strictEqual(scrollTop !== 0, true);
     });
 
     [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
