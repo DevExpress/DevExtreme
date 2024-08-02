@@ -137,7 +137,14 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         if (!that._selectionChangingInProgress) {
           that._selectionChangingInProgress = true;
           that._fireSelectionChangingEvent(args);
-          that._selectionChangingInProgress = false;
+
+          if (args.cancel instanceof Promise) {
+            args.cancel.finally(() => {
+              that._selectionChangingInProgress = false;
+            });
+          } else {
+            that._selectionChangingInProgress = false;
+          }
         }
       },
       onSelectionChanged(args) {
