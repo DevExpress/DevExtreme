@@ -53,7 +53,9 @@ export interface ResizableContainerProps {
   contentTemplate: JSXTemplate<PagerContentProps, 'pageSizeChange' | 'pageIndexChange'>;
 }
 
-export const ResizableContainerDefaultProps = { ...InternalPagerDefaultProps };
+export const ResizableContainerDefaultProps = {
+  pagerProps: { ...InternalPagerDefaultProps },
+};
 
 export class ResizableContainer extends InfernoComponent<ResizableContainerProps> {
   public state: any = {

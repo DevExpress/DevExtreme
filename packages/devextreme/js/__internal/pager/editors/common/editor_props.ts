@@ -1,5 +1,5 @@
 import { BaseWidgetDefaultProps, type BaseWidgetProps } from './base_widget_props';
-import type { WidgetProps } from './widget_props';
+import { WidgetDefaultProps, type WidgetProps } from './widget_props';
 
 export interface EditorProps extends BaseWidgetProps {
   readOnly?: false;
@@ -25,10 +25,8 @@ export type EditorPropsType = EditorProps
 
 export const EditorDefaultProps: EditorPropsType = {
   ...BaseWidgetDefaultProps,
-  ...{
-    aria: { },
-    classes: '',
-  },
+  aria: WidgetDefaultProps.aria,
+  classes: WidgetDefaultProps.classes,
   readOnly: false,
   name: '',
   value: null,

@@ -9,7 +9,7 @@ import messageLocalization from '../../../localization/message';
 import { combineClasses } from '../../core/r1/utils/render_utils';
 import { FIRST_CHILD_CLASS, PAGER_PAGE_SIZE_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
-import type { InternalPagerProps } from '../common/pager_props';
+import { InternalPagerDefaultProps, type InternalPagerProps } from '../common/pager_props';
 import type { FullPageSize } from '../common/types';
 
 export interface PageSizeLargeProps {
@@ -21,8 +21,8 @@ type PageSizeLargePropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeCha
 
 export const PageSizeLargeDefaultProps: PageSizeLargePropsType = {
   pageSizes: [],
-  pageSize: 5,
-  pageSizeChange: () => { },
+  pageSize: InternalPagerDefaultProps.pageSize,
+  pageSizeChange: InternalPagerDefaultProps.pageSizeChange,
 };
 
 export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> {

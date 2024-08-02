@@ -1,5 +1,6 @@
 import type { RefObject } from 'inferno';
 
+import { BaseWidgetDefaultProps } from '../../base_props';
 import type { BaseWidgetProps } from './base_widget_props';
 
 const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
@@ -28,6 +29,7 @@ export interface WidgetProps extends BaseWidgetProps {
 }
 
 export const WidgetDefaultProps: WidgetProps = {
+  ...BaseWidgetDefaultProps,
   _feedbackHideTimeout: DEFAULT_FEEDBACK_HIDE_TIMEOUT,
   _feedbackShowTimeout: DEFAULT_FEEDBACK_SHOW_TIMEOUT,
   cssText: '',

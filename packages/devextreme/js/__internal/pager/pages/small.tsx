@@ -5,7 +5,7 @@ import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
 import messageLocalization from '../../../localization/message';
-import type { InternalPagerProps } from '../common/pager_props';
+import { InternalPagerDefaultProps, type InternalPagerProps } from '../common/pager_props';
 import { NumberBox } from '../editors/number_box';
 import { PAGER_INFO_CLASS } from '../info';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
@@ -26,9 +26,9 @@ type PagerSmallPropsType = Pick<InternalPagerProps, 'pageCount' | 'pageIndex' | 
 
 export const PagerSmallDefaultProps: PagerSmallPropsType = {
   inputAttr: { 'aria-label': messageLocalization.format('dxPager-ariaPageNumber') },
-  pageIndex: 1,
-  pageCount: 10,
-  pageIndexChange: () => { },
+  pageIndex: InternalPagerDefaultProps.pageIndex,
+  pageCount: InternalPagerDefaultProps.pageCount,
+  pageIndexChange: InternalPagerDefaultProps.pageIndexChange,
 };
 
 export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {

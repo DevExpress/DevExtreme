@@ -7,7 +7,7 @@ import { Fragment } from 'inferno';
 
 import type { ConfigContextValue } from '../../core/r1/config_context';
 import { ConfigContext } from '../../core/r1/config_context';
-import type { InternalPagerProps } from '../common/pager_props';
+import { InternalPagerDefaultProps, type InternalPagerProps } from '../common/pager_props';
 import type { PagePropsInterface } from './page';
 import { Page } from './page';
 
@@ -33,10 +33,10 @@ interface PageIndexes extends Array<PageIndex> {}
 type PagesLargePropsType = Pick<InternalPagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 const PagesLargeDefaultProps: PagesLargePropsType = {
-  maxPagesCount: 10,
-  pageCount: 10,
-  pageIndex: 1,
-  pageIndexChange: () => { },
+  maxPagesCount: InternalPagerDefaultProps.maxPagesCount,
+  pageCount: InternalPagerDefaultProps.pageCount,
+  pageIndex: InternalPagerDefaultProps.pageIndex,
+  pageIndexChange: InternalPagerDefaultProps.pageIndexChange,
 };
 
 function getDelimiterType(
