@@ -15,12 +15,23 @@ const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
+
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const SCROLLABLE_CLASS = 'dx-scrollable';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 const NOW = '1721747399083';
+const userFirst = {
+    id: MOCK_COMPANION_USER_ID,
+    name: 'First',
+};
+const userSecond = {
+    id: MOCK_CURRENT_USER_ID,
+    name: 'Second',
+};
 
 const getDateTimeString = (timestamp) => {
     const options = { hour: '2-digit', minute: '2-digit', hour12: false };
@@ -28,6 +39,20 @@ const getDateTimeString = (timestamp) => {
     const dateTimeString = dateTime.toLocaleTimeString(undefined, options);
 
     return dateTimeString;
+};
+
+const generateMessages = (length) => {
+    const messages = Array.from({ length }, (_, i) => {
+        const item = {
+            timestamp: NOW,
+            author: i % 4 === 0 ? userFirst : userSecond,
+            text: String(Math.random()),
+        };
+
+        return item;
+    });
+
+    return messages;
 };
 
 QUnit.testStart(() => {
@@ -45,14 +70,10 @@ const moduleConfig = {
             this.instance = this.$element.dxChat('instance');
         };
 
-        const userFirst = {
-            id: MOCK_COMPANION_USER_ID,
-            name: 'First',
-        };
+        this.reinit = (options) => {
+            this.instance.dispose();
 
-        const userSecond = {
-            id: MOCK_CURRENT_USER_ID,
-            name: 'Second',
+            init(options);
         };
 
         const messages = [
@@ -484,7 +505,7 @@ QUnit.module('onMessageSend', moduleConfig, () => {
     });
 });
 
-QUnit.module('Default options', () => {
+QUnit.module('Default options', moduleConfig, () => {
     QUnit.test('There is an user id by default if user has not been set', function(assert) {
         const instance = $('#chat').dxChat().dxChat('instance');
 
@@ -498,5 +519,61 @@ QUnit.module('Default options', () => {
         const instance = $('#chat').dxChat().dxChat('instance');
 
         assert.strictEqual(typeof instance.option('user.id') === 'string', true);
+    });
+});
+
+QUnit.module('Scrolling', moduleConfig, () => {
+    QUnit.test('Scrollable should be rendered into Message List', function(assert) {
+        const $messageList = this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`);
+        const $scrollable = $messageList.children(`.${SCROLLABLE_CLASS}`);
+
+        assert.strictEqual($scrollable.length, 1);
+    });
+
+    QUnit.test('Scrollable should be scrolled to last message group after init', function(assert) {
+        this.reinit({ items: generateMessages(31) });
+
+        const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+        const scrollTop = scrollable.scrollTop();
+
+        assert.strictEqual(scrollTop !== 0, true);
+    });
+
+    QUnit.test('Scrollable should be scrolled to last message group if items canged in runtime', function(assert) {
+        this.instance.option({ items: generateMessages(31) });
+
+        const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+        const scrollTop = scrollable.scrollTop();
+
+        assert.strictEqual(scrollTop !== 0, true);
+    });
+
+    [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
+        const isCurrentUser = id === MOCK_CURRENT_USER_ID;
+        const textName = `Scrollable should be scrolled to last message group after render ${isCurrentUser ? 'current user' : 'companion'} message`;
+
+        QUnit.test(textName, function(assert) {
+            assert.expect(1);
+
+            this.reinit({ items: generateMessages(31) });
+
+            const author = { id };
+            const newMessage = {
+                author,
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            const scrollable = this.$element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+            scrollable.scrollToElement = ($item) => {
+                const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+                const lastMessageGroup = messageGroups[messageGroups.length - 1];
+
+                assert.strictEqual($item, lastMessageGroup);
+            };
+
+            this.instance.renderMessage(newMessage, author);
+        });
     });
 });
