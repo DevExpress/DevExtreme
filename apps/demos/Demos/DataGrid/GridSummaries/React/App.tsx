@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, Selection, Summary, TotalItem,
+  Column, Selection, Summary, TotalItem, Pager,
 } from 'devextreme-react/data-grid';
 import { formatDate } from 'devextreme/localization';
 import { orders } from './data.ts';
@@ -14,6 +14,7 @@ const App = () => (
     keyExpr="ID"
     showBorders={true}>
     <Selection mode="single" />
+    <Pager visible={true} />
     <Column dataField="OrderNumber" width={130} caption="Invoice Number" />
     <Column dataField="OrderDate" dataType="date" />
     <Column dataField="Employee" />

@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, Selection, Summary, GroupItem, SortByGroupSummaryInfo,
+  Column, Selection, Summary, GroupItem, SortByGroupSummaryInfo, Pager,
 } from 'devextreme-react/data-grid';
 import { orders } from './data.ts';
 
@@ -12,6 +12,7 @@ const App = () => (
     showBorders={true}
   >
     <Selection mode="single" />
+    <Pager visible={true} />
     <Column dataField="OrderNumber" width={130} caption="Invoice Number" />
     <Column dataField="OrderDate" dataType="date" />
     <Column dataField="Employee" groupIndex={0} />
