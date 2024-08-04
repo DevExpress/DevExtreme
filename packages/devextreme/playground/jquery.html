@@ -98,7 +98,11 @@
                     dataSource: store,
                     width: "70%",
                     columns: [
-                        'OrderNumber',
+                        {
+                            dataField: 'OrderNumber',
+                            // alignment: 'right',
+                            dataType: 'number',
+                        },
                         'OrderDate',
                         'StoreCity',
                         'StoreState',

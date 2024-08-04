@@ -18,6 +18,7 @@ export class Card extends PureComponent<CardProps> {
       <div className={CLASSES.card} tabIndex={0}>
         {this.props.row.cells.map((cell) => (
           <Field
+            alignment={cell.column.alignment}
             title={cell.column.name}
             value={cell.value}
           />

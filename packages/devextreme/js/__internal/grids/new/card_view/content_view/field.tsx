@@ -10,6 +10,8 @@ export const CLASSES = {
 export interface FieldProps {
   title: string | undefined;
   value: unknown;
+
+  alignment: 'right' | 'center' | 'left';
 }
 
 export class Field extends PureComponent<FieldProps> {
@@ -17,7 +19,7 @@ export class Field extends PureComponent<FieldProps> {
     return (
       <div className={CLASSES.field} tabIndex={0}>
         <span className={CLASSES.fieldName}>{this.props.title}: </span>
-        <span className={CLASSES.fieldName}>{this.props.value}</span>
+        <span style={{ 'text-align': this.props.alignment }} className={CLASSES.fieldName}>{this.props.value}</span>
       </div>
     );
   }

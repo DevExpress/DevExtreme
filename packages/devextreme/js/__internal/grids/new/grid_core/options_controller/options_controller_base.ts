@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
@@ -9,7 +10,10 @@ import { computed, state } from '@ts/core/reactive';
 type SubsGets<T> = Subscribable<T> & Gettable<T>;
 type SubsUpts<T> = Subscribable<T> & Updatable<T>;
 
-type OwnProperty<T, TPropName extends string> = TPropName extends keyof Required<T> ? Required<T>[TPropName] : never;
+type OwnProperty<T, TPropName extends string> =
+  TPropName extends keyof Required<T>
+    ? Required<T>[TPropName]
+    : unknown;
 
 type PropertyTypeBase<T, TProp extends string> =
   TProp extends `${infer TOwnProp}.${infer TNestedProps}`
@@ -17,12 +21,12 @@ type PropertyTypeBase<T, TProp extends string> =
     : OwnProperty<T, TProp>;
 
 export type PropertyType<TProps, TProp extends string> =
-  PropertyTypeBase<TProps, TProp> extends never
-    ? never
+  unknown extends PropertyTypeBase<TProps, TProp>
+    ? unknown
     : PropertyTypeBase<TProps, TProp> | undefined;
 
 export type PropertyWithDefaults<TProps, TDefaults, TProp extends string> =
-  PropertyType<TDefaults, TProp> extends never
+  unknown extends PropertyType<TDefaults, TProp>
     ? PropertyType<TProps, TProp>
     : NonNullable<PropertyType<TProps, TProp>> | PropertyTypeBase<TDefaults, TProp>;
 

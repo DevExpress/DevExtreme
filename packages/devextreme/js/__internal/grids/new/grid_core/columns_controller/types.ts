@@ -1,18 +1,18 @@
-export interface Column {
+import type { ColumnBase } from '@js/common/grids';
+
+export interface Column extends Pick<Required<ColumnBase>, 'alignment' | 'dataType'> {
   dataField?: string;
 
   name?: string;
 
-  calculateCellValue: (data) => unknown | Promise<unknown>;
+  calculateCellValue: (this: this, data: unknown) => unknown | Promise<unknown>;
 
-  editorTemplate: unknown;
+  editorTemplate?: unknown;
 
-  fieldTemplate: unknown;
+  fieldTemplate?: unknown;
 }
 
-export type ColumnSettings = Partial<Column>;
-
-export type ColumnConfiguration = ColumnSettings | string;
+export type ColumnProperties = Partial<Column> | string;
 
 export interface Cell {
   value: unknown;

@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { computed, iif } from '@ts/core/reactive';
 
 import { DataController } from '../data_controller/data_controller';
@@ -20,7 +21,6 @@ export class ColumnsController {
   );
 
   public readonly columns = computed(
-    // @ts-expect-error
     (columnsConfiguration) => (columnsConfiguration ?? []).map(normalizeColumn),
     [
       iif(
