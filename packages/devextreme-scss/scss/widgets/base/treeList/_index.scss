@@ -77,12 +77,12 @@ $treelist-row-error-color: $datagrid-row-error-color;
     @include dx-icon(dragvertical);
   }
 
-  .dx-sticky-columns {
+  .dx-treelist-sticky-columns {
     .dx-column-lines > td {
       border-right: none;
     }
   
-    .dx-treelist-table .dx-row .dx-last-left-sticky-column {
+    .dx-treelist-table .dx-row .dx-treelist-last-left-sticky-column {
       border-right: 2px solid $treelist-border-color;
 
       & + td {
@@ -90,12 +90,12 @@ $treelist-row-error-color: $datagrid-row-error-color;
       }
     }
   
-    .dx-treelist-table .dx-row .dx-first-right-sticky-column {
+    .dx-treelist-table .dx-row .dx-treelist-first-right-sticky-column {
       border-left: 2px solid $treelist-border-color;
     }
   }
 
-  .dx-left-sticky-column, .dx-right-sticky-column {
+  .dx-treelist-left-sticky-column, .dx-treelist-right-sticky-column {
     background-color: $treelist-base-background-color;
   }
 }

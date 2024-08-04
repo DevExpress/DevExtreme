@@ -4,9 +4,8 @@ import type { ModuleType } from '../m_types';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { GridCoreStickyColumnsDom } from './dom';
-import { getStickyOffset } from './m_sticky_columns_utils';
+import { getStickyOffset } from './utils';
 
-// View
 const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseStickyColumnsExtender extends Base {
   private _isStickyColumns(): boolean {
     const stickyColumns = this._columnsController?.getFixedColumns();
@@ -20,7 +19,11 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const $element = this.element();
     const isStickyColumns = this._isStickyColumns();
 
-    GridCoreStickyColumnsDom.toggleStickyColumnsClass($element, isStickyColumns);
+    GridCoreStickyColumnsDom.toggleStickyColumnsClass(
+      $element,
+      isStickyColumns,
+      this.addWidgetPrefix.bind(this),
+    );
   }
 
   protected _createCell(options) {
@@ -36,6 +39,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
         $cell,
         column,
         rtlEnabled ? [...stickyColumns].reverse() : stickyColumns,
+        this.addWidgetPrefix.bind(this),
       );
     }
 
@@ -54,7 +58,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
       columns.forEach((column, columnIndex) => {
         if (column.fixed) {
-          const offset = getStickyOffset(columns, widths, columnIndex, rtlEnabled);
+          const offset = getStickyOffset(columns, widths, columnIndex, rtlEnabled as boolean);
 
           this.setCellProperties(offset, columnIndex);
         }

@@ -1183,7 +1183,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIndex;
   }
 
-  protected setCellProperties(styleProps, columnIndex) {
+  protected setCellProperties(styleProps: CSSStyleDeclaration, columnIndex: number) {
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length) {
