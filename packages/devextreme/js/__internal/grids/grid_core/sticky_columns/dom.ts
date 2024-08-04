@@ -8,7 +8,7 @@ const getStickyColumnPosition = (
     return '';
   }
 
-  return fixedPosition || StickyPosition.Left;
+  return fixedPosition ?? StickyPosition.Left;
 };
 
 const addLeftStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidgetPrefix): void => {
