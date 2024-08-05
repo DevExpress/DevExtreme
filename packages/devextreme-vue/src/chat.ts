@@ -14,6 +14,7 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "rtlEnabled" |
   "title" |
+  "user" |
   "visible" |
   "width"
 >;
@@ -34,6 +35,7 @@ const DxChat = createComponent({
     onOptionChanged: Function,
     rtlEnabled: Boolean,
     title: String,
+    user: Object,
     visible: Boolean,
     width: [Function, Number, String]
   },
@@ -51,6 +53,7 @@ const DxChat = createComponent({
     "update:onOptionChanged": null,
     "update:rtlEnabled": null,
     "update:title": null,
+    "update:user": null,
     "update:visible": null,
     "update:width": null,
   },
@@ -63,7 +66,8 @@ const DxChat = createComponent({
     (this as any).$_WidgetClass = Chat;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
-      item: { isCollectionItem: true, optionName: "items" }
+      item: { isCollectionItem: true, optionName: "items" },
+      user: { isCollectionItem: false, optionName: "user" }
     };
   }
 });
@@ -78,7 +82,7 @@ const DxAuthor = createConfigurationComponent({
   },
   props: {
     avatarUrl: String,
-    id: Number,
+    id: [Number, String],
     name: String
   }
 });
@@ -104,12 +108,28 @@ const DxItem = createConfigurationComponent({
 (DxItem as any).$_expectedChildren = {
   author: { isCollectionItem: false, optionName: "author" }
 };
+const DxUser = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:avatarUrl": null,
+    "update:id": null,
+    "update:name": null,
+  },
+  props: {
+    avatarUrl: String,
+    id: [Number, String],
+    name: String
+  }
+});
+(DxUser as any).$_optionName = "user";
 
 export default DxChat;
 export {
   DxChat,
   DxAuthor,
-  DxItem
+  DxItem,
+  DxUser
 };
 import type * as DxChatTypes from "devextreme/ui/chat_types";
 export { DxChatTypes };
