@@ -432,7 +432,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     this._setAriaSelectionAttribute($itemElement, String(isSelected));
   },
 
-  _updateSelectedItems(args) {
+  updatingSelectedItems(args) {
     const that = this;
     const { addedItemKeys } = args;
     const { removedItemKeys } = args;
@@ -468,6 +468,18 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       when(selectionChangePromise).done(() => {
         that._fireSelectionChangeEvent(args.addedItems, args.removedItems);
       });
+    }
+  },
+
+  _updateSelectedItems(args) {
+    if (this.isSelectionCancel instanceof Promise) {
+      this.isSelectionCancel.then((cancel) => {
+        if (!cancel) {
+          this.updatingSelectedItems(args);
+        }
+      });
+    } else if (!this.isSelectionCancel) {
+      this.updatingSelectedItems(args);
     }
   },
 
@@ -679,28 +691,32 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       return;
     }
 
-    const key = this._getKeyByIndex(itemIndex);
+    let key = this.option('selectedIndex');
 
-    if (this._selection.isItemSelected(key)) {
-      return;
-    }
     if (this.isSelectionCancel instanceof Promise) {
       this.isSelectionCancel.then((cancel) => {
         if (!cancel) {
+          key = this._getKeyByIndex(itemIndex);
+          if (this._selection.isItemSelected(key)) {
+            return;
+          }
           if (this.option('selectionMode') === 'single') {
             return this._selection.setSelection([key]);
           }
-          const selectedItemKeys = this.option('selectedItemKeys') || [];
-          return this._selection.setSelection([...selectedItemKeys, key], [key]);
         }
       });
     } else if (!this.isSelectionCancel) {
+      key = this._getKeyByIndex(itemIndex);
+      if (this._selection.isItemSelected(key)) {
+        return;
+      }
       if (this.option('selectionMode') === 'single') {
         return this._selection.setSelection([key]);
       }
-      const selectedItemKeys = this.option('selectedItemKeys') || [];
-      return this._selection.setSelection([...selectedItemKeys, key], [key]);
     }
+
+    const selectedItemKeys = this.option('selectedItemKeys') || [];
+    return this._selection.setSelection([...selectedItemKeys, key], [key]);
   },
 
   unselectItem(itemElement) {
