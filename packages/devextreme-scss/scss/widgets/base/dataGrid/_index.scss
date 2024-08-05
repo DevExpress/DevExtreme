@@ -226,6 +226,28 @@ $datagrid-text-stub-background-image-path: null !default;
   .dx-command-drag .dx-datagrid-drag-icon {
     @include dx-icon(dragvertical);
   }
+
+  .dx-datagrid-sticky-columns {
+    .dx-column-lines > td {
+      border-right: none;
+    }
+
+    .dx-datagrid-table .dx-row .dx-datagrid-last-left-sticky-column {
+      border-right: 2px solid $datagrid-border-color;
+
+      & + td:not(.dx-datagrid-left-sticky-column) {
+        border-left: none;
+      }
+    }
+
+    .dx-datagrid-table .dx-row .dx-datagrid-first-right-sticky-column {
+      border-left: 2px solid $datagrid-border-color;
+    }
+  }
+
+  .dx-datagrid-left-sticky-column, .dx-datagrid-right-sticky-column {
+    background-color: $datagrid-base-background-color;
+  }
 }
 
 .dx-datagrid-filter-panel {
@@ -312,7 +334,6 @@ $datagrid-text-stub-background-image-path: null !default;
 
       &:last-child {
         border-left: none;
-        border-right: $datagrid-border;
       }
     }
   }
