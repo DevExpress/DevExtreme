@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Zeilenfelder hierher ziehen",
         "dxPivotGrid-filterFieldArea": "Filterfelder hierher ziehen",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Betreff",
         "dxScheduler-editorLabelStartDate": "Anfangszeit",
         "dxScheduler-editorLabelEndDate": "Endzeit",

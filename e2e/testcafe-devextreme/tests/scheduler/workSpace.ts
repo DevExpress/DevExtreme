@@ -327,7 +327,7 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
       });
     })
       .after(async () => {
-        await changeTheme(theme);
+        await changeTheme(Themes.genericLight);
       });
   });
 });
@@ -364,11 +364,12 @@ test('[T716993]: should has horizontal scrollbar with multiple resources and fix
 
 test('Scheduler appointments should change color on update resources', async (t) => {
   const button = new Button('#container');
+  const scheduler = new Scheduler('#otherContainer');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.click(button.element);
 
-  await takeScreenshot('scheduler-appointments-should-update-color.png');
+  await takeScreenshot('scheduler-appointments-should-update-color.png', scheduler.workSpace);
   await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxScheduler', {

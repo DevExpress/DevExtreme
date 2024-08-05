@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "行フィールドをこちらへドラッグ＆ドロップ",
         "dxPivotGrid-filterFieldArea": "フィルター フィールドをこちらへドラッグ＆ドロップ",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "件名",
         "dxScheduler-editorLabelStartDate": "開始時刻",
         "dxScheduler-editorLabelEndDate": "終了時刻",

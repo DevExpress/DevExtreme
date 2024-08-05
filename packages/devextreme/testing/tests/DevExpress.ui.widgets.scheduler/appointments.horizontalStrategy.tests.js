@@ -82,6 +82,7 @@ const createInstance = (options = {}) => {
         observer: createObserver(options.renderingStrategy),
         ...options,
         getResources: () => [],
+        getLoadedResources: () => [],
         getAppointmentColor: () => new Deferred(),
         getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');

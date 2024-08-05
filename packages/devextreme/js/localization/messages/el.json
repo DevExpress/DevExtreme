@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Τοποθετήστε τα πεδία γραμμών εδώ",
         "dxPivotGrid-filterFieldArea": "Τοποθετήστε τα πεδία φίλτρων εδώ",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Θέμα",
         "dxScheduler-editorLabelStartDate": "Ημερομηνία έναρξης",
         "dxScheduler-editorLabelEndDate": "Ημερομηνία λήξης",

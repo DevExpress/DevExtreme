@@ -1,15 +1,17 @@
 import registerComponent from '@js/core/component_registrator';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
-import type { Properties } from '@js/ui/chat';
+import type {
+  Message, MessageSendEvent, Properties, User,
+} from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
+import type { MessageBoxProperties } from './chat_message_box';
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
-
-const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
@@ -18,13 +20,23 @@ class Chat extends Widget<Properties> {
 
   _messageList?: MessageList;
 
+  _messageSendAction?: (e: MessageSendEvent) => void;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       title: '',
       items: [],
+      // @ts-expect-error
+      user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };
+  }
+
+  _init(): void {
+    super._init();
+
+    this._createMessageSendAction();
   }
 
   _initMarkup(): void {
@@ -47,20 +59,51 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items } = this.option();
+    // @ts-expect-error
+    const { items, user } = this.option();
 
+    const currentUserId = user?.id;
     const $messageList = $('<div>').appendTo(this.element());
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
-      currentUserId: MOCK_CURRENT_USER_ID,
+      currentUserId,
     });
   }
 
   _renderMessageBox(): void {
     const $messageBox = $('<div>').appendTo(this.element());
 
-    this._messageBox = this._createComponent($messageBox, MessageBox, {});
+    const configuration: MessageBoxProperties = {
+      onMessageSend: (e) => {
+        this._messageSendHandler(e);
+      },
+    };
+
+    this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
+  }
+
+  _createMessageSendAction(): void {
+    this._messageSendAction = this._createActionByOption(
+      'onMessageSend',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
+  }
+
+  _messageSendHandler(e: MessageSendEvent): void {
+    const { text, event } = e;
+    // @ts-expect-error
+    const { user } = this.option();
+
+    const message: Message = {
+      timestamp: String(Date.now()),
+      author: user,
+      text,
+    };
+
+    this.renderMessage(message, user);
+    // @ts-expect-error
+    this._messageSendAction?.({ message, event });
   }
 
   _optionChanged(args: Record<string, unknown>): void {
@@ -71,14 +114,30 @@ class Chat extends Widget<Properties> {
         // @ts-expect-error
         this._chatHeader?.option(name, value);
         break;
+      case 'user':
+        // @ts-expect-error
+        this._messageList?.option('currentUserId', value.id);
+        break;
       case 'items':
-        this._invalidate();
+        // @ts-expect-error
+        this._messageList?.option(name, value);
         break;
       case 'onMessageSend':
+        this._createMessageSendAction();
         break;
       default:
         super._optionChanged(args);
     }
+  }
+
+  renderMessage(message: Message, sender: User): void {
+    const { items } = this.option();
+
+    const newItems = items ? [...items, message] : [message];
+
+    this._setOptionWithoutOptionChange('items', newItems);
+
+    this._messageList?._renderMessage(message, newItems, sender);
   }
 }
 

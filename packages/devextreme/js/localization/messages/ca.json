@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Els camps de fila de la fila aquí",
         "dxPivotGrid-filterFieldArea": "Els camps de filtre de baixada aquí",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Assignatura",
         "dxScheduler-editorLabelStartDate": "Data d'inici",
         "dxScheduler-editorLabelEndDate": "Data de finalització",

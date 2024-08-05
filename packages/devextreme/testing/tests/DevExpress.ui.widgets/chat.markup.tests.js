@@ -92,6 +92,7 @@ const moduleConfig = {
         ];
 
         const options = {
+            user: userSecond,
             items: messages,
         };
 
@@ -146,7 +147,7 @@ QUnit.module('Render', moduleConfig, () => {
         this.instance.option({ items: [] });
         const $messageListContent = this.$element.find(`.${CHAT_MESSAGE_LIST_CONTENT_CLASS}`);
 
-        assert.strictEqual($messageListContent.length, 0);
+        assert.strictEqual($messageListContent.length, 1);
     });
 
     QUnit.test('Message groups should be rendered', function(assert) {
