@@ -1083,6 +1083,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
     }
+
+    &.dx-#{$widget-name}-sticky-columns .dx-row:not(.dx-row-lines) > td {
+      padding-top: $fluent-grid-base-cell-vertical-padding + 1;
+    }
   }
 
   .dx-#{$widget-name}-search-text {

@@ -1203,7 +1203,7 @@ export const columnFixingModule = {
     return {
       columnFixing: {
         enabled: false,
-        legacyMode: true,
+        legacyMode: false,
         texts: {
           fix: messageLocalization.format('dxDataGrid-columnFixingFix'),
           unfix: messageLocalization.format('dxDataGrid-columnFixingUnfix'),
