@@ -194,6 +194,10 @@
       vertical-align: middle;
       padding: 0;
     }
+
+    .dx-#{$widget-name}-left-sticky-column, .dx-#{$widget-name}-right-sticky-column {
+      position: sticky;
+    }
   }
 
   .dx-sortable-dragging .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
@@ -1048,6 +1052,10 @@
       bottom: 50%;
       position: absolute;
     }
+  }
+
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-table {
+    border-collapse: separate;
   }
 
   .dx-rtl .dx-#{$widget-name},
