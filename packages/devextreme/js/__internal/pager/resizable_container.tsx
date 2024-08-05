@@ -8,7 +8,7 @@ import { createRef as infernoCreateRef } from 'inferno';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { isDefined } from '../../core/utils/type';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
-import { InternalPagerDefaultProps, type InternalPagerProps } from './common/pager_props';
+import { PagerDefaultProps, type PagerProps } from './common/pager_props';
 import type { RefObject } from './common/types';
 import type { PagerContentProps } from './content';
 import { getElementContentWidth, getElementStyle, getElementWidth } from './utils/get_element_width';
@@ -49,12 +49,12 @@ function getElementsWidth({
 }
 
 export interface ResizableContainerProps {
-  pagerProps: InternalPagerProps;
+  pagerProps: PagerProps;
   contentTemplate: JSXTemplate<PagerContentProps, 'pageSizeChange' | 'pageIndexChange'>;
 }
 
 export const ResizableContainerDefaultProps = {
-  pagerProps: { ...InternalPagerDefaultProps },
+  pagerProps: { ...PagerDefaultProps },
 };
 
 export class ResizableContainer extends InfernoComponent<ResizableContainerProps> {
@@ -132,7 +132,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     }
   }
 
-  getContentAttributes(): Record<string, unknown> & InternalPagerProps {
+  getContentAttributes(): PagerProps {
     const {
       className,
       displayMode,

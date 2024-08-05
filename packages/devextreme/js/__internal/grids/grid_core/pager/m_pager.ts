@@ -1,8 +1,8 @@
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
-import Pager from '@js/ui/pager';
 
+import Pager from '../../../pager/wrappers/pager';
 import modules from '../m_modules';
 
 const PAGER_CLASS = 'pager';
@@ -97,12 +97,12 @@ export class PagerView extends modules.View {
       pageSizes: that.getPageSizes(),
       totalCount: dataController.totalCount(),
       hasKnownLastPage: dataController.hasKnownLastPage(),
-      pageIndexChanged(pageIndex) {
+      pageIndexChange(pageIndex) {
         if (dataController.pageIndex() !== pageIndex - 1) {
           dataController.pageIndex(pageIndex - 1);
         }
       },
-      pageSizeChanged(pageSize) {
+      pageSizeChange(pageSize) {
         dataController.pageSize(pageSize);
       },
       onKeyDown: (e) => keyboardController && keyboardController.executeAction('onKeyDown', e),

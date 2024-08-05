@@ -13,14 +13,14 @@ import {
 } from './common/consts';
 import type { KeyboardActionContextType } from './common/keyboard_action_context';
 import { KeyboardActionContext } from './common/keyboard_action_context';
-import type { InternalPagerProps } from './common/pager_props';
-import { InternalPagerDefaultProps } from './common/pager_props';
+import type { PagerProps } from './common/pager_props';
+import { PagerDefaultProps } from './common/pager_props';
 import { Widget } from './common/widget';
 import { InfoText } from './info';
 import { PageSizeSelector } from './page_size/selector';
 import { PageIndexSelector } from './pages/page_index_selector';
 
-export interface PagerContentProps extends InternalPagerProps {
+export interface PagerContentProps extends PagerProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
   rootElementRef?: RefObject<HTMLDivElement>;
@@ -30,7 +30,7 @@ export interface PagerContentProps extends InternalPagerProps {
 }
 
 export const PagerContentDefaultProps: PagerContentProps = {
-  ...InternalPagerDefaultProps,
+  ...PagerDefaultProps,
   infoTextVisible: true,
   isLargeDisplayMode: true,
 };

@@ -9,7 +9,7 @@ import type { ConfigContextValue } from '../../core/r1/config_context';
 import { ConfigContext } from '../../core/r1/config_context';
 import type { LightButtonProps } from '../common/light_button';
 import { LightButton } from '../common/light_button';
-import { InternalPagerDefaultProps, type InternalPagerProps } from '../common/pager_props';
+import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
 
@@ -40,7 +40,7 @@ export interface PageIndexSelectorProps {
   isLargeDisplayMode: boolean;
 }
 
-type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
+type PageIndexSelectorPropsType = Pick<PagerProps, 'hasKnownLastPage'
 | 'maxPagesCount'
 | 'pageCount'
 | 'pageIndex'
@@ -53,12 +53,12 @@ type PageIndexSelectorPropsType = Pick<InternalPagerProps, 'hasKnownLastPage'
 
 const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   isLargeDisplayMode: true,
-  maxPagesCount: InternalPagerDefaultProps.maxPagesCount,
-  pageCount: InternalPagerDefaultProps.pageCount,
-  pageIndex: InternalPagerDefaultProps.pageIndex,
-  pageIndexChange: InternalPagerDefaultProps.pageIndexChange,
-  showNavigationButtons: InternalPagerDefaultProps.showNavigationButtons,
-  totalCount: InternalPagerDefaultProps.totalCount,
+  maxPagesCount: PagerDefaultProps.maxPagesCount,
+  pageCount: PagerDefaultProps.pageCount,
+  pageIndex: PagerDefaultProps.pageIndex,
+  pageIndexChange: PagerDefaultProps.pageIndexChange,
+  showNavigationButtons: PagerDefaultProps.showNavigationButtons,
+  totalCount: PagerDefaultProps.totalCount,
 };
 
 interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > {navigate: LightButtonProps['onClick']}

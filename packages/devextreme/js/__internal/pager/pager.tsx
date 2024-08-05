@@ -3,7 +3,7 @@ import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 
 import { combineClasses } from '../core/r1/utils/render_utils';
-import type { InternalPagerProps, PagerProps } from './common/pager_props';
+import type { PagerProps } from './common/pager_props';
 import { PagerDefaultProps } from './common/pager_props';
 import { PagerContent } from './content';
 import { ResizableContainer } from './resizable_container';
@@ -22,11 +22,11 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
   }
 
   pageIndexChange(newPageIndex: number): void {
-    if (this.props.gridCompatibility) {
-      this.props.pageIndex = newPageIndex + 1;
-    } else {
-      this.props.pageIndex = newPageIndex;
-    }
+    const newValue = this.props.gridCompatibility ? newPageIndex + 1 : newPageIndex;
+    this.setState(() => ({
+      pageIndex: newValue,
+    }));
+    this.props.pageIndexChange(newValue);
   }
 
   getPageIndex(): number {
@@ -37,7 +37,10 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
   }
 
   pageSizeChange(newPageSize: number): void {
-    this.props.pageSize = newPageSize;
+    this.setState(() => ({
+      pageSize: newPageSize,
+    }));
+    this.props.pageSizeChange(newPageSize);
   }
 
   getClassName(): string | undefined {
@@ -50,7 +53,7 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
     return this.props.className;
   }
 
-  getPagerProps(): InternalPagerProps {
+  getPagerProps(): PagerProps {
     return {
       ...this.props,
       className: this.getClassName(),

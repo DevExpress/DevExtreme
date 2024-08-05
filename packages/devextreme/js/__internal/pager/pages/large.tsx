@@ -7,7 +7,7 @@ import { Fragment } from 'inferno';
 
 import type { ConfigContextValue } from '../../core/r1/config_context';
 import { ConfigContext } from '../../core/r1/config_context';
-import { InternalPagerDefaultProps, type InternalPagerProps } from '../common/pager_props';
+import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
 import type { PagePropsInterface } from './page';
 import { Page } from './page';
 
@@ -30,13 +30,13 @@ type DelimiterType = 'none' | 'low' | 'high' | 'both';
 interface PageIndexes extends Array<PageIndex> {}
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<InternalPagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 const PagesLargeDefaultProps: PagesLargePropsType = {
-  maxPagesCount: InternalPagerDefaultProps.maxPagesCount,
-  pageCount: InternalPagerDefaultProps.pageCount,
-  pageIndex: InternalPagerDefaultProps.pageIndex,
-  pageIndexChange: InternalPagerDefaultProps.pageIndexChange,
+  maxPagesCount: PagerDefaultProps.maxPagesCount,
+  pageCount: PagerDefaultProps.pageCount,
+  pageIndex: PagerDefaultProps.pageIndex,
+  pageIndexChange: PagerDefaultProps.pageIndexChange,
 };
 
 function getDelimiterType(

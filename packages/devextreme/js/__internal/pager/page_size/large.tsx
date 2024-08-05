@@ -9,7 +9,7 @@ import messageLocalization from '../../../localization/message';
 import { combineClasses } from '../../core/r1/utils/render_utils';
 import { FIRST_CHILD_CLASS, PAGER_PAGE_SIZE_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
-import { InternalPagerDefaultProps, type InternalPagerProps } from '../common/pager_props';
+import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
 import type { FullPageSize } from '../common/types';
 
 export interface PageSizeLargeProps {
@@ -17,12 +17,12 @@ export interface PageSizeLargeProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeLargePropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
+type PageSizeLargePropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
 
 export const PageSizeLargeDefaultProps: PageSizeLargePropsType = {
   pageSizes: [],
-  pageSize: InternalPagerDefaultProps.pageSize,
-  pageSizeChange: InternalPagerDefaultProps.pageSizeChange,
+  pageSize: PagerDefaultProps.pageSize,
+  pageSizeChange: PagerDefaultProps.pageSizeChange,
 };
 
 export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> {
