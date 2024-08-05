@@ -264,6 +264,10 @@ class BaseRenderingStrategy {
   _getAppointmentPartsPosition(appointmentParts, position, result) {
     if (appointmentParts.length) {
       appointmentParts.unshift(position);
+      appointmentParts.forEach((part, index) => {
+        part.partIndex = index;
+        part.partTotalCount = appointmentParts.length;
+      });
       result = result.concat(appointmentParts);
     } else {
       result.push(position);

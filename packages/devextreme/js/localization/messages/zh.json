@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "将行字段拖到到此次",
         "dxPivotGrid-filterFieldArea": "拖动筛选字段到此处",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "标题",
         "dxScheduler-editorLabelStartDate": "开始日期",
         "dxScheduler-editorLabelEndDate": "结束日期",

@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Sleep Rijvelden Hier",
         "dxPivotGrid-filterFieldArea": "Sleep Filtervelden Hier",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Onderwerp",
         "dxScheduler-editorLabelStartDate": "Startdatum",
         "dxScheduler-editorLabelEndDate": "Einddatum",

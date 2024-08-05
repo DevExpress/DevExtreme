@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Перетащите поля строк cюда",
         "dxPivotGrid-filterFieldArea": "Перетащите поля фильтров cюда",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Название",
         "dxScheduler-editorLabelStartDate": "Дата начала",
         "dxScheduler-editorLabelEndDate": "Дата завершения",
