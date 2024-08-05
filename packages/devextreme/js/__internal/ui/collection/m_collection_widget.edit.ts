@@ -134,31 +134,12 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
       onSelectionChanging(args) {
-        if (!that._selectionChangingInProgress) {
-          that._selectionChangingInProgress = true;
-          that._fireSelectionChangingEvent(args);
-        }
+        that._fireSelectionChangingEvent(args);
       },
       onSelectionChanged(args) {
-        if (!that._selectionChangingInProgress) {
-          that._selection.onSelectionChanging();
-        }
-        if (that.isSelectionCancel instanceof Promise) {
-          if (args.addedItemKeys.length || args.removedItemKeys.length) {
-            that.isSelectionCancel.then((cancel) => {
-              if (!cancel) {
-                that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-                that._updateSelectedItems(args);
-              }
-              that._selectionChangingInProgress = false;
-            });
-          }
-        } else if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          if (!that.isSelectionCancel) {
-            that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-            that._updateSelectedItems(args);
-            that._selectionChangingInProgress = false;
-          }
+        if (args.addedItemKeys.length || args.removedItemKeys.length) {
+          that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+          that._updateSelectedItems(args);
         }
       },
       filter: that._getCombinedFilter.bind(that),
@@ -690,6 +671,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   selectItem(itemElement) {
+    this._selection.onSelectionChanging();
     if (this.option('selectionMode') === 'none') return;
 
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
@@ -702,12 +684,23 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     if (this._selection.isItemSelected(key)) {
       return;
     }
-
-    if (this.option('selectionMode') === 'single') {
-      return this._selection.setSelection([key]);
+    if (this.isSelectionCancel instanceof Promise) {
+      this.isSelectionCancel.then((cancel) => {
+        if (!cancel) {
+          if (this.option('selectionMode') === 'single') {
+            return this._selection.setSelection([key]);
+          }
+          const selectedItemKeys = this.option('selectedItemKeys') || [];
+          return this._selection.setSelection([...selectedItemKeys, key], [key]);
+        }
+      });
+    } else if (!this.isSelectionCancel) {
+      if (this.option('selectionMode') === 'single') {
+        return this._selection.setSelection([key]);
+      }
+      const selectedItemKeys = this.option('selectedItemKeys') || [];
+      return this._selection.setSelection([...selectedItemKeys, key], [key]);
     }
-    const selectedItemKeys = this.option('selectedItemKeys') || [];
-    return this._selection.setSelection([...selectedItemKeys, key], [key]);
   },
 
   unselectItem(itemElement) {
