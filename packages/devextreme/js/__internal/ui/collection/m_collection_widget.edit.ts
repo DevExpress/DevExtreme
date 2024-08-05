@@ -137,19 +137,28 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         if (!that._selectionChangingInProgress) {
           that._selectionChangingInProgress = true;
           that._fireSelectionChangingEvent(args);
-
-          if (args.cancel instanceof Promise) {
-            args.cancel.finally(() => {
-              that._selectionChangingInProgress = false;
-            });
-          } else {
-            that._selectionChangingInProgress = false;
-          }
         }
       },
       onSelectionChanged(args) {
         if (!that._selectionChangingInProgress) {
-          that._selection.onSelectionChanging(args);
+          that._selection.onSelectionChanging();
+        }
+        if (that.isSelectionCancel instanceof Promise) {
+          if (args.addedItemKeys.length || args.removedItemKeys.length) {
+            that.isSelectionCancel.then((cancel) => {
+              if (!cancel) {
+                that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+                that._updateSelectedItems(args);
+              }
+              that._selectionChangingInProgress = false;
+            });
+          }
+        } else if (args.addedItemKeys.length || args.removedItemKeys.length) {
+          if (!that.isSelectionCancel) {
+            that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+            that._updateSelectedItems(args);
+            that._selectionChangingInProgress = false;
+          }
         }
       },
       filter: that._getCombinedFilter.bind(that),
@@ -492,22 +501,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       excludeValidators: ['disabled', 'readOnly'],
     })(args);
 
-    if (args.cancel instanceof Promise) {
-      args.cancel.then((cancel) => {
-        args.cancel = cancel;
-        if (!cancel) {
-          if (args.addedItemKeys.length || args.removedItemKeys.length) {
-            this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-            this._updateSelectedItems(args);
-          }
-        }
-      });
-    } else if (!args.cancel) {
-      if (args.addedItemKeys.length || args.removedItemKeys.length) {
-        this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-        this._updateSelectedItems(args);
-      }
-    }
+    this.isSelectionCancel = args.cancel;
   },
 
   _updateSelection: noop,
