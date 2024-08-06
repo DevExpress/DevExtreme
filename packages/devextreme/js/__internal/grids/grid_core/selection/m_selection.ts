@@ -217,6 +217,7 @@ export class SelectionController extends modules.Controller {
       selectionFilter: this.option('selectionFilter'),
       ignoreDisabledItems: true,
       isVirtualPaging: virtualPaging,
+      deferredCaseSensitivity: this.option('selection.deferredCaseSensitivity'),
       allowLoadByRange() {
         const hasGroupColumns = columnsController.getGroupColumns().length > 0;
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
@@ -407,12 +408,18 @@ export class SelectionController extends modules.Controller {
   public optionChanged(args) {
     super.optionChanged(args);
 
+    const selectionOptionsExists = !!this._selection?.options;
+
     // eslint-disable-next-line default-case
     switch (args.name) {
       case 'selection': {
         const oldSelectionMode = this._selectionMode;
 
         this.init();
+
+        if (selectionOptionsExists && args.fullName === 'selection.deferredCaseSensitivity') {
+          this._selection.options.deferredCaseSensitivity = args.value;
+        }
 
         if (args.fullName !== 'selection.showCheckBoxesMode') {
           const selectionMode = this._selectionMode;

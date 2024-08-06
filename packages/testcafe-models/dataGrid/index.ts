@@ -1,5 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
+import type { Selection } from 'devextreme/ui/data_grid';
 import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
@@ -787,5 +788,18 @@ export default class DataGrid extends Widget {
 
   getSummaryTotalElement(nth = 0): Selector {
     return this.element().find(`.${CLASS.summaryTotal}`).nth(nth);
+  }
+
+  apiChangeDeferredCaseSensitivity(
+      // @ts-expect-error delete after d.ts modification
+      caseSensitivity: Selection['deferredCaseSensitivity'],
+  ): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(
+        () => {
+          (getInstance() as DataGridInstance).option('selection.deferredCaseSensitivity', caseSensitivity);
+        },
+        { dependencies: { getInstance, caseSensitivity } },
+    )();
   }
 }
