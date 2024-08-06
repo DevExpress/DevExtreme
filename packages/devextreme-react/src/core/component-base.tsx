@@ -18,13 +18,15 @@ import config from 'devextreme/core/config';
 
 import { createPortal } from 'react-dom';
 
-import { RemovalLockerContext, RestoreTreeContext } from './helpers';
+import { RemovalLockerContext, RestoreTreeContext, useOptionScanning } from './helpers';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
-import { buildConfigTree } from './configuration/react/tree';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
+import { NestedOptionContext, NestedOptionContextContent } from './nested-option';
+import { ElementType } from './configuration/react/element';
+import { IConfigNode } from './configuration/config-node';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -86,6 +88,9 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
 
+    let widgetConfig: IConfigNode;
+    let context: NestedOptionContextContent;
+
     const restoreTree = useCallback(() => {
       if (childElementsDetached.current && childNodes.current?.length && element.current) {
         element.current.append(...childNodes.current);
@@ -134,21 +139,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         );
       }
     }, [element.current]);
-
-    const getConfig = useCallback(() => buildConfigTree(
-      {
-        templates: templateProps,
-        initialValuesProps: defaults,
-        predefinedValuesProps: {},
-        expectedChildren,
-      },
-      props,
-    ), [
-      templateProps,
-      defaults,
-      expectedChildren,
-      props,
-    ]);
 
     const setTemplateManagerHooks = useCallback(({
       createDXTemplates: createDXTemplatesFn,
@@ -208,8 +198,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       el = el || element.current;
 
-      const widgetConfig = getConfig();
-
       let options: any = {
         templatesRenderAsynchronously: true,
         ...optionsManager.current.getInitialOptions(widgetConfig),
@@ -254,7 +242,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       instance.current,
       subscribableOptions,
       independentEvents,
-      getConfig,
     ]);
 
     const onTemplatesRendered = useCallback(() => {
@@ -271,8 +258,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       updateCssClasses(prevPropsRef.current, props);
 
-      const widgetConfig = getConfig();
-
       const templateOptions = optionsManager.current.getTemplateOptions(widgetConfig);
       const dxTemplates = createDXTemplates.current?.(templateOptions) || {};
 
@@ -286,7 +271,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       createDXTemplates.current,
       scheduleTemplatesUpdate,
       updateCssClasses,
-      getConfig,
       props,
     ]);
 
@@ -374,15 +358,16 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       }
     ), [instance.current, element.current, createWidget]);
 
+    // @ts-expect-error TS2339
+    const { children } = props;
+
     const _renderChildren = useCallback(() => {
       if (renderChildren) {
         return renderChildren();
       }
 
-      // @ts-expect-error TS2339
-      const { children } = props;
       return children;
-    }, [props, renderChildren]);
+    }, [children, renderChildren]);
 
     const renderPortal = useCallback(() => portalContainer.current && createPortal(
       _renderChildren(),
@@ -390,19 +375,18 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ), [portalContainer.current, _renderChildren]);
 
     const renderContent = useCallback(() => {
-      // @ts-expect-error TS2339
-      const { children } = props;
+      const ref = (node: HTMLDivElement | null) => {
+        if (node && portalContainer.current !== node) {
+          portalContainer.current = node;
+          setForceUpdateToken(Math.random());
+        }
+      };
 
       return isPortalComponent && children
-        ? React.createElement('div', {
-          ref: (node: HTMLDivElement | null) => {
-            if (node && portalContainer.current !== node) {
-              portalContainer.current = node;
-              setForceUpdateToken(Math.random());
-            }
-          },
-          style: { display: 'contents' },
-        })
+        ? <div
+            ref={ref}
+            style={{ display: 'contents' }}
+          />
         : _renderChildren();
     }, [
       props,
@@ -411,21 +395,29 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       _renderChildren,
     ]);
 
-    return React.createElement(
-      RestoreTreeContext.Provider,
-      {
-        value: restoreTree,
+    [widgetConfig, context] = useOptionScanning({
+      type: ElementType.Option,
+      descriptor: {
+        name: '',
+        isCollection: false,
+        templates: templateProps,
+        initialValuesProps: defaults,
+        predefinedValuesProps: {},
+        expectedChildren,
       },
-      React.createElement(
-        'div',
-        getElementProps(),
-        renderContent(),
-        React.createElement(TemplateManager, {
-          init: setTemplateManagerHooks,
-          onTemplatesRendered,
-        }),
-      ),
-      isPortalComponent && renderPortal(),
+      props,
+    }, children);
+
+    return (
+      <RestoreTreeContext.Provider value={restoreTree}>
+          <div {...getElementProps()}>
+            <NestedOptionContext.Provider value={context}>
+              {renderContent()}
+            </NestedOptionContext.Provider>
+            <TemplateManager init={setTemplateManagerHooks} onTemplatesRendered={onTemplatesRendered}/>
+            {isPortalComponent && renderPortal()}
+          </div>
+      </RestoreTreeContext.Provider>
     );
   },
 ) as <P extends IHtmlOptions>(props: P & ComponentBaseProps & { ref?: React.Ref<ComponentBaseRef> }) => ReactElement | null;

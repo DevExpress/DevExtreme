@@ -5,7 +5,7 @@ import dxFilterBuilder, {
     Properties
 } from "devextreme/ui/filter_builder";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField } from "devextreme/ui/filter_builder";
@@ -95,21 +95,24 @@ type ICustomOperationProps = React.PropsWithChildren<{
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
 }>
-const _componentCustomOperation = memo(
-  (props: ICustomOperationProps) => {
-    return React.createElement(NestedOption<ICustomOperationProps>, { ...props });
-  }
-);
+const _componentCustomOperation = (props: ICustomOperationProps) => {
+  return React.createElement(NestedOption<ICustomOperationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "customOperations",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "editorTemplate",
+        render: "editorRender",
+        component: "editorComponent"
+      }],
+    },
+  });
+};
 
-const CustomOperation: typeof _componentCustomOperation & IElementDescriptor = Object.assign(_componentCustomOperation, {
-  OptionName: "customOperations",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "editorTemplate",
-    render: "editorRender",
-    component: "editorComponent"
-  }],
-})
+const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedComponentMeta>(_componentCustomOperation, {
+  componentType: "option",
+});
 
 // owners:
 // FilterBuilder
@@ -135,25 +138,28 @@ type IFieldProps = React.PropsWithChildren<{
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
 }>
-const _componentField = memo(
-  (props: IFieldProps) => {
-    return React.createElement(NestedOption<IFieldProps>, { ...props });
-  }
-);
+const _componentField = (props: IFieldProps) => {
+  return React.createElement(NestedOption<IFieldProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "fields",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        format: { optionName: "format", isCollectionItem: false },
+        lookup: { optionName: "lookup", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "editorTemplate",
+        render: "editorRender",
+        component: "editorComponent"
+      }],
+    },
+  });
+};
 
-const Field: typeof _componentField & IElementDescriptor = Object.assign(_componentField, {
-  OptionName: "fields",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    format: { optionName: "format", isCollectionItem: false },
-    lookup: { optionName: "lookup", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "editorTemplate",
-    render: "editorRender",
-    component: "editorComponent"
-  }],
-})
+const Field = Object.assign<typeof _componentField, NestedComponentMeta>(_componentField, {
+  componentType: "option",
+});
 
 // owners:
 // FilterBuilder
@@ -172,15 +178,18 @@ type IFilterOperationDescriptionsProps = React.PropsWithChildren<{
   notEqual?: string;
   startsWith?: string;
 }>
-const _componentFilterOperationDescriptions = memo(
-  (props: IFilterOperationDescriptionsProps) => {
-    return React.createElement(NestedOption<IFilterOperationDescriptionsProps>, { ...props });
-  }
-);
+const _componentFilterOperationDescriptions = (props: IFilterOperationDescriptionsProps) => {
+  return React.createElement(NestedOption<IFilterOperationDescriptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "filterOperationDescriptions",
+    },
+  });
+};
 
-const FilterOperationDescriptions: typeof _componentFilterOperationDescriptions & IElementDescriptor = Object.assign(_componentFilterOperationDescriptions, {
-  OptionName: "filterOperationDescriptions",
-})
+const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperationDescriptions, NestedComponentMeta>(_componentFilterOperationDescriptions, {
+  componentType: "option",
+});
 
 // owners:
 // Field
@@ -192,15 +201,18 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = memo(
-  (props: IFormatProps) => {
-    return React.createElement(NestedOption<IFormatProps>, { ...props });
-  }
-);
+const _componentFormat = (props: IFormatProps) => {
+  return React.createElement(NestedOption<IFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "format",
+    },
+  });
+};
 
-const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
-  OptionName: "format",
-})
+const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
 
 // owners:
 // FilterBuilder
@@ -210,15 +222,18 @@ type IGroupOperationDescriptionsProps = React.PropsWithChildren<{
   notOr?: string;
   or?: string;
 }>
-const _componentGroupOperationDescriptions = memo(
-  (props: IGroupOperationDescriptionsProps) => {
-    return React.createElement(NestedOption<IGroupOperationDescriptionsProps>, { ...props });
-  }
-);
+const _componentGroupOperationDescriptions = (props: IGroupOperationDescriptionsProps) => {
+  return React.createElement(NestedOption<IGroupOperationDescriptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "groupOperationDescriptions",
+    },
+  });
+};
 
-const GroupOperationDescriptions: typeof _componentGroupOperationDescriptions & IElementDescriptor = Object.assign(_componentGroupOperationDescriptions, {
-  OptionName: "groupOperationDescriptions",
-})
+const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperationDescriptions, NestedComponentMeta>(_componentGroupOperationDescriptions, {
+  componentType: "option",
+});
 
 // owners:
 // Field
@@ -228,15 +243,18 @@ type ILookupProps = React.PropsWithChildren<{
   displayExpr?: ((data: any) => string) | string;
   valueExpr?: ((data: any) => string | number | boolean) | string;
 }>
-const _componentLookup = memo(
-  (props: ILookupProps) => {
-    return React.createElement(NestedOption<ILookupProps>, { ...props });
-  }
-);
+const _componentLookup = (props: ILookupProps) => {
+  return React.createElement(NestedOption<ILookupProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "lookup",
+    },
+  });
+};
 
-const Lookup: typeof _componentLookup & IElementDescriptor = Object.assign(_componentLookup, {
-  OptionName: "lookup",
-})
+const Lookup = Object.assign<typeof _componentLookup, NestedComponentMeta>(_componentLookup, {
+  componentType: "option",
+});
 
 export default FilterBuilder;
 export {

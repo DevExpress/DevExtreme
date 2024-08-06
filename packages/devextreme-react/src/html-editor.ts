@@ -5,7 +5,7 @@ import dxHtmlEditor, {
     Properties
 } from "devextreme/ui/html_editor";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, dxHtmlEditorImageUploadTabItem, dxHtmlEditorTableContextMenuItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
@@ -157,18 +157,21 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   defaultValue?: Array<any>;
   onValueChange?: (value: Array<any>) => void;
 }>
-const _componentFileUploaderOptions = memo(
-  (props: IFileUploaderOptionsProps) => {
-    return React.createElement(NestedOption<IFileUploaderOptionsProps>, { ...props });
-  }
-);
+const _componentFileUploaderOptions = (props: IFileUploaderOptionsProps) => {
+  return React.createElement(NestedOption<IFileUploaderOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "fileUploaderOptions",
+      DefaultsProps: {
+        defaultValue: "value"
+      },
+    },
+  });
+};
 
-const FileUploaderOptions: typeof _componentFileUploaderOptions & IElementDescriptor = Object.assign(_componentFileUploaderOptions, {
-  OptionName: "fileUploaderOptions",
-  DefaultsProps: {
-    defaultValue: "value"
-  },
-})
+const FileUploaderOptions = Object.assign<typeof _componentFileUploaderOptions, NestedComponentMeta>(_componentFileUploaderOptions, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -179,19 +182,22 @@ type IImageUploadProps = React.PropsWithChildren<{
   uploadDirectory?: string;
   uploadUrl?: string;
 }>
-const _componentImageUpload = memo(
-  (props: IImageUploadProps) => {
-    return React.createElement(NestedOption<IImageUploadProps>, { ...props });
-  }
-);
+const _componentImageUpload = (props: IImageUploadProps) => {
+  return React.createElement(NestedOption<IImageUploadProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "imageUpload",
+      ExpectedChildren: {
+        fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
+        tab: { optionName: "tabs", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const ImageUpload: typeof _componentImageUpload & IElementDescriptor = Object.assign(_componentImageUpload, {
-  OptionName: "imageUpload",
-  ExpectedChildren: {
-    fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
-    tab: { optionName: "tabs", isCollectionItem: true }
-  },
-})
+const ImageUpload = Object.assign<typeof _componentImageUpload, NestedComponentMeta>(_componentImageUpload, {
+  componentType: "option",
+});
 
 // owners:
 // TableContextMenu
@@ -225,25 +231,28 @@ type IItemProps = React.PropsWithChildren<{
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }, {
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }, {
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -251,15 +260,18 @@ type IMediaResizingProps = React.PropsWithChildren<{
   allowedTargets?: Array<string>;
   enabled?: boolean;
 }>
-const _componentMediaResizing = memo(
-  (props: IMediaResizingProps) => {
-    return React.createElement(NestedOption<IMediaResizingProps>, { ...props });
-  }
-);
+const _componentMediaResizing = (props: IMediaResizingProps) => {
+  return React.createElement(NestedOption<IMediaResizingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "mediaResizing",
+    },
+  });
+};
 
-const MediaResizing: typeof _componentMediaResizing & IElementDescriptor = Object.assign(_componentMediaResizing, {
-  OptionName: "mediaResizing",
-})
+const MediaResizing = Object.assign<typeof _componentMediaResizing, NestedComponentMeta>(_componentMediaResizing, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -278,41 +290,47 @@ type IMentionProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentMention = memo(
-  (props: IMentionProps) => {
-    return React.createElement(NestedOption<IMentionProps>, { ...props });
-  }
-);
+const _componentMention = (props: IMentionProps) => {
+  return React.createElement(NestedOption<IMentionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "mentions",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "itemTemplate",
+        render: "itemRender",
+        component: "itemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Mention: typeof _componentMention & IElementDescriptor = Object.assign(_componentMention, {
-  OptionName: "mentions",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Mention = Object.assign<typeof _componentMention, NestedComponentMeta>(_componentMention, {
+  componentType: "option",
+});
 
 // owners:
 // ImageUpload
 type ITabProps = React.PropsWithChildren<{
   name?: "url" | "file";
 }>
-const _componentTab = memo(
-  (props: ITabProps) => {
-    return React.createElement(NestedOption<ITabProps>, { ...props });
-  }
-);
+const _componentTab = (props: ITabProps) => {
+  return React.createElement(NestedOption<ITabProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tabs",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const Tab: typeof _componentTab & IElementDescriptor = Object.assign(_componentTab, {
-  OptionName: "tabs",
-  IsCollectionItem: true,
-})
+const Tab = Object.assign<typeof _componentTab, NestedComponentMeta>(_componentTab, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -320,19 +338,22 @@ type ITableContextMenuProps = React.PropsWithChildren<{
   enabled?: boolean;
   items?: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">;
 }>
-const _componentTableContextMenu = memo(
-  (props: ITableContextMenuProps) => {
-    return React.createElement(NestedOption<ITableContextMenuProps>, { ...props });
-  }
-);
+const _componentTableContextMenu = (props: ITableContextMenuProps) => {
+  return React.createElement(NestedOption<ITableContextMenuProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tableContextMenu",
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        tableContextMenuItem: { optionName: "items", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const TableContextMenu: typeof _componentTableContextMenu & IElementDescriptor = Object.assign(_componentTableContextMenu, {
-  OptionName: "tableContextMenu",
-  ExpectedChildren: {
-    item: { optionName: "items", isCollectionItem: true },
-    tableContextMenuItem: { optionName: "items", isCollectionItem: true }
-  },
-})
+const TableContextMenu = Object.assign<typeof _componentTableContextMenu, NestedComponentMeta>(_componentTableContextMenu, {
+  componentType: "option",
+});
 
 // owners:
 // TableContextMenu
@@ -352,21 +373,24 @@ type ITableContextMenuItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentTableContextMenuItem = memo(
-  (props: ITableContextMenuItemProps) => {
-    return React.createElement(NestedOption<ITableContextMenuItemProps>, { ...props });
-  }
-);
+const _componentTableContextMenuItem = (props: ITableContextMenuItemProps) => {
+  return React.createElement(NestedOption<ITableContextMenuItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const TableContextMenuItem: typeof _componentTableContextMenuItem & IElementDescriptor = Object.assign(_componentTableContextMenuItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const TableContextMenuItem = Object.assign<typeof _componentTableContextMenuItem, NestedComponentMeta>(_componentTableContextMenuItem, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -375,15 +399,18 @@ type ITableResizingProps = React.PropsWithChildren<{
   minColumnWidth?: number;
   minRowHeight?: number;
 }>
-const _componentTableResizing = memo(
-  (props: ITableResizingProps) => {
-    return React.createElement(NestedOption<ITableResizingProps>, { ...props });
-  }
-);
+const _componentTableResizing = (props: ITableResizingProps) => {
+  return React.createElement(NestedOption<ITableResizingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tableResizing",
+    },
+  });
+};
 
-const TableResizing: typeof _componentTableResizing & IElementDescriptor = Object.assign(_componentTableResizing, {
-  OptionName: "tableResizing",
-})
+const TableResizing = Object.assign<typeof _componentTableResizing, NestedComponentMeta>(_componentTableResizing, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -392,19 +419,22 @@ type IToolbarProps = React.PropsWithChildren<{
   items?: Array<dxHtmlEditorToolbarItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">;
   multiline?: boolean;
 }>
-const _componentToolbar = memo(
-  (props: IToolbarProps) => {
-    return React.createElement(NestedOption<IToolbarProps>, { ...props });
-  }
-);
+const _componentToolbar = (props: IToolbarProps) => {
+  return React.createElement(NestedOption<IToolbarProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "toolbar",
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        toolbarItem: { optionName: "items", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const Toolbar: typeof _componentToolbar & IElementDescriptor = Object.assign(_componentToolbar, {
-  OptionName: "toolbar",
-  ExpectedChildren: {
-    item: { optionName: "items", isCollectionItem: true },
-    toolbarItem: { optionName: "items", isCollectionItem: true }
-  },
-})
+const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_componentToolbar, {
+  componentType: "option",
+});
 
 // owners:
 // Toolbar
@@ -430,25 +460,28 @@ type IToolbarItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentToolbarItem = memo(
-  (props: IToolbarItemProps) => {
-    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
-  }
-);
+const _componentToolbarItem = (props: IToolbarItemProps) => {
+  return React.createElement(NestedOption<IToolbarItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -456,15 +489,18 @@ type IVariablesProps = React.PropsWithChildren<{
   dataSource?: Array<string> | DataSource | DataSourceOptions | null | Store | string;
   escapeChar?: Array<string> | string;
 }>
-const _componentVariables = memo(
-  (props: IVariablesProps) => {
-    return React.createElement(NestedOption<IVariablesProps>, { ...props });
-  }
-);
+const _componentVariables = (props: IVariablesProps) => {
+  return React.createElement(NestedOption<IVariablesProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "variables",
+    },
+  });
+};
 
-const Variables: typeof _componentVariables & IElementDescriptor = Object.assign(_componentVariables, {
-  OptionName: "variables",
-})
+const Variables = Object.assign<typeof _componentVariables, NestedComponentMeta>(_componentVariables, {
+  componentType: "option",
+});
 
 export default HtmlEditor;
 export {

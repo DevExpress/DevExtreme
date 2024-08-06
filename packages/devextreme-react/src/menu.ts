@@ -6,7 +6,7 @@ import dxMenu, {
     Properties
 } from "devextreme/ui/menu";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from "devextreme/ui/menu";
@@ -105,19 +105,22 @@ type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
 }>
-const _componentAnimation = memo(
-  (props: IAnimationProps) => {
-    return React.createElement(NestedOption<IAnimationProps>, { ...props });
-  }
-);
+const _componentAnimation = (props: IAnimationProps) => {
+  return React.createElement(NestedOption<IAnimationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "animation",
+      ExpectedChildren: {
+        hide: { optionName: "hide", isCollectionItem: false },
+        show: { optionName: "show", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
-  OptionName: "animation",
-  ExpectedChildren: {
-    hide: { optionName: "hide", isCollectionItem: false },
-    show: { optionName: "show", isCollectionItem: false }
-  },
-})
+const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>(_componentAnimation, {
+  componentType: "option",
+});
 
 // owners:
 // Position
@@ -125,15 +128,18 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-const _componentAt = memo(
-  (props: IAtProps) => {
-    return React.createElement(NestedOption<IAtProps>, { ...props });
-  }
-);
+const _componentAt = (props: IAtProps) => {
+  return React.createElement(NestedOption<IAtProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "at",
+    },
+  });
+};
 
-const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
-  OptionName: "at",
-})
+const At = Object.assign<typeof _componentAt, NestedComponentMeta>(_componentAt, {
+  componentType: "option",
+});
 
 // owners:
 // Position
@@ -141,15 +147,18 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentBoundaryOffset = memo(
-  (props: IBoundaryOffsetProps) => {
-    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
-  }
-);
+const _componentBoundaryOffset = (props: IBoundaryOffsetProps) => {
+  return React.createElement(NestedOption<IBoundaryOffsetProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "boundaryOffset",
+    },
+  });
+};
 
-const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
-  OptionName: "boundaryOffset",
-})
+const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComponentMeta>(_componentBoundaryOffset, {
+  componentType: "option",
+});
 
 // owners:
 // Position
@@ -157,15 +166,18 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-const _componentCollision = memo(
-  (props: ICollisionProps) => {
-    return React.createElement(NestedOption<ICollisionProps>, { ...props });
-  }
-);
+const _componentCollision = (props: ICollisionProps) => {
+  return React.createElement(NestedOption<ICollisionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "collision",
+    },
+  });
+};
 
-const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
-  OptionName: "collision",
-})
+const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>(_componentCollision, {
+  componentType: "option",
+});
 
 // owners:
 // ShowFirstSubmenuMode
@@ -174,15 +186,18 @@ type IDelayProps = React.PropsWithChildren<{
   hide?: number;
   show?: number;
 }>
-const _componentDelay = memo(
-  (props: IDelayProps) => {
-    return React.createElement(NestedOption<IDelayProps>, { ...props });
-  }
-);
+const _componentDelay = (props: IDelayProps) => {
+  return React.createElement(NestedOption<IDelayProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "delay",
+    },
+  });
+};
 
-const Delay: typeof _componentDelay & IElementDescriptor = Object.assign(_componentDelay, {
-  OptionName: "delay",
-})
+const Delay = Object.assign<typeof _componentDelay, NestedComponentMeta>(_componentDelay, {
+  componentType: "option",
+});
 
 // owners:
 // Hide
@@ -193,18 +208,21 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-const _componentFrom = memo(
-  (props: IFromProps) => {
-    return React.createElement(NestedOption<IFromProps>, { ...props });
-  }
-);
+const _componentFrom = (props: IFromProps) => {
+  return React.createElement(NestedOption<IFromProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "from",
+      ExpectedChildren: {
+        position: { optionName: "position", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
-  OptionName: "from",
-  ExpectedChildren: {
-    position: { optionName: "position", isCollectionItem: false }
-  },
-})
+const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componentFrom, {
+  componentType: "option",
+});
 
 // owners:
 // Animation
@@ -220,19 +238,22 @@ type IHideProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-const _componentHide = memo(
-  (props: IHideProps) => {
-    return React.createElement(NestedOption<IHideProps>, { ...props });
-  }
-);
+const _componentHide = (props: IHideProps) => {
+  return React.createElement(NestedOption<IHideProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "hide",
+      ExpectedChildren: {
+        from: { optionName: "from", isCollectionItem: false },
+        to: { optionName: "to", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componentHide, {
-  OptionName: "hide",
-  ExpectedChildren: {
-    from: { optionName: "from", isCollectionItem: false },
-    to: { optionName: "to", isCollectionItem: false }
-  },
-})
+const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componentHide, {
+  componentType: "option",
+});
 
 // owners:
 // Menu
@@ -252,21 +273,24 @@ type IItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 // owners:
 // Position
@@ -274,15 +298,18 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-const _componentMy = memo(
-  (props: IMyProps) => {
-    return React.createElement(NestedOption<IMyProps>, { ...props });
-  }
-);
+const _componentMy = (props: IMyProps) => {
+  return React.createElement(NestedOption<IMyProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "my",
+    },
+  });
+};
 
-const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
-  OptionName: "my",
-})
+const My = Object.assign<typeof _componentMy, NestedComponentMeta>(_componentMy, {
+  componentType: "option",
+});
 
 // owners:
 // Position
@@ -290,15 +317,18 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentOffset = memo(
-  (props: IOffsetProps) => {
-    return React.createElement(NestedOption<IOffsetProps>, { ...props });
-  }
-);
+const _componentOffset = (props: IOffsetProps) => {
+  return React.createElement(NestedOption<IOffsetProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "offset",
+    },
+  });
+};
 
-const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
-  OptionName: "offset",
-})
+const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_componentOffset, {
+  componentType: "option",
+});
 
 // owners:
 // From
@@ -326,22 +356,25 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-const _componentPosition = memo(
-  (props: IPositionProps) => {
-    return React.createElement(NestedOption<IPositionProps>, { ...props });
-  }
-);
+const _componentPosition = (props: IPositionProps) => {
+  return React.createElement(NestedOption<IPositionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "position",
+      ExpectedChildren: {
+        at: { optionName: "at", isCollectionItem: false },
+        boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
+        collision: { optionName: "collision", isCollectionItem: false },
+        my: { optionName: "my", isCollectionItem: false },
+        offset: { optionName: "offset", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
-  OptionName: "position",
-  ExpectedChildren: {
-    at: { optionName: "at", isCollectionItem: false },
-    boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
-    collision: { optionName: "collision", isCollectionItem: false },
-    my: { optionName: "my", isCollectionItem: false },
-    offset: { optionName: "offset", isCollectionItem: false }
-  },
-})
+const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_componentPosition, {
+  componentType: "option",
+});
 
 // owners:
 // Animation
@@ -357,15 +390,18 @@ type IShowProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-const _componentShow = memo(
-  (props: IShowProps) => {
-    return React.createElement(NestedOption<IShowProps>, { ...props });
-  }
-);
+const _componentShow = (props: IShowProps) => {
+  return React.createElement(NestedOption<IShowProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "show",
+    },
+  });
+};
 
-const Show: typeof _componentShow & IElementDescriptor = Object.assign(_componentShow, {
-  OptionName: "show",
-})
+const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componentShow, {
+  componentType: "option",
+});
 
 // owners:
 // Menu
@@ -376,18 +412,21 @@ type IShowFirstSubmenuModeProps = React.PropsWithChildren<{
   };
   name?: "onClick" | "onHover";
 }>
-const _componentShowFirstSubmenuMode = memo(
-  (props: IShowFirstSubmenuModeProps) => {
-    return React.createElement(NestedOption<IShowFirstSubmenuModeProps>, { ...props });
-  }
-);
+const _componentShowFirstSubmenuMode = (props: IShowFirstSubmenuModeProps) => {
+  return React.createElement(NestedOption<IShowFirstSubmenuModeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "showFirstSubmenuMode",
+      ExpectedChildren: {
+        delay: { optionName: "delay", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const ShowFirstSubmenuMode: typeof _componentShowFirstSubmenuMode & IElementDescriptor = Object.assign(_componentShowFirstSubmenuMode, {
-  OptionName: "showFirstSubmenuMode",
-  ExpectedChildren: {
-    delay: { optionName: "delay", isCollectionItem: false }
-  },
-})
+const ShowFirstSubmenuMode = Object.assign<typeof _componentShowFirstSubmenuMode, NestedComponentMeta>(_componentShowFirstSubmenuMode, {
+  componentType: "option",
+});
 
 // owners:
 // Menu
@@ -398,18 +437,21 @@ type IShowSubmenuModeProps = React.PropsWithChildren<{
   };
   name?: "onClick" | "onHover";
 }>
-const _componentShowSubmenuMode = memo(
-  (props: IShowSubmenuModeProps) => {
-    return React.createElement(NestedOption<IShowSubmenuModeProps>, { ...props });
-  }
-);
+const _componentShowSubmenuMode = (props: IShowSubmenuModeProps) => {
+  return React.createElement(NestedOption<IShowSubmenuModeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "showSubmenuMode",
+      ExpectedChildren: {
+        delay: { optionName: "delay", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const ShowSubmenuMode: typeof _componentShowSubmenuMode & IElementDescriptor = Object.assign(_componentShowSubmenuMode, {
-  OptionName: "showSubmenuMode",
-  ExpectedChildren: {
-    delay: { optionName: "delay", isCollectionItem: false }
-  },
-})
+const ShowSubmenuMode = Object.assign<typeof _componentShowSubmenuMode, NestedComponentMeta>(_componentShowSubmenuMode, {
+  componentType: "option",
+});
 
 // owners:
 // Hide
@@ -420,15 +462,18 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-const _componentTo = memo(
-  (props: IToProps) => {
-    return React.createElement(NestedOption<IToProps>, { ...props });
-  }
-);
+const _componentTo = (props: IToProps) => {
+  return React.createElement(NestedOption<IToProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "to",
+    },
+  });
+};
 
-const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
-  OptionName: "to",
-})
+const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo, {
+  componentType: "option",
+});
 
 export default Menu;
 export {

@@ -37,6 +37,36 @@ interface IUnknownElement {
 
 type IElement = IOptionElement | ITemplateElement | IUnknownElement;
 
+function getOptionInfo(
+  elementDescriptor: IElementDescriptor,
+  props: any,
+  parentExpectedChildren?: Record<string, IExpectedChild>,
+): IOptionElement {
+  let name = elementDescriptor.OptionName;
+  let isCollectionItem = elementDescriptor.IsCollectionItem;
+
+  const expectation = parentExpectedChildren && parentExpectedChildren[name];
+  if (expectation) {
+    isCollectionItem = expectation.isCollectionItem;
+    if (expectation.optionName) {
+      name = expectation.optionName;
+    }
+  }
+
+  return {
+    type: ElementType.Option,
+    descriptor: {
+      name,
+      isCollection: !!isCollectionItem,
+      templates: elementDescriptor.TemplateProps || [],
+      initialValuesProps: elementDescriptor.DefaultsProps || {},
+      predefinedValuesProps: elementDescriptor.PredefinedProps || {},
+      expectedChildren: elementDescriptor.ExpectedChildren || {},
+    },
+    props,
+  };
+}
+
 function getElementInfo(
   element: React.ReactNode,
   parentExpectedChildren?: Record<string, IExpectedChild>,
@@ -58,29 +88,7 @@ function getElementInfo(
   const elementDescriptor = reactElement.type as any as IElementDescriptor;
 
   if (elementDescriptor.OptionName) {
-    let name = elementDescriptor.OptionName;
-    let isCollectionItem = elementDescriptor.IsCollectionItem;
-
-    const expectation = parentExpectedChildren && parentExpectedChildren[name];
-    if (expectation) {
-      isCollectionItem = expectation.isCollectionItem;
-      if (expectation.optionName) {
-        name = expectation.optionName;
-      }
-    }
-
-    return {
-      type: ElementType.Option,
-      descriptor: {
-        name,
-        isCollection: !!isCollectionItem,
-        templates: elementDescriptor.TemplateProps || [],
-        initialValuesProps: elementDescriptor.DefaultsProps || {},
-        predefinedValuesProps: elementDescriptor.PredefinedProps || {},
-        expectedChildren: elementDescriptor.ExpectedChildren || {},
-      },
-      props: reactElement.props,
-    };
+    return getOptionInfo(elementDescriptor, reactElement.props, parentExpectedChildren);
   }
 
   return {
@@ -99,9 +107,10 @@ interface IElementDescriptor {
 
 export {
   getElementInfo,
+  getOptionInfo,
   ElementType,
-  IElement,
   IOptionElement,
   IExpectedChild,
   IElementDescriptor,
+  IOptionDescriptor,
 };
