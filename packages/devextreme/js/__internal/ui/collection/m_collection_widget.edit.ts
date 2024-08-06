@@ -407,6 +407,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     if (this.isItemSelected($itemElement)) {
       this.unselectItem(e.currentTarget);
     } else {
+      this.initialSelectedIndex = this.option('selectedIndex');
+
       itemSelectPromise = this.selectItem(e.currentTarget);
     }
 
@@ -689,7 +691,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
   selectItem(itemElement) {
     if (this.option('selectionMode') === 'none') return;
-    this.initialSelectedIndex = this.option('selectedIndex');
+
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
       return;
