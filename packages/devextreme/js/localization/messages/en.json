@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Drop Row Fields Here",
         "dxPivotGrid-filterFieldArea": "Drop Filter Fields Here",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Subject",
         "dxScheduler-editorLabelStartDate": "Start Date",
         "dxScheduler-editorLabelEndDate": "End Date",

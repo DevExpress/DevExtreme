@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Zde vložte pole řádků",
         "dxPivotGrid-filterFieldArea": "Zde vložte filtr pole",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Předmět",
         "dxScheduler-editorLabelStartDate": "Počáteční datum",
         "dxScheduler-editorLabelEndDate": "Koncové datum",

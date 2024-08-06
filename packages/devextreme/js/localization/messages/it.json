@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Trascina qui i campi riga",
         "dxPivotGrid-filterFieldArea": "Trascina qui i campi filtro",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Oggetto",
         "dxScheduler-editorLabelStartDate": "Data inizio",
         "dxScheduler-editorLabelEndDate": "Data fine",

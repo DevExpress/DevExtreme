@@ -2,9 +2,11 @@
 import { move } from '@js/animation/translator';
 import registerComponent from '@js/core/component_registrator';
 import DOMComponent from '@js/core/dom_component';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
+import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
@@ -84,6 +86,7 @@ export class Appointment extends DOMComponent {
     switch (args.name) {
       case 'data':
       case 'groupIndex':
+      case 'groupTexts':
       case 'geometry':
       case 'allowDrag':
       case 'allowResize':
@@ -140,6 +143,7 @@ export class Appointment extends DOMComponent {
     super._render();
 
     this._renderAppointmentGeometry();
+    this._renderAriaLabel();
     this._renderEmptyClass();
     this._renderReducedAppointment();
     this._renderAllDayClass();
@@ -173,6 +177,45 @@ export class Appointment extends DOMComponent {
         this.coloredElement.addClass(APPOINTMENT_HAS_RESOURCE_COLOR_CLASS);
       }
     });
+  }
+
+  _getGroupText() {
+    const groupTexts = this.option('groupTexts') as string[];
+    if (!groupTexts?.length) {
+      return '';
+    }
+
+    const groupText = groupTexts.join(', ');
+    // @ts-expect-error
+    return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
+  }
+
+  _getDateText() {
+    const startDateText = this._localizeDate(this._getStartDate());
+    const endDateText = this._localizeDate(this._getEndDate());
+
+    const dateText = startDateText === endDateText
+      ? `${startDateText}`
+      : `${startDateText} - ${endDateText}`;
+
+    // @ts-expect-error
+    const { partIndex, partTotalCount } = this.option();
+    const partText = isDefined(partIndex) ? ` (${partIndex + 1}/${partTotalCount})` : '';
+
+    return `${dateText}${partText}`;
+  }
+
+  _renderAriaLabel() {
+    // @ts-expect-error
+    const $element: dxElementWrapper = this.$element();
+
+    const ariaLabel = [
+      this._getDateText(),
+      this._getGroupText(),
+    ]
+      .filter((label) => !!label)
+      .join(', ');
+    $element.attr('aria-label', `${ariaLabel}, `);
   }
 
   _renderAppointmentGeometry() {
@@ -211,6 +254,10 @@ export class Appointment extends DOMComponent {
     this._renderAppointmentReducedIcon();
   }
 
+  _localizeDate(date) {
+    return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
+  }
+
   _renderAppointmentReducedIcon() {
     const $icon = $('<div>')
       .addClass(REDUCED_APPOINTMENT_ICON)
@@ -218,7 +265,7 @@ export class Appointment extends DOMComponent {
 
     const endDate = this._getEndDate();
     const tooltipLabel = messageLocalization.format('dxScheduler-editorLabelEndDate');
-    const tooltipText = [tooltipLabel, ': ', dateLocalization.format(endDate, 'monthAndDay'), ', ', dateLocalization.format(endDate, 'year')].join('');
+    const tooltipText = [tooltipLabel, ': ', this._localizeDate(endDate)].join('');
 
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, () => {
@@ -235,6 +282,14 @@ export class Appointment extends DOMComponent {
 
   _getEndDate() {
     const result = ExpressionUtils.getField(this.option('dataAccessors'), 'endDate', this.rawAppointment);
+    if (result) {
+      return new Date(result);
+    }
+    return result;
+  }
+
+  _getStartDate() {
+    const result = ExpressionUtils.getField(this.option('dataAccessors'), 'startDate', this.rawAppointment);
     if (result) {
       return new Date(result);
     }

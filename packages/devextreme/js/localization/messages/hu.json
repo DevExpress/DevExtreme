@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Húzza a sormezőket ide",
         "dxPivotGrid-filterFieldArea": "Húzza a szűrőmezőket ide",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Tárgy",
         "dxScheduler-editorLabelStartDate": "Kezdés dátuma",
         "dxScheduler-editorLabelEndDate": "Befejezés dátuma",

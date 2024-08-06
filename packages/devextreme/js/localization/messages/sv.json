@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Släpp radfält här",
         "dxPivotGrid-filterFieldArea": "Släpp filterfält här",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Ämne",
         "dxScheduler-editorLabelStartDate": "Startdatum",
         "dxScheduler-editorLabelEndDate": "Slutdatum",
