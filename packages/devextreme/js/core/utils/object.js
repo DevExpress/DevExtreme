@@ -65,9 +65,10 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
 
-        if(shouldCopyUndefined && (prevValue !== newValue || prevValue === undefined)) {
-            assignValueToProperty(target, name, newValue, assignByReference);
-        } else if((newValue !== undefined) && prevValue !== newValue) {
+        if(
+            shouldCopyUndefined && (prevValue !== newValue || prevValue === undefined) ||
+            newValue !== undefined && prevValue !== newValue
+        ) {
             assignValueToProperty(target, name, newValue, assignByReference);
         }
     }

@@ -804,6 +804,7 @@ QUnit.test('update with explicit undefined', function(assert) {
         };
 
         assert.deepEqual(data, expectedData);
+        assert.ok(Object.prototype.hasOwnProperty.call(data.nested, 'a'));
         done();
     });
 });
