@@ -5,7 +5,7 @@ import dxMap, {
     Properties
 } from "devextreme/ui/map";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent } from "devextreme/ui/map";
@@ -95,15 +95,18 @@ type IApiKeyProps = React.PropsWithChildren<{
   google?: string;
   googleStatic?: string;
 }>
-const _componentApiKey = memo(
-  (props: IApiKeyProps) => {
-    return React.createElement(NestedOption<IApiKeyProps>, { ...props });
-  }
-);
+const _componentApiKey = (props: IApiKeyProps) => {
+  return React.createElement(NestedOption<IApiKeyProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "apiKey",
+    },
+  });
+};
 
-const ApiKey: typeof _componentApiKey & IElementDescriptor = Object.assign(_componentApiKey, {
-  OptionName: "apiKey",
-})
+const ApiKey = Object.assign<typeof _componentApiKey, NestedComponentMeta>(_componentApiKey, {
+  componentType: "option",
+});
 
 // owners:
 // Map
@@ -111,15 +114,18 @@ type ICenterProps = React.PropsWithChildren<{
   lat?: number;
   lng?: number;
 }>
-const _componentCenter = memo(
-  (props: ICenterProps) => {
-    return React.createElement(NestedOption<ICenterProps>, { ...props });
-  }
-);
+const _componentCenter = (props: ICenterProps) => {
+  return React.createElement(NestedOption<ICenterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "center",
+    },
+  });
+};
 
-const Center: typeof _componentCenter & IElementDescriptor = Object.assign(_componentCenter, {
-  OptionName: "center",
-})
+const Center = Object.assign<typeof _componentCenter, NestedComponentMeta>(_componentCenter, {
+  componentType: "option",
+});
 
 // owners:
 // Marker
@@ -128,15 +134,18 @@ type ILocationProps = React.PropsWithChildren<{
   lat?: number;
   lng?: number;
 }>
-const _componentLocation = memo(
-  (props: ILocationProps) => {
-    return React.createElement(NestedOption<ILocationProps>, { ...props });
-  }
-);
+const _componentLocation = (props: ILocationProps) => {
+  return React.createElement(NestedOption<ILocationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "location",
+    },
+  });
+};
 
-const Location: typeof _componentLocation & IElementDescriptor = Object.assign(_componentLocation, {
-  OptionName: "location",
-})
+const Location = Object.assign<typeof _componentLocation, NestedComponentMeta>(_componentLocation, {
+  componentType: "option",
+});
 
 // owners:
 // Map
@@ -152,20 +161,23 @@ type IMarkerProps = React.PropsWithChildren<{
     text?: string;
   };
 }>
-const _componentMarker = memo(
-  (props: IMarkerProps) => {
-    return React.createElement(NestedOption<IMarkerProps>, { ...props });
-  }
-);
+const _componentMarker = (props: IMarkerProps) => {
+  return React.createElement(NestedOption<IMarkerProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "markers",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        location: { optionName: "location", isCollectionItem: false },
+        tooltip: { optionName: "tooltip", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Marker: typeof _componentMarker & IElementDescriptor = Object.assign(_componentMarker, {
-  OptionName: "markers",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    location: { optionName: "location", isCollectionItem: false },
-    tooltip: { optionName: "tooltip", isCollectionItem: false }
-  },
-})
+const Marker = Object.assign<typeof _componentMarker, NestedComponentMeta>(_componentMarker, {
+  componentType: "option",
+});
 
 // owners:
 // Map
@@ -173,15 +185,18 @@ type IProviderConfigProps = React.PropsWithChildren<{
   mapId?: string;
   useAdvancedMarkers?: boolean;
 }>
-const _componentProviderConfig = memo(
-  (props: IProviderConfigProps) => {
-    return React.createElement(NestedOption<IProviderConfigProps>, { ...props });
-  }
-);
+const _componentProviderConfig = (props: IProviderConfigProps) => {
+  return React.createElement(NestedOption<IProviderConfigProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "providerConfig",
+    },
+  });
+};
 
-const ProviderConfig: typeof _componentProviderConfig & IElementDescriptor = Object.assign(_componentProviderConfig, {
-  OptionName: "providerConfig",
-})
+const ProviderConfig = Object.assign<typeof _componentProviderConfig, NestedComponentMeta>(_componentProviderConfig, {
+  componentType: "option",
+});
 
 // owners:
 // Map
@@ -195,19 +210,22 @@ type IRouteProps = React.PropsWithChildren<{
   opacity?: number;
   weight?: number;
 }>
-const _componentRoute = memo(
-  (props: IRouteProps) => {
-    return React.createElement(NestedOption<IRouteProps>, { ...props });
-  }
-);
+const _componentRoute = (props: IRouteProps) => {
+  return React.createElement(NestedOption<IRouteProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "routes",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        location: { optionName: "locations", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const Route: typeof _componentRoute & IElementDescriptor = Object.assign(_componentRoute, {
-  OptionName: "routes",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    location: { optionName: "locations", isCollectionItem: true }
-  },
-})
+const Route = Object.assign<typeof _componentRoute, NestedComponentMeta>(_componentRoute, {
+  componentType: "option",
+});
 
 // owners:
 // Marker
@@ -215,15 +233,18 @@ type ITooltipProps = React.PropsWithChildren<{
   isShown?: boolean;
   text?: string;
 }>
-const _componentTooltip = memo(
-  (props: ITooltipProps) => {
-    return React.createElement(NestedOption<ITooltipProps>, { ...props });
-  }
-);
+const _componentTooltip = (props: ITooltipProps) => {
+  return React.createElement(NestedOption<ITooltipProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tooltip",
+    },
+  });
+};
 
-const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
-  OptionName: "tooltip",
-})
+const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_componentTooltip, {
+  componentType: "option",
+});
 
 export default Map;
 export {
