@@ -39,25 +39,11 @@ const orderEach = function(map, func) {
     }
 };
 
-const assignValueToProperty = function(target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
-    if(!assignByReference && variableWrapper.isWrapped(target[property])) {
-        variableWrapper.assign(target[property], value);
-    } else if(!assignByReference && Array.isArray(value)) {
-        target[property] = value.map(item => {
-            let itemTarget = item;
-
-            if(Array.isArray(item)) {
-                itemTarget = [];
-            }
-            if(isObject(item)) {
-                itemTarget = {};
-            }
-
-            return deepExtendArraySafe(itemTarget, item, extendComplexObject, assignByReference, shouldCopyUndefined);
-        });
-    } else {
-        target[property] = value;
+const getDeepCopyTarget = (item) => {
+    if(isObject(item)) {
+        return Array.isArray(item) ? [] : {};
     }
+    return item;
 };
 
 // B239679, http://bugs.jquery.com/ticket/9477
@@ -78,12 +64,24 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
 
-        if(
-            Array.isArray(newValue) && !assignByReference ||
-            shouldCopyUndefined && (prevValue !== newValue || prevValue === undefined) ||
-            newValue !== undefined && prevValue !== newValue
-        ) {
-            assignValueToProperty(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
+        const isDeepCopyArray = Array.isArray(newValue) && !assignByReference;
+        const hasDifferentNewValue = (shouldCopyUndefined || newValue !== undefined) && prevValue !== newValue ||
+            shouldCopyUndefined && prevValue === undefined;
+
+        if(isDeepCopyArray || hasDifferentNewValue) {
+            if(!assignByReference && variableWrapper.isWrapped(target[name])) {
+                variableWrapper.assign(target[name], newValue);
+            } else if(!assignByReference && Array.isArray(newValue)) {
+                target[name] = newValue.map(item => deepExtendArraySafe(
+                    getDeepCopyTarget(item),
+                    item,
+                    extendComplexObject,
+                    assignByReference,
+                    shouldCopyUndefined
+                ));
+            } else {
+                target[name] = newValue;
+            }
         }
     }
 
