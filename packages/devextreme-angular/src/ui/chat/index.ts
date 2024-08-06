@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +27,9 @@ import DxChat from 'devextreme/ui/chat';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -36,6 +37,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
@@ -60,6 +65,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxChat = null;
+
 
     /**
      * [descr:WidgetOptions.disabled]
@@ -295,24 +301,29 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'messageSend', emit: 'onMessageSend' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'heightChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'itemsChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'titleChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'messageSend', emit: 'onMessageSend' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -31,7 +30,9 @@ import DxGantt from 'devextreme/ui/gantt';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -39,6 +40,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
@@ -81,6 +86,7 @@ import { DxiStripLineComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxGantt = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -1180,83 +1186,88 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'contextMenuPreparing', emit: 'onContextMenuPreparing' },
-            { subscribe: 'customCommand', emit: 'onCustomCommand' },
-            { subscribe: 'dependencyDeleted', emit: 'onDependencyDeleted' },
-            { subscribe: 'dependencyDeleting', emit: 'onDependencyDeleting' },
-            { subscribe: 'dependencyInserted', emit: 'onDependencyInserted' },
-            { subscribe: 'dependencyInserting', emit: 'onDependencyInserting' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'resourceAssigned', emit: 'onResourceAssigned' },
-            { subscribe: 'resourceAssigning', emit: 'onResourceAssigning' },
-            { subscribe: 'resourceDeleted', emit: 'onResourceDeleted' },
-            { subscribe: 'resourceDeleting', emit: 'onResourceDeleting' },
-            { subscribe: 'resourceInserted', emit: 'onResourceInserted' },
-            { subscribe: 'resourceInserting', emit: 'onResourceInserting' },
-            { subscribe: 'resourceManagerDialogShowing', emit: 'onResourceManagerDialogShowing' },
-            { subscribe: 'resourceUnassigned', emit: 'onResourceUnassigned' },
-            { subscribe: 'resourceUnassigning', emit: 'onResourceUnassigning' },
-            { subscribe: 'scaleCellPrepared', emit: 'onScaleCellPrepared' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'taskClick', emit: 'onTaskClick' },
-            { subscribe: 'taskDblClick', emit: 'onTaskDblClick' },
-            { subscribe: 'taskDeleted', emit: 'onTaskDeleted' },
-            { subscribe: 'taskDeleting', emit: 'onTaskDeleting' },
-            { subscribe: 'taskEditDialogShowing', emit: 'onTaskEditDialogShowing' },
-            { subscribe: 'taskInserted', emit: 'onTaskInserted' },
-            { subscribe: 'taskInserting', emit: 'onTaskInserting' },
-            { subscribe: 'taskMoving', emit: 'onTaskMoving' },
-            { subscribe: 'taskUpdated', emit: 'onTaskUpdated' },
-            { subscribe: 'taskUpdating', emit: 'onTaskUpdating' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'allowSelectionChange' },
-            { emit: 'columnsChange' },
-            { emit: 'contextMenuChange' },
-            { emit: 'dependenciesChange' },
-            { emit: 'disabledChange' },
-            { emit: 'editingChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'endDateRangeChange' },
-            { emit: 'filterRowChange' },
-            { emit: 'firstDayOfWeekChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'headerFilterChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'resourceAssignmentsChange' },
-            { emit: 'resourcesChange' },
-            { emit: 'rootValueChange' },
-            { emit: 'scaleTypeChange' },
-            { emit: 'scaleTypeRangeChange' },
-            { emit: 'selectedRowKeyChange' },
-            { emit: 'showDependenciesChange' },
-            { emit: 'showResourcesChange' },
-            { emit: 'showRowLinesChange' },
-            { emit: 'sortingChange' },
-            { emit: 'startDateRangeChange' },
-            { emit: 'stripLinesChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'taskContentTemplateChange' },
-            { emit: 'taskListWidthChange' },
-            { emit: 'taskProgressTooltipContentTemplateChange' },
-            { emit: 'tasksChange' },
-            { emit: 'taskTimeTooltipContentTemplateChange' },
-            { emit: 'taskTitlePositionChange' },
-            { emit: 'taskTooltipContentTemplateChange' },
-            { emit: 'toolbarChange' },
-            { emit: 'validationChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'contextMenuPreparing', emit: 'onContextMenuPreparing' },
+                       { subscribe: 'customCommand', emit: 'onCustomCommand' },
+                       { subscribe: 'dependencyDeleted', emit: 'onDependencyDeleted' },
+                       { subscribe: 'dependencyDeleting', emit: 'onDependencyDeleting' },
+                       { subscribe: 'dependencyInserted', emit: 'onDependencyInserted' },
+                       { subscribe: 'dependencyInserting', emit: 'onDependencyInserting' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'resourceAssigned', emit: 'onResourceAssigned' },
+                       { subscribe: 'resourceAssigning', emit: 'onResourceAssigning' },
+                       { subscribe: 'resourceDeleted', emit: 'onResourceDeleted' },
+                       { subscribe: 'resourceDeleting', emit: 'onResourceDeleting' },
+                       { subscribe: 'resourceInserted', emit: 'onResourceInserted' },
+                       { subscribe: 'resourceInserting', emit: 'onResourceInserting' },
+                       { subscribe: 'resourceManagerDialogShowing', emit: 'onResourceManagerDialogShowing' },
+                       { subscribe: 'resourceUnassigned', emit: 'onResourceUnassigned' },
+                       { subscribe: 'resourceUnassigning', emit: 'onResourceUnassigning' },
+                       { subscribe: 'scaleCellPrepared', emit: 'onScaleCellPrepared' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { subscribe: 'taskClick', emit: 'onTaskClick' },
+                       { subscribe: 'taskDblClick', emit: 'onTaskDblClick' },
+                       { subscribe: 'taskDeleted', emit: 'onTaskDeleted' },
+                       { subscribe: 'taskDeleting', emit: 'onTaskDeleting' },
+                       { subscribe: 'taskEditDialogShowing', emit: 'onTaskEditDialogShowing' },
+                       { subscribe: 'taskInserted', emit: 'onTaskInserted' },
+                       { subscribe: 'taskInserting', emit: 'onTaskInserting' },
+                       { subscribe: 'taskMoving', emit: 'onTaskMoving' },
+                       { subscribe: 'taskUpdated', emit: 'onTaskUpdated' },
+                       { subscribe: 'taskUpdating', emit: 'onTaskUpdating' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'allowSelectionChange' },
+                       { emit: 'columnsChange' },
+                       { emit: 'contextMenuChange' },
+                       { emit: 'dependenciesChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'editingChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'endDateRangeChange' },
+                       { emit: 'filterRowChange' },
+                       { emit: 'firstDayOfWeekChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'headerFilterChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'resourceAssignmentsChange' },
+                       { emit: 'resourcesChange' },
+                       { emit: 'rootValueChange' },
+                       { emit: 'scaleTypeChange' },
+                       { emit: 'scaleTypeRangeChange' },
+                       { emit: 'selectedRowKeyChange' },
+                       { emit: 'showDependenciesChange' },
+                       { emit: 'showResourcesChange' },
+                       { emit: 'showRowLinesChange' },
+                       { emit: 'sortingChange' },
+                       { emit: 'startDateRangeChange' },
+                       { emit: 'stripLinesChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'taskContentTemplateChange' },
+                       { emit: 'taskListWidthChange' },
+                       { emit: 'taskProgressTooltipContentTemplateChange' },
+                       { emit: 'tasksChange' },
+                       { emit: 'taskTimeTooltipContentTemplateChange' },
+                       { emit: 'taskTitlePositionChange' },
+                       { emit: 'taskTooltipContentTemplateChange' },
+                       { emit: 'toolbarChange' },
+                       { emit: 'validationChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

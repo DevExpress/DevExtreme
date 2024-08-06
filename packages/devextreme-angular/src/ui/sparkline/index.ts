@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -31,7 +30,9 @@ import DxSparkline from 'devextreme/viz/sparkline';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -39,6 +40,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoMarginModule } from 'devextreme-angular/ui/nested';
 import { DxoSizeModule } from 'devextreme-angular/ui/nested';
@@ -68,6 +73,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 })
 export class DxSparklineComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxSparkline = null;
+
 
     /**
      * [descr:dxSparklineOptions.argumentField]
@@ -763,51 +769,56 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'drawn', emit: 'onDrawn' },
-            { subscribe: 'exported', emit: 'onExported' },
-            { subscribe: 'exporting', emit: 'onExporting' },
-            { subscribe: 'fileSaving', emit: 'onFileSaving' },
-            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
-            { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
-            { emit: 'argumentFieldChange' },
-            { emit: 'barNegativeColorChange' },
-            { emit: 'barPositiveColorChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'firstLastColorChange' },
-            { emit: 'ignoreEmptyPointsChange' },
-            { emit: 'lineColorChange' },
-            { emit: 'lineWidthChange' },
-            { emit: 'lossColorChange' },
-            { emit: 'marginChange' },
-            { emit: 'maxColorChange' },
-            { emit: 'maxValueChange' },
-            { emit: 'minColorChange' },
-            { emit: 'minValueChange' },
-            { emit: 'pathModifiedChange' },
-            { emit: 'pointColorChange' },
-            { emit: 'pointSizeChange' },
-            { emit: 'pointSymbolChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'showFirstLastChange' },
-            { emit: 'showMinMaxChange' },
-            { emit: 'sizeChange' },
-            { emit: 'themeChange' },
-            { emit: 'tooltipChange' },
-            { emit: 'typeChange' },
-            { emit: 'valueFieldChange' },
-            { emit: 'winColorChange' },
-            { emit: 'winlossThresholdChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'drawn', emit: 'onDrawn' },
+                       { subscribe: 'exported', emit: 'onExported' },
+                       { subscribe: 'exporting', emit: 'onExporting' },
+                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
+                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
+                       { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
+                       { emit: 'argumentFieldChange' },
+                       { emit: 'barNegativeColorChange' },
+                       { emit: 'barPositiveColorChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'firstLastColorChange' },
+                       { emit: 'ignoreEmptyPointsChange' },
+                       { emit: 'lineColorChange' },
+                       { emit: 'lineWidthChange' },
+                       { emit: 'lossColorChange' },
+                       { emit: 'marginChange' },
+                       { emit: 'maxColorChange' },
+                       { emit: 'maxValueChange' },
+                       { emit: 'minColorChange' },
+                       { emit: 'minValueChange' },
+                       { emit: 'pathModifiedChange' },
+                       { emit: 'pointColorChange' },
+                       { emit: 'pointSizeChange' },
+                       { emit: 'pointSymbolChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'showFirstLastChange' },
+                       { emit: 'showMinMaxChange' },
+                       { emit: 'sizeChange' },
+                       { emit: 'themeChange' },
+                       { emit: 'tooltipChange' },
+                       { emit: 'typeChange' },
+                       { emit: 'valueFieldChange' },
+                       { emit: 'winColorChange' },
+                       { emit: 'winlossThresholdChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

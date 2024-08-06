@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -23,13 +22,19 @@ import DxLoadIndicator from 'devextreme/ui/load_indicator';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 
 
@@ -50,6 +55,7 @@ import {
 })
 export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     instance: DxLoadIndicator = null;
+
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -236,20 +242,25 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { emit: 'elementAttrChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'indicatorSrcChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'indicatorSrcChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

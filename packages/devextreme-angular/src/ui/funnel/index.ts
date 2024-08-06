@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -32,7 +31,9 @@ import DxFunnel from 'devextreme/viz/funnel';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,6 +41,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
@@ -81,6 +86,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 })
 export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxFunnel = null;
+
 
     /**
      * [descr:dxFunnelOptions.adaptiveLayout]
@@ -792,53 +798,58 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'drawn', emit: 'onDrawn' },
-            { subscribe: 'exported', emit: 'onExported' },
-            { subscribe: 'exporting', emit: 'onExporting' },
-            { subscribe: 'fileSaving', emit: 'onFileSaving' },
-            { subscribe: 'hoverChanged', emit: 'onHoverChanged' },
-            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'legendClick', emit: 'onLegendClick' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { emit: 'adaptiveLayoutChange' },
-            { emit: 'algorithmChange' },
-            { emit: 'argumentFieldChange' },
-            { emit: 'colorFieldChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'exportChange' },
-            { emit: 'hoverEnabledChange' },
-            { emit: 'invertedChange' },
-            { emit: 'itemChange' },
-            { emit: 'labelChange' },
-            { emit: 'legendChange' },
-            { emit: 'loadingIndicatorChange' },
-            { emit: 'marginChange' },
-            { emit: 'neckHeightChange' },
-            { emit: 'neckWidthChange' },
-            { emit: 'paletteChange' },
-            { emit: 'paletteExtensionModeChange' },
-            { emit: 'pathModifiedChange' },
-            { emit: 'redrawOnResizeChange' },
-            { emit: 'resolveLabelOverlappingChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'selectionModeChange' },
-            { emit: 'sizeChange' },
-            { emit: 'sortDataChange' },
-            { emit: 'themeChange' },
-            { emit: 'titleChange' },
-            { emit: 'tooltipChange' },
-            { emit: 'valueFieldChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'drawn', emit: 'onDrawn' },
+                       { subscribe: 'exported', emit: 'onExported' },
+                       { subscribe: 'exporting', emit: 'onExporting' },
+                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
+                       { subscribe: 'hoverChanged', emit: 'onHoverChanged' },
+                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'legendClick', emit: 'onLegendClick' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { emit: 'adaptiveLayoutChange' },
+                       { emit: 'algorithmChange' },
+                       { emit: 'argumentFieldChange' },
+                       { emit: 'colorFieldChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'exportChange' },
+                       { emit: 'hoverEnabledChange' },
+                       { emit: 'invertedChange' },
+                       { emit: 'itemChange' },
+                       { emit: 'labelChange' },
+                       { emit: 'legendChange' },
+                       { emit: 'loadingIndicatorChange' },
+                       { emit: 'marginChange' },
+                       { emit: 'neckHeightChange' },
+                       { emit: 'neckWidthChange' },
+                       { emit: 'paletteChange' },
+                       { emit: 'paletteExtensionModeChange' },
+                       { emit: 'pathModifiedChange' },
+                       { emit: 'redrawOnResizeChange' },
+                       { emit: 'resolveLabelOverlappingChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'selectionModeChange' },
+                       { emit: 'sizeChange' },
+                       { emit: 'sortDataChange' },
+                       { emit: 'themeChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'tooltipChange' },
+                       { emit: 'valueFieldChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

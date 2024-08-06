@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -39,7 +38,9 @@ import {
 } from '@angular/forms';
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -47,6 +48,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
@@ -93,6 +98,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxDropDownBox = null;
+
 
     /**
      * [descr:dxDropDownBoxOptions.acceptCustomValue]
@@ -1182,74 +1188,79 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'change', emit: 'onChange' },
-            { subscribe: 'closed', emit: 'onClosed' },
-            { subscribe: 'copy', emit: 'onCopy' },
-            { subscribe: 'cut', emit: 'onCut' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'enterKey', emit: 'onEnterKey' },
-            { subscribe: 'focusIn', emit: 'onFocusIn' },
-            { subscribe: 'focusOut', emit: 'onFocusOut' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'input', emit: 'onInput' },
-            { subscribe: 'keyDown', emit: 'onKeyDown' },
-            { subscribe: 'keyUp', emit: 'onKeyUp' },
-            { subscribe: 'opened', emit: 'onOpened' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'paste', emit: 'onPaste' },
-            { subscribe: 'valueChanged', emit: 'onValueChanged' },
-            { emit: 'acceptCustomValueChange' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'buttonsChange' },
-            { emit: 'contentTemplateChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'displayExprChange' },
-            { emit: 'displayValueFormatterChange' },
-            { emit: 'dropDownButtonTemplateChange' },
-            { emit: 'dropDownOptionsChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'fieldTemplateChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'inputAttrChange' },
-            { emit: 'isDirtyChange' },
-            { emit: 'isValidChange' },
-            { emit: 'itemsChange' },
-            { emit: 'labelChange' },
-            { emit: 'labelModeChange' },
-            { emit: 'maxLengthChange' },
-            { emit: 'nameChange' },
-            { emit: 'openedChange' },
-            { emit: 'openOnFieldClickChange' },
-            { emit: 'placeholderChange' },
-            { emit: 'readOnlyChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'showClearButtonChange' },
-            { emit: 'showDropDownButtonChange' },
-            { emit: 'stylingModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'textChange' },
-            { emit: 'validationErrorChange' },
-            { emit: 'validationErrorsChange' },
-            { emit: 'validationMessageModeChange' },
-            { emit: 'validationMessagePositionChange' },
-            { emit: 'validationStatusChange' },
-            { emit: 'valueChange' },
-            { emit: 'valueChangeEventChange' },
-            { emit: 'valueExprChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'onBlur' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'change', emit: 'onChange' },
+                       { subscribe: 'closed', emit: 'onClosed' },
+                       { subscribe: 'copy', emit: 'onCopy' },
+                       { subscribe: 'cut', emit: 'onCut' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'enterKey', emit: 'onEnterKey' },
+                       { subscribe: 'focusIn', emit: 'onFocusIn' },
+                       { subscribe: 'focusOut', emit: 'onFocusOut' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'input', emit: 'onInput' },
+                       { subscribe: 'keyDown', emit: 'onKeyDown' },
+                       { subscribe: 'keyUp', emit: 'onKeyUp' },
+                       { subscribe: 'opened', emit: 'onOpened' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'paste', emit: 'onPaste' },
+                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
+                       { emit: 'acceptCustomValueChange' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'buttonsChange' },
+                       { emit: 'contentTemplateChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'displayExprChange' },
+                       { emit: 'displayValueFormatterChange' },
+                       { emit: 'dropDownButtonTemplateChange' },
+                       { emit: 'dropDownOptionsChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'fieldTemplateChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'inputAttrChange' },
+                       { emit: 'isDirtyChange' },
+                       { emit: 'isValidChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'labelChange' },
+                       { emit: 'labelModeChange' },
+                       { emit: 'maxLengthChange' },
+                       { emit: 'nameChange' },
+                       { emit: 'openedChange' },
+                       { emit: 'openOnFieldClickChange' },
+                       { emit: 'placeholderChange' },
+                       { emit: 'readOnlyChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'showClearButtonChange' },
+                       { emit: 'showDropDownButtonChange' },
+                       { emit: 'stylingModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'textChange' },
+                       { emit: 'validationErrorChange' },
+                       { emit: 'validationErrorsChange' },
+                       { emit: 'validationMessageModeChange' },
+                       { emit: 'validationMessagePositionChange' },
+                       { emit: 'validationStatusChange' },
+                       { emit: 'valueChange' },
+                       { emit: 'valueChangeEventChange' },
+                       { emit: 'valueExprChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

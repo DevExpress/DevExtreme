@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -33,7 +32,9 @@ import DxActionSheet from 'devextreme/ui/action_sheet';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,6 +42,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
@@ -64,6 +69,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxActionSheet<TItem, TKey> = null;
+
 
     /**
      * [descr:dxActionSheetOptions.cancelText]
@@ -519,38 +525,43 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'cancelClick', emit: 'onCancelClick' },
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-            { subscribe: 'itemHold', emit: 'onItemHold' },
-            { subscribe: 'itemRendered', emit: 'onItemRendered' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { emit: 'cancelTextChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'itemHoldTimeoutChange' },
-            { emit: 'itemsChange' },
-            { emit: 'itemTemplateChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'showCancelButtonChange' },
-            { emit: 'showTitleChange' },
-            { emit: 'targetChange' },
-            { emit: 'titleChange' },
-            { emit: 'usePopoverChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'cancelClick', emit: 'onCancelClick' },
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+                       { subscribe: 'itemHold', emit: 'onItemHold' },
+                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { emit: 'cancelTextChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'itemHoldTimeoutChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'itemTemplateChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'showCancelButtonChange' },
+                       { emit: 'showTitleChange' },
+                       { emit: 'targetChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'usePopoverChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

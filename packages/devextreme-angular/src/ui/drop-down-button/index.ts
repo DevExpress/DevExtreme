@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -32,7 +31,9 @@ import DxDropDownButton from 'devextreme/ui/drop_down_button';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,6 +41,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -76,6 +81,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxDropDownButtonComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxDropDownButton = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -835,52 +841,57 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'buttonClick', emit: 'onButtonClick' },
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'displayExprChange' },
-            { emit: 'dropDownContentTemplateChange' },
-            { emit: 'dropDownOptionsChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'iconChange' },
-            { emit: 'itemsChange' },
-            { emit: 'itemTemplateChange' },
-            { emit: 'keyExprChange' },
-            { emit: 'noDataTextChange' },
-            { emit: 'openedChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'selectedItemChange' },
-            { emit: 'selectedItemKeyChange' },
-            { emit: 'showArrowIconChange' },
-            { emit: 'splitButtonChange' },
-            { emit: 'stylingModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'templateChange' },
-            { emit: 'textChange' },
-            { emit: 'typeChange' },
-            { emit: 'useItemTextAsTitleChange' },
-            { emit: 'useSelectModeChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'wrapItemTextChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'buttonClick', emit: 'onButtonClick' },
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'displayExprChange' },
+                       { emit: 'dropDownContentTemplateChange' },
+                       { emit: 'dropDownOptionsChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'iconChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'itemTemplateChange' },
+                       { emit: 'keyExprChange' },
+                       { emit: 'noDataTextChange' },
+                       { emit: 'openedChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'selectedItemChange' },
+                       { emit: 'selectedItemKeyChange' },
+                       { emit: 'showArrowIconChange' },
+                       { emit: 'splitButtonChange' },
+                       { emit: 'stylingModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'templateChange' },
+                       { emit: 'textChange' },
+                       { emit: 'typeChange' },
+                       { emit: 'useItemTextAsTitleChange' },
+                       { emit: 'useSelectModeChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'wrapItemTextChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

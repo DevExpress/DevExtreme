@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -34,7 +33,9 @@ import DxList from 'devextreme/ui/list';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -42,6 +43,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoItemDraggingModule } from 'devextreme-angular/ui/nested';
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
@@ -72,6 +77,7 @@ import { DxiMenuItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxListComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxList<TItem, TKey> = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -1347,84 +1353,89 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'groupRendered', emit: 'onGroupRendered' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-            { subscribe: 'itemDeleted', emit: 'onItemDeleted' },
-            { subscribe: 'itemDeleting', emit: 'onItemDeleting' },
-            { subscribe: 'itemHold', emit: 'onItemHold' },
-            { subscribe: 'itemRendered', emit: 'onItemRendered' },
-            { subscribe: 'itemReordered', emit: 'onItemReordered' },
-            { subscribe: 'itemSwipe', emit: 'onItemSwipe' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'pageLoading', emit: 'onPageLoading' },
-            { subscribe: 'pullRefresh', emit: 'onPullRefresh' },
-            { subscribe: 'scroll', emit: 'onScroll' },
-            { subscribe: 'selectAllValueChanged', emit: 'onSelectAllValueChanged' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'allowItemDeletingChange' },
-            { emit: 'bounceEnabledChange' },
-            { emit: 'collapsibleGroupsChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'disabledChange' },
-            { emit: 'displayExprChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'groupedChange' },
-            { emit: 'groupTemplateChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'indicateLoadingChange' },
-            { emit: 'itemDeleteModeChange' },
-            { emit: 'itemDraggingChange' },
-            { emit: 'itemHoldTimeoutChange' },
-            { emit: 'itemsChange' },
-            { emit: 'itemTemplateChange' },
-            { emit: 'keyExprChange' },
-            { emit: 'menuItemsChange' },
-            { emit: 'menuModeChange' },
-            { emit: 'nextButtonTextChange' },
-            { emit: 'noDataTextChange' },
-            { emit: 'pageLoadingTextChange' },
-            { emit: 'pageLoadModeChange' },
-            { emit: 'pulledDownTextChange' },
-            { emit: 'pullingDownTextChange' },
-            { emit: 'pullRefreshEnabledChange' },
-            { emit: 'refreshingTextChange' },
-            { emit: 'repaintChangesOnlyChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'scrollByContentChange' },
-            { emit: 'scrollByThumbChange' },
-            { emit: 'scrollingEnabledChange' },
-            { emit: 'searchEditorOptionsChange' },
-            { emit: 'searchEnabledChange' },
-            { emit: 'searchExprChange' },
-            { emit: 'searchModeChange' },
-            { emit: 'searchTimeoutChange' },
-            { emit: 'searchValueChange' },
-            { emit: 'selectAllModeChange' },
-            { emit: 'selectAllTextChange' },
-            { emit: 'selectByClickChange' },
-            { emit: 'selectedItemKeysChange' },
-            { emit: 'selectedItemsChange' },
-            { emit: 'selectionModeChange' },
-            { emit: 'showScrollbarChange' },
-            { emit: 'showSelectionControlsChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'useNativeScrollingChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'groupRendered', emit: 'onGroupRendered' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+                       { subscribe: 'itemDeleted', emit: 'onItemDeleted' },
+                       { subscribe: 'itemDeleting', emit: 'onItemDeleting' },
+                       { subscribe: 'itemHold', emit: 'onItemHold' },
+                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
+                       { subscribe: 'itemReordered', emit: 'onItemReordered' },
+                       { subscribe: 'itemSwipe', emit: 'onItemSwipe' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'pageLoading', emit: 'onPageLoading' },
+                       { subscribe: 'pullRefresh', emit: 'onPullRefresh' },
+                       { subscribe: 'scroll', emit: 'onScroll' },
+                       { subscribe: 'selectAllValueChanged', emit: 'onSelectAllValueChanged' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'allowItemDeletingChange' },
+                       { emit: 'bounceEnabledChange' },
+                       { emit: 'collapsibleGroupsChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'displayExprChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'groupedChange' },
+                       { emit: 'groupTemplateChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'indicateLoadingChange' },
+                       { emit: 'itemDeleteModeChange' },
+                       { emit: 'itemDraggingChange' },
+                       { emit: 'itemHoldTimeoutChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'itemTemplateChange' },
+                       { emit: 'keyExprChange' },
+                       { emit: 'menuItemsChange' },
+                       { emit: 'menuModeChange' },
+                       { emit: 'nextButtonTextChange' },
+                       { emit: 'noDataTextChange' },
+                       { emit: 'pageLoadingTextChange' },
+                       { emit: 'pageLoadModeChange' },
+                       { emit: 'pulledDownTextChange' },
+                       { emit: 'pullingDownTextChange' },
+                       { emit: 'pullRefreshEnabledChange' },
+                       { emit: 'refreshingTextChange' },
+                       { emit: 'repaintChangesOnlyChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'scrollByContentChange' },
+                       { emit: 'scrollByThumbChange' },
+                       { emit: 'scrollingEnabledChange' },
+                       { emit: 'searchEditorOptionsChange' },
+                       { emit: 'searchEnabledChange' },
+                       { emit: 'searchExprChange' },
+                       { emit: 'searchModeChange' },
+                       { emit: 'searchTimeoutChange' },
+                       { emit: 'searchValueChange' },
+                       { emit: 'selectAllModeChange' },
+                       { emit: 'selectAllTextChange' },
+                       { emit: 'selectByClickChange' },
+                       { emit: 'selectedItemKeysChange' },
+                       { emit: 'selectedItemsChange' },
+                       { emit: 'selectionModeChange' },
+                       { emit: 'showScrollbarChange' },
+                       { emit: 'showSelectionControlsChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'useNativeScrollingChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

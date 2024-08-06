@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -32,7 +31,9 @@ import DxTabPanel from 'devextreme/ui/tab_panel';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,6 +41,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
@@ -63,6 +68,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxTabPanel<TItem, TKey> = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -802,54 +808,59 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-            { subscribe: 'itemHold', emit: 'onItemHold' },
-            { subscribe: 'itemRendered', emit: 'onItemRendered' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'titleClick', emit: 'onTitleClick' },
-            { subscribe: 'titleHold', emit: 'onTitleHold' },
-            { subscribe: 'titleRendered', emit: 'onTitleRendered' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'animationEnabledChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'iconPositionChange' },
-            { emit: 'itemHoldTimeoutChange' },
-            { emit: 'itemsChange' },
-            { emit: 'itemTemplateChange' },
-            { emit: 'itemTitleTemplateChange' },
-            { emit: 'loopChange' },
-            { emit: 'noDataTextChange' },
-            { emit: 'repaintChangesOnlyChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'scrollByContentChange' },
-            { emit: 'scrollingEnabledChange' },
-            { emit: 'selectedIndexChange' },
-            { emit: 'selectedItemChange' },
-            { emit: 'showNavButtonsChange' },
-            { emit: 'stylingModeChange' },
-            { emit: 'swipeEnabledChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'tabsPositionChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+                       { subscribe: 'itemHold', emit: 'onItemHold' },
+                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { subscribe: 'titleClick', emit: 'onTitleClick' },
+                       { subscribe: 'titleHold', emit: 'onTitleHold' },
+                       { subscribe: 'titleRendered', emit: 'onTitleRendered' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'animationEnabledChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'iconPositionChange' },
+                       { emit: 'itemHoldTimeoutChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'itemTemplateChange' },
+                       { emit: 'itemTitleTemplateChange' },
+                       { emit: 'loopChange' },
+                       { emit: 'noDataTextChange' },
+                       { emit: 'repaintChangesOnlyChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'scrollByContentChange' },
+                       { emit: 'scrollingEnabledChange' },
+                       { emit: 'selectedIndexChange' },
+                       { emit: 'selectedItemChange' },
+                       { emit: 'showNavButtonsChange' },
+                       { emit: 'stylingModeChange' },
+                       { emit: 'swipeEnabledChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'tabsPositionChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

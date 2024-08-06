@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -25,13 +24,19 @@ import DxSortable from 'devextreme/ui/sortable';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 
@@ -53,6 +58,7 @@ import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 })
 export class DxSortableComponent extends DxComponent implements OnDestroy {
     instance: DxSortable = null;
+
 
     /**
      * [descr:dxSortableOptions.allowDropInsideItem]
@@ -567,40 +573,45 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'add', emit: 'onAdd' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'dragChange', emit: 'onDragChange' },
-            { subscribe: 'dragEnd', emit: 'onDragEnd' },
-            { subscribe: 'dragMove', emit: 'onDragMove' },
-            { subscribe: 'dragStart', emit: 'onDragStart' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'remove', emit: 'onRemove' },
-            { subscribe: 'reorder', emit: 'onReorder' },
-            { emit: 'allowDropInsideItemChange' },
-            { emit: 'allowReorderingChange' },
-            { emit: 'autoScrollChange' },
-            { emit: 'boundaryChange' },
-            { emit: 'containerChange' },
-            { emit: 'cursorOffsetChange' },
-            { emit: 'dataChange' },
-            { emit: 'dragDirectionChange' },
-            { emit: 'dragTemplateChange' },
-            { emit: 'dropFeedbackModeChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'filterChange' },
-            { emit: 'groupChange' },
-            { emit: 'handleChange' },
-            { emit: 'heightChange' },
-            { emit: 'itemOrientationChange' },
-            { emit: 'moveItemOnDropChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'scrollSensitivityChange' },
-            { emit: 'scrollSpeedChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'add', emit: 'onAdd' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'dragChange', emit: 'onDragChange' },
+                       { subscribe: 'dragEnd', emit: 'onDragEnd' },
+                       { subscribe: 'dragMove', emit: 'onDragMove' },
+                       { subscribe: 'dragStart', emit: 'onDragStart' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'remove', emit: 'onRemove' },
+                       { subscribe: 'reorder', emit: 'onReorder' },
+                       { emit: 'allowDropInsideItemChange' },
+                       { emit: 'allowReorderingChange' },
+                       { emit: 'autoScrollChange' },
+                       { emit: 'boundaryChange' },
+                       { emit: 'containerChange' },
+                       { emit: 'cursorOffsetChange' },
+                       { emit: 'dataChange' },
+                       { emit: 'dragDirectionChange' },
+                       { emit: 'dragTemplateChange' },
+                       { emit: 'dropFeedbackModeChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'filterChange' },
+                       { emit: 'groupChange' },
+                       { emit: 'handleChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'itemOrientationChange' },
+                       { emit: 'moveItemOnDropChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'scrollSensitivityChange' },
+                       { emit: 'scrollSpeedChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -33,7 +32,9 @@ import DxMenu from 'devextreme/ui/menu';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,6 +42,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
@@ -78,6 +83,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxMenu<TKey> = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -797,53 +803,58 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-            { subscribe: 'itemRendered', emit: 'onItemRendered' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'submenuHidden', emit: 'onSubmenuHidden' },
-            { subscribe: 'submenuHiding', emit: 'onSubmenuHiding' },
-            { subscribe: 'submenuShowing', emit: 'onSubmenuShowing' },
-            { subscribe: 'submenuShown', emit: 'onSubmenuShown' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'adaptivityEnabledChange' },
-            { emit: 'animationChange' },
-            { emit: 'cssClassChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'disabledChange' },
-            { emit: 'disabledExprChange' },
-            { emit: 'displayExprChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hideSubmenuOnMouseLeaveChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'itemsChange' },
-            { emit: 'itemsExprChange' },
-            { emit: 'itemTemplateChange' },
-            { emit: 'orientationChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'selectByClickChange' },
-            { emit: 'selectedExprChange' },
-            { emit: 'selectedItemChange' },
-            { emit: 'selectionModeChange' },
-            { emit: 'showFirstSubmenuModeChange' },
-            { emit: 'showSubmenuModeChange' },
-            { emit: 'submenuDirectionChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { subscribe: 'submenuHidden', emit: 'onSubmenuHidden' },
+                       { subscribe: 'submenuHiding', emit: 'onSubmenuHiding' },
+                       { subscribe: 'submenuShowing', emit: 'onSubmenuShowing' },
+                       { subscribe: 'submenuShown', emit: 'onSubmenuShown' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'adaptivityEnabledChange' },
+                       { emit: 'animationChange' },
+                       { emit: 'cssClassChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'disabledExprChange' },
+                       { emit: 'displayExprChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hideSubmenuOnMouseLeaveChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'itemsExprChange' },
+                       { emit: 'itemTemplateChange' },
+                       { emit: 'orientationChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'selectByClickChange' },
+                       { emit: 'selectedExprChange' },
+                       { emit: 'selectedItemChange' },
+                       { emit: 'selectionModeChange' },
+                       { emit: 'showFirstSubmenuModeChange' },
+                       { emit: 'showSubmenuModeChange' },
+                       { emit: 'submenuDirectionChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -33,7 +32,9 @@ import DxTreeView from 'devextreme/ui/tree_view';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,6 +42,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
@@ -67,6 +72,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxTreeView<TKey> = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -1154,72 +1160,77 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'itemCollapsed', emit: 'onItemCollapsed' },
-            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-            { subscribe: 'itemExpanded', emit: 'onItemExpanded' },
-            { subscribe: 'itemHold', emit: 'onItemHold' },
-            { subscribe: 'itemRendered', emit: 'onItemRendered' },
-            { subscribe: 'itemSelectionChanged', emit: 'onItemSelectionChanged' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectAllValueChanged', emit: 'onSelectAllValueChanged' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'animationEnabledChange' },
-            { emit: 'collapseIconChange' },
-            { emit: 'createChildrenChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'dataStructureChange' },
-            { emit: 'disabledChange' },
-            { emit: 'disabledExprChange' },
-            { emit: 'displayExprChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'expandAllEnabledChange' },
-            { emit: 'expandedExprChange' },
-            { emit: 'expandEventChange' },
-            { emit: 'expandIconChange' },
-            { emit: 'expandNodesRecursiveChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'hasItemsExprChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'itemHoldTimeoutChange' },
-            { emit: 'itemsChange' },
-            { emit: 'itemsExprChange' },
-            { emit: 'itemTemplateChange' },
-            { emit: 'keyExprChange' },
-            { emit: 'noDataTextChange' },
-            { emit: 'parentIdExprChange' },
-            { emit: 'rootValueChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'scrollDirectionChange' },
-            { emit: 'searchEditorOptionsChange' },
-            { emit: 'searchEnabledChange' },
-            { emit: 'searchExprChange' },
-            { emit: 'searchModeChange' },
-            { emit: 'searchTimeoutChange' },
-            { emit: 'searchValueChange' },
-            { emit: 'selectAllTextChange' },
-            { emit: 'selectByClickChange' },
-            { emit: 'selectedExprChange' },
-            { emit: 'selectionModeChange' },
-            { emit: 'selectNodesRecursiveChange' },
-            { emit: 'showCheckBoxesModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'useNativeScrollingChange' },
-            { emit: 'virtualModeEnabledChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'itemCollapsed', emit: 'onItemCollapsed' },
+                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+                       { subscribe: 'itemExpanded', emit: 'onItemExpanded' },
+                       { subscribe: 'itemHold', emit: 'onItemHold' },
+                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
+                       { subscribe: 'itemSelectionChanged', emit: 'onItemSelectionChanged' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'selectAllValueChanged', emit: 'onSelectAllValueChanged' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'animationEnabledChange' },
+                       { emit: 'collapseIconChange' },
+                       { emit: 'createChildrenChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'dataStructureChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'disabledExprChange' },
+                       { emit: 'displayExprChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'expandAllEnabledChange' },
+                       { emit: 'expandedExprChange' },
+                       { emit: 'expandEventChange' },
+                       { emit: 'expandIconChange' },
+                       { emit: 'expandNodesRecursiveChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'hasItemsExprChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'itemHoldTimeoutChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'itemsExprChange' },
+                       { emit: 'itemTemplateChange' },
+                       { emit: 'keyExprChange' },
+                       { emit: 'noDataTextChange' },
+                       { emit: 'parentIdExprChange' },
+                       { emit: 'rootValueChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'scrollDirectionChange' },
+                       { emit: 'searchEditorOptionsChange' },
+                       { emit: 'searchEnabledChange' },
+                       { emit: 'searchExprChange' },
+                       { emit: 'searchModeChange' },
+                       { emit: 'searchTimeoutChange' },
+                       { emit: 'searchValueChange' },
+                       { emit: 'selectAllTextChange' },
+                       { emit: 'selectByClickChange' },
+                       { emit: 'selectedExprChange' },
+                       { emit: 'selectionModeChange' },
+                       { emit: 'selectNodesRecursiveChange' },
+                       { emit: 'showCheckBoxesModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'useNativeScrollingChange' },
+                       { emit: 'virtualModeEnabledChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

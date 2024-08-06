@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -33,7 +32,7 @@ import DxPopup from 'devextreme/ui/popup';
 
 
 import {
-    DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,6 +40,14 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+import { InsertionDirective } from 'devextreme-angular/features/common';
+
+
+
+import { DxPopupComponentExtender } from 'devextreme-angular/features';
+
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
@@ -65,7 +72,7 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
  */
 @Component({
     selector: 'dx-popup',
-    template: '<ng-content></ng-content>',
+    template: '<ng-content></ng-content><ng-template dx-content-insertion></ng-template>',
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -73,8 +80,9 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxPopupComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+export class DxPopupComponent extends DxPopupComponentExtender implements OnDestroy, OnChanges, DoCheck {
     instance: DxPopup = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -936,60 +944,65 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'hidden', emit: 'onHidden' },
-            { subscribe: 'hiding', emit: 'onHiding' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'resize', emit: 'onResize' },
-            { subscribe: 'resizeEnd', emit: 'onResizeEnd' },
-            { subscribe: 'resizeStart', emit: 'onResizeStart' },
-            { subscribe: 'showing', emit: 'onShowing' },
-            { subscribe: 'shown', emit: 'onShown' },
-            { subscribe: 'titleRendered', emit: 'onTitleRendered' },
-            { emit: 'accessKeyChange' },
-            { emit: 'animationChange' },
-            { emit: 'closeOnOutsideClickChange' },
-            { emit: 'containerChange' },
-            { emit: 'contentTemplateChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'dragAndResizeAreaChange' },
-            { emit: 'dragEnabledChange' },
-            { emit: 'dragOutsideBoundaryChange' },
-            { emit: 'enableBodyScrollChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'fullScreenChange' },
-            { emit: 'heightChange' },
-            { emit: 'hideOnOutsideClickChange' },
-            { emit: 'hideOnParentScrollChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'maxHeightChange' },
-            { emit: 'maxWidthChange' },
-            { emit: 'minHeightChange' },
-            { emit: 'minWidthChange' },
-            { emit: 'positionChange' },
-            { emit: 'resizeEnabledChange' },
-            { emit: 'restorePositionChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'shadingChange' },
-            { emit: 'shadingColorChange' },
-            { emit: 'showCloseButtonChange' },
-            { emit: 'showTitleChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'titleChange' },
-            { emit: 'titleTemplateChange' },
-            { emit: 'toolbarItemsChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'wrapperAttrChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'hidden', emit: 'onHidden' },
+                       { subscribe: 'hiding', emit: 'onHiding' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'resize', emit: 'onResize' },
+                       { subscribe: 'resizeEnd', emit: 'onResizeEnd' },
+                       { subscribe: 'resizeStart', emit: 'onResizeStart' },
+                       { subscribe: 'showing', emit: 'onShowing' },
+                       { subscribe: 'shown', emit: 'onShown' },
+                       { subscribe: 'titleRendered', emit: 'onTitleRendered' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'animationChange' },
+                       { emit: 'closeOnOutsideClickChange' },
+                       { emit: 'containerChange' },
+                       { emit: 'contentTemplateChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'dragAndResizeAreaChange' },
+                       { emit: 'dragEnabledChange' },
+                       { emit: 'dragOutsideBoundaryChange' },
+                       { emit: 'enableBodyScrollChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'fullScreenChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hideOnOutsideClickChange' },
+                       { emit: 'hideOnParentScrollChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'maxHeightChange' },
+                       { emit: 'maxWidthChange' },
+                       { emit: 'minHeightChange' },
+                       { emit: 'minWidthChange' },
+                       { emit: 'positionChange' },
+                       { emit: 'resizeEnabledChange' },
+                       { emit: 'restorePositionChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'shadingChange' },
+                       { emit: 'shadingColorChange' },
+                       { emit: 'showCloseButtonChange' },
+                       { emit: 'showTitleChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'titleTemplateChange' },
+                       { emit: 'toolbarItemsChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'wrapperAttrChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {
@@ -1045,7 +1058,8 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     DxoShowModule,
     DxiToolbarItemModule,
     DxIntegrationModule,
-    DxTemplateModule
+    DxTemplateModule,
+    InsertionDirective
   ],
   declarations: [
     DxPopupComponent

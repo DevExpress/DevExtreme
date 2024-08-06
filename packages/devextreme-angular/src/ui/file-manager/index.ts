@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -27,7 +26,9 @@ import DxFileManager from 'devextreme/ui/file_manager';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -35,6 +36,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
@@ -66,6 +71,7 @@ import { DxoUploadModule } from 'devextreme-angular/ui/nested';
 })
 export class DxFileManagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxFileManager = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -841,64 +847,69 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'contextMenuItemClick', emit: 'onContextMenuItemClick' },
-            { subscribe: 'contextMenuShowing', emit: 'onContextMenuShowing' },
-            { subscribe: 'currentDirectoryChanged', emit: 'onCurrentDirectoryChanged' },
-            { subscribe: 'directoryCreated', emit: 'onDirectoryCreated' },
-            { subscribe: 'directoryCreating', emit: 'onDirectoryCreating' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'errorOccurred', emit: 'onErrorOccurred' },
-            { subscribe: 'fileUploaded', emit: 'onFileUploaded' },
-            { subscribe: 'fileUploading', emit: 'onFileUploading' },
-            { subscribe: 'focusedItemChanged', emit: 'onFocusedItemChanged' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemCopied', emit: 'onItemCopied' },
-            { subscribe: 'itemCopying', emit: 'onItemCopying' },
-            { subscribe: 'itemDeleted', emit: 'onItemDeleted' },
-            { subscribe: 'itemDeleting', emit: 'onItemDeleting' },
-            { subscribe: 'itemDownloading', emit: 'onItemDownloading' },
-            { subscribe: 'itemMoved', emit: 'onItemMoved' },
-            { subscribe: 'itemMoving', emit: 'onItemMoving' },
-            { subscribe: 'itemRenamed', emit: 'onItemRenamed' },
-            { subscribe: 'itemRenaming', emit: 'onItemRenaming' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectedFileOpened', emit: 'onSelectedFileOpened' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'toolbarItemClick', emit: 'onToolbarItemClick' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'allowedFileExtensionsChange' },
-            { emit: 'contextMenuChange' },
-            { emit: 'currentPathChange' },
-            { emit: 'currentPathKeysChange' },
-            { emit: 'customizeDetailColumnsChange' },
-            { emit: 'customizeThumbnailChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'fileSystemProviderChange' },
-            { emit: 'focusedItemKeyChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'itemViewChange' },
-            { emit: 'notificationsChange' },
-            { emit: 'permissionsChange' },
-            { emit: 'rootFolderNameChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'selectedItemKeysChange' },
-            { emit: 'selectionModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'toolbarChange' },
-            { emit: 'uploadChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'contextMenuItemClick', emit: 'onContextMenuItemClick' },
+                       { subscribe: 'contextMenuShowing', emit: 'onContextMenuShowing' },
+                       { subscribe: 'currentDirectoryChanged', emit: 'onCurrentDirectoryChanged' },
+                       { subscribe: 'directoryCreated', emit: 'onDirectoryCreated' },
+                       { subscribe: 'directoryCreating', emit: 'onDirectoryCreating' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'errorOccurred', emit: 'onErrorOccurred' },
+                       { subscribe: 'fileUploaded', emit: 'onFileUploaded' },
+                       { subscribe: 'fileUploading', emit: 'onFileUploading' },
+                       { subscribe: 'focusedItemChanged', emit: 'onFocusedItemChanged' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemCopied', emit: 'onItemCopied' },
+                       { subscribe: 'itemCopying', emit: 'onItemCopying' },
+                       { subscribe: 'itemDeleted', emit: 'onItemDeleted' },
+                       { subscribe: 'itemDeleting', emit: 'onItemDeleting' },
+                       { subscribe: 'itemDownloading', emit: 'onItemDownloading' },
+                       { subscribe: 'itemMoved', emit: 'onItemMoved' },
+                       { subscribe: 'itemMoving', emit: 'onItemMoving' },
+                       { subscribe: 'itemRenamed', emit: 'onItemRenamed' },
+                       { subscribe: 'itemRenaming', emit: 'onItemRenaming' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'selectedFileOpened', emit: 'onSelectedFileOpened' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { subscribe: 'toolbarItemClick', emit: 'onToolbarItemClick' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'allowedFileExtensionsChange' },
+                       { emit: 'contextMenuChange' },
+                       { emit: 'currentPathChange' },
+                       { emit: 'currentPathKeysChange' },
+                       { emit: 'customizeDetailColumnsChange' },
+                       { emit: 'customizeThumbnailChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'fileSystemProviderChange' },
+                       { emit: 'focusedItemKeyChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'itemViewChange' },
+                       { emit: 'notificationsChange' },
+                       { emit: 'permissionsChange' },
+                       { emit: 'rootFolderNameChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'selectedItemKeysChange' },
+                       { emit: 'selectionModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'toolbarChange' },
+                       { emit: 'uploadChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

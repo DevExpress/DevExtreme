@@ -1,5 +1,7 @@
 export * from 'devextreme-angular/core';
 export * from './ui/all';
+export { DxPopupService } from './features/popup/service';
+
 import './common';
 import './common/grids';
 import './common/charts';

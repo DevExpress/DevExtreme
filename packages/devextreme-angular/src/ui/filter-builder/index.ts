@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -34,7 +33,9 @@ import {
 } from '@angular/forms';
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -42,6 +43,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
 import { DxiFieldModule } from 'devextreme-angular/ui/nested';
@@ -78,6 +83,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxFilterBuilder = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -575,39 +581,44 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'editorPrepared', emit: 'onEditorPrepared' },
-            { subscribe: 'editorPreparing', emit: 'onEditorPreparing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'valueChanged', emit: 'onValueChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'allowHierarchicalFieldsChange' },
-            { emit: 'customOperationsChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'fieldsChange' },
-            { emit: 'filterOperationDescriptionsChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'groupOperationDescriptionsChange' },
-            { emit: 'groupOperationsChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'maxGroupLevelChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'valueChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'onBlur' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'editorPrepared', emit: 'onEditorPrepared' },
+                       { subscribe: 'editorPreparing', emit: 'onEditorPreparing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'allowHierarchicalFieldsChange' },
+                       { emit: 'customOperationsChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'fieldsChange' },
+                       { emit: 'filterOperationDescriptionsChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'groupOperationDescriptionsChange' },
+                       { emit: 'groupOperationsChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'maxGroupLevelChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'valueChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

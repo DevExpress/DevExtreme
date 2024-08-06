@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -34,7 +33,9 @@ import DxVectorMap from 'devextreme/viz/vector_map';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -42,6 +43,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
 import { DxoBorderModule } from 'devextreme-angular/ui/nested';
@@ -87,6 +92,7 @@ import { DxiLegendComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxVectorMap = null;
+
 
     /**
      * [descr:dxVectorMapOptions.annotations]
@@ -778,52 +784,57 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'centerChanged', emit: 'onCenterChanged' },
-            { subscribe: 'click', emit: 'onClick' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'drawn', emit: 'onDrawn' },
-            { subscribe: 'exported', emit: 'onExported' },
-            { subscribe: 'exporting', emit: 'onExporting' },
-            { subscribe: 'fileSaving', emit: 'onFileSaving' },
-            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
-            { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
-            { subscribe: 'zoomFactorChanged', emit: 'onZoomFactorChanged' },
-            { emit: 'annotationsChange' },
-            { emit: 'backgroundChange' },
-            { emit: 'boundsChange' },
-            { emit: 'centerChange' },
-            { emit: 'commonAnnotationSettingsChange' },
-            { emit: 'controlBarChange' },
-            { emit: 'customizeAnnotationChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'exportChange' },
-            { emit: 'layersChange' },
-            { emit: 'legendsChange' },
-            { emit: 'loadingIndicatorChange' },
-            { emit: 'maxZoomFactorChange' },
-            { emit: 'panningEnabledChange' },
-            { emit: 'pathModifiedChange' },
-            { emit: 'projectionChange' },
-            { emit: 'redrawOnResizeChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'sizeChange' },
-            { emit: 'themeChange' },
-            { emit: 'titleChange' },
-            { emit: 'tooltipChange' },
-            { emit: 'touchEnabledChange' },
-            { emit: 'wheelEnabledChange' },
-            { emit: 'zoomFactorChange' },
-            { emit: 'zoomingEnabledChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'centerChanged', emit: 'onCenterChanged' },
+                       { subscribe: 'click', emit: 'onClick' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'drawn', emit: 'onDrawn' },
+                       { subscribe: 'exported', emit: 'onExported' },
+                       { subscribe: 'exporting', emit: 'onExporting' },
+                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
+                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
+                       { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
+                       { subscribe: 'zoomFactorChanged', emit: 'onZoomFactorChanged' },
+                       { emit: 'annotationsChange' },
+                       { emit: 'backgroundChange' },
+                       { emit: 'boundsChange' },
+                       { emit: 'centerChange' },
+                       { emit: 'commonAnnotationSettingsChange' },
+                       { emit: 'controlBarChange' },
+                       { emit: 'customizeAnnotationChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'exportChange' },
+                       { emit: 'layersChange' },
+                       { emit: 'legendsChange' },
+                       { emit: 'loadingIndicatorChange' },
+                       { emit: 'maxZoomFactorChange' },
+                       { emit: 'panningEnabledChange' },
+                       { emit: 'pathModifiedChange' },
+                       { emit: 'projectionChange' },
+                       { emit: 'redrawOnResizeChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'sizeChange' },
+                       { emit: 'themeChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'tooltipChange' },
+                       { emit: 'touchEnabledChange' },
+                       { emit: 'wheelEnabledChange' },
+                       { emit: 'zoomFactorChange' },
+                       { emit: 'zoomingEnabledChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

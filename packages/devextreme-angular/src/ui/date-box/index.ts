@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -39,7 +38,9 @@ import {
 } from '@angular/forms';
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -47,6 +48,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
@@ -93,6 +98,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxDateBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxDateBox = null;
+
 
     /**
      * [descr:dxDropDownEditorOptions.acceptCustomValue]
@@ -1422,87 +1428,92 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'change', emit: 'onChange' },
-            { subscribe: 'closed', emit: 'onClosed' },
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'copy', emit: 'onCopy' },
-            { subscribe: 'cut', emit: 'onCut' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'enterKey', emit: 'onEnterKey' },
-            { subscribe: 'focusIn', emit: 'onFocusIn' },
-            { subscribe: 'focusOut', emit: 'onFocusOut' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'input', emit: 'onInput' },
-            { subscribe: 'keyDown', emit: 'onKeyDown' },
-            { subscribe: 'keyUp', emit: 'onKeyUp' },
-            { subscribe: 'opened', emit: 'onOpened' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'paste', emit: 'onPaste' },
-            { subscribe: 'valueChanged', emit: 'onValueChanged' },
-            { emit: 'acceptCustomValueChange' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'adaptivityEnabledChange' },
-            { emit: 'applyButtonTextChange' },
-            { emit: 'applyValueModeChange' },
-            { emit: 'buttonsChange' },
-            { emit: 'calendarOptionsChange' },
-            { emit: 'cancelButtonTextChange' },
-            { emit: 'dateOutOfRangeMessageChange' },
-            { emit: 'dateSerializationFormatChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'disabledDatesChange' },
-            { emit: 'displayFormatChange' },
-            { emit: 'dropDownButtonTemplateChange' },
-            { emit: 'dropDownOptionsChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'inputAttrChange' },
-            { emit: 'intervalChange' },
-            { emit: 'invalidDateMessageChange' },
-            { emit: 'isDirtyChange' },
-            { emit: 'isValidChange' },
-            { emit: 'labelChange' },
-            { emit: 'labelModeChange' },
-            { emit: 'maxChange' },
-            { emit: 'maxLengthChange' },
-            { emit: 'minChange' },
-            { emit: 'nameChange' },
-            { emit: 'openedChange' },
-            { emit: 'openOnFieldClickChange' },
-            { emit: 'pickerTypeChange' },
-            { emit: 'placeholderChange' },
-            { emit: 'readOnlyChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'showAnalogClockChange' },
-            { emit: 'showClearButtonChange' },
-            { emit: 'showDropDownButtonChange' },
-            { emit: 'spellcheckChange' },
-            { emit: 'stylingModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'textChange' },
-            { emit: 'todayButtonTextChange' },
-            { emit: 'typeChange' },
-            { emit: 'useMaskBehaviorChange' },
-            { emit: 'validationErrorChange' },
-            { emit: 'validationErrorsChange' },
-            { emit: 'validationMessageModeChange' },
-            { emit: 'validationMessagePositionChange' },
-            { emit: 'validationStatusChange' },
-            { emit: 'valueChange' },
-            { emit: 'valueChangeEventChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'onBlur' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'change', emit: 'onChange' },
+                       { subscribe: 'closed', emit: 'onClosed' },
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'copy', emit: 'onCopy' },
+                       { subscribe: 'cut', emit: 'onCut' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'enterKey', emit: 'onEnterKey' },
+                       { subscribe: 'focusIn', emit: 'onFocusIn' },
+                       { subscribe: 'focusOut', emit: 'onFocusOut' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'input', emit: 'onInput' },
+                       { subscribe: 'keyDown', emit: 'onKeyDown' },
+                       { subscribe: 'keyUp', emit: 'onKeyUp' },
+                       { subscribe: 'opened', emit: 'onOpened' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'paste', emit: 'onPaste' },
+                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
+                       { emit: 'acceptCustomValueChange' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'adaptivityEnabledChange' },
+                       { emit: 'applyButtonTextChange' },
+                       { emit: 'applyValueModeChange' },
+                       { emit: 'buttonsChange' },
+                       { emit: 'calendarOptionsChange' },
+                       { emit: 'cancelButtonTextChange' },
+                       { emit: 'dateOutOfRangeMessageChange' },
+                       { emit: 'dateSerializationFormatChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'disabledDatesChange' },
+                       { emit: 'displayFormatChange' },
+                       { emit: 'dropDownButtonTemplateChange' },
+                       { emit: 'dropDownOptionsChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'inputAttrChange' },
+                       { emit: 'intervalChange' },
+                       { emit: 'invalidDateMessageChange' },
+                       { emit: 'isDirtyChange' },
+                       { emit: 'isValidChange' },
+                       { emit: 'labelChange' },
+                       { emit: 'labelModeChange' },
+                       { emit: 'maxChange' },
+                       { emit: 'maxLengthChange' },
+                       { emit: 'minChange' },
+                       { emit: 'nameChange' },
+                       { emit: 'openedChange' },
+                       { emit: 'openOnFieldClickChange' },
+                       { emit: 'pickerTypeChange' },
+                       { emit: 'placeholderChange' },
+                       { emit: 'readOnlyChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'showAnalogClockChange' },
+                       { emit: 'showClearButtonChange' },
+                       { emit: 'showDropDownButtonChange' },
+                       { emit: 'spellcheckChange' },
+                       { emit: 'stylingModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'textChange' },
+                       { emit: 'todayButtonTextChange' },
+                       { emit: 'typeChange' },
+                       { emit: 'useMaskBehaviorChange' },
+                       { emit: 'validationErrorChange' },
+                       { emit: 'validationErrorsChange' },
+                       { emit: 'validationMessageModeChange' },
+                       { emit: 'validationMessagePositionChange' },
+                       { emit: 'validationStatusChange' },
+                       { emit: 'valueChange' },
+                       { emit: 'valueChangeEventChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

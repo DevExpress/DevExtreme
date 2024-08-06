@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -25,13 +24,19 @@ import DxDeferRendering from 'devextreme/ui/defer_rendering';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoFromModule } from 'devextreme-angular/ui/nested';
@@ -61,6 +66,7 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 })
 export class DxDeferRenderingComponent extends DxComponent implements OnDestroy {
     instance: DxDeferRendering = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -443,31 +449,36 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'rendered', emit: 'onRendered' },
-            { subscribe: 'shown', emit: 'onShown' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'animationChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'renderWhenChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'showLoadIndicatorChange' },
-            { emit: 'staggerItemSelectorChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'rendered', emit: 'onRendered' },
+                       { subscribe: 'shown', emit: 'onShown' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'animationChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'renderWhenChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'showLoadIndicatorChange' },
+                       { emit: 'staggerItemSelectorChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

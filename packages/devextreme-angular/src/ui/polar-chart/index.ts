@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -34,7 +33,9 @@ import DxPolarChart from 'devextreme/viz/polar_chart';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -42,6 +43,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -115,6 +120,7 @@ import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxPolarChart = null;
+
 
     /**
      * [descr:dxPolarChartOptions.adaptiveLayout]
@@ -1074,70 +1080,75 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'argumentAxisClick', emit: 'onArgumentAxisClick' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'done', emit: 'onDone' },
-            { subscribe: 'drawn', emit: 'onDrawn' },
-            { subscribe: 'exported', emit: 'onExported' },
-            { subscribe: 'exporting', emit: 'onExporting' },
-            { subscribe: 'fileSaving', emit: 'onFileSaving' },
-            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'legendClick', emit: 'onLegendClick' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'pointClick', emit: 'onPointClick' },
-            { subscribe: 'pointHoverChanged', emit: 'onPointHoverChanged' },
-            { subscribe: 'pointSelectionChanged', emit: 'onPointSelectionChanged' },
-            { subscribe: 'seriesClick', emit: 'onSeriesClick' },
-            { subscribe: 'seriesHoverChanged', emit: 'onSeriesHoverChanged' },
-            { subscribe: 'seriesSelectionChanged', emit: 'onSeriesSelectionChanged' },
-            { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
-            { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
-            { subscribe: 'zoomEnd', emit: 'onZoomEnd' },
-            { subscribe: 'zoomStart', emit: 'onZoomStart' },
-            { emit: 'adaptiveLayoutChange' },
-            { emit: 'animationChange' },
-            { emit: 'annotationsChange' },
-            { emit: 'argumentAxisChange' },
-            { emit: 'barGroupPaddingChange' },
-            { emit: 'barGroupWidthChange' },
-            { emit: 'commonAnnotationSettingsChange' },
-            { emit: 'commonAxisSettingsChange' },
-            { emit: 'commonSeriesSettingsChange' },
-            { emit: 'containerBackgroundColorChange' },
-            { emit: 'customizeAnnotationChange' },
-            { emit: 'customizeLabelChange' },
-            { emit: 'customizePointChange' },
-            { emit: 'dataPrepareSettingsChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'exportChange' },
-            { emit: 'legendChange' },
-            { emit: 'loadingIndicatorChange' },
-            { emit: 'marginChange' },
-            { emit: 'negativesAsZeroesChange' },
-            { emit: 'paletteChange' },
-            { emit: 'paletteExtensionModeChange' },
-            { emit: 'pathModifiedChange' },
-            { emit: 'pointSelectionModeChange' },
-            { emit: 'redrawOnResizeChange' },
-            { emit: 'resolveLabelOverlappingChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'seriesChange' },
-            { emit: 'seriesSelectionModeChange' },
-            { emit: 'seriesTemplateChange' },
-            { emit: 'sizeChange' },
-            { emit: 'themeChange' },
-            { emit: 'titleChange' },
-            { emit: 'tooltipChange' },
-            { emit: 'useSpiderWebChange' },
-            { emit: 'valueAxisChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'argumentAxisClick', emit: 'onArgumentAxisClick' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'done', emit: 'onDone' },
+                       { subscribe: 'drawn', emit: 'onDrawn' },
+                       { subscribe: 'exported', emit: 'onExported' },
+                       { subscribe: 'exporting', emit: 'onExporting' },
+                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
+                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'legendClick', emit: 'onLegendClick' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'pointClick', emit: 'onPointClick' },
+                       { subscribe: 'pointHoverChanged', emit: 'onPointHoverChanged' },
+                       { subscribe: 'pointSelectionChanged', emit: 'onPointSelectionChanged' },
+                       { subscribe: 'seriesClick', emit: 'onSeriesClick' },
+                       { subscribe: 'seriesHoverChanged', emit: 'onSeriesHoverChanged' },
+                       { subscribe: 'seriesSelectionChanged', emit: 'onSeriesSelectionChanged' },
+                       { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
+                       { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
+                       { subscribe: 'zoomEnd', emit: 'onZoomEnd' },
+                       { subscribe: 'zoomStart', emit: 'onZoomStart' },
+                       { emit: 'adaptiveLayoutChange' },
+                       { emit: 'animationChange' },
+                       { emit: 'annotationsChange' },
+                       { emit: 'argumentAxisChange' },
+                       { emit: 'barGroupPaddingChange' },
+                       { emit: 'barGroupWidthChange' },
+                       { emit: 'commonAnnotationSettingsChange' },
+                       { emit: 'commonAxisSettingsChange' },
+                       { emit: 'commonSeriesSettingsChange' },
+                       { emit: 'containerBackgroundColorChange' },
+                       { emit: 'customizeAnnotationChange' },
+                       { emit: 'customizeLabelChange' },
+                       { emit: 'customizePointChange' },
+                       { emit: 'dataPrepareSettingsChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'exportChange' },
+                       { emit: 'legendChange' },
+                       { emit: 'loadingIndicatorChange' },
+                       { emit: 'marginChange' },
+                       { emit: 'negativesAsZeroesChange' },
+                       { emit: 'paletteChange' },
+                       { emit: 'paletteExtensionModeChange' },
+                       { emit: 'pathModifiedChange' },
+                       { emit: 'pointSelectionModeChange' },
+                       { emit: 'redrawOnResizeChange' },
+                       { emit: 'resolveLabelOverlappingChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'seriesChange' },
+                       { emit: 'seriesSelectionModeChange' },
+                       { emit: 'seriesTemplateChange' },
+                       { emit: 'sizeChange' },
+                       { emit: 'themeChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'tooltipChange' },
+                       { emit: 'useSpiderWebChange' },
+                       { emit: 'valueAxisChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

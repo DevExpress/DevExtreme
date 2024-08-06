@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -35,7 +34,9 @@ import DxChart from 'devextreme/viz/chart';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -43,6 +44,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -153,6 +158,7 @@ import { DxiValueAxisComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxChart = null;
+
 
     /**
      * [descr:BaseChartOptions.adaptiveLayout]
@@ -1388,83 +1394,88 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'argumentAxisClick', emit: 'onArgumentAxisClick' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'done', emit: 'onDone' },
-            { subscribe: 'drawn', emit: 'onDrawn' },
-            { subscribe: 'exported', emit: 'onExported' },
-            { subscribe: 'exporting', emit: 'onExporting' },
-            { subscribe: 'fileSaving', emit: 'onFileSaving' },
-            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'legendClick', emit: 'onLegendClick' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'pointClick', emit: 'onPointClick' },
-            { subscribe: 'pointHoverChanged', emit: 'onPointHoverChanged' },
-            { subscribe: 'pointSelectionChanged', emit: 'onPointSelectionChanged' },
-            { subscribe: 'seriesClick', emit: 'onSeriesClick' },
-            { subscribe: 'seriesHoverChanged', emit: 'onSeriesHoverChanged' },
-            { subscribe: 'seriesSelectionChanged', emit: 'onSeriesSelectionChanged' },
-            { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
-            { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
-            { subscribe: 'zoomEnd', emit: 'onZoomEnd' },
-            { subscribe: 'zoomStart', emit: 'onZoomStart' },
-            { emit: 'adaptiveLayoutChange' },
-            { emit: 'adjustOnZoomChange' },
-            { emit: 'animationChange' },
-            { emit: 'annotationsChange' },
-            { emit: 'argumentAxisChange' },
-            { emit: 'autoHidePointMarkersChange' },
-            { emit: 'barGroupPaddingChange' },
-            { emit: 'barGroupWidthChange' },
-            { emit: 'commonAnnotationSettingsChange' },
-            { emit: 'commonAxisSettingsChange' },
-            { emit: 'commonPaneSettingsChange' },
-            { emit: 'commonSeriesSettingsChange' },
-            { emit: 'containerBackgroundColorChange' },
-            { emit: 'crosshairChange' },
-            { emit: 'customizeAnnotationChange' },
-            { emit: 'customizeLabelChange' },
-            { emit: 'customizePointChange' },
-            { emit: 'dataPrepareSettingsChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'defaultPaneChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'exportChange' },
-            { emit: 'legendChange' },
-            { emit: 'loadingIndicatorChange' },
-            { emit: 'marginChange' },
-            { emit: 'maxBubbleSizeChange' },
-            { emit: 'minBubbleSizeChange' },
-            { emit: 'negativesAsZeroesChange' },
-            { emit: 'paletteChange' },
-            { emit: 'paletteExtensionModeChange' },
-            { emit: 'panesChange' },
-            { emit: 'pathModifiedChange' },
-            { emit: 'pointSelectionModeChange' },
-            { emit: 'redrawOnResizeChange' },
-            { emit: 'resizePanesOnZoomChange' },
-            { emit: 'resolveLabelOverlappingChange' },
-            { emit: 'rotatedChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'scrollBarChange' },
-            { emit: 'seriesChange' },
-            { emit: 'seriesSelectionModeChange' },
-            { emit: 'seriesTemplateChange' },
-            { emit: 'sizeChange' },
-            { emit: 'stickyHoveringChange' },
-            { emit: 'synchronizeMultiAxesChange' },
-            { emit: 'themeChange' },
-            { emit: 'titleChange' },
-            { emit: 'tooltipChange' },
-            { emit: 'valueAxisChange' },
-            { emit: 'zoomAndPanChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'argumentAxisClick', emit: 'onArgumentAxisClick' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'done', emit: 'onDone' },
+                       { subscribe: 'drawn', emit: 'onDrawn' },
+                       { subscribe: 'exported', emit: 'onExported' },
+                       { subscribe: 'exporting', emit: 'onExporting' },
+                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
+                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'legendClick', emit: 'onLegendClick' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'pointClick', emit: 'onPointClick' },
+                       { subscribe: 'pointHoverChanged', emit: 'onPointHoverChanged' },
+                       { subscribe: 'pointSelectionChanged', emit: 'onPointSelectionChanged' },
+                       { subscribe: 'seriesClick', emit: 'onSeriesClick' },
+                       { subscribe: 'seriesHoverChanged', emit: 'onSeriesHoverChanged' },
+                       { subscribe: 'seriesSelectionChanged', emit: 'onSeriesSelectionChanged' },
+                       { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
+                       { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
+                       { subscribe: 'zoomEnd', emit: 'onZoomEnd' },
+                       { subscribe: 'zoomStart', emit: 'onZoomStart' },
+                       { emit: 'adaptiveLayoutChange' },
+                       { emit: 'adjustOnZoomChange' },
+                       { emit: 'animationChange' },
+                       { emit: 'annotationsChange' },
+                       { emit: 'argumentAxisChange' },
+                       { emit: 'autoHidePointMarkersChange' },
+                       { emit: 'barGroupPaddingChange' },
+                       { emit: 'barGroupWidthChange' },
+                       { emit: 'commonAnnotationSettingsChange' },
+                       { emit: 'commonAxisSettingsChange' },
+                       { emit: 'commonPaneSettingsChange' },
+                       { emit: 'commonSeriesSettingsChange' },
+                       { emit: 'containerBackgroundColorChange' },
+                       { emit: 'crosshairChange' },
+                       { emit: 'customizeAnnotationChange' },
+                       { emit: 'customizeLabelChange' },
+                       { emit: 'customizePointChange' },
+                       { emit: 'dataPrepareSettingsChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'defaultPaneChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'exportChange' },
+                       { emit: 'legendChange' },
+                       { emit: 'loadingIndicatorChange' },
+                       { emit: 'marginChange' },
+                       { emit: 'maxBubbleSizeChange' },
+                       { emit: 'minBubbleSizeChange' },
+                       { emit: 'negativesAsZeroesChange' },
+                       { emit: 'paletteChange' },
+                       { emit: 'paletteExtensionModeChange' },
+                       { emit: 'panesChange' },
+                       { emit: 'pathModifiedChange' },
+                       { emit: 'pointSelectionModeChange' },
+                       { emit: 'redrawOnResizeChange' },
+                       { emit: 'resizePanesOnZoomChange' },
+                       { emit: 'resolveLabelOverlappingChange' },
+                       { emit: 'rotatedChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'scrollBarChange' },
+                       { emit: 'seriesChange' },
+                       { emit: 'seriesSelectionModeChange' },
+                       { emit: 'seriesTemplateChange' },
+                       { emit: 'sizeChange' },
+                       { emit: 'stickyHoveringChange' },
+                       { emit: 'synchronizeMultiAxesChange' },
+                       { emit: 'themeChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'tooltipChange' },
+                       { emit: 'valueAxisChange' },
+                       { emit: 'zoomAndPanChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

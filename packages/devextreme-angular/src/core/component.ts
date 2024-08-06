@@ -209,6 +209,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
   }
 
+  protected _getAdditionalEmitters() {
+    return [];
+  }
+
   constructor(
     protected element: ElementRef,
     private readonly ngZone: NgZone,

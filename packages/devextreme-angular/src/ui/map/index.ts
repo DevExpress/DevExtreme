@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -28,7 +27,9 @@ import DxMap from 'devextreme/ui/map';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -36,6 +37,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
 import { DxiCenterModule } from 'devextreme-angular/ui/nested';
@@ -66,6 +71,7 @@ import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxMap = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -617,42 +623,47 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'click', emit: 'onClick' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'markerAdded', emit: 'onMarkerAdded' },
-            { subscribe: 'markerRemoved', emit: 'onMarkerRemoved' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'ready', emit: 'onReady' },
-            { subscribe: 'routeAdded', emit: 'onRouteAdded' },
-            { subscribe: 'routeRemoved', emit: 'onRouteRemoved' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'apiKeyChange' },
-            { emit: 'autoAdjustChange' },
-            { emit: 'centerChange' },
-            { emit: 'controlsChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'markerIconSrcChange' },
-            { emit: 'markersChange' },
-            { emit: 'providerChange' },
-            { emit: 'routesChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'typeChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'zoomChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'click', emit: 'onClick' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'markerAdded', emit: 'onMarkerAdded' },
+                       { subscribe: 'markerRemoved', emit: 'onMarkerRemoved' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'ready', emit: 'onReady' },
+                       { subscribe: 'routeAdded', emit: 'onRouteAdded' },
+                       { subscribe: 'routeRemoved', emit: 'onRouteRemoved' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'apiKeyChange' },
+                       { emit: 'autoAdjustChange' },
+                       { emit: 'centerChange' },
+                       { emit: 'controlsChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'markerIconSrcChange' },
+                       { emit: 'markersChange' },
+                       { emit: 'providerChange' },
+                       { emit: 'routesChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'typeChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'zoomChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

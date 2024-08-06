@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -34,7 +33,9 @@ import DxPopover from 'devextreme/ui/popover';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -42,6 +43,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
@@ -78,6 +83,7 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxPopover = null;
+
 
     /**
      * [descr:dxPopoverOptions.animation]
@@ -795,51 +801,56 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'hidden', emit: 'onHidden' },
-            { subscribe: 'hiding', emit: 'onHiding' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'showing', emit: 'onShowing' },
-            { subscribe: 'shown', emit: 'onShown' },
-            { subscribe: 'titleRendered', emit: 'onTitleRendered' },
-            { emit: 'animationChange' },
-            { emit: 'closeOnOutsideClickChange' },
-            { emit: 'containerChange' },
-            { emit: 'contentTemplateChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'enableBodyScrollChange' },
-            { emit: 'heightChange' },
-            { emit: 'hideEventChange' },
-            { emit: 'hideOnOutsideClickChange' },
-            { emit: 'hideOnParentScrollChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'maxHeightChange' },
-            { emit: 'maxWidthChange' },
-            { emit: 'minHeightChange' },
-            { emit: 'minWidthChange' },
-            { emit: 'positionChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'shadingChange' },
-            { emit: 'shadingColorChange' },
-            { emit: 'showCloseButtonChange' },
-            { emit: 'showEventChange' },
-            { emit: 'showTitleChange' },
-            { emit: 'targetChange' },
-            { emit: 'titleChange' },
-            { emit: 'titleTemplateChange' },
-            { emit: 'toolbarItemsChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'wrapperAttrChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'hidden', emit: 'onHidden' },
+                       { subscribe: 'hiding', emit: 'onHiding' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'showing', emit: 'onShowing' },
+                       { subscribe: 'shown', emit: 'onShown' },
+                       { subscribe: 'titleRendered', emit: 'onTitleRendered' },
+                       { emit: 'animationChange' },
+                       { emit: 'closeOnOutsideClickChange' },
+                       { emit: 'containerChange' },
+                       { emit: 'contentTemplateChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'enableBodyScrollChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hideEventChange' },
+                       { emit: 'hideOnOutsideClickChange' },
+                       { emit: 'hideOnParentScrollChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'maxHeightChange' },
+                       { emit: 'maxWidthChange' },
+                       { emit: 'minHeightChange' },
+                       { emit: 'minWidthChange' },
+                       { emit: 'positionChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'shadingChange' },
+                       { emit: 'shadingColorChange' },
+                       { emit: 'showCloseButtonChange' },
+                       { emit: 'showEventChange' },
+                       { emit: 'showTitleChange' },
+                       { emit: 'targetChange' },
+                       { emit: 'titleChange' },
+                       { emit: 'titleTemplateChange' },
+                       { emit: 'toolbarItemsChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'wrapperAttrChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

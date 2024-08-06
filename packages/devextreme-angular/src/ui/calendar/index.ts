@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -33,7 +32,9 @@ import {
 } from '@angular/forms';
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,6 +42,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 
 
@@ -69,6 +74,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxCalendarComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxCalendar = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -846,52 +852,57 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'valueChanged', emit: 'onValueChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'cellTemplateChange' },
-            { emit: 'dateSerializationFormatChange' },
-            { emit: 'disabledChange' },
-            { emit: 'disabledDatesChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'firstDayOfWeekChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'isDirtyChange' },
-            { emit: 'isValidChange' },
-            { emit: 'maxChange' },
-            { emit: 'maxZoomLevelChange' },
-            { emit: 'minChange' },
-            { emit: 'minZoomLevelChange' },
-            { emit: 'nameChange' },
-            { emit: 'readOnlyChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'selectionModeChange' },
-            { emit: 'selectWeekOnClickChange' },
-            { emit: 'showTodayButtonChange' },
-            { emit: 'showWeekNumbersChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'validationErrorChange' },
-            { emit: 'validationErrorsChange' },
-            { emit: 'validationMessageModeChange' },
-            { emit: 'validationMessagePositionChange' },
-            { emit: 'validationStatusChange' },
-            { emit: 'valueChange' },
-            { emit: 'visibleChange' },
-            { emit: 'weekNumberRuleChange' },
-            { emit: 'widthChange' },
-            { emit: 'zoomLevelChange' },
-            { emit: 'onBlur' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'cellTemplateChange' },
+                       { emit: 'dateSerializationFormatChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'disabledDatesChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'firstDayOfWeekChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'isDirtyChange' },
+                       { emit: 'isValidChange' },
+                       { emit: 'maxChange' },
+                       { emit: 'maxZoomLevelChange' },
+                       { emit: 'minChange' },
+                       { emit: 'minZoomLevelChange' },
+                       { emit: 'nameChange' },
+                       { emit: 'readOnlyChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'selectionModeChange' },
+                       { emit: 'selectWeekOnClickChange' },
+                       { emit: 'showTodayButtonChange' },
+                       { emit: 'showWeekNumbersChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'validationErrorChange' },
+                       { emit: 'validationErrorsChange' },
+                       { emit: 'validationMessageModeChange' },
+                       { emit: 'validationMessagePositionChange' },
+                       { emit: 'validationStatusChange' },
+                       { emit: 'valueChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'weekNumberRuleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'zoomLevelChange' },
+                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

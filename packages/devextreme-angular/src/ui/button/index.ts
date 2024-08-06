@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -24,13 +23,19 @@ import DxButton from 'devextreme/ui/button';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 
 
@@ -51,6 +56,7 @@ import {
 })
 export class DxButtonComponent extends DxComponent implements OnDestroy {
     instance: DxButton = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -485,33 +491,38 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'click', emit: 'onClick' },
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'iconChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'stylingModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'templateChange' },
-            { emit: 'textChange' },
-            { emit: 'typeChange' },
-            { emit: 'useSubmitBehaviorChange' },
-            { emit: 'validationGroupChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'click', emit: 'onClick' },
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'iconChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'stylingModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'templateChange' },
+                       { emit: 'textChange' },
+                       { emit: 'typeChange' },
+                       { emit: 'useSubmitBehaviorChange' },
+                       { emit: 'validationGroupChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

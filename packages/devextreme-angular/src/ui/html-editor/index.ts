@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -35,7 +34,9 @@ import {
 } from '@angular/forms';
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -43,6 +44,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoImageUploadModule } from 'devextreme-angular/ui/nested';
 import { DxoFileUploaderOptionsModule } from 'devextreme-angular/ui/nested';
@@ -82,6 +87,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxHtmlEditor = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -851,53 +857,58 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'focusIn', emit: 'onFocusIn' },
-            { subscribe: 'focusOut', emit: 'onFocusOut' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'valueChanged', emit: 'onValueChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'allowSoftLineBreakChange' },
-            { emit: 'customizeModulesChange' },
-            { emit: 'disabledChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'imageUploadChange' },
-            { emit: 'isDirtyChange' },
-            { emit: 'isValidChange' },
-            { emit: 'mediaResizingChange' },
-            { emit: 'mentionsChange' },
-            { emit: 'nameChange' },
-            { emit: 'placeholderChange' },
-            { emit: 'readOnlyChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'stylingModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'tableContextMenuChange' },
-            { emit: 'tableResizingChange' },
-            { emit: 'toolbarChange' },
-            { emit: 'validationErrorChange' },
-            { emit: 'validationErrorsChange' },
-            { emit: 'validationMessageModeChange' },
-            { emit: 'validationMessagePositionChange' },
-            { emit: 'validationStatusChange' },
-            { emit: 'valueChange' },
-            { emit: 'valueTypeChange' },
-            { emit: 'variablesChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'onBlur' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'focusIn', emit: 'onFocusIn' },
+                       { subscribe: 'focusOut', emit: 'onFocusOut' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'allowSoftLineBreakChange' },
+                       { emit: 'customizeModulesChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'imageUploadChange' },
+                       { emit: 'isDirtyChange' },
+                       { emit: 'isValidChange' },
+                       { emit: 'mediaResizingChange' },
+                       { emit: 'mentionsChange' },
+                       { emit: 'nameChange' },
+                       { emit: 'placeholderChange' },
+                       { emit: 'readOnlyChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'stylingModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'tableContextMenuChange' },
+                       { emit: 'tableResizingChange' },
+                       { emit: 'toolbarChange' },
+                       { emit: 'validationErrorChange' },
+                       { emit: 'validationErrorsChange' },
+                       { emit: 'validationMessageModeChange' },
+                       { emit: 'validationMessagePositionChange' },
+                       { emit: 'validationStatusChange' },
+                       { emit: 'valueChange' },
+                       { emit: 'valueTypeChange' },
+                       { emit: 'variablesChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

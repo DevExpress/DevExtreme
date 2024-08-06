@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -27,13 +26,19 @@ import DxTooltip from 'devextreme/ui/tooltip';
 
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
@@ -67,6 +72,7 @@ import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
 })
 export class DxTooltipComponent extends DxComponent implements OnDestroy {
     instance: DxTooltip = null;
+
 
     /**
      * [descr:dxPopoverOptions.animation]
@@ -647,42 +653,47 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'hidden', emit: 'onHidden' },
-            { subscribe: 'hiding', emit: 'onHiding' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'showing', emit: 'onShowing' },
-            { subscribe: 'shown', emit: 'onShown' },
-            { emit: 'animationChange' },
-            { emit: 'closeOnOutsideClickChange' },
-            { emit: 'containerChange' },
-            { emit: 'contentTemplateChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'heightChange' },
-            { emit: 'hideEventChange' },
-            { emit: 'hideOnOutsideClickChange' },
-            { emit: 'hideOnParentScrollChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'maxHeightChange' },
-            { emit: 'maxWidthChange' },
-            { emit: 'minHeightChange' },
-            { emit: 'minWidthChange' },
-            { emit: 'positionChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'shadingChange' },
-            { emit: 'shadingColorChange' },
-            { emit: 'showEventChange' },
-            { emit: 'targetChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'wrapperAttrChange' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'hidden', emit: 'onHidden' },
+                       { subscribe: 'hiding', emit: 'onHiding' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'showing', emit: 'onShowing' },
+                       { subscribe: 'shown', emit: 'onShown' },
+                       { emit: 'animationChange' },
+                       { emit: 'closeOnOutsideClickChange' },
+                       { emit: 'containerChange' },
+                       { emit: 'contentTemplateChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hideEventChange' },
+                       { emit: 'hideOnOutsideClickChange' },
+                       { emit: 'hideOnParentScrollChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'maxHeightChange' },
+                       { emit: 'maxWidthChange' },
+                       { emit: 'minHeightChange' },
+                       { emit: 'minWidthChange' },
+                       { emit: 'positionChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'shadingChange' },
+                       { emit: 'shadingColorChange' },
+                       { emit: 'showEventChange' },
+                       { emit: 'targetChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'wrapperAttrChange' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {

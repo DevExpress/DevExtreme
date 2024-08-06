@@ -9,7 +9,6 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
-
     Input,
     Output,
     OnDestroy,
@@ -39,7 +38,9 @@ import {
 } from '@angular/forms';
 
 import {
+
     DxComponent,
+
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -47,6 +48,10 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
+
+
+
+
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -92,6 +97,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxLookupComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxLookup = null;
+
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -1625,94 +1631,99 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-        this._createEventEmitters([
-            { subscribe: 'closed', emit: 'onClosed' },
-            { subscribe: 'contentReady', emit: 'onContentReady' },
-            { subscribe: 'disposing', emit: 'onDisposing' },
-            { subscribe: 'initialized', emit: 'onInitialized' },
-            { subscribe: 'itemClick', emit: 'onItemClick' },
-            { subscribe: 'opened', emit: 'onOpened' },
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'pageLoading', emit: 'onPageLoading' },
-            { subscribe: 'pullRefresh', emit: 'onPullRefresh' },
-            { subscribe: 'scroll', emit: 'onScroll' },
-            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'valueChanged', emit: 'onValueChanged' },
-            { emit: 'accessKeyChange' },
-            { emit: 'activeStateEnabledChange' },
-            { emit: 'applyButtonTextChange' },
-            { emit: 'applyValueModeChange' },
-            { emit: 'cancelButtonTextChange' },
-            { emit: 'cleanSearchOnOpeningChange' },
-            { emit: 'clearButtonTextChange' },
-            { emit: 'dataSourceChange' },
-            { emit: 'deferRenderingChange' },
-            { emit: 'disabledChange' },
-            { emit: 'displayExprChange' },
-            { emit: 'displayValueChange' },
-            { emit: 'dropDownCenteredChange' },
-            { emit: 'dropDownOptionsChange' },
-            { emit: 'elementAttrChange' },
-            { emit: 'fieldTemplateChange' },
-            { emit: 'focusStateEnabledChange' },
-            { emit: 'fullScreenChange' },
-            { emit: 'groupedChange' },
-            { emit: 'groupTemplateChange' },
-            { emit: 'heightChange' },
-            { emit: 'hintChange' },
-            { emit: 'hoverStateEnabledChange' },
-            { emit: 'inputAttrChange' },
-            { emit: 'isDirtyChange' },
-            { emit: 'isValidChange' },
-            { emit: 'itemsChange' },
-            { emit: 'itemTemplateChange' },
-            { emit: 'labelChange' },
-            { emit: 'labelModeChange' },
-            { emit: 'minSearchLengthChange' },
-            { emit: 'nameChange' },
-            { emit: 'nextButtonTextChange' },
-            { emit: 'noDataTextChange' },
-            { emit: 'openedChange' },
-            { emit: 'pageLoadingTextChange' },
-            { emit: 'pageLoadModeChange' },
-            { emit: 'placeholderChange' },
-            { emit: 'pulledDownTextChange' },
-            { emit: 'pullingDownTextChange' },
-            { emit: 'pullRefreshEnabledChange' },
-            { emit: 'refreshingTextChange' },
-            { emit: 'rtlEnabledChange' },
-            { emit: 'searchEnabledChange' },
-            { emit: 'searchExprChange' },
-            { emit: 'searchModeChange' },
-            { emit: 'searchPlaceholderChange' },
-            { emit: 'searchStartEventChange' },
-            { emit: 'searchTimeoutChange' },
-            { emit: 'selectedItemChange' },
-            { emit: 'showCancelButtonChange' },
-            { emit: 'showClearButtonChange' },
-            { emit: 'showDataBeforeSearchChange' },
-            { emit: 'stylingModeChange' },
-            { emit: 'tabIndexChange' },
-            { emit: 'textChange' },
-            { emit: 'useItemTextAsTitleChange' },
-            { emit: 'useNativeScrollingChange' },
-            { emit: 'usePopoverChange' },
-            { emit: 'validationErrorChange' },
-            { emit: 'validationErrorsChange' },
-            { emit: 'validationMessageModeChange' },
-            { emit: 'validationMessagePositionChange' },
-            { emit: 'validationStatusChange' },
-            { emit: 'valueChange' },
-            { emit: 'valueChangeEventChange' },
-            { emit: 'valueExprChange' },
-            { emit: 'visibleChange' },
-            { emit: 'widthChange' },
-            { emit: 'wrapItemTextChange' },
-            { emit: 'onBlur' }
-        ]);
+
+        this._createEventEmitters(this._getEmitters());
 
         this._idh.setHost(this);
         optionHost.setHost(this);
+    }
+
+    protected _getEmitters() {
+        return [
+                       { subscribe: 'closed', emit: 'onClosed' },
+                       { subscribe: 'contentReady', emit: 'onContentReady' },
+                       { subscribe: 'disposing', emit: 'onDisposing' },
+                       { subscribe: 'initialized', emit: 'onInitialized' },
+                       { subscribe: 'itemClick', emit: 'onItemClick' },
+                       { subscribe: 'opened', emit: 'onOpened' },
+                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+                       { subscribe: 'pageLoading', emit: 'onPageLoading' },
+                       { subscribe: 'pullRefresh', emit: 'onPullRefresh' },
+                       { subscribe: 'scroll', emit: 'onScroll' },
+                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
+                       { emit: 'accessKeyChange' },
+                       { emit: 'activeStateEnabledChange' },
+                       { emit: 'applyButtonTextChange' },
+                       { emit: 'applyValueModeChange' },
+                       { emit: 'cancelButtonTextChange' },
+                       { emit: 'cleanSearchOnOpeningChange' },
+                       { emit: 'clearButtonTextChange' },
+                       { emit: 'dataSourceChange' },
+                       { emit: 'deferRenderingChange' },
+                       { emit: 'disabledChange' },
+                       { emit: 'displayExprChange' },
+                       { emit: 'displayValueChange' },
+                       { emit: 'dropDownCenteredChange' },
+                       { emit: 'dropDownOptionsChange' },
+                       { emit: 'elementAttrChange' },
+                       { emit: 'fieldTemplateChange' },
+                       { emit: 'focusStateEnabledChange' },
+                       { emit: 'fullScreenChange' },
+                       { emit: 'groupedChange' },
+                       { emit: 'groupTemplateChange' },
+                       { emit: 'heightChange' },
+                       { emit: 'hintChange' },
+                       { emit: 'hoverStateEnabledChange' },
+                       { emit: 'inputAttrChange' },
+                       { emit: 'isDirtyChange' },
+                       { emit: 'isValidChange' },
+                       { emit: 'itemsChange' },
+                       { emit: 'itemTemplateChange' },
+                       { emit: 'labelChange' },
+                       { emit: 'labelModeChange' },
+                       { emit: 'minSearchLengthChange' },
+                       { emit: 'nameChange' },
+                       { emit: 'nextButtonTextChange' },
+                       { emit: 'noDataTextChange' },
+                       { emit: 'openedChange' },
+                       { emit: 'pageLoadingTextChange' },
+                       { emit: 'pageLoadModeChange' },
+                       { emit: 'placeholderChange' },
+                       { emit: 'pulledDownTextChange' },
+                       { emit: 'pullingDownTextChange' },
+                       { emit: 'pullRefreshEnabledChange' },
+                       { emit: 'refreshingTextChange' },
+                       { emit: 'rtlEnabledChange' },
+                       { emit: 'searchEnabledChange' },
+                       { emit: 'searchExprChange' },
+                       { emit: 'searchModeChange' },
+                       { emit: 'searchPlaceholderChange' },
+                       { emit: 'searchStartEventChange' },
+                       { emit: 'searchTimeoutChange' },
+                       { emit: 'selectedItemChange' },
+                       { emit: 'showCancelButtonChange' },
+                       { emit: 'showClearButtonChange' },
+                       { emit: 'showDataBeforeSearchChange' },
+                       { emit: 'stylingModeChange' },
+                       { emit: 'tabIndexChange' },
+                       { emit: 'textChange' },
+                       { emit: 'useItemTextAsTitleChange' },
+                       { emit: 'useNativeScrollingChange' },
+                       { emit: 'usePopoverChange' },
+                       { emit: 'validationErrorChange' },
+                       { emit: 'validationErrorsChange' },
+                       { emit: 'validationMessageModeChange' },
+                       { emit: 'validationMessagePositionChange' },
+                       { emit: 'validationStatusChange' },
+                       { emit: 'valueChange' },
+                       { emit: 'valueChangeEventChange' },
+                       { emit: 'valueExprChange' },
+                       { emit: 'visibleChange' },
+                       { emit: 'widthChange' },
+                       { emit: 'wrapItemTextChange' },
+                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
+                   ];
     }
 
     protected _createInstance(element, options) {
