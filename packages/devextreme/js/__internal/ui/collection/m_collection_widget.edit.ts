@@ -472,14 +472,19 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   _updateSelectedItems(args) {
+    this._selection.onSelectionChanging();
     if (this.isSelectionCancel instanceof Promise) {
       this.isSelectionCancel.then((cancel) => {
         if (!cancel) {
           this.updatingSelectedItems(args);
+        } else {
+          this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
         }
       });
     } else if (!this.isSelectionCancel) {
       this.updatingSelectedItems(args);
+    } else {
+      this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
     }
   },
 
@@ -683,36 +688,19 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   selectItem(itemElement) {
-    this._selection.onSelectionChanging();
     if (this.option('selectionMode') === 'none') return;
-
+    this.initialSelectedIndex = this.option('selectedIndex');
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
       return;
     }
 
-    let key = this.option('selectedIndex');
-
-    if (this.isSelectionCancel instanceof Promise) {
-      this.isSelectionCancel.then((cancel) => {
-        if (!cancel) {
-          key = this._getKeyByIndex(itemIndex);
-          if (this._selection.isItemSelected(key)) {
-            return;
-          }
-          if (this.option('selectionMode') === 'single') {
-            return this._selection.setSelection([key]);
-          }
-        }
-      });
-    } else if (!this.isSelectionCancel) {
-      key = this._getKeyByIndex(itemIndex);
-      if (this._selection.isItemSelected(key)) {
-        return;
-      }
-      if (this.option('selectionMode') === 'single') {
-        return this._selection.setSelection([key]);
-      }
+    const key = this._getKeyByIndex(itemIndex);
+    if (this._selection.isItemSelected(key)) {
+      return;
+    }
+    if (this.option('selectionMode') === 'single') {
+      return this._selection.setSelection([key]);
     }
 
     const selectedItemKeys = this.option('selectedItemKeys') || [];
