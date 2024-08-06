@@ -10546,6 +10546,11 @@ declare module DevExpress.ui {
       readonly isSelected?: boolean;
       readonly isExpanded?: boolean;
     };
+    export type DeferredCaseSensitivity =
+      | 'base'
+      | 'accent'
+      | 'case'
+      | 'variant';
     /**
      * [descr:_ui_data_grid_DisposingEvent]
      */
@@ -11632,6 +11637,10 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.selection.deferred]
        */
       deferred?: boolean;
+      /**
+       * [descr:dxDataGridOptions.selection.deferredCaseSensitivity]
+       */
+      deferredCaseSensitivity?: DeferredCaseSensitivity;
       /**
        * [descr:dxDataGridOptions.selection.selectAllMode]
        */

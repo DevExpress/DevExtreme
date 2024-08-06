@@ -1,6 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
-import type { Selection } from 'devextreme/ui/data_grid';
+import type { DeferredCaseSensitivity } from 'devextreme/ui/data_grid';
 import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
@@ -791,8 +791,7 @@ export default class DataGrid extends Widget {
   }
 
   apiChangeDeferredCaseSensitivity(
-      // @ts-expect-error delete after d.ts modification
-      caseSensitivity: Selection['deferredCaseSensitivity'],
+      caseSensitivity: DeferredCaseSensitivity,
   ): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(

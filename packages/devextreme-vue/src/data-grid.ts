@@ -1030,6 +1030,7 @@ const DxDataGridSelection = createConfigurationComponent({
     "update:hoveredElement": null,
     "update:allowSelectAll": null,
     "update:deferred": null,
+    "update:deferredCaseSensitivity": null,
     "update:mode": null,
     "update:selectAllMode": null,
     "update:showCheckBoxesMode": null,
@@ -1037,6 +1038,7 @@ const DxDataGridSelection = createConfigurationComponent({
   props: {
     allowSelectAll: Boolean,
     deferred: Boolean,
+    deferredCaseSensitivity: String,
     mode: String,
     selectAllMode: String,
     showCheckBoxesMode: String
@@ -2481,6 +2483,7 @@ const DxSelection = createConfigurationComponent({
     "update:hoveredElement": null,
     "update:allowSelectAll": null,
     "update:deferred": null,
+    "update:deferredCaseSensitivity": null,
     "update:mode": null,
     "update:recursive": null,
     "update:selectAllMode": null,
@@ -2490,6 +2493,7 @@ const DxSelection = createConfigurationComponent({
   props: {
     allowSelectAll: Boolean,
     deferred: Boolean,
+    deferredCaseSensitivity: String,
     mode: String,
     recursive: Boolean,
     selectAllMode: String,

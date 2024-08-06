@@ -143,6 +143,7 @@ export {
   Editing,
   EditingTexts,
   Scrolling,
+  DeferredCaseSensitivity,
   Selection,
   Column,
   ColumnButton,

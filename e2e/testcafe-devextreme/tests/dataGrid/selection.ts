@@ -184,7 +184,6 @@ const DATA_GRID_SELECTOR = '#container';
     selection: {
       mode: 'multiple',
       deferred: true,
-      // @ts-expect-error delete after d.ts changes
       deferredCaseSensitivity: caseSensitivity,
     },
   }));
@@ -209,7 +208,6 @@ test('Deferred selection should work correctly with deferred sensitivity: \'case
   selection: {
     mode: 'multiple',
     deferred: true,
-    // @ts-expect-error delete after d.ts changes
     deferredCaseSensitivity: 'case',
   },
 }));
@@ -245,7 +243,6 @@ test('DeferredCaseSensitivity option change should be correctly handled during r
   selection: {
     mode: 'multiple',
     deferred: true,
-    // @ts-expect-error delete after d.ts changes
     deferredCaseSensitivity: 'base',
   },
 }));
