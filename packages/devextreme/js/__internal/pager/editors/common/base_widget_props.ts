@@ -25,4 +25,5 @@ export const BaseWidgetDefaultProps: BaseWidgetProps = {
   hoverStateEnabled: false,
   tabIndex: 0,
   visible: true,
+  rtlEnabled: false,
 };
