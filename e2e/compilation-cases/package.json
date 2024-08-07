@@ -7,7 +7,7 @@
     "test": "tsc --noEmit"
   },
   "devDependencies": {
-    "@angular/common": "^11.2.14",
+    "@angular/common": "11.2.14",
     "@types/jquery": "3.5.29",
     "devextreme": "workspace:*",
     "jquery": "3.7.1",
