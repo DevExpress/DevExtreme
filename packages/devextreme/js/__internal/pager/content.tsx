@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
+import type { PagerDisplayMode } from '@js/common/grids';
 
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
 import { combineClasses } from '../core/r1/utils/render_utils';
-import type { DisplayMode } from './common/base_pager_props';
 import {
   LIGHT_MODE_CLASS, PAGER_CLASS, PAGER_PAGE_INDEXES_CLASS, PAGER_PAGES_CLASS,
 } from './common/consts';
@@ -111,7 +111,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     return this.props.pageSize !== 0;
   }
 
-  getNormalizedDisplayMode(): DisplayMode {
+  getNormalizedDisplayMode(): PagerDisplayMode {
     const {
       displayMode,
       lightModeEnabled,
@@ -119,7 +119,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     if (displayMode === 'adaptive' && lightModeEnabled !== undefined) {
       return lightModeEnabled ? 'compact' : 'full';
     }
-    return displayMode;
+    return displayMode ?? 'adaptive';
   }
 
   getPagesContainerVisible(): boolean {
@@ -156,7 +156,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
   getAria(): Record<string, string> {
     return {
       role: 'navigation',
-      label: this.props.label,
+      label: this.props.label ?? '',
     };
   }
 

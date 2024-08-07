@@ -2,6 +2,7 @@ import type { EventCallback } from '../../core/r1/event_callback';
 import { BasePagerDefaultProps, type BasePagerProps } from './base_pager_props';
 
 export interface PagerProps extends BasePagerProps {
+  [key: string]: unknown;
   pageSize: number;
   pageIndex: number;
   pageIndexChange: EventCallback<number>;

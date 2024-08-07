@@ -1,15 +1,15 @@
+import type { PagerDisplayMode } from '@js/common/grids';
+
 import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
 
-export type DisplayMode = 'adaptive' | 'compact' | 'full';
-
 export interface BasePagerProps {
-  gridCompatibility: boolean;
+  gridCompatibility?: boolean;
   className?: string;
   showInfo?: boolean;
   infoText?: string;
   lightModeEnabled?: boolean;
-  displayMode: DisplayMode;
+  displayMode?: PagerDisplayMode;
   maxPagesCount: number;
   pageCount: number;
   pagesCountText?: string;
@@ -19,9 +19,9 @@ export interface BasePagerProps {
   showPageSizes?: boolean;
   pageSizes: (number | 'all')[];
   rtlEnabled?: boolean;
-  showNavigationButtons: boolean;
+  showNavigationButtons?: boolean;
   totalCount?: number;
-  label: string;
+  label?: string;
   onKeyDown?: EventCallback<Event>;
 }
 

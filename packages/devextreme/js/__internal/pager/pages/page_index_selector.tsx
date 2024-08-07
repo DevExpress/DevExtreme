@@ -138,7 +138,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
       isLargeDisplayMode,
       showNavigationButtons,
     } = this.props;
-    return !isLargeDisplayMode || showNavigationButtons;
+    return (!isLargeDisplayMode || showNavigationButtons) ?? false;
   }
 
   getRenderNextButton(): boolean {
