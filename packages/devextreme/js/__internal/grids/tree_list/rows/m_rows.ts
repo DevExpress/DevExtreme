@@ -45,6 +45,7 @@ class TreeListRowsView extends RowsView {
         options.row.node.hasChildren,
       ], () => {
         $iconContainer.empty();
+        this.setAriaExpandedAttribute($container, options.row);
         this._renderIcons($iconContainer, options);
       });
 
@@ -121,12 +122,10 @@ class TreeListRowsView extends RowsView {
   protected _createRow(row) {
     const node = row && row.node;
     const $rowElement = super._createRow.apply(this, arguments as any);
-
     if (node) {
       this.setAria('level', row.level + 1, $rowElement);
-
       if (node.hasChildren) {
-        this.setAria('expanded', row.isExpanded, $rowElement);
+        this.setAriaExpandedAttribute($rowElement, row);
       }
     }
 

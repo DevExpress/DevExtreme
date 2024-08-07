@@ -182,6 +182,7 @@
         "dxDataGrid-ariaExpand": "نمایش",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
+        "dxDataGrid-ariaExpandableInstruction": "Use Enter key to toggle expand and collapse a focused node",
         "dxDataGrid-ariaDataGrid": "جدول",
         "dxDataGrid-ariaSearchInGrid": "جستجو",
         "dxDataGrid-ariaSelectAll": "انتخاب همه",
@@ -195,6 +196,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
+        "dxTreeList-ariaExpandableInstruction": "Use Ctrl + → key combination to expand and Ctrl + ← key combination to collapse a focused node",
         "dxTreeList-ariaSearchInGrid": "جستجو در لیست درختی",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "افزودن",

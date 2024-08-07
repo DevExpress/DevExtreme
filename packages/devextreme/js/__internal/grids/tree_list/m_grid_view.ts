@@ -7,6 +7,10 @@ class TreeListResizingController extends ResizingController {
     return 'dxTreeList-ariaTreeList';
   }
 
+  protected _getExpandableWidgetAriaLabel() {
+    return 'dxTreeList-ariaExpandableInstruction';
+  }
+
   protected _toggleBestFitMode(isBestFit) {
     super._toggleBestFitMode(isBestFit);
 
