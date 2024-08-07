@@ -8,11 +8,11 @@
     },
     "author": "Developer Express Inc.",
     "peerDependencies": {
-        "devextreme": "~24.2.0",
-        "devextreme-angular": "~24.2.0",
-        "devextreme-dist": "~24.2.0",
-        "devextreme-react": "~24.2.0",
-        "devextreme-vue": "~24.2.0"
+        "devextreme": "workspace:~24.2.0",
+        "devextreme-angular": "workspace:~24.2.0",
+        "devextreme-dist": "workspace:~24.2.0",
+        "devextreme-react": "workspace:~24.2.0",
+        "devextreme-vue": "workspace:~24.2.0"
     },
     "dependencies": {
         "@angular/cli": "16.2.12",
