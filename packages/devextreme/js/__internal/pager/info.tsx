@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { RefObject } from '@devextreme/runtime/inferno';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { createRef as infernoCreateRef } from 'inferno';
 
 import { format } from '../../core/utils/string';
 import messageLocalization from '../../localization/message';
@@ -24,6 +25,9 @@ export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
   public state: any = {};
 
   public refs: any = null;
+
+  // eslint-disable-next-line max-len
+  public rootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   getInfoText(): string {
     return this.props.infoText ?? messageLocalization.getFormatter('dxPager-infoText')();

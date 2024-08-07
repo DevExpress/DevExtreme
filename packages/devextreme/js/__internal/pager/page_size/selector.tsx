@@ -38,6 +38,8 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
 
   public refs: any = null;
 
+  public rootElementRef = infernoCreateRef() as RefObject<HTMLDivElement>;
+
   public htmlRef = infernoCreateRef() as RefObject<HTMLElement>;
 
   public __getterCache: any = {

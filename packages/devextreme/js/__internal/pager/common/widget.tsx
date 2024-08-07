@@ -7,6 +7,7 @@ import {
   createReRenderEffect, InfernoEffect, InfernoWrapperComponent,
 } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
+import { createRef as infernoCreateRef } from 'inferno';
 
 import domAdapter from '../../../core/dom_adapter';
 import errors from '../../../core/errors';
@@ -92,9 +93,11 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
 
   public refs: any = null;
 
-  public rootElementRef?: RefObject<HTMLDivElement>;
+  // eslint-disable-next-line max-len
+  public rootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
-  public widgetElementRef?: RefObject<HTMLDivElement>;
+  // eslint-disable-next-line max-len
+  public widgetElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   public config?: ConfigContextValue;
 

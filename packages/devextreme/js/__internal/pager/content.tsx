@@ -3,6 +3,7 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
 import type { PagerDisplayMode } from '@js/common/grids';
+import { createRef as infernoCreateRef } from 'inferno';
 
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import type { EventCallback } from '../core/r1/event_callback';
@@ -40,9 +41,15 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
 
   public refs: any = null;
 
-  public widgetElementRef?: RefObject<HTMLDivElement>;
+  // eslint-disable-next-line max-len
+  public widgetElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
-  public widgetRootElementRef?: RefObject<HTMLDivElement>;
+  // eslint-disable-next-line max-len
+  public widgetRootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
+
+  public pagesRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
+
+  public infoTextRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   public __getterCache: any = {
     keyboardAction: undefined,
