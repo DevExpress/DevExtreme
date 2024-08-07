@@ -209,7 +209,8 @@ export class ResizingController extends modules.ViewController {
     // @ts-expect-error Badly typed dxElementWrapper
     const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
 
-    this.component.setAria('label', expandableWidgetAriaLabel, $ariaLabelElement);
+    this.component.setAria('label', widgetStatusText, $ariaLabelElement);
+    this.component.setAria('roledescription', expandableWidgetAriaLabel, $ariaLabelElement);
     this._gridView.setWidgetA11yStatusText(widgetStatusText);
   }
 
