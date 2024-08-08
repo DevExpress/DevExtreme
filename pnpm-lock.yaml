@@ -361,8 +361,8 @@ importers:
         specifier: ^3.3.4
         version: 3.4.26(typescript@4.9.5)
       vuex:
-        specifier: 4.0.0-beta.4
-        version: 4.0.0-beta.4(vue@3.4.26(typescript@4.9.5))
+        specifier: 4.1.0
+        version: 4.1.0(vue@3.4.26(typescript@4.9.5))
       whatwg-fetch:
         specifier: 2.0.4
         version: 2.0.4
@@ -15780,10 +15780,10 @@ packages:
       typescript:
         optional: true
 
-  vuex@4.0.0-beta.4:
-    resolution: {integrity: sha512-/+4E1dokq5cwbl4mohOqOj8h0vOLOWmLSqlqTf++bfmN9/JKWtwYfsBrzlK0sYrNfuYcpQeX0BVxQHoHXDfYZQ==}
+  vuex@4.1.0:
+    resolution: {integrity: sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==}
     peerDependencies:
-      vue: ^3.0.0-beta.10
+      vue: ^3.2.0
 
   w3c-hr-time@1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}
@@ -36712,8 +36712,9 @@ snapshots:
     optionalDependencies:
       typescript: 5.4.5
 
-  vuex@4.0.0-beta.4(vue@3.4.26(typescript@4.9.5)):
+  vuex@4.1.0(vue@3.4.26(typescript@4.9.5)):
     dependencies:
+      '@vue/devtools-api': 6.6.1
       vue: 3.4.26(typescript@4.9.5)
 
   w3c-hr-time@1.0.2:
