@@ -182,7 +182,6 @@
         "dxDataGrid-ariaExpand": "Mở ra",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
-        "dxDataGrid-ariaExpandableInstruction": "Use Enter key to toggle expand and collapse a focused node",
         "dxDataGrid-ariaDataGrid": "Lưới dữ liệu",
         "dxDataGrid-ariaSearchInGrid": "Tìm kiếm trong lưới dữ liệu",
         "dxDataGrid-ariaSelectAll": "Chọn tất cả",
@@ -197,7 +196,7 @@
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
-        "dxTreeList-ariaExpandableInstruction": "Use Ctrl + → key combination to expand and Ctrl + ← key combination to collapse a focused node",
+        "dxTreeList-ariaExpandableInstruction": "Use Ctrl + right arrow key combination to expand and Ctrl + left arrow key combination to collapse a focused node",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Thêm",
 

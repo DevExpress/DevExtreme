@@ -182,7 +182,6 @@
         "dxDataGrid-ariaExpand": "Развернуть",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
-        "dxDataGrid-ariaExpandableInstruction": "Use Enter key to toggle expand and collapse a focused node",
         "dxDataGrid-ariaDataGrid": "Таблица данных с {0} строками и {1} колонками",
         "dxDataGrid-ariaSearchInGrid": "Искать в таблице данных",
         "dxDataGrid-ariaSelectAll": "Выбрать всё",
@@ -196,7 +195,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Иерархическая таблица данных с {0} строками и {1} колонками",
-        "dxTreeList-ariaExpandableInstruction": "используйте комбинацию клавиш Ctrl + →, чтобы развернуть, и комбинацию клавиш Ctrl + ←, чтобы свернуть выделенный узел.",
+        "dxTreeList-ariaExpandableInstruction": "Use Ctrl + right arrow key combination to expand and Ctrl + left arrow key combination to collapse a focused node",
         "dxTreeList-ariaSearchInGrid": "Искать в иерархической таблице данных",
         "dxTreeList-ariaToolbar": "Панель инструментов иерархической таблицы данных",
         "dxTreeList-editingAddRowToNode": "Добавить",

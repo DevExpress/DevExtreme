@@ -52,7 +52,6 @@ const options = {
   parentIdExpr: 'Task_Parent_ID',
   width: '100%',
   showBorders: true,
-  repaintChangesOnly: true,
   expandedRowKeys: [0],
   selectedRowKeys: [1],
   selection: {
@@ -68,9 +67,11 @@ const options = {
 
 test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
   const treeList = new TreeList('#container');
-  const expandableRow = treeList.getDataCell(0, 0).element;
+  const expandableRow = treeList.getDataRow(0).element;
 
   await t
+    .expect(expandableRow.getAttribute('aria-expanded'))
+    .eql('false')
     .click(expandableRow)
     .pressKey('ctrl+right')
     .expect(expandableRow.getAttribute('aria-expanded'))
@@ -79,9 +80,11 @@ test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) =>
 
 test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) => {
   const treeList = new TreeList('#container');
-  const expandableRow = treeList.getDataCell(0, 0).element;
+  const expandableRow = treeList.getDataRow(0).element;
 
   await t
+    .expect(expandableRow.getAttribute('aria-expanded'))
+    .eql('true')
     .click(expandableRow)
     .pressKey('ctrl+left')
     .expect(expandableRow.getAttribute('aria-expanded'))

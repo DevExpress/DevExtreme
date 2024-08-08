@@ -182,7 +182,6 @@
         "dxDataGrid-ariaExpand": "Rozwiń",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
-        "dxDataGrid-ariaExpandableInstruction": "Use Enter key to toggle expand and collapse a focused node",
         "dxDataGrid-ariaDataGrid": "Tabela danych zawierająca {0} wiersze/-y i {1} kolumn/y",
         "dxDataGrid-ariaSearchInGrid": "Szukaj w tabeli danych",
         "dxDataGrid-ariaSelectAll": "Wybierz wszystkie",
@@ -196,7 +195,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Lista strukturalna",
-        "dxTreeList-ariaExpandableInstruction": "Use Ctrl + → key combination to expand and Ctrl + ← key combination to collapse a focused node",
+        "dxTreeList-ariaExpandableInstruction": "Use Ctrl + right arrow key combination to expand and Ctrl + left arrow key combination to collapse a focused node",
         "dxTreeList-ariaSearchInGrid": "Szukaj w liście strukturalnej",
         "dxTreeList-ariaToolbar": "Pasek narzędzi listy strukturalnej",
         "dxTreeList-editingAddRowToNode": "Dodaj",

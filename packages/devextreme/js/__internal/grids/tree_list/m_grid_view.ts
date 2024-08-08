@@ -2,13 +2,13 @@ import { gridViewModule, ResizingController } from '@ts/grids/grid_core/views/m_
 
 import treeListCore from './m_core';
 
+const TREELIST_EXPANDABLE_INSTRUCTION = 'dxTreeList-ariaExpandableInstruction';
+
 class TreeListResizingController extends ResizingController {
+  protected _getExpandableWidgetAriaId = TREELIST_EXPANDABLE_INSTRUCTION;
+
   protected _getWidgetAriaLabel() {
     return 'dxTreeList-ariaTreeList';
-  }
-
-  protected _getExpandableWidgetAriaLabel() {
-    return 'dxTreeList-ariaExpandableInstruction';
   }
 
   protected _toggleBestFitMode(isBestFit) {
