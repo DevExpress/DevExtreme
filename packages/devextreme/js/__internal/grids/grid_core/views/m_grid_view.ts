@@ -194,7 +194,7 @@ export class ResizingController extends modules.ViewController {
     return 'dxDataGrid-ariaDataGrid';
   }
 
-  protected _setAriaLabel(): void {
+  private _setAriaLabel(): void {
     const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
     const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
