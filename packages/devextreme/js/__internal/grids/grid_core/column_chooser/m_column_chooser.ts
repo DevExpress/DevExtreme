@@ -130,27 +130,31 @@ export class ColumnChooserView extends ColumnsView {
     const isGenericTheme = isGeneric(themeName);
     const isMaterial = isMaterialTheme(themeName);
 
-    const dxPopupOptions = {
-      visible: false,
-      shading: false,
-      showCloseButton: false,
-      dragEnabled: true,
-      resizeEnabled: true,
-      wrapperAttr: { class: columnChooserClass },
-      toolbarItems: [
-        { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' },
-      ],
-      position: popupPosition,
-      width: columnChooserOptions.width,
-      height: columnChooserOptions.height,
-      rtlEnabled: that.option('rtlEnabled'),
-      onHidden() {
-        if (that._isWinDevice()) {
-          $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
-        }
-      },
-      container: columnChooserOptions.container,
-    };
+    function getPopupOptions() {
+      return {
+        visible: false,
+        shading: false,
+        showCloseButton: false,
+        dragEnabled: true,
+        resizeEnabled: true,
+        wrapperAttr: { class: columnChooserClass },
+        toolbarItems: [
+          { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' },
+        ],
+        position: popupPosition,
+        width: columnChooserOptions.width,
+        height: columnChooserOptions.height,
+        rtlEnabled: that.option('rtlEnabled'),
+        onHidden() {
+          if (that._isWinDevice()) {
+            $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
+          }
+        },
+        container: columnChooserOptions.container,
+      };
+    }
+
+    const dxPopupOptions = getPopupOptions();
 
     if (isGenericTheme || isMaterial) {
       extend(dxPopupOptions, { showCloseButton: true });
