@@ -5,7 +5,6 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { Fragment } from 'inferno';
 
 import messageLocalization from '../../../localization/message';
-import type { ConfigContextValue } from '../../core/r1/config_context';
 import { ConfigContext } from '../../core/r1/config_context';
 import type { LightButtonProps } from '../common/light_button';
 import { LightButton } from '../common/light_button';
@@ -78,8 +77,6 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
     nextButtonProps: undefined,
   };
 
-  public config?: ConfigContextValue;
-
   constructor(props) {
     super(props);
     this.pageIndexChanged = this.pageIndexChanged.bind(this);
@@ -104,7 +101,8 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
   }
 
   getButtonProps(direction): NavigationButtonProps {
-    const rtlAwareDirection = this.config?.rtlEnabled ? reverseDirections[direction] : direction;
+    // eslint-disable-next-line max-len
+    const rtlAwareDirection = this.getConfig()?.rtlEnabled ? reverseDirections[direction] : direction;
     const canNavigate = this.canNavigateTo(rtlAwareDirection);
     const className = classNames[`${direction}${canNavigate ? 'Enabled' : 'Disabled'}Class`];
     return {

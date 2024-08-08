@@ -220,7 +220,7 @@ export class PagesLarge extends BaseInfernoComponent<PagesLargePropsType> {
       };
     };
     const indices = this.getPageIndexes();
-    const rtlPageIndexes = this.config?.rtlEnabled ? [...indices].reverse() : indices;
+    const rtlPageIndexes = this.getConfig()?.rtlEnabled ? [...indices].reverse() : indices;
     return rtlPageIndexes.map((index) => createPage(index));
   }
 

@@ -83,7 +83,7 @@ export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> 
 
   onPageSizeChange(processedPageSize): () => void {
     return () => {
-      this.props.pageSizeChanged?.(processedPageSize);
+      this.props.pageSizeChanged(processedPageSize);
       return this.props.pageSize;
     };
   }
