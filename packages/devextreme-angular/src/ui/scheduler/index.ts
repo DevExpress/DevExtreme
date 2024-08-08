@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -30,9 +31,7 @@ import DxScheduler from 'devextreme/ui/scheduler';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,10 +39,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
 import { DxoEditingModule } from 'devextreme-angular/ui/nested';
@@ -72,7 +67,6 @@ import { DxiViewComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxScheduler = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -1450,94 +1444,89 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'appointmentAdded', emit: 'onAppointmentAdded' },
+            { subscribe: 'appointmentAdding', emit: 'onAppointmentAdding' },
+            { subscribe: 'appointmentClick', emit: 'onAppointmentClick' },
+            { subscribe: 'appointmentContextMenu', emit: 'onAppointmentContextMenu' },
+            { subscribe: 'appointmentDblClick', emit: 'onAppointmentDblClick' },
+            { subscribe: 'appointmentDeleted', emit: 'onAppointmentDeleted' },
+            { subscribe: 'appointmentDeleting', emit: 'onAppointmentDeleting' },
+            { subscribe: 'appointmentFormOpening', emit: 'onAppointmentFormOpening' },
+            { subscribe: 'appointmentRendered', emit: 'onAppointmentRendered' },
+            { subscribe: 'appointmentTooltipShowing', emit: 'onAppointmentTooltipShowing' },
+            { subscribe: 'appointmentUpdated', emit: 'onAppointmentUpdated' },
+            { subscribe: 'appointmentUpdating', emit: 'onAppointmentUpdating' },
+            { subscribe: 'cellClick', emit: 'onCellClick' },
+            { subscribe: 'cellContextMenu', emit: 'onCellContextMenu' },
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'adaptivityEnabledChange' },
+            { emit: 'allDayExprChange' },
+            { emit: 'allDayPanelModeChange' },
+            { emit: 'appointmentCollectorTemplateChange' },
+            { emit: 'appointmentDraggingChange' },
+            { emit: 'appointmentTemplateChange' },
+            { emit: 'appointmentTooltipTemplateChange' },
+            { emit: 'cellDurationChange' },
+            { emit: 'crossScrollingEnabledChange' },
+            { emit: 'currentDateChange' },
+            { emit: 'currentViewChange' },
+            { emit: 'customizeDateNavigatorTextChange' },
+            { emit: 'dataCellTemplateChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'dateCellTemplateChange' },
+            { emit: 'dateSerializationFormatChange' },
+            { emit: 'descriptionExprChange' },
+            { emit: 'disabledChange' },
+            { emit: 'dropDownAppointmentTemplateChange' },
+            { emit: 'editingChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'endDateExprChange' },
+            { emit: 'endDateTimeZoneExprChange' },
+            { emit: 'endDayHourChange' },
+            { emit: 'firstDayOfWeekChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'groupByDateChange' },
+            { emit: 'groupsChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'indicatorUpdateIntervalChange' },
+            { emit: 'maxChange' },
+            { emit: 'maxAppointmentsPerCellChange' },
+            { emit: 'minChange' },
+            { emit: 'noDataTextChange' },
+            { emit: 'offsetChange' },
+            { emit: 'recurrenceEditModeChange' },
+            { emit: 'recurrenceExceptionExprChange' },
+            { emit: 'recurrenceRuleExprChange' },
+            { emit: 'remoteFilteringChange' },
+            { emit: 'resourceCellTemplateChange' },
+            { emit: 'resourcesChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'scrollingChange' },
+            { emit: 'selectedCellDataChange' },
+            { emit: 'shadeUntilCurrentTimeChange' },
+            { emit: 'showAllDayPanelChange' },
+            { emit: 'showCurrentTimeIndicatorChange' },
+            { emit: 'startDateExprChange' },
+            { emit: 'startDateTimeZoneExprChange' },
+            { emit: 'startDayHourChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'textExprChange' },
+            { emit: 'timeCellTemplateChange' },
+            { emit: 'timeZoneChange' },
+            { emit: 'useDropDownViewSwitcherChange' },
+            { emit: 'viewsChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'appointmentAdded', emit: 'onAppointmentAdded' },
-                       { subscribe: 'appointmentAdding', emit: 'onAppointmentAdding' },
-                       { subscribe: 'appointmentClick', emit: 'onAppointmentClick' },
-                       { subscribe: 'appointmentContextMenu', emit: 'onAppointmentContextMenu' },
-                       { subscribe: 'appointmentDblClick', emit: 'onAppointmentDblClick' },
-                       { subscribe: 'appointmentDeleted', emit: 'onAppointmentDeleted' },
-                       { subscribe: 'appointmentDeleting', emit: 'onAppointmentDeleting' },
-                       { subscribe: 'appointmentFormOpening', emit: 'onAppointmentFormOpening' },
-                       { subscribe: 'appointmentRendered', emit: 'onAppointmentRendered' },
-                       { subscribe: 'appointmentTooltipShowing', emit: 'onAppointmentTooltipShowing' },
-                       { subscribe: 'appointmentUpdated', emit: 'onAppointmentUpdated' },
-                       { subscribe: 'appointmentUpdating', emit: 'onAppointmentUpdating' },
-                       { subscribe: 'cellClick', emit: 'onCellClick' },
-                       { subscribe: 'cellContextMenu', emit: 'onCellContextMenu' },
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'adaptivityEnabledChange' },
-                       { emit: 'allDayExprChange' },
-                       { emit: 'allDayPanelModeChange' },
-                       { emit: 'appointmentCollectorTemplateChange' },
-                       { emit: 'appointmentDraggingChange' },
-                       { emit: 'appointmentTemplateChange' },
-                       { emit: 'appointmentTooltipTemplateChange' },
-                       { emit: 'cellDurationChange' },
-                       { emit: 'crossScrollingEnabledChange' },
-                       { emit: 'currentDateChange' },
-                       { emit: 'currentViewChange' },
-                       { emit: 'customizeDateNavigatorTextChange' },
-                       { emit: 'dataCellTemplateChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'dateCellTemplateChange' },
-                       { emit: 'dateSerializationFormatChange' },
-                       { emit: 'descriptionExprChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'dropDownAppointmentTemplateChange' },
-                       { emit: 'editingChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'endDateExprChange' },
-                       { emit: 'endDateTimeZoneExprChange' },
-                       { emit: 'endDayHourChange' },
-                       { emit: 'firstDayOfWeekChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'groupByDateChange' },
-                       { emit: 'groupsChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'indicatorUpdateIntervalChange' },
-                       { emit: 'maxChange' },
-                       { emit: 'maxAppointmentsPerCellChange' },
-                       { emit: 'minChange' },
-                       { emit: 'noDataTextChange' },
-                       { emit: 'offsetChange' },
-                       { emit: 'recurrenceEditModeChange' },
-                       { emit: 'recurrenceExceptionExprChange' },
-                       { emit: 'recurrenceRuleExprChange' },
-                       { emit: 'remoteFilteringChange' },
-                       { emit: 'resourceCellTemplateChange' },
-                       { emit: 'resourcesChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'scrollingChange' },
-                       { emit: 'selectedCellDataChange' },
-                       { emit: 'shadeUntilCurrentTimeChange' },
-                       { emit: 'showAllDayPanelChange' },
-                       { emit: 'showCurrentTimeIndicatorChange' },
-                       { emit: 'startDateExprChange' },
-                       { emit: 'startDateTimeZoneExprChange' },
-                       { emit: 'startDayHourChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'textExprChange' },
-                       { emit: 'timeCellTemplateChange' },
-                       { emit: 'timeZoneChange' },
-                       { emit: 'useDropDownViewSwitcherChange' },
-                       { emit: 'viewsChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

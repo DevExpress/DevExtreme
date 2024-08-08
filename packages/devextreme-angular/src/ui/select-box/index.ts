@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -39,9 +40,7 @@ import {
 } from '@angular/forms';
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -49,10 +48,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
@@ -99,7 +94,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxSelectBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxSelectBox = null;
-
 
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]
@@ -1523,98 +1517,93 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'change', emit: 'onChange' },
+            { subscribe: 'closed', emit: 'onClosed' },
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'copy', emit: 'onCopy' },
+            { subscribe: 'customItemCreating', emit: 'onCustomItemCreating' },
+            { subscribe: 'cut', emit: 'onCut' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'enterKey', emit: 'onEnterKey' },
+            { subscribe: 'focusIn', emit: 'onFocusIn' },
+            { subscribe: 'focusOut', emit: 'onFocusOut' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'input', emit: 'onInput' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'keyDown', emit: 'onKeyDown' },
+            { subscribe: 'keyUp', emit: 'onKeyUp' },
+            { subscribe: 'opened', emit: 'onOpened' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'paste', emit: 'onPaste' },
+            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'valueChanged', emit: 'onValueChanged' },
+            { emit: 'acceptCustomValueChange' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'buttonsChange' },
+            { emit: 'customItemCreateEventChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'deferRenderingChange' },
+            { emit: 'disabledChange' },
+            { emit: 'displayExprChange' },
+            { emit: 'displayValueChange' },
+            { emit: 'dropDownButtonTemplateChange' },
+            { emit: 'dropDownOptionsChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'fieldTemplateChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'groupedChange' },
+            { emit: 'groupTemplateChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'inputAttrChange' },
+            { emit: 'isDirtyChange' },
+            { emit: 'isValidChange' },
+            { emit: 'itemsChange' },
+            { emit: 'itemTemplateChange' },
+            { emit: 'labelChange' },
+            { emit: 'labelModeChange' },
+            { emit: 'maxLengthChange' },
+            { emit: 'minSearchLengthChange' },
+            { emit: 'nameChange' },
+            { emit: 'noDataTextChange' },
+            { emit: 'openedChange' },
+            { emit: 'openOnFieldClickChange' },
+            { emit: 'placeholderChange' },
+            { emit: 'readOnlyChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'searchEnabledChange' },
+            { emit: 'searchExprChange' },
+            { emit: 'searchModeChange' },
+            { emit: 'searchTimeoutChange' },
+            { emit: 'selectedItemChange' },
+            { emit: 'showClearButtonChange' },
+            { emit: 'showDataBeforeSearchChange' },
+            { emit: 'showDropDownButtonChange' },
+            { emit: 'showSelectionControlsChange' },
+            { emit: 'spellcheckChange' },
+            { emit: 'stylingModeChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'textChange' },
+            { emit: 'useItemTextAsTitleChange' },
+            { emit: 'validationErrorChange' },
+            { emit: 'validationErrorsChange' },
+            { emit: 'validationMessageModeChange' },
+            { emit: 'validationMessagePositionChange' },
+            { emit: 'validationStatusChange' },
+            { emit: 'valueChange' },
+            { emit: 'valueChangeEventChange' },
+            { emit: 'valueExprChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'wrapItemTextChange' },
+            { emit: 'onBlur' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'change', emit: 'onChange' },
-                       { subscribe: 'closed', emit: 'onClosed' },
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'copy', emit: 'onCopy' },
-                       { subscribe: 'customItemCreating', emit: 'onCustomItemCreating' },
-                       { subscribe: 'cut', emit: 'onCut' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'enterKey', emit: 'onEnterKey' },
-                       { subscribe: 'focusIn', emit: 'onFocusIn' },
-                       { subscribe: 'focusOut', emit: 'onFocusOut' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'input', emit: 'onInput' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'keyDown', emit: 'onKeyDown' },
-                       { subscribe: 'keyUp', emit: 'onKeyUp' },
-                       { subscribe: 'opened', emit: 'onOpened' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'paste', emit: 'onPaste' },
-                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
-                       { emit: 'acceptCustomValueChange' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'buttonsChange' },
-                       { emit: 'customItemCreateEventChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'deferRenderingChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'displayExprChange' },
-                       { emit: 'displayValueChange' },
-                       { emit: 'dropDownButtonTemplateChange' },
-                       { emit: 'dropDownOptionsChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'fieldTemplateChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'groupedChange' },
-                       { emit: 'groupTemplateChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'inputAttrChange' },
-                       { emit: 'isDirtyChange' },
-                       { emit: 'isValidChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'itemTemplateChange' },
-                       { emit: 'labelChange' },
-                       { emit: 'labelModeChange' },
-                       { emit: 'maxLengthChange' },
-                       { emit: 'minSearchLengthChange' },
-                       { emit: 'nameChange' },
-                       { emit: 'noDataTextChange' },
-                       { emit: 'openedChange' },
-                       { emit: 'openOnFieldClickChange' },
-                       { emit: 'placeholderChange' },
-                       { emit: 'readOnlyChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'searchEnabledChange' },
-                       { emit: 'searchExprChange' },
-                       { emit: 'searchModeChange' },
-                       { emit: 'searchTimeoutChange' },
-                       { emit: 'selectedItemChange' },
-                       { emit: 'showClearButtonChange' },
-                       { emit: 'showDataBeforeSearchChange' },
-                       { emit: 'showDropDownButtonChange' },
-                       { emit: 'showSelectionControlsChange' },
-                       { emit: 'spellcheckChange' },
-                       { emit: 'stylingModeChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'textChange' },
-                       { emit: 'useItemTextAsTitleChange' },
-                       { emit: 'validationErrorChange' },
-                       { emit: 'validationErrorsChange' },
-                       { emit: 'validationMessageModeChange' },
-                       { emit: 'validationMessagePositionChange' },
-                       { emit: 'validationStatusChange' },
-                       { emit: 'valueChange' },
-                       { emit: 'valueChangeEventChange' },
-                       { emit: 'valueExprChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'wrapItemTextChange' },
-                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

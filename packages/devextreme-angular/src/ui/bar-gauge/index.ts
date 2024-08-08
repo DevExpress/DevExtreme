@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -29,9 +30,7 @@ import DxBarGauge from 'devextreme/viz/bar_gauge';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -39,10 +38,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
@@ -81,7 +76,6 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 })
 export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxBarGauge = null;
-
 
     /**
      * [descr:dxBarGaugeOptions.animation]
@@ -717,53 +711,48 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'drawn', emit: 'onDrawn' },
+            { subscribe: 'exported', emit: 'onExported' },
+            { subscribe: 'exporting', emit: 'onExporting' },
+            { subscribe: 'fileSaving', emit: 'onFileSaving' },
+            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
+            { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
+            { emit: 'animationChange' },
+            { emit: 'backgroundColorChange' },
+            { emit: 'barSpacingChange' },
+            { emit: 'baseValueChange' },
+            { emit: 'centerTemplateChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'endValueChange' },
+            { emit: 'exportChange' },
+            { emit: 'geometryChange' },
+            { emit: 'labelChange' },
+            { emit: 'legendChange' },
+            { emit: 'loadingIndicatorChange' },
+            { emit: 'marginChange' },
+            { emit: 'paletteChange' },
+            { emit: 'paletteExtensionModeChange' },
+            { emit: 'pathModifiedChange' },
+            { emit: 'redrawOnResizeChange' },
+            { emit: 'relativeInnerRadiusChange' },
+            { emit: 'resolveLabelOverlappingChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'sizeChange' },
+            { emit: 'startValueChange' },
+            { emit: 'themeChange' },
+            { emit: 'titleChange' },
+            { emit: 'tooltipChange' },
+            { emit: 'valuesChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'drawn', emit: 'onDrawn' },
-                       { subscribe: 'exported', emit: 'onExported' },
-                       { subscribe: 'exporting', emit: 'onExporting' },
-                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
-                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
-                       { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
-                       { emit: 'animationChange' },
-                       { emit: 'backgroundColorChange' },
-                       { emit: 'barSpacingChange' },
-                       { emit: 'baseValueChange' },
-                       { emit: 'centerTemplateChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'endValueChange' },
-                       { emit: 'exportChange' },
-                       { emit: 'geometryChange' },
-                       { emit: 'labelChange' },
-                       { emit: 'legendChange' },
-                       { emit: 'loadingIndicatorChange' },
-                       { emit: 'marginChange' },
-                       { emit: 'paletteChange' },
-                       { emit: 'paletteExtensionModeChange' },
-                       { emit: 'pathModifiedChange' },
-                       { emit: 'redrawOnResizeChange' },
-                       { emit: 'relativeInnerRadiusChange' },
-                       { emit: 'resolveLabelOverlappingChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'sizeChange' },
-                       { emit: 'startValueChange' },
-                       { emit: 'themeChange' },
-                       { emit: 'titleChange' },
-                       { emit: 'tooltipChange' },
-                       { emit: 'valuesChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

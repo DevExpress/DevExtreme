@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -31,9 +32,7 @@ import DxSplitter from 'devextreme/ui/splitter';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,10 +40,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
@@ -69,7 +64,6 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxSplitter<TItem, TKey> = null;
-
 
     /**
      * [descr:dxSplitterOptions.allowKeyboardNavigation]
@@ -449,41 +443,36 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemCollapsed', emit: 'onItemCollapsed' },
+            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+            { subscribe: 'itemExpanded', emit: 'onItemExpanded' },
+            { subscribe: 'itemRendered', emit: 'onItemRendered' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'resize', emit: 'onResize' },
+            { subscribe: 'resizeEnd', emit: 'onResizeEnd' },
+            { subscribe: 'resizeStart', emit: 'onResizeStart' },
+            { emit: 'allowKeyboardNavigationChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'heightChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'itemsChange' },
+            { emit: 'itemTemplateChange' },
+            { emit: 'orientationChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'separatorSizeChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'itemCollapsed', emit: 'onItemCollapsed' },
-                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-                       { subscribe: 'itemExpanded', emit: 'onItemExpanded' },
-                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'resize', emit: 'onResize' },
-                       { subscribe: 'resizeEnd', emit: 'onResizeEnd' },
-                       { subscribe: 'resizeStart', emit: 'onResizeStart' },
-                       { emit: 'allowKeyboardNavigationChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'itemTemplateChange' },
-                       { emit: 'orientationChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'separatorSizeChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

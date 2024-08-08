@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -30,9 +31,7 @@ import DxGallery from 'devextreme/ui/gallery';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,10 +39,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
@@ -67,7 +62,6 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxGallery<TItem, TKey> = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -743,54 +737,49 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+            { subscribe: 'itemHold', emit: 'onItemHold' },
+            { subscribe: 'itemRendered', emit: 'onItemRendered' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'animationDurationChange' },
+            { emit: 'animationEnabledChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'indicatorEnabledChange' },
+            { emit: 'initialItemWidthChange' },
+            { emit: 'itemHoldTimeoutChange' },
+            { emit: 'itemsChange' },
+            { emit: 'itemTemplateChange' },
+            { emit: 'loopChange' },
+            { emit: 'noDataTextChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'selectedIndexChange' },
+            { emit: 'selectedItemChange' },
+            { emit: 'showIndicatorChange' },
+            { emit: 'showNavButtonsChange' },
+            { emit: 'slideshowDelayChange' },
+            { emit: 'stretchImagesChange' },
+            { emit: 'swipeEnabledChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'wrapAroundChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-                       { subscribe: 'itemHold', emit: 'onItemHold' },
-                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'animationDurationChange' },
-                       { emit: 'animationEnabledChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'indicatorEnabledChange' },
-                       { emit: 'initialItemWidthChange' },
-                       { emit: 'itemHoldTimeoutChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'itemTemplateChange' },
-                       { emit: 'loopChange' },
-                       { emit: 'noDataTextChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'selectedIndexChange' },
-                       { emit: 'selectedItemChange' },
-                       { emit: 'showIndicatorChange' },
-                       { emit: 'showNavButtonsChange' },
-                       { emit: 'slideshowDelayChange' },
-                       { emit: 'stretchImagesChange' },
-                       { emit: 'swipeEnabledChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'wrapAroundChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

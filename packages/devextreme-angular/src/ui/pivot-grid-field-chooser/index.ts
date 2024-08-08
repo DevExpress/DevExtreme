@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -28,9 +29,7 @@ import DxPivotGridFieldChooser from 'devextreme/ui/pivot_grid_field_chooser';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -38,10 +37,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchModule } from 'devextreme-angular/ui/nested';
@@ -66,7 +61,6 @@ import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 })
 export class DxPivotGridFieldChooserComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxPivotGridFieldChooser = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -542,42 +536,37 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'contextMenuPreparing', emit: 'onContextMenuPreparing' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'allowSearchChange' },
+            { emit: 'applyChangesModeChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'encodeHtmlChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'headerFilterChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'layoutChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'searchTimeoutChange' },
+            { emit: 'stateChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'textsChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'contextMenuPreparing', emit: 'onContextMenuPreparing' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'allowSearchChange' },
-                       { emit: 'applyChangesModeChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'encodeHtmlChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'headerFilterChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'layoutChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'searchTimeoutChange' },
-                       { emit: 'stateChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'textsChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

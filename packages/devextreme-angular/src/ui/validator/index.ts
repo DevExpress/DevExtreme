@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -30,9 +31,7 @@ import DxValidator from 'devextreme/ui/validator';
 
 
 import {
-
     DxComponentExtension,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,10 +39,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
@@ -68,7 +63,6 @@ import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxValidatorComponent extends DxComponentExtension implements OnDestroy, OnChanges, DoCheck {
     instance: DxValidator = null;
-
 
     /**
      * [descr:dxValidatorOptions.adapter]
@@ -267,28 +261,23 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'validated', emit: 'onValidated' },
+            { emit: 'adapterChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'heightChange' },
+            { emit: 'nameChange' },
+            { emit: 'validationGroupChange' },
+            { emit: 'validationRulesChange' },
+            { emit: 'widthChange' }
+        ]);
         this.parentElement = this.getParentElement(parentOptionHost);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'validated', emit: 'onValidated' },
-                       { emit: 'adapterChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'nameChange' },
-                       { emit: 'validationGroupChange' },
-                       { emit: 'validationRulesChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

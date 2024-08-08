@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -30,9 +31,7 @@ import DxBox from 'devextreme/ui/box';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,10 +39,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoBoxModule } from 'devextreme-angular/ui/nested';
@@ -68,7 +63,6 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxBox<TItem, TKey> = null;
-
 
     /**
      * [descr:dxBoxOptions.align]
@@ -436,38 +430,33 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+            { subscribe: 'itemHold', emit: 'onItemHold' },
+            { subscribe: 'itemRendered', emit: 'onItemRendered' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'alignChange' },
+            { emit: 'crossAlignChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'directionChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'heightChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'itemHoldTimeoutChange' },
+            { emit: 'itemsChange' },
+            { emit: 'itemTemplateChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-                       { subscribe: 'itemHold', emit: 'onItemHold' },
-                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'alignChange' },
-                       { emit: 'crossAlignChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'directionChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'itemHoldTimeoutChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'itemTemplateChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

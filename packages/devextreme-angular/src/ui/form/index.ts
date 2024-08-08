@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -28,9 +29,7 @@ import DxForm from 'devextreme/ui/form';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -38,10 +37,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
@@ -71,7 +66,6 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxForm = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -823,56 +817,51 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'editorEnterKey', emit: 'onEditorEnterKey' },
+            { subscribe: 'fieldDataChanged', emit: 'onFieldDataChanged' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'alignItemLabelsChange' },
+            { emit: 'alignItemLabelsInAllGroupsChange' },
+            { emit: 'colCountChange' },
+            { emit: 'colCountByScreenChange' },
+            { emit: 'customizeItemChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'formDataChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'isDirtyChange' },
+            { emit: 'itemsChange' },
+            { emit: 'labelLocationChange' },
+            { emit: 'labelModeChange' },
+            { emit: 'minColWidthChange' },
+            { emit: 'optionalMarkChange' },
+            { emit: 'readOnlyChange' },
+            { emit: 'requiredMarkChange' },
+            { emit: 'requiredMessageChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'screenByWidthChange' },
+            { emit: 'scrollingEnabledChange' },
+            { emit: 'showColonAfterLabelChange' },
+            { emit: 'showOptionalMarkChange' },
+            { emit: 'showRequiredMarkChange' },
+            { emit: 'showValidationSummaryChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'validationGroupChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'editorEnterKey', emit: 'onEditorEnterKey' },
-                       { subscribe: 'fieldDataChanged', emit: 'onFieldDataChanged' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'alignItemLabelsChange' },
-                       { emit: 'alignItemLabelsInAllGroupsChange' },
-                       { emit: 'colCountChange' },
-                       { emit: 'colCountByScreenChange' },
-                       { emit: 'customizeItemChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'formDataChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'isDirtyChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'labelLocationChange' },
-                       { emit: 'labelModeChange' },
-                       { emit: 'minColWidthChange' },
-                       { emit: 'optionalMarkChange' },
-                       { emit: 'readOnlyChange' },
-                       { emit: 'requiredMarkChange' },
-                       { emit: 'requiredMessageChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'screenByWidthChange' },
-                       { emit: 'scrollingEnabledChange' },
-                       { emit: 'showColonAfterLabelChange' },
-                       { emit: 'showOptionalMarkChange' },
-                       { emit: 'showRequiredMarkChange' },
-                       { emit: 'showValidationSummaryChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'validationGroupChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

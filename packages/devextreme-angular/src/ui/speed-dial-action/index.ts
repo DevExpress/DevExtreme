@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -22,19 +23,13 @@ import DxSpeedDialAction from 'devextreme/ui/speed_dial_action';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 
 
@@ -55,7 +50,6 @@ import {
 })
 export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy {
     instance: DxSpeedDialAction = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -350,31 +344,26 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'click', emit: 'onClick' },
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'iconChange' },
+            { emit: 'indexChange' },
+            { emit: 'labelChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'visibleChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'click', emit: 'onClick' },
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'iconChange' },
-                       { emit: 'indexChange' },
-                       { emit: 'labelChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'visibleChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

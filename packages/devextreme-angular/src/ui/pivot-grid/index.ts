@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -28,9 +29,7 @@ import DxPivotGrid from 'devextreme/ui/pivot_grid';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -38,10 +37,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoDataSourceModule } from 'devextreme-angular/ui/nested';
 import { DxiFieldModule } from 'devextreme-angular/ui/nested';
@@ -76,7 +71,6 @@ import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 })
 export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxPivotGrid = null;
-
 
     /**
      * [descr:dxPivotGridOptions.allowExpandAll]
@@ -796,56 +790,51 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'cellClick', emit: 'onCellClick' },
+            { subscribe: 'cellPrepared', emit: 'onCellPrepared' },
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'contextMenuPreparing', emit: 'onContextMenuPreparing' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'exporting', emit: 'onExporting' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'allowExpandAllChange' },
+            { emit: 'allowFilteringChange' },
+            { emit: 'allowSortingChange' },
+            { emit: 'allowSortingBySummaryChange' },
+            { emit: 'dataFieldAreaChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'encodeHtmlChange' },
+            { emit: 'exportChange' },
+            { emit: 'fieldChooserChange' },
+            { emit: 'fieldPanelChange' },
+            { emit: 'headerFilterChange' },
+            { emit: 'heightChange' },
+            { emit: 'hideEmptySummaryCellsChange' },
+            { emit: 'hintChange' },
+            { emit: 'loadPanelChange' },
+            { emit: 'rowHeaderLayoutChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'scrollingChange' },
+            { emit: 'showBordersChange' },
+            { emit: 'showColumnGrandTotalsChange' },
+            { emit: 'showColumnTotalsChange' },
+            { emit: 'showRowGrandTotalsChange' },
+            { emit: 'showRowTotalsChange' },
+            { emit: 'showTotalsPriorChange' },
+            { emit: 'stateStoringChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'textsChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'wordWrapEnabledChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'cellClick', emit: 'onCellClick' },
-                       { subscribe: 'cellPrepared', emit: 'onCellPrepared' },
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'contextMenuPreparing', emit: 'onContextMenuPreparing' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'exporting', emit: 'onExporting' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'allowExpandAllChange' },
-                       { emit: 'allowFilteringChange' },
-                       { emit: 'allowSortingChange' },
-                       { emit: 'allowSortingBySummaryChange' },
-                       { emit: 'dataFieldAreaChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'encodeHtmlChange' },
-                       { emit: 'exportChange' },
-                       { emit: 'fieldChooserChange' },
-                       { emit: 'fieldPanelChange' },
-                       { emit: 'headerFilterChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hideEmptySummaryCellsChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'loadPanelChange' },
-                       { emit: 'rowHeaderLayoutChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'scrollingChange' },
-                       { emit: 'showBordersChange' },
-                       { emit: 'showColumnGrandTotalsChange' },
-                       { emit: 'showColumnTotalsChange' },
-                       { emit: 'showRowGrandTotalsChange' },
-                       { emit: 'showRowTotalsChange' },
-                       { emit: 'showTotalsPriorChange' },
-                       { emit: 'stateStoringChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'textsChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'wordWrapEnabledChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

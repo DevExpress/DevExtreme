@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -31,9 +32,7 @@ import DxTreeMap from 'devextreme/viz/tree_map';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,10 +40,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoColorizerModule } from 'devextreme-angular/ui/nested';
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
@@ -84,7 +79,6 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 })
 export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxTreeMap = null;
-
 
     /**
      * [descr:dxTreeMapOptions.childrenField]
@@ -752,57 +746,52 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'click', emit: 'onClick' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'drawn', emit: 'onDrawn' },
+            { subscribe: 'drill', emit: 'onDrill' },
+            { subscribe: 'exported', emit: 'onExported' },
+            { subscribe: 'exporting', emit: 'onExporting' },
+            { subscribe: 'fileSaving', emit: 'onFileSaving' },
+            { subscribe: 'hoverChanged', emit: 'onHoverChanged' },
+            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'nodesInitialized', emit: 'onNodesInitialized' },
+            { subscribe: 'nodesRendering', emit: 'onNodesRendering' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { emit: 'childrenFieldChange' },
+            { emit: 'colorFieldChange' },
+            { emit: 'colorizerChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'exportChange' },
+            { emit: 'groupChange' },
+            { emit: 'hoverEnabledChange' },
+            { emit: 'idFieldChange' },
+            { emit: 'interactWithGroupChange' },
+            { emit: 'labelFieldChange' },
+            { emit: 'layoutAlgorithmChange' },
+            { emit: 'layoutDirectionChange' },
+            { emit: 'loadingIndicatorChange' },
+            { emit: 'maxDepthChange' },
+            { emit: 'parentFieldChange' },
+            { emit: 'pathModifiedChange' },
+            { emit: 'redrawOnResizeChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'selectionModeChange' },
+            { emit: 'sizeChange' },
+            { emit: 'themeChange' },
+            { emit: 'tileChange' },
+            { emit: 'titleChange' },
+            { emit: 'tooltipChange' },
+            { emit: 'valueFieldChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'click', emit: 'onClick' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'drawn', emit: 'onDrawn' },
-                       { subscribe: 'drill', emit: 'onDrill' },
-                       { subscribe: 'exported', emit: 'onExported' },
-                       { subscribe: 'exporting', emit: 'onExporting' },
-                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
-                       { subscribe: 'hoverChanged', emit: 'onHoverChanged' },
-                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'nodesInitialized', emit: 'onNodesInitialized' },
-                       { subscribe: 'nodesRendering', emit: 'onNodesRendering' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-                       { emit: 'childrenFieldChange' },
-                       { emit: 'colorFieldChange' },
-                       { emit: 'colorizerChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'exportChange' },
-                       { emit: 'groupChange' },
-                       { emit: 'hoverEnabledChange' },
-                       { emit: 'idFieldChange' },
-                       { emit: 'interactWithGroupChange' },
-                       { emit: 'labelFieldChange' },
-                       { emit: 'layoutAlgorithmChange' },
-                       { emit: 'layoutDirectionChange' },
-                       { emit: 'loadingIndicatorChange' },
-                       { emit: 'maxDepthChange' },
-                       { emit: 'parentFieldChange' },
-                       { emit: 'pathModifiedChange' },
-                       { emit: 'redrawOnResizeChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'selectionModeChange' },
-                       { emit: 'sizeChange' },
-                       { emit: 'themeChange' },
-                       { emit: 'tileChange' },
-                       { emit: 'titleChange' },
-                       { emit: 'tooltipChange' },
-                       { emit: 'valueFieldChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

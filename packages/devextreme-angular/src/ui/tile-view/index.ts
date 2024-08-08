@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -31,9 +32,7 @@ import DxTileView from 'devextreme/ui/tile_view';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -41,10 +40,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
@@ -68,7 +63,6 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxTileView<TItem, TKey> = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -596,46 +590,41 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+            { subscribe: 'itemHold', emit: 'onItemHold' },
+            { subscribe: 'itemRendered', emit: 'onItemRendered' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'baseItemHeightChange' },
+            { emit: 'baseItemWidthChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'directionChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'itemHoldTimeoutChange' },
+            { emit: 'itemMarginChange' },
+            { emit: 'itemsChange' },
+            { emit: 'itemTemplateChange' },
+            { emit: 'noDataTextChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'showScrollbarChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-                       { subscribe: 'itemHold', emit: 'onItemHold' },
-                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'baseItemHeightChange' },
-                       { emit: 'baseItemWidthChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'directionChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'itemHoldTimeoutChange' },
-                       { emit: 'itemMarginChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'itemTemplateChange' },
-                       { emit: 'noDataTextChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'showScrollbarChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

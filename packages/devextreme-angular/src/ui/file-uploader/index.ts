@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -33,9 +34,7 @@ import {
 } from '@angular/forms';
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -43,10 +42,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 
 
@@ -75,7 +70,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxFileUploaderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxFileUploader = null;
-
 
     /**
      * [descr:dxFileUploaderOptions.abortUpload]
@@ -1213,81 +1207,76 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'beforeSend', emit: 'onBeforeSend' },
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'dropZoneEnter', emit: 'onDropZoneEnter' },
+            { subscribe: 'dropZoneLeave', emit: 'onDropZoneLeave' },
+            { subscribe: 'filesUploaded', emit: 'onFilesUploaded' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'progress', emit: 'onProgress' },
+            { subscribe: 'uploadAborted', emit: 'onUploadAborted' },
+            { subscribe: 'uploaded', emit: 'onUploaded' },
+            { subscribe: 'uploadError', emit: 'onUploadError' },
+            { subscribe: 'uploadStarted', emit: 'onUploadStarted' },
+            { subscribe: 'valueChanged', emit: 'onValueChanged' },
+            { emit: 'abortUploadChange' },
+            { emit: 'acceptChange' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'allowCancelingChange' },
+            { emit: 'allowedFileExtensionsChange' },
+            { emit: 'chunkSizeChange' },
+            { emit: 'dialogTriggerChange' },
+            { emit: 'disabledChange' },
+            { emit: 'dropZoneChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'inputAttrChange' },
+            { emit: 'invalidFileExtensionMessageChange' },
+            { emit: 'invalidMaxFileSizeMessageChange' },
+            { emit: 'invalidMinFileSizeMessageChange' },
+            { emit: 'isDirtyChange' },
+            { emit: 'isValidChange' },
+            { emit: 'labelTextChange' },
+            { emit: 'maxFileSizeChange' },
+            { emit: 'minFileSizeChange' },
+            { emit: 'multipleChange' },
+            { emit: 'nameChange' },
+            { emit: 'progressChange' },
+            { emit: 'readOnlyChange' },
+            { emit: 'readyToUploadMessageChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'selectButtonTextChange' },
+            { emit: 'showFileListChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'uploadAbortedMessageChange' },
+            { emit: 'uploadButtonTextChange' },
+            { emit: 'uploadChunkChange' },
+            { emit: 'uploadCustomDataChange' },
+            { emit: 'uploadedMessageChange' },
+            { emit: 'uploadFailedMessageChange' },
+            { emit: 'uploadFileChange' },
+            { emit: 'uploadHeadersChange' },
+            { emit: 'uploadMethodChange' },
+            { emit: 'uploadModeChange' },
+            { emit: 'uploadUrlChange' },
+            { emit: 'validationErrorChange' },
+            { emit: 'validationErrorsChange' },
+            { emit: 'validationStatusChange' },
+            { emit: 'valueChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'onBlur' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'beforeSend', emit: 'onBeforeSend' },
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'dropZoneEnter', emit: 'onDropZoneEnter' },
-                       { subscribe: 'dropZoneLeave', emit: 'onDropZoneLeave' },
-                       { subscribe: 'filesUploaded', emit: 'onFilesUploaded' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'progress', emit: 'onProgress' },
-                       { subscribe: 'uploadAborted', emit: 'onUploadAborted' },
-                       { subscribe: 'uploaded', emit: 'onUploaded' },
-                       { subscribe: 'uploadError', emit: 'onUploadError' },
-                       { subscribe: 'uploadStarted', emit: 'onUploadStarted' },
-                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
-                       { emit: 'abortUploadChange' },
-                       { emit: 'acceptChange' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'allowCancelingChange' },
-                       { emit: 'allowedFileExtensionsChange' },
-                       { emit: 'chunkSizeChange' },
-                       { emit: 'dialogTriggerChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'dropZoneChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'inputAttrChange' },
-                       { emit: 'invalidFileExtensionMessageChange' },
-                       { emit: 'invalidMaxFileSizeMessageChange' },
-                       { emit: 'invalidMinFileSizeMessageChange' },
-                       { emit: 'isDirtyChange' },
-                       { emit: 'isValidChange' },
-                       { emit: 'labelTextChange' },
-                       { emit: 'maxFileSizeChange' },
-                       { emit: 'minFileSizeChange' },
-                       { emit: 'multipleChange' },
-                       { emit: 'nameChange' },
-                       { emit: 'progressChange' },
-                       { emit: 'readOnlyChange' },
-                       { emit: 'readyToUploadMessageChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'selectButtonTextChange' },
-                       { emit: 'showFileListChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'uploadAbortedMessageChange' },
-                       { emit: 'uploadButtonTextChange' },
-                       { emit: 'uploadChunkChange' },
-                       { emit: 'uploadCustomDataChange' },
-                       { emit: 'uploadedMessageChange' },
-                       { emit: 'uploadFailedMessageChange' },
-                       { emit: 'uploadFileChange' },
-                       { emit: 'uploadHeadersChange' },
-                       { emit: 'uploadMethodChange' },
-                       { emit: 'uploadModeChange' },
-                       { emit: 'uploadUrlChange' },
-                       { emit: 'validationErrorChange' },
-                       { emit: 'validationErrorsChange' },
-                       { emit: 'validationStatusChange' },
-                       { emit: 'valueChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

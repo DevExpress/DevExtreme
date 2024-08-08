@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -37,9 +38,7 @@ import {
 } from '@angular/forms';
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -47,10 +46,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoBackgroundModule } from 'devextreme-angular/ui/nested';
 import { DxoImageModule } from 'devextreme-angular/ui/nested';
@@ -150,7 +145,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxRangeSelector = null;
-
 
     /**
      * [descr:dxRangeSelectorOptions.background]
@@ -748,51 +742,46 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'drawn', emit: 'onDrawn' },
+            { subscribe: 'exported', emit: 'onExported' },
+            { subscribe: 'exporting', emit: 'onExporting' },
+            { subscribe: 'fileSaving', emit: 'onFileSaving' },
+            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'valueChanged', emit: 'onValueChanged' },
+            { emit: 'backgroundChange' },
+            { emit: 'behaviorChange' },
+            { emit: 'chartChange' },
+            { emit: 'containerBackgroundColorChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'dataSourceFieldChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'exportChange' },
+            { emit: 'indentChange' },
+            { emit: 'loadingIndicatorChange' },
+            { emit: 'marginChange' },
+            { emit: 'pathModifiedChange' },
+            { emit: 'redrawOnResizeChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'scaleChange' },
+            { emit: 'selectedRangeColorChange' },
+            { emit: 'selectedRangeUpdateModeChange' },
+            { emit: 'shutterChange' },
+            { emit: 'sizeChange' },
+            { emit: 'sliderHandleChange' },
+            { emit: 'sliderMarkerChange' },
+            { emit: 'themeChange' },
+            { emit: 'titleChange' },
+            { emit: 'valueChange' },
+            { emit: 'onBlur' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'drawn', emit: 'onDrawn' },
-                       { subscribe: 'exported', emit: 'onExported' },
-                       { subscribe: 'exporting', emit: 'onExporting' },
-                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
-                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
-                       { emit: 'backgroundChange' },
-                       { emit: 'behaviorChange' },
-                       { emit: 'chartChange' },
-                       { emit: 'containerBackgroundColorChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'dataSourceFieldChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'exportChange' },
-                       { emit: 'indentChange' },
-                       { emit: 'loadingIndicatorChange' },
-                       { emit: 'marginChange' },
-                       { emit: 'pathModifiedChange' },
-                       { emit: 'redrawOnResizeChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'scaleChange' },
-                       { emit: 'selectedRangeColorChange' },
-                       { emit: 'selectedRangeUpdateModeChange' },
-                       { emit: 'shutterChange' },
-                       { emit: 'sizeChange' },
-                       { emit: 'sliderHandleChange' },
-                       { emit: 'sliderMarkerChange' },
-                       { emit: 'themeChange' },
-                       { emit: 'titleChange' },
-                       { emit: 'valueChange' },
-                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

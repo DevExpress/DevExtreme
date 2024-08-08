@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -32,9 +33,7 @@ import {
 } from '@angular/forms';
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -42,10 +41,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 
 
@@ -74,7 +69,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
 })
 export class DxCheckBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
     instance: DxCheckBox = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -640,47 +634,42 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'valueChanged', emit: 'onValueChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'enableThreeStateBehaviorChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'iconSizeChange' },
+            { emit: 'isDirtyChange' },
+            { emit: 'isValidChange' },
+            { emit: 'nameChange' },
+            { emit: 'readOnlyChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'textChange' },
+            { emit: 'validationErrorChange' },
+            { emit: 'validationErrorsChange' },
+            { emit: 'validationMessageModeChange' },
+            { emit: 'validationMessagePositionChange' },
+            { emit: 'validationStatusChange' },
+            { emit: 'valueChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'onBlur' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'valueChanged', emit: 'onValueChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'enableThreeStateBehaviorChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'iconSizeChange' },
-                       { emit: 'isDirtyChange' },
-                       { emit: 'isValidChange' },
-                       { emit: 'nameChange' },
-                       { emit: 'readOnlyChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'textChange' },
-                       { emit: 'validationErrorChange' },
-                       { emit: 'validationErrorsChange' },
-                       { emit: 'validationMessageModeChange' },
-                       { emit: 'validationMessagePositionChange' },
-                       { emit: 'validationStatusChange' },
-                       { emit: 'valueChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'onBlur' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

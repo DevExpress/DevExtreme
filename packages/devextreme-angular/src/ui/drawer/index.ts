@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -22,19 +23,13 @@ import DxDrawer from 'devextreme/ui/drawer';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 
 
@@ -55,7 +50,6 @@ import {
 })
 export class DxDrawerComponent extends DxComponent implements OnDestroy {
     instance: DxDrawer = null;
-
 
     /**
      * [descr:WidgetOptions.activeStateEnabled]
@@ -494,37 +488,32 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'animationDurationChange' },
+            { emit: 'animationEnabledChange' },
+            { emit: 'closeOnOutsideClickChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'maxSizeChange' },
+            { emit: 'minSizeChange' },
+            { emit: 'openedChange' },
+            { emit: 'openedStateModeChange' },
+            { emit: 'positionChange' },
+            { emit: 'revealModeChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'shadingChange' },
+            { emit: 'templateChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'animationDurationChange' },
-                       { emit: 'animationEnabledChange' },
-                       { emit: 'closeOnOutsideClickChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'maxSizeChange' },
-                       { emit: 'minSizeChange' },
-                       { emit: 'openedChange' },
-                       { emit: 'openedStateModeChange' },
-                       { emit: 'positionChange' },
-                       { emit: 'revealModeChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'shadingChange' },
-                       { emit: 'templateChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

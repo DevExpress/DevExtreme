@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -25,19 +26,13 @@ import DxBullet from 'devextreme/viz/bullet';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoMarginModule } from 'devextreme-angular/ui/nested';
 import { DxoSizeModule } from 'devextreme-angular/ui/nested';
@@ -66,7 +61,6 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 })
 export class DxBulletComponent extends DxComponent implements OnDestroy {
     instance: DxBullet = null;
-
 
     /**
      * [descr:dxBulletOptions.color]
@@ -501,41 +495,36 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'drawn', emit: 'onDrawn' },
+            { subscribe: 'exported', emit: 'onExported' },
+            { subscribe: 'exporting', emit: 'onExporting' },
+            { subscribe: 'fileSaving', emit: 'onFileSaving' },
+            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
+            { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
+            { emit: 'colorChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'endScaleValueChange' },
+            { emit: 'marginChange' },
+            { emit: 'pathModifiedChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'showTargetChange' },
+            { emit: 'showZeroLevelChange' },
+            { emit: 'sizeChange' },
+            { emit: 'startScaleValueChange' },
+            { emit: 'targetChange' },
+            { emit: 'targetColorChange' },
+            { emit: 'targetWidthChange' },
+            { emit: 'themeChange' },
+            { emit: 'tooltipChange' },
+            { emit: 'valueChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'drawn', emit: 'onDrawn' },
-                       { subscribe: 'exported', emit: 'onExported' },
-                       { subscribe: 'exporting', emit: 'onExporting' },
-                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
-                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
-                       { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
-                       { emit: 'colorChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'endScaleValueChange' },
-                       { emit: 'marginChange' },
-                       { emit: 'pathModifiedChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'showTargetChange' },
-                       { emit: 'showZeroLevelChange' },
-                       { emit: 'sizeChange' },
-                       { emit: 'startScaleValueChange' },
-                       { emit: 'targetChange' },
-                       { emit: 'targetColorChange' },
-                       { emit: 'targetWidthChange' },
-                       { emit: 'themeChange' },
-                       { emit: 'tooltipChange' },
-                       { emit: 'valueChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

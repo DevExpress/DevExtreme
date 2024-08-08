@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -26,19 +27,13 @@ import DxLoadPanel from 'devextreme/ui/load_panel';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
@@ -70,7 +65,6 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 })
 export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     instance: DxLoadPanel = null;
-
 
     /**
      * [descr:dxLoadPanelOptions.animation]
@@ -671,48 +665,43 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'hidden', emit: 'onHidden' },
+            { subscribe: 'hiding', emit: 'onHiding' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'showing', emit: 'onShowing' },
+            { subscribe: 'shown', emit: 'onShown' },
+            { emit: 'animationChange' },
+            { emit: 'closeOnOutsideClickChange' },
+            { emit: 'containerChange' },
+            { emit: 'deferRenderingChange' },
+            { emit: 'delayChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hideOnOutsideClickChange' },
+            { emit: 'hideOnParentScrollChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'indicatorSrcChange' },
+            { emit: 'maxHeightChange' },
+            { emit: 'maxWidthChange' },
+            { emit: 'messageChange' },
+            { emit: 'minHeightChange' },
+            { emit: 'minWidthChange' },
+            { emit: 'positionChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'shadingChange' },
+            { emit: 'shadingColorChange' },
+            { emit: 'showIndicatorChange' },
+            { emit: 'showPaneChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'wrapperAttrChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'hidden', emit: 'onHidden' },
-                       { subscribe: 'hiding', emit: 'onHiding' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'showing', emit: 'onShowing' },
-                       { subscribe: 'shown', emit: 'onShown' },
-                       { emit: 'animationChange' },
-                       { emit: 'closeOnOutsideClickChange' },
-                       { emit: 'containerChange' },
-                       { emit: 'deferRenderingChange' },
-                       { emit: 'delayChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hideOnOutsideClickChange' },
-                       { emit: 'hideOnParentScrollChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'indicatorSrcChange' },
-                       { emit: 'maxHeightChange' },
-                       { emit: 'maxWidthChange' },
-                       { emit: 'messageChange' },
-                       { emit: 'minHeightChange' },
-                       { emit: 'minWidthChange' },
-                       { emit: 'positionChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'shadingChange' },
-                       { emit: 'shadingColorChange' },
-                       { emit: 'showIndicatorChange' },
-                       { emit: 'showPaneChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'wrapperAttrChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

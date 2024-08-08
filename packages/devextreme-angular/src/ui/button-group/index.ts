@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -28,9 +29,7 @@ import DxButtonGroup from 'devextreme/ui/button_group';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -38,10 +37,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
@@ -65,7 +60,6 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxButtonGroupComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxButtonGroup = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -517,41 +511,36 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'buttonTemplateChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'itemsChange' },
+            { emit: 'keyExprChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'selectedItemKeysChange' },
+            { emit: 'selectedItemsChange' },
+            { emit: 'selectionModeChange' },
+            { emit: 'stylingModeChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'buttonTemplateChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'keyExprChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'selectedItemKeysChange' },
-                       { emit: 'selectedItemsChange' },
-                       { emit: 'selectionModeChange' },
-                       { emit: 'stylingModeChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

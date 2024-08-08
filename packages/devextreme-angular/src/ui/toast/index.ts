@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -24,19 +25,13 @@ import DxToast from 'devextreme/ui/toast';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
@@ -68,7 +63,6 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 })
 export class DxToastComponent extends DxComponent implements OnDestroy {
     instance: DxToast = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -709,50 +703,45 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'hidden', emit: 'onHidden' },
+            { subscribe: 'hiding', emit: 'onHiding' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'showing', emit: 'onShowing' },
+            { subscribe: 'shown', emit: 'onShown' },
+            { emit: 'accessKeyChange' },
+            { emit: 'animationChange' },
+            { emit: 'closeOnClickChange' },
+            { emit: 'closeOnOutsideClickChange' },
+            { emit: 'closeOnSwipeChange' },
+            { emit: 'contentTemplateChange' },
+            { emit: 'deferRenderingChange' },
+            { emit: 'displayTimeChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hideOnOutsideClickChange' },
+            { emit: 'hideOnParentScrollChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'maxHeightChange' },
+            { emit: 'maxWidthChange' },
+            { emit: 'messageChange' },
+            { emit: 'minHeightChange' },
+            { emit: 'minWidthChange' },
+            { emit: 'positionChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'shadingChange' },
+            { emit: 'shadingColorChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'typeChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'wrapperAttrChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'hidden', emit: 'onHidden' },
-                       { subscribe: 'hiding', emit: 'onHiding' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'showing', emit: 'onShowing' },
-                       { subscribe: 'shown', emit: 'onShown' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'animationChange' },
-                       { emit: 'closeOnClickChange' },
-                       { emit: 'closeOnOutsideClickChange' },
-                       { emit: 'closeOnSwipeChange' },
-                       { emit: 'contentTemplateChange' },
-                       { emit: 'deferRenderingChange' },
-                       { emit: 'displayTimeChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hideOnOutsideClickChange' },
-                       { emit: 'hideOnParentScrollChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'maxHeightChange' },
-                       { emit: 'maxWidthChange' },
-                       { emit: 'messageChange' },
-                       { emit: 'minHeightChange' },
-                       { emit: 'minWidthChange' },
-                       { emit: 'positionChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'shadingChange' },
-                       { emit: 'shadingColorChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'typeChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'wrapperAttrChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

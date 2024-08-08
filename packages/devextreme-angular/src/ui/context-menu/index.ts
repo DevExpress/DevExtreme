@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -34,9 +35,7 @@ import DxContextMenu from 'devextreme/ui/context_menu';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -44,10 +43,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
@@ -85,7 +80,6 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxContextMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxContextMenu<TKey> = null;
-
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -835,60 +829,55 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'hidden', emit: 'onHidden' },
+            { subscribe: 'hiding', emit: 'onHiding' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
+            { subscribe: 'itemRendered', emit: 'onItemRendered' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'positioning', emit: 'onPositioning' },
+            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'showing', emit: 'onShowing' },
+            { subscribe: 'shown', emit: 'onShown' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
+            { emit: 'animationChange' },
+            { emit: 'closeOnOutsideClickChange' },
+            { emit: 'cssClassChange' },
+            { emit: 'dataSourceChange' },
+            { emit: 'disabledChange' },
+            { emit: 'disabledExprChange' },
+            { emit: 'displayExprChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
+            { emit: 'heightChange' },
+            { emit: 'hideOnOutsideClickChange' },
+            { emit: 'hintChange' },
+            { emit: 'hoverStateEnabledChange' },
+            { emit: 'itemsChange' },
+            { emit: 'itemsExprChange' },
+            { emit: 'itemTemplateChange' },
+            { emit: 'positionChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'selectByClickChange' },
+            { emit: 'selectedExprChange' },
+            { emit: 'selectedItemChange' },
+            { emit: 'selectionModeChange' },
+            { emit: 'showEventChange' },
+            { emit: 'showSubmenuModeChange' },
+            { emit: 'submenuDirectionChange' },
+            { emit: 'tabIndexChange' },
+            { emit: 'targetChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'hidden', emit: 'onHidden' },
-                       { subscribe: 'hiding', emit: 'onHiding' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-                       { subscribe: 'itemRendered', emit: 'onItemRendered' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'positioning', emit: 'onPositioning' },
-                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-                       { subscribe: 'showing', emit: 'onShowing' },
-                       { subscribe: 'shown', emit: 'onShown' },
-                       { emit: 'accessKeyChange' },
-                       { emit: 'activeStateEnabledChange' },
-                       { emit: 'animationChange' },
-                       { emit: 'closeOnOutsideClickChange' },
-                       { emit: 'cssClassChange' },
-                       { emit: 'dataSourceChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'disabledExprChange' },
-                       { emit: 'displayExprChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'focusStateEnabledChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'hideOnOutsideClickChange' },
-                       { emit: 'hintChange' },
-                       { emit: 'hoverStateEnabledChange' },
-                       { emit: 'itemsChange' },
-                       { emit: 'itemsExprChange' },
-                       { emit: 'itemTemplateChange' },
-                       { emit: 'positionChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'selectByClickChange' },
-                       { emit: 'selectedExprChange' },
-                       { emit: 'selectedItemChange' },
-                       { emit: 'selectionModeChange' },
-                       { emit: 'showEventChange' },
-                       { emit: 'showSubmenuModeChange' },
-                       { emit: 'submenuDirectionChange' },
-                       { emit: 'tabIndexChange' },
-                       { emit: 'targetChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

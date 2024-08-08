@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -30,9 +31,7 @@ import DxDiagram from 'devextreme/ui/diagram';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,10 +39,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
 import { DxiCommandModule } from 'devextreme-angular/ui/nested';
@@ -88,7 +83,6 @@ import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
 })
 export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxDiagram = null;
-
 
     /**
      * [descr:dxDiagramOptions.autoZoomMode]
@@ -912,62 +906,57 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'contentReady', emit: 'onContentReady' },
+            { subscribe: 'customCommand', emit: 'onCustomCommand' },
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemDblClick', emit: 'onItemDblClick' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'requestEditOperation', emit: 'onRequestEditOperation' },
+            { subscribe: 'requestLayoutUpdate', emit: 'onRequestLayoutUpdate' },
+            { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { emit: 'autoZoomModeChange' },
+            { emit: 'contextMenuChange' },
+            { emit: 'contextToolboxChange' },
+            { emit: 'customShapesChange' },
+            { emit: 'customShapeTemplateChange' },
+            { emit: 'customShapeToolboxTemplateChange' },
+            { emit: 'defaultItemPropertiesChange' },
+            { emit: 'disabledChange' },
+            { emit: 'edgesChange' },
+            { emit: 'editingChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'exportChange' },
+            { emit: 'fullScreenChange' },
+            { emit: 'gridSizeChange' },
+            { emit: 'hasChangesChange' },
+            { emit: 'heightChange' },
+            { emit: 'historyToolbarChange' },
+            { emit: 'mainToolbarChange' },
+            { emit: 'nodesChange' },
+            { emit: 'pageColorChange' },
+            { emit: 'pageOrientationChange' },
+            { emit: 'pageSizeChange' },
+            { emit: 'propertiesPanelChange' },
+            { emit: 'readOnlyChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'showGridChange' },
+            { emit: 'simpleViewChange' },
+            { emit: 'snapToGridChange' },
+            { emit: 'toolboxChange' },
+            { emit: 'unitsChange' },
+            { emit: 'useNativeScrollingChange' },
+            { emit: 'viewToolbarChange' },
+            { emit: 'viewUnitsChange' },
+            { emit: 'visibleChange' },
+            { emit: 'widthChange' },
+            { emit: 'zoomLevelChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'contentReady', emit: 'onContentReady' },
-                       { subscribe: 'customCommand', emit: 'onCustomCommand' },
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'itemClick', emit: 'onItemClick' },
-                       { subscribe: 'itemDblClick', emit: 'onItemDblClick' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'requestEditOperation', emit: 'onRequestEditOperation' },
-                       { subscribe: 'requestLayoutUpdate', emit: 'onRequestLayoutUpdate' },
-                       { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-                       { emit: 'autoZoomModeChange' },
-                       { emit: 'contextMenuChange' },
-                       { emit: 'contextToolboxChange' },
-                       { emit: 'customShapesChange' },
-                       { emit: 'customShapeTemplateChange' },
-                       { emit: 'customShapeToolboxTemplateChange' },
-                       { emit: 'defaultItemPropertiesChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'edgesChange' },
-                       { emit: 'editingChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'exportChange' },
-                       { emit: 'fullScreenChange' },
-                       { emit: 'gridSizeChange' },
-                       { emit: 'hasChangesChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'historyToolbarChange' },
-                       { emit: 'mainToolbarChange' },
-                       { emit: 'nodesChange' },
-                       { emit: 'pageColorChange' },
-                       { emit: 'pageOrientationChange' },
-                       { emit: 'pageSizeChange' },
-                       { emit: 'propertiesPanelChange' },
-                       { emit: 'readOnlyChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'showGridChange' },
-                       { emit: 'simpleViewChange' },
-                       { emit: 'snapToGridChange' },
-                       { emit: 'toolboxChange' },
-                       { emit: 'unitsChange' },
-                       { emit: 'useNativeScrollingChange' },
-                       { emit: 'viewToolbarChange' },
-                       { emit: 'viewUnitsChange' },
-                       { emit: 'visibleChange' },
-                       { emit: 'widthChange' },
-                       { emit: 'zoomLevelChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

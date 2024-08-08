@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -22,19 +23,13 @@ import DxValidationGroup from 'devextreme/ui/validation_group';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 
 
@@ -55,7 +50,6 @@ import {
 })
 export class DxValidationGroupComponent extends DxComponent implements OnDestroy {
     instance: DxValidationGroup = null;
-
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
@@ -154,20 +148,15 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'elementAttrChange' },
+            { emit: 'heightChange' },
+            { emit: 'widthChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

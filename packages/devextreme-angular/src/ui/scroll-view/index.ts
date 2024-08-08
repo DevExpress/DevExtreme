@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -23,19 +24,13 @@ import DxScrollView from 'devextreme/ui/scroll_view';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 
 
@@ -56,7 +51,6 @@ import {
 })
 export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     instance: DxScrollView = null;
-
 
     /**
      * [descr:dxScrollableOptions.bounceEnabled]
@@ -427,36 +421,31 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'pullDown', emit: 'onPullDown' },
+            { subscribe: 'reachBottom', emit: 'onReachBottom' },
+            { subscribe: 'scroll', emit: 'onScroll' },
+            { subscribe: 'updated', emit: 'onUpdated' },
+            { emit: 'bounceEnabledChange' },
+            { emit: 'directionChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'heightChange' },
+            { emit: 'pulledDownTextChange' },
+            { emit: 'pullingDownTextChange' },
+            { emit: 'reachBottomTextChange' },
+            { emit: 'refreshingTextChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'scrollByContentChange' },
+            { emit: 'scrollByThumbChange' },
+            { emit: 'showScrollbarChange' },
+            { emit: 'useNativeChange' },
+            { emit: 'widthChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'pullDown', emit: 'onPullDown' },
-                       { subscribe: 'reachBottom', emit: 'onReachBottom' },
-                       { subscribe: 'scroll', emit: 'onScroll' },
-                       { subscribe: 'updated', emit: 'onUpdated' },
-                       { emit: 'bounceEnabledChange' },
-                       { emit: 'directionChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'pulledDownTextChange' },
-                       { emit: 'pullingDownTextChange' },
-                       { emit: 'reachBottomTextChange' },
-                       { emit: 'refreshingTextChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'scrollByContentChange' },
-                       { emit: 'scrollByThumbChange' },
-                       { emit: 'showScrollbarChange' },
-                       { emit: 'useNativeChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

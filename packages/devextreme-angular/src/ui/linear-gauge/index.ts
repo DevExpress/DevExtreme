@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -30,9 +31,7 @@ import DxLinearGauge from 'devextreme/viz/linear_gauge';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
@@ -40,10 +39,6 @@ import {
     IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
@@ -91,7 +86,6 @@ import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxLinearGauge = null;
-
 
     /**
      * [descr:BaseGaugeOptions.animation]
@@ -607,47 +601,42 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'drawn', emit: 'onDrawn' },
+            { subscribe: 'exported', emit: 'onExported' },
+            { subscribe: 'exporting', emit: 'onExporting' },
+            { subscribe: 'fileSaving', emit: 'onFileSaving' },
+            { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
+            { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
+            { emit: 'animationChange' },
+            { emit: 'containerBackgroundColorChange' },
+            { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'exportChange' },
+            { emit: 'geometryChange' },
+            { emit: 'loadingIndicatorChange' },
+            { emit: 'marginChange' },
+            { emit: 'pathModifiedChange' },
+            { emit: 'rangeContainerChange' },
+            { emit: 'redrawOnResizeChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'scaleChange' },
+            { emit: 'sizeChange' },
+            { emit: 'subvalueIndicatorChange' },
+            { emit: 'subvaluesChange' },
+            { emit: 'themeChange' },
+            { emit: 'titleChange' },
+            { emit: 'tooltipChange' },
+            { emit: 'valueChange' },
+            { emit: 'valueIndicatorChange' }
+        ]);
 
         this._idh.setHost(this);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'drawn', emit: 'onDrawn' },
-                       { subscribe: 'exported', emit: 'onExported' },
-                       { subscribe: 'exporting', emit: 'onExporting' },
-                       { subscribe: 'fileSaving', emit: 'onFileSaving' },
-                       { subscribe: 'incidentOccurred', emit: 'onIncidentOccurred' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'tooltipHidden', emit: 'onTooltipHidden' },
-                       { subscribe: 'tooltipShown', emit: 'onTooltipShown' },
-                       { emit: 'animationChange' },
-                       { emit: 'containerBackgroundColorChange' },
-                       { emit: 'disabledChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'exportChange' },
-                       { emit: 'geometryChange' },
-                       { emit: 'loadingIndicatorChange' },
-                       { emit: 'marginChange' },
-                       { emit: 'pathModifiedChange' },
-                       { emit: 'rangeContainerChange' },
-                       { emit: 'redrawOnResizeChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'scaleChange' },
-                       { emit: 'sizeChange' },
-                       { emit: 'subvalueIndicatorChange' },
-                       { emit: 'subvaluesChange' },
-                       { emit: 'themeChange' },
-                       { emit: 'titleChange' },
-                       { emit: 'tooltipChange' },
-                       { emit: 'valueChange' },
-                       { emit: 'valueIndicatorChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {

@@ -9,6 +9,7 @@ import {
     NgZone,
     PLATFORM_ID,
     Inject,
+
     Input,
     Output,
     OnDestroy,
@@ -23,19 +24,13 @@ import DxResizable from 'devextreme/ui/resizable';
 
 
 import {
-
     DxComponent,
-
     DxTemplateHost,
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
     WatcherHelper
 } from 'devextreme-angular/core';
-
-
-
-
 
 
 
@@ -56,7 +51,6 @@ import {
 })
 export class DxResizableComponent extends DxComponent implements OnDestroy {
     instance: DxResizable = null;
-
 
     /**
      * [descr:dxResizableOptions.area]
@@ -339,31 +333,26 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
-
-        this._createEventEmitters(this._getEmitters());
+        this._createEventEmitters([
+            { subscribe: 'disposing', emit: 'onDisposing' },
+            { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'resize', emit: 'onResize' },
+            { subscribe: 'resizeEnd', emit: 'onResizeEnd' },
+            { subscribe: 'resizeStart', emit: 'onResizeStart' },
+            { emit: 'areaChange' },
+            { emit: 'elementAttrChange' },
+            { emit: 'handlesChange' },
+            { emit: 'heightChange' },
+            { emit: 'keepAspectRatioChange' },
+            { emit: 'maxHeightChange' },
+            { emit: 'maxWidthChange' },
+            { emit: 'minHeightChange' },
+            { emit: 'minWidthChange' },
+            { emit: 'rtlEnabledChange' },
+            { emit: 'widthChange' }
+        ]);
         optionHost.setHost(this);
-    }
-
-    protected _getEmitters() {
-        return [
-                       { subscribe: 'disposing', emit: 'onDisposing' },
-                       { subscribe: 'initialized', emit: 'onInitialized' },
-                       { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                       { subscribe: 'resize', emit: 'onResize' },
-                       { subscribe: 'resizeEnd', emit: 'onResizeEnd' },
-                       { subscribe: 'resizeStart', emit: 'onResizeStart' },
-                       { emit: 'areaChange' },
-                       { emit: 'elementAttrChange' },
-                       { emit: 'handlesChange' },
-                       { emit: 'heightChange' },
-                       { emit: 'keepAspectRatioChange' },
-                       { emit: 'maxHeightChange' },
-                       { emit: 'maxWidthChange' },
-                       { emit: 'minHeightChange' },
-                       { emit: 'minWidthChange' },
-                       { emit: 'rtlEnabledChange' },
-                       { emit: 'widthChange' },  ...(this._getAdditionalEmitters?.() || [])
-                   ];
     }
 
     protected _createInstance(element, options) {
