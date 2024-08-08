@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import registerComponent from '@js/core/component_registrator';
-
 import { Pager as PagerComponent } from '../pager';
 import { GridPagerWrapper } from './grid_pager';
 
@@ -52,4 +50,3 @@ export default class Pager extends GridPagerWrapper {
     return PagerComponent;
   }
 }
-registerComponent('dxPager', Pager);

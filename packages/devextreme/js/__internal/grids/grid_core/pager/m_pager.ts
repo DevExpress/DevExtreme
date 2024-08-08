@@ -1,9 +1,9 @@
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
+import Pager from '@js/ui/pager';
 
 import type { PagerProps } from '../../../pager/common/pager_props';
-import Pager from '../../../pager/wrappers/pager';
 import modules from '../m_modules';
 
 const PAGER_CLASS = 'pager';
