@@ -204,7 +204,7 @@ export class ResizingController extends modules.ViewController {
     // @ts-expect-error Badly typed dxElementWrapper
     const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
     // @ts-expect-error Treelist Variable
-    const expandableWidgetAriaLabel = messageLocalization.format(this._getExpandableWidgetAriaId);
+    const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
 
     if (expandableWidgetAriaLabel !== '') {
       this.component.setAria('roledescription', expandableWidgetAriaLabel, $ariaLabelElement);
