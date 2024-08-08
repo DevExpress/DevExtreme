@@ -22,13 +22,13 @@ export interface PagerSmallProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallPropsType = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText'> & PagerSmallProps;
+type PagerSmallPropsType = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChanged' | 'pagesCountText'> & PagerSmallProps;
 
 export const PagerSmallDefaultProps: PagerSmallPropsType = {
   inputAttr: { 'aria-label': messageLocalization.format('dxPager-ariaPageNumber') },
   pageIndex: PagerDefaultProps.pageIndex,
   pageCount: PagerDefaultProps.pageCount,
-  pageIndexChange: PagerDefaultProps.pageIndexChange,
+  pageIndexChanged: PagerDefaultProps.pageIndexChanged,
 };
 
 export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
@@ -79,11 +79,11 @@ export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
   }
 
   selectLastPageIndex(): void {
-    this.props.pageIndexChange(this.props.pageCount - 1);
+    this.props.pageIndexChanged(this.props.pageCount - 1);
   }
 
   valueChange(value): void {
-    this.props.pageIndexChange(value - 1);
+    this.props.pageIndexChanged(value - 1);
   }
 
   render(): JSX.Element {

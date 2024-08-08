@@ -24,12 +24,12 @@ export interface PageSizeSelectorProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChanged' | 'pageSizes' > & PageSizeSelectorProps;
 
 const PageSizeSelectorDefaultProps: PageSizeSelectorPropsType = {
   isLargeDisplayMode: true,
   pageSize: PagerDefaultProps.pageSize,
-  pageSizeChange: PagerDefaultProps.pageSizeChange,
+  pageSizeChanged: PagerDefaultProps.pageSizeChanged,
   pageSizes: PagerDefaultProps.pageSizes,
 };
 
@@ -91,7 +91,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
     const normalizedPageSizes = this.getNormalizedPageSizes();
     const {
       pageSize,
-      pageSizeChange,
+      pageSizeChanged,
       isLargeDisplayMode,
     } = this.props;
     return (
@@ -100,7 +100,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
         <PageSizeLarge
           pageSizes={this.getNormalizedPageSizes()}
           pageSize={pageSize}
-          pageSizeChange={pageSizeChange}
+          pageSizeChanged={pageSizeChanged}
         />
         )}
         {!isLargeDisplayMode && (
@@ -108,7 +108,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
           parentRef={this.htmlRef}
           pageSizes={normalizedPageSizes}
           pageSize={pageSize}
-          pageSizeChange={pageSizeChange}
+          pageSizeChanged={pageSizeChanged}
         />
         )}
       </div>

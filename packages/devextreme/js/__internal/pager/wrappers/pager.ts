@@ -17,9 +17,9 @@ export default class Pager extends GridPagerWrapper {
       templates: [],
       props: [
         'defaultPageSize',
-        'pageSizeChange',
+        'pageSizeChanged',
         'defaultPageIndex',
-        'pageIndexChange',
+        'pageIndexChanged',
         'gridCompatibility',
         'className',
         'showInfo',

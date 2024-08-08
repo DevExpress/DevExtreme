@@ -30,13 +30,13 @@ type DelimiterType = 'none' | 'low' | 'high' | 'both';
 interface PageIndexes extends Array<PageIndex> {}
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
+type PagesLargePropsType = Pick<PagerProps, 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChanged'>;
 
 const PagesLargeDefaultProps: PagesLargePropsType = {
   maxPagesCount: PagerDefaultProps.maxPagesCount,
   pageCount: PagerDefaultProps.pageCount,
   pageIndex: PagerDefaultProps.pageIndex,
-  pageIndexChange: PagerDefaultProps.pageIndexChange,
+  pageIndexChanged: PagerDefaultProps.pageIndexChanged,
 };
 
 function getDelimiterType(
@@ -180,7 +180,7 @@ export class PagesLarge extends BaseInfernoComponent<PagesLargePropsType> {
   }
 
   onPageClick(pageIndex) {
-    this.props.pageIndexChange(pageIndex);
+    this.props.pageIndexChanged(pageIndex);
   }
 
   getPageIndexes() {

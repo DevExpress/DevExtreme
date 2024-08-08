@@ -181,7 +181,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
       showPageSizes,
       pageSizesRef,
       pageSize,
-      pageSizeChange,
+      pageSizeChanged,
       pageSizes,
       infoTextRef,
       infoText,
@@ -191,7 +191,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
       pagesRef,
       hasKnownLastPage,
       maxPagesCount,
-      pageIndexChange,
+      pageIndexChanged,
       pagesCountText,
       showNavigationButtons,
     } = this.props;
@@ -209,7 +209,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
             rootElementRef={pageSizesRef}
             isLargeDisplayMode={this.getIsLargeDisplayMode()}
             pageSize={pageSize}
-            pageSizeChange={pageSizeChange}
+            pageSizeChanged={pageSizeChanged}
             pageSizes={pageSizes}
           />
         )}
@@ -238,7 +238,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
                   maxPagesCount={maxPagesCount}
                   pageCount={pageCount}
                   pageIndex={pageIndex}
-                  pageIndexChange={pageIndexChange}
+                  pageIndexChanged={pageIndexChanged}
                   pagesCountText={pagesCountText}
                   showNavigationButtons={showNavigationButtons}
                   totalCount={totalCount}
