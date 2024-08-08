@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-filter-row-gantt',
+    selector: 'dxo-gantt-filter-row',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterRowGanttComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get betweenEndText(): string {
         return this._getOption('betweenEndText');
@@ -112,10 +112,10 @@ export class DxoFilterRowGanttComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoFilterRowGanttComponent
+    DxoGanttFilterRowComponent
   ],
   exports: [
-    DxoFilterRowGanttComponent
+    DxoGanttFilterRowComponent
   ],
 })
-export class DxoFilterRowGanttModule { }
+export class DxoGanttFilterRowModule { }

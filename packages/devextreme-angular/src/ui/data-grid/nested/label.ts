@@ -32,12 +32,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label-data-grid',
+    selector: 'dxo-data-grid-label',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoLabelDataGridComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+export class DxoDataGridLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
     @Input()
     get alignment(): HorizontalAlignment {
@@ -126,10 +126,10 @@ export class DxoLabelDataGridComponent extends NestedOption implements AfterView
 
 @NgModule({
   declarations: [
-    DxoLabelDataGridComponent
+    DxoDataGridLabelComponent
   ],
   exports: [
-    DxoLabelDataGridComponent
+    DxoDataGridLabelComponent
   ],
 })
-export class DxoLabelDataGridModule { }
+export class DxoDataGridLabelModule { }

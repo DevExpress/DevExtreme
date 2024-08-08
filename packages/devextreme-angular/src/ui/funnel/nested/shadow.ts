@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-funnel',
+    selector: 'dxo-funnel-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowFunnelComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoShadowFunnelComponent
+    DxoFunnelShadowComponent
   ],
   exports: [
-    DxoShadowFunnelComponent
+    DxoFunnelShadowComponent
   ],
 })
-export class DxoShadowFunnelModule { }
+export class DxoFunnelShadowModule { }

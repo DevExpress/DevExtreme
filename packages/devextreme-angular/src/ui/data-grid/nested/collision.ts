@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-data-grid',
+    selector: 'dxo-data-grid-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionDataGridComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoCollisionDataGridComponent
+    DxoDataGridCollisionComponent
   ],
   exports: [
-    DxoCollisionDataGridComponent
+    DxoDataGridCollisionComponent
   ],
 })
-export class DxoCollisionDataGridModule { }
+export class DxoDataGridCollisionModule { }

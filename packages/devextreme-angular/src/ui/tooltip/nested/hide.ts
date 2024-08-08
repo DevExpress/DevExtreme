@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hide-tooltip',
+    selector: 'dxo-tooltip-hide',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHideTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipHideComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoHideTooltipComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoHideTooltipComponent
+    DxoTooltipHideComponent
   ],
   exports: [
-    DxoHideTooltipComponent
+    DxoTooltipHideComponent
   ],
 })
-export class DxoHideTooltipModule { }
+export class DxoTooltipHideModule { }

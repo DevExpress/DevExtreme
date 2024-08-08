@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-cursor-offset-draggable',
+    selector: 'dxo-draggable-cursor-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCursorOffsetDraggableComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDraggableCursorOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoCursorOffsetDraggableComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoCursorOffsetDraggableComponent
+    DxoDraggableCursorOffsetComponent
   ],
   exports: [
-    DxoCursorOffsetDraggableComponent
+    DxoDraggableCursorOffsetComponent
   ],
 })
-export class DxoCursorOffsetDraggableModule { }
+export class DxoDraggableCursorOffsetModule { }

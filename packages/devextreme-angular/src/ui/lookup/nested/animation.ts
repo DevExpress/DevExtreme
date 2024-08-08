@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-lookup',
+    selector: 'dxo-lookup-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationLookupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLookupAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationLookupComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoAnimationLookupComponent
+    DxoLookupAnimationComponent
   ],
   exports: [
-    DxoAnimationLookupComponent
+    DxoLookupAnimationComponent
   ],
 })
-export class DxoAnimationLookupModule { }
+export class DxoLookupAnimationModule { }

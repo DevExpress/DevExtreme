@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-boundary-offset-tree-list',
+    selector: 'dxo-tree-list-boundary-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoundaryOffsetTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoBoundaryOffsetTreeListComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoBoundaryOffsetTreeListComponent
+    DxoTreeListBoundaryOffsetComponent
   ],
   exports: [
-    DxoBoundaryOffsetTreeListComponent
+    DxoTreeListBoundaryOffsetComponent
   ],
 })
-export class DxoBoundaryOffsetTreeListModule { }
+export class DxoTreeListBoundaryOffsetModule { }

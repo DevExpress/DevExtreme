@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-reduction-chart',
+    selector: 'dxo-chart-reduction',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoReductionChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartReductionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -72,10 +72,10 @@ export class DxoReductionChartComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoReductionChartComponent
+    DxoChartReductionComponent
   ],
   exports: [
-    DxoReductionChartComponent
+    DxoChartReductionComponent
   ],
 })
-export class DxoReductionChartModule { }
+export class DxoChartReductionModule { }

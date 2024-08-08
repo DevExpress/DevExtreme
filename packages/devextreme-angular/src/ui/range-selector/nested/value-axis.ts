@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-value-axis-range-selector',
+    selector: 'dxo-range-selector-value-axis',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoValueAxisRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorValueAxisComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get inverted(): boolean {
         return this._getOption('inverted');
@@ -105,10 +105,10 @@ export class DxoValueAxisRangeSelectorComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoValueAxisRangeSelectorComponent
+    DxoRangeSelectorValueAxisComponent
   ],
   exports: [
-    DxoValueAxisRangeSelectorComponent
+    DxoRangeSelectorValueAxisComponent
   ],
 })
-export class DxoValueAxisRangeSelectorModule { }
+export class DxoRangeSelectorValueAxisModule { }

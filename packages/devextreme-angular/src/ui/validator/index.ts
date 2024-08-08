@@ -44,13 +44,13 @@ import {
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 
-import { DxoAdapterValidatorModule } from 'devextreme-angular/ui/validator/nested';
-import { DxiValidationRuleValidatorModule } from 'devextreme-angular/ui/validator/nested';
+import { DxoValidatorAdapterModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 
 
 import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiValidationRuleValidatorComponent } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorValidationRuleComponent } from 'devextreme-angular/ui/validator/nested';
 
 
 
@@ -245,25 +245,25 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 
 
-    hasNewvalidationRules: boolean = false;
+    hasNewValidationRules: boolean = false;
 
-    @ContentChildren(DxiValidationRuleValidatorComponent)
-    get validationRulesNewChildren(): QueryList<DxiValidationRuleValidatorComponent> {
+    @ContentChildren(DxiValidatorValidationRuleComponent)
+    get validationRulesChildren(): QueryList<DxiValidatorValidationRuleComponent> {
         return this._getOption('validationRules');
     }
-    set validationRulesNewChildren(value) {
-        this.hasNewvalidationRules = value.length > 0;
+    set validationRulesChildren(value) {
+        this.hasNewValidationRules = value.length > 0;
         this.setChildren('validationRules', value);
     }
 
 
 
     @ContentChildren(DxiValidationRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+    get validationRulesLegacyChildren(): QueryList<DxiValidationRuleComponent> {
         return this._getOption('validationRules');
     }
-    set validationRulesChildren(value) {
-        if (this.hasNewvalidationRules) {
+    set validationRulesLegacyChildren(value) {
+        if (this.hasNewValidationRules) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -360,8 +360,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
   imports: [
     DxoAdapterModule,
     DxiValidationRuleModule,
-    DxoAdapterValidatorModule,
-    DxiValidationRuleValidatorModule,
+    DxoValidatorAdapterModule,
+    DxiValidatorValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -371,7 +371,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
   exports: [
     DxValidatorComponent,
     DxoAdapterModule,DxiValidationRuleModule,
-    DxoAdapterValidatorModule,DxiValidationRuleValidatorModule,
+    DxoValidatorAdapterModule,DxiValidatorValidationRuleModule,
     DxTemplateModule
   ]
 })

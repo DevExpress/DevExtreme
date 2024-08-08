@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-range-slider',
+    selector: 'dxo-range-slider-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipRangeSliderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSliderTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -89,10 +89,10 @@ export class DxoTooltipRangeSliderComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoTooltipRangeSliderComponent
+    DxoRangeSliderTooltipComponent
   ],
   exports: [
-    DxoTooltipRangeSliderComponent
+    DxoRangeSliderTooltipComponent
   ],
 })
-export class DxoTooltipRangeSliderModule { }
+export class DxoRangeSliderTooltipModule { }

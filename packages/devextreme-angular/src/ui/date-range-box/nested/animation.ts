@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-date-range-box',
+    selector: 'dxo-date-range-box-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationDateRangeBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateRangeBoxAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationDateRangeBoxComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoAnimationDateRangeBoxComponent
+    DxoDateRangeBoxAnimationComponent
   ],
   exports: [
-    DxoAnimationDateRangeBoxComponent
+    DxoDateRangeBoxAnimationComponent
   ],
 })
-export class DxoAnimationDateRangeBoxModule { }
+export class DxoDateRangeBoxAnimationModule { }

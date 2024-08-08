@@ -67,29 +67,29 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoOptionsTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoDropDownOptionsTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoAnimationTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoHideTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoFromTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoPositionTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoAtTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoBoundaryOffsetTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoCollisionTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoMyTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoOffsetTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoToTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxoShowTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxiToolbarItemTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
-import { DxiItemTagBoxModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxiTagBoxButtonModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxDropDownOptionsModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxAnimationModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxHideModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxFromModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxPositionModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxAtModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxBoundaryOffsetModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxCollisionModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxMyModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxOffsetModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxToModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxoTagBoxShowModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxiTagBoxToolbarItemModule } from 'devextreme-angular/ui/tag-box/nested';
+import { DxiTagBoxItemModule } from 'devextreme-angular/ui/tag-box/nested';
 
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonTagBoxComponent } from 'devextreme-angular/ui/tag-box/nested';
-import { DxiItemTagBoxComponent } from 'devextreme-angular/ui/tag-box/nested';
+import { DxiTagBoxButtonComponent } from 'devextreme-angular/ui/tag-box/nested';
+import { DxiTagBoxItemComponent } from 'devextreme-angular/ui/tag-box/nested';
 
 
 
@@ -1643,36 +1643,36 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    hasNewbuttons: boolean = false;
+    hasNewButtons: boolean = false;
 
-    @ContentChildren(DxiButtonTagBoxComponent)
-    get buttonsNewChildren(): QueryList<DxiButtonTagBoxComponent> {
+    @ContentChildren(DxiTagBoxButtonComponent)
+    get buttonsChildren(): QueryList<DxiTagBoxButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsNewChildren(value) {
-        this.hasNewbuttons = value.length > 0;
+    set buttonsChildren(value) {
+        this.hasNewButtons = value.length > 0;
         this.setChildren('buttons', value);
     }
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemTagBoxComponent)
-    get itemsNewChildren(): QueryList<DxiItemTagBoxComponent> {
+    @ContentChildren(DxiTagBoxItemComponent)
+    get itemsChildren(): QueryList<DxiTagBoxItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsChildren(value) {
-        if (this.hasNewbuttons) {
+    set buttonsLegacyChildren(value) {
+        if (this.hasNewButtons) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1682,11 +1682,11 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1890,22 +1890,22 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoShowModule,
     DxiToolbarItemModule,
     DxiItemModule,
-    DxiButtonTagBoxModule,
-    DxoOptionsTagBoxModule,
-    DxoDropDownOptionsTagBoxModule,
-    DxoAnimationTagBoxModule,
-    DxoHideTagBoxModule,
-    DxoFromTagBoxModule,
-    DxoPositionTagBoxModule,
-    DxoAtTagBoxModule,
-    DxoBoundaryOffsetTagBoxModule,
-    DxoCollisionTagBoxModule,
-    DxoMyTagBoxModule,
-    DxoOffsetTagBoxModule,
-    DxoToTagBoxModule,
-    DxoShowTagBoxModule,
-    DxiToolbarItemTagBoxModule,
-    DxiItemTagBoxModule,
+    DxiTagBoxButtonModule,
+    DxoTagBoxOptionsModule,
+    DxoTagBoxDropDownOptionsModule,
+    DxoTagBoxAnimationModule,
+    DxoTagBoxHideModule,
+    DxoTagBoxFromModule,
+    DxoTagBoxPositionModule,
+    DxoTagBoxAtModule,
+    DxoTagBoxBoundaryOffsetModule,
+    DxoTagBoxCollisionModule,
+    DxoTagBoxMyModule,
+    DxoTagBoxOffsetModule,
+    DxoTagBoxToModule,
+    DxoTagBoxShowModule,
+    DxiTagBoxToolbarItemModule,
+    DxiTagBoxItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1915,7 +1915,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
   exports: [
     DxTagBoxComponent,
     DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxiItemModule,
-    DxiButtonTagBoxModule,DxoOptionsTagBoxModule,DxoDropDownOptionsTagBoxModule,DxoAnimationTagBoxModule,DxoHideTagBoxModule,DxoFromTagBoxModule,DxoPositionTagBoxModule,DxoAtTagBoxModule,DxoBoundaryOffsetTagBoxModule,DxoCollisionTagBoxModule,DxoMyTagBoxModule,DxoOffsetTagBoxModule,DxoToTagBoxModule,DxoShowTagBoxModule,DxiToolbarItemTagBoxModule,DxiItemTagBoxModule,
+    DxiTagBoxButtonModule,DxoTagBoxOptionsModule,DxoTagBoxDropDownOptionsModule,DxoTagBoxAnimationModule,DxoTagBoxHideModule,DxoTagBoxFromModule,DxoTagBoxPositionModule,DxoTagBoxAtModule,DxoTagBoxBoundaryOffsetModule,DxoTagBoxCollisionModule,DxoTagBoxMyModule,DxoTagBoxOffsetModule,DxoTagBoxToModule,DxoTagBoxShowModule,DxiTagBoxToolbarItemModule,DxiTagBoxItemModule,
     DxTemplateModule
   ]
 })

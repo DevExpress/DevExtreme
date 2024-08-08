@@ -41,12 +41,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemValidationSummaryModule } from 'devextreme-angular/ui/validation-summary/nested';
+import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemValidationSummaryComponent } from 'devextreme-angular/ui/validation-summary/nested';
+import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validation-summary/nested';
 
 
 
@@ -209,25 +209,25 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemValidationSummaryComponent)
-    get itemsNewChildren(): QueryList<DxiItemValidationSummaryComponent> {
+    @ContentChildren(DxiValidationSummaryItemComponent)
+    get itemsChildren(): QueryList<DxiValidationSummaryItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -306,7 +306,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemValidationSummaryModule,
+    DxiValidationSummaryItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -316,7 +316,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
   exports: [
     DxValidationSummaryComponent,
     DxiItemModule,
-    DxiItemValidationSummaryModule,
+    DxiValidationSummaryItemModule,
     DxTemplateModule
   ]
 })

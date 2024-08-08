@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-sankey',
+    selector: 'dxo-sankey-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -194,10 +194,10 @@ export class DxoTooltipSankeyComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoTooltipSankeyComponent
+    DxoSankeyTooltipComponent
   ],
   exports: [
-    DxoTooltipSankeyComponent
+    DxoSankeyTooltipComponent
   ],
 })
-export class DxoTooltipSankeyModule { }
+export class DxoSankeyTooltipModule { }

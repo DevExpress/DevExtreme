@@ -48,17 +48,17 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
-import { DxoAnimationLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoHideLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoFromLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoPositionLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoAtLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoBoundaryOffsetLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoCollisionLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoMyLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoOffsetLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoToLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoShowLoadPanelModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelAnimationModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelHideModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelFromModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelPositionModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelAtModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelBoundaryOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelCollisionModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelMyModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelShowModule } from 'devextreme-angular/ui/load-panel/nested';
 
 
 
@@ -746,17 +746,17 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoAnimationLoadPanelModule,
-    DxoHideLoadPanelModule,
-    DxoFromLoadPanelModule,
-    DxoPositionLoadPanelModule,
-    DxoAtLoadPanelModule,
-    DxoBoundaryOffsetLoadPanelModule,
-    DxoCollisionLoadPanelModule,
-    DxoMyLoadPanelModule,
-    DxoOffsetLoadPanelModule,
-    DxoToLoadPanelModule,
-    DxoShowLoadPanelModule,
+    DxoLoadPanelAnimationModule,
+    DxoLoadPanelHideModule,
+    DxoLoadPanelFromModule,
+    DxoLoadPanelPositionModule,
+    DxoLoadPanelAtModule,
+    DxoLoadPanelBoundaryOffsetModule,
+    DxoLoadPanelCollisionModule,
+    DxoLoadPanelMyModule,
+    DxoLoadPanelOffsetModule,
+    DxoLoadPanelToModule,
+    DxoLoadPanelShowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -766,7 +766,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
   exports: [
     DxLoadPanelComponent,
     DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
-    DxoAnimationLoadPanelModule,DxoHideLoadPanelModule,DxoFromLoadPanelModule,DxoPositionLoadPanelModule,DxoAtLoadPanelModule,DxoBoundaryOffsetLoadPanelModule,DxoCollisionLoadPanelModule,DxoMyLoadPanelModule,DxoOffsetLoadPanelModule,DxoToLoadPanelModule,DxoShowLoadPanelModule,
+    DxoLoadPanelAnimationModule,DxoLoadPanelHideModule,DxoLoadPanelFromModule,DxoLoadPanelPositionModule,DxoLoadPanelAtModule,DxoLoadPanelBoundaryOffsetModule,DxoLoadPanelCollisionModule,DxoLoadPanelMyModule,DxoLoadPanelOffsetModule,DxoLoadPanelToModule,DxoLoadPanelShowModule,
     DxTemplateModule
   ]
 })

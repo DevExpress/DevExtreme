@@ -67,28 +67,28 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoOptionsDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoCalendarOptionsDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDisplayFormatDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDropDownOptionsDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoAnimationDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoHideDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoFromDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoPositionDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoAtDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoBoundaryOffsetDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoCollisionDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoMyDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoOffsetDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoToDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoShowDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxiToolbarItemDateBoxModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxiDateBoxButtonModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxOptionsModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxCalendarOptionsModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxDisplayFormatModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxDropDownOptionsModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxAnimationModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxHideModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxFromModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxPositionModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxAtModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxBoundaryOffsetModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxCollisionModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxMyModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxOffsetModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxToModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxShowModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nested';
 
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonDateBoxComponent } from 'devextreme-angular/ui/date-box/nested';
+import { DxiDateBoxButtonComponent } from 'devextreme-angular/ui/date-box/nested';
 
 
 
@@ -1424,25 +1424,25 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    hasNewbuttons: boolean = false;
+    hasNewButtons: boolean = false;
 
-    @ContentChildren(DxiButtonDateBoxComponent)
-    get buttonsNewChildren(): QueryList<DxiButtonDateBoxComponent> {
+    @ContentChildren(DxiDateBoxButtonComponent)
+    get buttonsChildren(): QueryList<DxiDateBoxButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsNewChildren(value) {
-        this.hasNewbuttons = value.length > 0;
+    set buttonsChildren(value) {
+        this.hasNewButtons = value.length > 0;
         this.setChildren('buttons', value);
     }
 
 
 
     @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsChildren(value) {
-        if (this.hasNewbuttons) {
+    set buttonsLegacyChildren(value) {
+        if (this.hasNewButtons) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1627,23 +1627,23 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxoToModule,
     DxoShowModule,
     DxiToolbarItemModule,
-    DxiButtonDateBoxModule,
-    DxoOptionsDateBoxModule,
-    DxoCalendarOptionsDateBoxModule,
-    DxoDisplayFormatDateBoxModule,
-    DxoDropDownOptionsDateBoxModule,
-    DxoAnimationDateBoxModule,
-    DxoHideDateBoxModule,
-    DxoFromDateBoxModule,
-    DxoPositionDateBoxModule,
-    DxoAtDateBoxModule,
-    DxoBoundaryOffsetDateBoxModule,
-    DxoCollisionDateBoxModule,
-    DxoMyDateBoxModule,
-    DxoOffsetDateBoxModule,
-    DxoToDateBoxModule,
-    DxoShowDateBoxModule,
-    DxiToolbarItemDateBoxModule,
+    DxiDateBoxButtonModule,
+    DxoDateBoxOptionsModule,
+    DxoDateBoxCalendarOptionsModule,
+    DxoDateBoxDisplayFormatModule,
+    DxoDateBoxDropDownOptionsModule,
+    DxoDateBoxAnimationModule,
+    DxoDateBoxHideModule,
+    DxoDateBoxFromModule,
+    DxoDateBoxPositionModule,
+    DxoDateBoxAtModule,
+    DxoDateBoxBoundaryOffsetModule,
+    DxoDateBoxCollisionModule,
+    DxoDateBoxMyModule,
+    DxoDateBoxOffsetModule,
+    DxoDateBoxToModule,
+    DxoDateBoxShowModule,
+    DxiDateBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1653,7 +1653,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
   exports: [
     DxDateBoxComponent,
     DxiButtonModule,DxoOptionsModule,DxoCalendarOptionsModule,DxoDisplayFormatModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,
-    DxiButtonDateBoxModule,DxoOptionsDateBoxModule,DxoCalendarOptionsDateBoxModule,DxoDisplayFormatDateBoxModule,DxoDropDownOptionsDateBoxModule,DxoAnimationDateBoxModule,DxoHideDateBoxModule,DxoFromDateBoxModule,DxoPositionDateBoxModule,DxoAtDateBoxModule,DxoBoundaryOffsetDateBoxModule,DxoCollisionDateBoxModule,DxoMyDateBoxModule,DxoOffsetDateBoxModule,DxoToDateBoxModule,DxoShowDateBoxModule,DxiToolbarItemDateBoxModule,
+    DxiDateBoxButtonModule,DxoDateBoxOptionsModule,DxoDateBoxCalendarOptionsModule,DxoDateBoxDisplayFormatModule,DxoDateBoxDropDownOptionsModule,DxoDateBoxAnimationModule,DxoDateBoxHideModule,DxoDateBoxFromModule,DxoDateBoxPositionModule,DxoDateBoxAtModule,DxoDateBoxBoundaryOffsetModule,DxoDateBoxCollisionModule,DxoDateBoxMyModule,DxoDateBoxOffsetModule,DxoDateBoxToModule,DxoDateBoxShowModule,DxiDateBoxToolbarItemModule,
     DxTemplateModule
   ]
 })

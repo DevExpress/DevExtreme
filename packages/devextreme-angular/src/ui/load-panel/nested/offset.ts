@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-offset-load-panel',
+    selector: 'dxo-load-panel-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOffsetLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLoadPanelOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoOffsetLoadPanelComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoOffsetLoadPanelComponent
+    DxoLoadPanelOffsetComponent
   ],
   exports: [
-    DxoOffsetLoadPanelComponent
+    DxoLoadPanelOffsetComponent
   ],
 })
-export class DxoOffsetLoadPanelModule { }
+export class DxoLoadPanelOffsetModule { }

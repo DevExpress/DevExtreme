@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-circular-gauge',
+    selector: 'dxo-circular-gauge-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatCircularGaugeComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoFormatCircularGaugeComponent
+    DxoCircularGaugeFormatComponent
   ],
   exports: [
-    DxoFormatCircularGaugeComponent
+    DxoCircularGaugeFormatComponent
   ],
 })
-export class DxoFormatCircularGaugeModule { }
+export class DxoCircularGaugeFormatModule { }

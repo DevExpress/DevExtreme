@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemAutocompleteComponent } from './toolbar-item-dxi';
+import { DxiAutocompleteToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-drop-down-options-autocomplete',
+    selector: 'dxo-autocomplete-drop-down-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDropDownOptionsAutocompleteComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAutocompleteDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoDropDownOptionsAutocompleteComponent extends NestedOption implem
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemAutocompleteComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemAutocompleteComponent> {
+    @ContentChildren(forwardRef(() => DxiAutocompleteToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiAutocompleteToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoDropDownOptionsAutocompleteComponent extends NestedOption implem
 
 @NgModule({
   declarations: [
-    DxoDropDownOptionsAutocompleteComponent
+    DxoAutocompleteDropDownOptionsComponent
   ],
   exports: [
-    DxoDropDownOptionsAutocompleteComponent
+    DxoAutocompleteDropDownOptionsComponent
   ],
 })
-export class DxoDropDownOptionsAutocompleteModule { }
+export class DxoAutocompleteDropDownOptionsModule { }

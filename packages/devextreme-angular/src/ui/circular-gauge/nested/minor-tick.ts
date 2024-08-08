@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-minor-tick-circular-gauge',
+    selector: 'dxo-circular-gauge-minor-tick',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMinorTickCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeMinorTickComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoMinorTickCircularGaugeComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoMinorTickCircularGaugeComponent
+    DxoCircularGaugeMinorTickComponent
   ],
   exports: [
-    DxoMinorTickCircularGaugeComponent
+    DxoCircularGaugeMinorTickComponent
   ],
 })
-export class DxoMinorTickCircularGaugeModule { }
+export class DxoCircularGaugeMinorTickModule { }

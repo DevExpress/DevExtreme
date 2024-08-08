@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-context-menu',
+    selector: 'dxo-context-menu-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationContextMenuComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoAnimationContextMenuComponent
+    DxoContextMenuAnimationComponent
   ],
   exports: [
-    DxoAnimationContextMenuComponent
+    DxoContextMenuAnimationComponent
   ],
 })
-export class DxoAnimationContextMenuModule { }
+export class DxoContextMenuAnimationModule { }

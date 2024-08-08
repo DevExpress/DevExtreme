@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-candlestick-range-selector',
+    selector: 'dxo-range-selector-candlestick',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCandlestickRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorCandlestickComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoCandlestickRangeSelectorComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoCandlestickRangeSelectorComponent
+    DxoRangeSelectorCandlestickComponent
   ],
   exports: [
-    DxoCandlestickRangeSelectorComponent
+    DxoRangeSelectorCandlestickComponent
   ],
 })
-export class DxoCandlestickRangeSelectorModule { }
+export class DxoRangeSelectorCandlestickModule { }

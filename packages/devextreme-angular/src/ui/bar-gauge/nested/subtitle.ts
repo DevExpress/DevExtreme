@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-subtitle-bar-gauge',
+    selector: 'dxo-bar-gauge-subtitle',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSubtitleBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -96,10 +96,10 @@ export class DxoSubtitleBarGaugeComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoSubtitleBarGaugeComponent
+    DxoBarGaugeSubtitleComponent
   ],
   exports: [
-    DxoSubtitleBarGaugeComponent
+    DxoBarGaugeSubtitleComponent
   ],
 })
-export class DxoSubtitleBarGaugeModule { }
+export class DxoBarGaugeSubtitleModule { }

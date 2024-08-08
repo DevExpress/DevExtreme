@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-linear-gauge',
+    selector: 'dxo-linear-gauge-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatLinearGaugeComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoFormatLinearGaugeComponent
+    DxoLinearGaugeFormatComponent
   ],
   exports: [
-    DxoFormatLinearGaugeComponent
+    DxoLinearGaugeFormatComponent
   ],
 })
-export class DxoFormatLinearGaugeModule { }
+export class DxoLinearGaugeFormatModule { }

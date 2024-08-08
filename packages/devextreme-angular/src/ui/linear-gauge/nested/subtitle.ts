@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-subtitle-linear-gauge',
+    selector: 'dxo-linear-gauge-subtitle',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSubtitleLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -96,10 +96,10 @@ export class DxoSubtitleLinearGaugeComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoSubtitleLinearGaugeComponent
+    DxoLinearGaugeSubtitleComponent
   ],
   exports: [
-    DxoSubtitleLinearGaugeComponent
+    DxoLinearGaugeSubtitleComponent
   ],
 })
-export class DxoSubtitleLinearGaugeModule { }
+export class DxoLinearGaugeSubtitleModule { }

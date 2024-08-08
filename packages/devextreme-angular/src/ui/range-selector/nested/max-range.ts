@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-max-range-range-selector',
+    selector: 'dxo-range-selector-max-range',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMaxRangeRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorMaxRangeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -127,10 +127,10 @@ export class DxoMaxRangeRangeSelectorComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoMaxRangeRangeSelectorComponent
+    DxoRangeSelectorMaxRangeComponent
   ],
   exports: [
-    DxoMaxRangeRangeSelectorComponent
+    DxoRangeSelectorMaxRangeComponent
   ],
 })
-export class DxoMaxRangeRangeSelectorModule { }
+export class DxoRangeSelectorMaxRangeModule { }

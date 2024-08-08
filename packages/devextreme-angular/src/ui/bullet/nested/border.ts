@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-border-bullet',
+    selector: 'dxo-bullet-border',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBorderBulletComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBulletBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -96,10 +96,10 @@ export class DxoBorderBulletComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoBorderBulletComponent
+    DxoBulletBorderComponent
   ],
   exports: [
-    DxoBorderBulletComponent
+    DxoBulletBorderComponent
   ],
 })
-export class DxoBorderBulletModule { }
+export class DxoBulletBorderModule { }

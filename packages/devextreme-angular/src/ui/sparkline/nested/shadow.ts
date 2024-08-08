@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-sparkline',
+    selector: 'dxo-sparkline-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowSparklineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowSparklineComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoShadowSparklineComponent
+    DxoSparklineShadowComponent
   ],
   exports: [
-    DxoShadowSparklineComponent
+    DxoSparklineShadowComponent
   ],
 })
-export class DxoShadowSparklineModule { }
+export class DxoSparklineShadowModule { }

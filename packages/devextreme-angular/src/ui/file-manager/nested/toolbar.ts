@@ -23,17 +23,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFileSelectionItemFileManagerComponent } from './file-selection-item-dxi';
-import { DxiItemFileManagerComponent } from './item-dxi';
+import { DxiFileManagerFileSelectionItemComponent } from './file-selection-item-dxi';
+import { DxiFileManagerItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-toolbar-file-manager',
+    selector: 'dxo-file-manager-toolbar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToolbarFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get fileSelectionItems(): Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem> {
         return this._getOption('fileSelectionItems');
@@ -56,16 +56,16 @@ export class DxoToolbarFileManagerComponent extends NestedOption implements OnDe
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFileSelectionItemFileManagerComponent))
-    get fileSelectionItemsChildren(): QueryList<DxiFileSelectionItemFileManagerComponent> {
+    @ContentChildren(forwardRef(() => DxiFileManagerFileSelectionItemComponent))
+    get fileSelectionItemsChildren(): QueryList<DxiFileManagerFileSelectionItemComponent> {
         return this._getOption('fileSelectionItems');
     }
     set fileSelectionItemsChildren(value) {
         this.setChildren('fileSelectionItems', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiItemFileManagerComponent))
-    get itemsChildren(): QueryList<DxiItemFileManagerComponent> {
+    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
+    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -93,10 +93,10 @@ export class DxoToolbarFileManagerComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoToolbarFileManagerComponent
+    DxoFileManagerToolbarComponent
   ],
   exports: [
-    DxoToolbarFileManagerComponent
+    DxoFileManagerToolbarComponent
   ],
 })
-export class DxoToolbarFileManagerModule { }
+export class DxoFileManagerToolbarModule { }

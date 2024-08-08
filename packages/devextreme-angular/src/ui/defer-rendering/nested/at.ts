@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-at-defer-rendering',
+    selector: 'dxo-defer-rendering-at',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAtDeferRenderingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDeferRenderingAtComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoAtDeferRenderingComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoAtDeferRenderingComponent
+    DxoDeferRenderingAtComponent
   ],
   exports: [
-    DxoAtDeferRenderingComponent
+    DxoDeferRenderingAtComponent
   ],
 })
-export class DxoAtDeferRenderingModule { }
+export class DxoDeferRenderingAtModule { }

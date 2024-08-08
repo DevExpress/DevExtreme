@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-button-date-box',
+    selector: 'dxi-date-box-button',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiButtonDateBoxComponent extends CollectionNestedOption {
+export class DxiDateBoxButtonComponent extends CollectionNestedOption {
     @Input()
     get location(): TextEditorButtonLocation {
         return this._getOption('location');
@@ -75,10 +75,10 @@ export class DxiButtonDateBoxComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiButtonDateBoxComponent
+    DxiDateBoxButtonComponent
   ],
   exports: [
-    DxiButtonDateBoxComponent
+    DxiDateBoxButtonComponent
   ],
 })
-export class DxiButtonDateBoxModule { }
+export class DxiDateBoxButtonModule { }

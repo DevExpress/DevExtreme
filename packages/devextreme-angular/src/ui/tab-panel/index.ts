@@ -44,12 +44,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTabPanelModule } from 'devextreme-angular/ui/tab-panel/nested';
+import { DxiTabPanelItemModule } from 'devextreme-angular/ui/tab-panel/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTabPanelComponent } from 'devextreme-angular/ui/tab-panel/nested';
+import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested';
 
 
 
@@ -788,25 +788,25 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemTabPanelComponent)
-    get itemsNewChildren(): QueryList<DxiItemTabPanelComponent> {
+    @ContentChildren(DxiTabPanelItemComponent)
+    get itemsChildren(): QueryList<DxiTabPanelItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -920,7 +920,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemTabPanelModule,
+    DxiTabPanelItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -930,7 +930,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
   exports: [
     DxTabPanelComponent,
     DxiItemModule,
-    DxiItemTabPanelModule,
+    DxiTabPanelItemModule,
     DxTemplateModule
   ]
 })

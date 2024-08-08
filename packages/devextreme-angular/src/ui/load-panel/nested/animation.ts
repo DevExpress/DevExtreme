@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-load-panel',
+    selector: 'dxo-load-panel-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLoadPanelAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationLoadPanelComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoAnimationLoadPanelComponent
+    DxoLoadPanelAnimationComponent
   ],
   exports: [
-    DxoAnimationLoadPanelComponent
+    DxoLoadPanelAnimationComponent
   ],
 })
-export class DxoAnimationLoadPanelModule { }
+export class DxoLoadPanelAnimationModule { }

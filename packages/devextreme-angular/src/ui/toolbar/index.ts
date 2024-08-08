@@ -44,12 +44,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemToolbarModule } from 'devextreme-angular/ui/toolbar/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemToolbarComponent } from 'devextreme-angular/ui/toolbar/nested';
+import { DxiToolbarItemComponent } from 'devextreme-angular/ui/toolbar/nested';
 
 
 
@@ -416,25 +416,25 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemToolbarComponent)
-    get itemsNewChildren(): QueryList<DxiItemToolbarComponent> {
+    @ContentChildren(DxiToolbarItemComponent)
+    get itemsChildren(): QueryList<DxiToolbarItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -527,7 +527,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemToolbarModule,
+    DxiToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -537,7 +537,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
   exports: [
     DxToolbarComponent,
     DxiItemModule,
-    DxiItemToolbarModule,
+    DxiToolbarItemModule,
     DxTemplateModule
   ]
 })

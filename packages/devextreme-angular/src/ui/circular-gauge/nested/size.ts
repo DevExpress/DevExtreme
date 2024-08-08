@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size-circular-gauge',
+    selector: 'dxo-circular-gauge-size',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizeCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeSizeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizeCircularGaugeComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoSizeCircularGaugeComponent
+    DxoCircularGaugeSizeComponent
   ],
   exports: [
-    DxoSizeCircularGaugeComponent
+    DxoCircularGaugeSizeComponent
   ],
 })
-export class DxoSizeCircularGaugeModule { }
+export class DxoCircularGaugeSizeModule { }

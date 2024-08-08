@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size-bar-gauge',
+    selector: 'dxo-bar-gauge-size',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizeBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeSizeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizeBarGaugeComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoSizeBarGaugeComponent
+    DxoBarGaugeSizeComponent
   ],
   exports: [
-    DxoSizeBarGaugeComponent
+    DxoBarGaugeSizeComponent
   ],
 })
-export class DxoSizeBarGaugeModule { }
+export class DxoBarGaugeSizeModule { }

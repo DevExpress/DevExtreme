@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-popover',
+    selector: 'dxo-popover-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionPopoverComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopoverCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionPopoverComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoCollisionPopoverComponent
+    DxoPopoverCollisionComponent
   ],
   exports: [
-    DxoCollisionPopoverComponent
+    DxoPopoverCollisionComponent
   ],
 })
-export class DxoCollisionPopoverModule { }
+export class DxoPopoverCollisionModule { }

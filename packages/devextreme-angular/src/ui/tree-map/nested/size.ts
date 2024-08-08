@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size-tree-map',
+    selector: 'dxo-tree-map-size',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizeTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapSizeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizeTreeMapComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoSizeTreeMapComponent
+    DxoTreeMapSizeComponent
   ],
   exports: [
-    DxoSizeTreeMapComponent
+    DxoTreeMapSizeComponent
   ],
 })
-export class DxoSizeTreeMapModule { }
+export class DxoTreeMapSizeModule { }

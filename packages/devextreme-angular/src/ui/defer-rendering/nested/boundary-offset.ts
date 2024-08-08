@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-boundary-offset-defer-rendering',
+    selector: 'dxo-defer-rendering-boundary-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoundaryOffsetDeferRenderingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDeferRenderingBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoBoundaryOffsetDeferRenderingComponent extends NestedOption imple
 
 @NgModule({
   declarations: [
-    DxoBoundaryOffsetDeferRenderingComponent
+    DxoDeferRenderingBoundaryOffsetComponent
   ],
   exports: [
-    DxoBoundaryOffsetDeferRenderingComponent
+    DxoDeferRenderingBoundaryOffsetComponent
   ],
 })
-export class DxoBoundaryOffsetDeferRenderingModule { }
+export class DxoDeferRenderingBoundaryOffsetModule { }

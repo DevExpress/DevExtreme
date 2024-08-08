@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scale-type-range-gantt',
+    selector: 'dxo-gantt-scale-type-range',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScaleTypeRangeGanttComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttScaleTypeRangeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get max(): GanttScaleType {
         return this._getOption('max');
@@ -72,10 +72,10 @@ export class DxoScaleTypeRangeGanttComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoScaleTypeRangeGanttComponent
+    DxoGanttScaleTypeRangeComponent
   ],
   exports: [
-    DxoScaleTypeRangeGanttComponent
+    DxoGanttScaleTypeRangeComponent
   ],
 })
-export class DxoScaleTypeRangeGanttModule { }
+export class DxoGanttScaleTypeRangeModule { }

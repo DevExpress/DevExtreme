@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-subtitle-chart',
+    selector: 'dxo-chart-subtitle',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSubtitleChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -96,10 +96,10 @@ export class DxoSubtitleChartComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoSubtitleChartComponent
+    DxoChartSubtitleComponent
   ],
   exports: [
-    DxoSubtitleChartComponent
+    DxoChartSubtitleComponent
   ],
 })
-export class DxoSubtitleChartModule { }
+export class DxoChartSubtitleModule { }

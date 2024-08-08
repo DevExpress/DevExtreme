@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-adaptive-layout-funnel',
+    selector: 'dxo-funnel-adaptive-layout',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAdaptiveLayoutFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -79,10 +79,10 @@ export class DxoAdaptiveLayoutFunnelComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoAdaptiveLayoutFunnelComponent
+    DxoFunnelAdaptiveLayoutComponent
   ],
   exports: [
-    DxoAdaptiveLayoutFunnelComponent
+    DxoFunnelAdaptiveLayoutComponent
   ],
 })
-export class DxoAdaptiveLayoutFunnelModule { }
+export class DxoFunnelAdaptiveLayoutModule { }

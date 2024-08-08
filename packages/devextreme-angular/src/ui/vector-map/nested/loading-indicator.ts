@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-loading-indicator-vector-map',
+    selector: 'dxo-vector-map-loading-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -109,10 +109,10 @@ export class DxoLoadingIndicatorVectorMapComponent extends NestedOption implemen
 
 @NgModule({
   declarations: [
-    DxoLoadingIndicatorVectorMapComponent
+    DxoVectorMapLoadingIndicatorComponent
   ],
   exports: [
-    DxoLoadingIndicatorVectorMapComponent
+    DxoVectorMapLoadingIndicatorComponent
   ],
 })
-export class DxoLoadingIndicatorVectorMapModule { }
+export class DxoVectorMapLoadingIndicatorModule { }

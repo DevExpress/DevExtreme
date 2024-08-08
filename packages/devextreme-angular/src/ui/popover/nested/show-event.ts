@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-show-event-popover',
+    selector: 'dxo-popover-show-event',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShowEventPopoverComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopoverShowEventComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get delay(): number | undefined {
         return this._getOption('delay');
@@ -71,10 +71,10 @@ export class DxoShowEventPopoverComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoShowEventPopoverComponent
+    DxoPopoverShowEventComponent
   ],
   exports: [
-    DxoShowEventPopoverComponent
+    DxoPopoverShowEventComponent
   ],
 })
-export class DxoShowEventPopoverModule { }
+export class DxoPopoverShowEventModule { }

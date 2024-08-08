@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-boundary-offset-tag-box',
+    selector: 'dxo-tag-box-boundary-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoundaryOffsetTagBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoBoundaryOffsetTagBoxComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoBoundaryOffsetTagBoxComponent
+    DxoTagBoxBoundaryOffsetComponent
   ],
   exports: [
-    DxoBoundaryOffsetTagBoxComponent
+    DxoTagBoxBoundaryOffsetComponent
   ],
 })
-export class DxoBoundaryOffsetTagBoxModule { }
+export class DxoTagBoxBoundaryOffsetModule { }

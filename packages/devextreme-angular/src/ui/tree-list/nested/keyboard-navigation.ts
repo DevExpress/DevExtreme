@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-keyboard-navigation-tree-list',
+    selector: 'dxo-tree-list-keyboard-navigation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoKeyboardNavigationTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get editOnKeyPress(): boolean {
         return this._getOption('editOnKeyPress');
@@ -88,10 +88,10 @@ export class DxoKeyboardNavigationTreeListComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoKeyboardNavigationTreeListComponent
+    DxoTreeListKeyboardNavigationComponent
   ],
   exports: [
-    DxoKeyboardNavigationTreeListComponent
+    DxoTreeListKeyboardNavigationComponent
   ],
 })
-export class DxoKeyboardNavigationTreeListModule { }
+export class DxoTreeListKeyboardNavigationModule { }

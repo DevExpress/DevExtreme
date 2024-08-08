@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-border-circular-gauge',
+    selector: 'dxo-circular-gauge-border',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBorderCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -96,10 +96,10 @@ export class DxoBorderCircularGaugeComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoBorderCircularGaugeComponent
+    DxoCircularGaugeBorderComponent
   ],
   exports: [
-    DxoBorderCircularGaugeComponent
+    DxoCircularGaugeBorderComponent
   ],
 })
-export class DxoBorderCircularGaugeModule { }
+export class DxoCircularGaugeBorderModule { }

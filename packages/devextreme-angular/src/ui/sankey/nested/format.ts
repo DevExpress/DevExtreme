@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-sankey',
+    selector: 'dxo-sankey-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatSankeyComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoFormatSankeyComponent
+    DxoSankeyFormatComponent
   ],
   exports: [
-    DxoFormatSankeyComponent
+    DxoSankeyFormatComponent
   ],
 })
-export class DxoFormatSankeyModule { }
+export class DxoSankeyFormatModule { }

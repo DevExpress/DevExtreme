@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-common-series-settings-pie-chart',
+    selector: 'dxo-pie-chart-common-series-settings',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCommonSeriesSettingsPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get argumentField(): string {
         return this._getOption('argumentField');
@@ -170,10 +170,10 @@ export class DxoCommonSeriesSettingsPieChartComponent extends NestedOption imple
 
 @NgModule({
   declarations: [
-    DxoCommonSeriesSettingsPieChartComponent
+    DxoPieChartCommonSeriesSettingsComponent
   ],
   exports: [
-    DxoCommonSeriesSettingsPieChartComponent
+    DxoPieChartCommonSeriesSettingsComponent
   ],
 })
-export class DxoCommonSeriesSettingsPieChartModule { }
+export class DxoPieChartCommonSeriesSettingsModule { }

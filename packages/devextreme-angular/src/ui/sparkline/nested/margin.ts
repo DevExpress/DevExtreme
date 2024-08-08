@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-margin-sparkline',
+    selector: 'dxo-sparkline-margin',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarginSparklineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineMarginComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -87,10 +87,10 @@ export class DxoMarginSparklineComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoMarginSparklineComponent
+    DxoSparklineMarginComponent
   ],
   exports: [
-    DxoMarginSparklineComponent
+    DxoSparklineMarginComponent
   ],
 })
-export class DxoMarginSparklineModule { }
+export class DxoSparklineMarginModule { }

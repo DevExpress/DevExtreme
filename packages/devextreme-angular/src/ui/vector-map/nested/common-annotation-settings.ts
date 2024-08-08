@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-common-annotation-settings-vector-map',
+    selector: 'dxo-vector-map-common-annotation-settings',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCommonAnnotationSettingsVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -280,10 +280,10 @@ export class DxoCommonAnnotationSettingsVectorMapComponent extends NestedOption 
 
 @NgModule({
   declarations: [
-    DxoCommonAnnotationSettingsVectorMapComponent
+    DxoVectorMapCommonAnnotationSettingsComponent
   ],
   exports: [
-    DxoCommonAnnotationSettingsVectorMapComponent
+    DxoVectorMapCommonAnnotationSettingsComponent
   ],
 })
-export class DxoCommonAnnotationSettingsVectorMapModule { }
+export class DxoVectorMapCommonAnnotationSettingsModule { }

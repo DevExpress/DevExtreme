@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-remote-operations-tree-list',
+    selector: 'dxo-tree-list-remote-operations',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoRemoteOperationsTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListRemoteOperationsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get filtering(): boolean {
         return this._getOption('filtering');
@@ -79,10 +79,10 @@ export class DxoRemoteOperationsTreeListComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoRemoteOperationsTreeListComponent
+    DxoTreeListRemoteOperationsComponent
   ],
   exports: [
-    DxoRemoteOperationsTreeListComponent
+    DxoTreeListRemoteOperationsComponent
   ],
 })
-export class DxoRemoteOperationsTreeListModule { }
+export class DxoTreeListRemoteOperationsModule { }

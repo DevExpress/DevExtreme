@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-circular-gauge',
+    selector: 'dxo-circular-gauge-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get duration(): number {
         return this._getOption('duration');
@@ -80,10 +80,10 @@ export class DxoAnimationCircularGaugeComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoAnimationCircularGaugeComponent
+    DxoCircularGaugeAnimationComponent
   ],
   exports: [
-    DxoAnimationCircularGaugeComponent
+    DxoCircularGaugeAnimationComponent
   ],
 })
-export class DxoAnimationCircularGaugeModule { }
+export class DxoCircularGaugeAnimationModule { }

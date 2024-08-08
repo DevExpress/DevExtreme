@@ -31,12 +31,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-toolbar-item-lookup',
+    selector: 'dxi-lookup-toolbar-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiToolbarItemLookupComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiLookupToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get cssClass(): string | undefined {
@@ -177,10 +177,10 @@ export class DxiToolbarItemLookupComponent extends CollectionNestedOption implem
 
 @NgModule({
   declarations: [
-    DxiToolbarItemLookupComponent
+    DxiLookupToolbarItemComponent
   ],
   exports: [
-    DxiToolbarItemLookupComponent
+    DxiLookupToolbarItemComponent
   ],
 })
-export class DxiToolbarItemLookupModule { }
+export class DxiLookupToolbarItemModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-at-autocomplete',
+    selector: 'dxo-autocomplete-at',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAtAutocompleteComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAutocompleteAtComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoAtAutocompleteComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoAtAutocompleteComponent
+    DxoAutocompleteAtComponent
   ],
   exports: [
-    DxoAtAutocompleteComponent
+    DxoAutocompleteAtComponent
   ],
 })
-export class DxoAtAutocompleteModule { }
+export class DxoAutocompleteAtModule { }

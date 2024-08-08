@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-at-select-box',
+    selector: 'dxo-select-box-at',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAtSelectBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSelectBoxAtComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoAtSelectBoxComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoAtSelectBoxComponent
+    DxoSelectBoxAtComponent
   ],
   exports: [
-    DxoAtSelectBoxComponent
+    DxoSelectBoxAtComponent
   ],
 })
-export class DxoAtSelectBoxModule { }
+export class DxoSelectBoxAtModule { }

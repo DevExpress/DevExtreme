@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-vector-map',
+    selector: 'dxo-vector-map-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -169,10 +169,10 @@ export class DxoTooltipVectorMapComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoTooltipVectorMapComponent
+    DxoVectorMapTooltipComponent
   ],
   exports: [
-    DxoTooltipVectorMapComponent
+    DxoVectorMapTooltipComponent
   ],
 })
-export class DxoTooltipVectorMapModule { }
+export class DxoVectorMapTooltipModule { }

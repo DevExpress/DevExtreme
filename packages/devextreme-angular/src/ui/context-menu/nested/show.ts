@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-show-context-menu',
+    selector: 'dxo-context-menu-show',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShowContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuShowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoShowContextMenuComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoShowContextMenuComponent
+    DxoContextMenuShowComponent
   ],
   exports: [
-    DxoShowContextMenuComponent
+    DxoContextMenuShowComponent
   ],
 })
-export class DxoShowContextMenuModule { }
+export class DxoContextMenuShowModule { }

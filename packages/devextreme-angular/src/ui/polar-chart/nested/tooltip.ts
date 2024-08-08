@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-polar-chart',
+    selector: 'dxo-polar-chart-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get argumentFormat(): Format | string | undefined {
         return this._getOption('argumentFormat');
@@ -202,10 +202,10 @@ export class DxoTooltipPolarChartComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoTooltipPolarChartComponent
+    DxoPolarChartTooltipComponent
   ],
   exports: [
-    DxoTooltipPolarChartComponent
+    DxoPolarChartTooltipComponent
   ],
 })
-export class DxoTooltipPolarChartModule { }
+export class DxoPolarChartTooltipModule { }

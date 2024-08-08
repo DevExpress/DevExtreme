@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-width-linear-gauge',
+    selector: 'dxo-linear-gauge-width',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoWidthLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeWidthComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get end(): number {
         return this._getOption('end');
@@ -71,10 +71,10 @@ export class DxoWidthLinearGaugeComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoWidthLinearGaugeComponent
+    DxoLinearGaugeWidthComponent
   ],
   exports: [
-    DxoWidthLinearGaugeComponent
+    DxoLinearGaugeWidthComponent
   ],
 })
-export class DxoWidthLinearGaugeModule { }
+export class DxoLinearGaugeWidthModule { }

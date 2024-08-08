@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-show-tag-box',
+    selector: 'dxo-tag-box-show',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShowTagBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxShowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoShowTagBoxComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoShowTagBoxComponent
+    DxoTagBoxShowComponent
   ],
   exports: [
-    DxoShowTagBoxComponent
+    DxoTagBoxShowComponent
   ],
 })
-export class DxoShowTagBoxModule { }
+export class DxoTagBoxShowModule { }

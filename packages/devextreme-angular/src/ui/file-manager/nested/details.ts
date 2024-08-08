@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiColumnFileManagerComponent } from './column-dxi';
+import { DxiFileManagerColumnComponent } from './column-dxi';
 
 
 @Component({
-    selector: 'dxo-details-file-manager',
+    selector: 'dxo-file-manager-details',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDetailsFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerDetailsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get columns(): Array<dxFileManagerDetailsColumn | string> {
         return this._getOption('columns');
@@ -47,8 +47,8 @@ export class DxoDetailsFileManagerComponent extends NestedOption implements OnDe
     }
 
 
-    @ContentChildren(forwardRef(() => DxiColumnFileManagerComponent))
-    get columnsChildren(): QueryList<DxiColumnFileManagerComponent> {
+    @ContentChildren(forwardRef(() => DxiFileManagerColumnComponent))
+    get columnsChildren(): QueryList<DxiFileManagerColumnComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
@@ -76,10 +76,10 @@ export class DxoDetailsFileManagerComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoDetailsFileManagerComponent
+    DxoFileManagerDetailsComponent
   ],
   exports: [
-    DxoDetailsFileManagerComponent
+    DxoFileManagerDetailsComponent
   ],
 })
-export class DxoDetailsFileManagerModule { }
+export class DxoFileManagerDetailsModule { }

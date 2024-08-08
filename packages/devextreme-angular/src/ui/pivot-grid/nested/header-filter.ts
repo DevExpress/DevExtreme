@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-header-filter-pivot-grid',
+    selector: 'dxo-pivot-grid-header-filter',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHeaderFilterPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -120,10 +120,10 @@ export class DxoHeaderFilterPivotGridComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoHeaderFilterPivotGridComponent
+    DxoPivotGridHeaderFilterComponent
   ],
   exports: [
-    DxoHeaderFilterPivotGridComponent
+    DxoPivotGridHeaderFilterComponent
   ],
 })
-export class DxoHeaderFilterPivotGridModule { }
+export class DxoPivotGridHeaderFilterModule { }

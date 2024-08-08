@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-col-count-by-screen-form',
+    selector: 'dxo-form-col-count-by-screen',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoColCountByScreenFormComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormColCountByScreenComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get lg(): number | undefined {
         return this._getOption('lg');
@@ -87,10 +87,10 @@ export class DxoColCountByScreenFormComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoColCountByScreenFormComponent
+    DxoFormColCountByScreenComponent
   ],
   exports: [
-    DxoColCountByScreenFormComponent
+    DxoFormColCountByScreenComponent
   ],
 })
-export class DxoColCountByScreenFormModule { }
+export class DxoFormColCountByScreenModule { }

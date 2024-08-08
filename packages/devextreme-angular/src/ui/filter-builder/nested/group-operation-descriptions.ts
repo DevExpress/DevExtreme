@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-group-operation-descriptions-filter-builder',
+    selector: 'dxo-filter-builder-group-operation-descriptions',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGroupOperationDescriptionsFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterBuilderGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get and(): string {
         return this._getOption('and');
@@ -87,10 +87,10 @@ export class DxoGroupOperationDescriptionsFilterBuilderComponent extends NestedO
 
 @NgModule({
   declarations: [
-    DxoGroupOperationDescriptionsFilterBuilderComponent
+    DxoFilterBuilderGroupOperationDescriptionsComponent
   ],
   exports: [
-    DxoGroupOperationDescriptionsFilterBuilderComponent
+    DxoFilterBuilderGroupOperationDescriptionsComponent
   ],
 })
-export class DxoGroupOperationDescriptionsFilterBuilderModule { }
+export class DxoFilterBuilderGroupOperationDescriptionsModule { }

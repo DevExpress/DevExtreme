@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-tree-list',
+    selector: 'dxo-tree-list-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationTreeListComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoAnimationTreeListComponent
+    DxoTreeListAnimationComponent
   ],
   exports: [
-    DxoAnimationTreeListComponent
+    DxoTreeListAnimationComponent
   ],
 })
-export class DxoAnimationTreeListModule { }
+export class DxoTreeListAnimationModule { }

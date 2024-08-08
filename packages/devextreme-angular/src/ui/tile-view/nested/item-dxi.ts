@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-tile-view',
+    selector: 'dxi-tile-view-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemTileViewComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiTileViewItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -126,10 +126,10 @@ export class DxiItemTileViewComponent extends CollectionNestedOption implements 
 
 @NgModule({
   declarations: [
-    DxiItemTileViewComponent
+    DxiTileViewItemComponent
   ],
   exports: [
-    DxiItemTileViewComponent
+    DxiTileViewItemComponent
   ],
 })
-export class DxiItemTileViewModule { }
+export class DxiTileViewItemModule { }

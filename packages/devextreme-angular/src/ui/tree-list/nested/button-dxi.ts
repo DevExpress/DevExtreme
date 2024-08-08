@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-button-tree-list',
+    selector: 'dxi-tree-list-button',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiButtonTreeListComponent extends CollectionNestedOption {
+export class DxiTreeListButtonComponent extends CollectionNestedOption {
     @Input()
     get cssClass(): string {
         return this._getOption('cssClass');
@@ -122,10 +122,10 @@ export class DxiButtonTreeListComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiButtonTreeListComponent
+    DxiTreeListButtonComponent
   ],
   exports: [
-    DxiButtonTreeListComponent
+    DxiTreeListButtonComponent
   ],
 })
-export class DxiButtonTreeListModule { }
+export class DxiTreeListButtonModule { }

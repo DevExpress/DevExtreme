@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-funnel',
+    selector: 'dxo-funnel-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontFunnelComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoFontFunnelComponent
+    DxoFunnelFontComponent
   ],
   exports: [
-    DxoFontFunnelComponent
+    DxoFunnelFontComponent
   ],
 })
-export class DxoFontFunnelModule { }
+export class DxoFunnelFontModule { }

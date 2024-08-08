@@ -29,16 +29,16 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiItemFormComponent } from './item-dxi';
+import { DxiFormItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxi-tab-form',
+    selector: 'dxi-form-tab',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiTabFormComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiFormTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get alignItemLabels(): boolean {
@@ -126,8 +126,8 @@ export class DxiTabFormComponent extends CollectionNestedOption implements After
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemFormComponent))
-    get itemsChildren(): QueryList<DxiItemFormComponent> {
+    @ContentChildren(forwardRef(() => DxiFormItemComponent))
+    get itemsChildren(): QueryList<DxiFormItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -163,10 +163,10 @@ export class DxiTabFormComponent extends CollectionNestedOption implements After
 
 @NgModule({
   declarations: [
-    DxiTabFormComponent
+    DxiFormTabComponent
   ],
   exports: [
-    DxiTabFormComponent
+    DxiFormTabComponent
   ],
 })
-export class DxiTabFormModule { }
+export class DxiFormTabModule { }

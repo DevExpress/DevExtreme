@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-text-circular-gauge',
+    selector: 'dxo-circular-gauge-text',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTextCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customizeText(): Function | undefined {
         return this._getOption('customizeText');
@@ -89,10 +89,10 @@ export class DxoTextCircularGaugeComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoTextCircularGaugeComponent
+    DxoCircularGaugeTextComponent
   ],
   exports: [
-    DxoTextCircularGaugeComponent
+    DxoCircularGaugeTextComponent
   ],
 })
-export class DxoTextCircularGaugeModule { }
+export class DxoCircularGaugeTextModule { }

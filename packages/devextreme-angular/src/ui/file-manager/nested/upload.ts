@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-upload-file-manager',
+    selector: 'dxo-file-manager-upload',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoUploadFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerUploadComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get chunkSize(): number {
         return this._getOption('chunkSize');
@@ -71,10 +71,10 @@ export class DxoUploadFileManagerComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoUploadFileManagerComponent
+    DxoFileManagerUploadComponent
   ],
   exports: [
-    DxoUploadFileManagerComponent
+    DxoFileManagerUploadComponent
   ],
 })
-export class DxoUploadFileManagerModule { }
+export class DxoFileManagerUploadModule { }

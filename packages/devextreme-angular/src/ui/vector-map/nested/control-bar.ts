@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-control-bar-vector-map',
+    selector: 'dxo-vector-map-control-bar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoControlBarVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapControlBarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get borderColor(): string {
         return this._getOption('borderColor');
@@ -128,10 +128,10 @@ export class DxoControlBarVectorMapComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoControlBarVectorMapComponent
+    DxoVectorMapControlBarComponent
   ],
   exports: [
-    DxoControlBarVectorMapComponent
+    DxoVectorMapControlBarComponent
   ],
 })
-export class DxoControlBarVectorMapModule { }
+export class DxoVectorMapControlBarModule { }

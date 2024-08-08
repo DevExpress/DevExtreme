@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-location-responsive-box',
+    selector: 'dxi-responsive-box-location',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiLocationResponsiveBoxComponent extends CollectionNestedOption {
+export class DxiResponsiveBoxLocationComponent extends CollectionNestedOption {
     @Input()
     get col(): number {
         return this._getOption('col');
@@ -89,10 +89,10 @@ export class DxiLocationResponsiveBoxComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiLocationResponsiveBoxComponent
+    DxiResponsiveBoxLocationComponent
   ],
   exports: [
-    DxiLocationResponsiveBoxComponent
+    DxiResponsiveBoxLocationComponent
   ],
 })
-export class DxiLocationResponsiveBoxModule { }
+export class DxiResponsiveBoxLocationModule { }

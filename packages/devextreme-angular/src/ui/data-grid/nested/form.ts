@@ -26,16 +26,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemDataGridComponent } from './item-dxi';
+import { DxiDataGridItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-form-data-grid',
+    selector: 'dxo-data-grid-form',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFormComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -368,8 +368,8 @@ export class DxoFormDataGridComponent extends NestedOption implements OnDestroy,
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemDataGridComponent))
-    get itemsChildren(): QueryList<DxiItemDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridItemComponent))
+    get itemsChildren(): QueryList<DxiDataGridItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -402,10 +402,10 @@ export class DxoFormDataGridComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoFormDataGridComponent
+    DxoDataGridFormComponent
   ],
   exports: [
-    DxoFormDataGridComponent
+    DxoDataGridFormComponent
   ],
 })
-export class DxoFormDataGridModule { }
+export class DxoDataGridFormModule { }

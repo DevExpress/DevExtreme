@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-value-error-bar-chart',
+    selector: 'dxo-chart-value-error-bar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoValueErrorBarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartValueErrorBarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -128,10 +128,10 @@ export class DxoValueErrorBarChartComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoValueErrorBarChartComponent
+    DxoChartValueErrorBarComponent
   ],
   exports: [
-    DxoValueErrorBarChartComponent
+    DxoChartValueErrorBarComponent
   ],
 })
-export class DxoValueErrorBarChartModule { }
+export class DxoChartValueErrorBarModule { }

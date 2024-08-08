@@ -28,16 +28,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemFormComponent } from './item-dxi';
+import { DxiFormItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-tab-panel-options-form',
+    selector: 'dxo-form-tab-panel-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTabPanelOptionsFormComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -408,8 +408,8 @@ export class DxoTabPanelOptionsFormComponent extends NestedOption implements OnD
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemFormComponent))
-    get itemsChildren(): QueryList<DxiItemFormComponent> {
+    @ContentChildren(forwardRef(() => DxiFormItemComponent))
+    get itemsChildren(): QueryList<DxiFormItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -444,10 +444,10 @@ export class DxoTabPanelOptionsFormComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoTabPanelOptionsFormComponent
+    DxoFormTabPanelOptionsComponent
   ],
   exports: [
-    DxoTabPanelOptionsFormComponent
+    DxoFormTabPanelOptionsComponent
   ],
 })
-export class DxoTabPanelOptionsFormModule { }
+export class DxoFormTabPanelOptionsModule { }

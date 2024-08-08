@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size-vector-map',
+    selector: 'dxo-vector-map-size',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizeVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapSizeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizeVectorMapComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoSizeVectorMapComponent
+    DxoVectorMapSizeComponent
   ],
   exports: [
-    DxoSizeVectorMapComponent
+    DxoVectorMapSizeComponent
   ],
 })
-export class DxoSizeVectorMapModule { }
+export class DxoVectorMapSizeModule { }

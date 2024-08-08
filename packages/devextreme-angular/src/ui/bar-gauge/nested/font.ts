@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-bar-gauge',
+    selector: 'dxo-bar-gauge-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontBarGaugeComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoFontBarGaugeComponent
+    DxoBarGaugeFontComponent
   ],
   exports: [
-    DxoFontBarGaugeComponent
+    DxoBarGaugeFontComponent
   ],
 })
-export class DxoFontBarGaugeModule { }
+export class DxoBarGaugeFontModule { }

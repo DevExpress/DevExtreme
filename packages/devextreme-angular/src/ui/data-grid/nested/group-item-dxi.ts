@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-group-item-data-grid',
+    selector: 'dxi-data-grid-group-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiGroupItemDataGridComponent extends CollectionNestedOption {
+export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     @Input()
     get alignByColumn(): boolean {
         return this._getOption('alignByColumn');
@@ -131,10 +131,10 @@ export class DxiGroupItemDataGridComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiGroupItemDataGridComponent
+    DxiDataGridGroupItemComponent
   ],
   exports: [
-    DxiGroupItemDataGridComponent
+    DxiDataGridGroupItemComponent
   ],
 })
-export class DxiGroupItemDataGridModule { }
+export class DxiDataGridGroupItemModule { }

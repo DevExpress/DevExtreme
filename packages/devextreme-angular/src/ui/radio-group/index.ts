@@ -50,12 +50,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemRadioGroupModule } from 'devextreme-angular/ui/radio-group/nested';
+import { DxiRadioGroupItemModule } from 'devextreme-angular/ui/radio-group/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemRadioGroupComponent } from 'devextreme-angular/ui/radio-group/nested';
+import { DxiRadioGroupItemComponent } from 'devextreme-angular/ui/radio-group/nested';
 
 
 
@@ -695,25 +695,25 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemRadioGroupComponent)
-    get itemsNewChildren(): QueryList<DxiItemRadioGroupComponent> {
+    @ContentChildren(DxiRadioGroupItemComponent)
+    get itemsChildren(): QueryList<DxiRadioGroupItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -840,7 +840,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemRadioGroupModule,
+    DxiRadioGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -850,7 +850,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
   exports: [
     DxRadioGroupComponent,
     DxiItemModule,
-    DxiItemRadioGroupModule,
+    DxiRadioGroupItemModule,
     DxTemplateModule
   ]
 })

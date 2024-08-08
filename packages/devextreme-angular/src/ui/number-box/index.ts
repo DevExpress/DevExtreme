@@ -50,14 +50,14 @@ import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
-import { DxoOptionsNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
-import { DxoFormatNumberBoxModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
 
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonNumberBoxComponent } from 'devextreme-angular/ui/number-box/nested';
+import { DxiNumberBoxButtonComponent } from 'devextreme-angular/ui/number-box/nested';
 
 
 
@@ -997,25 +997,25 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    hasNewbuttons: boolean = false;
+    hasNewButtons: boolean = false;
 
-    @ContentChildren(DxiButtonNumberBoxComponent)
-    get buttonsNewChildren(): QueryList<DxiButtonNumberBoxComponent> {
+    @ContentChildren(DxiNumberBoxButtonComponent)
+    get buttonsChildren(): QueryList<DxiNumberBoxButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsNewChildren(value) {
-        this.hasNewbuttons = value.length > 0;
+    set buttonsChildren(value) {
+        this.hasNewButtons = value.length > 0;
         this.setChildren('buttons', value);
     }
 
 
 
     @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsChildren(value) {
-        if (this.hasNewbuttons) {
+    set buttonsLegacyChildren(value) {
+        if (this.hasNewButtons) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1163,9 +1163,9 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
-    DxiButtonNumberBoxModule,
-    DxoOptionsNumberBoxModule,
-    DxoFormatNumberBoxModule,
+    DxiNumberBoxButtonModule,
+    DxoNumberBoxOptionsModule,
+    DxoNumberBoxFormatModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1175,7 +1175,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
   exports: [
     DxNumberBoxComponent,
     DxiButtonModule,DxoOptionsModule,DxoFormatModule,
-    DxiButtonNumberBoxModule,DxoOptionsNumberBoxModule,DxoFormatNumberBoxModule,
+    DxiNumberBoxButtonModule,DxoNumberBoxOptionsModule,DxoNumberBoxFormatModule,
     DxTemplateModule
   ]
 })

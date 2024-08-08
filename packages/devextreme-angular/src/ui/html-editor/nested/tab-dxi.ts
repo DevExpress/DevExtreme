@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-tab-html-editor',
+    selector: 'dxi-html-editor-tab',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiTabHtmlEditorComponent extends CollectionNestedOption {
+export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
     @Input()
     get name(): HtmlEditorImageUploadTab | undefined {
         return this._getOption('name');
@@ -58,10 +58,10 @@ export class DxiTabHtmlEditorComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiTabHtmlEditorComponent
+    DxiHtmlEditorTabComponent
   ],
   exports: [
-    DxiTabHtmlEditorComponent
+    DxiHtmlEditorTabComponent
   ],
 })
-export class DxiTabHtmlEditorModule { }
+export class DxiHtmlEditorTabModule { }

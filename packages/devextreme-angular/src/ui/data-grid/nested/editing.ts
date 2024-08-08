@@ -27,16 +27,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiChangeDataGridComponent } from './change-dxi';
+import { DxiDataGridChangeComponent } from './change-dxi';
 
 
 @Component({
-    selector: 'dxo-editing-data-grid',
+    selector: 'dxo-data-grid-editing',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoEditingDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridEditingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowAdding(): boolean {
         return this._getOption('allowAdding');
@@ -191,8 +191,8 @@ export class DxoEditingDataGridComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiChangeDataGridComponent))
-    get changesChildren(): QueryList<DxiChangeDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridChangeComponent))
+    get changesChildren(): QueryList<DxiDataGridChangeComponent> {
         return this._getOption('changes');
     }
     set changesChildren(value) {
@@ -227,10 +227,10 @@ export class DxoEditingDataGridComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoEditingDataGridComponent
+    DxoDataGridEditingComponent
   ],
   exports: [
-    DxoEditingDataGridComponent
+    DxoDataGridEditingComponent
   ],
 })
-export class DxoEditingDataGridModule { }
+export class DxoDataGridEditingModule { }

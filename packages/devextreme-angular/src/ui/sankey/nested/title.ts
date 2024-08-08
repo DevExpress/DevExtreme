@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-title-sankey',
+    selector: 'dxo-sankey-title',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTitleSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyTitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -129,10 +129,10 @@ export class DxoTitleSankeyComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoTitleSankeyComponent
+    DxoSankeyTitleComponent
   ],
   exports: [
-    DxoTitleSankeyComponent
+    DxoSankeyTitleComponent
   ],
 })
-export class DxoTitleSankeyModule { }
+export class DxoSankeyTitleModule { }

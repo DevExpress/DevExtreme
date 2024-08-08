@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-bullet',
+    selector: 'dxo-bullet-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatBulletComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBulletFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatBulletComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoFormatBulletComponent
+    DxoBulletFormatComponent
   ],
   exports: [
-    DxoFormatBulletComponent
+    DxoBulletFormatComponent
   ],
 })
-export class DxoFormatBulletModule { }
+export class DxoBulletFormatModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-to-color-box',
+    selector: 'dxo-color-box-to',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToColorBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColorBoxToComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -96,10 +96,10 @@ export class DxoToColorBoxComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoToColorBoxComponent
+    DxoColorBoxToComponent
   ],
   exports: [
-    DxoToColorBoxComponent
+    DxoColorBoxToComponent
   ],
 })
-export class DxoToColorBoxModule { }
+export class DxoColorBoxToModule { }

@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-connection-point-diagram',
+    selector: 'dxi-diagram-connection-point',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiConnectionPointDiagramComponent extends CollectionNestedOption {
+export class DxiDiagramConnectionPointComponent extends CollectionNestedOption {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -65,10 +65,10 @@ export class DxiConnectionPointDiagramComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiConnectionPointDiagramComponent
+    DxiDiagramConnectionPointComponent
   ],
   exports: [
-    DxiConnectionPointDiagramComponent
+    DxiDiagramConnectionPointComponent
   ],
 })
-export class DxiConnectionPointDiagramModule { }
+export class DxiDiagramConnectionPointModule { }

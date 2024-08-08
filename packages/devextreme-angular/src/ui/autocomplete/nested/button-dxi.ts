@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-button-autocomplete',
+    selector: 'dxi-autocomplete-button',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiButtonAutocompleteComponent extends CollectionNestedOption {
+export class DxiAutocompleteButtonComponent extends CollectionNestedOption {
     @Input()
     get location(): TextEditorButtonLocation {
         return this._getOption('location');
@@ -75,10 +75,10 @@ export class DxiButtonAutocompleteComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiButtonAutocompleteComponent
+    DxiAutocompleteButtonComponent
   ],
   exports: [
-    DxiButtonAutocompleteComponent
+    DxiAutocompleteButtonComponent
   ],
 })
-export class DxiButtonAutocompleteModule { }
+export class DxiAutocompleteButtonModule { }

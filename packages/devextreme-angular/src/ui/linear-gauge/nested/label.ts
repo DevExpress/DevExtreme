@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label-linear-gauge',
+    selector: 'dxo-linear-gauge-label',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customizeText(): Function {
         return this._getOption('customizeText');
@@ -113,10 +113,10 @@ export class DxoLabelLinearGaugeComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoLabelLinearGaugeComponent
+    DxoLinearGaugeLabelComponent
   ],
   exports: [
-    DxoLabelLinearGaugeComponent
+    DxoLinearGaugeLabelComponent
   ],
 })
-export class DxoLabelLinearGaugeModule { }
+export class DxoLinearGaugeLabelModule { }

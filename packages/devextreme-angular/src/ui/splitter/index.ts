@@ -45,13 +45,13 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemSplitterModule } from 'devextreme-angular/ui/splitter/nested';
+import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
 import { DxoSplitterSplitterModule } from 'devextreme-angular/ui/splitter/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemSplitterComponent } from 'devextreme-angular/ui/splitter/nested';
+import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested';
 
 
 
@@ -430,25 +430,25 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemSplitterComponent)
-    get itemsNewChildren(): QueryList<DxiItemSplitterComponent> {
+    @ContentChildren(DxiSplitterItemComponent)
+    get itemsChildren(): QueryList<DxiSplitterItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -545,7 +545,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
   imports: [
     DxiItemModule,
     DxoSplitterModule,
-    DxiItemSplitterModule,
+    DxiSplitterItemModule,
     DxoSplitterSplitterModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -556,7 +556,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
   exports: [
     DxSplitterComponent,
     DxiItemModule,DxoSplitterModule,
-    DxiItemSplitterModule,DxoSplitterSplitterModule,
+    DxiSplitterItemModule,DxoSplitterSplitterModule,
     DxTemplateModule
   ]
 })

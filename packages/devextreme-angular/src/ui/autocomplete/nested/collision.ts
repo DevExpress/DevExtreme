@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-autocomplete',
+    selector: 'dxo-autocomplete-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionAutocompleteComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAutocompleteCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionAutocompleteComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoCollisionAutocompleteComponent
+    DxoAutocompleteCollisionComponent
   ],
   exports: [
-    DxoCollisionAutocompleteComponent
+    DxoAutocompleteCollisionComponent
   ],
 })
-export class DxoCollisionAutocompleteModule { }
+export class DxoAutocompleteCollisionModule { }

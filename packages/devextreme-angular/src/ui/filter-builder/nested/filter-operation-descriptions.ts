@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-filter-operation-descriptions-filter-builder',
+    selector: 'dxo-filter-builder-filter-operation-descriptions',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterOperationDescriptionsFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterBuilderFilterOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get between(): string {
         return this._getOption('between');
@@ -159,10 +159,10 @@ export class DxoFilterOperationDescriptionsFilterBuilderComponent extends Nested
 
 @NgModule({
   declarations: [
-    DxoFilterOperationDescriptionsFilterBuilderComponent
+    DxoFilterBuilderFilterOperationDescriptionsComponent
   ],
   exports: [
-    DxoFilterOperationDescriptionsFilterBuilderComponent
+    DxoFilterBuilderFilterOperationDescriptionsComponent
   ],
 })
-export class DxoFilterOperationDescriptionsFilterBuilderModule { }
+export class DxoFilterBuilderFilterOperationDescriptionsModule { }

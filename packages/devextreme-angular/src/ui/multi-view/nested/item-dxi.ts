@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-multi-view',
+    selector: 'dxi-multi-view-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemMultiViewComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiMultiViewItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -102,10 +102,10 @@ export class DxiItemMultiViewComponent extends CollectionNestedOption implements
 
 @NgModule({
   declarations: [
-    DxiItemMultiViewComponent
+    DxiMultiViewItemComponent
   ],
   exports: [
-    DxiItemMultiViewComponent
+    DxiMultiViewItemComponent
   ],
 })
-export class DxiItemMultiViewModule { }
+export class DxiMultiViewItemModule { }

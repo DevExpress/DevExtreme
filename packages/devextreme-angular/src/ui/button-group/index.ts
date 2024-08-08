@@ -41,12 +41,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemButtonGroupModule } from 'devextreme-angular/ui/button-group/nested';
+import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemButtonGroupComponent } from 'devextreme-angular/ui/button-group/nested';
+import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/nested';
 
 
 
@@ -497,25 +497,25 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemButtonGroupComponent)
-    get itemsNewChildren(): QueryList<DxiItemButtonGroupComponent> {
+    @ContentChildren(DxiButtonGroupItemComponent)
+    get itemsChildren(): QueryList<DxiButtonGroupItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -613,7 +613,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemButtonGroupModule,
+    DxiButtonGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -623,7 +623,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
   exports: [
     DxButtonGroupComponent,
     DxiItemModule,
-    DxiItemButtonGroupModule,
+    DxiButtonGroupItemModule,
     DxTemplateModule
   ]
 })

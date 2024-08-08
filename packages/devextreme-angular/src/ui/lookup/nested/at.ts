@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-at-lookup',
+    selector: 'dxo-lookup-at',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAtLookupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLookupAtComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoAtLookupComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoAtLookupComponent
+    DxoLookupAtComponent
   ],
   exports: [
-    DxoAtLookupComponent
+    DxoLookupAtComponent
   ],
 })
-export class DxoAtLookupModule { }
+export class DxoLookupAtModule { }

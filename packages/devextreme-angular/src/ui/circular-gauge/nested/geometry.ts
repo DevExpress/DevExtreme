@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-geometry-circular-gauge',
+    selector: 'dxo-circular-gauge-geometry',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGeometryCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get endAngle(): number {
         return this._getOption('endAngle');
@@ -71,10 +71,10 @@ export class DxoGeometryCircularGaugeComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoGeometryCircularGaugeComponent
+    DxoCircularGaugeGeometryComponent
   ],
   exports: [
-    DxoGeometryCircularGaugeComponent
+    DxoCircularGaugeGeometryComponent
   ],
 })
-export class DxoGeometryCircularGaugeModule { }
+export class DxoCircularGaugeGeometryModule { }

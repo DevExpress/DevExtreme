@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-bar-gauge',
+    selector: 'dxo-bar-gauge-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowBarGaugeComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoShadowBarGaugeComponent
+    DxoBarGaugeShadowComponent
   ],
   exports: [
-    DxoShadowBarGaugeComponent
+    DxoBarGaugeShadowComponent
   ],
 })
-export class DxoShadowBarGaugeModule { }
+export class DxoBarGaugeShadowModule { }

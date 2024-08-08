@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-from-data-grid',
+    selector: 'dxo-data-grid-from',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFromDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFromComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -96,10 +96,10 @@ export class DxoFromDataGridComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoFromDataGridComponent
+    DxoDataGridFromComponent
   ],
   exports: [
-    DxoFromDataGridComponent
+    DxoDataGridFromComponent
   ],
 })
-export class DxoFromDataGridModule { }
+export class DxoDataGridFromModule { }

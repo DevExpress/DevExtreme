@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-small-values-grouping-pie-chart',
+    selector: 'dxo-pie-chart-small-values-grouping',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSmallValuesGroupingPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartSmallValuesGroupingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get groupName(): string {
         return this._getOption('groupName');
@@ -88,10 +88,10 @@ export class DxoSmallValuesGroupingPieChartComponent extends NestedOption implem
 
 @NgModule({
   declarations: [
-    DxoSmallValuesGroupingPieChartComponent
+    DxoPieChartSmallValuesGroupingComponent
   ],
   exports: [
-    DxoSmallValuesGroupingPieChartComponent
+    DxoPieChartSmallValuesGroupingComponent
   ],
 })
-export class DxoSmallValuesGroupingPieChartModule { }
+export class DxoPieChartSmallValuesGroupingModule { }

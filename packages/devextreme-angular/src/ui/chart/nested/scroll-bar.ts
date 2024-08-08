@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scroll-bar-chart',
+    selector: 'dxo-chart-scroll-bar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScrollBarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartScrollBarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -104,10 +104,10 @@ export class DxoScrollBarChartComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoScrollBarChartComponent
+    DxoChartScrollBarComponent
   ],
   exports: [
-    DxoScrollBarChartComponent
+    DxoChartScrollBarComponent
   ],
 })
-export class DxoScrollBarChartModule { }
+export class DxoChartScrollBarModule { }

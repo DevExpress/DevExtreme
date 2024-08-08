@@ -31,12 +31,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-toolbar-item-color-box',
+    selector: 'dxi-color-box-toolbar-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiToolbarItemColorBoxComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiColorBoxToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get cssClass(): string | undefined {
@@ -177,10 +177,10 @@ export class DxiToolbarItemColorBoxComponent extends CollectionNestedOption impl
 
 @NgModule({
   declarations: [
-    DxiToolbarItemColorBoxComponent
+    DxiColorBoxToolbarItemComponent
   ],
   exports: [
-    DxiToolbarItemColorBoxComponent
+    DxiColorBoxToolbarItemComponent
   ],
 })
-export class DxiToolbarItemColorBoxModule { }
+export class DxiColorBoxToolbarItemModule { }

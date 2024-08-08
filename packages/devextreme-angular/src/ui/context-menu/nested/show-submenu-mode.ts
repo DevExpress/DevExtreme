@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-show-submenu-mode-context-menu',
+    selector: 'dxo-context-menu-show-submenu-mode',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShowSubmenuModeContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuShowSubmenuModeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get delay(): number | { hide?: number, show?: number } {
         return this._getOption('delay');
@@ -72,10 +72,10 @@ export class DxoShowSubmenuModeContextMenuComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoShowSubmenuModeContextMenuComponent
+    DxoContextMenuShowSubmenuModeComponent
   ],
   exports: [
-    DxoShowSubmenuModeContextMenuComponent
+    DxoContextMenuShowSubmenuModeComponent
   ],
 })
-export class DxoShowSubmenuModeContextMenuModule { }
+export class DxoContextMenuShowSubmenuModeModule { }

@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemDropDownBoxComponent } from './toolbar-item-dxi';
+import { DxiDropDownBoxToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-drop-down-options-drop-down-box',
+    selector: 'dxo-drop-down-box-drop-down-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDropDownOptionsDropDownBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoDropDownOptionsDropDownBoxComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemDropDownBoxComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemDropDownBoxComponent> {
+    @ContentChildren(forwardRef(() => DxiDropDownBoxToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiDropDownBoxToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoDropDownOptionsDropDownBoxComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoDropDownOptionsDropDownBoxComponent
+    DxoDropDownBoxDropDownOptionsComponent
   ],
   exports: [
-    DxoDropDownOptionsDropDownBoxComponent
+    DxoDropDownBoxDropDownOptionsComponent
   ],
 })
-export class DxoDropDownOptionsDropDownBoxModule { }
+export class DxoDropDownBoxDropDownOptionsModule { }

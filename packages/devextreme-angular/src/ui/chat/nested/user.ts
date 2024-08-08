@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-user-chat',
+    selector: 'dxo-chat-user',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoUserChatComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChatUserComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get avatarUrl(): string {
         return this._getOption('avatarUrl');
@@ -79,10 +79,10 @@ export class DxoUserChatComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoUserChatComponent
+    DxoChatUserComponent
   ],
   exports: [
-    DxoUserChatComponent
+    DxoChatUserComponent
   ],
 })
-export class DxoUserChatModule { }
+export class DxoChatUserModule { }

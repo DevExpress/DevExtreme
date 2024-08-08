@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label-range-selector',
+    selector: 'dxo-range-selector-label',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
@@ -194,10 +194,10 @@ export class DxoLabelRangeSelectorComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoLabelRangeSelectorComponent
+    DxoRangeSelectorLabelComponent
   ],
   exports: [
-    DxoLabelRangeSelectorComponent
+    DxoRangeSelectorLabelComponent
   ],
 })
-export class DxoLabelRangeSelectorModule { }
+export class DxoRangeSelectorLabelModule { }

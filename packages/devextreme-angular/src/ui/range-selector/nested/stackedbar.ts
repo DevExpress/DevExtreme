@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-stackedbar-range-selector',
+    selector: 'dxo-range-selector-stackedbar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoStackedbarRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorStackedbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoStackedbarRangeSelectorComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoStackedbarRangeSelectorComponent
+    DxoRangeSelectorStackedbarComponent
   ],
   exports: [
-    DxoStackedbarRangeSelectorComponent
+    DxoRangeSelectorStackedbarComponent
   ],
 })
-export class DxoStackedbarRangeSelectorModule { }
+export class DxoRangeSelectorStackedbarModule { }

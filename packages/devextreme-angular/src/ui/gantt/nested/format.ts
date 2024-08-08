@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-gantt',
+    selector: 'dxo-gantt-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatGanttComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatGanttComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoFormatGanttComponent
+    DxoGanttFormatComponent
   ],
   exports: [
-    DxoFormatGanttComponent
+    DxoGanttFormatComponent
   ],
 })
-export class DxoFormatGanttModule { }
+export class DxoGanttFormatModule { }

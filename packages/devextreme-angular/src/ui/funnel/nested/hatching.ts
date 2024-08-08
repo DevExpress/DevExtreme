@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hatching-funnel',
+    selector: 'dxo-funnel-hatching',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHatchingFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelHatchingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get direction(): HatchDirection {
         return this._getOption('direction');
@@ -88,10 +88,10 @@ export class DxoHatchingFunnelComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoHatchingFunnelComponent
+    DxoFunnelHatchingComponent
   ],
   exports: [
-    DxoHatchingFunnelComponent
+    DxoFunnelHatchingComponent
   ],
 })
-export class DxoHatchingFunnelModule { }
+export class DxoFunnelHatchingModule { }

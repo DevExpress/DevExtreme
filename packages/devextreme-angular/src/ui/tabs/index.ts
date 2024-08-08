@@ -44,12 +44,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTabsModule } from 'devextreme-angular/ui/tabs/nested';
+import { DxiTabsItemModule } from 'devextreme-angular/ui/tabs/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTabsComponent } from 'devextreme-angular/ui/tabs/nested';
+import { DxiTabsItemComponent } from 'devextreme-angular/ui/tabs/nested';
 
 
 
@@ -724,25 +724,25 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemTabsComponent)
-    get itemsNewChildren(): QueryList<DxiItemTabsComponent> {
+    @ContentChildren(DxiTabsItemComponent)
+    get itemsChildren(): QueryList<DxiTabsItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -855,7 +855,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemTabsModule,
+    DxiTabsItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -865,7 +865,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
   exports: [
     DxTabsComponent,
     DxiItemModule,
-    DxiItemTabsModule,
+    DxiTabsItemModule,
     DxTemplateModule
   ]
 })

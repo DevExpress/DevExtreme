@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-nodes-diagram',
+    selector: 'dxo-diagram-nodes',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoNodesDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramNodesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get autoLayout(): DataLayoutType | { orientation?: Orientation, type?: DataLayoutType } {
         return this._getOption('autoLayout');
@@ -219,10 +219,10 @@ export class DxoNodesDiagramComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoNodesDiagramComponent
+    DxoDiagramNodesComponent
   ],
   exports: [
-    DxoNodesDiagramComponent
+    DxoDiagramNodesComponent
   ],
 })
-export class DxoNodesDiagramModule { }
+export class DxoDiagramNodesModule { }

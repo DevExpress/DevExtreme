@@ -26,16 +26,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemTreeListComponent } from './item-dxi';
+import { DxiTreeListItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-form-tree-list',
+    selector: 'dxo-tree-list-form',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFormComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -368,8 +368,8 @@ export class DxoFormTreeListComponent extends NestedOption implements OnDestroy,
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemTreeListComponent))
-    get itemsChildren(): QueryList<DxiItemTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListItemComponent))
+    get itemsChildren(): QueryList<DxiTreeListItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -402,10 +402,10 @@ export class DxoFormTreeListComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoFormTreeListComponent
+    DxoTreeListFormComponent
   ],
   exports: [
-    DxoFormTreeListComponent
+    DxoTreeListFormComponent
   ],
 })
-export class DxoFormTreeListModule { }
+export class DxoTreeListFormModule { }

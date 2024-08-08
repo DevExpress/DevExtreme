@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-strip-line-gantt',
+    selector: 'dxi-gantt-strip-line',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiStripLineGanttComponent extends CollectionNestedOption {
+export class DxiGanttStripLineComponent extends CollectionNestedOption {
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');
@@ -81,10 +81,10 @@ export class DxiStripLineGanttComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiStripLineGanttComponent
+    DxiGanttStripLineComponent
   ],
   exports: [
-    DxiStripLineGanttComponent
+    DxiGanttStripLineComponent
   ],
 })
-export class DxiStripLineGanttModule { }
+export class DxiGanttStripLineModule { }

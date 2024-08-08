@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label-sankey',
+    selector: 'dxo-sankey-label',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
@@ -128,10 +128,10 @@ export class DxoLabelSankeyComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoLabelSankeyComponent
+    DxoSankeyLabelComponent
   ],
   exports: [
-    DxoLabelSankeyComponent
+    DxoSankeyLabelComponent
   ],
 })
-export class DxoLabelSankeyModule { }
+export class DxoSankeyLabelModule { }

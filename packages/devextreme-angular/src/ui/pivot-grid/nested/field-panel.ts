@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-field-panel-pivot-grid',
+    selector: 'dxo-pivot-grid-field-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFieldPanelPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridFieldPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowFieldDragging(): boolean {
         return this._getOption('allowFieldDragging');
@@ -111,10 +111,10 @@ export class DxoFieldPanelPivotGridComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoFieldPanelPivotGridComponent
+    DxoPivotGridFieldPanelComponent
   ],
   exports: [
-    DxoFieldPanelPivotGridComponent
+    DxoPivotGridFieldPanelComponent
   ],
 })
-export class DxoFieldPanelPivotGridModule { }
+export class DxoPivotGridFieldPanelModule { }

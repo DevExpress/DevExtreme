@@ -48,16 +48,16 @@ import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxiFileSelectionItemModule } from 'devextreme-angular/ui/nested';
 import { DxoUploadModule } from 'devextreme-angular/ui/nested';
 
-import { DxoContextMenuFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxiItemFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxoItemViewFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxoDetailsFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxiColumnFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxoNotificationsFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxoPermissionsFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxoToolbarFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxiFileSelectionItemFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxoUploadFileManagerModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerContextMenuModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerItemViewModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerDetailsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerColumnModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerNotificationsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerPermissionsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerToolbarModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerFileSelectionItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
 
 
 
@@ -971,16 +971,16 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     DxoToolbarModule,
     DxiFileSelectionItemModule,
     DxoUploadModule,
-    DxoContextMenuFileManagerModule,
-    DxiItemFileManagerModule,
-    DxoItemViewFileManagerModule,
-    DxoDetailsFileManagerModule,
-    DxiColumnFileManagerModule,
-    DxoNotificationsFileManagerModule,
-    DxoPermissionsFileManagerModule,
-    DxoToolbarFileManagerModule,
-    DxiFileSelectionItemFileManagerModule,
-    DxoUploadFileManagerModule,
+    DxoFileManagerContextMenuModule,
+    DxiFileManagerItemModule,
+    DxoFileManagerItemViewModule,
+    DxoFileManagerDetailsModule,
+    DxiFileManagerColumnModule,
+    DxoFileManagerNotificationsModule,
+    DxoFileManagerPermissionsModule,
+    DxoFileManagerToolbarModule,
+    DxiFileManagerFileSelectionItemModule,
+    DxoFileManagerUploadModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -990,7 +990,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
   exports: [
     DxFileManagerComponent,
     DxoContextMenuModule,DxiItemModule,DxoItemViewModule,DxoDetailsModule,DxiColumnModule,DxoNotificationsModule,DxoPermissionsModule,DxoToolbarModule,DxiFileSelectionItemModule,DxoUploadModule,
-    DxoContextMenuFileManagerModule,DxiItemFileManagerModule,DxoItemViewFileManagerModule,DxoDetailsFileManagerModule,DxiColumnFileManagerModule,DxoNotificationsFileManagerModule,DxoPermissionsFileManagerModule,DxoToolbarFileManagerModule,DxiFileSelectionItemFileManagerModule,DxoUploadFileManagerModule,
+    DxoFileManagerContextMenuModule,DxiFileManagerItemModule,DxoFileManagerItemViewModule,DxoFileManagerDetailsModule,DxiFileManagerColumnModule,DxoFileManagerNotificationsModule,DxoFileManagerPermissionsModule,DxoFileManagerToolbarModule,DxiFileManagerFileSelectionItemModule,DxoFileManagerUploadModule,
     DxTemplateModule
   ]
 })

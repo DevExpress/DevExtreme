@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-data-prepare-settings-chart',
+    selector: 'dxo-chart-data-prepare-settings',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDataPrepareSettingsChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartDataPrepareSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get checkTypeForAllData(): boolean {
         return this._getOption('checkTypeForAllData');
@@ -79,10 +79,10 @@ export class DxoDataPrepareSettingsChartComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoDataPrepareSettingsChartComponent
+    DxoChartDataPrepareSettingsComponent
   ],
   exports: [
-    DxoDataPrepareSettingsChartComponent
+    DxoChartDataPrepareSettingsComponent
   ],
 })
-export class DxoDataPrepareSettingsChartModule { }
+export class DxoChartDataPrepareSettingsModule { }

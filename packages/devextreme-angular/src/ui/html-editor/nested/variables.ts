@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-variables-html-editor',
+    selector: 'dxo-html-editor-variables',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoVariablesHtmlEditorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorVariablesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<string> {
         return this._getOption('dataSource');
@@ -73,10 +73,10 @@ export class DxoVariablesHtmlEditorComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoVariablesHtmlEditorComponent
+    DxoHtmlEditorVariablesComponent
   ],
   exports: [
-    DxoVariablesHtmlEditorComponent
+    DxoHtmlEditorVariablesComponent
   ],
 })
-export class DxoVariablesHtmlEditorModule { }
+export class DxoHtmlEditorVariablesModule { }

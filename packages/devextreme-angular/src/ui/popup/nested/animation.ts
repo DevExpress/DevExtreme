@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-popup',
+    selector: 'dxo-popup-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationPopupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopupAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationPopupComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoAnimationPopupComponent
+    DxoPopupAnimationComponent
   ],
   exports: [
-    DxoAnimationPopupComponent
+    DxoPopupAnimationComponent
   ],
 })
-export class DxoAnimationPopupModule { }
+export class DxoPopupAnimationModule { }

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-link-sankey',
+    selector: 'dxo-sankey-link',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLinkSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyLinkComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
@@ -97,10 +97,10 @@ export class DxoLinkSankeyComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoLinkSankeyComponent
+    DxoSankeyLinkComponent
   ],
   exports: [
-    DxoLinkSankeyComponent
+    DxoSankeyLinkComponent
   ],
 })
-export class DxoLinkSankeyModule { }
+export class DxoSankeyLinkModule { }

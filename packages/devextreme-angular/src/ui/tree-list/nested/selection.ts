@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-selection-tree-list',
+    selector: 'dxo-tree-list-selection',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSelectionTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -88,10 +88,10 @@ export class DxoSelectionTreeListComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoSelectionTreeListComponent
+    DxoTreeListSelectionComponent
   ],
   exports: [
-    DxoSelectionTreeListComponent
+    DxoTreeListSelectionComponent
   ],
 })
-export class DxoSelectionTreeListModule { }
+export class DxoTreeListSelectionModule { }

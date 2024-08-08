@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-search-pivot-grid',
+    selector: 'dxo-pivot-grid-search',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSearchPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridSearchComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -88,10 +88,10 @@ export class DxoSearchPivotGridComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoSearchPivotGridComponent
+    DxoPivotGridSearchComponent
   ],
   exports: [
-    DxoSearchPivotGridComponent
+    DxoPivotGridSearchComponent
   ],
 })
-export class DxoSearchPivotGridModule { }
+export class DxoPivotGridSearchModule { }

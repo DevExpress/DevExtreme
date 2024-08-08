@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label-pie-chart',
+    selector: 'dxo-pie-chart-label',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get argumentFormat(): Format | string | undefined {
         return this._getOption('argumentFormat');
@@ -169,10 +169,10 @@ export class DxoLabelPieChartComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoLabelPieChartComponent
+    DxoPieChartLabelComponent
   ],
   exports: [
-    DxoLabelPieChartComponent
+    DxoPieChartLabelComponent
   ],
 })
-export class DxoLabelPieChartModule { }
+export class DxoPieChartLabelModule { }

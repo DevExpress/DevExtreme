@@ -43,12 +43,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemMultiViewModule } from 'devextreme-angular/ui/multi-view/nested';
+import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemMultiViewComponent } from 'devextreme-angular/ui/multi-view/nested';
+import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nested';
 
 
 
@@ -603,25 +603,25 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemMultiViewComponent)
-    get itemsNewChildren(): QueryList<DxiItemMultiViewComponent> {
+    @ContentChildren(DxiMultiViewItemComponent)
+    get itemsChildren(): QueryList<DxiMultiViewItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -724,7 +724,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemMultiViewModule,
+    DxiMultiViewItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -734,7 +734,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
   exports: [
     DxMultiViewComponent,
     DxiItemModule,
-    DxiItemMultiViewModule,
+    DxiMultiViewItemModule,
     DxTemplateModule
   ]
 })

@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemColorBoxComponent } from './toolbar-item-dxi';
+import { DxiColorBoxToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-drop-down-options-color-box',
+    selector: 'dxo-color-box-drop-down-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDropDownOptionsColorBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoDropDownOptionsColorBoxComponent extends NestedOption implements
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemColorBoxComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemColorBoxComponent> {
+    @ContentChildren(forwardRef(() => DxiColorBoxToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiColorBoxToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoDropDownOptionsColorBoxComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoDropDownOptionsColorBoxComponent
+    DxoColorBoxDropDownOptionsComponent
   ],
   exports: [
-    DxoDropDownOptionsColorBoxComponent
+    DxoColorBoxDropDownOptionsComponent
   ],
 })
-export class DxoDropDownOptionsColorBoxModule { }
+export class DxoColorBoxDropDownOptionsModule { }

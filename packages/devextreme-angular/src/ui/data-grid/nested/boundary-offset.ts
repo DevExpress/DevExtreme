@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-boundary-offset-data-grid',
+    selector: 'dxo-data-grid-boundary-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoundaryOffsetDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoBoundaryOffsetDataGridComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoBoundaryOffsetDataGridComponent
+    DxoDataGridBoundaryOffsetComponent
   ],
   exports: [
-    DxoBoundaryOffsetDataGridComponent
+    DxoDataGridBoundaryOffsetComponent
   ],
 })
-export class DxoBoundaryOffsetDataGridModule { }
+export class DxoDataGridBoundaryOffsetModule { }

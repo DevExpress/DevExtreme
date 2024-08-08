@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-fullstackedarea-chart',
+    selector: 'dxo-chart-fullstackedarea',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFullstackedareaChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartFullstackedareaComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoFullstackedareaChartComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoFullstackedareaChartComponent
+    DxoChartFullstackedareaComponent
   ],
   exports: [
-    DxoFullstackedareaChartComponent
+    DxoChartFullstackedareaComponent
   ],
 })
-export class DxoFullstackedareaChartModule { }
+export class DxoChartFullstackedareaModule { }

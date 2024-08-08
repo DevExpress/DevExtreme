@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-selection-data-grid',
+    selector: 'dxo-data-grid-selection',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSelectionDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -113,10 +113,10 @@ export class DxoSelectionDataGridComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoSelectionDataGridComponent
+    DxoDataGridSelectionComponent
   ],
   exports: [
-    DxoSelectionDataGridComponent
+    DxoDataGridSelectionComponent
   ],
 })
-export class DxoSelectionDataGridModule { }
+export class DxoDataGridSelectionModule { }

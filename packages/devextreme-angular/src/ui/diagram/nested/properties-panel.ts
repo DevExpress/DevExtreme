@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTabDiagramComponent } from './tab-dxi';
+import { DxiDiagramTabComponent } from './tab-dxi';
 
 
 @Component({
-    selector: 'dxo-properties-panel-diagram',
+    selector: 'dxo-diagram-properties-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPropertiesPanelDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get tabs(): Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }> {
         return this._getOption('tabs');
@@ -55,8 +55,8 @@ export class DxoPropertiesPanelDiagramComponent extends NestedOption implements 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTabDiagramComponent))
-    get tabsChildren(): QueryList<DxiTabDiagramComponent> {
+    @ContentChildren(forwardRef(() => DxiDiagramTabComponent))
+    get tabsChildren(): QueryList<DxiDiagramTabComponent> {
         return this._getOption('tabs');
     }
     set tabsChildren(value) {
@@ -84,10 +84,10 @@ export class DxoPropertiesPanelDiagramComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoPropertiesPanelDiagramComponent
+    DxoDiagramPropertiesPanelComponent
   ],
   exports: [
-    DxoPropertiesPanelDiagramComponent
+    DxoDiagramPropertiesPanelComponent
   ],
 })
-export class DxoPropertiesPanelDiagramModule { }
+export class DxoDiagramPropertiesPanelModule { }

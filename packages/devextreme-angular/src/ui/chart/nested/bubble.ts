@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-bubble-chart',
+    selector: 'dxo-chart-bubble',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBubbleChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartBubbleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoBubbleChartComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoBubbleChartComponent
+    DxoChartBubbleComponent
   ],
   exports: [
-    DxoBubbleChartComponent
+    DxoChartBubbleComponent
   ],
 })
-export class DxoBubbleChartModule { }
+export class DxoChartBubbleModule { }

@@ -63,26 +63,26 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoOptionsColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoDropDownOptionsColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoAnimationColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoHideColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoFromColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoPositionColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoAtColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoBoundaryOffsetColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoCollisionColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoMyColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoOffsetColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoToColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxoShowColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
-import { DxiToolbarItemColorBoxModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxiColorBoxButtonModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxOptionsModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxDropDownOptionsModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxAnimationModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxHideModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxFromModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxPositionModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxAtModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxBoundaryOffsetModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxCollisionModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxMyModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxOffsetModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxToModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxoColorBoxShowModule } from 'devextreme-angular/ui/color-box/nested';
+import { DxiColorBoxToolbarItemModule } from 'devextreme-angular/ui/color-box/nested';
 
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiButtonColorBoxComponent } from 'devextreme-angular/ui/color-box/nested';
+import { DxiColorBoxButtonComponent } from 'devextreme-angular/ui/color-box/nested';
 
 
 
@@ -1110,25 +1110,25 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    hasNewbuttons: boolean = false;
+    hasNewButtons: boolean = false;
 
-    @ContentChildren(DxiButtonColorBoxComponent)
-    get buttonsNewChildren(): QueryList<DxiButtonColorBoxComponent> {
+    @ContentChildren(DxiColorBoxButtonComponent)
+    get buttonsChildren(): QueryList<DxiColorBoxButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsNewChildren(value) {
-        this.hasNewbuttons = value.length > 0;
+    set buttonsChildren(value) {
+        this.hasNewButtons = value.length > 0;
         this.setChildren('buttons', value);
     }
 
 
 
     @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
         return this._getOption('buttons');
     }
-    set buttonsChildren(value) {
-        if (this.hasNewbuttons) {
+    set buttonsLegacyChildren(value) {
+        if (this.hasNewButtons) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1293,21 +1293,21 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoToModule,
     DxoShowModule,
     DxiToolbarItemModule,
-    DxiButtonColorBoxModule,
-    DxoOptionsColorBoxModule,
-    DxoDropDownOptionsColorBoxModule,
-    DxoAnimationColorBoxModule,
-    DxoHideColorBoxModule,
-    DxoFromColorBoxModule,
-    DxoPositionColorBoxModule,
-    DxoAtColorBoxModule,
-    DxoBoundaryOffsetColorBoxModule,
-    DxoCollisionColorBoxModule,
-    DxoMyColorBoxModule,
-    DxoOffsetColorBoxModule,
-    DxoToColorBoxModule,
-    DxoShowColorBoxModule,
-    DxiToolbarItemColorBoxModule,
+    DxiColorBoxButtonModule,
+    DxoColorBoxOptionsModule,
+    DxoColorBoxDropDownOptionsModule,
+    DxoColorBoxAnimationModule,
+    DxoColorBoxHideModule,
+    DxoColorBoxFromModule,
+    DxoColorBoxPositionModule,
+    DxoColorBoxAtModule,
+    DxoColorBoxBoundaryOffsetModule,
+    DxoColorBoxCollisionModule,
+    DxoColorBoxMyModule,
+    DxoColorBoxOffsetModule,
+    DxoColorBoxToModule,
+    DxoColorBoxShowModule,
+    DxiColorBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1317,7 +1317,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
   exports: [
     DxColorBoxComponent,
     DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,
-    DxiButtonColorBoxModule,DxoOptionsColorBoxModule,DxoDropDownOptionsColorBoxModule,DxoAnimationColorBoxModule,DxoHideColorBoxModule,DxoFromColorBoxModule,DxoPositionColorBoxModule,DxoAtColorBoxModule,DxoBoundaryOffsetColorBoxModule,DxoCollisionColorBoxModule,DxoMyColorBoxModule,DxoOffsetColorBoxModule,DxoToColorBoxModule,DxoShowColorBoxModule,DxiToolbarItemColorBoxModule,
+    DxiColorBoxButtonModule,DxoColorBoxOptionsModule,DxoColorBoxDropDownOptionsModule,DxoColorBoxAnimationModule,DxoColorBoxHideModule,DxoColorBoxFromModule,DxoColorBoxPositionModule,DxoColorBoxAtModule,DxoColorBoxBoundaryOffsetModule,DxoColorBoxCollisionModule,DxoColorBoxMyModule,DxoColorBoxOffsetModule,DxoColorBoxToModule,DxoColorBoxShowModule,DxiColorBoxToolbarItemModule,
     DxTemplateModule
   ]
 })

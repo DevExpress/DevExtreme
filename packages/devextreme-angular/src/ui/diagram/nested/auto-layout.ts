@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-auto-layout-diagram',
+    selector: 'dxo-diagram-auto-layout',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAutoLayoutDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');
@@ -73,10 +73,10 @@ export class DxoAutoLayoutDiagramComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoAutoLayoutDiagramComponent
+    DxoDiagramAutoLayoutComponent
   ],
   exports: [
-    DxoAutoLayoutDiagramComponent
+    DxoDiagramAutoLayoutComponent
   ],
 })
-export class DxoAutoLayoutDiagramModule { }
+export class DxoDiagramAutoLayoutModule { }

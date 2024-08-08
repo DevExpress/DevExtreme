@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-date-box',
+    selector: 'dxo-date-box-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionDateBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateBoxCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionDateBoxComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoCollisionDateBoxComponent
+    DxoDateBoxCollisionComponent
   ],
   exports: [
-    DxoCollisionDateBoxComponent
+    DxoDateBoxCollisionComponent
   ],
 })
-export class DxoCollisionDateBoxModule { }
+export class DxoDateBoxCollisionModule { }

@@ -27,12 +27,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-header-filter-gantt',
+    selector: 'dxo-gantt-header-filter',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHeaderFilterGanttComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -148,10 +148,10 @@ export class DxoHeaderFilterGanttComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoHeaderFilterGanttComponent
+    DxoGanttHeaderFilterComponent
   ],
   exports: [
-    DxoHeaderFilterGanttComponent
+    DxoGanttHeaderFilterComponent
   ],
 })
-export class DxoHeaderFilterGanttModule { }
+export class DxoGanttHeaderFilterModule { }

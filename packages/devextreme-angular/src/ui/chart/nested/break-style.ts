@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-break-style-chart',
+    selector: 'dxo-chart-break-style',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBreakStyleChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartBreakStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -80,10 +80,10 @@ export class DxoBreakStyleChartComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoBreakStyleChartComponent
+    DxoChartBreakStyleComponent
   ],
   exports: [
-    DxoBreakStyleChartComponent
+    DxoChartBreakStyleComponent
   ],
 })
-export class DxoBreakStyleChartModule { }
+export class DxoChartBreakStyleModule { }

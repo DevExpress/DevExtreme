@@ -29,17 +29,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiButtonTreeListComponent } from './button-dxi';
-import { DxiValidationRuleTreeListComponent } from './validation-rule-dxi';
+import { DxiTreeListButtonComponent } from './button-dxi';
+import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
-    selector: 'dxi-column-tree-list',
+    selector: 'dxi-tree-list-column',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiColumnTreeListComponent extends CollectionNestedOption {
+export class DxiTreeListColumnComponent extends CollectionNestedOption {
     @Input()
     get alignment(): HorizontalAlignment | string | undefined {
         return this._getOption('alignment');
@@ -542,24 +542,24 @@ export class DxiColumnTreeListComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiButtonTreeListComponent))
-    get buttonsChildren(): QueryList<DxiButtonTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListButtonComponent))
+    get buttonsChildren(): QueryList<DxiTreeListButtonComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
         this.setChildren('buttons', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiColumnTreeListComponent))
-    get columnsChildren(): QueryList<DxiColumnTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListColumnComponent))
+    get columnsChildren(): QueryList<DxiTreeListColumnComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
         this.setChildren('columns', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleTreeListComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiTreeListValidationRuleComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
@@ -594,10 +594,10 @@ export class DxiColumnTreeListComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiColumnTreeListComponent
+    DxiTreeListColumnComponent
   ],
   exports: [
-    DxiColumnTreeListComponent
+    DxiTreeListColumnComponent
   ],
 })
-export class DxiColumnTreeListModule { }
+export class DxiTreeListColumnModule { }

@@ -26,17 +26,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiValidationRuleDataGridComponent } from './validation-rule-dxi';
-import { DxiTabDataGridComponent } from './tab-dxi';
+import { DxiDataGridValidationRuleComponent } from './validation-rule-dxi';
+import { DxiDataGridTabComponent } from './tab-dxi';
 
 
 @Component({
-    selector: 'dxi-item-data-grid',
+    selector: 'dxi-data-grid-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemDataGridComponent extends CollectionNestedOption {
+export class DxiDataGridItemComponent extends CollectionNestedOption {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -347,24 +347,24 @@ export class DxiItemDataGridComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleDataGridComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiDataGridValidationRuleComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
         this.setChildren('validationRules', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiItemDataGridComponent))
-    get itemsChildren(): QueryList<DxiItemDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridItemComponent))
+    get itemsChildren(): QueryList<DxiDataGridItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
         this.setChildren('items', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiTabDataGridComponent))
-    get tabsChildren(): QueryList<DxiTabDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridTabComponent))
+    get tabsChildren(): QueryList<DxiDataGridTabComponent> {
         return this._getOption('tabs');
     }
     set tabsChildren(value) {
@@ -388,10 +388,10 @@ export class DxiItemDataGridComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemDataGridComponent
+    DxiDataGridItemComponent
   ],
   exports: [
-    DxiItemDataGridComponent
+    DxiDataGridItemComponent
   ],
 })
-export class DxiItemDataGridModule { }
+export class DxiDataGridItemModule { }

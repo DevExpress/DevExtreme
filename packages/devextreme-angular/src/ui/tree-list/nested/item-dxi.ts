@@ -26,17 +26,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiValidationRuleTreeListComponent } from './validation-rule-dxi';
-import { DxiTabTreeListComponent } from './tab-dxi';
+import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
+import { DxiTreeListTabComponent } from './tab-dxi';
 
 
 @Component({
-    selector: 'dxi-item-tree-list',
+    selector: 'dxi-tree-list-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemTreeListComponent extends CollectionNestedOption {
+export class DxiTreeListItemComponent extends CollectionNestedOption {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -347,24 +347,24 @@ export class DxiItemTreeListComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleTreeListComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiTreeListValidationRuleComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
         this.setChildren('validationRules', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiItemTreeListComponent))
-    get itemsChildren(): QueryList<DxiItemTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListItemComponent))
+    get itemsChildren(): QueryList<DxiTreeListItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
         this.setChildren('items', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiTabTreeListComponent))
-    get tabsChildren(): QueryList<DxiTabTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListTabComponent))
+    get tabsChildren(): QueryList<DxiTreeListTabComponent> {
         return this._getOption('tabs');
     }
     set tabsChildren(value) {
@@ -388,10 +388,10 @@ export class DxiItemTreeListComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemTreeListComponent
+    DxiTreeListItemComponent
   ],
   exports: [
-    DxiItemTreeListComponent
+    DxiTreeListItemComponent
   ],
 })
-export class DxiItemTreeListModule { }
+export class DxiTreeListItemModule { }

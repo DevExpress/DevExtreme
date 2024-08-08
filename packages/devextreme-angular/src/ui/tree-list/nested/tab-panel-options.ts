@@ -28,16 +28,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemTreeListComponent } from './item-dxi';
+import { DxiTreeListItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-tab-panel-options-tree-list',
+    selector: 'dxo-tree-list-tab-panel-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTabPanelOptionsTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -408,8 +408,8 @@ export class DxoTabPanelOptionsTreeListComponent extends NestedOption implements
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemTreeListComponent))
-    get itemsChildren(): QueryList<DxiItemTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListItemComponent))
+    get itemsChildren(): QueryList<DxiTreeListItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -444,10 +444,10 @@ export class DxoTabPanelOptionsTreeListComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoTabPanelOptionsTreeListComponent
+    DxoTreeListTabPanelOptionsComponent
   ],
   exports: [
-    DxoTabPanelOptionsTreeListComponent
+    DxoTreeListTabPanelOptionsComponent
   ],
 })
-export class DxoTabPanelOptionsTreeListModule { }
+export class DxoTreeListTabPanelOptionsModule { }

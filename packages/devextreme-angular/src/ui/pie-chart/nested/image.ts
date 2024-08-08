@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-image-pie-chart',
+    selector: 'dxo-pie-chart-image',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoImagePieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartImageComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -79,10 +79,10 @@ export class DxoImagePieChartComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoImagePieChartComponent
+    DxoPieChartImageComponent
   ],
   exports: [
-    DxoImagePieChartComponent
+    DxoPieChartImageComponent
   ],
 })
-export class DxoImagePieChartModule { }
+export class DxoPieChartImageModule { }

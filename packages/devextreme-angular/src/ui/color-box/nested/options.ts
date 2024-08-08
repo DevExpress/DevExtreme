@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-options-color-box',
+    selector: 'dxo-color-box-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOptionsColorBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColorBoxOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -249,10 +249,10 @@ export class DxoOptionsColorBoxComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoOptionsColorBoxComponent
+    DxoColorBoxOptionsComponent
   ],
   exports: [
-    DxoOptionsColorBoxComponent
+    DxoColorBoxOptionsComponent
   ],
 })
-export class DxoOptionsColorBoxModule { }
+export class DxoColorBoxOptionsModule { }

@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-pane-chart',
+    selector: 'dxi-chart-pane',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiPaneChartComponent extends CollectionNestedOption {
+export class DxiChartPaneComponent extends CollectionNestedOption {
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -82,10 +82,10 @@ export class DxiPaneChartComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiPaneChartComponent
+    DxiChartPaneComponent
   ],
   exports: [
-    DxiPaneChartComponent
+    DxiChartPaneComponent
   ],
 })
-export class DxiPaneChartModule { }
+export class DxiChartPaneModule { }

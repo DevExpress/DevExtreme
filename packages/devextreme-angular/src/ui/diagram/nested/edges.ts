@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-edges-diagram',
+    selector: 'dxo-diagram-edges',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoEdgesDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramEdgesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customDataExpr(): Function | string | undefined {
         return this._getOption('customDataExpr');
@@ -185,10 +185,10 @@ export class DxoEdgesDiagramComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoEdgesDiagramComponent
+    DxoDiagramEdgesComponent
   ],
   exports: [
-    DxoEdgesDiagramComponent
+    DxoDiagramEdgesComponent
   ],
 })
-export class DxoEdgesDiagramModule { }
+export class DxoDiagramEdgesModule { }

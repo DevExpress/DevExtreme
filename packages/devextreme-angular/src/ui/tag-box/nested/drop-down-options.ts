@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemTagBoxComponent } from './toolbar-item-dxi';
+import { DxiTagBoxToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-drop-down-options-tag-box',
+    selector: 'dxo-tag-box-drop-down-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDropDownOptionsTagBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoDropDownOptionsTagBoxComponent extends NestedOption implements O
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemTagBoxComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemTagBoxComponent> {
+    @ContentChildren(forwardRef(() => DxiTagBoxToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiTagBoxToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoDropDownOptionsTagBoxComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoDropDownOptionsTagBoxComponent
+    DxoTagBoxDropDownOptionsComponent
   ],
   exports: [
-    DxoDropDownOptionsTagBoxComponent
+    DxoTagBoxDropDownOptionsComponent
   ],
 })
-export class DxoDropDownOptionsTagBoxModule { }
+export class DxoTagBoxDropDownOptionsModule { }

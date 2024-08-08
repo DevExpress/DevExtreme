@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-tree-map',
+    selector: 'dxo-tree-map-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontTreeMapComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoFontTreeMapComponent
+    DxoTreeMapFontComponent
   ],
   exports: [
-    DxoFontTreeMapComponent
+    DxoTreeMapFontComponent
   ],
 })
-export class DxoFontTreeMapModule { }
+export class DxoTreeMapFontModule { }

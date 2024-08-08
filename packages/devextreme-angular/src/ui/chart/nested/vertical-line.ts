@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-vertical-line-chart',
+    selector: 'dxo-chart-vertical-line',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoVerticalLineChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartVerticalLineComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -105,10 +105,10 @@ export class DxoVerticalLineChartComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoVerticalLineChartComponent
+    DxoChartVerticalLineComponent
   ],
   exports: [
-    DxoVerticalLineChartComponent
+    DxoChartVerticalLineComponent
   ],
 })
-export class DxoVerticalLineChartModule { }
+export class DxoChartVerticalLineModule { }

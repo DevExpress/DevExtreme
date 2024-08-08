@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-value-error-bar-range-selector',
+    selector: 'dxo-range-selector-value-error-bar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoValueErrorBarRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorValueErrorBarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -128,10 +128,10 @@ export class DxoValueErrorBarRangeSelectorComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoValueErrorBarRangeSelectorComponent
+    DxoRangeSelectorValueErrorBarComponent
   ],
   exports: [
-    DxoValueErrorBarRangeSelectorComponent
+    DxoRangeSelectorValueErrorBarComponent
   ],
 })
-export class DxoValueErrorBarRangeSelectorModule { }
+export class DxoRangeSelectorValueErrorBarModule { }

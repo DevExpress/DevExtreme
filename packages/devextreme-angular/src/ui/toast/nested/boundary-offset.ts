@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-boundary-offset-toast',
+    selector: 'dxo-toast-boundary-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoundaryOffsetToastComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoToastBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoBoundaryOffsetToastComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoBoundaryOffsetToastComponent
+    DxoToastBoundaryOffsetComponent
   ],
   exports: [
-    DxoBoundaryOffsetToastComponent
+    DxoToastBoundaryOffsetComponent
   ],
 })
-export class DxoBoundaryOffsetToastModule { }
+export class DxoToastBoundaryOffsetModule { }

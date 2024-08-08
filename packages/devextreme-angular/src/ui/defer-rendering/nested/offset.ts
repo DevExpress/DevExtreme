@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-offset-defer-rendering',
+    selector: 'dxo-defer-rendering-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOffsetDeferRenderingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDeferRenderingOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoOffsetDeferRenderingComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoOffsetDeferRenderingComponent
+    DxoDeferRenderingOffsetComponent
   ],
   exports: [
-    DxoOffsetDeferRenderingComponent
+    DxoDeferRenderingOffsetComponent
   ],
 })
-export class DxoOffsetDeferRenderingModule { }
+export class DxoDeferRenderingOffsetModule { }

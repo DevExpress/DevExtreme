@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-behavior-range-selector',
+    selector: 'dxo-range-selector-behavior',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBehaviorRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorBehaviorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSlidersSwap(): boolean {
         return this._getOption('allowSlidersSwap');
@@ -113,10 +113,10 @@ export class DxoBehaviorRangeSelectorComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoBehaviorRangeSelectorComponent
+    DxoRangeSelectorBehaviorComponent
   ],
   exports: [
-    DxoBehaviorRangeSelectorComponent
+    DxoRangeSelectorBehaviorComponent
   ],
 })
-export class DxoBehaviorRangeSelectorModule { }
+export class DxoRangeSelectorBehaviorModule { }

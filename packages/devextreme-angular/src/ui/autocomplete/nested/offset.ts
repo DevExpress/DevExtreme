@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-offset-autocomplete',
+    selector: 'dxo-autocomplete-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOffsetAutocompleteComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAutocompleteOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoOffsetAutocompleteComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoOffsetAutocompleteComponent
+    DxoAutocompleteOffsetComponent
   ],
   exports: [
-    DxoOffsetAutocompleteComponent
+    DxoAutocompleteOffsetComponent
   ],
 })
-export class DxoOffsetAutocompleteModule { }
+export class DxoAutocompleteOffsetModule { }

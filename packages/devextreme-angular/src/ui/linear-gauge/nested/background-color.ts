@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-background-color-linear-gauge',
+    selector: 'dxo-linear-gauge-background-color',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBackgroundColorLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeBackgroundColorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get base(): string | undefined {
         return this._getOption('base');
@@ -71,10 +71,10 @@ export class DxoBackgroundColorLinearGaugeComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoBackgroundColorLinearGaugeComponent
+    DxoLinearGaugeBackgroundColorComponent
   ],
   exports: [
-    DxoBackgroundColorLinearGaugeComponent
+    DxoLinearGaugeBackgroundColorComponent
   ],
 })
-export class DxoBackgroundColorLinearGaugeModule { }
+export class DxoLinearGaugeBackgroundColorModule { }

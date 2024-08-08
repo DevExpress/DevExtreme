@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-button-options-form',
+    selector: 'dxo-form-button-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoButtonOptionsFormComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormButtonOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -249,10 +249,10 @@ export class DxoButtonOptionsFormComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoButtonOptionsFormComponent
+    DxoFormButtonOptionsComponent
   ],
   exports: [
-    DxoButtonOptionsFormComponent
+    DxoFormButtonOptionsComponent
   ],
 })
-export class DxoButtonOptionsFormModule { }
+export class DxoFormButtonOptionsModule { }

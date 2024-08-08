@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemGanttComponent } from './item-dxi';
+import { DxiGanttItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-toolbar-gantt',
+    selector: 'dxo-gantt-toolbar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToolbarGanttComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get items(): Array<dxGanttToolbarItem | GanttPredefinedToolbarItem> {
         return this._getOption('items');
@@ -47,8 +47,8 @@ export class DxoToolbarGanttComponent extends NestedOption implements OnDestroy,
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemGanttComponent))
-    get itemsChildren(): QueryList<DxiItemGanttComponent> {
+    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
+    get itemsChildren(): QueryList<DxiGanttItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -76,10 +76,10 @@ export class DxoToolbarGanttComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoToolbarGanttComponent
+    DxoGanttToolbarComponent
   ],
   exports: [
-    DxoToolbarGanttComponent
+    DxoGanttToolbarComponent
   ],
 })
-export class DxoToolbarGanttModule { }
+export class DxoGanttToolbarModule { }

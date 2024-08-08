@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-subtitle-funnel',
+    selector: 'dxo-funnel-subtitle',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSubtitleFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -96,10 +96,10 @@ export class DxoSubtitleFunnelComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoSubtitleFunnelComponent
+    DxoFunnelSubtitleComponent
   ],
   exports: [
-    DxoSubtitleFunnelComponent
+    DxoFunnelSubtitleComponent
   ],
 })
-export class DxoSubtitleFunnelModule { }
+export class DxoFunnelSubtitleModule { }

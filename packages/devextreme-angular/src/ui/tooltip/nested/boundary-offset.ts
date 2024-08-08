@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-boundary-offset-tooltip',
+    selector: 'dxo-tooltip-boundary-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoundaryOffsetTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoBoundaryOffsetTooltipComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoBoundaryOffsetTooltipComponent
+    DxoTooltipBoundaryOffsetComponent
   ],
   exports: [
-    DxoBoundaryOffsetTooltipComponent
+    DxoTooltipBoundaryOffsetComponent
   ],
 })
-export class DxoBoundaryOffsetTooltipModule { }
+export class DxoTooltipBoundaryOffsetModule { }

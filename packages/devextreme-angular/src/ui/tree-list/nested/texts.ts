@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-texts-tree-list',
+    selector: 'dxo-tree-list-texts',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTextsTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get fix(): string {
         return this._getOption('fix');
@@ -231,10 +231,10 @@ export class DxoTextsTreeListComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoTextsTreeListComponent
+    DxoTreeListTextsComponent
   ],
   exports: [
-    DxoTextsTreeListComponent
+    DxoTreeListTextsComponent
   ],
 })
-export class DxoTextsTreeListModule { }
+export class DxoTreeListTextsModule { }

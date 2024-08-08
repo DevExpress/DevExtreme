@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-chat',
+    selector: 'dxi-chat-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemChatComponent extends CollectionNestedOption {
+export class DxiChatItemComponent extends CollectionNestedOption {
     @Input()
     get author(): User | undefined {
         return this._getOption('author');
@@ -82,10 +82,10 @@ export class DxiItemChatComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemChatComponent
+    DxiChatItemComponent
   ],
   exports: [
-    DxiItemChatComponent
+    DxiChatItemComponent
   ],
 })
-export class DxiItemChatModule { }
+export class DxiChatItemModule { }

@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-position-context-menu',
+    selector: 'dxo-context-menu-position',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPositionContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -114,10 +114,10 @@ export class DxoPositionContextMenuComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoPositionContextMenuComponent
+    DxoContextMenuPositionComponent
   ],
   exports: [
-    DxoPositionContextMenuComponent
+    DxoContextMenuPositionComponent
   ],
 })
-export class DxoPositionContextMenuModule { }
+export class DxoContextMenuPositionModule { }

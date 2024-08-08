@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-lookup-tree-list',
+    selector: 'dxo-tree-list-lookup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLookupTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListLookupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowClearing(): boolean {
         return this._getOption('allowClearing');
@@ -97,10 +97,10 @@ export class DxoLookupTreeListComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoLookupTreeListComponent
+    DxoTreeListLookupComponent
   ],
   exports: [
-    DxoLookupTreeListComponent
+    DxoTreeListLookupComponent
   ],
 })
-export class DxoLookupTreeListModule { }
+export class DxoTreeListLookupModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-defer-rendering',
+    selector: 'dxo-defer-rendering-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionDeferRenderingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDeferRenderingCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionDeferRenderingComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoCollisionDeferRenderingComponent
+    DxoDeferRenderingCollisionComponent
   ],
   exports: [
-    DxoCollisionDeferRenderingComponent
+    DxoDeferRenderingCollisionComponent
   ],
 })
-export class DxoCollisionDeferRenderingModule { }
+export class DxoDeferRenderingCollisionModule { }

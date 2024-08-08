@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-margin-range-selector',
+    selector: 'dxo-range-selector-margin',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarginRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorMarginComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -87,10 +87,10 @@ export class DxoMarginRangeSelectorComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoMarginRangeSelectorComponent
+    DxoRangeSelectorMarginComponent
   ],
   exports: [
-    DxoMarginRangeSelectorComponent
+    DxoRangeSelectorMarginComponent
   ],
 })
-export class DxoMarginRangeSelectorModule { }
+export class DxoRangeSelectorMarginModule { }

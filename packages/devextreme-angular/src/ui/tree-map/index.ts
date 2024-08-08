@@ -60,23 +60,23 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-import { DxoColorizerTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoExportTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoGroupTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoBorderTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoHoverStyleTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoLabelTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoFontTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoSelectionStyleTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoLoadingIndicatorTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoSizeTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoTileTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoTitleTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoMarginTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoSubtitleTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoTooltipTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoFormatTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
-import { DxoShadowTreeMapModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapColorizerModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapExportModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapGroupModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapBorderModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapHoverStyleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapLabelModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapFontModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapSelectionStyleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapLoadingIndicatorModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapSizeModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapTileModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapTitleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapMarginModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapSubtitleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapTooltipModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapFormatModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTreeMapShadowModule } from 'devextreme-angular/ui/tree-map/nested';
 
 
 
@@ -874,23 +874,23 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     DxoTooltipModule,
     DxoFormatModule,
     DxoShadowModule,
-    DxoColorizerTreeMapModule,
-    DxoExportTreeMapModule,
-    DxoGroupTreeMapModule,
-    DxoBorderTreeMapModule,
-    DxoHoverStyleTreeMapModule,
-    DxoLabelTreeMapModule,
-    DxoFontTreeMapModule,
-    DxoSelectionStyleTreeMapModule,
-    DxoLoadingIndicatorTreeMapModule,
-    DxoSizeTreeMapModule,
-    DxoTileTreeMapModule,
-    DxoTitleTreeMapModule,
-    DxoMarginTreeMapModule,
-    DxoSubtitleTreeMapModule,
-    DxoTooltipTreeMapModule,
-    DxoFormatTreeMapModule,
-    DxoShadowTreeMapModule,
+    DxoTreeMapColorizerModule,
+    DxoTreeMapExportModule,
+    DxoTreeMapGroupModule,
+    DxoTreeMapBorderModule,
+    DxoTreeMapHoverStyleModule,
+    DxoTreeMapLabelModule,
+    DxoTreeMapFontModule,
+    DxoTreeMapSelectionStyleModule,
+    DxoTreeMapLoadingIndicatorModule,
+    DxoTreeMapSizeModule,
+    DxoTreeMapTileModule,
+    DxoTreeMapTitleModule,
+    DxoTreeMapMarginModule,
+    DxoTreeMapSubtitleModule,
+    DxoTreeMapTooltipModule,
+    DxoTreeMapFormatModule,
+    DxoTreeMapShadowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -900,7 +900,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
   exports: [
     DxTreeMapComponent,
     DxoColorizerModule,DxoExportModule,DxoGroupModule,DxoBorderModule,DxoHoverStyleModule,DxoLabelModule,DxoFontModule,DxoSelectionStyleModule,DxoLoadingIndicatorModule,DxoSizeModule,DxoTileModule,DxoTitleModule,DxoMarginModule,DxoSubtitleModule,DxoTooltipModule,DxoFormatModule,DxoShadowModule,
-    DxoColorizerTreeMapModule,DxoExportTreeMapModule,DxoGroupTreeMapModule,DxoBorderTreeMapModule,DxoHoverStyleTreeMapModule,DxoLabelTreeMapModule,DxoFontTreeMapModule,DxoSelectionStyleTreeMapModule,DxoLoadingIndicatorTreeMapModule,DxoSizeTreeMapModule,DxoTileTreeMapModule,DxoTitleTreeMapModule,DxoMarginTreeMapModule,DxoSubtitleTreeMapModule,DxoTooltipTreeMapModule,DxoFormatTreeMapModule,DxoShadowTreeMapModule,
+    DxoTreeMapColorizerModule,DxoTreeMapExportModule,DxoTreeMapGroupModule,DxoTreeMapBorderModule,DxoTreeMapHoverStyleModule,DxoTreeMapLabelModule,DxoTreeMapFontModule,DxoTreeMapSelectionStyleModule,DxoTreeMapLoadingIndicatorModule,DxoTreeMapSizeModule,DxoTreeMapTileModule,DxoTreeMapTitleModule,DxoTreeMapMarginModule,DxoTreeMapSubtitleModule,DxoTreeMapTooltipModule,DxoTreeMapFormatModule,DxoTreeMapShadowModule,
     DxTemplateModule
   ]
 })

@@ -44,12 +44,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTileViewModule } from 'devextreme-angular/ui/tile-view/nested';
+import { DxiTileViewItemModule } from 'devextreme-angular/ui/tile-view/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTileViewComponent } from 'devextreme-angular/ui/tile-view/nested';
+import { DxiTileViewItemComponent } from 'devextreme-angular/ui/tile-view/nested';
 
 
 
@@ -576,25 +576,25 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemTileViewComponent)
-    get itemsNewChildren(): QueryList<DxiItemTileViewComponent> {
+    @ContentChildren(DxiTileViewItemComponent)
+    get itemsChildren(): QueryList<DxiTileViewItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -695,7 +695,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemTileViewModule,
+    DxiTileViewItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -705,7 +705,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
   exports: [
     DxTileViewComponent,
     DxiItemModule,
-    DxiItemTileViewModule,
+    DxiTileViewItemModule,
     DxTemplateModule
   ]
 })

@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-pie-chart',
+    selector: 'dxo-pie-chart-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get argumentFormat(): Format | string | undefined {
         return this._getOption('argumentFormat');
@@ -202,10 +202,10 @@ export class DxoTooltipPieChartComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoTooltipPieChartComponent
+    DxoPieChartTooltipComponent
   ],
   exports: [
-    DxoTooltipPieChartComponent
+    DxoPieChartTooltipComponent
   ],
 })
-export class DxoTooltipPieChartModule { }
+export class DxoPieChartTooltipModule { }

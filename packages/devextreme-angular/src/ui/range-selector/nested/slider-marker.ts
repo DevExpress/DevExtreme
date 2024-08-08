@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-slider-marker-range-selector',
+    selector: 'dxo-range-selector-slider-marker',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSliderMarkerRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorSliderMarkerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -129,10 +129,10 @@ export class DxoSliderMarkerRangeSelectorComponent extends NestedOption implemen
 
 @NgModule({
   declarations: [
-    DxoSliderMarkerRangeSelectorComponent
+    DxoRangeSelectorSliderMarkerComponent
   ],
   exports: [
-    DxoSliderMarkerRangeSelectorComponent
+    DxoRangeSelectorSliderMarkerComponent
   ],
 })
-export class DxoSliderMarkerRangeSelectorModule { }
+export class DxoRangeSelectorSliderMarkerModule { }

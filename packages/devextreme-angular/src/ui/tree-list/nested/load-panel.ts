@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-load-panel-tree-list',
+    selector: 'dxo-tree-list-load-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadPanelTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): Mode | boolean {
         return this._getOption('enabled');
@@ -128,10 +128,10 @@ export class DxoLoadPanelTreeListComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoLoadPanelTreeListComponent
+    DxoTreeListLoadPanelComponent
   ],
   exports: [
-    DxoLoadPanelTreeListComponent
+    DxoTreeListLoadPanelComponent
   ],
 })
-export class DxoLoadPanelTreeListModule { }
+export class DxoTreeListLoadPanelModule { }

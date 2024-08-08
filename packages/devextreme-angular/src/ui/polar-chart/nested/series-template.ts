@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-series-template-polar-chart',
+    selector: 'dxo-polar-chart-series-template',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSeriesTemplatePolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customizeSeries(): Function {
         return this._getOption('customizeSeries');
@@ -71,10 +71,10 @@ export class DxoSeriesTemplatePolarChartComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoSeriesTemplatePolarChartComponent
+    DxoPolarChartSeriesTemplateComponent
   ],
   exports: [
-    DxoSeriesTemplatePolarChartComponent
+    DxoPolarChartSeriesTemplateComponent
   ],
 })
-export class DxoSeriesTemplatePolarChartModule { }
+export class DxoPolarChartSeriesTemplateModule { }

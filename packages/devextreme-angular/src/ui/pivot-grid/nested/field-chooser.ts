@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-field-chooser-pivot-grid',
+    selector: 'dxo-pivot-grid-field-chooser',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFieldChooserPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridFieldChooserComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -129,10 +129,10 @@ export class DxoFieldChooserPivotGridComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoFieldChooserPivotGridComponent
+    DxoPivotGridFieldChooserComponent
   ],
   exports: [
-    DxoFieldChooserPivotGridComponent
+    DxoPivotGridFieldChooserComponent
   ],
 })
-export class DxoFieldChooserPivotGridModule { }
+export class DxoPivotGridFieldChooserModule { }

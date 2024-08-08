@@ -43,9 +43,9 @@ import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 
-import { DxoHeaderFilterPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
-import { DxoSearchPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
-import { DxoTextsPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoPivotGridFieldChooserHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoPivotGridFieldChooserSearchModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
 
 
@@ -621,9 +621,9 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     DxoHeaderFilterModule,
     DxoSearchModule,
     DxoTextsModule,
-    DxoHeaderFilterPivotGridFieldChooserModule,
-    DxoSearchPivotGridFieldChooserModule,
-    DxoTextsPivotGridFieldChooserModule,
+    DxoPivotGridFieldChooserHeaderFilterModule,
+    DxoPivotGridFieldChooserSearchModule,
+    DxoPivotGridFieldChooserTextsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -633,7 +633,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
   exports: [
     DxPivotGridFieldChooserComponent,
     DxoHeaderFilterModule,DxoSearchModule,DxoTextsModule,
-    DxoHeaderFilterPivotGridFieldChooserModule,DxoSearchPivotGridFieldChooserModule,DxoTextsPivotGridFieldChooserModule,
+    DxoPivotGridFieldChooserHeaderFilterModule,DxoPivotGridFieldChooserSearchModule,DxoPivotGridFieldChooserTextsModule,
     DxTemplateModule
   ]
 })

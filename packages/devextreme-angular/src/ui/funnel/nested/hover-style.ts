@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hover-style-funnel',
+    selector: 'dxo-funnel-hover-style',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHoverStyleFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -72,10 +72,10 @@ export class DxoHoverStyleFunnelComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoHoverStyleFunnelComponent
+    DxoFunnelHoverStyleComponent
   ],
   exports: [
-    DxoHoverStyleFunnelComponent
+    DxoFunnelHoverStyleComponent
   ],
 })
-export class DxoHoverStyleFunnelModule { }
+export class DxoFunnelHoverStyleModule { }

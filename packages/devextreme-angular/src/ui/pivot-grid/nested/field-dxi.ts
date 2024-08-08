@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-field-pivot-grid',
+    selector: 'dxi-pivot-grid-field',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiFieldPivotGridComponent extends CollectionNestedOption {
+export class DxiPivotGridFieldComponent extends CollectionNestedOption {
     @Input()
     get allowCrossGroupCalculation(): boolean {
         return this._getOption('allowCrossGroupCalculation');
@@ -362,10 +362,10 @@ export class DxiFieldPivotGridComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiFieldPivotGridComponent
+    DxiPivotGridFieldComponent
   ],
   exports: [
-    DxiFieldPivotGridComponent
+    DxiPivotGridFieldComponent
   ],
 })
-export class DxiFieldPivotGridModule { }
+export class DxiPivotGridFieldModule { }

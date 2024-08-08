@@ -25,16 +25,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiSeriesRangeSelectorComponent } from './series-dxi';
+import { DxiRangeSelectorSeriesComponent } from './series-dxi';
 
 
 @Component({
-    selector: 'dxo-chart-range-selector',
+    selector: 'dxo-range-selector-chart',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoChartRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorChartComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get barGroupPadding(): number {
         return this._getOption('barGroupPadding');
@@ -153,8 +153,8 @@ export class DxoChartRangeSelectorComponent extends NestedOption implements OnDe
     }
 
 
-    @ContentChildren(forwardRef(() => DxiSeriesRangeSelectorComponent))
-    get seriesChildren(): QueryList<DxiSeriesRangeSelectorComponent> {
+    @ContentChildren(forwardRef(() => DxiRangeSelectorSeriesComponent))
+    get seriesChildren(): QueryList<DxiRangeSelectorSeriesComponent> {
         return this._getOption('series');
     }
     set seriesChildren(value) {
@@ -182,10 +182,10 @@ export class DxoChartRangeSelectorComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoChartRangeSelectorComponent
+    DxoRangeSelectorChartComponent
   ],
   exports: [
-    DxoChartRangeSelectorComponent
+    DxoRangeSelectorChartComponent
   ],
 })
-export class DxoChartRangeSelectorModule { }
+export class DxoRangeSelectorChartModule { }

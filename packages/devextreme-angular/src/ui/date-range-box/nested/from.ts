@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-from-date-range-box',
+    selector: 'dxo-date-range-box-from',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFromDateRangeBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateRangeBoxFromComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -96,10 +96,10 @@ export class DxoFromDateRangeBoxComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoFromDateRangeBoxComponent
+    DxoDateRangeBoxFromComponent
   ],
   exports: [
-    DxoFromDateRangeBoxComponent
+    DxoDateRangeBoxFromComponent
   ],
 })
-export class DxoFromDateRangeBoxModule { }
+export class DxoDateRangeBoxFromModule { }

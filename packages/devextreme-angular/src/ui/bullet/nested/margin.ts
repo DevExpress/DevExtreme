@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-margin-bullet',
+    selector: 'dxo-bullet-margin',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarginBulletComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBulletMarginComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -87,10 +87,10 @@ export class DxoMarginBulletComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoMarginBulletComponent
+    DxoBulletMarginComponent
   ],
   exports: [
-    DxoMarginBulletComponent
+    DxoBulletMarginComponent
   ],
 })
-export class DxoMarginBulletModule { }
+export class DxoBulletMarginModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-table-resizing-html-editor',
+    selector: 'dxo-html-editor-table-resizing',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTableResizingHtmlEditorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorTableResizingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -79,10 +79,10 @@ export class DxoTableResizingHtmlEditorComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoTableResizingHtmlEditorComponent
+    DxoHtmlEditorTableResizingComponent
   ],
   exports: [
-    DxoTableResizingHtmlEditorComponent
+    DxoHtmlEditorTableResizingComponent
   ],
 })
-export class DxoTableResizingHtmlEditorModule { }
+export class DxoHtmlEditorTableResizingModule { }

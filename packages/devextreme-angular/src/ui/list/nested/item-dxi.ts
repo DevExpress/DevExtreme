@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-list',
+    selector: 'dxi-list-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemListComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiListItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get badge(): string {
@@ -142,10 +142,10 @@ export class DxiItemListComponent extends CollectionNestedOption implements Afte
 
 @NgModule({
   declarations: [
-    DxiItemListComponent
+    DxiListItemComponent
   ],
   exports: [
-    DxiItemListComponent
+    DxiListItemComponent
   ],
 })
-export class DxiItemListModule { }
+export class DxiListItemModule { }

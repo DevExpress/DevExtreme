@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-linear-gauge',
+    selector: 'dxo-linear-gauge-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -186,10 +186,10 @@ export class DxoTooltipLinearGaugeComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoTooltipLinearGaugeComponent
+    DxoLinearGaugeTooltipComponent
   ],
   exports: [
-    DxoTooltipLinearGaugeComponent
+    DxoLinearGaugeTooltipComponent
   ],
 })
-export class DxoTooltipLinearGaugeModule { }
+export class DxoLinearGaugeTooltipModule { }

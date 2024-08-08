@@ -26,16 +26,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiButtonTreeViewComponent } from './button-dxi';
+import { DxiTreeViewButtonComponent } from './button-dxi';
 
 
 @Component({
-    selector: 'dxo-search-editor-options-tree-view',
+    selector: 'dxo-tree-view-search-editor-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSearchEditorOptionsTreeViewComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -495,8 +495,8 @@ export class DxoSearchEditorOptionsTreeViewComponent extends NestedOption implem
     }
 
 
-    @ContentChildren(forwardRef(() => DxiButtonTreeViewComponent))
-    get buttonsChildren(): QueryList<DxiButtonTreeViewComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeViewButtonComponent))
+    get buttonsChildren(): QueryList<DxiTreeViewButtonComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
@@ -530,10 +530,10 @@ export class DxoSearchEditorOptionsTreeViewComponent extends NestedOption implem
 
 @NgModule({
   declarations: [
-    DxoSearchEditorOptionsTreeViewComponent
+    DxoTreeViewSearchEditorOptionsComponent
   ],
   exports: [
-    DxoSearchEditorOptionsTreeViewComponent
+    DxoTreeViewSearchEditorOptionsComponent
   ],
 })
-export class DxoSearchEditorOptionsTreeViewModule { }
+export class DxoTreeViewSearchEditorOptionsModule { }

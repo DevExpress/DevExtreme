@@ -29,12 +29,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-drop-down-button',
+    selector: 'dxi-drop-down-button-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemDropDownButtonComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiDropDownButtonItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get badge(): string {
@@ -135,10 +135,10 @@ export class DxiItemDropDownButtonComponent extends CollectionNestedOption imple
 
 @NgModule({
   declarations: [
-    DxiItemDropDownButtonComponent
+    DxiDropDownButtonItemComponent
   ],
   exports: [
-    DxiItemDropDownButtonComponent
+    DxiDropDownButtonItemComponent
   ],
 })
-export class DxiItemDropDownButtonModule { }
+export class DxiDropDownButtonItemModule { }

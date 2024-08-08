@@ -24,16 +24,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemGanttComponent } from './item-dxi';
+import { DxiGanttItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-context-menu-gantt',
+    selector: 'dxo-gantt-context-menu',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoContextMenuGanttComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -56,8 +56,8 @@ export class DxoContextMenuGanttComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemGanttComponent))
-    get itemsChildren(): QueryList<DxiItemGanttComponent> {
+    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
+    get itemsChildren(): QueryList<DxiGanttItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -85,10 +85,10 @@ export class DxoContextMenuGanttComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoContextMenuGanttComponent
+    DxoGanttContextMenuComponent
   ],
   exports: [
-    DxoContextMenuGanttComponent
+    DxoGanttContextMenuComponent
   ],
 })
-export class DxoContextMenuGanttModule { }
+export class DxoGanttContextMenuModule { }

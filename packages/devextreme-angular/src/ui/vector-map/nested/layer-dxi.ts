@@ -25,12 +25,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-layer-vector-map',
+    selector: 'dxi-vector-map-layer',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiLayerVectorMapComponent extends CollectionNestedOption {
+export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     @Input()
     get borderColor(): string {
         return this._getOption('borderColor');
@@ -286,10 +286,10 @@ export class DxiLayerVectorMapComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiLayerVectorMapComponent
+    DxiVectorMapLayerComponent
   ],
   exports: [
-    DxiLayerVectorMapComponent
+    DxiVectorMapLayerComponent
   ],
 })
-export class DxiLayerVectorMapModule { }
+export class DxiVectorMapLayerModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-media-resizing-html-editor',
+    selector: 'dxo-html-editor-media-resizing',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMediaResizingHtmlEditorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorMediaResizingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowedTargets(): Array<string> {
         return this._getOption('allowedTargets');
@@ -71,10 +71,10 @@ export class DxoMediaResizingHtmlEditorComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoMediaResizingHtmlEditorComponent
+    DxoHtmlEditorMediaResizingComponent
   ],
   exports: [
-    DxoMediaResizingHtmlEditorComponent
+    DxoHtmlEditorMediaResizingComponent
   ],
 })
-export class DxoMediaResizingHtmlEditorModule { }
+export class DxoHtmlEditorMediaResizingModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-data-grid',
+    selector: 'dxo-data-grid-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatDataGridComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoFormatDataGridComponent
+    DxoDataGridFormatComponent
   ],
   exports: [
-    DxoFormatDataGridComponent
+    DxoDataGridFormatComponent
   ],
 })
-export class DxoFormatDataGridModule { }
+export class DxoDataGridFormatModule { }

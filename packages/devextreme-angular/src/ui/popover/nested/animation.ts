@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-popover',
+    selector: 'dxo-popover-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationPopoverComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopoverAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationPopoverComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoAnimationPopoverComponent
+    DxoPopoverAnimationComponent
   ],
   exports: [
-    DxoAnimationPopoverComponent
+    DxoPopoverAnimationComponent
   ],
 })
-export class DxoAnimationPopoverModule { }
+export class DxoPopoverAnimationModule { }

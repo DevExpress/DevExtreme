@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-pager-data-grid',
+    selector: 'dxo-data-grid-pager',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPagerDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
         return this._getOption('allowedPageSizes');
@@ -121,10 +121,10 @@ export class DxoPagerDataGridComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoPagerDataGridComponent
+    DxoDataGridPagerComponent
   ],
   exports: [
-    DxoPagerDataGridComponent
+    DxoDataGridPagerComponent
   ],
 })
-export class DxoPagerDataGridModule { }
+export class DxoDataGridPagerModule { }

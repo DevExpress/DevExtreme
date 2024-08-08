@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-filter-operation-descriptions-tree-list',
+    selector: 'dxo-tree-list-filter-operation-descriptions',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterOperationDescriptionsTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFilterOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get between(): string {
         return this._getOption('between');
@@ -159,10 +159,10 @@ export class DxoFilterOperationDescriptionsTreeListComponent extends NestedOptio
 
 @NgModule({
   declarations: [
-    DxoFilterOperationDescriptionsTreeListComponent
+    DxoTreeListFilterOperationDescriptionsComponent
   ],
   exports: [
-    DxoFilterOperationDescriptionsTreeListComponent
+    DxoTreeListFilterOperationDescriptionsComponent
   ],
 })
-export class DxoFilterOperationDescriptionsTreeListModule { }
+export class DxoTreeListFilterOperationDescriptionsModule { }

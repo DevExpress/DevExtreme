@@ -27,12 +27,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-column-gantt',
+    selector: 'dxi-gantt-column',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiColumnGanttComponent extends CollectionNestedOption {
+export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()
     get alignment(): HorizontalAlignment | string | undefined {
         return this._getOption('alignment');
@@ -371,10 +371,10 @@ export class DxiColumnGanttComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiColumnGanttComponent
+    DxiGanttColumnComponent
   ],
   exports: [
-    DxiColumnGanttComponent
+    DxiGanttColumnComponent
   ],
 })
-export class DxiColumnGanttModule { }
+export class DxiGanttColumnModule { }

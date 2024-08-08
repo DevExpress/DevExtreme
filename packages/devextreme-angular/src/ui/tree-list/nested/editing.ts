@@ -27,16 +27,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiChangeTreeListComponent } from './change-dxi';
+import { DxiTreeListChangeComponent } from './change-dxi';
 
 
 @Component({
-    selector: 'dxo-editing-tree-list',
+    selector: 'dxo-tree-list-editing',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoEditingTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowAdding(): boolean | Function {
         return this._getOption('allowAdding');
@@ -183,8 +183,8 @@ export class DxoEditingTreeListComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiChangeTreeListComponent))
-    get changesChildren(): QueryList<DxiChangeTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListChangeComponent))
+    get changesChildren(): QueryList<DxiTreeListChangeComponent> {
         return this._getOption('changes');
     }
     set changesChildren(value) {
@@ -219,10 +219,10 @@ export class DxoEditingTreeListComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoEditingTreeListComponent
+    DxoTreeListEditingComponent
   ],
   exports: [
-    DxoEditingTreeListComponent
+    DxoTreeListEditingComponent
   ],
 })
-export class DxoEditingTreeListModule { }
+export class DxoTreeListEditingModule { }

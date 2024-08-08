@@ -24,16 +24,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiRangeLinearGaugeComponent } from './range-dxi';
+import { DxiLinearGaugeRangeComponent } from './range-dxi';
 
 
 @Component({
-    selector: 'dxo-range-container-linear-gauge',
+    selector: 'dxo-linear-gauge-range-container',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoRangeContainerLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -104,8 +104,8 @@ export class DxoRangeContainerLinearGaugeComponent extends NestedOption implemen
     }
 
 
-    @ContentChildren(forwardRef(() => DxiRangeLinearGaugeComponent))
-    get rangesChildren(): QueryList<DxiRangeLinearGaugeComponent> {
+    @ContentChildren(forwardRef(() => DxiLinearGaugeRangeComponent))
+    get rangesChildren(): QueryList<DxiLinearGaugeRangeComponent> {
         return this._getOption('ranges');
     }
     set rangesChildren(value) {
@@ -133,10 +133,10 @@ export class DxoRangeContainerLinearGaugeComponent extends NestedOption implemen
 
 @NgModule({
   declarations: [
-    DxoRangeContainerLinearGaugeComponent
+    DxoLinearGaugeRangeContainerComponent
   ],
   exports: [
-    DxoRangeContainerLinearGaugeComponent
+    DxoLinearGaugeRangeContainerComponent
   ],
 })
-export class DxoRangeContainerLinearGaugeModule { }
+export class DxoLinearGaugeRangeContainerModule { }

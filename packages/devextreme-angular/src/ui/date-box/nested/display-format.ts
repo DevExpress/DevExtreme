@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-display-format-date-box',
+    selector: 'dxo-date-box-display-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDisplayFormatDateBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateBoxDisplayFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoDisplayFormatDateBoxComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoDisplayFormatDateBoxComponent
+    DxoDateBoxDisplayFormatComponent
   ],
   exports: [
-    DxoDisplayFormatDateBoxComponent
+    DxoDateBoxDisplayFormatComponent
   ],
 })
-export class DxoDisplayFormatDateBoxModule { }
+export class DxoDateBoxDisplayFormatModule { }

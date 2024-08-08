@@ -24,12 +24,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-series-range-selector',
+    selector: 'dxi-range-selector-series',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiSeriesRangeSelectorComponent extends CollectionNestedOption {
+export class DxiRangeSelectorSeriesComponent extends CollectionNestedOption {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -373,10 +373,10 @@ export class DxiSeriesRangeSelectorComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiSeriesRangeSelectorComponent
+    DxiRangeSelectorSeriesComponent
   ],
   exports: [
-    DxiSeriesRangeSelectorComponent
+    DxiRangeSelectorSeriesComponent
   ],
 })
-export class DxiSeriesRangeSelectorModule { }
+export class DxiRangeSelectorSeriesModule { }

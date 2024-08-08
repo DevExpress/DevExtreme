@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-zoom-level-diagram',
+    selector: 'dxo-diagram-zoom-level',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoZoomLevelDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramZoomLevelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get items(): Array<number> {
         return this._getOption('items');
@@ -84,10 +84,10 @@ export class DxoZoomLevelDiagramComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoZoomLevelDiagramComponent
+    DxoDiagramZoomLevelComponent
   ],
   exports: [
-    DxoZoomLevelDiagramComponent
+    DxoDiagramZoomLevelComponent
   ],
 })
-export class DxoZoomLevelDiagramModule { }
+export class DxoDiagramZoomLevelModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-margin-sankey',
+    selector: 'dxo-sankey-margin',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarginSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyMarginComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -87,10 +87,10 @@ export class DxoMarginSankeyComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoMarginSankeyComponent
+    DxoSankeyMarginComponent
   ],
   exports: [
-    DxoMarginSankeyComponent
+    DxoSankeyMarginComponent
   ],
 })
-export class DxoMarginSankeyModule { }
+export class DxoSankeyMarginModule { }

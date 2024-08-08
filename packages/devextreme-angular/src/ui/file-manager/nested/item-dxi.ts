@@ -26,12 +26,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-file-manager',
+    selector: 'dxi-file-manager-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemFileManagerComponent extends CollectionNestedOption {
+export class DxiFileManagerItemComponent extends CollectionNestedOption {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -166,8 +166,8 @@ export class DxiItemFileManagerComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemFileManagerComponent))
-    get itemsChildren(): QueryList<DxiItemFileManagerComponent> {
+    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
+    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -191,10 +191,10 @@ export class DxiItemFileManagerComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemFileManagerComponent
+    DxiFileManagerItemComponent
   ],
   exports: [
-    DxiItemFileManagerComponent
+    DxiFileManagerItemComponent
   ],
 })
-export class DxiItemFileManagerModule { }
+export class DxiFileManagerItemModule { }

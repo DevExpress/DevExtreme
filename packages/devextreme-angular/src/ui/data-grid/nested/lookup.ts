@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-lookup-data-grid',
+    selector: 'dxo-data-grid-lookup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLookupDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridLookupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowClearing(): boolean {
         return this._getOption('allowClearing');
@@ -97,10 +97,10 @@ export class DxoLookupDataGridComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoLookupDataGridComponent
+    DxoDataGridLookupComponent
   ],
   exports: [
-    DxoLookupDataGridComponent
+    DxoDataGridLookupComponent
   ],
 })
-export class DxoLookupDataGridModule { }
+export class DxoDataGridLookupModule { }

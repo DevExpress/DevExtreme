@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemFileManagerComponent } from './item-dxi';
+import { DxiFileManagerItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-context-menu-file-manager',
+    selector: 'dxo-file-manager-context-menu',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoContextMenuFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get items(): Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem> {
         return this._getOption('items');
@@ -47,8 +47,8 @@ export class DxoContextMenuFileManagerComponent extends NestedOption implements 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemFileManagerComponent))
-    get itemsChildren(): QueryList<DxiItemFileManagerComponent> {
+    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
+    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -76,10 +76,10 @@ export class DxoContextMenuFileManagerComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoContextMenuFileManagerComponent
+    DxoFileManagerContextMenuComponent
   ],
   exports: [
-    DxoContextMenuFileManagerComponent
+    DxoFileManagerContextMenuComponent
   ],
 })
-export class DxoContextMenuFileManagerModule { }
+export class DxoFileManagerContextMenuModule { }

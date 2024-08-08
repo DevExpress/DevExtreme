@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-margin-funnel',
+    selector: 'dxo-funnel-margin',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarginFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelMarginComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -87,10 +87,10 @@ export class DxoMarginFunnelComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoMarginFunnelComponent
+    DxoFunnelMarginComponent
   ],
   exports: [
-    DxoMarginFunnelComponent
+    DxoFunnelMarginComponent
   ],
 })
-export class DxoMarginFunnelModule { }
+export class DxoFunnelMarginModule { }

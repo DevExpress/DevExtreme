@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-group-operation-descriptions-tree-list',
+    selector: 'dxo-tree-list-group-operation-descriptions',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGroupOperationDescriptionsTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get and(): string {
         return this._getOption('and');
@@ -87,10 +87,10 @@ export class DxoGroupOperationDescriptionsTreeListComponent extends NestedOption
 
 @NgModule({
   declarations: [
-    DxoGroupOperationDescriptionsTreeListComponent
+    DxoTreeListGroupOperationDescriptionsComponent
   ],
   exports: [
-    DxoGroupOperationDescriptionsTreeListComponent
+    DxoTreeListGroupOperationDescriptionsComponent
   ],
 })
-export class DxoGroupOperationDescriptionsTreeListModule { }
+export class DxoTreeListGroupOperationDescriptionsModule { }

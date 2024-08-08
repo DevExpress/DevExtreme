@@ -35,12 +35,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-gantt',
+    selector: 'dxi-gantt-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemGanttComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiGanttItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get beginGroup(): boolean {
@@ -200,8 +200,8 @@ export class DxiItemGanttComponent extends CollectionNestedOption implements Aft
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemGanttComponent))
-    get itemsChildren(): QueryList<DxiItemGanttComponent> {
+    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
+    get itemsChildren(): QueryList<DxiGanttItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -237,10 +237,10 @@ export class DxiItemGanttComponent extends CollectionNestedOption implements Aft
 
 @NgModule({
   declarations: [
-    DxiItemGanttComponent
+    DxiGanttItemComponent
   ],
   exports: [
-    DxiItemGanttComponent
+    DxiGanttItemComponent
   ],
 })
-export class DxiItemGanttModule { }
+export class DxiGanttItemModule { }

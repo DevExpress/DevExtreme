@@ -24,16 +24,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiValidationRuleTreeListComponent } from './validation-rule-dxi';
+import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
-    selector: 'dxo-form-item-tree-list',
+    selector: 'dxo-tree-list-form-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormItemTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFormItemComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -152,8 +152,8 @@ export class DxoFormItemTreeListComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiValidationRuleTreeListComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiTreeListValidationRuleComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
@@ -181,10 +181,10 @@ export class DxoFormItemTreeListComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoFormItemTreeListComponent
+    DxoTreeListFormItemComponent
   ],
   exports: [
-    DxoFormItemTreeListComponent
+    DxoTreeListFormItemComponent
   ],
 })
-export class DxoFormItemTreeListModule { }
+export class DxoTreeListFormItemModule { }

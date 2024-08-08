@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-context-menu',
+    selector: 'dxo-context-menu-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionContextMenuComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoCollisionContextMenuComponent
+    DxoContextMenuCollisionComponent
   ],
   exports: [
-    DxoCollisionContextMenuComponent
+    DxoContextMenuCollisionComponent
   ],
 })
-export class DxoCollisionContextMenuModule { }
+export class DxoContextMenuCollisionModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-drop-down-button',
+    selector: 'dxo-drop-down-button-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionDropDownButtonComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownButtonCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionDropDownButtonComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoCollisionDropDownButtonComponent
+    DxoDropDownButtonCollisionComponent
   ],
   exports: [
-    DxoCollisionDropDownButtonComponent
+    DxoDropDownButtonCollisionComponent
   ],
 })
-export class DxoCollisionDropDownButtonModule { }
+export class DxoDropDownButtonCollisionModule { }

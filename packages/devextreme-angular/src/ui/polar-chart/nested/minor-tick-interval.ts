@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-minor-tick-interval-polar-chart',
+    selector: 'dxo-polar-chart-minor-tick-interval',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMinorTickIntervalPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartMinorTickIntervalComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -127,10 +127,10 @@ export class DxoMinorTickIntervalPolarChartComponent extends NestedOption implem
 
 @NgModule({
   declarations: [
-    DxoMinorTickIntervalPolarChartComponent
+    DxoPolarChartMinorTickIntervalComponent
   ],
   exports: [
-    DxoMinorTickIntervalPolarChartComponent
+    DxoPolarChartMinorTickIntervalComponent
   ],
 })
-export class DxoMinorTickIntervalPolarChartModule { }
+export class DxoPolarChartMinorTickIntervalModule { }

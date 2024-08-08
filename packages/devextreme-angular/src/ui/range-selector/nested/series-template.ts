@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-series-template-range-selector',
+    selector: 'dxo-range-selector-series-template',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSeriesTemplateRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customizeSeries(): Function {
         return this._getOption('customizeSeries');
@@ -71,10 +71,10 @@ export class DxoSeriesTemplateRangeSelectorComponent extends NestedOption implem
 
 @NgModule({
   declarations: [
-    DxoSeriesTemplateRangeSelectorComponent
+    DxoRangeSelectorSeriesTemplateComponent
   ],
   exports: [
-    DxoSeriesTemplateRangeSelectorComponent
+    DxoRangeSelectorSeriesTemplateComponent
   ],
 })
-export class DxoSeriesTemplateRangeSelectorModule { }
+export class DxoRangeSelectorSeriesTemplateModule { }

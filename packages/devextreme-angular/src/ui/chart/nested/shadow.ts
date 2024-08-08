@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-chart',
+    selector: 'dxo-chart-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowChartComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoShadowChartComponent
+    DxoChartShadowComponent
   ],
   exports: [
-    DxoShadowChartComponent
+    DxoChartShadowComponent
   ],
 })
-export class DxoShadowChartModule { }
+export class DxoChartShadowModule { }

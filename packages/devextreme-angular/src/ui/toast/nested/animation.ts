@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-toast',
+    selector: 'dxo-toast-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationToastComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoToastAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationToastComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoAnimationToastComponent
+    DxoToastAnimationComponent
   ],
   exports: [
-    DxoAnimationToastComponent
+    DxoToastAnimationComponent
   ],
 })
-export class DxoAnimationToastModule { }
+export class DxoToastAnimationModule { }

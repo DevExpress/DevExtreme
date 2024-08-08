@@ -45,12 +45,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemActionSheetModule } from 'devextreme-angular/ui/action-sheet/nested';
+import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemActionSheetComponent } from 'devextreme-angular/ui/action-sheet/nested';
+import { DxiActionSheetItemComponent } from 'devextreme-angular/ui/action-sheet/nested';
 
 
 
@@ -505,25 +505,25 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemActionSheetComponent)
-    get itemsNewChildren(): QueryList<DxiItemActionSheetComponent> {
+    @ContentChildren(DxiActionSheetItemComponent)
+    get itemsChildren(): QueryList<DxiActionSheetItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -621,7 +621,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemActionSheetModule,
+    DxiActionSheetItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -631,7 +631,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
   exports: [
     DxActionSheetComponent,
     DxiItemModule,
-    DxiItemActionSheetModule,
+    DxiActionSheetItemModule,
     DxTemplateModule
   ]
 })

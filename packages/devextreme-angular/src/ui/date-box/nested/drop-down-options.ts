@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemDateBoxComponent } from './toolbar-item-dxi';
+import { DxiDateBoxToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-drop-down-options-date-box',
+    selector: 'dxo-date-box-drop-down-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDropDownOptionsDateBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoDropDownOptionsDateBoxComponent extends NestedOption implements 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemDateBoxComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemDateBoxComponent> {
+    @ContentChildren(forwardRef(() => DxiDateBoxToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiDateBoxToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoDropDownOptionsDateBoxComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoDropDownOptionsDateBoxComponent
+    DxoDateBoxDropDownOptionsComponent
   ],
   exports: [
-    DxoDropDownOptionsDateBoxComponent
+    DxoDateBoxDropDownOptionsComponent
   ],
 })
-export class DxoDropDownOptionsDateBoxModule { }
+export class DxoDateBoxDropDownOptionsModule { }

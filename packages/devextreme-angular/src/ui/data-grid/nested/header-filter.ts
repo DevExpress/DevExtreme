@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-header-filter-data-grid',
+    selector: 'dxo-data-grid-header-filter',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHeaderFilterDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -147,10 +147,10 @@ export class DxoHeaderFilterDataGridComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoHeaderFilterDataGridComponent
+    DxoDataGridHeaderFilterComponent
   ],
   exports: [
-    DxoHeaderFilterDataGridComponent
+    DxoDataGridHeaderFilterComponent
   ],
 })
-export class DxoHeaderFilterDataGridModule { }
+export class DxoDataGridHeaderFilterModule { }

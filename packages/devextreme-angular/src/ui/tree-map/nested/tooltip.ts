@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-tree-map',
+    selector: 'dxo-tree-map-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -178,10 +178,10 @@ export class DxoTooltipTreeMapComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoTooltipTreeMapComponent
+    DxoTreeMapTooltipComponent
   ],
   exports: [
-    DxoTooltipTreeMapComponent
+    DxoTreeMapTooltipComponent
   ],
 })
-export class DxoTooltipTreeMapModule { }
+export class DxoTreeMapTooltipModule { }

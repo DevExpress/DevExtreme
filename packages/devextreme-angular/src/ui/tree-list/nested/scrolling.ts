@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scrolling-tree-list',
+    selector: 'dxo-tree-list-scrolling',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScrollingTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get columnRenderingMode(): DataRenderMode {
         return this._getOption('columnRenderingMode');
@@ -129,10 +129,10 @@ export class DxoScrollingTreeListComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoScrollingTreeListComponent
+    DxoTreeListScrollingComponent
   ],
   exports: [
-    DxoScrollingTreeListComponent
+    DxoTreeListScrollingComponent
   ],
 })
-export class DxoScrollingTreeListModule { }
+export class DxoTreeListScrollingModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-export-bar-gauge',
+    selector: 'dxo-bar-gauge-export',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoExportBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeExportComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -112,10 +112,10 @@ export class DxoExportBarGaugeComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoExportBarGaugeComponent
+    DxoBarGaugeExportComponent
   ],
   exports: [
-    DxoExportBarGaugeComponent
+    DxoBarGaugeExportComponent
   ],
 })
-export class DxoExportBarGaugeModule { }
+export class DxoBarGaugeExportModule { }

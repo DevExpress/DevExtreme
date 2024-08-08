@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-stackedspline-range-selector',
+    selector: 'dxo-range-selector-stackedspline',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoStackedsplineRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorStackedsplineComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoStackedsplineRangeSelectorComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoStackedsplineRangeSelectorComponent
+    DxoRangeSelectorStackedsplineComponent
   ],
   exports: [
-    DxoStackedsplineRangeSelectorComponent
+    DxoRangeSelectorStackedsplineComponent
   ],
 })
-export class DxoStackedsplineRangeSelectorModule { }
+export class DxoRangeSelectorStackedsplineModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-tooltip',
+    selector: 'dxo-tooltip-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationTooltipComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoAnimationTooltipComponent
+    DxoTooltipAnimationComponent
   ],
   exports: [
-    DxoAnimationTooltipComponent
+    DxoTooltipAnimationComponent
   ],
 })
-export class DxoAnimationTooltipModule { }
+export class DxoTooltipAnimationModule { }

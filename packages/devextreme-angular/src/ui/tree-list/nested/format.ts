@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-tree-list',
+    selector: 'dxo-tree-list-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatTreeListComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoFormatTreeListComponent
+    DxoTreeListFormatComponent
   ],
   exports: [
-    DxoFormatTreeListComponent
+    DxoTreeListFormatComponent
   ],
 })
-export class DxoFormatTreeListModule { }
+export class DxoTreeListFormatModule { }

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hide-date-box',
+    selector: 'dxo-date-box-hide',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHideDateBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateBoxHideComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoHideDateBoxComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoHideDateBoxComponent
+    DxoDateBoxHideComponent
   ],
   exports: [
-    DxoHideDateBoxComponent
+    DxoDateBoxHideComponent
   ],
 })
-export class DxoHideDateBoxModule { }
+export class DxoDateBoxHideModule { }

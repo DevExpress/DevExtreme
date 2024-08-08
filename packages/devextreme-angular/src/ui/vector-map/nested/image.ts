@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-image-vector-map',
+    selector: 'dxo-vector-map-image',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoImageVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapImageComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -79,10 +79,10 @@ export class DxoImageVectorMapComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoImageVectorMapComponent
+    DxoVectorMapImageComponent
   ],
   exports: [
-    DxoImageVectorMapComponent
+    DxoVectorMapImageComponent
   ],
 })
-export class DxoImageVectorMapModule { }
+export class DxoVectorMapImageModule { }

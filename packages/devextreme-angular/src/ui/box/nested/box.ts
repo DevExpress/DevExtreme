@@ -27,7 +27,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemBoxComponent } from './item-dxi';
+import { DxiBoxItemComponent } from './item-dxi';
 
 
 @Component({
@@ -225,8 +225,8 @@ export class DxoBoxBoxComponent extends NestedOption implements OnDestroy, OnIni
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemBoxComponent))
-    get itemsChildren(): QueryList<DxiItemBoxComponent> {
+    @ContentChildren(forwardRef(() => DxiBoxItemComponent))
+    get itemsChildren(): QueryList<DxiBoxItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {

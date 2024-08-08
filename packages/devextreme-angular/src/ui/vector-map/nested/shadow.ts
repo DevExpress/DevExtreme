@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-vector-map',
+    selector: 'dxo-vector-map-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowVectorMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowVectorMapComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoShadowVectorMapComponent
+    DxoVectorMapShadowComponent
   ],
   exports: [
-    DxoShadowVectorMapComponent
+    DxoVectorMapShadowComponent
   ],
 })
-export class DxoShadowVectorMapModule { }
+export class DxoVectorMapShadowModule { }

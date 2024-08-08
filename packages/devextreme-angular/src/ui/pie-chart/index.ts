@@ -73,41 +73,41 @@ import { DxoSeriesTemplateModule } from 'devextreme-angular/ui/nested';
 import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
-import { DxoAdaptiveLayoutPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoAnimationPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxiAnnotationPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoBorderPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoFontPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoImagePieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoShadowPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoCommonAnnotationSettingsPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoCommonSeriesSettingsPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoColorPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoHoverStylePieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoHatchingPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoLabelPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoArgumentFormatPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoConnectorPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoFormatPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoSelectionStylePieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoSmallValuesGroupingPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoExportPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoLegendPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoMarginPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoTitlePieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoSubtitlePieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoLoadingIndicatorPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxiSeriesPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoSeriesTemplatePieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoSizePieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxoTooltipPieChartModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartAdaptiveLayoutModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartAnimationModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxiPieChartAnnotationModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartFontModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartImageModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartShadowModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartCommonAnnotationSettingsModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartCommonSeriesSettingsModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartColorModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartHoverStyleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartHatchingModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartLabelModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartArgumentFormatModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartConnectorModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartFormatModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartSelectionStyleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartSmallValuesGroupingModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartExportModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartLegendModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartMarginModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartSubtitleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartLoadingIndicatorModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxiPieChartSeriesModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartSeriesTemplateModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartSizeModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 
 
 import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
 import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiAnnotationPieChartComponent } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxiSeriesPieChartComponent } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxiPieChartAnnotationComponent } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nested';
 
 
 
@@ -971,36 +971,36 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
-    hasNewannotations: boolean = false;
+    hasNewAnnotations: boolean = false;
 
-    @ContentChildren(DxiAnnotationPieChartComponent)
-    get annotationsNewChildren(): QueryList<DxiAnnotationPieChartComponent> {
+    @ContentChildren(DxiPieChartAnnotationComponent)
+    get annotationsChildren(): QueryList<DxiPieChartAnnotationComponent> {
         return this._getOption('annotations');
     }
-    set annotationsNewChildren(value) {
-        this.hasNewannotations = value.length > 0;
+    set annotationsChildren(value) {
+        this.hasNewAnnotations = value.length > 0;
         this.setChildren('annotations', value);
     }
 
-    hasNewseries: boolean = false;
+    hasNewSeries: boolean = false;
 
-    @ContentChildren(DxiSeriesPieChartComponent)
-    get seriesNewChildren(): QueryList<DxiSeriesPieChartComponent> {
+    @ContentChildren(DxiPieChartSeriesComponent)
+    get seriesChildren(): QueryList<DxiPieChartSeriesComponent> {
         return this._getOption('series');
     }
-    set seriesNewChildren(value) {
-        this.hasNewseries = value.length > 0;
+    set seriesChildren(value) {
+        this.hasNewSeries = value.length > 0;
         this.setChildren('series', value);
     }
 
 
 
     @ContentChildren(DxiAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiAnnotationComponent> {
+    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
         return this._getOption('annotations');
     }
-    set annotationsChildren(value) {
-        if (this.hasNewannotations) {
+    set annotationsLegacyChildren(value) {
+        if (this.hasNewAnnotations) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1010,11 +1010,11 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     }
 
     @ContentChildren(DxiSeriesComponent)
-    get seriesChildren(): QueryList<DxiSeriesComponent> {
+    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
         return this._getOption('series');
     }
-    set seriesChildren(value) {
-        if (this.hasNewseries) {
+    set seriesLegacyChildren(value) {
+        if (this.hasNewSeries) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1167,34 +1167,34 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     DxoSeriesTemplateModule,
     DxoSizeModule,
     DxoTooltipModule,
-    DxoAdaptiveLayoutPieChartModule,
-    DxoAnimationPieChartModule,
-    DxiAnnotationPieChartModule,
-    DxoBorderPieChartModule,
-    DxoFontPieChartModule,
-    DxoImagePieChartModule,
-    DxoShadowPieChartModule,
-    DxoCommonAnnotationSettingsPieChartModule,
-    DxoCommonSeriesSettingsPieChartModule,
-    DxoColorPieChartModule,
-    DxoHoverStylePieChartModule,
-    DxoHatchingPieChartModule,
-    DxoLabelPieChartModule,
-    DxoArgumentFormatPieChartModule,
-    DxoConnectorPieChartModule,
-    DxoFormatPieChartModule,
-    DxoSelectionStylePieChartModule,
-    DxoSmallValuesGroupingPieChartModule,
-    DxoExportPieChartModule,
-    DxoLegendPieChartModule,
-    DxoMarginPieChartModule,
-    DxoTitlePieChartModule,
-    DxoSubtitlePieChartModule,
-    DxoLoadingIndicatorPieChartModule,
-    DxiSeriesPieChartModule,
-    DxoSeriesTemplatePieChartModule,
-    DxoSizePieChartModule,
-    DxoTooltipPieChartModule,
+    DxoPieChartAdaptiveLayoutModule,
+    DxoPieChartAnimationModule,
+    DxiPieChartAnnotationModule,
+    DxoPieChartBorderModule,
+    DxoPieChartFontModule,
+    DxoPieChartImageModule,
+    DxoPieChartShadowModule,
+    DxoPieChartCommonAnnotationSettingsModule,
+    DxoPieChartCommonSeriesSettingsModule,
+    DxoPieChartColorModule,
+    DxoPieChartHoverStyleModule,
+    DxoPieChartHatchingModule,
+    DxoPieChartLabelModule,
+    DxoPieChartArgumentFormatModule,
+    DxoPieChartConnectorModule,
+    DxoPieChartFormatModule,
+    DxoPieChartSelectionStyleModule,
+    DxoPieChartSmallValuesGroupingModule,
+    DxoPieChartExportModule,
+    DxoPieChartLegendModule,
+    DxoPieChartMarginModule,
+    DxoPieChartTitleModule,
+    DxoPieChartSubtitleModule,
+    DxoPieChartLoadingIndicatorModule,
+    DxiPieChartSeriesModule,
+    DxoPieChartSeriesTemplateModule,
+    DxoPieChartSizeModule,
+    DxoPieChartTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1204,7 +1204,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
   exports: [
     DxPieChartComponent,
     DxoAdaptiveLayoutModule,DxoAnimationModule,DxiAnnotationModule,DxoBorderModule,DxoFontModule,DxoImageModule,DxoShadowModule,DxoCommonAnnotationSettingsModule,DxoCommonSeriesSettingsModule,DxoColorModule,DxoHoverStyleModule,DxoHatchingModule,DxoLabelModule,DxoArgumentFormatModule,DxoConnectorModule,DxoFormatModule,DxoSelectionStyleModule,DxoSmallValuesGroupingModule,DxoExportModule,DxoLegendModule,DxoMarginModule,DxoTitleModule,DxoSubtitleModule,DxoLoadingIndicatorModule,DxiSeriesModule,DxoSeriesTemplateModule,DxoSizeModule,DxoTooltipModule,
-    DxoAdaptiveLayoutPieChartModule,DxoAnimationPieChartModule,DxiAnnotationPieChartModule,DxoBorderPieChartModule,DxoFontPieChartModule,DxoImagePieChartModule,DxoShadowPieChartModule,DxoCommonAnnotationSettingsPieChartModule,DxoCommonSeriesSettingsPieChartModule,DxoColorPieChartModule,DxoHoverStylePieChartModule,DxoHatchingPieChartModule,DxoLabelPieChartModule,DxoArgumentFormatPieChartModule,DxoConnectorPieChartModule,DxoFormatPieChartModule,DxoSelectionStylePieChartModule,DxoSmallValuesGroupingPieChartModule,DxoExportPieChartModule,DxoLegendPieChartModule,DxoMarginPieChartModule,DxoTitlePieChartModule,DxoSubtitlePieChartModule,DxoLoadingIndicatorPieChartModule,DxiSeriesPieChartModule,DxoSeriesTemplatePieChartModule,DxoSizePieChartModule,DxoTooltipPieChartModule,
+    DxoPieChartAdaptiveLayoutModule,DxoPieChartAnimationModule,DxiPieChartAnnotationModule,DxoPieChartBorderModule,DxoPieChartFontModule,DxoPieChartImageModule,DxoPieChartShadowModule,DxoPieChartCommonAnnotationSettingsModule,DxoPieChartCommonSeriesSettingsModule,DxoPieChartColorModule,DxoPieChartHoverStyleModule,DxoPieChartHatchingModule,DxoPieChartLabelModule,DxoPieChartArgumentFormatModule,DxoPieChartConnectorModule,DxoPieChartFormatModule,DxoPieChartSelectionStyleModule,DxoPieChartSmallValuesGroupingModule,DxoPieChartExportModule,DxoPieChartLegendModule,DxoPieChartMarginModule,DxoPieChartTitleModule,DxoPieChartSubtitleModule,DxoPieChartLoadingIndicatorModule,DxiPieChartSeriesModule,DxoPieChartSeriesTemplateModule,DxoPieChartSizeModule,DxoPieChartTooltipModule,
     DxTemplateModule
   ]
 })

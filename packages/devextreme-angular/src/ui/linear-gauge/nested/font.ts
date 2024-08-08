@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-linear-gauge',
+    selector: 'dxo-linear-gauge-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontLinearGaugeComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoFontLinearGaugeComponent
+    DxoLinearGaugeFontComponent
   ],
   exports: [
-    DxoFontLinearGaugeComponent
+    DxoLinearGaugeFontComponent
   ],
 })
-export class DxoFontLinearGaugeModule { }
+export class DxoLinearGaugeFontModule { }

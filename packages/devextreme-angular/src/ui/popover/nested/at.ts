@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-at-popover',
+    selector: 'dxo-popover-at',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAtPopoverComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopoverAtComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoAtPopoverComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoAtPopoverComponent
+    DxoPopoverAtComponent
   ],
   exports: [
-    DxoAtPopoverComponent
+    DxoPopoverAtComponent
   ],
 })
-export class DxoAtPopoverModule { }
+export class DxoPopoverAtModule { }

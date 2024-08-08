@@ -28,7 +28,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemSplitterComponent } from './item-dxi';
+import { DxiSplitterItemComponent } from './item-dxi';
 
 
 @Component({
@@ -250,8 +250,8 @@ export class DxoSplitterSplitterComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemSplitterComponent))
-    get itemsChildren(): QueryList<DxiItemSplitterComponent> {
+    @ContentChildren(forwardRef(() => DxiSplitterItemComponent))
+    get itemsChildren(): QueryList<DxiSplitterItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {

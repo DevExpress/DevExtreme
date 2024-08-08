@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-sparkline',
+    selector: 'dxo-sparkline-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatSparklineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatSparklineComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoFormatSparklineComponent
+    DxoSparklineFormatComponent
   ],
   exports: [
-    DxoFormatSparklineComponent
+    DxoSparklineFormatComponent
   ],
 })
-export class DxoFormatSparklineModule { }
+export class DxoSparklineFormatModule { }

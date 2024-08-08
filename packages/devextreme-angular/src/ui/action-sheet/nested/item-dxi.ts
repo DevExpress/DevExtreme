@@ -29,12 +29,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-action-sheet',
+    selector: 'dxi-action-sheet-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemActionSheetComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiActionSheetItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -127,10 +127,10 @@ export class DxiItemActionSheetComponent extends CollectionNestedOption implemen
 
 @NgModule({
   declarations: [
-    DxiItemActionSheetComponent
+    DxiActionSheetItemComponent
   ],
   exports: [
-    DxiItemActionSheetComponent
+    DxiActionSheetItemComponent
   ],
 })
-export class DxiItemActionSheetModule { }
+export class DxiActionSheetItemModule { }

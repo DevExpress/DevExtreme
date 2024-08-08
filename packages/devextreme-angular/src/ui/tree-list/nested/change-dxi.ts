@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-change-tree-list',
+    selector: 'dxi-tree-list-change',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiChangeTreeListComponent extends CollectionNestedOption {
+export class DxiTreeListChangeComponent extends CollectionNestedOption {
     @Input()
     get data(): any {
         return this._getOption('data');
@@ -90,10 +90,10 @@ export class DxiChangeTreeListComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiChangeTreeListComponent
+    DxiTreeListChangeComponent
   ],
   exports: [
-    DxiChangeTreeListComponent
+    DxiTreeListChangeComponent
   ],
 })
-export class DxiChangeTreeListModule { }
+export class DxiTreeListChangeModule { }

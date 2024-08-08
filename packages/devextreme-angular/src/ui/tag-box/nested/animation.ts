@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-tag-box',
+    selector: 'dxo-tag-box-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationTagBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationTagBoxComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoAnimationTagBoxComponent
+    DxoTagBoxAnimationComponent
   ],
   exports: [
-    DxoAnimationTagBoxComponent
+    DxoTagBoxAnimationComponent
   ],
 })
-export class DxoAnimationTagBoxModule { }
+export class DxoTagBoxAnimationModule { }

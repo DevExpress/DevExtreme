@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-paging-data-grid',
+    selector: 'dxo-data-grid-paging',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPagingDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridPagingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -100,10 +100,10 @@ export class DxoPagingDataGridComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoPagingDataGridComponent
+    DxoDataGridPagingComponent
   ],
   exports: [
-    DxoPagingDataGridComponent
+    DxoDataGridPagingComponent
   ],
 })
-export class DxoPagingDataGridModule { }
+export class DxoDataGridPagingModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-cursor-offset-sortable',
+    selector: 'dxo-sortable-cursor-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCursorOffsetSortableComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSortableCursorOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoCursorOffsetSortableComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoCursorOffsetSortableComponent
+    DxoSortableCursorOffsetComponent
   ],
   exports: [
-    DxoCursorOffsetSortableComponent
+    DxoSortableCursorOffsetComponent
   ],
 })
-export class DxoCursorOffsetSortableModule { }
+export class DxoSortableCursorOffsetModule { }

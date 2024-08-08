@@ -43,12 +43,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemAccordionModule } from 'devextreme-angular/ui/accordion/nested';
+import { DxiAccordionItemModule } from 'devextreme-angular/ui/accordion/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemAccordionComponent } from 'devextreme-angular/ui/accordion/nested';
+import { DxiAccordionItemComponent } from 'devextreme-angular/ui/accordion/nested';
 
 
 
@@ -711,25 +711,25 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemAccordionComponent)
-    get itemsNewChildren(): QueryList<DxiItemAccordionComponent> {
+    @ContentChildren(DxiAccordionItemComponent)
+    get itemsChildren(): QueryList<DxiAccordionItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -842,7 +842,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemAccordionModule,
+    DxiAccordionItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -852,7 +852,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
   exports: [
     DxAccordionComponent,
     DxiItemModule,
-    DxiItemAccordionModule,
+    DxiAccordionItemModule,
     DxTemplateModule
   ]
 })

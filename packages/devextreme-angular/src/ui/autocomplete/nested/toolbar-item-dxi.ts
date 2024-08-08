@@ -31,12 +31,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-toolbar-item-autocomplete',
+    selector: 'dxi-autocomplete-toolbar-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiToolbarItemAutocompleteComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiAutocompleteToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get cssClass(): string | undefined {
@@ -177,10 +177,10 @@ export class DxiToolbarItemAutocompleteComponent extends CollectionNestedOption 
 
 @NgModule({
   declarations: [
-    DxiToolbarItemAutocompleteComponent
+    DxiAutocompleteToolbarItemComponent
   ],
   exports: [
-    DxiToolbarItemAutocompleteComponent
+    DxiAutocompleteToolbarItemComponent
   ],
 })
-export class DxiToolbarItemAutocompleteModule { }
+export class DxiAutocompleteToolbarItemModule { }

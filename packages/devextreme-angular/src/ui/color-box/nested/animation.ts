@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-color-box',
+    selector: 'dxo-color-box-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationColorBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColorBoxAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationColorBoxComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoAnimationColorBoxComponent
+    DxoColorBoxAnimationComponent
   ],
   exports: [
-    DxoAnimationColorBoxComponent
+    DxoColorBoxAnimationComponent
   ],
 })
-export class DxoAnimationColorBoxModule { }
+export class DxoColorBoxAnimationModule { }

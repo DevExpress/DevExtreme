@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-connector-range-selector',
+    selector: 'dxo-range-selector-connector',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoConnectorRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorConnectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -79,10 +79,10 @@ export class DxoConnectorRangeSelectorComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoConnectorRangeSelectorComponent
+    DxoRangeSelectorConnectorComponent
   ],
   exports: [
-    DxoConnectorRangeSelectorComponent
+    DxoRangeSelectorConnectorComponent
   ],
 })
-export class DxoConnectorRangeSelectorModule { }
+export class DxoRangeSelectorConnectorModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-geometry-linear-gauge',
+    selector: 'dxo-linear-gauge-geometry',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGeometryLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');
@@ -64,10 +64,10 @@ export class DxoGeometryLinearGaugeComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoGeometryLinearGaugeComponent
+    DxoLinearGaugeGeometryComponent
   ],
   exports: [
-    DxoGeometryLinearGaugeComponent
+    DxoLinearGaugeGeometryComponent
   ],
 })
-export class DxoGeometryLinearGaugeModule { }
+export class DxoLinearGaugeGeometryModule { }

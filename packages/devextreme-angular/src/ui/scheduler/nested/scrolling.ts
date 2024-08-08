@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scrolling-scheduler',
+    selector: 'dxo-scheduler-scrolling',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScrollingSchedulerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSchedulerScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get mode(): ScrollMode {
         return this._getOption('mode');
@@ -64,10 +64,10 @@ export class DxoScrollingSchedulerComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoScrollingSchedulerComponent
+    DxoSchedulerScrollingComponent
   ],
   exports: [
-    DxoScrollingSchedulerComponent
+    DxoSchedulerScrollingComponent
   ],
 })
-export class DxoScrollingSchedulerModule { }
+export class DxoSchedulerScrollingModule { }

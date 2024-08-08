@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-label-chart',
+    selector: 'dxo-chart-label',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLabelChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -267,10 +267,10 @@ export class DxoLabelChartComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoLabelChartComponent
+    DxoChartLabelComponent
   ],
   exports: [
-    DxoLabelChartComponent
+    DxoChartLabelComponent
   ],
 })
-export class DxoLabelChartModule { }
+export class DxoChartLabelModule { }

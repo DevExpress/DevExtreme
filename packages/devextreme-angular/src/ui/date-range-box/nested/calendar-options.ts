@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-calendar-options-date-range-box',
+    selector: 'dxo-date-range-box-calendar-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCalendarOptionsDateRangeBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateRangeBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -398,10 +398,10 @@ export class DxoCalendarOptionsDateRangeBoxComponent extends NestedOption implem
 
 @NgModule({
   declarations: [
-    DxoCalendarOptionsDateRangeBoxComponent
+    DxoDateRangeBoxCalendarOptionsComponent
   ],
   exports: [
-    DxoCalendarOptionsDateRangeBoxComponent
+    DxoDateRangeBoxCalendarOptionsComponent
   ],
 })
-export class DxoCalendarOptionsDateRangeBoxModule { }
+export class DxoDateRangeBoxCalendarOptionsModule { }

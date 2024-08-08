@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-boundary-offset-drop-down-button',
+    selector: 'dxo-drop-down-button-boundary-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBoundaryOffsetDropDownButtonComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownButtonBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoBoundaryOffsetDropDownButtonComponent extends NestedOption imple
 
 @NgModule({
   declarations: [
-    DxoBoundaryOffsetDropDownButtonComponent
+    DxoDropDownButtonBoundaryOffsetComponent
   ],
   exports: [
-    DxoBoundaryOffsetDropDownButtonComponent
+    DxoDropDownButtonBoundaryOffsetComponent
   ],
 })
-export class DxoBoundaryOffsetDropDownButtonModule { }
+export class DxoDropDownButtonBoundaryOffsetModule { }

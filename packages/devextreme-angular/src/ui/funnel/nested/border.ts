@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-border-funnel',
+    selector: 'dxo-funnel-border',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBorderFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -104,10 +104,10 @@ export class DxoBorderFunnelComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoBorderFunnelComponent
+    DxoFunnelBorderComponent
   ],
   exports: [
-    DxoBorderFunnelComponent
+    DxoFunnelBorderComponent
   ],
 })
-export class DxoBorderFunnelModule { }
+export class DxoFunnelBorderModule { }

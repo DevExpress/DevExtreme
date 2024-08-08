@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-lookup-filter-builder',
+    selector: 'dxo-filter-builder-lookup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLookupFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterBuilderLookupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowClearing(): boolean {
         return this._getOption('allowClearing');
@@ -89,10 +89,10 @@ export class DxoLookupFilterBuilderComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoLookupFilterBuilderComponent
+    DxoFilterBuilderLookupComponent
   ],
   exports: [
-    DxoLookupFilterBuilderComponent
+    DxoFilterBuilderLookupComponent
   ],
 })
-export class DxoLookupFilterBuilderModule { }
+export class DxoFilterBuilderLookupModule { }

@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-break-range-selector',
+    selector: 'dxi-range-selector-break',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiBreakRangeSelectorComponent extends CollectionNestedOption {
+export class DxiRangeSelectorBreakComponent extends CollectionNestedOption {
     @Input()
     get endValue(): Date | number | string | undefined {
         return this._getOption('endValue');
@@ -65,10 +65,10 @@ export class DxiBreakRangeSelectorComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiBreakRangeSelectorComponent
+    DxiRangeSelectorBreakComponent
   ],
   exports: [
-    DxiBreakRangeSelectorComponent
+    DxiRangeSelectorBreakComponent
   ],
 })
-export class DxiBreakRangeSelectorModule { }
+export class DxiRangeSelectorBreakModule { }

@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-bar-gauge',
+    selector: 'dxo-bar-gauge-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -186,10 +186,10 @@ export class DxoTooltipBarGaugeComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoTooltipBarGaugeComponent
+    DxoBarGaugeTooltipComponent
   ],
   exports: [
-    DxoTooltipBarGaugeComponent
+    DxoBarGaugeTooltipComponent
   ],
 })
-export class DxoTooltipBarGaugeModule { }
+export class DxoBarGaugeTooltipModule { }

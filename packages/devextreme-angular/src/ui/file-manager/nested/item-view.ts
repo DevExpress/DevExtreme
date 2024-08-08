@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-item-view-file-manager',
+    selector: 'dxo-file-manager-item-view',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoItemViewFileManagerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerItemViewComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get details(): { columns?: Array<dxFileManagerDetailsColumn | string> } {
         return this._getOption('details');
@@ -88,10 +88,10 @@ export class DxoItemViewFileManagerComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoItemViewFileManagerComponent
+    DxoFileManagerItemViewComponent
   ],
   exports: [
-    DxoItemViewFileManagerComponent
+    DxoFileManagerItemViewComponent
   ],
 })
-export class DxoItemViewFileManagerModule { }
+export class DxoFileManagerItemViewModule { }

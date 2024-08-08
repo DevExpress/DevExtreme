@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hatching-range-selector',
+    selector: 'dxo-range-selector-hatching',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHatchingRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorHatchingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get direction(): HatchDirection {
         return this._getOption('direction');
@@ -88,10 +88,10 @@ export class DxoHatchingRangeSelectorComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoHatchingRangeSelectorComponent
+    DxoRangeSelectorHatchingComponent
   ],
   exports: [
-    DxoHatchingRangeSelectorComponent
+    DxoRangeSelectorHatchingComponent
   ],
 })
-export class DxoHatchingRangeSelectorModule { }
+export class DxoRangeSelectorHatchingModule { }

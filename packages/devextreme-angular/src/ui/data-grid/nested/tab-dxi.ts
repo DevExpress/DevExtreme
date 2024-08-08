@@ -29,16 +29,16 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiItemDataGridComponent } from './item-dxi';
+import { DxiDataGridItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxi-tab-data-grid',
+    selector: 'dxi-data-grid-tab',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiTabDataGridComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiDataGridTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get alignItemLabels(): boolean {
@@ -126,8 +126,8 @@ export class DxiTabDataGridComponent extends CollectionNestedOption implements A
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemDataGridComponent))
-    get itemsChildren(): QueryList<DxiItemDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridItemComponent))
+    get itemsChildren(): QueryList<DxiDataGridItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -163,10 +163,10 @@ export class DxiTabDataGridComponent extends CollectionNestedOption implements A
 
 @NgModule({
   declarations: [
-    DxiTabDataGridComponent
+    DxiDataGridTabComponent
   ],
   exports: [
-    DxiTabDataGridComponent
+    DxiDataGridTabComponent
   ],
 })
-export class DxiTabDataGridModule { }
+export class DxiDataGridTabModule { }

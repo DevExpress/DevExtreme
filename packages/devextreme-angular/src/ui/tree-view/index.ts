@@ -48,15 +48,15 @@ import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
-import { DxoSearchEditorOptionsTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
-import { DxiButtonTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
-import { DxoOptionsTreeViewModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiTreeViewButtonModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemTreeViewComponent } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiTreeViewItemComponent } from 'devextreme-angular/ui/tree-view/nested';
 
 
 
@@ -1143,25 +1143,25 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemTreeViewComponent)
-    get itemsNewChildren(): QueryList<DxiItemTreeViewComponent> {
+    @ContentChildren(DxiTreeViewItemComponent)
+    get itemsChildren(): QueryList<DxiTreeViewItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1298,10 +1298,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
-    DxiItemTreeViewModule,
-    DxoSearchEditorOptionsTreeViewModule,
-    DxiButtonTreeViewModule,
-    DxoOptionsTreeViewModule,
+    DxiTreeViewItemModule,
+    DxoTreeViewSearchEditorOptionsModule,
+    DxiTreeViewButtonModule,
+    DxoTreeViewOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1311,7 +1311,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
   exports: [
     DxTreeViewComponent,
     DxiItemModule,DxoSearchEditorOptionsModule,DxiButtonModule,DxoOptionsModule,
-    DxiItemTreeViewModule,DxoSearchEditorOptionsTreeViewModule,DxiButtonTreeViewModule,DxoOptionsTreeViewModule,
+    DxiTreeViewItemModule,DxoTreeViewSearchEditorOptionsModule,DxiTreeViewButtonModule,DxoTreeViewOptionsModule,
     DxTemplateModule
   ]
 })

@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-position-popup',
+    selector: 'dxo-popup-position',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPositionPopupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopupPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -114,10 +114,10 @@ export class DxoPositionPopupComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoPositionPopupComponent
+    DxoPopupPositionComponent
   ],
   exports: [
-    DxoPositionPopupComponent
+    DxoPopupPositionComponent
   ],
 })
-export class DxoPositionPopupModule { }
+export class DxoPopupPositionModule { }

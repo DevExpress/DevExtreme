@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-filter-row-tree-list',
+    selector: 'dxo-tree-list-filter-row',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterRowTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get applyFilter(): ApplyFilterMode {
         return this._getOption('applyFilter');
@@ -128,10 +128,10 @@ export class DxoFilterRowTreeListComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoFilterRowTreeListComponent
+    DxoTreeListFilterRowComponent
   ],
   exports: [
-    DxoFilterRowTreeListComponent
+    DxoTreeListFilterRowComponent
   ],
 })
-export class DxoFilterRowTreeListModule { }
+export class DxoTreeListFilterRowModule { }

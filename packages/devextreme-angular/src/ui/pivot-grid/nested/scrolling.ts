@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scrolling-pivot-grid',
+    selector: 'dxo-pivot-grid-scrolling',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScrollingPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get mode(): ScrollMode {
         return this._getOption('mode');
@@ -72,10 +72,10 @@ export class DxoScrollingPivotGridComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoScrollingPivotGridComponent
+    DxoPivotGridScrollingComponent
   ],
   exports: [
-    DxoScrollingPivotGridComponent
+    DxoPivotGridScrollingComponent
   ],
 })
-export class DxoScrollingPivotGridModule { }
+export class DxoPivotGridScrollingModule { }

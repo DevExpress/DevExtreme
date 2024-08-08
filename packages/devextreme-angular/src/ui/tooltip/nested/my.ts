@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-my-tooltip',
+    selector: 'dxo-tooltip-my',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMyTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipMyComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoMyTooltipComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoMyTooltipComponent
+    DxoTooltipMyComponent
   ],
   exports: [
-    DxoMyTooltipComponent
+    DxoTooltipMyComponent
   ],
 })
-export class DxoMyTooltipModule { }
+export class DxoTooltipMyModule { }

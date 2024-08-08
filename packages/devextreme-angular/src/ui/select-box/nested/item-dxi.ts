@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-select-box',
+    selector: 'dxi-select-box-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemSelectBoxComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiSelectBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -110,10 +110,10 @@ export class DxiItemSelectBoxComponent extends CollectionNestedOption implements
 
 @NgModule({
   declarations: [
-    DxiItemSelectBoxComponent
+    DxiSelectBoxItemComponent
   ],
   exports: [
-    DxiItemSelectBoxComponent
+    DxiSelectBoxItemComponent
   ],
 })
-export class DxiItemSelectBoxModule { }
+export class DxiSelectBoxItemModule { }

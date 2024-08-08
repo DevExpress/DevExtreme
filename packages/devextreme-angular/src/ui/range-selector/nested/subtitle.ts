@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-subtitle-range-selector',
+    selector: 'dxo-range-selector-subtitle',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSubtitleRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -96,10 +96,10 @@ export class DxoSubtitleRangeSelectorComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoSubtitleRangeSelectorComponent
+    DxoRangeSelectorSubtitleComponent
   ],
   exports: [
-    DxoSubtitleRangeSelectorComponent
+    DxoRangeSelectorSubtitleComponent
   ],
 })
-export class DxoSubtitleRangeSelectorModule { }
+export class DxoRangeSelectorSubtitleModule { }

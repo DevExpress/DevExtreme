@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemTreeListComponent } from './item-dxi';
+import { DxiTreeListItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-toolbar-tree-list',
+    selector: 'dxo-tree-list-toolbar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToolbarTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -63,8 +63,8 @@ export class DxoToolbarTreeListComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemTreeListComponent))
-    get itemsChildren(): QueryList<DxiItemTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListItemComponent))
+    get itemsChildren(): QueryList<DxiTreeListItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -92,10 +92,10 @@ export class DxoToolbarTreeListComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoToolbarTreeListComponent
+    DxoTreeListToolbarComponent
   ],
   exports: [
-    DxoToolbarTreeListComponent
+    DxoTreeListToolbarComponent
   ],
 })
-export class DxoToolbarTreeListModule { }
+export class DxoTreeListToolbarModule { }

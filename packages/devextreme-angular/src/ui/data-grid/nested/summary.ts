@@ -25,17 +25,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGroupItemDataGridComponent } from './group-item-dxi';
-import { DxiTotalItemDataGridComponent } from './total-item-dxi';
+import { DxiDataGridGroupItemComponent } from './group-item-dxi';
+import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 
 
 @Component({
-    selector: 'dxo-summary-data-grid',
+    selector: 'dxo-data-grid-summary',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSummaryDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get calculateCustomSummary(): Function {
         return this._getOption('calculateCustomSummary');
@@ -90,16 +90,16 @@ export class DxoSummaryDataGridComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiGroupItemDataGridComponent))
-    get groupItemsChildren(): QueryList<DxiGroupItemDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridGroupItemComponent))
+    get groupItemsChildren(): QueryList<DxiDataGridGroupItemComponent> {
         return this._getOption('groupItems');
     }
     set groupItemsChildren(value) {
         this.setChildren('groupItems', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiTotalItemDataGridComponent))
-    get totalItemsChildren(): QueryList<DxiTotalItemDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridTotalItemComponent))
+    get totalItemsChildren(): QueryList<DxiDataGridTotalItemComponent> {
         return this._getOption('totalItems');
     }
     set totalItemsChildren(value) {
@@ -127,10 +127,10 @@ export class DxoSummaryDataGridComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoSummaryDataGridComponent
+    DxoDataGridSummaryComponent
   ],
   exports: [
-    DxoSummaryDataGridComponent
+    DxoDataGridSummaryComponent
   ],
 })
-export class DxoSummaryDataGridModule { }
+export class DxoDataGridSummaryModule { }

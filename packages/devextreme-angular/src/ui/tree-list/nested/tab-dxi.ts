@@ -29,16 +29,16 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiItemTreeListComponent } from './item-dxi';
+import { DxiTreeListItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxi-tab-tree-list',
+    selector: 'dxi-tree-list-tab',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiTabTreeListComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiTreeListTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get alignItemLabels(): boolean {
@@ -126,8 +126,8 @@ export class DxiTabTreeListComponent extends CollectionNestedOption implements A
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemTreeListComponent))
-    get itemsChildren(): QueryList<DxiItemTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListItemComponent))
+    get itemsChildren(): QueryList<DxiTreeListItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -163,10 +163,10 @@ export class DxiTabTreeListComponent extends CollectionNestedOption implements A
 
 @NgModule({
   declarations: [
-    DxiTabTreeListComponent
+    DxiTreeListTabComponent
   ],
   exports: [
-    DxiTabTreeListComponent
+    DxiTreeListTabComponent
   ],
 })
-export class DxiTabTreeListModule { }
+export class DxiTreeListTabModule { }

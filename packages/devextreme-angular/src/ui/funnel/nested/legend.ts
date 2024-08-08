@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-legend-funnel',
+    selector: 'dxo-funnel-legend',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLegendFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');
@@ -233,10 +233,10 @@ export class DxoLegendFunnelComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoLegendFunnelComponent
+    DxoFunnelLegendComponent
   ],
   exports: [
-    DxoLegendFunnelComponent
+    DxoFunnelLegendComponent
   ],
 })
-export class DxoLegendFunnelModule { }
+export class DxoFunnelLegendModule { }

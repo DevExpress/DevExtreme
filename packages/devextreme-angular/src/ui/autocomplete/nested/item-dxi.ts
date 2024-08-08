@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-autocomplete',
+    selector: 'dxi-autocomplete-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemAutocompleteComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiAutocompleteItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -110,10 +110,10 @@ export class DxiItemAutocompleteComponent extends CollectionNestedOption impleme
 
 @NgModule({
   declarations: [
-    DxiItemAutocompleteComponent
+    DxiAutocompleteItemComponent
   ],
   exports: [
-    DxiItemAutocompleteComponent
+    DxiAutocompleteItemComponent
   ],
 })
-export class DxiItemAutocompleteModule { }
+export class DxiAutocompleteItemModule { }

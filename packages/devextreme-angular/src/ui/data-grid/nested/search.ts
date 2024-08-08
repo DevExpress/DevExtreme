@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-search-data-grid',
+    selector: 'dxo-data-grid-search',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSearchDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridSearchComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -96,10 +96,10 @@ export class DxoSearchDataGridComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoSearchDataGridComponent
+    DxoDataGridSearchComponent
   ],
   exports: [
-    DxoSearchDataGridComponent
+    DxoDataGridSearchComponent
   ],
 })
-export class DxoSearchDataGridModule { }
+export class DxoDataGridSearchModule { }

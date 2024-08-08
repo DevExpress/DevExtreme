@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hover-style-sankey',
+    selector: 'dxo-sankey-hover-style',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHoverStyleSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -88,10 +88,10 @@ export class DxoHoverStyleSankeyComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoHoverStyleSankeyComponent
+    DxoSankeyHoverStyleComponent
   ],
   exports: [
-    DxoHoverStyleSankeyComponent
+    DxoSankeyHoverStyleComponent
   ],
 })
-export class DxoHoverStyleSankeyModule { }
+export class DxoSankeyHoverStyleModule { }

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-title-polar-chart',
+    selector: 'dxo-polar-chart-title',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTitlePolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartTitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -129,10 +129,10 @@ export class DxoTitlePolarChartComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoTitlePolarChartComponent
+    DxoPolarChartTitleComponent
   ],
   exports: [
-    DxoTitlePolarChartComponent
+    DxoPolarChartTitleComponent
   ],
 })
-export class DxoTitlePolarChartModule { }
+export class DxoPolarChartTitleModule { }

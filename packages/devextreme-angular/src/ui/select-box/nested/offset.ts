@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-offset-select-box',
+    selector: 'dxo-select-box-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOffsetSelectBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSelectBoxOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoOffsetSelectBoxComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoOffsetSelectBoxComponent
+    DxoSelectBoxOffsetComponent
   ],
   exports: [
-    DxoOffsetSelectBoxComponent
+    DxoSelectBoxOffsetComponent
   ],
 })
-export class DxoOffsetSelectBoxModule { }
+export class DxoSelectBoxOffsetModule { }

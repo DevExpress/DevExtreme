@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-editing-diagram',
+    selector: 'dxo-diagram-editing',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoEditingDiagramComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramEditingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowAddShape(): boolean {
         return this._getOption('allowAddShape');
@@ -127,10 +127,10 @@ export class DxoEditingDiagramComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoEditingDiagramComponent
+    DxoDiagramEditingComponent
   ],
   exports: [
-    DxoEditingDiagramComponent
+    DxoDiagramEditingComponent
   ],
 })
-export class DxoEditingDiagramModule { }
+export class DxoDiagramEditingModule { }

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-search-panel-tree-list',
+    selector: 'dxo-tree-list-search-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSearchPanelTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListSearchPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get highlightCaseSensitive(): boolean {
         return this._getOption('highlightCaseSensitive');
@@ -124,10 +124,10 @@ export class DxoSearchPanelTreeListComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoSearchPanelTreeListComponent
+    DxoTreeListSearchPanelComponent
   ],
   exports: [
-    DxoSearchPanelTreeListComponent
+    DxoTreeListSearchPanelComponent
   ],
 })
-export class DxoSearchPanelTreeListModule { }
+export class DxoTreeListSearchPanelModule { }

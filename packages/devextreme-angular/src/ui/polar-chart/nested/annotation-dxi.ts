@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-annotation-polar-chart',
+    selector: 'dxi-polar-chart-annotation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiAnnotationPolarChartComponent extends CollectionNestedOption {
+export class DxiPolarChartAnnotationComponent extends CollectionNestedOption {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -314,10 +314,10 @@ export class DxiAnnotationPolarChartComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiAnnotationPolarChartComponent
+    DxiPolarChartAnnotationComponent
   ],
   exports: [
-    DxiAnnotationPolarChartComponent
+    DxiPolarChartAnnotationComponent
   ],
 })
-export class DxiAnnotationPolarChartModule { }
+export class DxiPolarChartAnnotationModule { }

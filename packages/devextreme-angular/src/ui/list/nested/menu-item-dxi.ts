@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-menu-item-list',
+    selector: 'dxi-list-menu-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiMenuItemListComponent extends CollectionNestedOption {
+export class DxiListMenuItemComponent extends CollectionNestedOption {
     @Input()
     get action(): Function {
         return this._getOption('action');
@@ -65,10 +65,10 @@ export class DxiMenuItemListComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiMenuItemListComponent
+    DxiListMenuItemComponent
   ],
   exports: [
-    DxiMenuItemListComponent
+    DxiListMenuItemComponent
   ],
 })
-export class DxiMenuItemListModule { }
+export class DxiListMenuItemModule { }

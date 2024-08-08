@@ -46,17 +46,17 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
-import { DxoAnimationToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoHideToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoFromToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoPositionToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoAtToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoBoundaryOffsetToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoCollisionToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoMyToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoOffsetToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoToToastModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoShowToastModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastAnimationModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastHideModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastFromModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastPositionModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastAtModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastBoundaryOffsetModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastCollisionModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastMyModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastOffsetModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastShowModule } from 'devextreme-angular/ui/toast/nested';
 
 
 
@@ -786,17 +786,17 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxoAnimationToastModule,
-    DxoHideToastModule,
-    DxoFromToastModule,
-    DxoPositionToastModule,
-    DxoAtToastModule,
-    DxoBoundaryOffsetToastModule,
-    DxoCollisionToastModule,
-    DxoMyToastModule,
-    DxoOffsetToastModule,
-    DxoToToastModule,
-    DxoShowToastModule,
+    DxoToastAnimationModule,
+    DxoToastHideModule,
+    DxoToastFromModule,
+    DxoToastPositionModule,
+    DxoToastAtModule,
+    DxoToastBoundaryOffsetModule,
+    DxoToastCollisionModule,
+    DxoToastMyModule,
+    DxoToastOffsetModule,
+    DxoToastToModule,
+    DxoToastShowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -806,7 +806,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
   exports: [
     DxToastComponent,
     DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
-    DxoAnimationToastModule,DxoHideToastModule,DxoFromToastModule,DxoPositionToastModule,DxoAtToastModule,DxoBoundaryOffsetToastModule,DxoCollisionToastModule,DxoMyToastModule,DxoOffsetToastModule,DxoToToastModule,DxoShowToastModule,
+    DxoToastAnimationModule,DxoToastHideModule,DxoToastFromModule,DxoToastPositionModule,DxoToastAtModule,DxoToastBoundaryOffsetModule,DxoToastCollisionModule,DxoToastMyModule,DxoToastOffsetModule,DxoToastToModule,DxoToastShowModule,
     DxTemplateModule
   ]
 })

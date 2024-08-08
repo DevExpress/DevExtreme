@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-circular-gauge',
+    selector: 'dxo-circular-gauge-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowCircularGaugeComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoShadowCircularGaugeComponent
+    DxoCircularGaugeShadowComponent
   ],
   exports: [
-    DxoShadowCircularGaugeComponent
+    DxoCircularGaugeShadowComponent
   ],
 })
-export class DxoShadowCircularGaugeModule { }
+export class DxoCircularGaugeShadowModule { }

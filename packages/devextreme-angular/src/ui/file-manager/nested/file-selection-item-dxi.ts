@@ -23,12 +23,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-file-selection-item-file-manager',
+    selector: 'dxi-file-manager-file-selection-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiFileSelectionItemFileManagerComponent extends CollectionNestedOption {
+export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption {
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');
@@ -140,10 +140,10 @@ export class DxiFileSelectionItemFileManagerComponent extends CollectionNestedOp
 
 @NgModule({
   declarations: [
-    DxiFileSelectionItemFileManagerComponent
+    DxiFileManagerFileSelectionItemComponent
   ],
   exports: [
-    DxiFileSelectionItemFileManagerComponent
+    DxiFileManagerFileSelectionItemComponent
   ],
 })
-export class DxiFileSelectionItemFileManagerModule { }
+export class DxiFileManagerFileSelectionItemModule { }

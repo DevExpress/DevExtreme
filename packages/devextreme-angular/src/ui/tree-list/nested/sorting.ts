@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-sorting-tree-list',
+    selector: 'dxo-tree-list-sorting',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSortingTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListSortingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get ascendingText(): string {
         return this._getOption('ascendingText');
@@ -96,10 +96,10 @@ export class DxoSortingTreeListComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoSortingTreeListComponent
+    DxoTreeListSortingComponent
   ],
   exports: [
-    DxoSortingTreeListComponent
+    DxoTreeListSortingComponent
   ],
 })
-export class DxoSortingTreeListModule { }
+export class DxoTreeListSortingModule { }

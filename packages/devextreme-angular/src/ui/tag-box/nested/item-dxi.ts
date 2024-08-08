@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-tag-box',
+    selector: 'dxi-tag-box-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemTagBoxComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiTagBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -110,10 +110,10 @@ export class DxiItemTagBoxComponent extends CollectionNestedOption implements Af
 
 @NgModule({
   declarations: [
-    DxiItemTagBoxComponent
+    DxiTagBoxItemComponent
   ],
   exports: [
-    DxiItemTagBoxComponent
+    DxiTagBoxItemComponent
   ],
 })
-export class DxiItemTagBoxModule { }
+export class DxiTagBoxItemModule { }

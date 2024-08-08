@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-defer-rendering',
+    selector: 'dxo-defer-rendering-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationDeferRenderingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDeferRenderingAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoAnimationDeferRenderingComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoAnimationDeferRenderingComponent
+    DxoDeferRenderingAnimationComponent
   ],
   exports: [
-    DxoAnimationDeferRenderingComponent
+    DxoDeferRenderingAnimationComponent
   ],
 })
-export class DxoAnimationDeferRenderingModule { }
+export class DxoDeferRenderingAnimationModule { }

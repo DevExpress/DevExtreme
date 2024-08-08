@@ -24,16 +24,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemHtmlEditorComponent } from './item-dxi';
+import { DxiHtmlEditorItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-toolbar-html-editor',
+    selector: 'dxo-html-editor-toolbar',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoToolbarHtmlEditorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get container(): UserDefinedElement | string {
         return this._getOption('container');
@@ -64,8 +64,8 @@ export class DxoToolbarHtmlEditorComponent extends NestedOption implements OnDes
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemHtmlEditorComponent))
-    get itemsChildren(): QueryList<DxiItemHtmlEditorComponent> {
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
+    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -93,10 +93,10 @@ export class DxoToolbarHtmlEditorComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoToolbarHtmlEditorComponent
+    DxoHtmlEditorToolbarComponent
   ],
   exports: [
-    DxoToolbarHtmlEditorComponent
+    DxoHtmlEditorToolbarComponent
   ],
 })
-export class DxoToolbarHtmlEditorModule { }
+export class DxoHtmlEditorToolbarModule { }

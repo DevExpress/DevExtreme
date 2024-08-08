@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-operation-descriptions-gantt',
+    selector: 'dxo-gantt-operation-descriptions',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOperationDescriptionsGanttComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get between(): string {
         return this._getOption('between');
@@ -143,10 +143,10 @@ export class DxoOperationDescriptionsGanttComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoOperationDescriptionsGanttComponent
+    DxoGanttOperationDescriptionsComponent
   ],
   exports: [
-    DxoOperationDescriptionsGanttComponent
+    DxoGanttOperationDescriptionsComponent
   ],
 })
-export class DxoOperationDescriptionsGanttModule { }
+export class DxoGanttOperationDescriptionsModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-minor-grid-polar-chart',
+    selector: 'dxo-polar-chart-minor-grid',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMinorGridPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartMinorGridComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -87,10 +87,10 @@ export class DxoMinorGridPolarChartComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoMinorGridPolarChartComponent
+    DxoPolarChartMinorGridComponent
   ],
   exports: [
-    DxoMinorGridPolarChartComponent
+    DxoPolarChartMinorGridComponent
   ],
 })
-export class DxoMinorGridPolarChartModule { }
+export class DxoPolarChartMinorGridModule { }

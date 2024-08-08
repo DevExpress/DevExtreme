@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-loading-indicator-pie-chart',
+    selector: 'dxo-pie-chart-loading-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -109,10 +109,10 @@ export class DxoLoadingIndicatorPieChartComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoLoadingIndicatorPieChartComponent
+    DxoPieChartLoadingIndicatorComponent
   ],
   exports: [
-    DxoLoadingIndicatorPieChartComponent
+    DxoPieChartLoadingIndicatorComponent
   ],
 })
-export class DxoLoadingIndicatorPieChartModule { }
+export class DxoPieChartLoadingIndicatorModule { }

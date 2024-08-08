@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-sorting-data-grid',
+    selector: 'dxo-data-grid-sorting',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSortingDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridSortingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get ascendingText(): string {
         return this._getOption('ascendingText');
@@ -96,10 +96,10 @@ export class DxoSortingDataGridComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoSortingDataGridComponent
+    DxoDataGridSortingComponent
   ],
   exports: [
-    DxoSortingDataGridComponent
+    DxoDataGridSortingComponent
   ],
 })
-export class DxoSortingDataGridModule { }
+export class DxoDataGridSortingModule { }

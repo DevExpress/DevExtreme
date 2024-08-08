@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-appointment-dragging-scheduler',
+    selector: 'dxo-scheduler-appointment-dragging',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAppointmentDraggingSchedulerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSchedulerAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get autoScroll(): boolean {
         return this._getOption('autoScroll');
@@ -135,10 +135,10 @@ export class DxoAppointmentDraggingSchedulerComponent extends NestedOption imple
 
 @NgModule({
   declarations: [
-    DxoAppointmentDraggingSchedulerComponent
+    DxoSchedulerAppointmentDraggingComponent
   ],
   exports: [
-    DxoAppointmentDraggingSchedulerComponent
+    DxoSchedulerAppointmentDraggingComponent
   ],
 })
-export class DxoAppointmentDraggingSchedulerModule { }
+export class DxoSchedulerAppointmentDraggingModule { }

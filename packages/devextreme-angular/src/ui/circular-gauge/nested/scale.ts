@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-scale-circular-gauge',
+    selector: 'dxo-circular-gauge-scale',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoScaleCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -154,10 +154,10 @@ export class DxoScaleCircularGaugeComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoScaleCircularGaugeComponent
+    DxoCircularGaugeScaleComponent
   ],
   exports: [
-    DxoScaleCircularGaugeComponent
+    DxoCircularGaugeScaleComponent
   ],
 })
-export class DxoScaleCircularGaugeModule { }
+export class DxoCircularGaugeScaleModule { }

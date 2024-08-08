@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-border-sparkline',
+    selector: 'dxo-sparkline-border',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBorderSparklineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -96,10 +96,10 @@ export class DxoBorderSparklineComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoBorderSparklineComponent
+    DxoSparklineBorderComponent
   ],
   exports: [
-    DxoBorderSparklineComponent
+    DxoSparklineBorderComponent
   ],
 })
-export class DxoBorderSparklineModule { }
+export class DxoSparklineBorderModule { }

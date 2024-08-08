@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-subvalue-indicator-linear-gauge',
+    selector: 'dxo-linear-gauge-subvalue-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSubvalueIndicatorLinearGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeSubvalueIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -210,10 +210,10 @@ export class DxoSubvalueIndicatorLinearGaugeComponent extends NestedOption imple
 
 @NgModule({
   declarations: [
-    DxoSubvalueIndicatorLinearGaugeComponent
+    DxoLinearGaugeSubvalueIndicatorComponent
   ],
   exports: [
-    DxoSubvalueIndicatorLinearGaugeComponent
+    DxoLinearGaugeSubvalueIndicatorComponent
   ],
 })
-export class DxoSubvalueIndicatorLinearGaugeModule { }
+export class DxoLinearGaugeSubvalueIndicatorModule { }

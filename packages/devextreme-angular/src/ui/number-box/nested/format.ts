@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-number-box',
+    selector: 'dxo-number-box-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatNumberBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoNumberBoxFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatNumberBoxComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoFormatNumberBoxComponent
+    DxoNumberBoxFormatComponent
   ],
   exports: [
-    DxoFormatNumberBoxComponent
+    DxoNumberBoxFormatComponent
   ],
 })
-export class DxoFormatNumberBoxModule { }
+export class DxoNumberBoxFormatModule { }

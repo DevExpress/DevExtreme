@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size-bullet',
+    selector: 'dxo-bullet-size',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizeBulletComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBulletSizeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizeBulletComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoSizeBulletComponent
+    DxoBulletSizeComponent
   ],
   exports: [
-    DxoSizeBulletComponent
+    DxoBulletSizeComponent
   ],
 })
-export class DxoSizeBulletModule { }
+export class DxoBulletSizeModule { }

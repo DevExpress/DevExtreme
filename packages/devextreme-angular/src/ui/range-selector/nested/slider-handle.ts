@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-slider-handle-range-selector',
+    selector: 'dxo-range-selector-slider-handle',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSliderHandleRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorSliderHandleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -79,10 +79,10 @@ export class DxoSliderHandleRangeSelectorComponent extends NestedOption implemen
 
 @NgModule({
   declarations: [
-    DxoSliderHandleRangeSelectorComponent
+    DxoRangeSelectorSliderHandleComponent
   ],
   exports: [
-    DxoSliderHandleRangeSelectorComponent
+    DxoRangeSelectorSliderHandleComponent
   ],
 })
-export class DxoSliderHandleRangeSelectorModule { }
+export class DxoRangeSelectorSliderHandleModule { }

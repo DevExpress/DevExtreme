@@ -130,90 +130,90 @@ import { DxiValueAxisModule } from 'devextreme-angular/ui/nested';
 import { DxoZoomAndPanModule } from 'devextreme-angular/ui/nested';
 import { DxoDragBoxStyleModule } from 'devextreme-angular/ui/nested';
 
-import { DxoAdaptiveLayoutChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoAnimationChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiAnnotationChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoBorderChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoFontChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoImageChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoShadowChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoArgumentAxisChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoAggregationIntervalChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiBreakChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoBreakStyleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiConstantLineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoLabelChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoConstantLineStyleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoGridChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoFormatChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoMinorGridChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoMinorTickChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoMinorTickIntervalChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoMinVisualRangeLengthChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiStripChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStripStyleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoTickChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoTickIntervalChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoTitleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoCommonAnnotationSettingsChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoCommonAxisSettingsChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoCommonPaneSettingsChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoBackgroundColorChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoCommonSeriesSettingsChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoAggregationChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoAreaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoHoverStyleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoHatchingChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoConnectorChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoPointChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoHeightChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoUrlChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoWidthChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoSelectionStyleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoReductionChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoValueErrorBarChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoBarChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoBubbleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoCandlestickChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoColorChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoFullstackedareaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoFullstackedbarChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoFullstackedlineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoFullstackedsplineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoFullstackedsplineareaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoArgumentFormatChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoLineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoRangeareaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoRangebarChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoScatterChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoSplineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoSplineareaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStackedareaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStackedbarChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStackedlineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStackedsplineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStackedsplineareaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStepareaChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoSteplineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoStockChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoCrosshairChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoHorizontalLineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoVerticalLineChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoDataPrepareSettingsChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoExportChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoLegendChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoMarginChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoSubtitleChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoLoadingIndicatorChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiPaneChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoScrollBarChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiSeriesChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoSeriesTemplateChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoSizeChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoTooltipChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxiValueAxisChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoZoomAndPanChartModule } from 'devextreme-angular/ui/chart/nested';
-import { DxoDragBoxStyleChartModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAdaptiveLayoutModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAnimationModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartAnnotationModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartBorderModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFontModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartImageModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartShadowModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartArgumentAxisModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAggregationIntervalModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartBreakModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartBreakStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartConstantLineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLabelModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartConstantLineStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartGridModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFormatModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartMinorGridModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartMinorTickModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartMinorTickIntervalModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartMinVisualRangeLengthModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartStripModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStripStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartTickModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartTickIntervalModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartTitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAnnotationSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonAxisSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonPaneSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartBackgroundColorModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCommonSeriesSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAggregationModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartAreaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHoverStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHatchingModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartConnectorModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartPointModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHeightModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartUrlModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartWidthModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSelectionStyleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartReductionModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartValueErrorBarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartBarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartBubbleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCandlestickModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartColorModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFullstackedareaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFullstackedbarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFullstackedlineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFullstackedsplineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartFullstackedsplineareaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartArgumentFormatModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartRangeareaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartRangebarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartScatterModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSplineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSplineareaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStackedareaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStackedbarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStackedlineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStackedsplineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStackedsplineareaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStepareaModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSteplineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartStockModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartCrosshairModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartHorizontalLineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartVerticalLineModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartDataPrepareSettingsModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartExportModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLegendModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartMarginModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSubtitleModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartLoadingIndicatorModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartPaneModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartScrollBarModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartSeriesModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSeriesTemplateModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartSizeModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartTooltipModule } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartValueAxisModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartZoomAndPanModule } from 'devextreme-angular/ui/chart/nested';
+import { DxoChartDragBoxStyleModule } from 'devextreme-angular/ui/chart/nested';
 
 
 import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
@@ -221,10 +221,10 @@ import { DxiPaneComponent } from 'devextreme-angular/ui/nested';
 import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
 import { DxiValueAxisComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiAnnotationChartComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiPaneChartComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiSeriesChartComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiValueAxisChartComponent } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartAnnotationComponent } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartPaneComponent } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartSeriesComponent } from 'devextreme-angular/ui/chart/nested';
+import { DxiChartValueAxisComponent } from 'devextreme-angular/ui/chart/nested';
 
 
 
@@ -1436,58 +1436,58 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-    hasNewannotations: boolean = false;
+    hasNewAnnotations: boolean = false;
 
-    @ContentChildren(DxiAnnotationChartComponent)
-    get annotationsNewChildren(): QueryList<DxiAnnotationChartComponent> {
+    @ContentChildren(DxiChartAnnotationComponent)
+    get annotationsChildren(): QueryList<DxiChartAnnotationComponent> {
         return this._getOption('annotations');
     }
-    set annotationsNewChildren(value) {
-        this.hasNewannotations = value.length > 0;
+    set annotationsChildren(value) {
+        this.hasNewAnnotations = value.length > 0;
         this.setChildren('annotations', value);
     }
 
-    hasNewpanes: boolean = false;
+    hasNewPanes: boolean = false;
 
-    @ContentChildren(DxiPaneChartComponent)
-    get panesNewChildren(): QueryList<DxiPaneChartComponent> {
+    @ContentChildren(DxiChartPaneComponent)
+    get panesChildren(): QueryList<DxiChartPaneComponent> {
         return this._getOption('panes');
     }
-    set panesNewChildren(value) {
-        this.hasNewpanes = value.length > 0;
+    set panesChildren(value) {
+        this.hasNewPanes = value.length > 0;
         this.setChildren('panes', value);
     }
 
-    hasNewseries: boolean = false;
+    hasNewSeries: boolean = false;
 
-    @ContentChildren(DxiSeriesChartComponent)
-    get seriesNewChildren(): QueryList<DxiSeriesChartComponent> {
+    @ContentChildren(DxiChartSeriesComponent)
+    get seriesChildren(): QueryList<DxiChartSeriesComponent> {
         return this._getOption('series');
     }
-    set seriesNewChildren(value) {
-        this.hasNewseries = value.length > 0;
+    set seriesChildren(value) {
+        this.hasNewSeries = value.length > 0;
         this.setChildren('series', value);
     }
 
-    hasNewvalueAxis: boolean = false;
+    hasNewValueAxis: boolean = false;
 
-    @ContentChildren(DxiValueAxisChartComponent)
-    get valueAxisNewChildren(): QueryList<DxiValueAxisChartComponent> {
+    @ContentChildren(DxiChartValueAxisComponent)
+    get valueAxisChildren(): QueryList<DxiChartValueAxisComponent> {
         return this._getOption('valueAxis');
     }
-    set valueAxisNewChildren(value) {
-        this.hasNewvalueAxis = value.length > 0;
+    set valueAxisChildren(value) {
+        this.hasNewValueAxis = value.length > 0;
         this.setChildren('valueAxis', value);
     }
 
 
 
     @ContentChildren(DxiAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiAnnotationComponent> {
+    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
         return this._getOption('annotations');
     }
-    set annotationsChildren(value) {
-        if (this.hasNewannotations) {
+    set annotationsLegacyChildren(value) {
+        if (this.hasNewAnnotations) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1497,11 +1497,11 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     @ContentChildren(DxiPaneComponent)
-    get panesChildren(): QueryList<DxiPaneComponent> {
+    get panesLegacyChildren(): QueryList<DxiPaneComponent> {
         return this._getOption('panes');
     }
-    set panesChildren(value) {
-        if (this.hasNewpanes) {
+    set panesLegacyChildren(value) {
+        if (this.hasNewPanes) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1511,11 +1511,11 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     @ContentChildren(DxiSeriesComponent)
-    get seriesChildren(): QueryList<DxiSeriesComponent> {
+    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
         return this._getOption('series');
     }
-    set seriesChildren(value) {
-        if (this.hasNewseries) {
+    set seriesLegacyChildren(value) {
+        if (this.hasNewSeries) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1525,11 +1525,11 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
 
     @ContentChildren(DxiValueAxisComponent)
-    get valueAxisChildren(): QueryList<DxiValueAxisComponent> {
+    get valueAxisLegacyChildren(): QueryList<DxiValueAxisComponent> {
         return this._getOption('valueAxis');
     }
-    set valueAxisChildren(value) {
-        if (this.hasNewvalueAxis) {
+    set valueAxisLegacyChildren(value) {
+        if (this.hasNewValueAxis) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1763,90 +1763,90 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     DxiValueAxisModule,
     DxoZoomAndPanModule,
     DxoDragBoxStyleModule,
-    DxoAdaptiveLayoutChartModule,
-    DxoAnimationChartModule,
-    DxiAnnotationChartModule,
-    DxoBorderChartModule,
-    DxoFontChartModule,
-    DxoImageChartModule,
-    DxoShadowChartModule,
-    DxoArgumentAxisChartModule,
-    DxoAggregationIntervalChartModule,
-    DxiBreakChartModule,
-    DxoBreakStyleChartModule,
-    DxiConstantLineChartModule,
-    DxoLabelChartModule,
-    DxoConstantLineStyleChartModule,
-    DxoGridChartModule,
-    DxoFormatChartModule,
-    DxoMinorGridChartModule,
-    DxoMinorTickChartModule,
-    DxoMinorTickIntervalChartModule,
-    DxoMinVisualRangeLengthChartModule,
-    DxiStripChartModule,
-    DxoStripStyleChartModule,
-    DxoTickChartModule,
-    DxoTickIntervalChartModule,
-    DxoTitleChartModule,
-    DxoCommonAnnotationSettingsChartModule,
-    DxoCommonAxisSettingsChartModule,
-    DxoCommonPaneSettingsChartModule,
-    DxoBackgroundColorChartModule,
-    DxoCommonSeriesSettingsChartModule,
-    DxoAggregationChartModule,
-    DxoAreaChartModule,
-    DxoHoverStyleChartModule,
-    DxoHatchingChartModule,
-    DxoConnectorChartModule,
-    DxoPointChartModule,
-    DxoHeightChartModule,
-    DxoUrlChartModule,
-    DxoWidthChartModule,
-    DxoSelectionStyleChartModule,
-    DxoReductionChartModule,
-    DxoValueErrorBarChartModule,
-    DxoBarChartModule,
-    DxoBubbleChartModule,
-    DxoCandlestickChartModule,
-    DxoColorChartModule,
-    DxoFullstackedareaChartModule,
-    DxoFullstackedbarChartModule,
-    DxoFullstackedlineChartModule,
-    DxoFullstackedsplineChartModule,
-    DxoFullstackedsplineareaChartModule,
-    DxoArgumentFormatChartModule,
-    DxoLineChartModule,
-    DxoRangeareaChartModule,
-    DxoRangebarChartModule,
-    DxoScatterChartModule,
-    DxoSplineChartModule,
-    DxoSplineareaChartModule,
-    DxoStackedareaChartModule,
-    DxoStackedbarChartModule,
-    DxoStackedlineChartModule,
-    DxoStackedsplineChartModule,
-    DxoStackedsplineareaChartModule,
-    DxoStepareaChartModule,
-    DxoSteplineChartModule,
-    DxoStockChartModule,
-    DxoCrosshairChartModule,
-    DxoHorizontalLineChartModule,
-    DxoVerticalLineChartModule,
-    DxoDataPrepareSettingsChartModule,
-    DxoExportChartModule,
-    DxoLegendChartModule,
-    DxoMarginChartModule,
-    DxoSubtitleChartModule,
-    DxoLoadingIndicatorChartModule,
-    DxiPaneChartModule,
-    DxoScrollBarChartModule,
-    DxiSeriesChartModule,
-    DxoSeriesTemplateChartModule,
-    DxoSizeChartModule,
-    DxoTooltipChartModule,
-    DxiValueAxisChartModule,
-    DxoZoomAndPanChartModule,
-    DxoDragBoxStyleChartModule,
+    DxoChartAdaptiveLayoutModule,
+    DxoChartAnimationModule,
+    DxiChartAnnotationModule,
+    DxoChartBorderModule,
+    DxoChartFontModule,
+    DxoChartImageModule,
+    DxoChartShadowModule,
+    DxoChartArgumentAxisModule,
+    DxoChartAggregationIntervalModule,
+    DxiChartBreakModule,
+    DxoChartBreakStyleModule,
+    DxiChartConstantLineModule,
+    DxoChartLabelModule,
+    DxoChartConstantLineStyleModule,
+    DxoChartGridModule,
+    DxoChartFormatModule,
+    DxoChartMinorGridModule,
+    DxoChartMinorTickModule,
+    DxoChartMinorTickIntervalModule,
+    DxoChartMinVisualRangeLengthModule,
+    DxiChartStripModule,
+    DxoChartStripStyleModule,
+    DxoChartTickModule,
+    DxoChartTickIntervalModule,
+    DxoChartTitleModule,
+    DxoChartCommonAnnotationSettingsModule,
+    DxoChartCommonAxisSettingsModule,
+    DxoChartCommonPaneSettingsModule,
+    DxoChartBackgroundColorModule,
+    DxoChartCommonSeriesSettingsModule,
+    DxoChartAggregationModule,
+    DxoChartAreaModule,
+    DxoChartHoverStyleModule,
+    DxoChartHatchingModule,
+    DxoChartConnectorModule,
+    DxoChartPointModule,
+    DxoChartHeightModule,
+    DxoChartUrlModule,
+    DxoChartWidthModule,
+    DxoChartSelectionStyleModule,
+    DxoChartReductionModule,
+    DxoChartValueErrorBarModule,
+    DxoChartBarModule,
+    DxoChartBubbleModule,
+    DxoChartCandlestickModule,
+    DxoChartColorModule,
+    DxoChartFullstackedareaModule,
+    DxoChartFullstackedbarModule,
+    DxoChartFullstackedlineModule,
+    DxoChartFullstackedsplineModule,
+    DxoChartFullstackedsplineareaModule,
+    DxoChartArgumentFormatModule,
+    DxoChartLineModule,
+    DxoChartRangeareaModule,
+    DxoChartRangebarModule,
+    DxoChartScatterModule,
+    DxoChartSplineModule,
+    DxoChartSplineareaModule,
+    DxoChartStackedareaModule,
+    DxoChartStackedbarModule,
+    DxoChartStackedlineModule,
+    DxoChartStackedsplineModule,
+    DxoChartStackedsplineareaModule,
+    DxoChartStepareaModule,
+    DxoChartSteplineModule,
+    DxoChartStockModule,
+    DxoChartCrosshairModule,
+    DxoChartHorizontalLineModule,
+    DxoChartVerticalLineModule,
+    DxoChartDataPrepareSettingsModule,
+    DxoChartExportModule,
+    DxoChartLegendModule,
+    DxoChartMarginModule,
+    DxoChartSubtitleModule,
+    DxoChartLoadingIndicatorModule,
+    DxiChartPaneModule,
+    DxoChartScrollBarModule,
+    DxiChartSeriesModule,
+    DxoChartSeriesTemplateModule,
+    DxoChartSizeModule,
+    DxoChartTooltipModule,
+    DxiChartValueAxisModule,
+    DxoChartZoomAndPanModule,
+    DxoChartDragBoxStyleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1856,7 +1856,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
   exports: [
     DxChartComponent,
     DxoAdaptiveLayoutModule,DxoAnimationModule,DxiAnnotationModule,DxoBorderModule,DxoFontModule,DxoImageModule,DxoShadowModule,DxoArgumentAxisModule,DxoAggregationIntervalModule,DxiBreakModule,DxoBreakStyleModule,DxiConstantLineModule,DxoLabelModule,DxoConstantLineStyleModule,DxoGridModule,DxoFormatModule,DxoMinorGridModule,DxoMinorTickModule,DxoMinorTickIntervalModule,DxoMinVisualRangeLengthModule,DxiStripModule,DxoStripStyleModule,DxoTickModule,DxoTickIntervalModule,DxoTitleModule,DxoCommonAnnotationSettingsModule,DxoCommonAxisSettingsModule,DxoCommonPaneSettingsModule,DxoBackgroundColorModule,DxoCommonSeriesSettingsModule,DxoAggregationModule,DxoAreaModule,DxoHoverStyleModule,DxoHatchingModule,DxoConnectorModule,DxoPointModule,DxoHeightModule,DxoUrlModule,DxoWidthModule,DxoSelectionStyleModule,DxoReductionModule,DxoValueErrorBarModule,DxoBarModule,DxoBubbleModule,DxoCandlestickModule,DxoColorModule,DxoFullstackedareaModule,DxoFullstackedbarModule,DxoFullstackedlineModule,DxoFullstackedsplineModule,DxoFullstackedsplineareaModule,DxoArgumentFormatModule,DxoLineModule,DxoRangeareaModule,DxoRangebarModule,DxoScatterModule,DxoSplineModule,DxoSplineareaModule,DxoStackedareaModule,DxoStackedbarModule,DxoStackedlineModule,DxoStackedsplineModule,DxoStackedsplineareaModule,DxoStepareaModule,DxoSteplineModule,DxoStockModule,DxoCrosshairModule,DxoHorizontalLineModule,DxoVerticalLineModule,DxoDataPrepareSettingsModule,DxoExportModule,DxoLegendModule,DxoMarginModule,DxoSubtitleModule,DxoLoadingIndicatorModule,DxiPaneModule,DxoScrollBarModule,DxiSeriesModule,DxoSeriesTemplateModule,DxoSizeModule,DxoTooltipModule,DxiValueAxisModule,DxoZoomAndPanModule,DxoDragBoxStyleModule,
-    DxoAdaptiveLayoutChartModule,DxoAnimationChartModule,DxiAnnotationChartModule,DxoBorderChartModule,DxoFontChartModule,DxoImageChartModule,DxoShadowChartModule,DxoArgumentAxisChartModule,DxoAggregationIntervalChartModule,DxiBreakChartModule,DxoBreakStyleChartModule,DxiConstantLineChartModule,DxoLabelChartModule,DxoConstantLineStyleChartModule,DxoGridChartModule,DxoFormatChartModule,DxoMinorGridChartModule,DxoMinorTickChartModule,DxoMinorTickIntervalChartModule,DxoMinVisualRangeLengthChartModule,DxiStripChartModule,DxoStripStyleChartModule,DxoTickChartModule,DxoTickIntervalChartModule,DxoTitleChartModule,DxoCommonAnnotationSettingsChartModule,DxoCommonAxisSettingsChartModule,DxoCommonPaneSettingsChartModule,DxoBackgroundColorChartModule,DxoCommonSeriesSettingsChartModule,DxoAggregationChartModule,DxoAreaChartModule,DxoHoverStyleChartModule,DxoHatchingChartModule,DxoConnectorChartModule,DxoPointChartModule,DxoHeightChartModule,DxoUrlChartModule,DxoWidthChartModule,DxoSelectionStyleChartModule,DxoReductionChartModule,DxoValueErrorBarChartModule,DxoBarChartModule,DxoBubbleChartModule,DxoCandlestickChartModule,DxoColorChartModule,DxoFullstackedareaChartModule,DxoFullstackedbarChartModule,DxoFullstackedlineChartModule,DxoFullstackedsplineChartModule,DxoFullstackedsplineareaChartModule,DxoArgumentFormatChartModule,DxoLineChartModule,DxoRangeareaChartModule,DxoRangebarChartModule,DxoScatterChartModule,DxoSplineChartModule,DxoSplineareaChartModule,DxoStackedareaChartModule,DxoStackedbarChartModule,DxoStackedlineChartModule,DxoStackedsplineChartModule,DxoStackedsplineareaChartModule,DxoStepareaChartModule,DxoSteplineChartModule,DxoStockChartModule,DxoCrosshairChartModule,DxoHorizontalLineChartModule,DxoVerticalLineChartModule,DxoDataPrepareSettingsChartModule,DxoExportChartModule,DxoLegendChartModule,DxoMarginChartModule,DxoSubtitleChartModule,DxoLoadingIndicatorChartModule,DxiPaneChartModule,DxoScrollBarChartModule,DxiSeriesChartModule,DxoSeriesTemplateChartModule,DxoSizeChartModule,DxoTooltipChartModule,DxiValueAxisChartModule,DxoZoomAndPanChartModule,DxoDragBoxStyleChartModule,
+    DxoChartAdaptiveLayoutModule,DxoChartAnimationModule,DxiChartAnnotationModule,DxoChartBorderModule,DxoChartFontModule,DxoChartImageModule,DxoChartShadowModule,DxoChartArgumentAxisModule,DxoChartAggregationIntervalModule,DxiChartBreakModule,DxoChartBreakStyleModule,DxiChartConstantLineModule,DxoChartLabelModule,DxoChartConstantLineStyleModule,DxoChartGridModule,DxoChartFormatModule,DxoChartMinorGridModule,DxoChartMinorTickModule,DxoChartMinorTickIntervalModule,DxoChartMinVisualRangeLengthModule,DxiChartStripModule,DxoChartStripStyleModule,DxoChartTickModule,DxoChartTickIntervalModule,DxoChartTitleModule,DxoChartCommonAnnotationSettingsModule,DxoChartCommonAxisSettingsModule,DxoChartCommonPaneSettingsModule,DxoChartBackgroundColorModule,DxoChartCommonSeriesSettingsModule,DxoChartAggregationModule,DxoChartAreaModule,DxoChartHoverStyleModule,DxoChartHatchingModule,DxoChartConnectorModule,DxoChartPointModule,DxoChartHeightModule,DxoChartUrlModule,DxoChartWidthModule,DxoChartSelectionStyleModule,DxoChartReductionModule,DxoChartValueErrorBarModule,DxoChartBarModule,DxoChartBubbleModule,DxoChartCandlestickModule,DxoChartColorModule,DxoChartFullstackedareaModule,DxoChartFullstackedbarModule,DxoChartFullstackedlineModule,DxoChartFullstackedsplineModule,DxoChartFullstackedsplineareaModule,DxoChartArgumentFormatModule,DxoChartLineModule,DxoChartRangeareaModule,DxoChartRangebarModule,DxoChartScatterModule,DxoChartSplineModule,DxoChartSplineareaModule,DxoChartStackedareaModule,DxoChartStackedbarModule,DxoChartStackedlineModule,DxoChartStackedsplineModule,DxoChartStackedsplineareaModule,DxoChartStepareaModule,DxoChartSteplineModule,DxoChartStockModule,DxoChartCrosshairModule,DxoChartHorizontalLineModule,DxoChartVerticalLineModule,DxoChartDataPrepareSettingsModule,DxoChartExportModule,DxoChartLegendModule,DxoChartMarginModule,DxoChartSubtitleModule,DxoChartLoadingIndicatorModule,DxiChartPaneModule,DxoChartScrollBarModule,DxiChartSeriesModule,DxoChartSeriesTemplateModule,DxoChartSizeModule,DxoChartTooltipModule,DxiChartValueAxisModule,DxoChartZoomAndPanModule,DxoChartDragBoxStyleModule,
     DxTemplateModule
   ]
 })

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-bar-gauge',
+    selector: 'dxo-bar-gauge-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatBarGaugeComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoFormatBarGaugeComponent
+    DxoBarGaugeFormatComponent
   ],
   exports: [
-    DxoFormatBarGaugeComponent
+    DxoBarGaugeFormatComponent
   ],
 })
-export class DxoFormatBarGaugeModule { }
+export class DxoBarGaugeFormatModule { }

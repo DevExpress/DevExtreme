@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-loading-indicator-tree-map',
+    selector: 'dxo-tree-map-loading-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -109,10 +109,10 @@ export class DxoLoadingIndicatorTreeMapComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoLoadingIndicatorTreeMapComponent
+    DxoTreeMapLoadingIndicatorComponent
   ],
   exports: [
-    DxoLoadingIndicatorTreeMapComponent
+    DxoTreeMapLoadingIndicatorComponent
   ],
 })
-export class DxoLoadingIndicatorTreeMapModule { }
+export class DxoTreeMapLoadingIndicatorModule { }

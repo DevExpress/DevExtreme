@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-splinearea-chart',
+    selector: 'dxo-chart-splinearea',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSplineareaChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartSplineareaComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoSplineareaChartComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoSplineareaChartComponent
+    DxoChartSplineareaComponent
   ],
   exports: [
-    DxoSplineareaChartComponent
+    DxoChartSplineareaComponent
   ],
 })
-export class DxoSplineareaChartModule { }
+export class DxoChartSplineareaModule { }

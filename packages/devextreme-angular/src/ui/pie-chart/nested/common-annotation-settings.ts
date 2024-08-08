@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-common-annotation-settings-pie-chart',
+    selector: 'dxo-pie-chart-common-annotation-settings',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCommonAnnotationSettingsPieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartCommonAnnotationSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');
@@ -297,10 +297,10 @@ export class DxoCommonAnnotationSettingsPieChartComponent extends NestedOption i
 
 @NgModule({
   declarations: [
-    DxoCommonAnnotationSettingsPieChartComponent
+    DxoPieChartCommonAnnotationSettingsComponent
   ],
   exports: [
-    DxoCommonAnnotationSettingsPieChartComponent
+    DxoPieChartCommonAnnotationSettingsComponent
   ],
 })
-export class DxoCommonAnnotationSettingsPieChartModule { }
+export class DxoPieChartCommonAnnotationSettingsModule { }

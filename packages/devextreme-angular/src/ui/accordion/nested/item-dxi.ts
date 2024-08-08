@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-accordion',
+    selector: 'dxi-accordion-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemAccordionComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiAccordionItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -134,10 +134,10 @@ export class DxiItemAccordionComponent extends CollectionNestedOption implements
 
 @NgModule({
   declarations: [
-    DxiItemAccordionComponent
+    DxiAccordionItemComponent
   ],
   exports: [
-    DxiItemAccordionComponent
+    DxiAccordionItemComponent
   ],
 })
-export class DxiItemAccordionModule { }
+export class DxiAccordionItemModule { }

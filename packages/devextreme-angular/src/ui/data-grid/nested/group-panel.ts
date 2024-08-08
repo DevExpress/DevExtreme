@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-group-panel-data-grid',
+    selector: 'dxo-data-grid-group-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGroupPanelDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowColumnDragging(): boolean {
         return this._getOption('allowColumnDragging');
@@ -93,10 +93,10 @@ export class DxoGroupPanelDataGridComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoGroupPanelDataGridComponent
+    DxoDataGridGroupPanelComponent
   ],
   exports: [
-    DxoGroupPanelDataGridComponent
+    DxoDataGridGroupPanelComponent
   ],
 })
-export class DxoGroupPanelDataGridModule { }
+export class DxoDataGridGroupPanelModule { }

@@ -20,12 +20,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-break-chart',
+    selector: 'dxi-chart-break',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiBreakChartComponent extends CollectionNestedOption {
+export class DxiChartBreakComponent extends CollectionNestedOption {
     @Input()
     get endValue(): Date | number | string | undefined {
         return this._getOption('endValue');
@@ -65,10 +65,10 @@ export class DxiBreakChartComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiBreakChartComponent
+    DxiChartBreakComponent
   ],
   exports: [
-    DxiBreakChartComponent
+    DxiChartBreakComponent
   ],
 })
-export class DxiBreakChartModule { }
+export class DxiChartBreakModule { }

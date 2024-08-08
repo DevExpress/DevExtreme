@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-show-event-context-menu',
+    selector: 'dxo-context-menu-show-event',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShowEventContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuShowEventComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get delay(): number | undefined {
         return this._getOption('delay');
@@ -71,10 +71,10 @@ export class DxoShowEventContextMenuComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoShowEventContextMenuComponent
+    DxoContextMenuShowEventComponent
   ],
   exports: [
-    DxoShowEventContextMenuComponent
+    DxoContextMenuShowEventComponent
   ],
 })
-export class DxoShowEventContextMenuModule { }
+export class DxoContextMenuShowEventModule { }

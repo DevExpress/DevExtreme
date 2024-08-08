@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-loading-indicator-range-selector',
+    selector: 'dxo-range-selector-loading-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -109,10 +109,10 @@ export class DxoLoadingIndicatorRangeSelectorComponent extends NestedOption impl
 
 @NgModule({
   declarations: [
-    DxoLoadingIndicatorRangeSelectorComponent
+    DxoRangeSelectorLoadingIndicatorComponent
   ],
   exports: [
-    DxoLoadingIndicatorRangeSelectorComponent
+    DxoRangeSelectorLoadingIndicatorComponent
   ],
 })
-export class DxoLoadingIndicatorRangeSelectorModule { }
+export class DxoRangeSelectorLoadingIndicatorModule { }

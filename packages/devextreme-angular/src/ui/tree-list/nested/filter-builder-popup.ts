@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemTreeListComponent } from './toolbar-item-dxi';
+import { DxiTreeListToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-filter-builder-popup-tree-list',
+    selector: 'dxo-tree-list-filter-builder-popup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterBuilderPopupTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFilterBuilderPopupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoFilterBuilderPopupTreeListComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemTreeListComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemTreeListComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeListToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiTreeListToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoFilterBuilderPopupTreeListComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoFilterBuilderPopupTreeListComponent
+    DxoTreeListFilterBuilderPopupComponent
   ],
   exports: [
-    DxoFilterBuilderPopupTreeListComponent
+    DxoTreeListFilterBuilderPopupComponent
   ],
 })
-export class DxoFilterBuilderPopupTreeListModule { }
+export class DxoTreeListFilterBuilderPopupModule { }

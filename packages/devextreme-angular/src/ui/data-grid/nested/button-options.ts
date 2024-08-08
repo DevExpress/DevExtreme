@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-button-options-data-grid',
+    selector: 'dxo-data-grid-button-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoButtonOptionsDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridButtonOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -249,10 +249,10 @@ export class DxoButtonOptionsDataGridComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoButtonOptionsDataGridComponent
+    DxoDataGridButtonOptionsComponent
   ],
   exports: [
-    DxoButtonOptionsDataGridComponent
+    DxoDataGridButtonOptionsComponent
   ],
 })
-export class DxoButtonOptionsDataGridModule { }
+export class DxoDataGridButtonOptionsModule { }

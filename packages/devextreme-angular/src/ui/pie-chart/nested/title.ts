@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-title-pie-chart',
+    selector: 'dxo-pie-chart-title',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTitlePieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartTitleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -129,10 +129,10 @@ export class DxoTitlePieChartComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoTitlePieChartComponent
+    DxoPieChartTitleComponent
   ],
   exports: [
-    DxoTitlePieChartComponent
+    DxoPieChartTitleComponent
   ],
 })
-export class DxoTitlePieChartModule { }
+export class DxoPieChartTitleModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-load-panel',
+    selector: 'dxo-load-panel-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLoadPanelCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionLoadPanelComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoCollisionLoadPanelComponent
+    DxoLoadPanelCollisionComponent
   ],
   exports: [
-    DxoCollisionLoadPanelComponent
+    DxoLoadPanelCollisionComponent
   ],
 })
-export class DxoCollisionLoadPanelModule { }
+export class DxoLoadPanelCollisionModule { }

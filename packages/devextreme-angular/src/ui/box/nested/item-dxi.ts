@@ -29,12 +29,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-box',
+    selector: 'dxi-box-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemBoxComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get baseSize(): number | string {
@@ -143,10 +143,10 @@ export class DxiItemBoxComponent extends CollectionNestedOption implements After
 
 @NgModule({
   declarations: [
-    DxiItemBoxComponent
+    DxiBoxItemComponent
   ],
   exports: [
-    DxiItemBoxComponent
+    DxiBoxItemComponent
   ],
 })
-export class DxiItemBoxModule { }
+export class DxiBoxItemModule { }

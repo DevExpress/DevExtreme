@@ -27,17 +27,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiConstantLinePolarChartComponent } from './constant-line-dxi';
-import { DxiStripPolarChartComponent } from './strip-dxi';
+import { DxiPolarChartConstantLineComponent } from './constant-line-dxi';
+import { DxiPolarChartStripComponent } from './strip-dxi';
 
 
 @Component({
-    selector: 'dxo-value-axis-polar-chart',
+    selector: 'dxo-polar-chart-value-axis',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoValueAxisPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartValueAxisComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -322,16 +322,16 @@ export class DxoValueAxisPolarChartComponent extends NestedOption implements OnD
     }
 
 
-    @ContentChildren(forwardRef(() => DxiConstantLinePolarChartComponent))
-    get constantLinesChildren(): QueryList<DxiConstantLinePolarChartComponent> {
+    @ContentChildren(forwardRef(() => DxiPolarChartConstantLineComponent))
+    get constantLinesChildren(): QueryList<DxiPolarChartConstantLineComponent> {
         return this._getOption('constantLines');
     }
     set constantLinesChildren(value) {
         this.setChildren('constantLines', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiStripPolarChartComponent))
-    get stripsChildren(): QueryList<DxiStripPolarChartComponent> {
+    @ContentChildren(forwardRef(() => DxiPolarChartStripComponent))
+    get stripsChildren(): QueryList<DxiPolarChartStripComponent> {
         return this._getOption('strips');
     }
     set stripsChildren(value) {
@@ -364,10 +364,10 @@ export class DxoValueAxisPolarChartComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoValueAxisPolarChartComponent
+    DxoPolarChartValueAxisComponent
   ],
   exports: [
-    DxoValueAxisPolarChartComponent
+    DxoPolarChartValueAxisComponent
   ],
 })
-export class DxoValueAxisPolarChartModule { }
+export class DxoPolarChartValueAxisModule { }

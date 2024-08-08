@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hide-data-grid',
+    selector: 'dxo-data-grid-hide',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHideDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridHideComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoHideDataGridComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoHideDataGridComponent
+    DxoDataGridHideComponent
   ],
   exports: [
-    DxoHideDataGridComponent
+    DxoDataGridHideComponent
   ],
 })
-export class DxoHideDataGridModule { }
+export class DxoDataGridHideModule { }

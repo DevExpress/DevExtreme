@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-border-tree-map',
+    selector: 'dxo-tree-map-border',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBorderTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -96,10 +96,10 @@ export class DxoBorderTreeMapComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoBorderTreeMapComponent
+    DxoTreeMapBorderComponent
   ],
   exports: [
-    DxoBorderTreeMapComponent
+    DxoTreeMapBorderComponent
   ],
 })
-export class DxoBorderTreeMapModule { }
+export class DxoTreeMapBorderModule { }

@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-custom-operation-filter-builder',
+    selector: 'dxi-filter-builder-custom-operation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiCustomOperationFilterBuilderComponent extends CollectionNestedOption {
+export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption {
     @Input()
     get calculateFilterExpression(): Function {
         return this._getOption('calculateFilterExpression');
@@ -114,10 +114,10 @@ export class DxiCustomOperationFilterBuilderComponent extends CollectionNestedOp
 
 @NgModule({
   declarations: [
-    DxiCustomOperationFilterBuilderComponent
+    DxiFilterBuilderCustomOperationComponent
   ],
   exports: [
-    DxiCustomOperationFilterBuilderComponent
+    DxiFilterBuilderCustomOperationComponent
   ],
 })
-export class DxiCustomOperationFilterBuilderModule { }
+export class DxiFilterBuilderCustomOperationModule { }

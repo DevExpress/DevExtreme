@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-button-group',
+    selector: 'dxi-button-group-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemButtonGroupComponent extends CollectionNestedOption {
+export class DxiButtonGroupItemComponent extends CollectionNestedOption {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -114,10 +114,10 @@ export class DxiItemButtonGroupComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemButtonGroupComponent
+    DxiButtonGroupItemComponent
   ],
   exports: [
-    DxiItemButtonGroupComponent
+    DxiButtonGroupItemComponent
   ],
 })
-export class DxiItemButtonGroupModule { }
+export class DxiButtonGroupItemModule { }

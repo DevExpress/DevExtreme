@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-funnel',
+    selector: 'dxo-funnel-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -178,10 +178,10 @@ export class DxoTooltipFunnelComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoTooltipFunnelComponent
+    DxoFunnelTooltipComponent
   ],
   exports: [
-    DxoTooltipFunnelComponent
+    DxoFunnelTooltipComponent
   ],
 })
-export class DxoTooltipFunnelModule { }
+export class DxoFunnelTooltipModule { }

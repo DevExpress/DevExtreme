@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-resource-scheduler',
+    selector: 'dxi-scheduler-resource',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiResourceSchedulerComponent extends CollectionNestedOption {
+export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     @Input()
     get allowMultiple(): boolean {
         return this._getOption('allowMultiple');
@@ -115,10 +115,10 @@ export class DxiResourceSchedulerComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiResourceSchedulerComponent
+    DxiSchedulerResourceComponent
   ],
   exports: [
-    DxiResourceSchedulerComponent
+    DxiSchedulerResourceComponent
   ],
 })
-export class DxiResourceSchedulerModule { }
+export class DxiSchedulerResourceModule { }

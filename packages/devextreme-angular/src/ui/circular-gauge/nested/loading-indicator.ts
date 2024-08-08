@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-loading-indicator-circular-gauge',
+    selector: 'dxo-circular-gauge-loading-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -101,10 +101,10 @@ export class DxoLoadingIndicatorCircularGaugeComponent extends NestedOption impl
 
 @NgModule({
   declarations: [
-    DxoLoadingIndicatorCircularGaugeComponent
+    DxoCircularGaugeLoadingIndicatorComponent
   ],
   exports: [
-    DxoLoadingIndicatorCircularGaugeComponent
+    DxoCircularGaugeLoadingIndicatorComponent
   ],
 })
-export class DxoLoadingIndicatorCircularGaugeModule { }
+export class DxoCircularGaugeLoadingIndicatorModule { }

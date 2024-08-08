@@ -29,16 +29,16 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiConnectionPointDiagramComponent } from './connection-point-dxi';
+import { DxiDiagramConnectionPointComponent } from './connection-point-dxi';
 
 
 @Component({
-    selector: 'dxi-custom-shape-diagram',
+    selector: 'dxi-diagram-custom-shape',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiCustomShapeDiagramComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiDiagramCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get allowEditImage(): boolean {
@@ -350,8 +350,8 @@ export class DxiCustomShapeDiagramComponent extends CollectionNestedOption imple
     }
 
 
-    @ContentChildren(forwardRef(() => DxiConnectionPointDiagramComponent))
-    get connectionPointsChildren(): QueryList<DxiConnectionPointDiagramComponent> {
+    @ContentChildren(forwardRef(() => DxiDiagramConnectionPointComponent))
+    get connectionPointsChildren(): QueryList<DxiDiagramConnectionPointComponent> {
         return this._getOption('connectionPoints');
     }
     set connectionPointsChildren(value) {
@@ -387,10 +387,10 @@ export class DxiCustomShapeDiagramComponent extends CollectionNestedOption imple
 
 @NgModule({
   declarations: [
-    DxiCustomShapeDiagramComponent
+    DxiDiagramCustomShapeComponent
   ],
   exports: [
-    DxiCustomShapeDiagramComponent
+    DxiDiagramCustomShapeComponent
   ],
 })
-export class DxiCustomShapeDiagramModule { }
+export class DxiDiagramCustomShapeModule { }

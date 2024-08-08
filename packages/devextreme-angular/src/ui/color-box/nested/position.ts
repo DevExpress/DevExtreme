@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-position-color-box',
+    selector: 'dxo-color-box-position',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPositionColorBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColorBoxPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -114,10 +114,10 @@ export class DxoPositionColorBoxComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoPositionColorBoxComponent
+    DxoColorBoxPositionComponent
   ],
   exports: [
-    DxoPositionColorBoxComponent
+    DxoColorBoxPositionComponent
   ],
 })
-export class DxoPositionColorBoxModule { }
+export class DxoColorBoxPositionModule { }

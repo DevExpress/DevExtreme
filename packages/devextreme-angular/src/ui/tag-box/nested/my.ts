@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-my-tag-box',
+    selector: 'dxo-tag-box-my',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMyTagBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxMyComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoMyTagBoxComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoMyTagBoxComponent
+    DxoTagBoxMyComponent
   ],
   exports: [
-    DxoMyTagBoxComponent
+    DxoTagBoxMyComponent
   ],
 })
-export class DxoMyTagBoxModule { }
+export class DxoTagBoxMyModule { }

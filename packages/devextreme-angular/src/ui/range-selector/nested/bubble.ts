@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-bubble-range-selector',
+    selector: 'dxo-range-selector-bubble',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBubbleRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorBubbleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoBubbleRangeSelectorComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoBubbleRangeSelectorComponent
+    DxoRangeSelectorBubbleComponent
   ],
   exports: [
-    DxoBubbleRangeSelectorComponent
+    DxoRangeSelectorBubbleComponent
   ],
 })
-export class DxoBubbleRangeSelectorModule { }
+export class DxoRangeSelectorBubbleModule { }

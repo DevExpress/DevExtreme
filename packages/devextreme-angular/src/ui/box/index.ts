@@ -44,13 +44,13 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemBoxModule } from 'devextreme-angular/ui/box/nested';
+import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
 import { DxoBoxBoxModule } from 'devextreme-angular/ui/box/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemBoxComponent } from 'devextreme-angular/ui/box/nested';
+import { DxiBoxItemComponent } from 'devextreme-angular/ui/box/nested';
 
 
 
@@ -417,25 +417,25 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemBoxComponent)
-    get itemsNewChildren(): QueryList<DxiItemBoxComponent> {
+    @ContentChildren(DxiBoxItemComponent)
+    get itemsChildren(): QueryList<DxiBoxItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -529,7 +529,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
   imports: [
     DxiItemModule,
     DxoBoxModule,
-    DxiItemBoxModule,
+    DxiBoxItemModule,
     DxoBoxBoxModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -540,7 +540,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
   exports: [
     DxBoxComponent,
     DxiItemModule,DxoBoxModule,
-    DxiItemBoxModule,DxoBoxBoxModule,
+    DxiBoxItemModule,DxoBoxBoxModule,
     DxTemplateModule
   ]
 })

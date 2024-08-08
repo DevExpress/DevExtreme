@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-cursor-offset-data-grid',
+    selector: 'dxo-data-grid-cursor-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCursorOffsetDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridCursorOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoCursorOffsetDataGridComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoCursorOffsetDataGridComponent
+    DxoDataGridCursorOffsetComponent
   ],
   exports: [
-    DxoCursorOffsetDataGridComponent
+    DxoDataGridCursorOffsetComponent
   ],
 })
-export class DxoCursorOffsetDataGridModule { }
+export class DxoDataGridCursorOffsetModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-sankey',
+    selector: 'dxo-sankey-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowSankeyComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoShadowSankeyComponent
+    DxoSankeyShadowComponent
   ],
   exports: [
-    DxoShadowSankeyComponent
+    DxoSankeyShadowComponent
   ],
 })
-export class DxoShadowSankeyModule { }
+export class DxoSankeyShadowModule { }

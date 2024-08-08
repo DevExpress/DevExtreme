@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-state-storing-data-grid',
+    selector: 'dxo-data-grid-state-storing',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoStateStoringDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridStateStoringComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customLoad(): Function {
         return this._getOption('customLoad');
@@ -104,10 +104,10 @@ export class DxoStateStoringDataGridComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoStateStoringDataGridComponent
+    DxoDataGridStateStoringComponent
   ],
   exports: [
-    DxoStateStoringDataGridComponent
+    DxoDataGridStateStoringComponent
   ],
 })
-export class DxoStateStoringDataGridModule { }
+export class DxoDataGridStateStoringModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-aggregation-range-selector',
+    selector: 'dxo-range-selector-aggregation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAggregationRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get calculate(): Function | undefined {
         return this._getOption('calculate');
@@ -80,10 +80,10 @@ export class DxoAggregationRangeSelectorComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoAggregationRangeSelectorComponent
+    DxoRangeSelectorAggregationComponent
   ],
   exports: [
-    DxoAggregationRangeSelectorComponent
+    DxoRangeSelectorAggregationComponent
   ],
 })
-export class DxoAggregationRangeSelectorModule { }
+export class DxoRangeSelectorAggregationModule { }

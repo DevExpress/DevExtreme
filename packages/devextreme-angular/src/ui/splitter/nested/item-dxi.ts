@@ -29,12 +29,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-splitter',
+    selector: 'dxi-splitter-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemSplitterComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiSplitterItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get collapsed(): boolean {
@@ -159,10 +159,10 @@ export class DxiItemSplitterComponent extends CollectionNestedOption implements 
 
 @NgModule({
   declarations: [
-    DxiItemSplitterComponent
+    DxiSplitterItemComponent
   ],
   exports: [
-    DxiItemSplitterComponent
+    DxiSplitterItemComponent
   ],
 })
-export class DxiItemSplitterModule { }
+export class DxiSplitterItemModule { }

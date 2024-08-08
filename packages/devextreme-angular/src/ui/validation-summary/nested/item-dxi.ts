@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-validation-summary',
+    selector: 'dxi-validation-summary-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemValidationSummaryComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiValidationSummaryItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -110,10 +110,10 @@ export class DxiItemValidationSummaryComponent extends CollectionNestedOption im
 
 @NgModule({
   declarations: [
-    DxiItemValidationSummaryComponent
+    DxiValidationSummaryItemComponent
   ],
   exports: [
-    DxiItemValidationSummaryComponent
+    DxiValidationSummaryItemComponent
   ],
 })
-export class DxiItemValidationSummaryModule { }
+export class DxiValidationSummaryItemModule { }

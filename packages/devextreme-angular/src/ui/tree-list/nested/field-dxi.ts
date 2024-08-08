@@ -25,12 +25,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-field-tree-list',
+    selector: 'dxi-tree-list-field',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiFieldTreeListComponent extends CollectionNestedOption {
+export class DxiTreeListFieldComponent extends CollectionNestedOption {
     @Input()
     get calculateFilterExpression(): Function {
         return this._getOption('calculateFilterExpression');
@@ -158,10 +158,10 @@ export class DxiFieldTreeListComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiFieldTreeListComponent
+    DxiTreeListFieldComponent
   ],
   exports: [
-    DxiFieldTreeListComponent
+    DxiTreeListFieldComponent
   ],
 })
-export class DxiFieldTreeListModule { }
+export class DxiTreeListFieldModule { }

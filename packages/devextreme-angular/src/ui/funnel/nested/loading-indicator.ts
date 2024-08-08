@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-loading-indicator-funnel',
+    selector: 'dxo-funnel-loading-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorFunnelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -109,10 +109,10 @@ export class DxoLoadingIndicatorFunnelComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoLoadingIndicatorFunnelComponent
+    DxoFunnelLoadingIndicatorComponent
   ],
   exports: [
-    DxoLoadingIndicatorFunnelComponent
+    DxoFunnelLoadingIndicatorComponent
   ],
 })
-export class DxoLoadingIndicatorFunnelModule { }
+export class DxoFunnelLoadingIndicatorModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-minor-tick-interval-range-selector',
+    selector: 'dxo-range-selector-minor-tick-interval',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMinorTickIntervalRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorMinorTickIntervalComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -127,10 +127,10 @@ export class DxoMinorTickIntervalRangeSelectorComponent extends NestedOption imp
 
 @NgModule({
   declarations: [
-    DxoMinorTickIntervalRangeSelectorComponent
+    DxoRangeSelectorMinorTickIntervalComponent
   ],
   exports: [
-    DxoMinorTickIntervalRangeSelectorComponent
+    DxoRangeSelectorMinorTickIntervalComponent
   ],
 })
-export class DxoMinorTickIntervalRangeSelectorModule { }
+export class DxoRangeSelectorMinorTickIntervalModule { }

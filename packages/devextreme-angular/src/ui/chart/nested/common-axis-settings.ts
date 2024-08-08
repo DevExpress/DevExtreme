@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-common-axis-settings-chart',
+    selector: 'dxo-chart-common-axis-settings',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCommonAxisSettingsChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
@@ -234,10 +234,10 @@ export class DxoCommonAxisSettingsChartComponent extends NestedOption implements
 
 @NgModule({
   declarations: [
-    DxoCommonAxisSettingsChartComponent
+    DxoChartCommonAxisSettingsComponent
   ],
   exports: [
-    DxoCommonAxisSettingsChartComponent
+    DxoChartCommonAxisSettingsComponent
   ],
 })
-export class DxoCommonAxisSettingsChartModule { }
+export class DxoChartCommonAxisSettingsModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-filter-builder',
+    selector: 'dxo-filter-builder-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterBuilderFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatFilterBuilderComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoFormatFilterBuilderComponent
+    DxoFilterBuilderFormatComponent
   ],
   exports: [
-    DxoFormatFilterBuilderComponent
+    DxoFilterBuilderFormatComponent
   ],
 })
-export class DxoFormatFilterBuilderModule { }
+export class DxoFilterBuilderFormatModule { }

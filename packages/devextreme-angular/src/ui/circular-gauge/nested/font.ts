@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-circular-gauge',
+    selector: 'dxo-circular-gauge-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontCircularGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontCircularGaugeComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoFontCircularGaugeComponent
+    DxoCircularGaugeFontComponent
   ],
   exports: [
-    DxoFontCircularGaugeComponent
+    DxoCircularGaugeFontComponent
   ],
 })
-export class DxoFontCircularGaugeModule { }
+export class DxoCircularGaugeFontModule { }

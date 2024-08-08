@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-group-operation-descriptions-data-grid',
+    selector: 'dxo-data-grid-group-operation-descriptions',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGroupOperationDescriptionsDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get and(): string {
         return this._getOption('and');
@@ -87,10 +87,10 @@ export class DxoGroupOperationDescriptionsDataGridComponent extends NestedOption
 
 @NgModule({
   declarations: [
-    DxoGroupOperationDescriptionsDataGridComponent
+    DxoDataGridGroupOperationDescriptionsComponent
   ],
   exports: [
-    DxoGroupOperationDescriptionsDataGridComponent
+    DxoDataGridGroupOperationDescriptionsComponent
   ],
 })
-export class DxoGroupOperationDescriptionsDataGridModule { }
+export class DxoDataGridGroupOperationDescriptionsModule { }

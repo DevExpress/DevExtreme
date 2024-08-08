@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-pager-tree-list',
+    selector: 'dxo-tree-list-pager',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPagerTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListPagerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
         return this._getOption('allowedPageSizes');
@@ -121,10 +121,10 @@ export class DxoPagerTreeListComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoPagerTreeListComponent
+    DxoTreeListPagerComponent
   ],
   exports: [
-    DxoPagerTreeListComponent
+    DxoTreeListPagerComponent
   ],
 })
-export class DxoPagerTreeListModule { }
+export class DxoTreeListPagerModule { }

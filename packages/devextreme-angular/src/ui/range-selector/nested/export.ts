@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-export-range-selector',
+    selector: 'dxo-range-selector-export',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoExportRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorExportComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -112,10 +112,10 @@ export class DxoExportRangeSelectorComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoExportRangeSelectorComponent
+    DxoRangeSelectorExportComponent
   ],
   exports: [
-    DxoExportRangeSelectorComponent
+    DxoRangeSelectorExportComponent
   ],
 })
-export class DxoExportRangeSelectorModule { }
+export class DxoRangeSelectorExportModule { }

@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-column-chooser-data-grid',
+    selector: 'dxo-data-grid-column-chooser',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoColumnChooserDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridColumnChooserComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -163,10 +163,10 @@ export class DxoColumnChooserDataGridComponent extends NestedOption implements O
 
 @NgModule({
   declarations: [
-    DxoColumnChooserDataGridComponent
+    DxoDataGridColumnChooserComponent
   ],
   exports: [
-    DxoColumnChooserDataGridComponent
+    DxoDataGridColumnChooserComponent
   ],
 })
-export class DxoColumnChooserDataGridModule { }
+export class DxoDataGridColumnChooserModule { }

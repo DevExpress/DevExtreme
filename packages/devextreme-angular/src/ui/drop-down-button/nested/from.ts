@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-from-drop-down-button',
+    selector: 'dxo-drop-down-button-from',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFromDropDownButtonComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownButtonFromComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -96,10 +96,10 @@ export class DxoFromDropDownButtonComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoFromDropDownButtonComponent
+    DxoDropDownButtonFromComponent
   ],
   exports: [
-    DxoFromDropDownButtonComponent
+    DxoDropDownButtonFromComponent
   ],
 })
-export class DxoFromDropDownButtonModule { }
+export class DxoDropDownButtonFromModule { }

@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-url-chart',
+    selector: 'dxo-chart-url',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoUrlChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartUrlComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get rangeMaxPoint(): string | undefined {
         return this._getOption('rangeMaxPoint');
@@ -71,10 +71,10 @@ export class DxoUrlChartComponent extends NestedOption implements OnDestroy, OnI
 
 @NgModule({
   declarations: [
-    DxoUrlChartComponent
+    DxoChartUrlComponent
   ],
   exports: [
-    DxoUrlChartComponent
+    DxoChartUrlComponent
   ],
 })
-export class DxoUrlChartModule { }
+export class DxoChartUrlModule { }

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-collision-tooltip',
+    selector: 'dxo-tooltip-collision',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCollisionTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -72,10 +72,10 @@ export class DxoCollisionTooltipComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoCollisionTooltipComponent
+    DxoTooltipCollisionComponent
   ],
   exports: [
-    DxoCollisionTooltipComponent
+    DxoTooltipCollisionComponent
   ],
 })
-export class DxoCollisionTooltipModule { }
+export class DxoTooltipCollisionModule { }

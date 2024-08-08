@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-width-range-selector',
+    selector: 'dxo-range-selector-width',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoWidthRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorWidthComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get rangeMaxPoint(): number | undefined {
         return this._getOption('rangeMaxPoint');
@@ -71,10 +71,10 @@ export class DxoWidthRangeSelectorComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoWidthRangeSelectorComponent
+    DxoRangeSelectorWidthComponent
   ],
   exports: [
-    DxoWidthRangeSelectorComponent
+    DxoRangeSelectorWidthComponent
   ],
 })
-export class DxoWidthRangeSelectorModule { }
+export class DxoRangeSelectorWidthModule { }

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hide-popup',
+    selector: 'dxo-popup-hide',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHidePopupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopupHideComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoHidePopupComponent extends NestedOption implements OnDestroy, On
 
 @NgModule({
   declarations: [
-    DxoHidePopupComponent
+    DxoPopupHideComponent
   ],
   exports: [
-    DxoHidePopupComponent
+    DxoPopupHideComponent
   ],
 })
-export class DxoHidePopupModule { }
+export class DxoPopupHideModule { }

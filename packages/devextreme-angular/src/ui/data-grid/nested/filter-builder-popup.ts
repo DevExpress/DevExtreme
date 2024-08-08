@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemDataGridComponent } from './toolbar-item-dxi';
+import { DxiDataGridToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-filter-builder-popup-data-grid',
+    selector: 'dxo-data-grid-filter-builder-popup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterBuilderPopupDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFilterBuilderPopupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoFilterBuilderPopupDataGridComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemDataGridComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiDataGridToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoFilterBuilderPopupDataGridComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoFilterBuilderPopupDataGridComponent
+    DxoDataGridFilterBuilderPopupComponent
   ],
   exports: [
-    DxoFilterBuilderPopupDataGridComponent
+    DxoDataGridFilterBuilderPopupComponent
   ],
 })
-export class DxoFilterBuilderPopupDataGridModule { }
+export class DxoDataGridFilterBuilderPopupModule { }

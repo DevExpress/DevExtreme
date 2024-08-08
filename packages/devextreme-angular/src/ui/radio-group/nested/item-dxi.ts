@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-radio-group',
+    selector: 'dxi-radio-group-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemRadioGroupComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiRadioGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -110,10 +110,10 @@ export class DxiItemRadioGroupComponent extends CollectionNestedOption implement
 
 @NgModule({
   declarations: [
-    DxiItemRadioGroupComponent
+    DxiRadioGroupItemComponent
   ],
   exports: [
-    DxiItemRadioGroupComponent
+    DxiRadioGroupItemComponent
   ],
 })
-export class DxiItemRadioGroupModule { }
+export class DxiRadioGroupItemModule { }

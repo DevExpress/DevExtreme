@@ -59,26 +59,26 @@ import { DxoShowFirstSubmenuModeModule } from 'devextreme-angular/ui/nested';
 import { DxoDelayModule } from 'devextreme-angular/ui/nested';
 import { DxoShowSubmenuModeModule } from 'devextreme-angular/ui/nested';
 
-import { DxoAnimationMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoHideMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoFromMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoPositionMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoAtMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoBoundaryOffsetMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoCollisionMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoMyMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoOffsetMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoToMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoShowMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxiItemMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoShowFirstSubmenuModeMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoDelayMenuModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoShowSubmenuModeMenuModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuAnimationModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuHideModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuFromModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuPositionModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuAtModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuBoundaryOffsetModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuCollisionModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuMyModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuOffsetModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuShowModule } from 'devextreme-angular/ui/menu/nested';
+import { DxiMenuItemModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuDelayModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemMenuComponent } from 'devextreme-angular/ui/menu/nested';
+import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
 
 
 
@@ -797,25 +797,25 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemMenuComponent)
-    get itemsNewChildren(): QueryList<DxiItemMenuComponent> {
+    @ContentChildren(DxiMenuItemComponent)
+    get itemsChildren(): QueryList<DxiMenuItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -942,21 +942,21 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     DxoShowFirstSubmenuModeModule,
     DxoDelayModule,
     DxoShowSubmenuModeModule,
-    DxoAnimationMenuModule,
-    DxoHideMenuModule,
-    DxoFromMenuModule,
-    DxoPositionMenuModule,
-    DxoAtMenuModule,
-    DxoBoundaryOffsetMenuModule,
-    DxoCollisionMenuModule,
-    DxoMyMenuModule,
-    DxoOffsetMenuModule,
-    DxoToMenuModule,
-    DxoShowMenuModule,
-    DxiItemMenuModule,
-    DxoShowFirstSubmenuModeMenuModule,
-    DxoDelayMenuModule,
-    DxoShowSubmenuModeMenuModule,
+    DxoMenuAnimationModule,
+    DxoMenuHideModule,
+    DxoMenuFromModule,
+    DxoMenuPositionModule,
+    DxoMenuAtModule,
+    DxoMenuBoundaryOffsetModule,
+    DxoMenuCollisionModule,
+    DxoMenuMyModule,
+    DxoMenuOffsetModule,
+    DxoMenuToModule,
+    DxoMenuShowModule,
+    DxiMenuItemModule,
+    DxoMenuShowFirstSubmenuModeModule,
+    DxoMenuDelayModule,
+    DxoMenuShowSubmenuModeModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -966,7 +966,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
   exports: [
     DxMenuComponent,
     DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiItemModule,DxoShowFirstSubmenuModeModule,DxoDelayModule,DxoShowSubmenuModeModule,
-    DxoAnimationMenuModule,DxoHideMenuModule,DxoFromMenuModule,DxoPositionMenuModule,DxoAtMenuModule,DxoBoundaryOffsetMenuModule,DxoCollisionMenuModule,DxoMyMenuModule,DxoOffsetMenuModule,DxoToMenuModule,DxoShowMenuModule,DxiItemMenuModule,DxoShowFirstSubmenuModeMenuModule,DxoDelayMenuModule,DxoShowSubmenuModeMenuModule,
+    DxoMenuAnimationModule,DxoMenuHideModule,DxoMenuFromModule,DxoMenuPositionModule,DxoMenuAtModule,DxoMenuBoundaryOffsetModule,DxoMenuCollisionModule,DxoMenuMyModule,DxoMenuOffsetModule,DxoMenuToModule,DxoMenuShowModule,DxiMenuItemModule,DxoMenuShowFirstSubmenuModeModule,DxoMenuDelayModule,DxoMenuShowSubmenuModeModule,
     DxTemplateModule
   ]
 })

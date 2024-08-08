@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-margin-polar-chart',
+    selector: 'dxo-polar-chart-margin',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoMarginPolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartMarginComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -87,10 +87,10 @@ export class DxoMarginPolarChartComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoMarginPolarChartComponent
+    DxoPolarChartMarginComponent
   ],
   exports: [
-    DxoMarginPolarChartComponent
+    DxoPolarChartMarginComponent
   ],
 })
-export class DxoMarginPolarChartModule { }
+export class DxoPolarChartMarginModule { }

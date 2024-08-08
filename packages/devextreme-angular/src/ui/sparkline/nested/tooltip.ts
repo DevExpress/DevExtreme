@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-sparkline',
+    selector: 'dxo-sparkline-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipSparklineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -186,10 +186,10 @@ export class DxoTooltipSparklineComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoTooltipSparklineComponent
+    DxoSparklineTooltipComponent
   ],
   exports: [
-    DxoTooltipSparklineComponent
+    DxoSparklineTooltipComponent
   ],
 })
-export class DxoTooltipSparklineModule { }
+export class DxoSparklineTooltipModule { }

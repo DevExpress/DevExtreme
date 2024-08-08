@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-options-drop-down-box',
+    selector: 'dxo-drop-down-box-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOptionsDropDownBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownBoxOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -249,10 +249,10 @@ export class DxoOptionsDropDownBoxComponent extends NestedOption implements OnDe
 
 @NgModule({
   declarations: [
-    DxoOptionsDropDownBoxComponent
+    DxoDropDownBoxOptionsComponent
   ],
   exports: [
-    DxoOptionsDropDownBoxComponent
+    DxoDropDownBoxOptionsComponent
   ],
 })
-export class DxoOptionsDropDownBoxModule { }
+export class DxoDropDownBoxOptionsModule { }

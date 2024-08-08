@@ -23,16 +23,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemHtmlEditorComponent } from './item-dxi';
+import { DxiHtmlEditorItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-table-context-menu-html-editor',
+    selector: 'dxo-html-editor-table-context-menu',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTableContextMenuHtmlEditorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -55,8 +55,8 @@ export class DxoTableContextMenuHtmlEditorComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemHtmlEditorComponent))
-    get itemsChildren(): QueryList<DxiItemHtmlEditorComponent> {
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
+    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -84,10 +84,10 @@ export class DxoTableContextMenuHtmlEditorComponent extends NestedOption impleme
 
 @NgModule({
   declarations: [
-    DxoTableContextMenuHtmlEditorComponent
+    DxoHtmlEditorTableContextMenuComponent
   ],
   exports: [
-    DxoTableContextMenuHtmlEditorComponent
+    DxoHtmlEditorTableContextMenuComponent
   ],
 })
-export class DxoTableContextMenuHtmlEditorModule { }
+export class DxoHtmlEditorTableContextMenuModule { }

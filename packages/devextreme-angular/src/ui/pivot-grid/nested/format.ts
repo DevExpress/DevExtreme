@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-format-pivot-grid',
+    selector: 'dxo-pivot-grid-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFormatPivotGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoFormatPivotGridComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoFormatPivotGridComponent
+    DxoPivotGridFormatComponent
   ],
   exports: [
-    DxoFormatPivotGridComponent
+    DxoPivotGridFormatComponent
   ],
 })
-export class DxoFormatPivotGridModule { }
+export class DxoPivotGridFormatModule { }

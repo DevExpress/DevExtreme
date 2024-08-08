@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tooltip-chart',
+    selector: 'dxo-chart-tooltip',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoTooltipChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get argumentFormat(): Format | string | undefined {
         return this._getOption('argumentFormat');
@@ -211,10 +211,10 @@ export class DxoTooltipChartComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoTooltipChartComponent
+    DxoChartTooltipComponent
   ],
   exports: [
-    DxoTooltipChartComponent
+    DxoChartTooltipComponent
   ],
 })
-export class DxoTooltipChartModule { }
+export class DxoChartTooltipModule { }

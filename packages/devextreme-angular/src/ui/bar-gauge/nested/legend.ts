@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-legend-bar-gauge',
+    selector: 'dxo-bar-gauge-legend',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLegendBarGaugeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');
@@ -242,10 +242,10 @@ export class DxoLegendBarGaugeComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoLegendBarGaugeComponent
+    DxoBarGaugeLegendComponent
   ],
   exports: [
-    DxoLegendBarGaugeComponent
+    DxoBarGaugeLegendComponent
   ],
 })
-export class DxoLegendBarGaugeModule { }
+export class DxoBarGaugeLegendModule { }

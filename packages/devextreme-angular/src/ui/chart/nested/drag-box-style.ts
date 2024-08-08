@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-drag-box-style-chart',
+    selector: 'dxo-chart-drag-box-style',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDragBoxStyleChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartDragBoxStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -71,10 +71,10 @@ export class DxoDragBoxStyleChartComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoDragBoxStyleChartComponent
+    DxoChartDragBoxStyleComponent
   ],
   exports: [
-    DxoDragBoxStyleChartComponent
+    DxoChartDragBoxStyleComponent
   ],
 })
-export class DxoDragBoxStyleChartModule { }
+export class DxoChartDragBoxStyleModule { }

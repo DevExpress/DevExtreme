@@ -48,9 +48,9 @@ import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
-import { DxoLabelSliderModule } from 'devextreme-angular/ui/slider/nested';
-import { DxoFormatSliderModule } from 'devextreme-angular/ui/slider/nested';
-import { DxoTooltipSliderModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoSliderLabelModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoSliderFormatModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoSliderTooltipModule } from 'devextreme-angular/ui/slider/nested';
 
 
 
@@ -853,9 +853,9 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
-    DxoLabelSliderModule,
-    DxoFormatSliderModule,
-    DxoTooltipSliderModule,
+    DxoSliderLabelModule,
+    DxoSliderFormatModule,
+    DxoSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -865,7 +865,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
   exports: [
     DxSliderComponent,
     DxoLabelModule,DxoFormatModule,DxoTooltipModule,
-    DxoLabelSliderModule,DxoFormatSliderModule,DxoTooltipSliderModule,
+    DxoSliderLabelModule,DxoSliderFormatModule,DxoSliderTooltipModule,
     DxTemplateModule
   ]
 })

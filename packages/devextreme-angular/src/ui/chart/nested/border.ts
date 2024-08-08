@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-border-chart',
+    selector: 'dxo-chart-border',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoBorderChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -136,10 +136,10 @@ export class DxoBorderChartComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoBorderChartComponent
+    DxoChartBorderComponent
   ],
   exports: [
-    DxoBorderChartComponent
+    DxoChartBorderComponent
   ],
 })
-export class DxoBorderChartModule { }
+export class DxoChartBorderModule { }

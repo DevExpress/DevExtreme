@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-data-grid',
+    selector: 'dxo-data-grid-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get hide(): AnimationConfig {
         return this._getOption('hide');
@@ -72,10 +72,10 @@ export class DxoAnimationDataGridComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoAnimationDataGridComponent
+    DxoDataGridAnimationComponent
   ],
   exports: [
-    DxoAnimationDataGridComponent
+    DxoDataGridAnimationComponent
   ],
 })
-export class DxoAnimationDataGridModule { }
+export class DxoDataGridAnimationModule { }

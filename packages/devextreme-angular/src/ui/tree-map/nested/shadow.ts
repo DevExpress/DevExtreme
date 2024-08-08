@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-shadow-tree-map',
+    selector: 'dxo-tree-map-shadow',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShadowTreeMapComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapShadowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -95,10 +95,10 @@ export class DxoShadowTreeMapComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoShadowTreeMapComponent
+    DxoTreeMapShadowComponent
   ],
   exports: [
-    DxoShadowTreeMapComponent
+    DxoTreeMapShadowComponent
   ],
 })
-export class DxoShadowTreeMapModule { }
+export class DxoTreeMapShadowModule { }

@@ -22,12 +22,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-button-list',
+    selector: 'dxi-list-button',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiButtonListComponent extends CollectionNestedOption {
+export class DxiListButtonComponent extends CollectionNestedOption {
     @Input()
     get location(): TextEditorButtonLocation {
         return this._getOption('location');
@@ -75,10 +75,10 @@ export class DxiButtonListComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiButtonListComponent
+    DxiListButtonComponent
   ],
   exports: [
-    DxiButtonListComponent
+    DxiListButtonComponent
   ],
 })
-export class DxiButtonListModule { }
+export class DxiListButtonModule { }

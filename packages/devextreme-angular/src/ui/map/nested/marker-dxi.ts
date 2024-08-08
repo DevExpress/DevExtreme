@@ -20,16 +20,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiLocationMapComponent } from './location-dxi';
+import { DxiMapLocationComponent } from './location-dxi';
 
 
 @Component({
-    selector: 'dxi-marker-map',
+    selector: 'dxi-map-marker',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiMarkerMapComponent extends CollectionNestedOption {
+export class DxiMapMarkerComponent extends CollectionNestedOption {
     @Input()
     get iconSrc(): string {
         return this._getOption('iconSrc');
@@ -68,8 +68,8 @@ export class DxiMarkerMapComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiLocationMapComponent))
-    get locationChildren(): QueryList<DxiLocationMapComponent> {
+    @ContentChildren(forwardRef(() => DxiMapLocationComponent))
+    get locationChildren(): QueryList<DxiMapLocationComponent> {
         return this._getOption('location');
     }
     set locationChildren(value) {
@@ -93,10 +93,10 @@ export class DxiMarkerMapComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiMarkerMapComponent
+    DxiMapMarkerComponent
   ],
   exports: [
-    DxiMarkerMapComponent
+    DxiMapMarkerComponent
   ],
 })
-export class DxiMarkerMapModule { }
+export class DxiMapMarkerModule { }

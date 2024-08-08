@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-constant-line-polar-chart',
+    selector: 'dxi-polar-chart-constant-line',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiConstantLinePolarChartComponent extends CollectionNestedOption {
+export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -106,10 +106,10 @@ export class DxiConstantLinePolarChartComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiConstantLinePolarChartComponent
+    DxiPolarChartConstantLineComponent
   ],
   exports: [
-    DxiConstantLinePolarChartComponent
+    DxiPolarChartConstantLineComponent
   ],
 })
-export class DxiConstantLinePolarChartModule { }
+export class DxiPolarChartConstantLineModule { }

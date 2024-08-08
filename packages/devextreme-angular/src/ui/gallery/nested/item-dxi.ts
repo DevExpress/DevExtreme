@@ -28,12 +28,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-gallery',
+    selector: 'dxi-gallery-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemGalleryComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiGalleryItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -118,10 +118,10 @@ export class DxiItemGalleryComponent extends CollectionNestedOption implements A
 
 @NgModule({
   declarations: [
-    DxiItemGalleryComponent
+    DxiGalleryItemComponent
   ],
   exports: [
-    DxiItemGalleryComponent
+    DxiGalleryItemComponent
   ],
 })
-export class DxiItemGalleryModule { }
+export class DxiGalleryItemModule { }

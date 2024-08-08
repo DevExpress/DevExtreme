@@ -28,16 +28,16 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiLocationResponsiveBoxComponent } from './location-dxi';
+import { DxiResponsiveBoxLocationComponent } from './location-dxi';
 
 
 @Component({
-    selector: 'dxi-item-responsive-box',
+    selector: 'dxi-responsive-box-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemResponsiveBoxComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get disabled(): boolean {
@@ -93,8 +93,8 @@ export class DxiItemResponsiveBoxComponent extends CollectionNestedOption implem
     }
 
 
-    @ContentChildren(forwardRef(() => DxiLocationResponsiveBoxComponent))
-    get locationChildren(): QueryList<DxiLocationResponsiveBoxComponent> {
+    @ContentChildren(forwardRef(() => DxiResponsiveBoxLocationComponent))
+    get locationChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
         return this._getOption('location');
     }
     set locationChildren(value) {
@@ -130,10 +130,10 @@ export class DxiItemResponsiveBoxComponent extends CollectionNestedOption implem
 
 @NgModule({
   declarations: [
-    DxiItemResponsiveBoxComponent
+    DxiResponsiveBoxItemComponent
   ],
   exports: [
-    DxiItemResponsiveBoxComponent
+    DxiResponsiveBoxItemComponent
   ],
 })
-export class DxiItemResponsiveBoxModule { }
+export class DxiResponsiveBoxItemModule { }

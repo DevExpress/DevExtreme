@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-column-fixing-data-grid',
+    selector: 'dxo-data-grid-column-fixing',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoColumnFixingDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridColumnFixingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -71,10 +71,10 @@ export class DxoColumnFixingDataGridComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoColumnFixingDataGridComponent
+    DxoDataGridColumnFixingComponent
   ],
   exports: [
-    DxoColumnFixingDataGridComponent
+    DxoDataGridColumnFixingComponent
   ],
 })
-export class DxoColumnFixingDataGridModule { }
+export class DxoDataGridColumnFixingModule { }

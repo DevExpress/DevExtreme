@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-range-selector',
+    selector: 'dxo-range-selector-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontRangeSelectorComponent extends NestedOption implements OnDes
 
 @NgModule({
   declarations: [
-    DxoFontRangeSelectorComponent
+    DxoRangeSelectorFontComponent
   ],
   exports: [
-    DxoFontRangeSelectorComponent
+    DxoRangeSelectorFontComponent
   ],
 })
-export class DxoFontRangeSelectorModule { }
+export class DxoRangeSelectorFontModule { }

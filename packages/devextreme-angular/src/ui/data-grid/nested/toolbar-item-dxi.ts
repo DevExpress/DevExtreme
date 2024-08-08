@@ -31,12 +31,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-toolbar-item-data-grid',
+    selector: 'dxi-data-grid-toolbar-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiToolbarItemDataGridComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiDataGridToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get cssClass(): string | undefined {
@@ -177,10 +177,10 @@ export class DxiToolbarItemDataGridComponent extends CollectionNestedOption impl
 
 @NgModule({
   declarations: [
-    DxiToolbarItemDataGridComponent
+    DxiDataGridToolbarItemComponent
   ],
   exports: [
-    DxiToolbarItemDataGridComponent
+    DxiDataGridToolbarItemComponent
   ],
 })
-export class DxiToolbarItemDataGridModule { }
+export class DxiDataGridToolbarItemModule { }

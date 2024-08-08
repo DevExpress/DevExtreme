@@ -31,12 +31,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-html-editor',
+    selector: 'dxi-html-editor-item',
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiItemHtmlEditorComponent extends CollectionNestedOption implements AfterViewInit,
+export class DxiHtmlEditorItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
     get beginGroup(): boolean {
@@ -249,10 +249,10 @@ export class DxiItemHtmlEditorComponent extends CollectionNestedOption implement
 
 @NgModule({
   declarations: [
-    DxiItemHtmlEditorComponent
+    DxiHtmlEditorItemComponent
   ],
   exports: [
-    DxiItemHtmlEditorComponent
+    DxiHtmlEditorItemComponent
   ],
 })
-export class DxiItemHtmlEditorModule { }
+export class DxiHtmlEditorItemModule { }

@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-custom-operation-tree-list',
+    selector: 'dxi-tree-list-custom-operation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiCustomOperationTreeListComponent extends CollectionNestedOption {
+export class DxiTreeListCustomOperationComponent extends CollectionNestedOption {
     @Input()
     get calculateFilterExpression(): Function {
         return this._getOption('calculateFilterExpression');
@@ -114,10 +114,10 @@ export class DxiCustomOperationTreeListComponent extends CollectionNestedOption 
 
 @NgModule({
   declarations: [
-    DxiCustomOperationTreeListComponent
+    DxiTreeListCustomOperationComponent
   ],
   exports: [
-    DxiCustomOperationTreeListComponent
+    DxiTreeListCustomOperationComponent
   ],
 })
-export class DxiCustomOperationTreeListModule { }
+export class DxiTreeListCustomOperationModule { }

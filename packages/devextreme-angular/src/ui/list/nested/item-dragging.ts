@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-item-dragging-list',
+    selector: 'dxo-list-item-dragging',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoItemDraggingListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoListItemDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDropInsideItem(): boolean {
         return this._getOption('allowDropInsideItem');
@@ -306,10 +306,10 @@ export class DxoItemDraggingListComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoItemDraggingListComponent
+    DxoListItemDraggingComponent
   ],
   exports: [
-    DxoItemDraggingListComponent
+    DxoListItemDraggingComponent
   ],
 })
-export class DxoItemDraggingListModule { }
+export class DxoListItemDraggingModule { }

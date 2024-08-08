@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-bullet',
+    selector: 'dxo-bullet-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontBulletComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBulletFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontBulletComponent extends NestedOption implements OnDestroy, O
 
 @NgModule({
   declarations: [
-    DxoFontBulletComponent
+    DxoBulletFontComponent
   ],
   exports: [
-    DxoFontBulletComponent
+    DxoBulletFontComponent
   ],
 })
-export class DxoFontBulletModule { }
+export class DxoBulletFontModule { }

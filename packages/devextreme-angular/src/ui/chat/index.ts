@@ -42,14 +42,14 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
 import { DxoUserModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemChatModule } from 'devextreme-angular/ui/chat/nested';
-import { DxoAuthorChatModule } from 'devextreme-angular/ui/chat/nested';
-import { DxoUserChatModule } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatAuthorModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemChatComponent } from 'devextreme-angular/ui/chat/nested';
+import { DxiChatItemComponent } from 'devextreme-angular/ui/chat/nested';
 
 
 
@@ -304,25 +304,25 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemChatComponent)
-    get itemsNewChildren(): QueryList<DxiItemChatComponent> {
+    @ContentChildren(DxiChatItemComponent)
+    get itemsChildren(): QueryList<DxiChatItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -407,9 +407,9 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiItemModule,
     DxoAuthorModule,
     DxoUserModule,
-    DxiItemChatModule,
-    DxoAuthorChatModule,
-    DxoUserChatModule,
+    DxiChatItemModule,
+    DxoChatAuthorModule,
+    DxoChatUserModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -419,7 +419,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   exports: [
     DxChatComponent,
     DxiItemModule,DxoAuthorModule,DxoUserModule,
-    DxiItemChatModule,DxoAuthorChatModule,DxoUserChatModule,
+    DxiChatItemModule,DxoChatAuthorModule,DxoChatUserModule,
     DxTemplateModule
   ]
 })

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-options-list',
+    selector: 'dxo-list-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOptionsListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoListOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -249,10 +249,10 @@ export class DxoOptionsListComponent extends NestedOption implements OnDestroy, 
 
 @NgModule({
   declarations: [
-    DxoOptionsListComponent
+    DxoListOptionsComponent
   ],
   exports: [
-    DxoOptionsListComponent
+    DxoListOptionsComponent
   ],
 })
-export class DxoOptionsListModule { }
+export class DxoListOptionsModule { }

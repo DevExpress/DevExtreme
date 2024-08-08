@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-header-filter-tree-list',
+    selector: 'dxo-tree-list-header-filter',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHeaderFilterTreeListComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -147,10 +147,10 @@ export class DxoHeaderFilterTreeListComponent extends NestedOption implements On
 
 @NgModule({
   declarations: [
-    DxoHeaderFilterTreeListComponent
+    DxoTreeListHeaderFilterComponent
   ],
   exports: [
-    DxoHeaderFilterTreeListComponent
+    DxoTreeListHeaderFilterComponent
   ],
 })
-export class DxoHeaderFilterTreeListModule { }
+export class DxoTreeListHeaderFilterModule { }

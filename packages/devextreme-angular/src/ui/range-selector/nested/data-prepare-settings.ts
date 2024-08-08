@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-data-prepare-settings-range-selector',
+    selector: 'dxo-range-selector-data-prepare-settings',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoDataPrepareSettingsRangeSelectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorDataPrepareSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get checkTypeForAllData(): boolean {
         return this._getOption('checkTypeForAllData');
@@ -79,10 +79,10 @@ export class DxoDataPrepareSettingsRangeSelectorComponent extends NestedOption i
 
 @NgModule({
   declarations: [
-    DxoDataPrepareSettingsRangeSelectorComponent
+    DxoRangeSelectorDataPrepareSettingsComponent
   ],
   exports: [
-    DxoDataPrepareSettingsRangeSelectorComponent
+    DxoRangeSelectorDataPrepareSettingsComponent
   ],
 })
-export class DxoDataPrepareSettingsRangeSelectorModule { }
+export class DxoRangeSelectorDataPrepareSettingsModule { }

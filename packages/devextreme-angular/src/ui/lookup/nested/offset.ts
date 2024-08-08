@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-offset-lookup',
+    selector: 'dxo-lookup-offset',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOffsetLookupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLookupOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -71,10 +71,10 @@ export class DxoOffsetLookupComponent extends NestedOption implements OnDestroy,
 
 @NgModule({
   declarations: [
-    DxoOffsetLookupComponent
+    DxoLookupOffsetComponent
   ],
   exports: [
-    DxoOffsetLookupComponent
+    DxoLookupOffsetComponent
   ],
 })
-export class DxoOffsetLookupModule { }
+export class DxoLookupOffsetModule { }

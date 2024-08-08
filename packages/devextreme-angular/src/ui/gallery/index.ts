@@ -43,12 +43,12 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiItemGalleryModule } from 'devextreme-angular/ui/gallery/nested';
+import { DxiGalleryItemModule } from 'devextreme-angular/ui/gallery/nested';
 
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiItemGalleryComponent } from 'devextreme-angular/ui/gallery/nested';
+import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
 
 
 
@@ -723,25 +723,25 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-    hasNewitems: boolean = false;
+    hasNewItems: boolean = false;
 
-    @ContentChildren(DxiItemGalleryComponent)
-    get itemsNewChildren(): QueryList<DxiItemGalleryComponent> {
+    @ContentChildren(DxiGalleryItemComponent)
+    get itemsChildren(): QueryList<DxiGalleryItemComponent> {
         return this._getOption('items');
     }
-    set itemsNewChildren(value) {
-        this.hasNewitems = value.length > 0;
+    set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
 
 
     @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
         return this._getOption('items');
     }
-    set itemsChildren(value) {
-        if (this.hasNewitems) {
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -850,7 +850,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 @NgModule({
   imports: [
     DxiItemModule,
-    DxiItemGalleryModule,
+    DxiGalleryItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -860,7 +860,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
   exports: [
     DxGalleryComponent,
     DxiItemModule,
-    DxiItemGalleryModule,
+    DxiGalleryItemModule,
     DxTemplateModule
   ]
 })

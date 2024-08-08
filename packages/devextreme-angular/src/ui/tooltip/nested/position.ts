@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-position-tooltip',
+    selector: 'dxo-tooltip-position',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPositionTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -114,10 +114,10 @@ export class DxoPositionTooltipComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoPositionTooltipComponent
+    DxoTooltipPositionComponent
   ],
   exports: [
-    DxoPositionTooltipComponent
+    DxoTooltipPositionComponent
   ],
 })
-export class DxoPositionTooltipModule { }
+export class DxoTooltipPositionModule { }

@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-row-dragging-data-grid',
+    selector: 'dxo-data-grid-row-dragging',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoRowDraggingDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridRowDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDropInsideItem(): boolean {
         return this._getOption('allowDropInsideItem');
@@ -241,10 +241,10 @@ export class DxoRowDraggingDataGridComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoRowDraggingDataGridComponent
+    DxoDataGridRowDraggingComponent
   ],
   exports: [
-    DxoRowDraggingDataGridComponent
+    DxoDataGridRowDraggingComponent
   ],
 })
-export class DxoRowDraggingDataGridModule { }
+export class DxoDataGridRowDraggingModule { }

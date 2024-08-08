@@ -24,12 +24,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-item-tree-view',
+    selector: 'dxi-tree-view-item',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiItemTreeViewComponent extends CollectionNestedOption {
+export class DxiTreeViewItemComponent extends CollectionNestedOption {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -132,8 +132,8 @@ export class DxiItemTreeViewComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemTreeViewComponent))
-    get itemsChildren(): QueryList<DxiItemTreeViewComponent> {
+    @ContentChildren(forwardRef(() => DxiTreeViewItemComponent))
+    get itemsChildren(): QueryList<DxiTreeViewItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
@@ -157,10 +157,10 @@ export class DxiItemTreeViewComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiItemTreeViewComponent
+    DxiTreeViewItemComponent
   ],
   exports: [
-    DxiItemTreeViewComponent
+    DxiTreeViewItemComponent
   ],
 })
-export class DxiItemTreeViewModule { }
+export class DxiTreeViewItemModule { }

@@ -26,12 +26,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-candlestick-chart',
+    selector: 'dxo-chart-candlestick',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoCandlestickChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartCandlestickComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get aggregation(): { calculate?: Function | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');
@@ -547,10 +547,10 @@ export class DxoCandlestickChartComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoCandlestickChartComponent
+    DxoChartCandlestickComponent
   ],
   exports: [
-    DxoCandlestickChartComponent
+    DxoChartCandlestickComponent
   ],
 })
-export class DxoCandlestickChartModule { }
+export class DxoChartCandlestickModule { }

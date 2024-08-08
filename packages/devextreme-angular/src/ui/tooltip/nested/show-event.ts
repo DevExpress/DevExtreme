@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-show-event-tooltip',
+    selector: 'dxo-tooltip-show-event',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoShowEventTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipShowEventComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get delay(): number | undefined {
         return this._getOption('delay');
@@ -71,10 +71,10 @@ export class DxoShowEventTooltipComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoShowEventTooltipComponent
+    DxoTooltipShowEventComponent
   ],
   exports: [
-    DxoShowEventTooltipComponent
+    DxoTooltipShowEventComponent
   ],
 })
-export class DxoShowEventTooltipModule { }
+export class DxoTooltipShowEventModule { }

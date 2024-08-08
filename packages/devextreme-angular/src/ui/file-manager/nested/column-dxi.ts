@@ -21,12 +21,12 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxi-column-file-manager',
+    selector: 'dxi-file-manager-column',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiColumnFileManagerComponent extends CollectionNestedOption {
+export class DxiFileManagerColumnComponent extends CollectionNestedOption {
     @Input()
     get alignment(): HorizontalAlignment | string | undefined {
         return this._getOption('alignment');
@@ -138,10 +138,10 @@ export class DxiColumnFileManagerComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiColumnFileManagerComponent
+    DxiFileManagerColumnComponent
   ],
   exports: [
-    DxiColumnFileManagerComponent
+    DxiFileManagerColumnComponent
   ],
 })
-export class DxiColumnFileManagerModule { }
+export class DxiFileManagerColumnModule { }

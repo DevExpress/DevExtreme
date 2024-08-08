@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-loading-indicator-sankey',
+    selector: 'dxo-sankey-loading-indicator',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoLoadingIndicatorSankeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -109,10 +109,10 @@ export class DxoLoadingIndicatorSankeyComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoLoadingIndicatorSankeyComponent
+    DxoSankeyLoadingIndicatorComponent
   ],
   exports: [
-    DxoLoadingIndicatorSankeyComponent
+    DxoSankeyLoadingIndicatorComponent
   ],
 })
-export class DxoLoadingIndicatorSankeyModule { }
+export class DxoSankeyLoadingIndicatorModule { }

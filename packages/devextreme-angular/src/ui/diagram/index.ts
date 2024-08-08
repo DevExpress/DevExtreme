@@ -64,33 +64,33 @@ import { DxoToolboxModule } from 'devextreme-angular/ui/nested';
 import { DxoViewToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoZoomLevelModule } from 'devextreme-angular/ui/nested';
 
-import { DxoContextMenuDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiCommandDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiItemDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoContextToolboxDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiCustomShapeDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiConnectionPointDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoDefaultItemPropertiesDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoEdgesDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoEditingDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoExportDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoGridSizeDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoHistoryToolbarDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoMainToolbarDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoNodesDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoAutoLayoutDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoPageSizeDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoPropertiesPanelDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiTabDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiGroupDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoToolboxDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoViewToolbarDiagramModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoZoomLevelDiagramModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramContextMenuModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramCommandModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramItemModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramContextToolboxModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramCustomShapeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramConnectionPointModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramDefaultItemPropertiesModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramEdgesModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramEditingModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramExportModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramGridSizeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramHistoryToolbarModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramMainToolbarModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramNodesModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramAutoLayoutModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramPageSizeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramPropertiesPanelModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramTabModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramGroupModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramToolboxModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
 
 
 import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
 
-import { DxiCustomShapeDiagramComponent } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/nested';
 
 
 
@@ -913,25 +913,25 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
-    hasNewcustomShapes: boolean = false;
+    hasNewCustomShapes: boolean = false;
 
-    @ContentChildren(DxiCustomShapeDiagramComponent)
-    get customShapesNewChildren(): QueryList<DxiCustomShapeDiagramComponent> {
+    @ContentChildren(DxiDiagramCustomShapeComponent)
+    get customShapesChildren(): QueryList<DxiDiagramCustomShapeComponent> {
         return this._getOption('customShapes');
     }
-    set customShapesNewChildren(value) {
-        this.hasNewcustomShapes = value.length > 0;
+    set customShapesChildren(value) {
+        this.hasNewCustomShapes = value.length > 0;
         this.setChildren('customShapes', value);
     }
 
 
 
     @ContentChildren(DxiCustomShapeComponent)
-    get customShapesChildren(): QueryList<DxiCustomShapeComponent> {
+    get customShapesLegacyChildren(): QueryList<DxiCustomShapeComponent> {
         return this._getOption('customShapes');
     }
-    set customShapesChildren(value) {
-        if (this.hasNewcustomShapes) {
+    set customShapesLegacyChildren(value) {
+        if (this.hasNewCustomShapes) {
             if (value.length > 0) {
                 console.log('Use only one type of nested items');
             }
@@ -1067,28 +1067,28 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     DxoToolboxModule,
     DxoViewToolbarModule,
     DxoZoomLevelModule,
-    DxoContextMenuDiagramModule,
-    DxiCommandDiagramModule,
-    DxiItemDiagramModule,
-    DxoContextToolboxDiagramModule,
-    DxiCustomShapeDiagramModule,
-    DxiConnectionPointDiagramModule,
-    DxoDefaultItemPropertiesDiagramModule,
-    DxoEdgesDiagramModule,
-    DxoEditingDiagramModule,
-    DxoExportDiagramModule,
-    DxoGridSizeDiagramModule,
-    DxoHistoryToolbarDiagramModule,
-    DxoMainToolbarDiagramModule,
-    DxoNodesDiagramModule,
-    DxoAutoLayoutDiagramModule,
-    DxoPageSizeDiagramModule,
-    DxoPropertiesPanelDiagramModule,
-    DxiTabDiagramModule,
-    DxiGroupDiagramModule,
-    DxoToolboxDiagramModule,
-    DxoViewToolbarDiagramModule,
-    DxoZoomLevelDiagramModule,
+    DxoDiagramContextMenuModule,
+    DxiDiagramCommandModule,
+    DxiDiagramItemModule,
+    DxoDiagramContextToolboxModule,
+    DxiDiagramCustomShapeModule,
+    DxiDiagramConnectionPointModule,
+    DxoDiagramDefaultItemPropertiesModule,
+    DxoDiagramEdgesModule,
+    DxoDiagramEditingModule,
+    DxoDiagramExportModule,
+    DxoDiagramGridSizeModule,
+    DxoDiagramHistoryToolbarModule,
+    DxoDiagramMainToolbarModule,
+    DxoDiagramNodesModule,
+    DxoDiagramAutoLayoutModule,
+    DxoDiagramPageSizeModule,
+    DxoDiagramPropertiesPanelModule,
+    DxiDiagramTabModule,
+    DxiDiagramGroupModule,
+    DxoDiagramToolboxModule,
+    DxoDiagramViewToolbarModule,
+    DxoDiagramZoomLevelModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1098,7 +1098,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
   exports: [
     DxDiagramComponent,
     DxoContextMenuModule,DxiCommandModule,DxiItemModule,DxoContextToolboxModule,DxiCustomShapeModule,DxiConnectionPointModule,DxoDefaultItemPropertiesModule,DxoEdgesModule,DxoEditingModule,DxoExportModule,DxoGridSizeModule,DxoHistoryToolbarModule,DxoMainToolbarModule,DxoNodesModule,DxoAutoLayoutModule,DxoPageSizeModule,DxoPropertiesPanelModule,DxiTabModule,DxiGroupModule,DxoToolboxModule,DxoViewToolbarModule,DxoZoomLevelModule,
-    DxoContextMenuDiagramModule,DxiCommandDiagramModule,DxiItemDiagramModule,DxoContextToolboxDiagramModule,DxiCustomShapeDiagramModule,DxiConnectionPointDiagramModule,DxoDefaultItemPropertiesDiagramModule,DxoEdgesDiagramModule,DxoEditingDiagramModule,DxoExportDiagramModule,DxoGridSizeDiagramModule,DxoHistoryToolbarDiagramModule,DxoMainToolbarDiagramModule,DxoNodesDiagramModule,DxoAutoLayoutDiagramModule,DxoPageSizeDiagramModule,DxoPropertiesPanelDiagramModule,DxiTabDiagramModule,DxiGroupDiagramModule,DxoToolboxDiagramModule,DxoViewToolbarDiagramModule,DxoZoomLevelDiagramModule,
+    DxoDiagramContextMenuModule,DxiDiagramCommandModule,DxiDiagramItemModule,DxoDiagramContextToolboxModule,DxiDiagramCustomShapeModule,DxiDiagramConnectionPointModule,DxoDiagramDefaultItemPropertiesModule,DxoDiagramEdgesModule,DxoDiagramEditingModule,DxoDiagramExportModule,DxoDiagramGridSizeModule,DxoDiagramHistoryToolbarModule,DxoDiagramMainToolbarModule,DxoDiagramNodesModule,DxoDiagramAutoLayoutModule,DxoDiagramPageSizeModule,DxoDiagramPropertiesPanelModule,DxiDiagramTabModule,DxiDiagramGroupModule,DxoDiagramToolboxModule,DxoDiagramViewToolbarModule,DxoDiagramZoomLevelModule,
     DxTemplateModule
   ]
 })

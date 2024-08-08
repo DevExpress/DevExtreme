@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-hide-load-panel',
+    selector: 'dxo-load-panel-hide',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoHideLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLoadPanelHideComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get complete(): Function {
         return this._getOption('complete');
@@ -137,10 +137,10 @@ export class DxoHideLoadPanelComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoHideLoadPanelComponent
+    DxoLoadPanelHideComponent
   ],
   exports: [
-    DxoHideLoadPanelComponent
+    DxoLoadPanelHideComponent
   ],
 })
-export class DxoHideLoadPanelModule { }
+export class DxoLoadPanelHideModule { }

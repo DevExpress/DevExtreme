@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-aggregation-interval-chart',
+    selector: 'dxo-chart-aggregation-interval',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAggregationIntervalChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartAggregationIntervalComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -127,10 +127,10 @@ export class DxoAggregationIntervalChartComponent extends NestedOption implement
 
 @NgModule({
   declarations: [
-    DxoAggregationIntervalChartComponent
+    DxoChartAggregationIntervalComponent
   ],
   exports: [
-    DxoAggregationIntervalChartComponent
+    DxoChartAggregationIntervalComponent
   ],
 })
-export class DxoAggregationIntervalChartModule { }
+export class DxoChartAggregationIntervalModule { }

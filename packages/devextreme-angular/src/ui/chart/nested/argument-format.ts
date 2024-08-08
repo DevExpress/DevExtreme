@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-argument-format-chart',
+    selector: 'dxo-chart-argument-format',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoArgumentFormatChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartArgumentFormatComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -104,10 +104,10 @@ export class DxoArgumentFormatChartComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoArgumentFormatChartComponent
+    DxoChartArgumentFormatComponent
   ],
   exports: [
-    DxoArgumentFormatChartComponent
+    DxoChartArgumentFormatComponent
   ],
 })
-export class DxoArgumentFormatChartModule { }
+export class DxoChartArgumentFormatModule { }

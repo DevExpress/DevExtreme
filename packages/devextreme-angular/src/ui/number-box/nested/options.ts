@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-options-number-box',
+    selector: 'dxo-number-box-options',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoOptionsNumberBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoNumberBoxOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -249,10 +249,10 @@ export class DxoOptionsNumberBoxComponent extends NestedOption implements OnDest
 
 @NgModule({
   declarations: [
-    DxoOptionsNumberBoxComponent
+    DxoNumberBoxOptionsComponent
   ],
   exports: [
-    DxoOptionsNumberBoxComponent
+    DxoNumberBoxOptionsComponent
   ],
 })
-export class DxoOptionsNumberBoxModule { }
+export class DxoNumberBoxOptionsModule { }

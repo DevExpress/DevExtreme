@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-series-template-pie-chart',
+    selector: 'dxo-pie-chart-series-template',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSeriesTemplatePieChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customizeSeries(): Function {
         return this._getOption('customizeSeries');
@@ -71,10 +71,10 @@ export class DxoSeriesTemplatePieChartComponent extends NestedOption implements 
 
 @NgModule({
   declarations: [
-    DxoSeriesTemplatePieChartComponent
+    DxoPieChartSeriesTemplateComponent
   ],
   exports: [
-    DxoSeriesTemplatePieChartComponent
+    DxoPieChartSeriesTemplateComponent
   ],
 })
-export class DxoSeriesTemplatePieChartModule { }
+export class DxoPieChartSeriesTemplateModule { }

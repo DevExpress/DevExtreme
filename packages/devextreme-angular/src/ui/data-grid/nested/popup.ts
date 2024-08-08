@@ -30,16 +30,16 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiToolbarItemDataGridComponent } from './toolbar-item-dxi';
+import { DxiDataGridToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
-    selector: 'dxo-popup-data-grid',
+    selector: 'dxo-data-grid-popup',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPopupDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -465,8 +465,8 @@ export class DxoPopupDataGridComponent extends NestedOption implements OnDestroy
     }
 
 
-    @ContentChildren(forwardRef(() => DxiToolbarItemDataGridComponent))
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemDataGridComponent> {
+    @ContentChildren(forwardRef(() => DxiDataGridToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiDataGridToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
@@ -502,10 +502,10 @@ export class DxoPopupDataGridComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoPopupDataGridComponent
+    DxoDataGridPopupComponent
   ],
   exports: [
-    DxoPopupDataGridComponent
+    DxoDataGridPopupComponent
   ],
 })
-export class DxoPopupDataGridModule { }
+export class DxoDataGridPopupModule { }

@@ -25,12 +25,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-position-date-box',
+    selector: 'dxo-date-box-position',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPositionDateBoxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateBoxPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -114,10 +114,10 @@ export class DxoPositionDateBoxComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoPositionDateBoxComponent
+    DxoDateBoxPositionComponent
   ],
   exports: [
-    DxoPositionDateBoxComponent
+    DxoDateBoxPositionComponent
   ],
 })
-export class DxoPositionDateBoxModule { }
+export class DxoDateBoxPositionModule { }

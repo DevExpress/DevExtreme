@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-font-sparkline',
+    selector: 'dxo-sparkline-font',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFontSparklineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineFontComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -95,10 +95,10 @@ export class DxoFontSparklineComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoFontSparklineComponent
+    DxoSparklineFontComponent
   ],
   exports: [
-    DxoFontSparklineComponent
+    DxoSparklineFontComponent
   ],
 })
-export class DxoFontSparklineModule { }
+export class DxoSparklineFontModule { }

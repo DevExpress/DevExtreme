@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size-polar-chart',
+    selector: 'dxo-polar-chart-size',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizePolarChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartSizeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizePolarChartComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoSizePolarChartComponent
+    DxoPolarChartSizeComponent
   ],
   exports: [
-    DxoSizePolarChartComponent
+    DxoPolarChartSizeComponent
   ],
 })
-export class DxoSizePolarChartModule { }
+export class DxoPolarChartSizeModule { }

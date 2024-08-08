@@ -49,13 +49,13 @@ import { DxoFontModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
-import { DxoMarginSparklineModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoSizeSparklineModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoTooltipSparklineModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoBorderSparklineModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoFontSparklineModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoFormatSparklineModule } from 'devextreme-angular/ui/sparkline/nested';
-import { DxoShadowSparklineModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineMarginModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineSizeModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineBorderModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineFontModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineFormatModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineShadowModule } from 'devextreme-angular/ui/sparkline/nested';
 
 
 
@@ -870,13 +870,13 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
-    DxoMarginSparklineModule,
-    DxoSizeSparklineModule,
-    DxoTooltipSparklineModule,
-    DxoBorderSparklineModule,
-    DxoFontSparklineModule,
-    DxoFormatSparklineModule,
-    DxoShadowSparklineModule,
+    DxoSparklineMarginModule,
+    DxoSparklineSizeModule,
+    DxoSparklineTooltipModule,
+    DxoSparklineBorderModule,
+    DxoSparklineFontModule,
+    DxoSparklineFormatModule,
+    DxoSparklineShadowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -886,7 +886,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
   exports: [
     DxSparklineComponent,
     DxoMarginModule,DxoSizeModule,DxoTooltipModule,DxoBorderModule,DxoFontModule,DxoFormatModule,DxoShadowModule,
-    DxoMarginSparklineModule,DxoSizeSparklineModule,DxoTooltipSparklineModule,DxoBorderSparklineModule,DxoFontSparklineModule,DxoFormatSparklineModule,DxoShadowSparklineModule,
+    DxoSparklineMarginModule,DxoSparklineSizeModule,DxoSparklineTooltipModule,DxoSparklineBorderModule,DxoSparklineFontModule,DxoSparklineFormatModule,DxoSparklineShadowModule,
     DxTemplateModule
   ]
 })

@@ -23,12 +23,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-animation-chart',
+    selector: 'dxo-chart-animation',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoAnimationChartComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get duration(): number {
         return this._getOption('duration');
@@ -88,10 +88,10 @@ export class DxoAnimationChartComponent extends NestedOption implements OnDestro
 
 @NgModule({
   declarations: [
-    DxoAnimationChartComponent
+    DxoChartAnimationComponent
   ],
   exports: [
-    DxoAnimationChartComponent
+    DxoChartAnimationComponent
   ],
 })
-export class DxoAnimationChartModule { }
+export class DxoChartAnimationModule { }

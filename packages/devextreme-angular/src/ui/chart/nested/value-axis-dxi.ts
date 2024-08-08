@@ -26,18 +26,18 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiBreakChartComponent } from './break-dxi';
-import { DxiConstantLineChartComponent } from './constant-line-dxi';
-import { DxiStripChartComponent } from './strip-dxi';
+import { DxiChartBreakComponent } from './break-dxi';
+import { DxiChartConstantLineComponent } from './constant-line-dxi';
+import { DxiChartStripComponent } from './strip-dxi';
 
 
 @Component({
-    selector: 'dxi-value-axis-chart',
+    selector: 'dxi-chart-value-axis',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxiValueAxisChartComponent extends CollectionNestedOption {
+export class DxiChartValueAxisComponent extends CollectionNestedOption {
     @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
@@ -441,24 +441,24 @@ export class DxiValueAxisChartComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiBreakChartComponent))
-    get breaksChildren(): QueryList<DxiBreakChartComponent> {
+    @ContentChildren(forwardRef(() => DxiChartBreakComponent))
+    get breaksChildren(): QueryList<DxiChartBreakComponent> {
         return this._getOption('breaks');
     }
     set breaksChildren(value) {
         this.setChildren('breaks', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiConstantLineChartComponent))
-    get constantLinesChildren(): QueryList<DxiConstantLineChartComponent> {
+    @ContentChildren(forwardRef(() => DxiChartConstantLineComponent))
+    get constantLinesChildren(): QueryList<DxiChartConstantLineComponent> {
         return this._getOption('constantLines');
     }
     set constantLinesChildren(value) {
         this.setChildren('constantLines', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiStripChartComponent))
-    get stripsChildren(): QueryList<DxiStripChartComponent> {
+    @ContentChildren(forwardRef(() => DxiChartStripComponent))
+    get stripsChildren(): QueryList<DxiChartStripComponent> {
         return this._getOption('strips');
     }
     set stripsChildren(value) {
@@ -488,10 +488,10 @@ export class DxiValueAxisChartComponent extends CollectionNestedOption {
 
 @NgModule({
   declarations: [
-    DxiValueAxisChartComponent
+    DxiChartValueAxisComponent
   ],
   exports: [
-    DxiValueAxisChartComponent
+    DxiChartValueAxisComponent
   ],
 })
-export class DxiValueAxisChartModule { }
+export class DxiChartValueAxisModule { }

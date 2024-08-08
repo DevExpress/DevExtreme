@@ -24,12 +24,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-filter-panel-data-grid',
+    selector: 'dxo-data-grid-filter-panel',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoFilterPanelDataGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get customizeText(): Function {
         return this._getOption('customizeText');
@@ -100,10 +100,10 @@ export class DxoFilterPanelDataGridComponent extends NestedOption implements OnD
 
 @NgModule({
   declarations: [
-    DxoFilterPanelDataGridComponent
+    DxoDataGridFilterPanelComponent
   ],
   exports: [
-    DxoFilterPanelDataGridComponent
+    DxoDataGridFilterPanelComponent
   ],
 })
-export class DxoFilterPanelDataGridModule { }
+export class DxoDataGridFilterPanelModule { }

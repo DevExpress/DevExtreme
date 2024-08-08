@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-size-sparkline',
+    selector: 'dxo-sparkline-size',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoSizeSparklineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineSizeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -71,10 +71,10 @@ export class DxoSizeSparklineComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   declarations: [
-    DxoSizeSparklineComponent
+    DxoSparklineSizeComponent
   ],
   exports: [
-    DxoSizeSparklineComponent
+    DxoSparklineSizeComponent
   ],
 })
-export class DxoSizeSparklineModule { }
+export class DxoSparklineSizeModule { }
