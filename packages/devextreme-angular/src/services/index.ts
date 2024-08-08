@@ -1,1 +1,1 @@
-export { DxPopupService } from './popup';
+export { DxPopupService } from './popup/service';

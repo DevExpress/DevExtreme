@@ -3,7 +3,6 @@ module.exports = {
         metadataGenerator: {
             sourceMetadataFilePath: './metadata/NGMetaData.json',
             deprecatedMetadataFilePath: './metadata/DeprecatedComponentsMetadata.json',
-            extraMetadataFilePath: './metadata/extraMetadata.json',
             outputFolderPath: './metadata/generated',
             nestedPathPart: 'nested',
             basePathPart: 'base',
@@ -29,9 +28,7 @@ module.exports = {
                 './common',
                 './common/grids',
                 './common/charts',
-            ],
-            commonExports: {
-            }
+            ]
         },
         moduleFacadeGenerator: {
             moduleFacades: {
