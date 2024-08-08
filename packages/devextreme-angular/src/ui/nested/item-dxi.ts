@@ -38,6 +38,7 @@ import { DxiLocationComponent } from './location-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost],
+    
     inputs: [
         'disabled',
         'html',
