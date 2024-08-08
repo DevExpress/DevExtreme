@@ -11,21 +11,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "devextreme": "~24.2.0",
-    "devextreme-react": "~24.2.0"
+    "devextreme": "workspace:~24.2.0",
+    "devextreme-react": "workspace:~24.2.0"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^7.6.9",
-    "@storybook/addon-interactions": "^7.6.9",
-    "@storybook/addon-links": "^7.6.9",
-    "@storybook/blocks": "^7.6.9",
-    "@storybook/react": "^7.6.9",
-    "@storybook/react-webpack5": "^7.6.9",
-    "@storybook/test": "^7.6.9",
-    "prop-types": "^15.8.1",
-    "react": "~18.0.0",
-    "react-dom": "~18.0.0",
-    "storybook": "^7.6.9",
+    "@storybook/addon-essentials": "7.6.19",
+    "@storybook/addon-interactions": "7.6.19",
+    "@storybook/addon-links": "7.6.19",
+    "@storybook/blocks": "7.6.19",
+    "@storybook/react": "7.6.19",
+    "@storybook/react-webpack5": "7.6.19",
+    "@storybook/test": "7.6.19",
+    "prop-types": "15.8.1",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "storybook": "7.6.19",
     "typescript": "4.9.5"
   }
 }
