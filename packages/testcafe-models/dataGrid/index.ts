@@ -481,7 +481,7 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  apiCellValue(rowIndex: number, columnIndex: number, value: string): Promise<void> {
+  apiCellValue<T>(rowIndex: number, columnIndex: number, value: T): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
       () => (getInstance() as any).cellValue(rowIndex, columnIndex, value),

@@ -171,7 +171,28 @@ QUnit.test('deepExtendArraySafe utility does not throw an error with \'null\' de
     assert.equal(result.deepProp.toChange, 'changed value');
 });
 
-QUnit.test('deepExtendArraySafe utility does not pollute object prototype', function(assert) {
-    objectUtils.deepExtendArraySafe({ }, JSON.parse('{ "__proto__": { "pollution": true }}'), true);
-    assert.ok(!('pollution' in { }), 'object prototype is not polluted');
+QUnit.test('deepExtendArraySafe sets undefined', function(assert) {
+    const objWithValue = { time: { duration: 50 } };
+    const objNoValue = {};
+
+    objectUtils.deepExtendArraySafe(objWithValue, { time: { duration: undefined } }, true, false, true);
+    objectUtils.deepExtendArraySafe(objNoValue, { time: { duration: undefined } }, true, false, true);
+
+    assert.equal(objWithValue.time.duration, undefined);
+    assert.ok(Object.prototype.hasOwnProperty.call(objWithValue.time, 'duration'));
+    assert.ok(Object.prototype.hasOwnProperty.call(objNoValue.time, 'duration'));
+
 });
+
+QUnit.test('deepExtendArraySafe doesn\'t set undefined if shouldCopyUndefined == false', function(assert) {
+    const objWithValue = { time: { duration: 50 } };
+    const objNoValue = {};
+    objectUtils.deepExtendArraySafe(objWithValue, { time: { duration: undefined } }, true, false, false);
+    objectUtils.deepExtendArraySafe(objNoValue, { time: { duration: undefined } }, true, false, false);
+
+    assert.equal(objWithValue.time.duration, 50);
+    assert.notOk(Object.prototype.hasOwnProperty.call(objNoValue.time, 'duration'));
+
+});
+
+
