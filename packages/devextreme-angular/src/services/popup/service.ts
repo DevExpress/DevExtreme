@@ -7,7 +7,7 @@ import {
     ComponentRef,
 } from '@angular/core'
 import { DxPopupComponent, DxPopupTypes } from 'devextreme-angular/ui/popup';
-import { DxServicePopupComponent } from "./component";
+import { DxServicePopupComponent } from "./service.component";
 
 @Injectable({
     providedIn: 'root',

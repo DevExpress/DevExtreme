@@ -13,7 +13,7 @@ import { DxTemplateHost,
     NestedOptionHost,
     WatcherHelper} from "devextreme-angular/core";
 import { DxPopupComponent } from "devextreme-angular/ui/popup";
-import {DxServicePopupInsertionDirective} from "./directive";
+import {DxServicePopupInsertionDirective} from "./insertion.directive";
 
 
 @Component({
