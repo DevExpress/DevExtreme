@@ -18,7 +18,7 @@
     "vite": "2.9.18",
     "webpack": "5.76.0",
     "webpack-cli": "4.10.0",
-    "devextreme": "*"
+    "devextreme": "workspace:*"
   },
   "alias": {
     "globalize$": "./node_modules/globalize/dist/globalize.js",

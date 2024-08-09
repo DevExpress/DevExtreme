@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Slipp radfelter her",
         "dxPivotGrid-filterFieldArea": "Slipp filterfelter her",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Emne",
         "dxScheduler-editorLabelStartDate": "Startdato",
         "dxScheduler-editorLabelEndDate": "Sluttdato",

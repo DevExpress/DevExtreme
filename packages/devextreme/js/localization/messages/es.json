@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Arrastra campos de fila aquí",
         "dxPivotGrid-filterFieldArea": "Arrastra campos de filtro aquí",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Asunto",
         "dxScheduler-editorLabelStartDate": "Fecha inicial",
         "dxScheduler-editorLabelEndDate": "Fecha final",

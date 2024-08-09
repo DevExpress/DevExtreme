@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -89,20 +89,20 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     });
   }
 
-  _renderMessageBubbles(items): void {
+  _renderMessageBubbles(items: Message[]): void {
     items.forEach((message, index) => {
       this._renderMessageBubble(message, index, items.length);
     });
   }
 
-  _renderName(name, $element): void {
+  _renderName(name: string, $element: dxElementWrapper): void {
     $('<div>')
       .addClass(CHAT_MESSAGE_NAME_CLASS)
       .text(name)
       .appendTo($element);
   }
 
-  _renderTime(timestamp, $element): void {
+  _renderTime(timestamp: string, $element: dxElementWrapper): void {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
     const dateTime = new Date(Number(timestamp));
     const dateTimeString = dateTime.toLocaleTimeString(undefined, options);
@@ -113,12 +113,17 @@ class MessageGroup extends Widget<MessageGroupOptions> {
       .appendTo($element);
   }
 
-  _renderMessageGroupInformation(message): void {
+  _renderMessageGroupInformation(message: Message): void {
     const { timestamp, author } = message;
     const $messageGroupInformation = $('<div>').addClass(CHAT_MESSAGE_GROUP_INFORMATION_CLASS);
 
-    this._renderName(author.name, $messageGroupInformation);
-    this._renderTime(timestamp, $messageGroupInformation);
+    if (author?.name) {
+      this._renderName(author.name, $messageGroupInformation);
+    }
+
+    if (timestamp) {
+      this._renderTime(timestamp, $messageGroupInformation);
+    }
 
     $messageGroupInformation.appendTo(this.element());
   }

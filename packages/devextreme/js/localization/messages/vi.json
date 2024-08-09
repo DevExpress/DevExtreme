@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Thả các trường của hàng vào đây",
         "dxPivotGrid-filterFieldArea": "Thả bộ lọc các trường vào đây",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Chủ đề",
         "dxScheduler-editorLabelStartDate": "Ngày bắt đầu",
         "dxScheduler-editorLabelEndDate": "Ngày kết thúc",

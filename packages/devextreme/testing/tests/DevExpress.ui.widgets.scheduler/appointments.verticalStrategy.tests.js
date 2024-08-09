@@ -68,6 +68,7 @@ const createInstance = (options) => {
         observer,
         ...options,
         getResources: () => [],
+        getLoadedResources: () => [],
         getAppointmentColor: () => new Deferred(),
         getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');

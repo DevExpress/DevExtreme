@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "إفلات حقول الصف هنا",
         "dxPivotGrid-filterFieldArea": "إفلات حقول التصفية هنا",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "الموضوع",
         "dxScheduler-editorLabelStartDate": "تاريخ البدء",
         "dxScheduler-editorLabelEndDate": "تاريخ الانتهاء",
