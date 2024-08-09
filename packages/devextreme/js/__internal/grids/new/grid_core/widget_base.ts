@@ -16,6 +16,7 @@ import { PagerView } from '@ts/grids/new/grid_core/pager';
 import { Search } from '@ts/grids/new/grid_core/search/controller';
 
 import { ContentStatusView } from './content_view/content_status_view';
+import { FilterPanelView } from './filtering/filter_panel/filter_panel';
 
 export class GridCoreNew<Properties> extends Widget<Properties> {
   protected diContext!: DIContext;
@@ -50,6 +51,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(HeadersView);
     this.diContext.register(Search);
     this.diContext.register(ContentStatusView);
+    this.diContext.register(FilterPanelView);
   }
 
   protected _initDIContext(): void {

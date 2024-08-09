@@ -19,7 +19,10 @@ export class Search {
       location: 'after',
       locateInMenu: 'auto',
       template: (data, index, element: any) => {
-        render(<SearchField></SearchField>, element.get(0));
+        render(
+          <SearchField/>,
+          element.get(0),
+        );
       },
     });
   }
