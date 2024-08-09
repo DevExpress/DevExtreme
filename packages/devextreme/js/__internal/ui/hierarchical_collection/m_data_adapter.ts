@@ -525,6 +525,7 @@ const DataAdapter = Class.inherit({
 
     if (this.options.sort) {
       matches = storeHelper
+        // @ts-expect-error
         .queryByOptions(query(matches), { sort: this.options.sort, langParams: this.options.langParams })
         .toArray();
     }

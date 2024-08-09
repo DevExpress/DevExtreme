@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Numeskite eilučių laukus čia",
         "dxPivotGrid-filterFieldArea": "Numeskite filtrų laukus čia",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Tema",
         "dxScheduler-editorLabelStartDate": "Pradžios data",
         "dxScheduler-editorLabelEndDate": "Pabaigos data",

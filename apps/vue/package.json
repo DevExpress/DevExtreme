@@ -10,8 +10,8 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "dependencies": {
-    "devextreme": "~24.2.0",
-    "devextreme-vue": "~24.2.0",
+    "devextreme": "workspace:~24.2.0",
+    "devextreme-vue": "workspace:~24.2.0",
     "vue": "3.2.47"
   },
   "devDependencies": {

@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Satır Alanlarını Buraya Bırak",
         "dxPivotGrid-filterFieldArea": "Filtre Alanlarını Buraya Bırak",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Konu",
         "dxScheduler-editorLabelStartDate": "Başlangıç Tarihi",
         "dxScheduler-editorLabelEndDate": "Bitiş Tarihi",

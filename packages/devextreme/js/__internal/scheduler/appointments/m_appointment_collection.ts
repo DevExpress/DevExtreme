@@ -29,6 +29,7 @@ import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
+import { getPathToLeaf } from '../resources/m_utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { AgendaAppointment, Appointment } from './m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
@@ -552,6 +553,20 @@ class SchedulerAppointments extends CollectionWidget {
     this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
   }
 
+  _getGroupTexts(groupIndex, loadedResources) {
+    if (!loadedResources?.length) {
+      return [];
+    }
+    const idPath = getPathToLeaf(groupIndex, loadedResources);
+    const textPath = idPath.map(
+      (id, index) => loadedResources[index].items
+        .find(
+          (item) => item.id === id,
+        ).text,
+    );
+    return textPath;
+  }
+
   _renderAppointment(element, settings) {
     element.data(APPOINTMENT_SETTINGS_KEY, settings);
 
@@ -577,6 +592,7 @@ class SchedulerAppointments extends CollectionWidget {
       const config: any = {
         data: rawAppointment,
         groupIndex: settings.groupIndex,
+        groupTexts: this._getGroupTexts(settings.groupIndex, this.option('getLoadedResources')()),
         observer: this.option('observer'),
         geometry,
         direction: settings.direction || 'vertical',
@@ -590,6 +606,8 @@ class SchedulerAppointments extends CollectionWidget {
         cellHeight: this.invoke('getCellHeight'),
         resizableConfig: this._resizableConfig(rawAppointment, settings),
         groups: this.option('groups'),
+        partIndex: settings.partIndex,
+        partTotalCount: settings.partTotalCount,
 
         getAppointmentColor: this.option('getAppointmentColor'),
         getResourceDataAccessors: this.option('getResourceDataAccessors'),
