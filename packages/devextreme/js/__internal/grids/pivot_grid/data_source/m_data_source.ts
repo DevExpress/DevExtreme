@@ -262,8 +262,8 @@ const PivotGridDataSource = Class.inherit((function () {
 
   function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
     const StoreConstructor = dataSourceOptions.remoteOperations
-    || dataSourceOptions.paginate ? RemoteStore : LocalStore;
-
+      || dataSourceOptions.paginate ? RemoteStore : LocalStore;
+    // @ts-expect-error
     return new StoreConstructor(extend(normalizeDataSourceOptions(dataSourceOptions), {
       onChanged: null,
       onLoadingChanged: null,
@@ -1136,8 +1136,8 @@ const PivotGridDataSource = Class.inherit((function () {
         that._sort(descriptions, loadedData);
 
         !that.isEmpty()
-        && isRunningTotalUsed(dataFields)
-        && summaryUtils.applyRunningTotal(descriptions, loadedData);
+          && isRunningTotalUsed(dataFields)
+          && summaryUtils.applyRunningTotal(descriptions, loadedData);
 
         that._data = loadedData;
         deferred !== false && when(deferred).done(() => {

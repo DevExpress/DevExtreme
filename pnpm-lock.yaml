@@ -361,8 +361,8 @@ importers:
         specifier: ^3.3.4
         version: 3.4.26(typescript@4.9.5)
       vuex:
-        specifier: 4.0.0-beta.4
-        version: 4.0.0-beta.4(vue@3.4.26(typescript@4.9.5))
+        specifier: 4.1.0
+        version: 4.1.0(vue@3.4.26(typescript@4.9.5))
       whatwg-fetch:
         specifier: 2.0.4
         version: 2.0.4
@@ -1230,8 +1230,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0(webpack@5.76.0(@swc/core@1.4.17))
       yaml:
-        specifier: 2.3.4
-        version: 2.3.4
+        specifier: 2.5.0
+        version: 2.5.0
       yargs:
         specifier: 17.7.2
         version: 17.7.2
@@ -15780,10 +15780,10 @@ packages:
       typescript:
         optional: true
 
-  vuex@4.0.0-beta.4:
-    resolution: {integrity: sha512-/+4E1dokq5cwbl4mohOqOj8h0vOLOWmLSqlqTf++bfmN9/JKWtwYfsBrzlK0sYrNfuYcpQeX0BVxQHoHXDfYZQ==}
+  vuex@4.1.0:
+    resolution: {integrity: sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==}
     peerDependencies:
-      vue: ^3.0.0-beta.10
+      vue: ^3.2.0
 
   w3c-hr-time@1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}
@@ -16222,9 +16222,10 @@ packages:
     resolution: {integrity: sha512-2eHWfjaoXgTBC2jNM1LRef62VQa0umtvRiDSk6HSzW7RvS5YtkabJrwYLLEKWBc8a5U2PTSCs+dJjUTJdlHsWQ==}
     engines: {node: '>= 14'}
 
-  yaml@2.3.4:
-    resolution: {integrity: sha512-8aAvwVUSHpfEqTQ4w/KMlf3HcRdt50E5ODIQJBw1fQ5RL34xabzxtUlzTXVqc4rkZsPbvrXKWnABCD7kWSmocA==}
+  yaml@2.5.0:
+    resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
     engines: {node: '>= 14'}
+    hasBin: true
 
   yargs-parser@18.1.3:
     resolution: {integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==}
@@ -36711,8 +36712,9 @@ snapshots:
     optionalDependencies:
       typescript: 5.4.5
 
-  vuex@4.0.0-beta.4(vue@3.4.26(typescript@4.9.5)):
+  vuex@4.1.0(vue@3.4.26(typescript@4.9.5)):
     dependencies:
+      '@vue/devtools-api': 6.6.1
       vue: 3.4.26(typescript@4.9.5)
 
   w3c-hr-time@1.0.2:
@@ -37425,7 +37427,7 @@ snapshots:
 
   yaml@2.3.1: {}
 
-  yaml@2.3.4: {}
+  yaml@2.5.0: {}
 
   yargs-parser@18.1.3:
     dependencies:
