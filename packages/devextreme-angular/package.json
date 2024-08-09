@@ -1,6 +1,6 @@
 {
   "name": "devextreme-angular",
-  "version": "23.2.7",
+  "version": "23.2.8",
   "description": "Angular UI and visualization components based on DevExtreme widgets",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@angular/common": ">=12.0.0 <=17.X.X",
     "@angular/core": ">=12.0.0 <=17.X.X",
     "@angular/forms": ">=12.0.0 <=17.X.X",
-    "devextreme": "~23.2.7"
+    "devextreme": "~23.2.8"
   },
   "devDependencies": {
     "@angular/animations": "~12.2.17",
