@@ -37,7 +37,6 @@ class TreeListRowsView extends RowsView {
     const $iconContainer = $('<div>')
       .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
       .appendTo($container);
-
     if (options.watch) {
       const dispose = options.watch(() => [
         options.row.level,
@@ -45,13 +44,13 @@ class TreeListRowsView extends RowsView {
         options.row.node.hasChildren,
       ], () => {
         $iconContainer.empty();
-        this.setAriaExpandedAttribute($container, options.row);
         this._renderIcons($iconContainer, options);
+        this.setAriaExpandedAttribute($container, options.row);
       });
 
       eventsEngine.on($iconContainer, removeEvent, dispose);
     }
-
+    this.setAriaExpandedAttribute($container, options.row);
     $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
 
     return this._renderIcons($iconContainer, options);

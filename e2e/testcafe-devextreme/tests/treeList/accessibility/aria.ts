@@ -68,12 +68,17 @@ const options = {
 test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
   const treeList = new TreeList('#container');
   const expandableRow = treeList.getDataRow(0).element;
+  const expandableCell = treeList.getDataCell(0, 0).element;
 
   await t
+    .expect(expandableCell.getAttribute('aria-expanded'))
+    .eql('false')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('false')
     .click(expandableRow)
     .pressKey('ctrl+right')
+    .expect(expandableCell.getAttribute('aria-expanded'))
+    .eql('true')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('true');
 }).before(async () => createWidget('dxTreeList', options));
@@ -81,12 +86,17 @@ test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) =>
 test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) => {
   const treeList = new TreeList('#container');
   const expandableRow = treeList.getDataRow(0).element;
+  const expandableCell = treeList.getDataCell(0, 0).element;
 
   await t
+    .expect(expandableCell.getAttribute('aria-expanded'))
+    .eql('true')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('true')
     .click(expandableRow)
     .pressKey('ctrl+left')
+    .expect(expandableCell.getAttribute('aria-expanded'))
+    .eql('false')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('false');
 }).before(async () => {
