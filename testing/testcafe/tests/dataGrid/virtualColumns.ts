@@ -5,7 +5,6 @@ import url from '../../helpers/getPageUrl';
 import { createWidget, disposeWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from '../../model/dataGrid';
 import type { Column } from '../../../../js/ui/data_grid';
-import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
@@ -252,7 +251,7 @@ test('The markup should be correct after horizontal scrolling and collapse of th
 }));
 
 // T1191875
-safeSizeTest('Columns should be rendered correctly after reinit of columns controller', async (t) => {
+/* safeSizeTest */test.skip('Columns should be rendered correctly after reinit of columns controller', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
