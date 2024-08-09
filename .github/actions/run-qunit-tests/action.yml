@@ -54,7 +54,7 @@ runs:
       if: ${{ inputs.browser == 'chrome' }}
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '116.0.5845.110'
+        chrome-version: '120.0.6099.71'
 
     - name: Setup Firefox profile
       if: ${{ inputs.browser == 'firefox' }}
