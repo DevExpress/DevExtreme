@@ -17,4 +17,6 @@ export interface Properties {
   noDataText?: string;
 
   dataSource?: DataSourceLike<unknown>;
+
+  searchText?: string;
 }

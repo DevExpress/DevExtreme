@@ -1,3 +1,5 @@
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataSourceLike } from '@js/data/data_source';
 import DataSource from '@js/data/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
@@ -7,6 +9,7 @@ import {
 } from '@ts/core/reactive';
 
 import { OptionsController } from '../options_controller/options_controller';
+import { Search } from '../search/controller';
 
 export function normalizeDataSource(
   dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined,
@@ -15,7 +18,8 @@ export function normalizeDataSource(
     return dataSourceLike;
   }
 
-  return new DataSource(normalizeDataSourceOptions(dataSourceLike));
+  // TODO: research making second param not required
+  return new DataSource(normalizeDataSourceOptions(dataSourceLike, undefined));
 }
 
 export class DataController {
@@ -47,15 +51,18 @@ export class DataController {
 
   public readonly isLoading: Subscribable<boolean> = this._isLoading;
 
+  public readonly filter = state<any>(undefined);
+
   public readonly pageCount = computed(
     (totalCount, pageSize) => Math.ceil(totalCount / pageSize!),
     [this.totalCount, this.pageSize],
   );
 
-  static dependencies = [OptionsController] as const;
+  static dependencies = [OptionsController, Search] as const;
 
   constructor(
     private readonly options: OptionsController,
+    private readonly search: Search,
   ) {
     effect(
       (dataSource) => {
@@ -81,13 +88,14 @@ export class DataController {
     );
 
     effect(
-      (pageIndex, pageSize, dataSource) => {
+      (pageIndex, pageSize, dataSource, filter) => {
         dataSource.pageIndex(pageIndex!);
         dataSource.requireTotalCount(true);
         dataSource.pageSize(pageSize!);
+        dataSource.filter(filter);
         dataSource.load();
       },
-      [this.pageIndex, this.pageSize, this.dataSource],
+      [this.pageIndex, this.pageSize, this.dataSource, this.filter],
     );
   }
 }

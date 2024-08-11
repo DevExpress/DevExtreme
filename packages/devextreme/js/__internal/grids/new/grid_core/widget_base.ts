@@ -82,6 +82,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
         pageSize: 6,
         pageIndex: 0,
       },
+      searchText: '',
     };
   }
 

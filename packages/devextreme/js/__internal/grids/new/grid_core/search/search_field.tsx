@@ -15,7 +15,7 @@ export class SearchField extends Component<SearchFieldProps> {
     return (
       <input
         value={this.props.value}
-        onChange={this.onChange}
+        onChange={this.onChange.bind(this)}
       />
     );
   }

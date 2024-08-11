@@ -1,6 +1,6 @@
 import PagerWidget from '@js/ui/pager';
 
-import { createWidgetWrapper } from './widget_wrapper';
+import { InfernoWrapper } from './widget_wrapper';
 
 // TODO: remove when public .d.ts for pager is created
 interface PagerProps {
@@ -17,4 +17,8 @@ interface PagerProps {
   pageCount?: number;
 }
 
-export const Pager = createWidgetWrapper<PagerProps, any>(PagerWidget);
+export class Pager extends InfernoWrapper<PagerProps, any> {
+  protected getComponentFabric(): typeof PagerWidget {
+    return PagerWidget;
+  }
+}

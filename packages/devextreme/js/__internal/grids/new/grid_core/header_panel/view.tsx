@@ -1,13 +1,8 @@
-import type { dxToolbarOptions } from '@js/ui/toolbar';
-import dxToolbar from '@js/ui/toolbar';
-import { computed, Subscribable } from '@ts/core/reactive';
-import { InfernoNode } from 'inferno';
+import { computed } from '@ts/core/reactive';
 
 import { View } from '../core/view';
-import { createWidgetWrapper } from '../core/widget_wrapper';
+import { Toolbar } from '../inferno_wrappers/toolbar';
 import { HeaderPanelController } from './controller';
-
-const Toolbar = createWidgetWrapper<dxToolbarOptions, dxToolbar>(dxToolbar);
 
 export class HeaderPanelView extends View {
   static dependencies = [HeaderPanelController] as const;

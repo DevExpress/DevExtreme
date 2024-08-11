@@ -1,5 +1,10 @@
+import type { Properties as LoadPanelProperties } from '@js/ui/load_panel';
 import dxLoadPanel from '@js/ui/load_panel';
 
-import { createWidgetWrapper } from './widget_wrapper';
+import { InfernoWrapper } from './widget_wrapper';
 
-export const LoadPanel = createWidgetWrapper(dxLoadPanel);
+export class LoadPanel extends InfernoWrapper<LoadPanelProperties, dxLoadPanel> {
+  protected getComponentFabric(): typeof dxLoadPanel {
+    return dxLoadPanel;
+  }
+}

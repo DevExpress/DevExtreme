@@ -2,31 +2,32 @@ import type DOMComponent from '@js/core/dom_component';
 import type { InfernoNode } from 'inferno';
 import { Component, createRef } from 'inferno';
 
-export function createWidgetWrapper<
-  TProperties, TComponent extends DOMComponent<TProperties>,
->(
-  component: new (element: Element, options: TProperties) => TComponent,
-) {
-  return class Wrapper extends Component<TProperties> {
-    ref = createRef<HTMLDivElement>();
+export abstract class InfernoWrapper<
+  TProperties,
+  TComponent extends DOMComponent<TProperties>,
+> extends Component<TProperties> {
+  private readonly ref = createRef<HTMLDivElement>();
 
-    component!: TComponent;
+  private component?: TComponent;
 
-    render(): InfernoNode {
-      return <div ref={this.ref}></div>;
-    }
+  protected abstract getComponentFabric(): new (
+    element: Element, options: TProperties
+  ) => TComponent;
 
-    componentDidMount(): void {
-      // eslint-disable-next-line no-new, new-cap, @typescript-eslint/no-non-null-assertion
-      this.component = new component(this.ref.current!, this.props);
-    }
+  public render(): InfernoNode {
+    return <div ref={this.ref}></div>;
+  }
 
-    componentDidUpdate(): void {
-      this.component.option(this.props);
-    }
+  public componentDidMount(): void {
+    // eslint-disable-next-line no-new, @typescript-eslint/no-non-null-assertion
+    this.component = new (this.getComponentFabric())(this.ref.current!, this.props);
+  }
 
-    componentWillUnmount(): void {
-      this.component.dispose();
-    }
-  };
+  public componentDidUpdate(): void {
+    this.component?.option(this.props);
+  }
+
+  public componentWillUnmount(): void {
+    this.component?.dispose();
+  }
 }

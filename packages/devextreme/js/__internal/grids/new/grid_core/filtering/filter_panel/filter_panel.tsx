@@ -79,7 +79,6 @@ class FilterPanelComponent extends Component {
   }
 
   render() {
-    console.log('asd');
     return <div ref={this.ref}>filterPanel</div>;
   }
 

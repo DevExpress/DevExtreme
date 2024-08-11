@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { render } from 'inferno';
 
 import { HeaderPanelController } from '../header_panel/controller';
@@ -20,7 +21,9 @@ export class Search {
       locateInMenu: 'auto',
       template: (data, index, element: any) => {
         render(
-          <SearchField/>,
+          <SearchField
+            onChange={this.searchText.update.bind(this.searchText)}
+          />,
           element.get(0),
         );
       },
