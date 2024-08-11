@@ -5,7 +5,6 @@
 import { isFunction } from '@js/core/utils/type';
 
 import type { Subscription } from './subscription';
-import { SubscriptionBag } from './subscription';
 import type {
   Callback, Gettable,
   MaybeSubscribable,

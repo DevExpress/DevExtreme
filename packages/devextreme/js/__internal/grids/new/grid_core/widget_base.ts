@@ -2,7 +2,7 @@
 import browser from '@js/core/utils/browser';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
-import { DIContext } from '@ts/core/di';
+import { DIContext } from '@ts/core/di/index';
 import { ColumnsChooser } from '@ts/grids/new/grid_core/columns_chooser/columns_chooser';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { ColumnsDraggingController } from '@ts/grids/new/grid_core/columns_dragging/columns_dragging';
