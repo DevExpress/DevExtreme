@@ -1,14 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
-import dxLoadPanel from '@js/ui/load_panel';
 import { computed } from '@ts/core/reactive';
 
 import { View } from '../core/view';
-import { createWidgetWrapper } from '../core/widget_wrapper';
 import { DataController } from '../data_controller/data_controller';
+import { LoadPanel } from '../inferno_wrappers/load_panel';
 import { OptionsController } from '../options_controller/options_controller';
 import { NoData } from './no_data';
-
-const LoadPanel = createWidgetWrapper(dxLoadPanel);
 
 export class ContentStatusView extends View {
   private readonly isNoData = computed(

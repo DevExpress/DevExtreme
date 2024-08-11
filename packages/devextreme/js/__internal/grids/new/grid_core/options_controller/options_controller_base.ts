@@ -89,7 +89,7 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
     });
   }
 
-  oneWay<TProp extends string>(
+  public oneWay<TProp extends string>(
     name: TProp,
   ): SubsGets<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
     const obs = computed(
@@ -100,7 +100,7 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
     return obs as any;
   }
 
-  twoWay<TProp extends string>(
+  public twoWay<TProp extends string>(
     name: TProp,
   ): SubsUpts<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
     const obs = state(this.component.option(name));
