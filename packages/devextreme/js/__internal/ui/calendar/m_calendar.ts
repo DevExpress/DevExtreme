@@ -1518,9 +1518,6 @@ const Calendar = Editor.inherit({
         this.setAria('id', undefined, this._view._getCellByDate(previousValue));
         this._updateCurrentDate(value);
         break;
-      case 'readOnly':
-        this._setAriaReadonly(this.option('readOnly'));
-        break;
       case 'zoomLevel':
         this.$element().removeClass(`${CALENDAR_VIEW_CLASS}-${previousValue}`);
         this._correctZoomLevel();
