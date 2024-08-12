@@ -33,15 +33,16 @@ export default class SelectionStrategy {
     this.options[name] = value;
   }
 
-  onSelectionChanging() {
-    const { addedItemKeys } = this.options;
-    const { removedItemKeys } = this.options;
-    const { addedItems } = this.options;
-    const { removedItems } = this.options;
-    const { selectedItems } = this.options;
-    const { selectedItemKeys } = this.options;
-    const cancel = false;
-    const onSelectionChanging = this.options.onSelectionChanging || noop;
+  onSelectionChanging(): void {
+    const {
+      selectedItems,
+      selectedItemKeys,
+      addedItemKeys,
+      removedItemKeys,
+      addedItems,
+      removedItems,
+      onSelectionChanging = noop,
+    } = this.options;
 
     onSelectionChanging({
       selectedItems,
@@ -50,18 +51,20 @@ export default class SelectionStrategy {
       removedItemKeys,
       addedItems,
       removedItems,
-      cancel,
+      cancel: false,
     });
   }
 
   onSelectionChanged() {
-    const { addedItemKeys } = this.options;
-    const { removedItemKeys } = this.options;
-    const { addedItems } = this.options;
-    const { removedItems } = this.options;
-    const { selectedItems } = this.options;
-    const { selectedItemKeys } = this.options;
-    const onSelectionChanged = this.options.onSelectionChanged || noop;
+    const {
+      selectedItems,
+      selectedItemKeys,
+      addedItemKeys,
+      removedItemKeys,
+      addedItems,
+      removedItems,
+      onSelectionChanged = noop,
+    } = this.options;
 
     this._clearItemKeys();
     onSelectionChanged({

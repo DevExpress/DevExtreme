@@ -9,7 +9,7 @@ import {
 } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isPromise } from '@js/core/utils/type';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/data/data_source/utils';
 import eventsEngine from '@js/events/core/events_engine';
@@ -68,11 +68,28 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     this._initKeyGetter();
 
+    this._initActions();
+
     this._initSelectionModule();
   },
 
   _initKeyGetter() {
     this._keyGetter = compileGetter(this.option('keyExpr'));
+  },
+
+  _getActionsList() {
+    return ['onSelectionChanging', 'onSelectionChanged'];
+  },
+
+  _initActions() {
+    this._actions = {};
+    const actions = this._getActionsList();
+
+    each(actions, (_, action) => {
+      this._actions[action] = this._createActionByOption(action, {
+        excludeValidators: ['disabled', 'readOnly'],
+      }) || noop;
+    });
   },
 
   _getKeysByItems(selectedItems) {
@@ -133,13 +150,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       mode: this.option('selectionMode'),
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
-      onSelectionChanging(args) {
-        that._fireSelectionChangingEvent(args);
-      },
       onSelectionChanged(args) {
+        that.selectionChangingArgs = { cancel: false };
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-          that._updateSelectedItems(args);
+          that._processSelectionChanging(args);
         }
       },
       filter: that._getCombinedFilter.bind(that),
@@ -407,8 +421,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     if (this.isItemSelected($itemElement)) {
       this.unselectItem(e.currentTarget);
     } else {
-      this.initialSelectedIndex = this.option('selectedIndex');
-
       itemSelectPromise = this.selectItem(e.currentTarget);
     }
 
@@ -434,11 +446,31 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     this._setAriaSelectionAttribute($itemElement, String(isSelected));
   },
 
-  updatingSelectedItems(args) {
+  onSelectionChangingHandler(args) {
+    this._actions.onSelectionChanging(args);
+  },
+
+  _processSelectionChanging(args) {
+    this.onSelectionChangingHandler(this.selectionChangingArgs);
+    if (isPromise(this.selectionChangingArgs.cancel)) {
+      this.selectionChangingArgs.cancel.then((cancel) => {
+        if (!cancel) {
+          this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+          this._updateSelectedItems(args);
+        }
+      }).catch((e) => {
+        console.error(e);
+      });
+    } else if (!this.selectionChangingArgs.cancel) {
+      this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+      this._updateSelectedItems(args);
+    }
+  },
+
+  _updateSelectedItems(args) {
     const that = this;
     const { addedItemKeys } = args;
     const { removedItemKeys } = args;
-
     if (that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
       const selectionChangePromise = that._selectionChangePromise;
       if (!that._rendering) {
@@ -468,27 +500,27 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       }
 
       when(selectionChangePromise).done(() => {
-        that._fireSelectionChangeEvent(args.addedItems, args.removedItems);
+        this._actions.onSelectionChanged(args);
       });
     }
   },
 
-  _updateSelectedItems(args) {
-    this._selection.onSelectionChanging();
-    if (this.isSelectionCancel instanceof Promise) {
-      this.isSelectionCancel.then((cancel) => {
-        if (!cancel) {
-          this.updatingSelectedItems(args);
-        } else {
-          this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
-        }
-      });
-    } else if (!this.isSelectionCancel) {
-      this.updatingSelectedItems(args);
-    } else {
-      this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
-    }
-  },
+  // _updateSelectedItems(args) {
+  //   this._selection.onSelectionChanging();
+  //   if (this.isSelectionCancel instanceof Promise) {
+  //     this.isSelectionCancel.then((cancel) => {
+  //       if (!cancel) {
+  //         this.updatingSelectedItems(args);
+  //       } else {
+  //         this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
+  //       }
+  //     });
+  //   } else if (!this.isSelectionCancel) {
+  //     this.updatingSelectedItems(args);
+  //   } else {
+  //     this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
+  //   }
+  // },
 
   _fireSelectionChangeEvent(addedItems, removedItems) {
     this._createActionByOption('onSelectionChanged', {
@@ -500,8 +532,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     this._createActionByOption('onSelectionChanging', {
       excludeValidators: ['disabled', 'readOnly'],
     })(args);
-
-    this.isSelectionCancel = args.cancel;
   },
 
   _updateSelection: noop,
@@ -536,6 +566,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   _optionChanged(args) {
+    if (this._getActionsList().includes(args.name)) {
+      this._initActions();
+      return;
+    }
+
     switch (args.name) {
       case 'selectionMode':
         this._invalidate();
