@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Przeciągnij pola wiersza/-y tutaj",
         "dxPivotGrid-filterFieldArea": "Przeciągnij pola filtra tutaj",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Dotyczy",
         "dxScheduler-editorLabelStartDate": "Czas rozpoczęcia",
         "dxScheduler-editorLabelEndDate": "Czas zakończenia",

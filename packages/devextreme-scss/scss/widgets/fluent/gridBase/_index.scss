@@ -84,19 +84,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
     }
 
-    .dx-editor-with-menu {
+    .dx-#{$widget-name}-filter-row .dx-editor-with-menu {
       .dx-menu-item-content {
         display: flex;
         justify-content: center;
         align-items: center;
-
-        .dx-icon {
-          @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
-
-          &.dx-icon-filter-operation-default {
-            margin-top: 2px;
-          }
-        }
       }
 
       .dx-texteditor {
@@ -440,7 +432,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         box-shadow: none;
       }
 
-      .dx-texteditor-input {
+      &:not(.dx-tagbox) .dx-texteditor-input {
         background: $datagrid-editor-bg;
         font-size: $fluent-grid-base-cell-font-size;
         height: $fluent-grid-base-cell-height;
@@ -466,7 +458,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
 
-      .dx-tag-container {
+      &:not(.dx-tagbox) .dx-tag-container {
         min-height: $fluent-grid-base-cell-height;
         padding: 0;
       }

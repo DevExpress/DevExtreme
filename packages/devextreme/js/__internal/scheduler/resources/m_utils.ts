@@ -21,6 +21,7 @@ export const getWrappedDataSource = (dataSource) => {
   }
 
   const result = {
+    // @ts-expect-error
     ...normalizeDataSourceOptions(dataSource),
     pageSize: 0,
   };
@@ -203,7 +204,7 @@ export const getOrLoadResourceItem = (resources, resourceLoaderMap, field, value
 
   resources
     .filter((resource) => getFieldExpr(resource) === field
-            && isDefined(resource.dataSource))
+      && isDefined(resource.dataSource))
     .forEach((resource) => {
       const wrappedDataSource: any = getWrappedDataSource(resource.dataSource);
       const valueExpr = getValueExpr(resource);
@@ -551,7 +552,7 @@ export const loadResources = (groups, resources, resourceLoaderMap) => {
 };
 
 export const getNormalizedResources = (rawAppointment, dataAccessors, resources) => {
-  const result = { };
+  const result = {};
 
   each(dataAccessors.resources.getter, (fieldName) => {
     const value = dataAccessors.resources.getter[fieldName](rawAppointment);

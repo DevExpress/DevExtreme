@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Pudota rivikentät tähän",
         "dxPivotGrid-filterFieldArea": "Pudota suodatinkentät tähän",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Aihe",
         "dxScheduler-editorLabelStartDate": "Alkamispäivä",
         "dxScheduler-editorLabelEndDate": "Päättymispäivä",
