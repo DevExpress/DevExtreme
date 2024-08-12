@@ -33,6 +33,8 @@ export class DxServicePopupComponent extends DxPopupComponent implements AfterVi
 
   @Output() afterViewInit$: EventEmitter<void> = new EventEmitter<void>();
 
+  contentComponentRef: any;
+
   constructor(
     elementRef: ElementRef,
     ngZone: NgZone,

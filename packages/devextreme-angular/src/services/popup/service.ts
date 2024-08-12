@@ -4,9 +4,9 @@ import {
   ComponentFactoryResolver,
   Injector,
   EmbeddedViewRef,
-  ComponentRef,
+  ComponentRef, Type,
 } from '@angular/core';
-import { DxPopupComponent, DxPopupTypes } from 'devextreme-angular/ui/popup';
+import { DxPopupTypes } from 'devextreme-angular/ui/popup';
 import { DxServicePopupComponent } from './service.component';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class DxPopupService {
     private readonly componentFactoryResolver: ComponentFactoryResolver,
   ) {}
 
-  open(contentComponentType: any, popupOptions?: DxPopupTypes.Properties) {
+  open<T>(contentComponentType: Type<T>, popupOptions?: DxPopupTypes.Properties) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DxServicePopupComponent);
     const componentRef: ComponentRef<DxServicePopupComponent> = componentFactory.create(this.injector);
     const cmpInstance = componentRef.instance;
@@ -34,7 +34,7 @@ export class DxPopupService {
         cmpInstance.instance.option(popupOptions);
       }
 
-      cmpInstance.insertionPoint?.viewContainerRef.createComponent(contentComponentType);
+      componentRef.instance.contentComponentRef = cmpInstance.insertionPoint?.viewContainerRef.createComponent(contentComponentType);
     });
 
     this.applicationRef.attachView(componentRef.hostView);
@@ -45,6 +45,8 @@ export class DxPopupService {
 
     cmpInstance.visible = true;
 
-    return componentRef.instance as DxPopupComponent;
+    this.applicationRef.tick();
+
+    return componentRef.instance as (typeof componentRef.instance & { contentComponentRef:  ComponentRef<T> });
   }
 }
