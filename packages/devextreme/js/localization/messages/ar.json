@@ -155,6 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "الغاء التصليح",
         "dxDataGrid-columnFixingLeftPosition": "إلى اليسار",
         "dxDataGrid-columnFixingRightPosition": "إلى اليمين",
+        "dxDataGrid-columnFixingStickyPosition": "To the sticky",
         "dxDataGrid-exportTo": "تصدير",
         "dxDataGrid-exportToExcel": "تصدير إلى ملف Excel",
         "dxDataGrid-exporting": "تصدير ...",

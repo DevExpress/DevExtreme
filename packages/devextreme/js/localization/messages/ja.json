@@ -155,6 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "固定の解除",
         "dxDataGrid-columnFixingLeftPosition": "左に固定",
         "dxDataGrid-columnFixingRightPosition": "右に固定",
+        "dxDataGrid-columnFixingStickyPosition": "To the sticky",
         "dxDataGrid-exportTo": "エクスポート",
         "dxDataGrid-exportToExcel": "Excel ファイルにエクスポート",
         "dxDataGrid-exporting": "エクスポート...",
