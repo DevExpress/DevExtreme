@@ -4610,7 +4610,7 @@ QUnit.module('Navigation - click on other view cell', {
 
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
-        this.CANCEL_DELAY = 5000;
+        this.DELAY = 5000;
         fx.off = true;
         this.$element = $('<div>').appendTo('#qunit-fixture');
     },
@@ -4649,7 +4649,7 @@ QUnit.module('Aria accessibility', {
             readOnly: true
         }).dxCalendar('instance');
 
-        clock.tick(this.CANCEL_DELAY);
+        clock.tick(this.DELAY);
 
         calendar.option('readOnly', false);
 
@@ -4668,7 +4668,7 @@ QUnit.module('Aria accessibility', {
             readOnly: false
         }).dxCalendar('instance');
 
-        clock.tick(this.CANCEL_DELAY);
+        clock.tick(this.DELAY);
 
         calendar.option('readOnly', true);
 
