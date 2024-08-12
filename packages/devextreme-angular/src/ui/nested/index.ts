@@ -227,6 +227,7 @@ export * from './tooltip';
 export * from './total-item-dxi';
 export * from './upload';
 export * from './url';
+export * from './user';
 export * from './validation-rule-dxi';
 export * from './validation';
 export * from './value-axis-dxi';

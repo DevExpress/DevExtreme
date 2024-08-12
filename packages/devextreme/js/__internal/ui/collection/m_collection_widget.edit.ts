@@ -158,7 +158,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             if (that._disposed) {
               return;
             }
-
+            // @ts-expect-error
             const items = normalizeLoadResult(loadResult).data;
 
             dataController.applyMapFunction(items);

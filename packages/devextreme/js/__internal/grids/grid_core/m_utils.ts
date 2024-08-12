@@ -150,8 +150,8 @@ const equalFilterParameters = function (filter1, filter2) {
     return true;
   } if (isFunction(filter1) && filter1.columnIndex >= 0 && isFunction(filter2) && filter2.columnIndex >= 0) {
     return filter1.columnIndex === filter2.columnIndex
-            && toComparable(filter1.filterValue) === toComparable(filter2.filterValue)
-            && toComparable(filter1.selectedFilterOperation) === toComparable(filter2.selectedFilterOperation);
+      && toComparable(filter1.filterValue) === toComparable(filter2.filterValue)
+      && toComparable(filter1.selectedFilterOperation) === toComparable(filter2.selectedFilterOperation);
   }
   return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
 };
@@ -370,7 +370,11 @@ export default {
 
     if (groupInterval) {
       each(groupInterval, (index, interval) => {
-        result.push(remoteGrouping ? { selector: dataField, groupInterval: interval, isExpanded: index < groupInterval.length - 1 } : getIntervalSelector.bind(column, interval));
+        result.push(remoteGrouping ? {
+          selector: dataField,
+          groupInterval: interval,
+          isExpanded: index < groupInterval.length - 1,
+        } : getIntervalSelector.bind(column, interval));
       });
 
       return result;
@@ -591,7 +595,7 @@ export default {
         lookupDataSourceOptions = lookupDataSourceOptions({});
       }
     }
-
+    // @ts-expect-error
     return normalizeDataSourceOptions(lookupDataSourceOptions);
   },
 
@@ -628,7 +632,7 @@ export default {
 
       const canUseCache = cachedUniqueRelevantItems && (
         !hasGroupPaging
-                || (loadOptions.skip === previousSkip && loadOptions.take === previousTake)
+        || (loadOptions.skip === previousSkip && loadOptions.take === previousTake)
       );
 
       if (canUseCache) {
@@ -677,7 +681,7 @@ export default {
           });
 
           newDataSource
-          // @ts-expect-error
+            // @ts-expect-error
             .load()
             .done(d.resolve)
             .fail(d.fail);
