@@ -45,12 +45,10 @@ class TreeListRowsView extends RowsView {
       ], () => {
         $iconContainer.empty();
         this._renderIcons($iconContainer, options);
-        this.setAriaExpandedAttribute($container, options.row);
       });
 
       eventsEngine.on($iconContainer, removeEvent, dispose);
     }
-    this.setAriaExpandedAttribute($container, options.row);
     $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
 
     return this._renderIcons($iconContainer, options);

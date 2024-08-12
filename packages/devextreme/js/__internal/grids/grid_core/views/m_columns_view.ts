@@ -841,6 +841,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     this._setCellAriaAttributes($cell, cellOptions);
 
+    if (options.row.node && options.row.node.hasChildren) {
+      this.setAria('expanded', options.row.isExpanded, $cell);
+    }
+
     this._renderCellContent($cell, cellOptions, options);
 
     $row.get(0).appendChild($cell.get(0));
