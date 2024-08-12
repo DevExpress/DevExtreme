@@ -125,7 +125,8 @@ class TreeListRowsView extends RowsView {
       if (node.hasChildren) {
         const { cells } = row;
         cells.forEach((cell) => {
-          this.setAriaExpandedAttribute(cell.cellElement, row);
+          const { cellElement } = cell;
+          this.setAriaExpandedAttribute(cellElement, row);
         });
         this.setAriaExpandedAttribute($rowElement, row);
       }

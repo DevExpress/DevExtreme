@@ -147,7 +147,7 @@ export class ModuleItem {
   }
 
   public setAria(name, value, $target) {
-    const target = $target.get(0);
+    const target = $target ?? $target.get(0);
     const prefix = name !== 'role' && name !== 'id' ? 'aria-' : '';
 
     if (target.setAttribute) {
