@@ -501,19 +501,6 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-appointment-collector {
-    background-color: $scheduler-appointment-base-color;
-    color: $scheduler-appointment-text-color;
-
-    &.dx-button,
-    &.dx-button.dx-state-hover,
-    &.dx-button.dx-state-active,
-    &.dx-button.dx-state-focused {
-      background-color: $scheduler-appointment-base-color;
-      color: $scheduler-appointment-text-color;
-      border: none;
-      box-shadow: none;
-    }
-
     &.dx-button.dx-state-hover {
       &::before {
         pointer-events: none;
@@ -523,14 +510,6 @@ $scheduler-appointment-form-label-padding: 20px;
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: $scheduler-appointment-start-color;
-        opacity: 0.98;
-      }
-
-      .dx-scheduler-appointment-collector-content,
-      .dx-button-content {
-        color: $scheduler-dd-appointment-hover-text-color;
-        opacity: 0.99;
       }
     }
   }
