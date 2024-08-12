@@ -37,6 +37,7 @@ class TreeListRowsView extends RowsView {
     const $iconContainer = $('<div>')
       .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
       .appendTo($container);
+
     if (options.watch) {
       const dispose = options.watch(() => [
         options.row.level,
