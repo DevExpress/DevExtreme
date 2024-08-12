@@ -65,5 +65,10 @@
     "lint-staged",
     "pre-commit"
   ],
-  "packageManager": "pnpm@9.1.2"
+  "packageManager": "pnpm@9.1.2",
+  "dependencies": {
+    "rehype-stringify": "^10.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.0"
+  }
 }

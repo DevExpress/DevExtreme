@@ -36,6 +36,9 @@
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.10.1",
+    "rehype-stringify": "^10.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.0",
     "rrule": "^2.7.1",
     "showdown": "^2.1.0",
     "turndown": "~7.1.0"
