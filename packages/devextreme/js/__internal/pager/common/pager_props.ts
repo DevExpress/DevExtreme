@@ -5,8 +5,10 @@ export interface PagerProps extends BasePagerProps {
   [key: string]: unknown;
   pageSize: number;
   pageIndex: number;
-  pageIndexChanged: EventCallback<number>;
-  pageSizeChanged: EventCallback<number>;
+  pageIndexChanged?: EventCallback<number>;
+  pageSizeChanged?: EventCallback<number>;
+  pageIndexChangedInternal: EventCallback<number>;
+  pageSizeChangedInternal: EventCallback<number>;
 }
 
 export const PagerDefaultProps: PagerProps = {
@@ -15,4 +17,6 @@ export const PagerDefaultProps: PagerProps = {
   pageIndex: 1,
   pageIndexChanged: () => { },
   pageSizeChanged: () => { },
+  pageIndexChangedInternal: () => { },
+  pageSizeChangedInternal: () => { },
 };

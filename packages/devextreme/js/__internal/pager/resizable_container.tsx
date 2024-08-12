@@ -50,7 +50,7 @@ function getElementsWidth({
 
 export interface ResizableContainerProps {
   pagerProps: PagerProps;
-  contentTemplate: JSXTemplate<PagerContentProps, 'pageSizeChanged' | 'pageIndexChanged'>;
+  contentTemplate: JSXTemplate<PagerContentProps, 'pageSizeChangedInternal' | 'pageIndexChangedInternal'>;
 }
 
 export const ResizableContainerDefaultProps = {
@@ -145,9 +145,9 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       onKeyDown,
       pageCount,
       pageIndex,
-      pageIndexChanged,
+      pageIndexChangedInternal,
       pageSize,
-      pageSizeChanged,
+      pageSizeChangedInternal,
       pageSizes,
       pagesCountText,
       pagesNavigatorVisible,
@@ -162,8 +162,8 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     return {
       pageSize,
       pageIndex,
-      pageIndexChanged,
-      pageSizeChanged,
+      pageIndexChangedInternal,
+      pageSizeChangedInternal,
       gridCompatibility,
       className,
       showInfo,
