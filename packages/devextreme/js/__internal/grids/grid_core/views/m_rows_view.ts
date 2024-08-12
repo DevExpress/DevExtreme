@@ -457,7 +457,7 @@ export class RowsView extends ColumnsView {
                         $rowElement.toggle(item.visible);
                       } else if (columnIndices) {
                         const { cells } = item;
-                        this._updateRowAriaAttributes(cells);
+                        this._updateCellAriaAttributes(cells);
                         this._updateCells($rowElement, $newRowElement, columnIndices);
                       } else {
                         $rowElement.replaceWith($newRowElement);
@@ -504,7 +504,7 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  protected _updateRowAriaAttributes<T extends { isExpanded?: boolean; cellElement: HTMLElement }>(cells: T[]): void {
+  protected _updateCellAriaAttributes<T extends { isExpanded?: boolean; cellElement: HTMLElement }>(cells: T[]): void {
     cells.forEach(({ isExpanded, cellElement }) => {
       if (typeof isExpanded !== 'undefined') {
         this.setAria('expanded', isExpanded, cellElement);
