@@ -123,6 +123,10 @@ class TreeListRowsView extends RowsView {
     if (node) {
       this.setAria('level', row.level + 1, $rowElement);
       if (node.hasChildren) {
+        const { cells } = row;
+        cells.forEach((cell) => {
+          this.setAriaExpandedAttribute(cell.cellElement, row);
+        });
         this.setAriaExpandedAttribute($rowElement, row);
       }
     }

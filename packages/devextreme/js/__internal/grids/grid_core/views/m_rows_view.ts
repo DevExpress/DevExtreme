@@ -456,10 +456,6 @@ export class RowsView extends ColumnsView {
                       if (isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
                         $rowElement.toggle(item.visible);
                       } else if (columnIndices) {
-                        if (item.node) {
-                          const { cells } = item;
-                          this._updateCellAriaAttributes(cells);
-                        }
                         this._updateCells($rowElement, $newRowElement, columnIndices);
                       } else {
                         $rowElement.replaceWith($newRowElement);
@@ -503,14 +499,6 @@ export class RowsView extends ColumnsView {
       });
     }).fail(() => {
       this._contentChanges = [];
-    });
-  }
-
-  protected _updateCellAriaAttributes<T extends { isExpanded?: boolean; cellElement: HTMLElement }>(cells: T[]): void {
-    cells.forEach(({ isExpanded, cellElement }) => {
-      if (typeof isExpanded !== 'undefined') {
-        this.setAria('expanded', isExpanded, cellElement);
-      }
     });
   }
 
