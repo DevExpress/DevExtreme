@@ -37,11 +37,13 @@
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.10.1",
     "rehype-stringify": "^10.0.0",
+    "remark-html": "^16.0.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.0",
     "rrule": "^2.7.1",
     "showdown": "^2.1.0",
-    "turndown": "~7.1.0"
+    "turndown": "~7.1.0",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@babel/core": "7.23.9",

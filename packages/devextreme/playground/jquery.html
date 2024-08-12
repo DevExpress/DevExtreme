@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -18,9 +19,12 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
 
-    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script src="https://unpkg.com/turndown@7.1.2/dist/turndown.js"></script>
+    <script src="https://unpkg.com/showdown@2.1.0/dist/showdown.js"></script>
+
+    <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
@@ -28,20 +32,44 @@
     <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
-    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
 
-    <!--
+
     <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
-    -->
+
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        .dx-htmleditor-content img {
+            vertical-align: middle;
+            padding-right: 10px;
+        }
+
+        .value-content {
+            margin-top: 20px;
+            overflow: auto;
+            height: 110px;
+            width: 100%;
+            white-space: pre-wrap;
+        }
+
+        .options {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(191, 191, 191, 0.15);
+            box-sizing: border-box;
+            width: 100%;
+        }
+    </style>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,13 +77,36 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+
+        <div class="dx-viewport demo-container">
+            <div class="html-editor"></div>
+        </div>
+
+
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            $(() => {
+                const htmlTable = '<table><tbody><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr></tbody></table>';
+                const mdTable = `| Month    | Savings |\n| -------- | ------- |\n| January  | $250    |\n| February | $80     |\n| March    | $420    |\n`;
+
+                const editorInstance = $('.html-editor').dxHtmlEditor({
+                    height: 300,
+                    valueType: 'markdown',
+                    value: mdTable,
+                    toolbar: {
+                        items: [
+                            'insertTable',
+                        ],
+                    },
+                }).dxHtmlEditor('instance');
+
+                // editorInstance.option({ valueType: 'markdown' });
+                // editorInstance.option({ valueType: 'html' });
+
+                const valueType = editorInstance.option('valueType');
+                const value = editorInstance.option('value');
+
+                debugger
             });
         </script>
     </div>
