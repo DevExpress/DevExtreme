@@ -726,6 +726,7 @@ const Calendar = Editor.inherit({
     this._updateNavigatorLabels();
 
     this.setAria('role', 'application');
+    this._setAriaReadonly(this.option('readOnly'));
 
     this._moveToClosestAvailableDate();
   },
@@ -744,7 +745,16 @@ const Calendar = Editor.inherit({
     }
   },
 
-  _setAriaReadonly: noop,
+  _setAriaReadonly(readonly = false) {
+    const element = this.$element();
+    if (!readonly) {
+      element.removeAttr('role');
+      element.removeAttr('aria-label');
+    } else {
+      element.attr('role', 'group');
+      this.setAria('label', 'Readonly-calendar', element);
+    }
+  },
 
   _getKeyboardListeners() {
     return this.callBase().concat([this._view]);
@@ -1507,6 +1517,9 @@ const Calendar = Editor.inherit({
       case 'currentDate':
         this.setAria('id', undefined, this._view._getCellByDate(previousValue));
         this._updateCurrentDate(value);
+        break;
+      case 'readOnly':
+        this._setAriaReadonly(this.option('readOnly'));
         break;
       case 'zoomLevel':
         this.$element().removeClass(`${CALENDAR_VIEW_CLASS}-${previousValue}`);
