@@ -158,6 +158,7 @@ export default CollectionWidget.inherit({
     } else {
       const changedItem = items[indexByKey(keyInfo, items, change.key)];
       if (changedItem) {
+        // @ts-expect-error
         update(keyInfo, items, change.key, change.data).done(() => {
           this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByKey(change.key));
         });
@@ -166,6 +167,7 @@ export default CollectionWidget.inherit({
   },
 
   _insertByChange(keyInfo, items, change, isPartialRefresh) {
+    // @ts-expect-error
     when(isPartialRefresh || insert(keyInfo, items, change.data, change.index)).done(() => {
       this._beforeItemElementInserted(change);
 
