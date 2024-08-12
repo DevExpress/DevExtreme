@@ -456,8 +456,10 @@ export class RowsView extends ColumnsView {
                       if (isDefined(item.visible) && item.visible !== $rowElement.is(':visible')) {
                         $rowElement.toggle(item.visible);
                       } else if (columnIndices) {
-                        const { cells } = item;
-                        this._updateCellAriaAttributes(cells);
+                        if (item.node) {
+                          const { cells } = item;
+                          this._updateCellAriaAttributes(cells);
+                        }
                         this._updateCells($rowElement, $newRowElement, columnIndices);
                       } else {
                         $rowElement.replaceWith($newRowElement);
