@@ -47,6 +47,6 @@ export class DxPopupService {
 
     this.applicationRef.tick();
 
-    return componentRef.instance as (typeof componentRef.instance & { contentComponentRef:  ComponentRef<T> });
+    return componentRef.instance as (typeof componentRef.instance & { contentComponentRef: ComponentRef<T> });
   }
 }
