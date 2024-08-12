@@ -620,57 +620,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return super._getRowVisibleColumns(rowIndex);
   }
 
-  public getContextMenuItems(options) {
-    const { column } = options;
-    const columnFixingOptions: any = this.option('columnFixing');
-    let items: any = super.getContextMenuItems(options);
-
-    if (options.row && options.row.rowType === 'header') {
-      if (columnFixingOptions.enabled === true && column && column.allowFixing) {
-        const onItemClick = (params) => {
-          // eslint-disable-next-line default-case
-          switch (params.itemData.value) {
-            case 'none':
-              this._columnsController.columnOption(column.index, 'fixed', false);
-              break;
-            case 'left':
-              this._columnsController.columnOption(column.index, {
-                fixed: true,
-                fixedPosition: 'left',
-              });
-              break;
-            case 'right':
-              this._columnsController.columnOption(column.index, {
-                fixed: true,
-                fixedPosition: 'right',
-              });
-              break;
-          }
-        };
-
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        items = items || [];
-        items.push(
-          {
-            text: columnFixingOptions.texts.fix,
-            beginGroup: true,
-            items: [
-              {
-                text: columnFixingOptions.texts.leftPosition, value: 'left', disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'), onItemClick,
-              },
-              {
-                text: columnFixingOptions.texts.rightPosition, value: 'right', disabled: column.fixed && column.fixedPosition === 'right', onItemClick,
-              }],
-          },
-          {
-            text: columnFixingOptions.texts.unfix, value: 'none', disabled: !column.fixed, onItemClick,
-          },
-        );
-      }
-    }
-    return items;
-  }
-
   private getFixedColumnElements(rowIndex?) {
     const that = this;
 
@@ -1209,6 +1158,7 @@ export const columnFixingModule = {
           unfix: messageLocalization.format('dxDataGrid-columnFixingUnfix'),
           leftPosition: messageLocalization.format('dxDataGrid-columnFixingLeftPosition'),
           rightPosition: messageLocalization.format('dxDataGrid-columnFixingRightPosition'),
+          stickyPosition: messageLocalization.format('dxDataGrid-columnFixingStickyPosition'),
         },
       },
     };
