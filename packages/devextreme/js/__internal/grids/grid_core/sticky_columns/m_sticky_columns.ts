@@ -103,6 +103,20 @@ const columnHeadersView = (
               break;
           }
         };
+        const fixedPositionItems = [
+          {
+            text: columnFixingOptions.texts.leftPosition, value: 'left', disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'), onItemClick,
+          },
+          {
+            text: columnFixingOptions.texts.rightPosition, value: 'right', disabled: column.fixed && column.fixedPosition === 'right', onItemClick,
+          },
+        ];
+
+        if (this._isStickyColumns()) {
+          fixedPositionItems.push({
+            text: columnFixingOptions.texts.stickyPosition, value: 'sticky', disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky, onItemClick,
+          });
+        }
 
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         items = items || [];
@@ -110,24 +124,12 @@ const columnHeadersView = (
           {
             text: columnFixingOptions.texts.fix,
             beginGroup: true,
-            items: [
-              {
-                text: columnFixingOptions.texts.leftPosition, value: 'left', disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'), onItemClick,
-              },
-              {
-                text: columnFixingOptions.texts.rightPosition, value: 'right', disabled: column.fixed && column.fixedPosition === 'right', onItemClick,
-              }],
+            items: fixedPositionItems,
           },
           {
             text: columnFixingOptions.texts.unfix, value: 'none', disabled: !column.fixed, onItemClick,
           },
         );
-
-        if (this._isStickyColumns()) {
-          items[items.length - 2].items.push({
-            text: columnFixingOptions.texts.stickyPosition, value: 'sticky', disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky, onItemClick,
-          });
-        }
       }
     }
     return items;

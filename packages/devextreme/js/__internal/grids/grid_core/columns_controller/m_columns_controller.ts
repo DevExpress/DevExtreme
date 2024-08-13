@@ -504,13 +504,8 @@ export class ColumnsController extends modules.Controller {
 
   public getStickyColumns(): any[] {
     const visibleColumns = this.getVisibleColumns(null, true);
-    const isColumnFixing = this._isColumnFixing();
 
-    if (isColumnFixing) {
-      return visibleColumns.filter((column) => column.fixed);
-    }
-
-    return [];
+    return visibleColumns.filter((column) => column.fixed);
   }
 
   private _getFixedColumnsCore() {
@@ -754,7 +749,7 @@ export class ColumnsController extends modules.Controller {
           column.fixed = parentBandColumns[0]?.fixed ?? column.fixed;
           column.fixedPosition = parentBandColumns[0]?.fixedPosition ?? column.fixedPosition;
 
-          if (column.fixed && getFixedPosition(this, column) !== StickyPosition.Sticky) {
+          if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
             const isDefaultCommandColumn = !!column.command && !isCustomCommandColumn(this, column);
 
             let isFixedToEnd = column.fixedPosition === 'right';
