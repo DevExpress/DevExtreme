@@ -34,7 +34,7 @@ export class DxPopupService {
         cmpInstance.instance.option(popupOptions);
       }
 
-      componentRef.instance.contentRef = cmpInstance.insertionPoint?.viewContainerRef.createComponent(contentComponent);
+      componentRef.instance.contentRef = cmpInstance.contentInsertion?.viewContainerRef.createComponent(contentComponent);
     });
 
     this.applicationRef.attachView(componentRef.hostView);

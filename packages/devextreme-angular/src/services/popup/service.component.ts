@@ -26,10 +26,10 @@ import { DxServicePopupInsertionDirective } from './insertion.directive';
     NestedOptionHost,
     IterableDifferHelper,
   ],
-  template: '<ng-template dx-service-popup-insertion></ng-template>',
+  template: '<ng-template popup-content-insertion></ng-template>',
 })
 export class DxServicePopupComponent extends DxPopupComponent implements AfterViewInit {
-  @ViewChild(DxServicePopupInsertionDirective) insertionPoint: DxServicePopupInsertionDirective;
+  @ViewChild(DxServicePopupInsertionDirective) contentInsertion: DxServicePopupInsertionDirective;
 
   @Output() afterViewInit$: EventEmitter<void> = new EventEmitter<void>();
 

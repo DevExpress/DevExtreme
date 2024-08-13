@@ -1,14 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-
 import { DxPopupService } from 'devextreme-angular/services';
-import {DxButtonModule} from 'devextreme-angular';
-import {Component, Input} from '@angular/core';
-
-const interceptors: Record<string, () => void> = {};
-
-interceptors.interceptorFn = () => {};
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
+import { DxButtonModule } from 'devextreme-angular';
+import {Component, Input } from '@angular/core';
 
 @Component({
     selector: 'stub-component',
@@ -42,8 +35,7 @@ describe('Using DxPopupService', () => {
     });
 
     it('DxPopupService opens DxPopup with component passed as argument', (done) => {
-        let fixture = TestBed.createComponent(StubComponent);
-
+        const fixture = TestBed.createComponent(StubComponent);
         const popupRef = popupService.open(PopupContentComponent, { showTitle: true, showCloseButton: true });
 
         popupRef.onHidden.subscribe(() => {
