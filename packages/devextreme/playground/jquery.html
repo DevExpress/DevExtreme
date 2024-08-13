@@ -54,24 +54,24 @@
         <div id="button"></div>
         <script>
             $(function () {
-                // const items = [
-                //     {
-                //         text: 'custom 1',
-                //     },
-                //     {
-                //         text: 'custom 2',
-                //     },
-                // ];
+                const items = [
+                    {
+                        text: 'custom 1',
+                    },
+                    {
+                        text: 'custom 2',
+                    },
+                ];
 
-                const items = ['custom 1', 'custom 2'];
+                // const items = ['custom 1', 'custom 2'];
 
                 $('#button').dxRadioGroup({
                     items,
-                    // itemTemplate(itemData, _, itemElement) {
-                    //     const $button = $('<button>').text(itemData.text);
+                    itemTemplate(itemData, _, itemElement) {
+                        const $button = $('<button>').text(itemData.text);
 
-                    //     itemElement.append($button);
-                    // },
+                        itemElement.append($button);
+                    },
                 });
             });
         </script>

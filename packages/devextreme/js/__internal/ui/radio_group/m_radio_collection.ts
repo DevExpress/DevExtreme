@@ -1,3 +1,4 @@
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
@@ -13,6 +14,7 @@ const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
 const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+const ITEM_CONTENT_CLASS = 'dx-item-content';
 
 export type Properties = TypedCollectionWidgetOptions<RadioCollection>;
 
@@ -53,7 +55,8 @@ class RadioCollection extends CollectionWidget<Properties> {
 
   _postprocessRenderItem(args): void {
     const { itemData, itemElement } = args;
-    const { html, text } = itemData;
+    const { html } = itemData;
+    const contentId = `dx-${new Guid()}`;
 
     if (!html) {
       const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
@@ -67,13 +70,19 @@ class RadioCollection extends CollectionWidget<Properties> {
       const aria = {
         role: 'radio',
         // eslint-disable-next-line spellcheck/spell-checker
-        labelledby: undefined,
+        labelledby: contentId,
       };
 
       this.setAria(aria, $radioContainer);
     }
 
     super._postprocessRenderItem(args);
+
+    if (!html) {
+      const $itemContent = $(itemElement).find(`.${ITEM_CONTENT_CLASS}`);
+
+      $itemContent.attr('id', contentId);
+    }
   }
 
   _getTargetForSettingId($target) {
