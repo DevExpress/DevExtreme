@@ -5,6 +5,10 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input,
     ContentChildren,
@@ -12,7 +16,7 @@ import {
     QueryList
 } from '@angular/core';
 
-
+import { DOCUMENT } from '@angular/common';
 
 
 import { AsyncRule, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, VerticalAlignment } from 'devextreme/common';
@@ -22,6 +26,10 @@ import { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 import { DxiFormValidationRuleComponent } from './validation-rule-dxi';
@@ -30,11 +38,12 @@ import { DxiFormTabComponent } from './tab-dxi';
 
 @Component({
     selector: 'dxi-form-item',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiFormItemComponent extends CollectionNestedOption {
+export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -322,10 +331,22 @@ export class DxiFormItemComponent extends CollectionNestedOption {
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 
