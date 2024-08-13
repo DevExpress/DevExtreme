@@ -66,19 +66,9 @@ class RadioCollection extends CollectionWidget<Properties> {
 
       const aria = {
         role: 'radio',
-        label: undefined,
         // eslint-disable-next-line spellcheck/spell-checker
         labelledby: undefined,
       };
-
-      debugger;
-
-      if (text || typeof itemData === 'string') {
-        aria.label = text || itemData;
-      } else {
-        // eslint-disable-next-line spellcheck/spell-checker
-        aria.labelledby = text;
-      }
 
       this.setAria(aria, $radioContainer);
     }
