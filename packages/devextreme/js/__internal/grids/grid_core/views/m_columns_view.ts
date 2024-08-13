@@ -792,11 +792,22 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _updateCells($rowElement, $newRowElement, columnIndices) {
+  protected _updateCells($rowElement, $newRowElement, columnIndices, options?) {
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
     const cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
+    const {
+      cells: cellElements,
+      node,
+      rowType,
+    } = options || {};
+
+    if (cellElements && node?.hasChildren) {
+      cellElements.forEach((cell) => {
+        this.setAria('expanded', cell.isExpanded, cell.cellElement);
+      });
+    }
 
     columnIndices.forEach((columnIndex, index) => {
       const $cell = $cells.eq(columnIndex);
