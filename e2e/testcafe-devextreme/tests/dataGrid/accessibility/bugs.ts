@@ -10,7 +10,7 @@ test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if the
 
   await t
     .expect(dataGrid.getContainer().getAttribute('aria-label'))
-    .eql('Data grid with 0 rows and 2 columns');
+    .eql('Data grid with 0 rows and 2 columns. ');
 }).before(async () => createWidget('dxDataGrid', {
   keyExpr: 'id',
   dataSource: [{
