@@ -10,7 +10,7 @@ import {
 } from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
 import { ConfigProvider } from '../../../common/config_provider';
-import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../utils/resolve_rtl';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../../../__internal/core/r1/utils/resolve_rtl';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 import errors from '../../../../core/errors';
 import domAdapter from '../../../../core/dom_adapter';
@@ -19,7 +19,7 @@ jest.mock('../../../../events/utils/index', () => ({
   ...jest.requireActual('../../../../events/utils/index'),
 }));
 jest.mock('../../../common/config_provider', () => ({ ConfigProvider: () => null }));
-jest.mock('../../../utils/resolve_rtl');
+jest.mock('../../../../__internal/core/r1/utils/resolve_rtl');
 jest.mock('../../../../core/utils/resize_callbacks');
 jest.mock('../../../../core/errors');
 

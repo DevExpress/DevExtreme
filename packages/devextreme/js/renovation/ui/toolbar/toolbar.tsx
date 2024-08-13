@@ -8,7 +8,7 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { BaseToolbarItemProps, ToolbarProps } from './toolbar_props';
 import { isObject } from '../../../core/utils/type';
 import { ConfigContext, ConfigContextValue } from '../../../__internal/core/r1/config_context';
-import { resolveRtlEnabled } from '../../utils/resolve_rtl';
+import { resolveRtlEnabled } from '../../../__internal/core/r1/utils/resolve_rtl';
 
 export const viewFunction = ({ componentProps, restAttributes }: Toolbar): JSX.Element => (
   <DomComponentWrapper

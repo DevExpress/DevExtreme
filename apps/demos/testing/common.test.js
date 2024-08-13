@@ -66,9 +66,6 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    DataGrid: [
-      { demo: 'RightToLeftSupport', themes: [THEME.generic, THEME.material, THEME.fluent] },
-    ],
   },
   Angular: {
     DataGrid: [
