@@ -477,6 +477,9 @@ QUnit.module('Tab select action', () => {
             assert.strictEqual(count, 2, 'onSelectionChanging should be called twice');
             assert.strictEqual(onSelectionChangedSpy.callCount, 0, 'onSelectionChanged should not be called');
             assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 when cancel is true');
+            assert.deepEqual(this.tabInstance.option('selectedItem'), { text: '0' }, 'selectedItem should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItems'), [{ text: '0' }], 'selectedItems should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItemKeys'), [{ text: '0' }], 'selectedItemKeys should remain the first key');
         });
 
         QUnit.test('Selection should be cancelled synchronously when e.cancel is set to true', function(assert) {
@@ -494,6 +497,9 @@ QUnit.module('Tab select action', () => {
             assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'onSelectionChanged should not be called');
             assert.ok(onSelectionChangingSpy.getCall(0).args[0].cancel, 'e.cancel should be set to true');
             assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 when cancelled');
+            assert.deepEqual(this.tabInstance.option('selectedItem'), { text: '0' }, 'selectedItem should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItems'), [{ text: '0' }], 'selectedItems should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItemKeys'), [{ text: '0' }], 'selectedItemKeys should remain the first key');
         });
 
         QUnit.test('Selection should not change when onSelectionChanging is cancelled with a rejected promise', function(assert) {
@@ -511,9 +517,12 @@ QUnit.module('Tab select action', () => {
 
             $item.trigger('dxclick');
 
-            assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 before promise resolves');
             assert.strictEqual(onSelectionChangingSpy.callCount, 1, 'onSelectionChanging should be called twice after click');
             assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'onSelectionChanged should not be called before promise resolves');
+            assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 before promise resolves');
+            assert.deepEqual(this.tabInstance.option('selectedItem'), { text: '0' }, 'selectedItem should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItems'), [{ text: '0' }], 'selectedItems should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItemKeys'), [{ text: '0' }], 'selectedItemKeys should remain the first key');
 
             this.clock.tick(this.CANCEL_DELAY);
 
@@ -522,6 +531,9 @@ QUnit.module('Tab select action', () => {
                 assert.strictEqual(onSelectionChangingSpy.callCount, 1, 'onSelectionChanging should still be called once');
                 assert.strictEqual(this.onSelectionChangedSpy.callCount, 0, 'onSelectionChanged should be called after promise rejection');
                 assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should change after cancellation promise rejection');
+                assert.deepEqual(this.tabInstance.option('selectedItem'), { text: '0' }, 'selectedItem should remain the first item');
+                assert.deepEqual(this.tabInstance.option('selectedItems'), [{ text: '0' }], 'selectedItems should remain the first item');
+                assert.deepEqual(this.tabInstance.option('selectedItemKeys'), [{ text: '0' }], 'selectedItemKeys should remain the first key');
             });
         });
 
@@ -551,6 +563,9 @@ QUnit.module('Tab select action', () => {
             onSelectionChangingSpy.getCall(0).args[0].cancel.then((cancel) => {
                 assert.ok(cancel, 'e.cancel should be set to true');
                 assert.strictEqual(this.tabInstance.option('selectedIndex'), 0, 'selectedIndex should remain 0 when cancelled');
+                assert.deepEqual(this.tabInstance.option('selectedItem'), { text: '0' }, 'selectedItem should remain the first item');
+                assert.deepEqual(this.tabInstance.option('selectedItems'), [{ text: '0' }], 'selectedItems should remain the first item');
+                assert.deepEqual(this.tabInstance.option('selectedItemKeys'), [{ text: '0' }], 'selectedItemKeys should remain the first key');
             });
         });
 
@@ -563,6 +578,10 @@ QUnit.module('Tab select action', () => {
             assert.strictEqual(this.onSelectionChangedSpy.callCount, 1, 'onSelectionChanged should be called');
             assert.notOk(this.onSelectionChangingSpy.getCall(0).args[0].cancel, 'e.cancel should be set to false');
             assert.strictEqual(this.tabInstance.option('selectedIndex'), 1, 'selectedIndex should move to index 1');
+
+            assert.deepEqual(this.tabInstance.option('selectedItem'), { text: '1' }, 'selectedItem should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItems'), [{ text: '1' }], 'selectedItems should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItemKeys'), [{ text: '1' }], 'selectedItemKeys should remain the first key');
         });
 
         QUnit.test('Multiple items should be selected and one item deselected correctly', function(assert) {
@@ -590,6 +609,9 @@ QUnit.module('Tab select action', () => {
 
             const selectedItems = this.tabInstance.option('selectedItems');
             assert.deepEqual(selectedItems, expectedResult, 'Items with indexes 1 and 2 should be selected');
+            assert.deepEqual(this.tabInstance.option('selectedItem'), { text: '1' }, 'selectedItem should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItems'), expectedResult, 'selectedItems should remain the first item');
+            assert.deepEqual(this.tabInstance.option('selectedItemKeys'), expectedResult, 'selectedItemKeys should remain the first key');
             assert.strictEqual(this.onSelectionChangingSpy.callCount, 5, 'onSelectionChanging should be called for each action');
             assert.strictEqual(this.onSelectionChangedSpy.callCount, 4, 'onSelectionChanged should be called for each complete selection change');
         });
