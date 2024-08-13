@@ -27,7 +27,7 @@ import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
 import { ScrollableProps } from './common/scrollable_props';
 
 import { resolveRtlEnabled } from '../../utils/resolve_rtl';
-import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../__internal/core/r1/config_context';
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {

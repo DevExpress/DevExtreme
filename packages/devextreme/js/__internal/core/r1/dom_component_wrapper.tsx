@@ -5,7 +5,6 @@ import {
   hasTemplate, InfernoComponent, InfernoEffect, renderTemplate,
 } from '@devextreme/runtime/inferno';
 import type { ComponentClass } from '@js/core/dom_component';
-import type { EventCallback } from '@js/renovation/ui/common/event_callback';
 import { getUpdatedOptions } from '@js/renovation/ui/common/utils/get_updated_options';
 import type { DisposeEffectReturn } from '@js/renovation/utils/effect_return';
 import type { RefObject } from 'inferno';
@@ -13,7 +12,8 @@ import { createRef } from 'inferno';
 
 import type DomComponent from '../../../core/dom_component';
 import { extend } from '../../../core/utils/extend';
-import { ConfigContext } from '../../../renovation/common/config_context';
+import { ConfigContext } from './config_context';
+import type { EventCallback } from './event_callback';
 
 interface ComponentProps {
   className?: string;
@@ -55,11 +55,11 @@ export class DomComponentWrapper extends InfernoComponent<DomComponentWrapperPro
   }
 
   getConfig(): any {
-    const { id } = (ConfigContext as any);
+    const { id } = ConfigContext;
     if (this.context[id]) {
       return this.context[id];
     }
-    return (ConfigContext as any).defaultValue;
+    return ConfigContext.defaultValue;
   }
 
   render(): JSX.Element {
