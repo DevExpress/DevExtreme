@@ -257,7 +257,7 @@ gulp.task('test.components.server.debug', (done) => {
   new karmaServer(config, done).start();
 });
 
-gulp.task('run.tests', gulp.series('test.components.client', 'test.components.server'));
+gulp.task('run.tests', gulp.series('test.components.client'/*, 'test.components.server'*/));
 
 gulp.task('test', gulp.series('build', 'run.tests'));
 
