@@ -805,6 +805,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if (cellElements && node?.hasChildren) {
       cellElements.forEach((cell) => {
+        cell.cellElement = cell.cellElement instanceof HTMLElement ? $(cell.cellElement) : cell.cellElement;
         this.setAria('expanded', cell.isExpanded, cell.cellElement);
       });
     }
