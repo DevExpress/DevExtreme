@@ -505,35 +505,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
   },
 
-  // _updateSelectedItems(args) {
-  //   this._selection.onSelectionChanging();
-  //   if (this.isSelectionCancel instanceof Promise) {
-  //     this.isSelectionCancel.then((cancel) => {
-  //       if (!cancel) {
-  //         this.updatingSelectedItems(args);
-  //       } else {
-  //         this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
-  //       }
-  //     });
-  //   } else if (!this.isSelectionCancel) {
-  //     this.updatingSelectedItems(args);
-  //   } else {
-  //     this._setOptionWithoutOptionChange('selectedIndex', this.initialSelectedIndex);
-  //   }
-  // },
-
-  _fireSelectionChangeEvent(addedItems, removedItems) {
-    this._createActionByOption('onSelectionChanged', {
-      excludeValidators: ['disabled', 'readOnly'],
-    })({ addedItems, removedItems });
-  },
-
-  _fireSelectionChangingEvent(args) {
-    this._createActionByOption('onSelectionChanging', {
-      excludeValidators: ['disabled', 'readOnly'],
-    })(args);
-  },
-
   _updateSelection: noop,
 
   _setAriaSelectionAttribute($target, value) {
