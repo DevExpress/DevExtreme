@@ -24,7 +24,7 @@ import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
-import { NestedOptionContext, NestedOptionContextContent } from './nested-option';
+import { NestedOptionContext } from './nested-option';
 import { ElementType } from './configuration/react/element';
 import { IConfigNode } from './configuration/config-node';
 
@@ -89,7 +89,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const prevPropsRef = useRef<P & ComponentBaseProps>();
 
     let widgetConfig: IConfigNode;
-    let context: NestedOptionContextContent;
 
     const restoreTree = useCallback(() => {
       if (childElementsDetached.current && childNodes.current?.length && element.current) {
@@ -375,7 +374,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ), [portalContainer.current, _renderChildren]);
 
     const renderContent = useCallback(() => {
-      const ref = (node: HTMLDivElement | null) => {
+      const contentRef = (node: HTMLDivElement | null) => {
         if (node && portalContainer.current !== node) {
           portalContainer.current = node;
           setForceUpdateToken(Math.random());
@@ -384,7 +383,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       return isPortalComponent && children
         ? <div
-            ref={ref}
+            ref={contentRef}
             style={{ display: 'contents' }}
           />
         : _renderChildren();
@@ -395,7 +394,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       _renderChildren,
     ]);
 
-    [widgetConfig, context] = useOptionScanning({
+    const options = useOptionScanning({
       type: ElementType.Option,
       descriptor: {
         name: '',
@@ -407,6 +406,9 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       },
       props,
     }, children);
+
+    [widgetConfig] = options;
+    const [, context] = options;
 
     return (
       <RestoreTreeContext.Provider value={restoreTree}>
