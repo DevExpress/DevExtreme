@@ -19,7 +19,7 @@ export class DxPopupService {
     private readonly componentFactoryResolver: ComponentFactoryResolver,
   ) {}
 
-  open<T>(contentComponentType: Type<T>, popupOptions?: DxPopupTypes.Properties) {
+  open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties) {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DxServicePopupComponent);
     const componentRef: ComponentRef<DxServicePopupComponent> = componentFactory.create(this.injector);
     const cmpInstance = componentRef.instance;
@@ -34,7 +34,7 @@ export class DxPopupService {
         cmpInstance.instance.option(popupOptions);
       }
 
-      componentRef.instance.contentComponentRef = cmpInstance.insertionPoint?.viewContainerRef.createComponent(contentComponentType);
+      componentRef.instance.contentRef = cmpInstance.insertionPoint?.viewContainerRef.createComponent(contentComponent);
     });
 
     this.applicationRef.attachView(componentRef.hostView);
@@ -47,6 +47,6 @@ export class DxPopupService {
 
     this.applicationRef.tick();
 
-    return componentRef.instance as (typeof componentRef.instance & { contentComponentRef: ComponentRef<T> });
+    return componentRef.instance as (typeof componentRef.instance & { contentRef: ComponentRef<T> });
   }
 }

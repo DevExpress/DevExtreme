@@ -50,7 +50,7 @@ describe('Using DxPopupService', () => {
             done();
         });
 
-        popupRef.contentComponentRef.instance.onClick = () => {
+        popupRef.contentRef.instance.onClick = () => {
             popupRef.visible = false;
         };
 
@@ -62,8 +62,8 @@ describe('Using DxPopupService', () => {
 
         expect(popupEl).toBeTruthy();
         expect(popupCloseEl).toBeTruthy();
-        expect(popupRef.contentComponentRef).toBeTruthy();
-        expect(popupContentComponentEl.textContent).toEqual('Test- Button');
+        expect(popupRef.contentRef).toBeTruthy();
+        expect(popupContentComponentEl.textContent).toEqual('Test Button');
 
         popupContentComponentEl.click();
     });

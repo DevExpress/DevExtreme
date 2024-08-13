@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component,
+  Component, ComponentRef,
   ElementRef,
   EventEmitter, Inject,
   NgZone,
@@ -33,7 +33,7 @@ export class DxServicePopupComponent extends DxPopupComponent implements AfterVi
 
   @Output() afterViewInit$: EventEmitter<void> = new EventEmitter<void>();
 
-  contentComponentRef: any;
+  contentRef: ComponentRef<unknown>;
 
   constructor(
     elementRef: ElementRef,
