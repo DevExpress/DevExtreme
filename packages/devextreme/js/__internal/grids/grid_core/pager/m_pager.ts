@@ -3,6 +3,7 @@ import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import Pager from '@js/ui/pager';
 
+import type { PagerProps } from '../../../pager/common/pager_props';
 import { View } from '../m_modules';
 
 const PAGER_CLASS = 'pager';
@@ -83,7 +84,7 @@ export class PagerView extends View {
     const pagerOptions = that.option('pager') ?? {};
     const dataController = that.getController('data');
     const keyboardController = that.getController('keyboardNavigation');
-    const options: any = {
+    const options: PagerProps = {
       maxPagesCount: MAX_PAGES_COUNT,
       pageIndex: getPageIndex(dataController),
       pageCount: dataController.pageCount(),
@@ -97,6 +98,7 @@ export class PagerView extends View {
       pageSizes: that.getPageSizes(),
       totalCount: dataController.totalCount(),
       hasKnownLastPage: dataController.hasKnownLastPage(),
+      rtlEnabled: that.option('rtlEnabled'),
       pageIndexChanged(pageIndex) {
         if (dataController.pageIndex() !== pageIndex - 1) {
           dataController.pageIndex(pageIndex - 1);
@@ -106,8 +108,6 @@ export class PagerView extends View {
         dataController.pageSize(pageSize);
       },
       onKeyDown: (e) => keyboardController && keyboardController.executeAction('onKeyDown', e),
-      useLegacyKeyboardNavigation: this.option('useLegacyKeyboardNavigation'),
-      useKeyboard: this.option('keyboardNavigation.enabled'),
     };
 
     if (isDefined(pagerOptions.infoText)) {

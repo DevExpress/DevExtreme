@@ -13,7 +13,7 @@ import {
 import { renderTemplate, hasTemplate } from '@devextreme/runtime/declarations';
 import type DomComponent from '../../../core/dom_component';
 import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
-import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../__internal/core/r1/config_context';
 import { EventCallback } from './event_callback';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 import { getUpdatedOptions } from './utils/get_updated_options';

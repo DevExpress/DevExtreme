@@ -1,6 +1,6 @@
 import each from 'jest-each';
 import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../resolve_rtl';
-import { ConfigContextValue } from '../../common/config_context';
+import { ConfigContextValue } from '../../../__internal/core/r1/config_context';
 import config from '../../../core/config';
 
 describe('rtlEnabled', () => {
