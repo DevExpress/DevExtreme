@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,6 +43,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -51,13 +53,29 @@
         <br />
         <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            $(function () {
+                // const items = [
+                //     {
+                //         text: 'custom 1',
+                //     },
+                //     {
+                //         text: 'custom 2',
+                //     },
+                // ];
+
+                const items = ['custom 1', 'custom 2'];
+
+                $('#button').dxRadioGroup({
+                    items,
+                    // itemTemplate(itemData, _, itemElement) {
+                    //     const $button = $('<button>').text(itemData.text);
+
+                    //     itemElement.append($button);
+                    // },
                 });
             });
         </script>
     </div>
 </body>
+
 </html>

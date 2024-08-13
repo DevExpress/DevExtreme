@@ -383,11 +383,17 @@ const CollectionWidget = Widget.inherit({
     this.setAria('activedescendant', isDefined(this.option('focusedElement')) ? this.getFocusedItemId() : null, $target);
   },
 
+  _getTargetForSettingId($target) {
+    return $target;
+  },
+
   _refreshItemId($target, needCleanItemId) {
+    const $focusTarget = this._getTargetForSettingId($target);
+
     if (!needCleanItemId && this.option('focusedElement')) {
-      this.setAria('id', this.getFocusedItemId(), $target);
+      this.setAria('id', this.getFocusedItemId(), $focusTarget);
     } else {
-      this.setAria('id', null, $target);
+      this.setAria('id', null, $focusTarget);
     }
   },
 

@@ -29,10 +29,13 @@ class RadioCollection extends CollectionWidget<Properties> {
   _getDefaultOptions(): Properties {
     const defaultOptions = super._getDefaultOptions();
 
+    // // @ts-expect-error
+    // return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions(), {
+    //   _itemAttributes: { role: 'radio' },
+    // });
+
     // @ts-expect-error
-    return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions(), {
-      _itemAttributes: { role: 'radio' },
-    });
+    return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions());
   }
 
   _initMarkup(): void {
@@ -49,7 +52,8 @@ class RadioCollection extends CollectionWidget<Properties> {
   }
 
   _postprocessRenderItem(args): void {
-    const { itemData: { html }, itemElement } = args;
+    const { itemData, itemElement } = args;
+    const { html, text } = itemData;
 
     if (!html) {
       const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
@@ -59,9 +63,33 @@ class RadioCollection extends CollectionWidget<Properties> {
       const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
       $(itemElement).prepend($radioContainer);
+
+      const aria = {
+        role: 'radio',
+        label: undefined,
+        // eslint-disable-next-line spellcheck/spell-checker
+        labelledby: undefined,
+      };
+
+      debugger;
+
+      if (text || typeof itemData === 'string') {
+        aria.label = text || itemData;
+      } else {
+        // eslint-disable-next-line spellcheck/spell-checker
+        aria.labelledby = text;
+      }
+
+      this.setAria(aria, $radioContainer);
     }
 
     super._postprocessRenderItem(args);
+  }
+
+  _getTargetForSettingId($target) {
+    const $radioContainer = $target.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
+    return $radioContainer;
   }
 
   _processSelectableItem(
@@ -76,7 +104,11 @@ class RadioCollection extends CollectionWidget<Properties> {
       .first()
       .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isSelected);
 
-    this.setAria('checked', isSelected, $itemElement);
+    // this.setAria('checked', isSelected, $itemElement);
+
+    const $radioContainer = $itemElement.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
+    this.setAria('checked', isSelected, $radioContainer);
   }
 
   _refreshContent(): void {
