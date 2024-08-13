@@ -63,7 +63,7 @@ describe('Using DxPopupService', () => {
         expect(popupEl).toBeTruthy();
         expect(popupCloseEl).toBeTruthy();
         expect(popupRef.contentComponentRef).toBeTruthy();
-        expect(popupContentComponentEl.textContent).toEqual('Test Button');
+        expect(popupContentComponentEl.textContent).toEqual('Test- Button');
 
         popupContentComponentEl.click();
     });
