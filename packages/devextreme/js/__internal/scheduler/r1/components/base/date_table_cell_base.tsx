@@ -2,6 +2,7 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
+import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
 import { DATE_TABLE_CELL_CLASS } from '../const';
 import type { DataCellTemplateProps, DefaultProps } from '../types';
@@ -93,7 +94,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     const cellSizeVerticalClass = renderUtils
       .getCellSizeVerticalClass(!!allDay);
 
-    const classes = renderUtils.combineClasses({
+    const classes = combineClasses({
       [cellSizeHorizontalClass]: true,
       [cellSizeVerticalClass]: true,
       [DATE_TABLE_CELL_CLASS]: !allDay,
