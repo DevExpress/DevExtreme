@@ -155,7 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "Rozwiąż",
         "dxDataGrid-columnFixingLeftPosition": "Na lewo",
         "dxDataGrid-columnFixingRightPosition": "Na prawo",
-        "dxDataGrid-columnFixingStickyPosition": "To the sticky",
+        "dxDataGrid-columnFixingStickyPosition": "Stick in place",
         "dxDataGrid-exportTo": "Eksportuj",
         "dxDataGrid-exportToExcel": "Eksportuj jako plik excel",
         "dxDataGrid-exporting": "Eksport...",

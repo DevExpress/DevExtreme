@@ -155,7 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "Uvolnit",
         "dxDataGrid-columnFixingLeftPosition": "Vlevo",
         "dxDataGrid-columnFixingRightPosition": "Vpravo",
-        "dxDataGrid-columnFixingStickyPosition": "To the sticky",
+        "dxDataGrid-columnFixingStickyPosition": "Stick in place",
         "dxDataGrid-exportTo": "Export",
         "dxDataGrid-exportToExcel": "Export do sešitu Excel",
         "dxDataGrid-exporting": "Export...",

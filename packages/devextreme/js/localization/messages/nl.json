@@ -155,7 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "Blokkering opheffen",
         "dxDataGrid-columnFixingLeftPosition": "Naar links",
         "dxDataGrid-columnFixingRightPosition": "Naar rechts",
-        "dxDataGrid-columnFixingStickyPosition": "To the sticky",
+        "dxDataGrid-columnFixingStickyPosition": "Stick in place",
         "dxDataGrid-exportTo": "Exporteren",
         "dxDataGrid-exportToExcel": "Exporteer naar Excel bestand",
         "dxDataGrid-exporting": "Exporteren...",
