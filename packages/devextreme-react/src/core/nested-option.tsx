@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  createContext,
   useContext,
   useLayoutEffect,
   useState,
@@ -9,12 +8,10 @@ import {
 import {
   getOptionInfo,
   IElementDescriptor,
-  IExpectedChild,
-  IOptionDescriptor,
 } from './configuration/react/element';
 
-import { IConfigNode } from './configuration/config-node';
-import { useOptionScanning } from './helpers';
+import { useOptionScanning } from './use-option-scanning';
+import { NestedOptionContext } from './helpers';
 
 interface INestedOptionMeta {
   optionName: string;
@@ -22,22 +19,6 @@ interface INestedOptionMeta {
   updateFunc: (newProps: any, prevProps: any) => void;
   makeDirty: () => void;
 }
-
-interface NestedOptionContextContent {
-  parentExpectedChildren: Record<string, IExpectedChild> | undefined;
-  parentFullName: string;
-  onChildOptionsReady: (configNode: IConfigNode, optionDescriptor: IOptionDescriptor, token: number, key: number) => void;
-  takeConfigurationKey: () => number;
-  updateToken: number | undefined;
-}
-
-const NestedOptionContext = createContext<NestedOptionContextContent>({
-  parentExpectedChildren: {},
-  parentFullName: '',
-  onChildOptionsReady: () => undefined,
-  takeConfigurationKey: () => 0,
-  updateToken: undefined,
-});
 
 const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IElementDescriptor }): React.ReactElement | null {
   // @ts-expect-error TS2339
@@ -47,18 +28,22 @@ const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IE
   const {
     parentExpectedChildren,
     onChildOptionsReady: triggerParentOptionsReady,
-    takeConfigurationKey,
+    getOptionComponentKey,
   } = useContext(NestedOptionContext);
 
-  const [key] = useState(takeConfigurationKey());
-
+  const [optionComponentKey] = useState(getOptionComponentKey());
   const optionElement = getOptionInfo(elementDescriptor, restProps, parentExpectedChildren);
 
-  const [config, context, hasAnonymousTemplate, token] = useOptionScanning(optionElement, children);
+  const [
+    config,
+    context,
+    hasAnonymousTemplate,
+    treeUpdateToken,
+  ] = useOptionScanning(optionElement, children);
 
   useLayoutEffect(() => {
-    triggerParentOptionsReady(config, optionElement.descriptor, token, key);
-  }, [token]);
+    triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
+  }, [treeUpdateToken]);
 
   return (
     <React.Fragment>
@@ -72,6 +57,4 @@ const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IE
 export default NestedOption;
 export {
   INestedOptionMeta,
-  NestedOptionContext,
-  NestedOptionContextContent,
 };

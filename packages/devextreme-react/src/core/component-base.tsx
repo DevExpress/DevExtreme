@@ -18,13 +18,13 @@ import config from 'devextreme/core/config';
 
 import { createPortal } from 'react-dom';
 
-import { RemovalLockerContext, RestoreTreeContext, useOptionScanning } from './helpers';
+import { RemovalLockerContext, RestoreTreeContext, NestedOptionContext } from './helpers';
+import { useOptionScanning } from './use-option-scanning';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
-import { NestedOptionContext } from './nested-option';
 import { ElementType } from './configuration/react/element';
 import { IConfigNode } from './configuration/config-node';
 
