@@ -815,9 +815,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: editing
    */
-  protected _setCellAriaAttributes($cell, cellOptions) {
+  protected _setCellAriaAttributes($cell, cellOptions, options?) {
     if (cellOptions.rowType !== 'freeSpace') {
       this.setAria('role', 'gridcell', $cell);
+      if (options?.row?.node?.hasChildren) {
+        const { row } = options;
+        this.setAria('expanded', row.isExpanded, $cell);
+      }
 
       const columnIndexOffset = this._columnsController.getColumnIndexOffset();
       const ariaColIndex = cellOptions.columnIndex + columnIndexOffset + 1;
@@ -839,11 +843,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     const $cell = this._createCell(cellOptions);
 
-    this._setCellAriaAttributes($cell, cellOptions);
-
-    if (options.row.node && options.row.node.hasChildren) {
-      this.setAria('expanded', options.row.isExpanded, $cell);
-    }
+    this._setCellAriaAttributes($cell, cellOptions, options);
 
     this._renderCellContent($cell, cellOptions, options);
 

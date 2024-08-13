@@ -62,43 +62,69 @@ const options = {
       dataField: 'Task_Subject',
       width: 300,
     },
+    {
+      dataField: 'Task_Assigned_Employee_ID',
+      width: 300,
+    },
+    {
+      dataField: 'Task_ID',
+      width: 300,
+    },
   ],
 };
 
 test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) => {
   const treeList = new TreeList('#container');
   const expandableRow = treeList.getDataRow(0).element;
-  const expandableCell = treeList.getDataCell(0, 0).element;
+  const expandableCells = [
+    treeList.getDataCell(0, 0).element,
+    treeList.getDataCell(0, 1).element,
+    treeList.getDataCell(0, 2).element,
+  ];
 
   await t
-    .expect(expandableCell.getAttribute('aria-expanded'))
-    .eql('false')
     .expect(expandableRow.getAttribute('aria-expanded'))
-    .eql('false')
+    .eql('false');
+
+  expandableCells.map(async (cell) => {
+    await t.expect(cell.getAttribute('aria-expanded')).eql('false');
+  });
+
+  await t
     .click(expandableRow)
     .pressKey('ctrl+right')
-    .expect(expandableCell.getAttribute('aria-expanded'))
-    .eql('true')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('true');
+  expandableCells.map(async (cell) => {
+    await t.expect(cell.getAttribute('aria-expanded')).eql('true');
+  });
 }).before(async () => createWidget('dxTreeList', options));
 
 test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) => {
   const treeList = new TreeList('#container');
   const expandableRow = treeList.getDataRow(0).element;
-  const expandableCell = treeList.getDataCell(0, 0).element;
+  const expandableCells = [
+    treeList.getDataCell(0, 0).element,
+    treeList.getDataCell(0, 1).element,
+    treeList.getDataCell(0, 2).element,
+  ];
 
   await t
-    .expect(expandableCell.getAttribute('aria-expanded'))
-    .eql('true')
     .expect(expandableRow.getAttribute('aria-expanded'))
-    .eql('true')
+    .eql('true');
+
+  expandableCells.map(async (cell) => {
+    await t.expect(cell.getAttribute('aria-expanded')).eql('true');
+  });
+
+  await t
     .click(expandableRow)
     .pressKey('ctrl+left')
-    .expect(expandableCell.getAttribute('aria-expanded'))
-    .eql('false')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('false');
+  expandableCells.map(async (cell) => {
+    await t.expect(cell.getAttribute('aria-expanded')).eql('false');
+  });
 }).before(async () => {
   options.expandedRowKeys = [1];
   await createWidget('dxTreeList', options);
