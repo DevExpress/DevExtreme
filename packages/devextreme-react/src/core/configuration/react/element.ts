@@ -39,7 +39,7 @@ type IElement = IOptionElement | ITemplateElement | IUnknownElement;
 
 function getOptionInfo(
   elementDescriptor: IElementDescriptor,
-  props: any,
+  props: Record<string, any>,
   parentExpectedChildren?: Record<string, IExpectedChild>,
 ): IOptionElement {
   let name = elementDescriptor.OptionName;

@@ -1,5 +1,14 @@
 /* eslint-disable max-classes-per-file, no-restricted-syntax */
-import { createContext, Context, useContext, Children, useMemo, useRef } from 'react';
+import {
+  Children,
+  Context,
+  ReactNode,
+  createContext,
+  useContext,
+  useMemo,
+  useRef,
+} from 'react';
+
 import { TemplateInstantiationModel, UpdateLocker } from './types';
 import { NestedOptionContext, NestedOptionContextContent } from './nested-option';
 import { ElementType, getElementInfo, IOptionElement } from './configuration/react/element';
@@ -74,7 +83,7 @@ export function capitalizeFirstLetter(text: string): string {
   return '';
 }
 
-export function useOptionScanning(optionElement: IOptionElement, children: any): [
+export function useOptionScanning(optionElement: IOptionElement, children: ReactNode): [
   IConfigNode,
   NestedOptionContextContent,
   boolean,
@@ -91,7 +100,7 @@ export function useOptionScanning(optionElement: IOptionElement, children: any):
 
   const fullName = optionElement.descriptor.isCollection
     ? path
-    : mergeNameParts(path, optionElement.descriptor.name)
+    : mergeNameParts(path, optionElement.descriptor.name);
 
   const separatedValues = separateProps(
     optionElement.props,
@@ -123,7 +132,6 @@ export function useOptionScanning(optionElement: IOptionElement, children: any):
         if (template) {
           templates.push(template);
         }
-        return;
       }
     },
   );
@@ -146,7 +154,10 @@ export function useOptionScanning(optionElement: IOptionElement, children: any):
     parentExpectedChildren: optionElement.descriptor.expectedChildren,
     parentFullName: fullName,
     updateToken,
-    takeConfigurationKey: () => childKey.current++,
+    takeConfigurationKey: () => {
+      childKey.current += 1;
+      return childKey.current;
+    },
     onChildOptionsReady: (configNode, optionDescriptor, token, key) => {
       if (token !== updateToken) {
         return;
@@ -171,8 +182,7 @@ export function useOptionScanning(optionElement: IOptionElement, children: any):
 
         if (itemIndex < collection.length) {
           collection[itemIndex] = collectionItem;
-        }
-        else {
+        } else {
           collectionMap[key] = itemIndex;
           collection.push(collectionItem);
         }
