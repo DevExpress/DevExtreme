@@ -1,4 +1,4 @@
-DevExtreme Angular Charts is a set of responsive data visualization controls. With the vast assortment of charts including bars, areas, lines, bubbles, funnels and pyramids, DevExtreme Charting library will satisfy the most demanding customers. It supports native Angular features as well: AOT compilation, declarative configuration, TypeScript compile-time checking, and more.
+DevExtreme Charts is a set of responsive data visualization controls. With the vast assortment of charts including bars, areas, lines, bubbles, funnels and pyramids, DevExtreme Charting library will satisfy the most demanding customers. It supports native Angular features as well: AOT compilation, declarative configuration, TypeScript compile-time checking, and more.
 <!--split-->
 
 [note]
