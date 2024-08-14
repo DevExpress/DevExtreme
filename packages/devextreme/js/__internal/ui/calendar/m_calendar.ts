@@ -726,7 +726,7 @@ const Calendar = Editor.inherit({
     this._updateNavigatorLabels();
 
     this.setAria('role', 'application');
-    this._updateAriaReadonly(this.option('readOnly'));
+    this._updateAria(this.option('readOnly'));
 
     this._moveToClosestAvailableDate();
   },
@@ -745,15 +745,13 @@ const Calendar = Editor.inherit({
     }
   },
 
-  _updateAriaReadonly(readonly = false) {
-    const element = this.$element();
-    if (!readonly) {
-      element.removeAttr('role');
-      element.removeAttr('aria-label');
-    } else {
-      element.attr('role', 'group');
-      this.setAria('label', 'Read-only calendar', element);
-    }
+  _updateAria(readOnly = false) {
+    const $element = this.$element();
+    const aria = {
+      role: readOnly ? 'group' : undefined,
+      label: readOnly ? messageLocalization.format('dxCalendar-readOnly') : undefined,
+    };
+    this.setAria(aria, $element);
   },
 
   _setAriaReadonly: noop,
@@ -1556,7 +1554,7 @@ const Calendar = Editor.inherit({
         break;
       case 'readOnly':
         this.callBase(args);
-        this._updateAriaReadonly(this.option('readOnly'));
+        this._updateAria(value);
         break;
       case 'skipFocusCheck':
         break;

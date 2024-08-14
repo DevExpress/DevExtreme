@@ -4624,7 +4624,7 @@ QUnit.module('Aria accessibility', {
         $element.dxCalendar({
             readOnly: true
         }).dxCalendar('instance');
-        assert.strictEqual($element.attr('aria-label'), 'Readonly-calendar', 'aria-label is set correctly');
+        assert.strictEqual($element.attr('aria-label'), 'Read-only calendar', 'aria-label is set correctly');
         assert.strictEqual($element.attr('role'), 'group', 'role is set correctly');
     });
 
@@ -4660,8 +4660,21 @@ QUnit.module('Aria accessibility', {
 
         calendar.option('readOnly', true);
 
-        assert.strictEqual($element.attr('aria-label'), 'Readonly-calendar', 'aria-label is set correctly');
+        assert.strictEqual($element.attr('aria-label'), 'Read-only calendar', 'aria-label is set correctly');
         assert.strictEqual($element.attr('role'), 'group', 'role is set correctly');
+    });
+
+    QUnit.test('aria-label attribute should be equal to custom localized text', function(assert) {
+        const localizedText = 'Read-only calendar';
+        localization.loadMessages({ 'en': { 'dxCalendar-readOnly': localizedText } });
+
+        const $element = this.$element;
+
+        $element.dxCalendar({
+            readOnly: true
+        });
+
+        assert.strictEqual($element.attr('aria-label'), localizedText, 'aria-label is set correctly');
     });
 
     QUnit.test('aria-activedescendant on views wrapper should point to the focused cell', function(assert) {
