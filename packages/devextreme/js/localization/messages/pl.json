@@ -311,6 +311,7 @@
         "dxCalendar-captionCenturyLabel": "Century selection",
         "dxCalendar-selectedDate": "The selected date is {0}",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
+        "dxCalendar-readOnly": "Read-only calendar",
 
         "dxColorView-ariaRed": "czerwony",
         "dxColorView-ariaGreen": "zielony",
