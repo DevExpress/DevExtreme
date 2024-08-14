@@ -57,7 +57,6 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoPopoverAnimationModule } from 'devextreme-angular/ui/popover/nested';
 import { DxoPopoverHideModule } from 'devextreme-angular/ui/popover/nested';
@@ -75,7 +74,6 @@ import { DxoPopoverShowEventModule } from 'devextreme-angular/ui/popover/nested'
 import { DxiPopoverToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
 
 
-import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
 
 import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/nested';
 
@@ -807,20 +805,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
-    @ContentChildren(DxiToolbarItemComponent)
-    get toolbarItemsLegacyChildren(): QueryList<DxiToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsLegacyChildren(value) {
-        if (this.hasNewToolbarItems) {
-            if (value.length > 0) {
-                console.log('Use only one type of nested items');
-            }
-        } else {
-            this.setChildren('toolbarItems', value);
-        }
-    }
-
 
 
 
@@ -933,7 +917,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
-    DxiToolbarItemModule,
     DxoPopoverAnimationModule,
     DxoPopoverHideModule,
     DxoPopoverFromModule,
@@ -956,7 +939,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
   ],
   exports: [
     DxPopoverComponent,
-    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxoHideEventModule,DxoShowEventModule,DxiToolbarItemModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxoHideEventModule,DxoShowEventModule,
     DxoPopoverAnimationModule,DxoPopoverHideModule,DxoPopoverFromModule,DxoPopoverPositionModule,DxoPopoverAtModule,DxoPopoverBoundaryOffsetModule,DxoPopoverCollisionModule,DxoPopoverMyModule,DxoPopoverOffsetModule,DxoPopoverToModule,DxoPopoverShowModule,DxoPopoverHideEventModule,DxoPopoverShowEventModule,DxiPopoverToolbarItemModule,
     DxTemplateModule
   ]

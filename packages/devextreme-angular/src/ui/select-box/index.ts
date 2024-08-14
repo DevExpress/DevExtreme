@@ -64,7 +64,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiSelectBoxButtonModule } from 'devextreme-angular/ui/select-box/nested';
@@ -1746,7 +1745,6 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxiSelectBoxButtonModule,
     DxoSelectBoxOptionsModule,
@@ -1772,7 +1770,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
   ],
   exports: [
     DxSelectBoxComponent,
-    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxiItemModule,
+    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiItemModule,
     DxiSelectBoxButtonModule,DxoSelectBoxOptionsModule,DxoSelectBoxDropDownOptionsModule,DxoSelectBoxAnimationModule,DxoSelectBoxHideModule,DxoSelectBoxFromModule,DxoSelectBoxPositionModule,DxoSelectBoxAtModule,DxoSelectBoxBoundaryOffsetModule,DxoSelectBoxCollisionModule,DxoSelectBoxMyModule,DxoSelectBoxOffsetModule,DxoSelectBoxToModule,DxoSelectBoxShowModule,DxiSelectBoxToolbarItemModule,DxiSelectBoxItemModule,
     DxTemplateModule
   ]

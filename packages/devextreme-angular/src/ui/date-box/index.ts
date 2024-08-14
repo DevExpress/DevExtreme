@@ -65,7 +65,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiDateBoxButtonModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxOptionsModule } from 'devextreme-angular/ui/date-box/nested';
@@ -1626,7 +1625,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiDateBoxButtonModule,
     DxoDateBoxOptionsModule,
     DxoDateBoxCalendarOptionsModule,
@@ -1652,7 +1650,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
   ],
   exports: [
     DxDateBoxComponent,
-    DxiButtonModule,DxoOptionsModule,DxoCalendarOptionsModule,DxoDisplayFormatModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,
+    DxiButtonModule,DxoOptionsModule,DxoCalendarOptionsModule,DxoDisplayFormatModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
     DxiDateBoxButtonModule,DxoDateBoxOptionsModule,DxoDateBoxCalendarOptionsModule,DxoDateBoxDisplayFormatModule,DxoDateBoxDropDownOptionsModule,DxoDateBoxAnimationModule,DxoDateBoxHideModule,DxoDateBoxFromModule,DxoDateBoxPositionModule,DxoDateBoxAtModule,DxoDateBoxBoundaryOffsetModule,DxoDateBoxCollisionModule,DxoDateBoxMyModule,DxoDateBoxOffsetModule,DxoDateBoxToModule,DxoDateBoxShowModule,DxiDateBoxToolbarItemModule,
     DxTemplateModule
   ]

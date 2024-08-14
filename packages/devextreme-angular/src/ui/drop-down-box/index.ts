@@ -63,7 +63,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiDropDownBoxButtonModule } from 'devextreme-angular/ui/drop-down-box/nested';
@@ -1390,7 +1389,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxiDropDownBoxButtonModule,
     DxoDropDownBoxOptionsModule,
@@ -1416,7 +1414,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
   ],
   exports: [
     DxDropDownBoxComponent,
-    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxiItemModule,
+    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiItemModule,
     DxiDropDownBoxButtonModule,DxoDropDownBoxOptionsModule,DxoDropDownBoxDropDownOptionsModule,DxoDropDownBoxAnimationModule,DxoDropDownBoxHideModule,DxoDropDownBoxFromModule,DxoDropDownBoxPositionModule,DxoDropDownBoxAtModule,DxoDropDownBoxBoundaryOffsetModule,DxoDropDownBoxCollisionModule,DxoDropDownBoxMyModule,DxoDropDownBoxOffsetModule,DxoDropDownBoxToModule,DxoDropDownBoxShowModule,DxiDropDownBoxToolbarItemModule,DxiDropDownBoxItemModule,
     DxTemplateModule
   ]

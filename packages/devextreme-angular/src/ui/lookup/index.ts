@@ -63,7 +63,6 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxoLookupDropDownOptionsModule } from 'devextreme-angular/ui/lookup/nested';
@@ -1835,7 +1834,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxoLookupDropDownOptionsModule,
     DxoLookupAnimationModule,
@@ -1861,7 +1859,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
   ],
   exports: [
     DxLookupComponent,
-    DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxoHideEventModule,DxoShowEventModule,DxiToolbarItemModule,DxiItemModule,
+    DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxoHideEventModule,DxoShowEventModule,DxiItemModule,
     DxoLookupDropDownOptionsModule,DxoLookupAnimationModule,DxoLookupHideModule,DxoLookupFromModule,DxoLookupPositionModule,DxoLookupAtModule,DxoLookupBoundaryOffsetModule,DxoLookupCollisionModule,DxoLookupMyModule,DxoLookupOffsetModule,DxoLookupToModule,DxoLookupShowModule,DxoLookupHideEventModule,DxoLookupShowEventModule,DxiLookupToolbarItemModule,DxiLookupItemModule,
     DxTemplateModule
   ]

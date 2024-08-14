@@ -65,7 +65,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiDateRangeBoxButtonModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
@@ -1710,7 +1709,6 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiDateRangeBoxButtonModule,
     DxoDateRangeBoxOptionsModule,
     DxoDateRangeBoxCalendarOptionsModule,
@@ -1736,7 +1734,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
   ],
   exports: [
     DxDateRangeBoxComponent,
-    DxiButtonModule,DxoOptionsModule,DxoCalendarOptionsModule,DxoDisplayFormatModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,
+    DxiButtonModule,DxoOptionsModule,DxoCalendarOptionsModule,DxoDisplayFormatModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
     DxiDateRangeBoxButtonModule,DxoDateRangeBoxOptionsModule,DxoDateRangeBoxCalendarOptionsModule,DxoDateRangeBoxDisplayFormatModule,DxoDateRangeBoxDropDownOptionsModule,DxoDateRangeBoxAnimationModule,DxoDateRangeBoxHideModule,DxoDateRangeBoxFromModule,DxoDateRangeBoxPositionModule,DxoDateRangeBoxAtModule,DxoDateRangeBoxBoundaryOffsetModule,DxoDateRangeBoxCollisionModule,DxoDateRangeBoxMyModule,DxoDateRangeBoxOffsetModule,DxoDateRangeBoxToModule,DxoDateRangeBoxShowModule,DxiDateRangeBoxToolbarItemModule,
     DxTemplateModule
   ]

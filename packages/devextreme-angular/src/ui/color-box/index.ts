@@ -61,7 +61,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiColorBoxButtonModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxOptionsModule } from 'devextreme-angular/ui/color-box/nested';
@@ -1292,7 +1291,6 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiColorBoxButtonModule,
     DxoColorBoxOptionsModule,
     DxoColorBoxDropDownOptionsModule,
@@ -1316,7 +1314,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
   ],
   exports: [
     DxColorBoxComponent,
-    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,
+    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
     DxiColorBoxButtonModule,DxoColorBoxOptionsModule,DxoColorBoxDropDownOptionsModule,DxoColorBoxAnimationModule,DxoColorBoxHideModule,DxoColorBoxFromModule,DxoColorBoxPositionModule,DxoColorBoxAtModule,DxoColorBoxBoundaryOffsetModule,DxoColorBoxCollisionModule,DxoColorBoxMyModule,DxoColorBoxOffsetModule,DxoColorBoxToModule,DxoColorBoxShowModule,DxiColorBoxToolbarItemModule,
     DxTemplateModule
   ]

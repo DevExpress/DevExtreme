@@ -64,7 +64,6 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTagBoxButtonModule } from 'devextreme-angular/ui/tag-box/nested';
@@ -1888,7 +1887,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxiItemModule,
     DxiTagBoxButtonModule,
     DxoTagBoxOptionsModule,
@@ -1914,7 +1912,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
   ],
   exports: [
     DxTagBoxComponent,
-    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiToolbarItemModule,DxiItemModule,
+    DxiButtonModule,DxoOptionsModule,DxoDropDownOptionsModule,DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxiItemModule,
     DxiTagBoxButtonModule,DxoTagBoxOptionsModule,DxoTagBoxDropDownOptionsModule,DxoTagBoxAnimationModule,DxoTagBoxHideModule,DxoTagBoxFromModule,DxoTagBoxPositionModule,DxoTagBoxAtModule,DxoTagBoxBoundaryOffsetModule,DxoTagBoxCollisionModule,DxoTagBoxMyModule,DxoTagBoxOffsetModule,DxoTagBoxToModule,DxoTagBoxShowModule,DxiTagBoxToolbarItemModule,DxiTagBoxItemModule,
     DxTemplateModule
   ]
