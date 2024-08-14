@@ -141,9 +141,15 @@ const prepareConfigs = (framework)=> {
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
         'devextreme-angular/core': `${bundlesRoot}/devextreme-angular-core.umd.js`,
+        'devextreme-angular/services': `${bundlesRoot}/devextreme-angular-services.umd.js`,
         ...componentNames.reduce((items, item) => {
           // eslint-disable-next-line no-param-reassign
           items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
+
+          if(item === 'popup') {
+            items[`devextreme-angular/ui/${item}/component`] = `${bundlesRoot}/devextreme-angular-ui-${item}-component.umd.js`;
+          }
+
           return items;
         }, {}),
       };
