@@ -6,7 +6,7 @@ import {
   EmbeddedViewRef,
   ComponentRef, Type,
 } from '@angular/core';
-import { DxPopupTypes } from 'devextreme-angular/ui/popup';
+import { DxPopupTypes } from 'devextreme-angular/ui/popup/component';
 import { DxServicePopupComponent } from './service.component';
 
 @Injectable({
