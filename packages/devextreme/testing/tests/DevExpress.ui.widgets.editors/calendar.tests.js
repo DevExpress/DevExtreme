@@ -4610,7 +4610,6 @@ QUnit.module('Navigation - click on other view cell', {
 
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
-        this.DELAY = 5000;
         fx.off = true;
         this.$element = $('<div>').appendTo('#qunit-fixture');
     },
@@ -4622,61 +4621,47 @@ QUnit.module('Aria accessibility', {
     QUnit.test('aria-label should be \'Readonly-calendar\' and role = group when readOnly option is true', function(assert) {
         const $element = this.$element;
 
-        const calendar = $element.dxCalendar({
+        $element.dxCalendar({
             readOnly: true
         }).dxCalendar('instance');
-        const $parentElement = $(calendar._$element);
-        assert.strictEqual($parentElement.attr('aria-label'), 'Readonly-calendar', 'aria-label is set correctly');
-        assert.strictEqual($parentElement.attr('role'), 'group', 'role is set correctly');
+        assert.strictEqual($element.attr('aria-label'), 'Readonly-calendar', 'aria-label is set correctly');
+        assert.strictEqual($element.attr('role'), 'group', 'role is set correctly');
     });
 
     QUnit.test('aria-label and role should be removed when readOnly option is false', function(assert) {
         const $element = this.$element;
 
-        const calendar = $element.dxCalendar({
+        $element.dxCalendar({
             readOnly: false
         }).dxCalendar('instance');
-        const $parentElement = $(calendar._$element);
-        assert.notOk($parentElement.attr('aria-label'), 'aria-label is removed');
-        assert.notOk($parentElement.attr('role'), 'role is removed');
+        assert.notOk($element.attr('aria-label'), 'aria-label is not set');
+        assert.notOk($element.attr('role'), 'role is not set');
     });
 
     QUnit.test('aria-label and role should be removed when readOnly option is set to false on runtime', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $element = this.$element;
 
         const calendar = $element.dxCalendar({
             readOnly: true
         }).dxCalendar('instance');
 
-        clock.tick(this.DELAY);
-
         calendar.option('readOnly', false);
 
-        const $parentElement = $(calendar._$element);
-        assert.notOk($parentElement.attr('aria-label'), 'aria-label is removed');
-        assert.notOk($parentElement.attr('role'), 'role is removed');
-
-        clock.restore();
+        assert.notOk($element.attr('aria-label'), 'aria-label is removed');
+        assert.notOk($element.attr('role'), 'role is removed');
     });
 
     QUnit.test('aria-label and role should be setted when readOnly option is set to true on runtime', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $element = this.$element;
 
         const calendar = $element.dxCalendar({
             readOnly: false
         }).dxCalendar('instance');
 
-        clock.tick(this.DELAY);
-
         calendar.option('readOnly', true);
 
-        const $parentElement = $(calendar._$element);
-        assert.strictEqual($parentElement.attr('aria-label'), 'Readonly-calendar', 'aria-label is set correctly');
-        assert.strictEqual($parentElement.attr('role'), 'group', 'role is set correctly');
-
-        clock.restore();
+        assert.strictEqual($element.attr('aria-label'), 'Readonly-calendar', 'aria-label is set correctly');
+        assert.strictEqual($element.attr('role'), 'group', 'role is set correctly');
     });
 
     QUnit.test('aria-activedescendant on views wrapper should point to the focused cell', function(assert) {

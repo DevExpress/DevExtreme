@@ -726,7 +726,7 @@ const Calendar = Editor.inherit({
     this._updateNavigatorLabels();
 
     this.setAria('role', 'application');
-    this._setAriaReadonly(this.option('readOnly'));
+    this._updateAriaReadonly(this.option('readOnly'));
 
     this._moveToClosestAvailableDate();
   },
@@ -745,7 +745,7 @@ const Calendar = Editor.inherit({
     }
   },
 
-  _setAriaReadonly(readonly = false) {
+  _updateAriaReadonly(readonly = false) {
     const element = this.$element();
     if (!readonly) {
       element.removeAttr('role');
@@ -755,6 +755,8 @@ const Calendar = Editor.inherit({
       this.setAria('label', 'Readonly-calendar', element);
     }
   },
+
+  _setAriaReadonly: noop,
 
   _getKeyboardListeners() {
     return this.callBase().concat([this._view]);
@@ -1551,6 +1553,9 @@ const Calendar = Editor.inherit({
       case 'cellTemplate':
       case 'showTodayButton':
         this._invalidate();
+        break;
+      case 'readOnly':
+        this._updateAriaReadonly(this.option('readOnly'));
         break;
       case 'skipFocusCheck':
         break;
