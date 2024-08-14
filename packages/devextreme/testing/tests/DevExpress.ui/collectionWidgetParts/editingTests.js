@@ -25,6 +25,60 @@ class TestComponent extends CollectionWidget {
 
 const getItemElement = (instance, itemIndex) => instance.itemElements().eq(itemIndex);
 
+module('onSelectionChanging event triggering', () => {
+    test('added and removed selection should be correct', function(assert) {
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: [0, 1, 2, 3],
+            selectionMode: 'multiple',
+            onSelectionChanging: function(args) {
+                assert.ok(args.addedItems.length <= 1, 'unloaded items does not present in selection');
+                assert.ok(args.removedItems.length <= 1, 'unloaded items does not present in selection');
+            }
+        });
+
+        instance.selectItem(1);
+        instance.unselectItem(1);
+    });
+
+    test('selection of items should raise selectionChanging event - subscription using "on" method', function(assert) {
+        const selectionChangingHandler = sinon.spy();
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: [0, 1, 2, 3],
+            selectionMode: 'multiple'
+        });
+
+        instance.on('selectionChanging', selectionChangingHandler);
+
+        instance.selectItem(1);
+
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+    });
+
+    test('cancelling selectionChanging event should not raise selectionChanged event - subscription using "on" method', function(assert) {
+        const selectionChangingHandler = sinon.spy(function(e) {
+            e.cancel = true;
+        });
+        const selectionChangedHandler = sinon.spy();
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: [0, 1, 2, 3],
+            selectionMode: 'multiple',
+            selectedIndex: 0
+        });
+
+        instance.on('selectionChanging', selectionChangingHandler);
+        instance.on('selectionChanged', selectionChangedHandler);
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'Initially selectedIndex should be 0');
+        instance.selectItem(1);
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+        assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged should not be raised');
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex should be remain unchanged');
+    });
+});
+
+
 module('selecting of items', {
     beforeEach: function() {
         this.items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];

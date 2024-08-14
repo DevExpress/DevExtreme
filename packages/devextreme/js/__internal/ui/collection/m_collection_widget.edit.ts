@@ -151,7 +151,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
       onSelectionChanged(args) {
-        that.selectionChangingArgs = { cancel: false };
+        that.selectionChangingArgs = { ...args, cancel: false };
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
           that._processSelectionChanging(args);
         }
