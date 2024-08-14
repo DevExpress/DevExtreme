@@ -73,6 +73,29 @@ gulp.task('generate.common-reexports', (done) => {
   done();
 });
 
+gulp.task('generate.post-actions', (done) => {
+  const makeExportsContent = (exportsParams) => exportsParams
+      .map(({exportString, path}) => `export ${exportString} from '${path}';`)
+      .join('\n');
+
+  const actions = buildConfig.tools.postGenerateActions?.map(
+      ({folder,
+        copyTo,
+        indexContent}) => new Promise((resolve, reject) => gulp.src(folder + '/**/*')
+          .pipe(gulp.dest(copyTo))
+          .on('end',
+              () => {
+                const content = makeExportsContent(indexContent.exports);
+
+                fs.writeFile(folder + '/index.ts', content, 'utf8', () => resolve());
+              }
+          )
+          .on('error', () => reject()))
+      );
+
+  return Promise.all(actions).then(() => done());
+});
+
 gulp.task('build.license-headers', () => {
   const config = buildConfig.components;
   const pkg = require('./package.json');
@@ -185,6 +208,7 @@ gulp.task('default', buildTask);
 gulp.task('generate', gulp.series(
   'generate.facades',
   'generate.common-reexports',
+  'generate.post-actions',
 ));
 
 // ------------Testing------------
