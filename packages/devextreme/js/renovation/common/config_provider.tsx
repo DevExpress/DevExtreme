@@ -6,7 +6,7 @@ import {
   Provider,
   Component,
 } from '@devextreme-generator/declarations';
-import { ConfigContextValue, ConfigContext } from './config_context';
+import { ConfigContextValue, ConfigContext } from '../../__internal/core/r1/config_context';
 
 export const viewFunction = (viewModel: ConfigProvider): JSX.Element => viewModel.props.children;
 
