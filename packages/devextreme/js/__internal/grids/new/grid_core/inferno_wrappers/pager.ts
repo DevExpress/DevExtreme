@@ -18,6 +18,7 @@ interface PagerProps {
 }
 
 export class Pager extends InfernoWrapper<PagerProps, any> {
+  // @ts-expect-error
   protected getComponentFabric(): typeof PagerWidget {
     return PagerWidget;
   }
