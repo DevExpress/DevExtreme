@@ -46,8 +46,32 @@ const getDeepCopyTarget = (item) => {
     return item;
 };
 
+const legacyAssign = function(target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
+    if(!assignByReference && variableWrapper.isWrapped(target[property])) {
+        variableWrapper.assign(target[property], value);
+    } else {
+        target[property] = value;
+    }
+};
+
+const newAssign = function(target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
+    if(!assignByReference && variableWrapper.isWrapped(target[property])) {
+        variableWrapper.assign(target[property], value);
+    } else if(!assignByReference && Array.isArray(value)) {
+        target[property] = value.map(item => deepExtendArraySafe(
+            getDeepCopyTarget(item),
+            item,
+            extendComplexObject,
+            assignByReference,
+            shouldCopyUndefined
+        ));
+    } else {
+        target[property] = value;
+    }
+};
+
 // B239679, http://bugs.jquery.com/ticket/9477
-const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference, shouldCopyUndefined) {
+const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference, shouldCopyUndefined, assignFunc = legacyAssign) {
     let prevValue;
     let newValue;
 
@@ -69,19 +93,7 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             shouldCopyUndefined && prevValue === undefined;
 
         if(isDeepCopyArray || hasDifferentNewValue) {
-            if(!assignByReference && variableWrapper.isWrapped(target[name])) {
-                variableWrapper.assign(target[name], newValue);
-            } else if(!assignByReference && Array.isArray(newValue)) {
-                target[name] = newValue.map(item => deepExtendArraySafe(
-                    getDeepCopyTarget(item),
-                    item,
-                    extendComplexObject,
-                    assignByReference,
-                    shouldCopyUndefined
-                ));
-            } else {
-                target[name] = newValue;
-            }
+            assignFunc(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
     }
 
@@ -91,5 +103,7 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
 export {
     clone,
     orderEach,
-    deepExtendArraySafe
+    deepExtendArraySafe,
+    legacyAssign,
+    newAssign
 };
