@@ -4745,8 +4745,6 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
   await createWidget('dxDataGrid', {
     showBorders: true,
     selection: {
-      allowSelectAll: true,
-      selectAllMode: 'page',
       mode: 'multiple',
     },
     editing: {
@@ -4754,26 +4752,11 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
       allowAdding: true,
     },
     columns: [
-      {
-        dataField: 'Calculation',
-      },
-      {
-        dataField: 'CalculationType',
-        visible: false,
-      },
+      'Calculation',
+      'CalculationType',
       {
         type: 'buttons',
-        allowHiding: false,
-        allowResizing: false,
         fixed: true,
-        buttons: [
-          {
-            name: 'edit',
-          },
-          {
-            name: 'delete',
-          },
-        ],
       },
     ],
     dataSource: {
