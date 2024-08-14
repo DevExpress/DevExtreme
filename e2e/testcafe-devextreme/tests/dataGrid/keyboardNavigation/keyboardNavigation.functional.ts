@@ -4729,3 +4729,56 @@ test('DataGrid - Data rows are skipped during Tab navigation if the first column
   showBorders: true,
   width: 300,
 }));
+
+test('DataGrid input cell should not put tabindex to incorrect element while on edit mode (T1239462)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const button = Selector('.dx-datagrid-addrow-button');
+
+  await t
+    .click(button)
+    .pressKey('tab');
+  await takeScreenshot('data-grid_keyboard-navigation-input-text-focused.png', dataGrid.element);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    showBorders: true,
+    selection: {
+      allowSelectAll: true,
+      selectAllMode: 'page',
+      mode: 'multiple',
+    },
+    editing: {
+      mode: 'form',
+      allowAdding: true,
+    },
+    columns: [
+      {
+        dataField: 'Calculation',
+      },
+      {
+        dataField: 'CalculationType',
+        visible: false,
+      },
+      {
+        type: 'buttons',
+        allowHiding: false,
+        allowResizing: false,
+        fixed: true,
+        buttons: [
+          {
+            name: 'edit',
+          },
+          {
+            name: 'delete',
+          },
+        ],
+      },
+    ],
+    dataSource: {
+      store: [],
+    },
+  });
+});
