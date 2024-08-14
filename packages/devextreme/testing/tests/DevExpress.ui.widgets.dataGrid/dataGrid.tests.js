@@ -173,7 +173,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(filterRowWrapper.getTextEditorInput(1).attr('aria-describedby'), headersWrapper.getHeaderItem(0, 4).attr('id'));
 
         assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('role'), 'group', 'group role');
-        assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('aria-label'), 'Data grid with 2 rows and 4 columns. ', 'aria-label of the datagrid container');
+        assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('aria-label'), 'Data grid with 2 rows and 4 columns', 'aria-label of the datagrid container');
         assert.equal(headersWrapper.getElement().attr('role'), 'presentation', 'Headers role');
         assert.equal(headersWrapper.getColumnsIndicators().attr('role'), 'presentation', 'Headers columns indicators role');
         assert.equal($('.dx-datagrid-scroll-container').attr('role'), 'presentation', 'Scroll container role');
