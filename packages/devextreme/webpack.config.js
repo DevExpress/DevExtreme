@@ -27,6 +27,7 @@ module.exports = {
         'devextreme-quill': 'window.DevExpress.Quill',
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown',
+        'unified': 'window.unified',
         'exceljs': 'window.ExcelJS',
         'jspdf': 'window.jspdf.jsPDF',
         'devexpress-diagram': 'window.DevExpress.diagram',

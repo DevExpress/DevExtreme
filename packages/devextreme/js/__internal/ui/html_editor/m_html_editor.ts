@@ -69,6 +69,8 @@ const HtmlEditor = Editor.inherit({
 
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       stylingMode: config().editorStylingMode || 'outlined',
+
+      onProcessMarkdownToHtml: () => {},
     });
   },
 
@@ -262,6 +264,12 @@ const HtmlEditor = Editor.inherit({
     this._prepareConverters();
 
     this.callBase();
+
+    this._createActions();
+  },
+
+  _createActions() {
+    this._processMarkdownToHtmlAction = this._createActionByOption('onProcessMarkdownToHtml');
   },
 
   _prepareQuillRegistrator() {
@@ -485,7 +493,23 @@ const HtmlEditor = Editor.inherit({
 
     const currentValue = ensureDefined(value, this.option('value'));
 
-    return valueType === MARKDOWN_VALUE_TYPE ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
+    if (valueType === MARKDOWN_VALUE_TYPE) {
+      const markup = converter.toMarkdown(currentValue);
+
+      return markup;
+    }
+
+    if (this._processMarkdownToHtmlAction) {
+      const processedValue = this._processMarkdownToHtmlAction(currentValue);
+
+      const markup = converter.toHtmlWithCustomConverter(processedValue);
+
+      return markup;
+    }
+
+    const markup = converter.toHtml(currentValue);
+
+    return markup;
   },
 
   _isMarkdownValue() {

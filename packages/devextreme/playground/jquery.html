@@ -24,6 +24,22 @@
     <script src="https://unpkg.com/turndown@7.1.2/dist/turndown.js"></script>
     <script src="https://unpkg.com/showdown@2.1.0/dist/showdown.js"></script>
 
+    <script type="module">
+        import { unified } from 'https://esm.sh/unified@11?bundle';
+        import remarkParse from 'https://esm.sh/remark-parse@11?bundle';
+        import remarkGfm from 'https://esm.sh/remark-gfm@4?bundle';
+        import remarkRehype from 'https://esm.sh/remark-rehype@11?bundle';
+        import rehypeStringify from 'https://esm.sh/rehype-stringify@10?bundle';
+        import remarkGithub from 'https://esm.sh/remark-github@12?bundle';
+
+        window.unified = unified;
+        window.remarkParse = remarkParse;
+        window.remarkGfm = remarkGfm;
+        window.remarkGithub = remarkGithub;
+        window.remarkRehype = remarkRehype;
+        window.rehypeStringify = rehypeStringify;
+    </script>
+
     <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
@@ -98,19 +114,30 @@
                         ],
                     },
                     onValueChanged({ value }) {
-                        debugger
+                        // debugger
+                    },
+                    // Right now it only works with synchronous plugins. But plugins can be asynchronous. We should support them
+                    onProcessMarkdownToHtml: (value) => {
+                        const result = window.unified()
+                            .use(window.remarkParse)
+                            .use(window.remarkGfm)
+                            .use(window.remarkGithub, { repository: 'https://github.com/DevExpress/DevExtreme/' })
+                            .use(window.remarkRehype)
+                            .use(window.rehypeStringify)
+                            .processSync(value.actionValue);
+
+                        return result.value;
                     },
                 }).dxHtmlEditor('instance');
 
                 // editorInstance.option({ valueType: 'markdown' });
                 // editorInstance.option({ valueType: 'html' });
 
-                editorInstance.option({ value: '~~user~~' });
+                // editorInstance.option({ value: '~~user~~' });
                 // editorInstance.option({ valueType: 'html' });
 
-                const { valueType, value } = editorInstance.option();
-
-                debugger
+                // https://unifiedjs.com/explore/package/remark-github/
+                editorInstance.option({ value: 'Commit: f603d5534f876a18a6cf553b7a03b47208adf5b5' });
             });
         </script>
     </div>

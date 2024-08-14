@@ -3,18 +3,16 @@
 import { getWindow } from '@js/core/utils/window';
 import Errors from '@js/ui/widget/ui.errors';
 // import rehypeParse from 'rehype-parse';
-import rehypeRaw from 'rehype-raw';
+// import rehypeRaw from 'rehype-raw';
 // import rehypeRemark from 'rehype-remark';
-import rehypeSanitize from 'rehype-sanitize';
-import rehypeStringify from 'rehype-stringify';
-import remarkGfm from 'remark-gfm';
-// import remarkHtml from 'remark-html';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
+// import rehypeStringify from 'rehype-stringify';
+// import remarkGfm from 'remark-gfm';
+// import remarkParse from 'remark-parse';
+// import remarkRehype from 'remark-rehype';
 // import remarkStringify from 'remark-stringify';
+// import { unified } from 'unified';
 import ShowDown from 'showdown';
 import TurnDown from 'turndown';
-import { unified } from 'unified';
 
 import converterController from '../m_converterController';
 
@@ -25,6 +23,16 @@ class MarkdownConverter {
 
   _html2Markdown: any;
 
+  _unified: any;
+
+  _remarkParse: any;
+
+  _remarkGfm: any;
+
+  _remarkRehype: any;
+
+  _rehypeStringify: any;
+
   constructor() {
     const window = getWindow();
     // @ts-expect-error
@@ -33,12 +41,47 @@ class MarkdownConverter {
     // @ts-expect-error
     const showdown = window && window.showdown || ShowDown;
 
+    // @ts-expect-error
+    this._unified = window && window.unified;
+
+    // @ts-expect-error
+    this._remarkParse = window && window.remarkParse;
+
+    // @ts-expect-error
+    this._remarkGfm = window && window.remarkGfm;
+
+    // @ts-expect-error
+    this._remarkRehype = window && window.remarkRehype;
+
+    // @ts-expect-error
+    this._rehypeStringify = window && window.rehypeStringify;
+
     if (!turndown) {
       throw Errors.Error('E1041', 'Turndown');
     }
 
     if (!showdown) {
+      throw Errors.Error('E1041', 'Showdown');
+    }
+
+    if (withUnified && !this._unified) {
       throw Errors.Error('E1041', 'Unified');
+    }
+
+    if (withUnified && !this._remarkParse) {
+      throw Errors.Error('E1041', 'RemarkParse');
+    }
+
+    if (withUnified && !this._remarkGfm) {
+      throw Errors.Error('E1041', 'RemarkGfm');
+    }
+
+    if (withUnified && !this._remarkRehype) {
+      throw Errors.Error('E1041', 'RemarkRehype');
+    }
+
+    if (withUnified && !this._rehypeStringify) {
+      throw Errors.Error('E1041', 'RehypeStringify');
     }
 
     // eslint-disable-next-line new-cap
@@ -56,7 +99,7 @@ class MarkdownConverter {
     }
 
     if (withUnified) {
-      this._markdown2Html = unified;
+      this._markdown2Html = this._unified;
     } else {
       this._markdown2Html = new showdown.Converter({
         simpleLineBreaks: true,
@@ -87,35 +130,36 @@ class MarkdownConverter {
 
   toHtml(markdownMarkup) {
     if (withUnified) {
-      return this.withUnified(markdownMarkup);
+      return this._processWithUnified(markdownMarkup);
     }
 
-    return this.withShowdown(markdownMarkup);
+    return this._processWithShowdown(markdownMarkup);
   }
 
-  withUnified(markdownMarkup) {
-    const obj = this._markdown2Html()
-      .use(remarkParse)
-      .use(remarkGfm)
-      // .use(remarkRehype, { allowDangerousHtml: true })
-      .use(remarkRehype)
-      // .use(rehypeRaw)
-      // .use(rehypeSanitize)
-      .use(rehypeStringify)
-      .processSync(markdownMarkup);
-
-    debugger;
-
-    let markup = String(obj);
-
-    if (markup) {
-      markup = markup.replace(new RegExp('\\r?\\n', 'g'), '');
-    }
+  toHtmlWithCustomConverter(markdownMarkup) {
+    const markup = markdownMarkup?.replace?.(new RegExp('\\r?\\n', 'g'), '');
 
     return markup;
   }
 
-  withShowdown(markdownMarkup) {
+  _processWithUnified(markdownMarkup) {
+    const result = this._markdown2Html()
+      .use(this._remarkParse)
+      .use(this._remarkGfm)
+      // .use(remarkRehype, { allowDangerousHtml: true })
+      .use(this._remarkRehype)
+      // .use(rehypeRaw)
+      .use(this._rehypeStringify)
+      .processSync(markdownMarkup);
+
+    const stringResult = String(result);
+
+    const markup = stringResult ? stringResult.replace(new RegExp('\\r?\\n', 'g'), '') : '';
+
+    return markup;
+  }
+
+  _processWithShowdown(markdownMarkup) {
     let markup = this._markdown2Html.makeHtml(markdownMarkup);
 
     if (markup) {
