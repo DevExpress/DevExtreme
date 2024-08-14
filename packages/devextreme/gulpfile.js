@@ -11,6 +11,12 @@ gulp.task('clean', function(callback) {
     require('del').sync([
         'artifacts/**',
         '!artifacts',
+        '!artifacts/css',
+        '!artifacts/css/*',
+        '!artifacts/css/fonts',
+        '!artifacts/css/fonts/*',
+        '!artifacts/css/icons',
+        '!artifacts/css/icons/*',
         '!artifacts/npm',
         '!artifacts/npm/devextreme',
         '!artifacts/npm/devextreme/*.json',
@@ -25,7 +31,6 @@ require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
-require('./build/gulp/styles/style-compiler');
 require('./build/gulp/npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
@@ -38,13 +43,6 @@ require('./build/gulp/systemjs');
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
-}
-
-function createStyleCompilerBatch() {
-    return gulp.series(env.TEST_CI
-        ? ['style-compiler-themes-ci']
-        : ['style-compiler-themes']
-    );
 }
 
 function createMiscBatch() {
@@ -63,7 +61,7 @@ function createMainBatch(dev) {
     if(!env.TEST_CI || env.BUILD_TESTCAFE) {
         tasks.push('js-bundles-prod');
     }
-    tasks.push('style-compiler-batch', 'misc-batch');
+    tasks.push('misc-batch');
     return (callback) => multiProcess(tasks, callback, true);
 }
 
@@ -82,7 +80,6 @@ function createDefaultBatch(dev) {
 }
 
 gulp.task('misc-batch', createMiscBatch());
-gulp.task('style-compiler-batch', createStyleCompilerBatch());
 gulp.task('main-batch', createMainBatch(false));
 gulp.task('main-batch-dev', createMainBatch(true));
 
@@ -98,7 +95,6 @@ gulp.task('dev-watch', gulp.parallel(
     'renovated-components-watch',
     'bundler-config-watch',
     'js-bundles-watch',
-    'style-compiler-themes-watch',
     'test-env'
 ));
 

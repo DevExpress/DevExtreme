@@ -34,6 +34,7 @@ const getChildKeys = function (that, keys) {
   return childKeys;
 };
 
+// @ts-expect-error
 const applySorting = (data: any[], sort: any): any => queryByOptions(
   query(data),
   {
@@ -218,6 +219,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
       result = result || [];
 
       for (let i = 0; i < data.length; i++) {
+        // @ts-expect-error
         const item = createObjectWithChanges(data[i]);
 
         key = this._keyGetter(item);
@@ -576,6 +578,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
   protected _handleDataLoaded(options) {
     const data = options.data = this._convertDataToPlainStructure(options.data);
     if (!options.remoteOperations.filtering && options.loadOptions.filter) {
+      // @ts-expect-error
       options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
     }
     this._updateHasItemsMap(options);

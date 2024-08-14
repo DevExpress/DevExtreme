@@ -3,9 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme-vue",
   "projectType": "library",
-  "implicitDependencies": [
-    "devextreme-main"
-  ],
   "targets": {
     "pack": {
       "executor": "nx:run-script",

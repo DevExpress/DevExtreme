@@ -1,5 +1,5 @@
 {
-  "name": "devextreme-main",
+  "name": "devextreme",
   "version": "24.2.0",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
@@ -63,7 +63,7 @@
     "@typescript-eslint/parser": "5.62.0",
     "ast-types": "0.14.2",
     "autoprefixer": "10.4.17",
-    "axe-core": "4.9.1",
+    "axe-core": "4.10.0",
     "babel-plugin-add-module-exports": "1.0.4",
     "babel-plugin-inferno": "6.7.1",
     "bootstrap": "5.3.2",
@@ -73,7 +73,7 @@
     "clean-css": "5.3.3",
     "cross-env": "7.0.3",
     "cssom": "0.5.0",
-    "csstype": "^3.1.3",
+    "csstype": "3.1.3",
     "del": "2.2.2",
     "devextreme-cldr-data": "1.0.3",
     "devextreme-screenshot-comparer": "2.0.17",
@@ -152,7 +152,7 @@
     "npm-run-all": "4.1.5",
     "opentype.js": "1.3.4",
     "plugin-error": "2.0.1",
-    "qunit": "2.21.0",
+    "qunit": "2.21.1",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-test-renderer": "16.14.0",
@@ -163,9 +163,7 @@
     "staged-git-files": "1.3.0",
     "string-replace-loader": "3.1.0",
     "stylelint": "15.11.0",
-    "stylelint-config-standard-scss": "9.0.0",
     "stylelint-devextreme": "0.0.6",
-    "stylelint-scss": "5.3.1",
     "systemjs": "0.19.41",
     "systemjs-plugin-babel": "0.0.25",
     "systemjs-plugin-css": "0.1.37",
@@ -182,16 +180,14 @@
     "vinyl-named": "1.1.0",
     "webpack": "5.76.0",
     "webpack-stream": "7.0.0",
-    "yaml": "2.3.4",
+    "yaml": "2.5.0",
     "yargs": "17.7.2"
   },
   "scripts": {
-    "preinstall": "node build/preinstall.js",
     "clean": "gulp clean",
-    "lint": "npm-run-all -p -c lint-js lint-css lint-ts lint-renovation lint-dts lint-texts",
+    "lint": "npm-run-all -p -c lint-js lint-ts lint-renovation lint-dts lint-texts",
     "lint-js": "eslint --quiet --ext .js .",
     "lint-ts": "eslint --quiet --ext .tsx,.ts --ignore-pattern /js/renovation/ --ignore-pattern /testing/renovation/ --ignore-pattern *.d.ts .",
-    "lint-css": "stylelint scss",
     "lint-renovation": "eslint --quiet --ext .tsx,.ts ./js/renovation",
     "lint-dts": "eslint js --ext .d.ts --ignore-pattern /js/renovation/",
     "lint-staged": "lint-staged",
@@ -223,7 +219,6 @@
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
     "test-jest": "jest --no-coverage --runInBand",
     "test-jest:watch": "jest --watch",
-    "test-styles": "pnpm run test-jest --config=./testing/styles/jest.config.json --coverage=false",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "tcd-update": "tcd-update"
   },
@@ -232,5 +227,9 @@
     "ios > 9",
     "> 1%",
     "not dead"
-  ]
+  ],
+  "publishConfig": {
+    "directory": "artifacts/npm/devextreme",
+    "linkDirectory": true
+  }
 }

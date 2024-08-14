@@ -3293,6 +3293,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const eventArray = [];
         const dataGrid = createDataGrid({
             columns: [{ dataField: 'field1', fixed: true }, { dataField: 'field2' }],
+            columnFixing: {
+                legacyMode: true
+            },
             dataSource: {
                 load: function() {
                     return $.Deferred().reject('Load error');
@@ -5125,7 +5128,8 @@ QUnit.module('templates', baseModuleConfig, () => {
                     visible: true
                 },
                 columnFixing: {
-                    enabled: true
+                    enabled: true,
+                    legacyMode: true
                 },
                 columns: [{
                     dataField: 'field1',

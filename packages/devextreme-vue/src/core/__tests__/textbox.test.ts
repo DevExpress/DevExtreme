@@ -58,4 +58,28 @@ describe('two-way binding', () => {
       expect(component.$_config.updateValue).toBeCalled();
     });
   });
+
+  it('dxClass should be set when class attr ', async () => {
+    expect.assertions(1);
+    const vm = defineComponent({
+      template:
+                `<dx-text-box id="component" :class="customClass"></dx-text-box>
+                `,
+      components: {
+        DxTextBox,
+      },
+      props: {
+        customClass: {
+          type: String,
+          default: 'custom1',
+        },
+      },
+    });
+    const wrapper = mount(vm);
+    const component = wrapper.getComponent('#component');
+    await wrapper.setProps({ customClass: 'custom2' });
+    await nextTick(() => {
+      expect(component.element.classList.toString()).toBe('custom2 dx-show-invalid-badge dx-textbox dx-texteditor dx-editor-outlined dx-texteditor-empty dx-widget');
+    });
+  });
 });

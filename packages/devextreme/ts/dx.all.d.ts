@@ -9454,6 +9454,14 @@ declare module DevExpress.ui {
    */
   export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
+     * [descr:dxChatOptions.user]
+     */
+    user?: DevExpress.ui.dxChat.User;
+    /**
+     * [descr:dxChatOptions.title]
+     */
+    title?: string;
+    /**
      * [descr:dxChatOptions.items]
      */
     items?: Array<DevExpress.ui.dxChat.Message>;
@@ -25667,11 +25675,10 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ResizeEndEvent]
      */
-    export type ResizeEndEvent<TKey = any> = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<
-        dxSplitter<TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > &
+    export type ResizeEndEvent<TKey = any> = DevExpress.events.NativeEventInfo<
+      dxSplitter<TKey>,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > &
       ResizeInfo;
     /**
      * [descr:_ui_splitter_ResizeEvent]
@@ -30497,7 +30504,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:User.id]
      */
-    id?: number;
+    id?: number | string;
     /**
      * [descr:User.name]
      */

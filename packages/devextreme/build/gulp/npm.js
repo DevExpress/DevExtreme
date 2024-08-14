@@ -6,6 +6,7 @@ const eol = require('gulp-eol');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
 const merge = require('merge-stream');
+const through = require('through2');
 const replace = require('gulp-replace');
 const lazyPipe = require('lazypipe');
 const gulpFilter = require('gulp-filter');
@@ -16,7 +17,7 @@ const ctx = require('./context.js');
 const env = require('./env-variables.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
-const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDir, devextremeDistDir } = require('./utils');
+const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDistDir } = require('./utils');
 
 const resultPath = ctx.RESULT_NPM_PATH;
 
@@ -115,7 +116,20 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(`${dist}/bin`)),
 
     gulp
-        .src(`${dist}/package.json`)
+        .src('package.json')
+        .pipe(
+            through.obj((file, enc, callback) => {
+                const pkg = JSON.parse(file.contents.toString(enc));
+
+                pkg.name = 'devextreme';
+                pkg.version = ctx.version;
+                delete pkg.devDependencies;
+                delete pkg.publishConfig;
+
+                file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
+                callback(null, file);
+            })
+        )
         .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, overwriteInternalPackageName()))
         .pipe(gulp.dest(dist)),
 
@@ -137,9 +151,6 @@ const distPath = `${resultPath}/${packageDistDir}`;
 gulp.task('npm-sources', gulp.series(
     'ts-sources',
     () => gulp
-        .src(`${resultPath}/${devextremeDir}/package.json`)
-        .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(packagePath))),
-    () => gulp
         .src(`${resultPath}/${devextremeDistDir}/package.json`)
         .pipe(overwriteInternalPackageName())
         .pipe(gulpIf(env.BUILD_INTERNAL_PACKAGE, gulp.dest(distPath))),
@@ -154,19 +165,18 @@ gulp.task('npm-dist', () => gulp
 const scssDir = `${packagePath}/scss`;
 
 gulp.task('npm-sass', gulp.series(
-    'create-scss-bundles',
     gulp.parallel(
         () => gulp
-            .src('scss/**/*')
+            .src(`${ctx.SCSS_PACKAGE_PATH}/scss/**/*`)
             .pipe(dataUri())
             .pipe(gulp.dest(scssDir)),
 
         () => gulp
-            .src('fonts/**/*', { base: '.' })
+            .src(`${ctx.SCSS_PACKAGE_PATH}/fonts/**/*`, { base: '.' })
             .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
 
         () => gulp
-            .src('icons/**/*', { base: '.' })
+            .src(`${ctx.SCSS_PACKAGE_PATH}/icons/**/*`, { base: '.' })
             .pipe(gulp.dest(`${scssDir}/widgets/base`)),
     )
 ));

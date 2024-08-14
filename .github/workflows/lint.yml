@@ -246,8 +246,8 @@ jobs:
         pnpm install
 
     - name: Lint CSS
-      working-directory: ./packages/devextreme
-      run: pnpx nx lint-css
+      working-directory: ./packages/devextreme-scss
+      run: pnpx nx lint
 
   pnpm_lock:
     runs-on: devextreme-shr2

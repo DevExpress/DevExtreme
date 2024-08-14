@@ -94,14 +94,14 @@ const filesContent: { [key: string]: string } = {
   'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';',
 
   // validation tests
-  [path.resolve(__dirname, '../../../devextreme/scss/widgets/righttheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";',
-  [path.resolve(__dirname, '../../../devextreme/scss/widgets/extratheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./menu";',
-  [path.resolve(__dirname, '../../../devextreme/scss/widgets/lesstheme/_index.scss')]: '// public widgets\n@use "./toolbar";',
+  [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/righttheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";',
+  [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/extratheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./menu";',
+  [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/lesstheme/_index.scss')]: '// public widgets\n@use "./toolbar";',
 
   // collect test
   [path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js')]: 'import t from \'./toolbar\';import b from \'./button\';',
-  [path.resolve(__dirname, '../../../devextreme/scss/widgets/generic/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
-  [path.resolve(__dirname, '../../../devextreme/scss/widgets/material/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
+  [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/generic/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
+  [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/material/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";@use "./icon";@use "./menu";',
 };
 
 const copyDependencies = (dependencies: Record<string, string[]>): Record<string, string[]> => {

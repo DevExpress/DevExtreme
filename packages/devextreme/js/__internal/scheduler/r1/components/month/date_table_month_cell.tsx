@@ -1,7 +1,7 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
-import { renderUtils } from '../../utils/index';
+import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { DateTableCellBaseProps } from '../base/date_table_cell_base';
 import { DateTableCallBaseDefaultProps, DateTableCellBase } from '../base/date_table_cell_base';
 import type { ContentTemplateProps } from '../types';
@@ -53,7 +53,7 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
       otherMonth,
       today,
     } = this.props;
-    const classes = renderUtils.combineClasses({
+    const classes = combineClasses({
       'dx-scheduler-date-table-other-month': !!otherMonth,
       'dx-scheduler-date-table-current-date': !!today,
       'dx-scheduler-date-table-first-of-month': !!firstDayOfMonth,

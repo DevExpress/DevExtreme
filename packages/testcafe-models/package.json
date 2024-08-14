@@ -4,7 +4,7 @@
     "testcafe": "*"
   },
   "devDependencies": {
-    "devextreme": "~24.2.0"
+    "devextreme": "workspace:~24.2.0"
   },
   "version": "24.2.0"
 }

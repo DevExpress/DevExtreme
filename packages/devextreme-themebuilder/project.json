@@ -16,8 +16,10 @@
       "outputs": [
         "{projectRoot}/dist",
         "{projectRoot}/src/data/metadata",
-        "{projectRoot}/src/data/scss"
-      ]
+        "{projectRoot}/src/data/scss",
+        "{workspaceRoot}/packages/devextreme-scss/scss/**/*.scss"
+      ],
+      "cache": false
     },
     "test": {
       "executor": "nx:run-script",
@@ -33,7 +35,7 @@
       "outputs": [
         "{projectRoot}/coverage"
       ],
-      "cache": true
+      "cache": false
     }
   },
   "tags": []

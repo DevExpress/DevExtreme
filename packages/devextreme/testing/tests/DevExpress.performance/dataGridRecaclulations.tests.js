@@ -48,6 +48,9 @@ QUnit.performanceTest('render with columnFixing', function(assert) {
     const measureFunction = createDataGridMeasureFunction({
         dataSource: window.orders,
         columnAutoWidth: true,
+        columnFixing: {
+            legacyMode: true
+        },
         customizeColumns: function(columns) {
             columns[0].fixed = true;
         }
@@ -91,6 +94,9 @@ QUnit.performanceTest('updateDimensions with columnFixing', function(assert) {
     createDataGridMeasureFunction({
         dataSource: window.orders,
         columnAutoWidth: true,
+        columnFixing: {
+            legacyMode: true
+        },
         customizeColumns: function(columns) {
             columns[0].fixed = true;
         }
@@ -138,6 +144,9 @@ QUnit.performanceTest('refresh with columnFixing', function(assert) {
     createDataGridMeasureFunction({
         dataSource: window.orders,
         columnAutoWidth: true,
+        columnFixing: {
+            legacyMode: true
+        },
         customizeColumns: function(columns) {
             columns[0].fixed = true;
         }

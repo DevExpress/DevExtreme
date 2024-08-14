@@ -53,6 +53,10 @@ const generateTestData = (rowCount: number) => new Array(rowCount)
         filterRow: {
           visible: true,
         },
+        columnFixing: {
+          // @ts-expect-error private option
+          legacyMode: true,
+        },
         columns: [
           ...firstColumns,
           ...secondColumns,

@@ -8,49 +8,49 @@ To run a playground, clone this repository and follow the instructions below.
 
 Before you run a playground, install modules and build the devextreme package. Run the following scripts from the root directory of this repository:
 ```
-npm install
-npm run build -w=devextreme-main
+pnpm install
+pnpm run build -w=devextreme
 ```
 
 ## Angular playground
 > **_NOTE:_** Requires Node v17+
 1. Prepare the devextreme-angular package:
 ```
-npm run pack -w=devextreme-angular
+pnpm run pack -w=devextreme-angular
 ```
 2. Run the launch script:
 ```
 cd apps/angular
-npm run start
+pnpm run start
 ```
 
 ## React playground
 1. Prepare the devextreme-react package:
 ```
-npm run pack -w=devextreme-react
+pnpm run pack -w=devextreme-react
 ```
 2. Run the launch script:
 ```
 cd apps/react
-npm run start
+pnpm run start
 ```
 
 ## Vue playground
 1. Prepare the devextreme-vue package:
 ```
-npm run pack -w=devextreme-vue
+pnpm run pack -w=devextreme-vue
 ```
 2. Run the launch script:
 ```
 cd apps/vue
-npm run start
+pnpm run start
 ```
 
 ## Update DevExtreme code
 
 To observe the changes made to the DevExtreme code within playgrounds, rebuild the `devextreme` package.
 ```
-npm run build -w=devextreme-main
+pnpm run build -w=devextreme
 ```
 If you need your changes to apply dynamically without reloading the playground, save them in the following directory:
 ```

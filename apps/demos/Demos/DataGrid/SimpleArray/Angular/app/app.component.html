@@ -2,7 +2,7 @@
   id="gridContainer"
   [dataSource]="customers"
   keyExpr="ID"
-  [columns]="['CompanyName', 'City', 'State', 'Phone', 'Fax']"
   [showBorders]="true"
 >
+  <dxi-column *ngFor="let column of columns" [dataField]="column"></dxi-column>
 </dx-data-grid>

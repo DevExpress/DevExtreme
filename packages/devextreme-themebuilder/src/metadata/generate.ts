@@ -3,10 +3,10 @@ import * as path from 'path';
 import MetadataCollector from './collector';
 import DependencyCollector from './dependency-collector';
 import { version } from '../../../devextreme/build/gulp/context';
-import { resolveDataUri } from '../../../devextreme/build/gulp/gulp-data-uri';
+import { resolveDataUri } from '../../../devextreme-scss/build/gulp-data-uri';
 import { browserslist } from '../../../devextreme/package.json';
 
-const stylesDirectory = path.resolve(__dirname, '../../../devextreme/scss');
+const stylesDirectory = path.resolve(__dirname, '../../../devextreme-scss/scss');
 const stylesDestinationDirectory = './src/data/scss';
 const metadataDestinationFile = './src/data/metadata/dx-theme-builder-metadata.ts';
 const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;

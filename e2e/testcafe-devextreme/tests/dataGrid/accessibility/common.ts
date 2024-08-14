@@ -599,6 +599,10 @@ const DATA_GRID_SELECTOR = '#container';
     return createWidget('dxDataGrid', {
       dataSource: getData(10, 7),
       keyExpr: 'field_0',
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [
         {
           dataField: 'field_0',
@@ -1440,6 +1444,8 @@ const DATA_GRID_SELECTOR = '#container';
       keyExpr: 'field_0',
       columnFixing: {
         enabled: true,
+        // @ts-expect-error private option
+        legacyMode: true,
       },
       sorting: {
         mode: 'multiple',

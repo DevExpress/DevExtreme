@@ -183,6 +183,10 @@ safeSizeTest('The updateDimensions method should render the grid if a container 
       mode: 'virtual',
       useNative,
     },
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     customizeColumns(columns) {
       columns[0].fixed = true;
     },
@@ -235,6 +239,10 @@ test('The markup should be correct after horizontal scrolling and collapse of th
   scrolling: {
     mode: 'virtual',
     columnRenderingMode: 'virtual',
+  },
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
   },
   customizeColumns(columns) {
     columns[0].fixed = true;
@@ -334,6 +342,8 @@ test('Group row should have right colspan with summary, virtual columns and fixe
     columns,
     columnFixing: {
       enabled: true,
+      // @ts-expect-error private option
+      legacyMode: true,
     },
     columnMinWidth: 100,
     scrolling: {

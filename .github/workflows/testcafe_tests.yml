@@ -58,12 +58,12 @@ jobs:
         pnpm install
 
     - name: Build
-      run: pnpx nx build devextreme-main
+      run: pnpx nx build devextreme
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
       run: |
-        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3

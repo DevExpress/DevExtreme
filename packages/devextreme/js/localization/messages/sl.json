@@ -230,6 +230,8 @@
         "dxPivotGrid-rowFieldArea": "Povleci vrstice tukaj",
         "dxPivotGrid-filterFieldArea": "Povleci filtre tukaj",
 
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+
         "dxScheduler-editorLabelTitle": "Predmet",
         "dxScheduler-editorLabelStartDate": "Datum začetka",
         "dxScheduler-editorLabelEndDate": "Datum konca",

@@ -115,9 +115,9 @@ export type ResizeStartEvent<TKey = any> = Cancelable & NativeEventInfo<dxSplitt
  * @docid _ui_splitter_ResizeEndEvent
  * @public
  * @type object
- * @inherits Cancelable,NativeEventInfo,_ui_splitter_ResizeInfo
+ * @inherits NativeEventInfo,_ui_splitter_ResizeInfo
  */
-export type ResizeEndEvent<TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
+export type ResizeEndEvent<TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
  * @docid _ui_splitter_ItemCollapsedEvent

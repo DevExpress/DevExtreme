@@ -261,7 +261,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
   private _updateMasterDataGridCore(masterDataGrid, masterRowOptions) {
     const d = Deferred();
 
-    if (masterDataGrid.getView('rowsView').isFixedColumns()) {
+    if (masterDataGrid.getView('rowsView')?.isFixedColumns?.()) {
       // @ts-expect-error
       this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $(masterRowOptions.rowElement)).done(d.resolve);
     } else {

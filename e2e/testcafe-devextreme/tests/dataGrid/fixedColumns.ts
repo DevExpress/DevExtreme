@@ -59,6 +59,10 @@ test('Fixed columns should have same width as not fixed columns with columnAutoW
     },
     columnAutoWidth: true,
     scrolling: { mode: 'standard', useNative: true },
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     columns: [
       {
         dataField: 'dataA',
@@ -174,12 +178,15 @@ test('Hovering over a row should work correctly when there is a fixed column and
     keyExpr: 'id',
     renderAsync: false,
     hoverStateEnabled: true,
-    // @ts-expect-error private option
     templatesRenderAsynchronously: true,
     columns: [
       { dataField: 'id', fixed: true },
       { dataField: 'text', cellTemplate: '#test' },
     ],
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     showBorders: true,
   });
 
@@ -235,6 +242,10 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
     Column7: 'f',
     Column8: 'g',
   }],
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
   columns: [
     {
       dataField: 'Column1', fixed: true, fixedPosition: 'right', width: 100,
@@ -298,7 +309,6 @@ test('Hovering over a row should work correctly after scrolling when there is a 
     keyExpr: 'id',
     renderAsync: false,
     hoverStateEnabled: true,
-    // @ts-expect-error private option
     templatesRenderAsynchronously: true,
     columns: [
       'id',
@@ -309,6 +319,10 @@ test('Hovering over a row should work correctly after scrolling when there is a 
       },
       'text2',
     ],
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     paging: {
       enabled: false,
     },
@@ -345,6 +359,10 @@ safeSizeTest('The grid layout should be correct after resizing the window when t
 }, [800, 800]).before(async () => createWidget('dxDataGrid', {
   columnAutoWidth: true,
   dataSource: [{}],
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
   columns: [{
     caption: 'Fixed column',
     fixed: true,
@@ -378,7 +396,11 @@ test('DataGrid - Group summary is not updated when a column is fixed on the righ
   ],
   keyExpr: 'id',
   repaintChangesOnly: true,
-  columnFixing: { enabled: true },
+  columnFixing: {
+    enabled: true,
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
   groupPanel: {
     visible: true,
   },

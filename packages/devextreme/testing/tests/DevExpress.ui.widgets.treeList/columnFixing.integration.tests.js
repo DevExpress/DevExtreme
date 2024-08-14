@@ -33,7 +33,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 fixed: true
             }],
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             selection: {
                 mode: 'multiple'

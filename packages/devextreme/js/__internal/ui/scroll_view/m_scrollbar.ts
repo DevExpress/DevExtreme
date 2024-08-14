@@ -92,7 +92,9 @@ const Scrollbar = (Widget as any).inherit({
     eventsEngine.on(this._$thumb, addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
   },
 
-  feedbackOn() {
+  feedbackOn(e) {
+    e?.preventDefault();
+
     this.$element().addClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
     activeScrollbar = this;
   },

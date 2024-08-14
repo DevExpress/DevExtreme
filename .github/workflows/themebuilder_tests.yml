@@ -53,7 +53,7 @@ jobs:
         pnpm install
 
     - name: Build etalon bundles
-      working-directory: ./packages/devextreme
+      working-directory: ./packages/devextreme-scss
       run: pnpx gulp style-compiler-themes-ci
 
     - name: Build
@@ -65,12 +65,12 @@ jobs:
       run: pnpx nx test
 
     - name: Check styles for duplicate rules (generic)
-      working-directory: ./packages/devextreme
-      run: pnpx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.light.css"
+      working-directory: ./packages/devextreme-scss
+      run: pnpx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.light.css"
 
     - name: Check styles for duplicate rules (material)
-      working-directory: ./packages/devextreme
-      run: pnpx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
+      working-directory: ./packages/devextreme-scss
+      run: pnpx stylelint --config tests/bundles-stylelint-config.json "../devextreme/artifacts/**/dx.material.blue.light.css"
 
   notify:
     runs-on: devextreme-shr2

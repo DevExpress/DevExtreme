@@ -9,8 +9,8 @@
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
   "dependencies": {
-    "devextreme": "~24.2.0",
-    "devextreme-react": "~24.2.0",
+    "devextreme": "workspace:~24.2.0",
+    "devextreme-react": "workspace:~24.2.0",
     "react": "~18.0.0",
     "react-dom": "~18.0.0"
   },

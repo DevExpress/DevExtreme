@@ -113,7 +113,7 @@ QUnit.test('scroll by thumb', function(assert) {
     mouse.move(0, distance);
     location = getScrollOffset($scrollable);
 
-    assert.notOk(downEvent.isDefaultPrevented(), 'default is not prevented'); // T516691
+    assert.strictEqual(downEvent.isDefaultPrevented(), true, 'default should be prevented (T1240632)');
     assert.equal(location.top, -distance / containerToContentRatio, 'scroll follows pointer');
 
     mouse.move(0, distance);

@@ -206,8 +206,11 @@ test('Headers should be rendered correctly after changing the grouping.autoExpan
     ],
     width: 700,
     renderAsync: false,
-    // @ts-expect-error private option
     templatesRenderAsynchronously: true,
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     columns: [
       { dataField: 'field1', headerCellTemplate: (_, { column }) => $('<div>').text(column.caption as string) },
       { dataField: 'field2', groupIndex: 0 },

@@ -120,6 +120,10 @@ safeSizeTest('Validation popup with open master detail and fixed columns', async
   dataSource: getData(20, 2),
   height: 400,
   showBorders: true,
+  columnFixing: {
+    // @ts-expect-error private option
+    legacyMode: true,
+  },
   columns: [{
     dataField: 'field_0',
     validationRules: [{ type: 'required' }],

@@ -1,7 +1,5 @@
 node_modules
 /artifacts
-!/artifacts/npm/devextreme/package.json
-!/artifacts/npm/devextreme/project.json
 !/artifacts/npm/devextreme-dist/package.json
 /testing/testcafe/artifacts
 /testing/LastSuiteTime.txt

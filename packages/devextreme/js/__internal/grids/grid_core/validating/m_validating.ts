@@ -1150,7 +1150,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     let $nextFixedRowElement;
     let $groupCellElement;
     // @ts-expect-error
-    const isFixedColumns = this._rowsView.isFixedColumns();
+    const isFixedColumns = this._rowsView?.isFixedColumns?.();
     // @ts-expect-error
     const isFormOrPopupEditMode = this._editingController.isFormOrPopupEditMode();
 

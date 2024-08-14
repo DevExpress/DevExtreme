@@ -2537,6 +2537,22 @@ QUnit.module('Visibility of control elements', {
 });
 
 QUnit.module('Events', moduleConfig, () => {
+    QUnit.test('items sizes should be already updated when onResizeEnd is raised (T1240125)', function(assert) {
+        assert.expect(1);
+
+        this.reinit({
+            onResizeEnd: (eventArgs) => {
+                const newItems = eventArgs.component.option('items');
+                assert.strictEqual(newItems[0].size, firstPaneInitialSize + delta, 'Size of the first item should be updated');
+            },
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
+        });
+        const firstPaneInitialSize = this.instance.option('items')[0].size;
+        const delta = 90;
+        const pointer = pointerMock(this.getResizeHandles(false).eq(0));
+        pointer.start().dragStart().drag(delta, 0).dragEnd();
+    });
+
     ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
         QUnit.test(`${eventHandler} should be called when handle dragged`, function(assert) {
             const resizeHandlerStub = sinon.stub();
@@ -2946,29 +2962,6 @@ QUnit.module('Events', moduleConfig, () => {
 
         this.checkItemSizes([200, 200]);
         this.assertLayout([50, 50]);
-        assert.true(resizeEvent.event.cancel);
-    });
-
-    QUnit.test('onResizeEnd event should be cancellable', function(assert) {
-        let resizeEvent;
-        this.reinit({
-            width: 408,
-            height: 408,
-            dataSource: [{ size: '200px' }, { size: '200px' }],
-            onResizeEnd: function(e) {
-                resizeEvent = e;
-                e.cancel = true;
-            },
-        });
-
-        const pointer = pointerMock(this.getResizeHandles().eq(0));
-        pointer.start().dragStart().drag(100, 100).dragEnd();
-
-        const firstPaneSize = this.instance.option('items[0].size');
-        const secondPaneSize = this.instance.option('items[1].size');
-
-        assert.strictEqual(firstPaneSize, 200);
-        assert.strictEqual(secondPaneSize, 200);
         assert.true(resizeEvent.event.cancel);
     });
 });

@@ -513,6 +513,7 @@ const RemoteStore = Class.inherit((function () {
         skip: 0,
         take: 20,
       }).done((data) => {
+        // @ts-expect-error
         const normalizedArguments = normalizeLoadResult(data);
         d.resolve(pivotGridUtils.discoverObjectFields(normalizedArguments.data, fields));
       }).fail(d.reject);

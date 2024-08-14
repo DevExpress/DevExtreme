@@ -1,5 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Button from 'devextreme-testcafe-models/button';
 import Scheduler, { CLASS } from 'devextreme-testcafe-models/scheduler';
 import { extend } from 'devextreme/core/utils/extend';
 import { createWidget } from '../../helpers/createWidget';
@@ -326,7 +327,7 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
       });
     })
       .after(async () => {
-        await changeTheme(theme);
+        await changeTheme(Themes.genericLight);
       });
   });
 });
@@ -359,4 +360,45 @@ test('[T716993]: should has horizontal scrollbar with multiple resources and fix
   });
 }).after(async () => {
   await removeStylesheetRulesFromPage();
+});
+
+test('Scheduler appointments should change color on update resources', async (t) => {
+  const button = new Button('#container');
+  const scheduler = new Scheduler('#otherContainer');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.click(button.element);
+
+  await takeScreenshot('scheduler-appointments-should-update-color.png', scheduler.workSpace);
+  await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    timeZone: 'America/Los_Angeles',
+    dataSource: [{
+      text: 'Website Re-Design Plan',
+      startDate: new Date('2021-03-29T16:30:00.000Z'),
+      endDate: new Date('2021-03-29T18:30:00.000Z'),
+      resource: 1,
+    }],
+    views: ['week', 'month'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 28),
+    startDayHour: 9,
+    height: 730,
+    resources: [{
+      fieldExpr: 'resource',
+      dataSource: [{ id: 1, text: 'res 1', color: 'red' }],
+    }],
+  }, '#otherContainer');
+  await createWidget('dxButton', {
+    text: 'Change resources',
+    onClick() {
+      const schedulerWidget = ($('#otherContainer') as any).dxScheduler('instance');
+      schedulerWidget.option('resources', [{
+        fieldExpr: 'resource',
+        dataSource: [{ id: 1, text: 'new res 1', color: 'pink' }],
+      }]);
+      schedulerWidget.getDataSource().reload();
+    },
+  }, '#container');
 });

@@ -1,6 +1,6 @@
 const $ = require('jquery');
 const dblclickEvent = require('events/dblclick');
-const { dblClick } = require('__internal/events/dblclick');
+const { dblClick } = require('__internal/events/m_dblclick');
 const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {
@@ -44,7 +44,7 @@ QUnit.test('dxdblclick should not be handled on a usual dxclick even if dblClick
 
     el.off(dblclickEvent.name);
     el.on(dblclickEvent.name, handler);
-    el.on(dblclickEvent.name, () => {});
+    el.on(dblclickEvent.name, () => { });
 
     el.trigger('dxclick');
 

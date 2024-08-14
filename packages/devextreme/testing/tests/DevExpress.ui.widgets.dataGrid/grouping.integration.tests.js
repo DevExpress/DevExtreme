@@ -41,6 +41,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     { id: 1, value: 'value 1' }
                 ]
             },
+            columnFixing: { legacyMode: true },
             columns: ['id', {
                 dataField: 'value',
                 fixed: true,
@@ -546,6 +547,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 load: function() {
                     return loadResult;
                 }
+            },
+            columnFixing: {
+                legacyMode: true
             }
         });
 

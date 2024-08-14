@@ -1773,7 +1773,8 @@ QUnit.module('Fixed columns', {
             filterRow: {
                 visible: true,
                 showOperationChooser: true
-            }
+            },
+            columnFixing: { legacyMode: true }
         };
 
         // act
@@ -1824,7 +1825,8 @@ QUnit.module('Fixed columns', {
             filterRow: {
                 visible: true,
                 showOperationChooser: true
-            }
+            },
+            columnFixing: { legacyMode: true }
         };
 
         // act
@@ -1870,7 +1872,8 @@ QUnit.module('Fixed columns', {
             filterRow: {
                 visible: true,
                 showOperationChooser: true
-            }
+            },
+            columnFixing: { legacyMode: true }
         };
 
         // act
@@ -1920,7 +1923,8 @@ QUnit.module('Fixed columns', {
             filterRow: {
                 visible: true,
                 showOperationChooser: true
-            }
+            },
+            columnFixing: { legacyMode: true }
         };
 
         // act

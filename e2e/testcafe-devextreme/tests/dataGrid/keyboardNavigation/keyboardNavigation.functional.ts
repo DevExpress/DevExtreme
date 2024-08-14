@@ -1914,6 +1914,10 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       mode: 'multiple',
       showCheckBoxesMode: 'always',
     },
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     customizeColumns(columns) {
       columns[0].fixed = true;
       columns[1].fixed = true;
@@ -2004,6 +2008,10 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     selection: {
       mode: 'multiple',
       showCheckBoxesMode: 'always',
+    },
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
     },
     customizeColumns(columns) {
       columns[0].fixedPosition = 'right';
@@ -2221,6 +2229,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         { name: 'Ben', c0: 'c0_1' },
       ],
       keyExpr: 'name',
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [{ type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'left' }, 'name', 'c0'],
       editing: {
         mode: 'row',
@@ -2297,6 +2309,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         { name: 'Ben', c0: 'c0_1' },
       ],
       keyExpr: 'name',
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: [{ type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'left' }, 'name', 'c0'],
       editing: {
         mode: 'row',
@@ -2378,6 +2394,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         { name: 'Ben', c0: 'c0_1' },
       ],
       keyExpr: 'name',
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: ['name', 'c0', { type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'right' }],
       editing: {
         mode: 'row',
@@ -2442,6 +2462,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         { name: 'Ben', c0: 'c0_1' },
       ],
       keyExpr: 'name',
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: ['name', 'c0', { type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'right' }],
       editing: {
         mode: 'row',
@@ -2523,6 +2547,10 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
         { name: 'Ben', c0: 'c0_1' },
       ],
       keyExpr: 'name',
+      columnFixing: {
+        // @ts-expect-error private option
+        legacyMode: true,
+      },
       columns: ['name', 'c0', { type: 'buttons', fixed: isCommandColumnFixed, fixedPosition: 'right' }],
       editing: {
         mode: 'row',
@@ -3540,6 +3568,10 @@ test('The last cell should be focused after changing the page size when scrollin
     keyExpr: 'id',
     width: 450,
     columnWidth: 150,
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     customizeColumns(columns) {
       columns[0].fixed = true;
       columns[6].fixed = true;

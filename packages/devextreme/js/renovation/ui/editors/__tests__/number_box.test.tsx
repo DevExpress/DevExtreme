@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { NumberBox, NumberBoxProps, viewFunction as NumberBoxView } from '../number_box';
-import { DomComponentWrapper } from '../../common/dom_component_wrapper';
+import { DomComponentWrapper } from '../../../../__internal/core/r1/dom_component_wrapper';
 import LegacyNumberBox from '../../../../ui/number_box';
 import { EditorStateProps } from '../common/editor_state_props';
 import { EditorLabelProps } from '../common/editor_label_props';

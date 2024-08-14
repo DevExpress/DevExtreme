@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid from 'devextreme-react/data-grid';
+import DataGrid, { Column } from 'devextreme-react/data-grid';
 import { customers } from './data.js';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
@@ -9,6 +9,13 @@ const App = () => (
     keyExpr="ID"
     defaultColumns={columns}
     showBorders={true}
-  />
+  >
+    {columns.map((column, index) => (
+      <Column
+        dataField={column}
+        key={index}
+      />
+    ))}
+  </DataGrid>
 );
 export default App;
