@@ -1,4 +1,4 @@
-import { ConfigContextValue } from '../common/config_context';
+import { ConfigContextValue } from '../../__internal/core/r1/config_context';
 import { isDefined } from '../../core/utils/type';
 import globalConfig from '../../core/config';
 

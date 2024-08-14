@@ -18,7 +18,7 @@ import * as ElementLocationModule from '../utils/get_element_location_internal';
 import { DIRECTION_BOTH, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
 import { ScrollableProps } from '../common/scrollable_props';
 import config from '../../../../core/config';
-import { ConfigContextValue } from '../../../common/config_context';
+import { ConfigContextValue } from '../../../../__internal/core/r1/config_context';
 
 jest.mock('../utils/get_element_location_internal', () => ({
   ...jest.requireActual('../utils/get_element_location_internal'),

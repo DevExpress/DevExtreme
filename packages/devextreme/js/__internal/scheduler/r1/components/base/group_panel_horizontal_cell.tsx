@@ -1,7 +1,7 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
-import { renderUtils } from '../../utils/index';
+import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { GroupPanelCellProps } from './group_panel_props';
 import { GroupPanelCellDefaultProps } from './group_panel_props';
 
@@ -32,7 +32,7 @@ export class GroupPanelHorizontalCell extends BaseInfernoComponent<GroupPanelHor
       isFirstGroupCell,
       isLastGroupCell,
     } = this.props;
-    const classes = renderUtils.combineClasses({
+    const classes = combineClasses({
       'dx-scheduler-group-header': true,
       'dx-scheduler-first-group-cell': isFirstGroupCell,
       'dx-scheduler-last-group-cell': isLastGroupCell,
