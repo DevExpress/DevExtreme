@@ -749,7 +749,7 @@ const Calendar = Editor.inherit({
     const $element = this.$element();
     const aria = {
       role: readOnly ? 'group' : undefined,
-      label: readOnly ? messageLocalization.format('dxCalendar-readOnly') : undefined,
+      label: readOnly ? messageLocalization.format('dxCalendar-readOnlyLabel') : undefined,
     };
     this.setAria(aria, $element);
   },

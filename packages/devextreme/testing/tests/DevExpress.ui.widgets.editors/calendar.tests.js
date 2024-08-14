@@ -4666,7 +4666,7 @@ QUnit.module('Aria accessibility', {
     });
 
     QUnit.test('aria-label attribute should be equal to custom localized text', function(assert) {
-        const localizedText = 'Read-only calendar';
+        const localizedText = 'For Testing';
         localization.loadMessages({ 'en': { 'dxCalendar-readOnly': localizedText } });
 
         const $element = this.$element;
