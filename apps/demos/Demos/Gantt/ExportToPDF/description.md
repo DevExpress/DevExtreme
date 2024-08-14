@@ -1,4 +1,4 @@
-DevExtreme JavaScript Gantt component allows you to export the contents of your Gantt to PDF.
+DevExtreme Gantt component allows you to export the contents of your Gantt to PDF.
 <!--split-->
 
 This demo allows you to apply the following built-in export and task filter options:
