@@ -92,19 +92,23 @@
                 const editorInstance = $('.html-editor').dxHtmlEditor({
                     height: 300,
                     valueType: 'markdown',
-                    value: mdTable,
                     toolbar: {
                         items: [
                             'insertTable',
                         ],
+                    },
+                    onValueChanged({ value }) {
+                        debugger
                     },
                 }).dxHtmlEditor('instance');
 
                 // editorInstance.option({ valueType: 'markdown' });
                 // editorInstance.option({ valueType: 'html' });
 
-                const valueType = editorInstance.option('valueType');
-                const value = editorInstance.option('value');
+                editorInstance.option({ value: '~~user~~' });
+                // editorInstance.option({ valueType: 'html' });
+
+                const { valueType, value } = editorInstance.option();
 
                 debugger
             });

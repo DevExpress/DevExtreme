@@ -97,11 +97,14 @@ class MarkdownConverter {
     const obj = this._markdown2Html()
       .use(remarkParse)
       .use(remarkGfm)
-      .use(remarkRehype, { allowDangerousHtml: true })
-      .use(rehypeRaw)
-      .use(rehypeSanitize)
+      // .use(remarkRehype, { allowDangerousHtml: true })
+      .use(remarkRehype)
+      // .use(rehypeRaw)
+      // .use(rehypeSanitize)
       .use(rehypeStringify)
       .processSync(markdownMarkup);
+
+    debugger;
 
     let markup = String(obj);
 
