@@ -184,9 +184,21 @@ QUnit.test('deepExtendArraySafe sets undefined', function(assert) {
     objectUtils.deepExtendArraySafe(objNoValue, { time: { duration: undefined } }, true, false, true);
 
     assert.equal(objWithValue.time.duration, undefined);
+    assert.ok(Object.prototype.hasOwnProperty.call(objWithValue.time, 'duration'));
     assert.ok(Object.prototype.hasOwnProperty.call(objNoValue.time, 'duration'));
+
 });
 
+QUnit.test('deepExtendArraySafe doesn\'t set undefined if shouldCopyUndefined == false', function(assert) {
+    const objWithValue = { time: { duration: 50 } };
+    const objNoValue = {};
+    objectUtils.deepExtendArraySafe(objWithValue, { time: { duration: undefined } }, true, false, false);
+    objectUtils.deepExtendArraySafe(objNoValue, { time: { duration: undefined } }, true, false, false);
+
+    assert.equal(objWithValue.time.duration, 50);
+    assert.notOk(Object.prototype.hasOwnProperty.call(objNoValue.time, 'duration'));
+
+});
 
 QUnit.test('deepExtendArraySafe copies array into object property deeply', function(assert) {
     const objWithValue = { time: undefined };
@@ -200,4 +212,3 @@ QUnit.test('deepExtendArraySafe copies array into object property deeply', funct
     timeArray[0] = 5;
     assert.deepEqual(objWithValue.time, [1, complexTime, 3]);
 });
-
