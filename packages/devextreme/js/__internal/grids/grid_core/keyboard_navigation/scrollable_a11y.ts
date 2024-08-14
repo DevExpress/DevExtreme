@@ -86,8 +86,9 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
   private getFirstNotFixedCell(): dxElementWrapper | undefined {
     const columns = this._columnsController.getVisibleColumns();
     const columnIndex = columns.findIndex(({ fixed }) => !fixed);
+    const isEditing = this._editingController?.isEditing();
 
-    return columnIndex === -1
+    return columnIndex === -1 || isEditing
       ? undefined
       : this._rowsView._getCellElement(0, columnIndex);
   }
