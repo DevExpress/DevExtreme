@@ -1555,6 +1555,7 @@ const Calendar = Editor.inherit({
         this._invalidate();
         break;
       case 'readOnly':
+        this.callBase(args);
         this._updateAriaReadonly(this.option('readOnly'));
         break;
       case 'skipFocusCheck':
