@@ -205,7 +205,11 @@ export class ResizingController extends modules.ViewController {
     const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
     // @ts-expect-error Treelist Variable
     const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
-    this.component.setAria('label', `${widgetStatusText}. ${expandableWidgetAriaLabel}`, $ariaLabelElement);
+    const labelParts = [widgetStatusText];
+    if (expandableWidgetAriaLabel) {
+      labelParts.push(expandableWidgetAriaLabel);
+    }
+    this.component.setAria('label', labelParts.join('. '), $ariaLabelElement);
     this._gridView.setWidgetA11yStatusText(widgetStatusText);
   }
 
