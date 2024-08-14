@@ -4618,12 +4618,13 @@ QUnit.module('Aria accessibility', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('aria-label should be \'Readonly-calendar\' and role = group when readOnly option is true', function(assert) {
+    QUnit.test('aria-label should be \'Read-only calendar\' and role = group when readOnly option is true', function(assert) {
         const $element = this.$element;
 
         $element.dxCalendar({
             readOnly: true
         }).dxCalendar('instance');
+
         assert.strictEqual($element.attr('aria-label'), 'Read-only calendar', 'aria-label is set correctly');
         assert.strictEqual($element.attr('role'), 'group', 'role is set correctly');
     });
