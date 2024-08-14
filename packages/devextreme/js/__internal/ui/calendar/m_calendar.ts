@@ -752,7 +752,7 @@ const Calendar = Editor.inherit({
       element.removeAttr('aria-label');
     } else {
       element.attr('role', 'group');
-      this.setAria('label', 'Readonly-calendar', element);
+      this.setAria('label', 'Read-only calendar', element);
     }
   },
 
