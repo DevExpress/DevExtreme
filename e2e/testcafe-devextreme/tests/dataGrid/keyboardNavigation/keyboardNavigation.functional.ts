@@ -4733,10 +4733,9 @@ test('DataGrid - Data rows are skipped during Tab navigation if the first column
 test('DataGrid input cell should not put tabindex to incorrect element while on edit mode (T1239462)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const button = Selector('.dx-datagrid-addrow-button');
 
   await t
-    .click(button)
+    .click(dataGrid.getToolbar().getItem(0))
     .pressKey('tab');
   await takeScreenshot('data-grid_keyboard-navigation-input-text-focused.png', dataGrid.element);
 
