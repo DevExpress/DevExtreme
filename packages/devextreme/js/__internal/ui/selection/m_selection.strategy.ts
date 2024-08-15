@@ -33,28 +33,6 @@ export default class SelectionStrategy {
     this.options[name] = value;
   }
 
-  onSelectionChanging(): void {
-    const {
-      selectedItems,
-      selectedItemKeys,
-      addedItemKeys,
-      removedItemKeys,
-      addedItems,
-      removedItems,
-      onSelectionChanging = noop,
-    } = this.options;
-
-    onSelectionChanging({
-      selectedItems,
-      selectedItemKeys,
-      addedItemKeys,
-      removedItemKeys,
-      addedItems,
-      removedItems,
-      cancel: false,
-    });
-  }
-
   onSelectionChanged() {
     const {
       selectedItems,
