@@ -40,6 +40,7 @@ module('onSelectionChanging event', () => {
             instance.selectItem(0);
 
             const e = selectionChangingStub.getCall(0).args[0];
+            assert.strictEqual(Object.keys(e).length, 5, '5 parameters are presented');
             assert.strictEqual(e.component, instance, 'component parameter is correct');
             assert.strictEqual(e.element, $element.get(0), 'element parameter is correct');
             assert.deepEqual(e.addedItems, [0], 'addedItems parameter is correct');
@@ -508,6 +509,20 @@ module('selecting of items', {
         });
 
         this.instance.option('selectedItems', [this.items[0]]);
+    });
+
+    test('onSelectionChanged should have correct parameters', function(assert) {
+        const selectionChangedStub = sinon.stub();
+        this.instance.option('onSelectionChanged', selectionChangedStub);
+
+        this.instance.option('selectedIndex', 1);
+
+        const e = selectionChangedStub.getCall(0).args[0];
+        assert.strictEqual(Object.keys(e).length, 4, '4 parameters are presented');
+        assert.strictEqual(e.component, this.instance, 'component parameter is correct');
+        assert.strictEqual(e.element, this.$element.get(0), 'element parameter is correct');
+        assert.deepEqual(e.addedItems, [{ 'a': 1 }], 'addedItems parameter is correct');
+        assert.deepEqual(e.removedItems, [], 'removedItems parameter is correct');
     });
 
     test('onSelectionChanged should not be fired if selection not changed', function(assert) {

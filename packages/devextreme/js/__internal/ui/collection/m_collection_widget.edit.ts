@@ -458,7 +458,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       return;
     }
 
-    const selectionChangingArgs = { ...args, cancel: false };
+    const selectionChangingArgs = {
+      removedItems: args.removedItems,
+      addedItems: args.addedItems,
+      cancel: false,
+    };
     this._actions.onSelectionChanging(selectionChangingArgs);
 
     if (isPromise(selectionChangingArgs.cancel)) {
@@ -508,7 +512,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       }
 
       when(selectionChangePromise).done(() => {
-        this._actions.onSelectionChanged(args);
+        this._actions.onSelectionChanged({
+          addedItems: args.addedItems,
+          removedItems: args.removedItems,
+        });
       });
     }
   },
