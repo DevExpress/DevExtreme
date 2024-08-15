@@ -119,6 +119,8 @@ class Chat extends Widget<Properties> {
       case 'items':
         // @ts-expect-error
         this._messageList?.option(name, value);
+        // Add if branch
+        // this._messageList?._renderMessage(message, newItems, sender);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -133,7 +135,7 @@ class Chat extends Widget<Properties> {
 
     const newItems = items ? [...items, message] : [message];
 
-    this._setOptionWithoutOptionChange('items', newItems);
+    this.option('items', newItems);
 
     this._messageList?._renderMessage(message, newItems, sender);
   }

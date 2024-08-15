@@ -10,7 +10,7 @@ const { readFileSync, readdirSync } = require('fs');
 
 const root = join(__dirname, '..', '..', '..', '..');
 const indexFileName = 'index.html';
-const cssDirectory = join(root, 'node_modules', 'devextreme', 'dist', 'css');
+const cssDirectory = join(root, 'apps', 'demos', 'node_modules', 'devextreme', 'dist', 'css');
 const getAvailableThemes = readdirSync(cssDirectory).filter((f) => /^dx\.(?!common).*\.css$/i.test(f));
 const baseTheme = 'dx.light.css';
 const port = process.argv[2] ?? 3000;
