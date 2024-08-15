@@ -446,28 +446,31 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   _processSelectionChanging(args) {
+    const updateSelectedItemsIfNeeded = (args, cancel: boolean): void => {
+      if (!cancel) {
+        this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+        this._updateSelectedItems(args);
+      }
+    };
+
     if (!this._rendered) {
-      this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+      updateSelectedItemsIfNeeded(args, false);
       return;
     }
 
     const selectionChangingArgs = { ...args, cancel: false };
     this._actions.onSelectionChanging(selectionChangingArgs);
+
     if (isPromise(selectionChangingArgs.cancel)) {
       selectionChangingArgs.cancel
         .then((cancel) => {
-          if (!cancel) {
-            this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-            this._updateSelectedItems(args);
-          }
+          updateSelectedItemsIfNeeded(args, cancel);
         })
         .catch(() => {
-          this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-          this._updateSelectedItems(args);
+          updateSelectedItemsIfNeeded(args, false);
         });
-    } else if (!selectionChangingArgs.cancel) {
-      this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-      this._updateSelectedItems(args);
+    } else {
+      updateSelectedItemsIfNeeded(args, selectionChangingArgs.cancel);
     }
   },
 
