@@ -151,7 +151,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
       onSelectionChanged(args) {
-        that.selectionChangingArgs = { ...args, cancel: false };
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
           that._processSelectionChanging(args);
         }
@@ -447,17 +446,21 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   _processSelectionChanging(args) {
-    this._actions.onSelectionChanging(this.selectionChangingArgs);
-    if (isPromise(this.selectionChangingArgs.cancel)) {
-      this.selectionChangingArgs.cancel.then((cancel) => {
-        if (!cancel) {
+    const selectionChangingArgs = { ...args, cancel: false };
+    this._actions.onSelectionChanging(selectionChangingArgs);
+    if (isPromise(selectionChangingArgs.cancel)) {
+      selectionChangingArgs.cancel
+        .then((cancel) => {
+          if (!cancel) {
+            this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+            this._updateSelectedItems(args);
+          }
+        })
+        .catch(() => {
           this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
           this._updateSelectedItems(args);
-        }
-      }).catch((e) => {
-        console.error(e);
-      });
-    } else if (!this.selectionChangingArgs.cancel) {
+        });
+    } else if (!selectionChangingArgs.cancel) {
       this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
       this._updateSelectedItems(args);
     }
