@@ -59,7 +59,7 @@ gulp.task('generate.moduleFacades', gulp.series('generate.components', (done) =>
   done();
 }));
 
-gulp.task('generate.before.preserve-files', (done) => {
+gulp.task('before-generate.preserve-files', (done) => {
   const { outputFolderPath } = buildConfig.tools.componentGenerator;
   const { preserveFoldersAndFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
 
@@ -82,31 +82,6 @@ gulp.task('generate.before.preserve-files', (done) => {
   gulp.parallel(...tasks)(done)
 });
 
-gulp.task('generate.after.restore-preserved', (done) => {
-  const { outputFolderPath } = buildConfig.tools.componentGenerator;
-  const { preserveFoldersAndFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
-
-  const tasks = preserveFoldersAndFiles.map((folderOrFile) => {
-    let src = temporaryFolderForPreserved + folderOrFile;
-    let dest = outputFolderPath + folderOrFile;
-    const isFolder = !fs.statSync(src).isFile();
-
-    if (isFolder) {
-      src += `/**/*`;
-    } else {
-      dest = dest.replace(/\/[^\/]+$/, '/');
-    }
-
-    return () => gulp.src(src).pipe(gulp.dest(dest));
-  });
-
-  gulp.parallel(...tasks)(() => fs.rm(
-      temporaryFolderForPreserved,
-      { recursive: true, force: true },
-      (err) => done(err)
-  ));
-});
-
 gulp.task('generate.facades', gulp.series('generate.moduleFacades', (done) => {
   const facadeGenerator = new AngularFacadeGenerator();
 
@@ -121,23 +96,49 @@ gulp.task('generate.common-reexports', (done) => {
   done();
 });
 
-gulp.task('generate.after.rename-files', (done) => {
+gulp.task('after-generate.rename-files', (done) => {
   const { outputFolderPath } = buildConfig.tools.componentGenerator;
   const { renameGeneratedFiles } = buildConfig.afterGenerate;
   const rename = require('gulp-rename');
 
-  const tasks = (renameGeneratedFiles || [])?.map(({ path, name }) => gulp
-      .src(outputFolderPath + path)
-      .pipe(rename(name))
-      .pipe(gulp.dest((file) => file.base))
+  const actions = (renameGeneratedFiles || []).map(({ path, name }) =>
+      () =>  gulp
+          .src(outputFolderPath + path)
+          .pipe(rename(name))
+          .pipe(gulp.dest((file) => file.base))
   );
 
-  Promise.all(tasks).then(() => done());
+  gulp.parallel(...actions)(done);
 });
 
-gulp.task('generate.after', gulp.series(
-    'generate.after.rename-files',
-    'generate.after.restore-preserved',
+gulp.task('after-generate.restore-preserved', (done) => {
+  const { outputFolderPath } = buildConfig.tools.componentGenerator;
+  const { preserveFoldersAndFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
+
+  const actions = preserveFoldersAndFiles.map((folderOrFile) => {
+    let src = temporaryFolderForPreserved + folderOrFile;
+    let dest = outputFolderPath + folderOrFile;
+    const isFile = fs.statSync(src).isFile();
+
+    if (isFile) {
+      dest = path.dirname(dest);
+    } else {
+      src += `/**/*`;
+    }
+
+    return () => gulp.src(src).pipe(gulp.dest(dest));
+  });
+
+  gulp.parallel(...actions)(() => fs.rm(
+      temporaryFolderForPreserved,
+      { recursive: true, force: true },
+      (err) => done(err)
+  ));
+});
+
+gulp.task('after-generate', gulp.series(
+    'after-generate.rename-files',
+    'after-generate.restore-preserved',
 ));
 
 gulp.task('build.license-headers', () => {
@@ -250,10 +251,10 @@ const buildTask = gulp.series('build.components');
 gulp.task('build', buildTask);
 gulp.task('default', buildTask);
 gulp.task('generate', gulp.series(
-  'generate.before.preserve-files',
+  'before-generate.preserve-files',
   'generate.facades',
   'generate.common-reexports',
-  'generate.after',
+  'after-generate',
 ));
 
 // ------------Testing------------
