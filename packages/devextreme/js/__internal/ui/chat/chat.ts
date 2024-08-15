@@ -25,6 +25,8 @@ class Chat extends Widget<Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
+  _sender?: User;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -106,13 +108,41 @@ class Chat extends Widget<Properties> {
     this._messageSendAction?.({ message, event });
   }
 
+  _compareItems(value: Message[], previousValue: Message[]): boolean {
+    const valueLength = value.length;
+    const previousValueLength = previousValue.length;
+
+    const lastValueItem = value[value.length - 1];
+    const lastPreviousValueItem = value[value.length - 1];
+
+    if (
+      lastValueItem !== lastPreviousValueItem
+      && previousValueLength - valueLength === 1
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  _processItemsUpdating(value: Message[], previousValue: Message[]): void {
+    const shouldBeInvalidated = !this._compareItems(value, previousValue);
+
+    if (shouldBeInvalidated) {
+      this._messageList?.option('items', value);
+    } else {
+      // @ts-expect-error
+      this._messageList?._renderMessage(value[value.length - 1], value, this._sender);
+    }
+  }
+
   _optionChanged(args: Record<string, unknown>): void {
-    const { name, value } = args;
+    const { name, value, previousValue } = args;
 
     switch (name) {
       case 'title':
         // @ts-expect-error
-        this._chatHeader?.option(name, value);
+        this._chatHeader?.option('title', value);
         break;
       case 'user':
         // @ts-expect-error
@@ -120,7 +150,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'items':
         // @ts-expect-error
-        this._messageList?.option(name, value);
+        this._processItemsUpdating(value, previousValue);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -131,13 +161,15 @@ class Chat extends Widget<Properties> {
   }
 
   renderMessage(message: Message, sender: User): void {
+    this._sender = sender;
+
     const { items } = this.option();
 
     const newItems = items ? [...items, message] : [message];
 
-    this._setOptionWithoutOptionChange('items', newItems);
+    this.option('items', newItems);
 
-    this._messageList?._renderMessage(message, newItems, sender);
+    this._sender = undefined;
   }
 }
 
