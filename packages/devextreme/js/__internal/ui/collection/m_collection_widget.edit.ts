@@ -446,6 +446,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   _processSelectionChanging(args) {
+    if (!this._rendered) {
+      this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+      return;
+    }
+
     const selectionChangingArgs = { ...args, cancel: false };
     this._actions.onSelectionChanging(selectionChangingArgs);
     if (isPromise(selectionChangingArgs.cancel)) {
@@ -470,6 +475,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     const that = this;
     const { addedItemKeys } = args;
     const { removedItemKeys } = args;
+
     if (that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
       const selectionChangePromise = that._selectionChangePromise;
       if (!that._rendering) {
