@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable spellcheck/spell-checker */
-import { interruptableComputed, Observable } from './core';
+import { InterruptableComputed, Observable } from './core';
 import { type Subscription, SubscriptionBag } from './subscription';
 import type {
   Gettable, MapMaybeSubscribable, MaybeSubscribable, Subscribable, Updatable,
@@ -32,7 +32,7 @@ export function computed<TArgs extends readonly any[], TValue>(
   compute: (...args: TArgs) => TValue,
   deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
 ): Subscribable<TValue> & Gettable<TValue> {
-  return interruptableComputed(compute, deps);
+  return new InterruptableComputed(compute, deps);
 }
 
 export function effect<T1>(
