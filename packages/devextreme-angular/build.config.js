@@ -60,7 +60,7 @@ module.exports = {
         },
     },
     afterGenerate: {
-        preserveFoldersAndFiles: ['popup/service', 'popup/index.ts'],
+        preserveComponentFiles: ['popup/service', 'popup/index.ts'],
         renameGeneratedFiles: [{ path: 'popup/index.ts', name: 'component.ts' }],
         temporaryFolderForPreserved: './tmp-preserved/'
     },

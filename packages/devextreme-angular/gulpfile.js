@@ -59,24 +59,23 @@ gulp.task('generate.moduleFacades', gulp.series('generate.components', (done) =>
   done();
 }));
 
-gulp.task('before-generate.preserve-files', (done) => {
+gulp.task('before-generate.preserve-component-files', (done) => {
   const { outputFolderPath } = buildConfig.tools.componentGenerator;
-  const { preserveFoldersAndFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
+  const { preserveComponentFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
 
-  const tasks = preserveFoldersAndFiles.map((folderOrFile) => {
-    const [componentName, folder] = folderOrFile.split('/');
-    const isFolder = !fs.statSync(path.join(outputFolderPath,folderOrFile)).isFile();
+  const tasks = preserveComponentFiles.map((folderOrFilePath) => {
+    const [componentName, folder] = folderOrFilePath.split('/');
+    let src = outputFolderPath + folderOrFilePath;
+    const isFolder = !fs.statSync(src).isFile();
 
-    let preserveDest = `${temporaryFolderForPreserved}/${componentName}`;
+    let dest = `${temporaryFolderForPreserved}/${componentName}`;
 
     if (isFolder) {
-      preserveDest += `/${folder}`;
-      folderOrFile += '/**/*';
+      dest += `/${folder}`;
+      src += '/**/*';
     }
 
-    return () => gulp
-        .src(`${outputFolderPath}${folderOrFile}`)
-        .pipe(gulp.dest(preserveDest));
+    return () => gulp.src(src).pipe(gulp.dest(dest));
   });
 
   gulp.parallel(...tasks)(done)
@@ -113,9 +112,9 @@ gulp.task('after-generate.rename-files', (done) => {
 
 gulp.task('after-generate.restore-preserved', (done) => {
   const { outputFolderPath } = buildConfig.tools.componentGenerator;
-  const { preserveFoldersAndFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
+  const { preserveComponentFiles, temporaryFolderForPreserved } = buildConfig.afterGenerate;
 
-  const actions = preserveFoldersAndFiles.map((folderOrFile) => {
+  const actions = preserveComponentFiles.map((folderOrFile) => {
     let src = temporaryFolderForPreserved + folderOrFile;
     let dest = outputFolderPath + folderOrFile;
     const isFile = fs.statSync(src).isFile();
@@ -251,7 +250,7 @@ const buildTask = gulp.series('build.components');
 gulp.task('build', buildTask);
 gulp.task('default', buildTask);
 gulp.task('generate', gulp.series(
-  'before-generate.preserve-files',
+  'before-generate.preserve-component-files',
   'generate.facades',
   'generate.common-reexports',
   'after-generate',
