@@ -79,7 +79,8 @@ $gantt-successor-background-color: white;
     background-color: $base-bg;
   }
 
-  .dx-header-row {
+  .dx-header-row,
+  .dx-treelist-filter-row {
     height: $gantt-header-item-height;
   }
 
