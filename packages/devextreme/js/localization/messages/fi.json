@@ -195,7 +195,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
-        "dxTreeList-ariaExpandableInstruction": "Use Ctrl + right arrow key combination to expand and Ctrl + left arrow key combination to collapse a focused node",
+        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Lisää",

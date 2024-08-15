@@ -84,7 +84,7 @@ test('Aria expanded should be toggled true on Ctrl + → keypress', async (t) =>
 
   await t
     .expect(treeList.getContainer().getAttribute('aria-label'))
-    .eql('Tree list with 1 rows and 3 columns. Use Ctrl + right arrow key combination to expand and Ctrl + left arrow key combination to collapse a focused node')
+    .eql('Tree list with 1 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('false');
 
@@ -114,7 +114,7 @@ test('Aria expanded should be toggled false on Ctrl + ← keypress', async (t) =
 
   await t
     .expect(treeList.getContainer().getAttribute('aria-label'))
-    .eql('Tree list with 3 rows and 3 columns. Use Ctrl + right arrow key combination to expand and Ctrl + left arrow key combination to collapse a focused node')
+    .eql('Tree list with 3 rows and 3 columns. Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it')
     .expect(expandableRow.getAttribute('aria-expanded'))
     .eql('true');
 
