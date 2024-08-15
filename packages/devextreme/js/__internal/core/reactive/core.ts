@@ -4,13 +4,10 @@
 
 import { isFunction } from '@js/core/utils/type';
 
-import type { Subscription } from './subscription';
+import { type Subscription, SubscriptionBag } from './subscription';
 import type {
-  Callback, Gettable,
-  MaybeSubscribable,
-  Subscribable, Updatable,
+  Callback, Gettable, Subscribable, Updatable,
 } from './types';
-import { isSubscribable } from './types';
 
 export class Observable<T> implements Subscribable<T>, Updatable<T>, Gettable<T> {
   private readonly callbacks: Set<Callback<T>> = new Set();
@@ -41,40 +38,50 @@ export class Observable<T> implements Subscribable<T>, Updatable<T>, Gettable<T>
   unreactive_get(): T {
     return this.value;
   }
+
+  dispose(): void {
+    this.callbacks.clear();
+  }
 }
 
-export function toSubscribable<T>(v: MaybeSubscribable<T>): Subscribable<T> {
-  if (isSubscribable(v)) {
-    return v;
+export class InterruptableComputed<
+  TArgs extends readonly any[], TValue,
+> extends Observable<TValue> {
+  private readonly depValues: [...TArgs];
+
+  private readonly depInitialized: boolean[];
+
+  private isInitialized = false;
+
+  private readonly subscriptions = new SubscriptionBag();
+
+  constructor(
+    compute: (...args: TArgs) => TValue,
+    deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
+  ) {
+    super(undefined as any);
+
+    this.depValues = deps.map(() => undefined) as any;
+    this.depInitialized = deps.map(() => false);
+
+    deps.forEach((dep, i) => {
+      this.subscriptions.add(dep.subscribe((v) => {
+        this.depValues[i] = v;
+
+        if (!this.isInitialized) {
+          this.depInitialized[i] = true;
+          this.isInitialized = this.depInitialized.every((e) => e);
+        }
+
+        if (this.isInitialized) {
+          this.update(compute(...this.depValues));
+        }
+      }));
+    });
   }
 
-  return new Observable(v);
-}
-
-export function interruptableComputed<TArgs extends readonly any[], TValue>(
-  compute: (...args: TArgs) => TValue,
-  deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
-): Observable<TValue> {
-  const depValues: [...TArgs] = deps.map(() => undefined) as any;
-  const depInitialized = deps.map(() => false);
-  let isInitialized = false;
-
-  const value = new Observable<TValue>(undefined as any);
-
-  deps.forEach((dep, i) => {
-    dep.subscribe((v) => {
-      depValues[i] = v;
-
-      if (!isInitialized) {
-        depInitialized[i] = true;
-        isInitialized = depInitialized.every((e) => e);
-      }
-
-      if (isInitialized) {
-        value.update(compute(...depValues));
-      }
-    });
-  });
-
-  return value;
+  dispose(): void {
+    super.dispose();
+    this.subscriptions.unsubscribe();
+  }
 }
