@@ -85,10 +85,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     this._actions = {};
     const actions = this._getActionsList();
 
-    each(actions, (_, action) => {
+    actions.forEach((action) => {
       this._actions[action] = this._createActionByOption(action, {
         excludeValidators: ['disabled', 'readOnly'],
-      }) || noop;
+      }) ?? noop;
     });
   },
 
@@ -446,12 +446,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     this._setAriaSelectionAttribute($itemElement, String(isSelected));
   },
 
-  onSelectionChangingHandler(args) {
-    this._actions.onSelectionChanging(args);
-  },
-
   _processSelectionChanging(args) {
-    this.onSelectionChangingHandler(this.selectionChangingArgs);
+    this._actions.onSelectionChanging(this.selectionChangingArgs);
     if (isPromise(this.selectionChangingArgs.cancel)) {
       this.selectionChangingArgs.cancel.then((cancel) => {
         if (!cancel) {
@@ -537,11 +533,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   _optionChanged(args) {
-    if (this._getActionsList().includes(args.name)) {
-      this._initActions();
-      return;
-    }
-
     switch (args.name) {
       case 'selectionMode':
         this._invalidate();
@@ -565,9 +556,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       case 'selectionRequired':
         this._normalizeSelectedItems();
         break;
-      case 'selectByClick':
       case 'onSelectionChanged':
       case 'onSelectionChanging':
+        this._initActions();
+        break;
+      case 'selectByClick':
       case 'onItemDeleting':
       case 'onItemDeleted':
       case 'onItemReordered':
@@ -704,9 +697,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
 
     const key = this._getKeyByIndex(itemIndex);
+
     if (this._selection.isItemSelected(key)) {
       return;
     }
+
     if (this.option('selectionMode') === 'single') {
       return this._selection.setSelection([key]);
     }
