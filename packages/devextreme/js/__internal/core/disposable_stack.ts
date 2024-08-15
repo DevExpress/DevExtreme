@@ -34,7 +34,6 @@ export class DisposableStack {
 
   public use<T extends Disposable | null | undefined>(value: T): T {
     if (value) {
-      // @ts-expect-error todo: remove once ts is updated
       this.stack.push(value);
     }
     return value;
