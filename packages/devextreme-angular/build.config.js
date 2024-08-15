@@ -58,25 +58,11 @@ module.exports = {
             metadataPath: './metadata/NGMetaData.json',
             outputPath: './src/'
         },
-        postGenerateActions: [
-            {
-                folder: './src/ui/popup',
-                copyTo: './src/ui/popup/component',
-                indexContent: {
-                    exports: [
-                        {
-                            exportString: '*',
-                            path: 'devextreme-angular/ui/popup/component',
-                        },
-                        {
-                            exportString: '{ DxPopupService }',
-                            path: 'devextreme-angular/services',
-                        }
-                    ]
-                }
-            }
-        ]
-
+    },
+    afterGenerate: {
+        preserveFoldersAndFiles: ['popup/service', 'popup/index.ts'],
+        renameGeneratedFiles: [{ path: 'popup/index.ts', name: 'component.ts' }],
+        temporaryFolderForPreserved: './tmp-preserved/'
     },
     components: {
         srcFilesPattern: '**/*.ts',

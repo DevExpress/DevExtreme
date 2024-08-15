@@ -1,2 +1,2 @@
-export * from 'devextreme-angular/ui/popup/component';
-export { DxPopupService } from 'devextreme-angular/services';
+export * from './component';
+export { DxPopupService } from './service/service';

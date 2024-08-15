@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DxPopupService } from 'devextreme-angular/services';
+import { DxPopupService } from 'devextreme-angular/ui/popup';
 import { DxButtonModule } from 'devextreme-angular';
 import {Component, Input } from '@angular/core';
 
