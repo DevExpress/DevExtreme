@@ -20,7 +20,6 @@ import localization from 'localization';
 import 'generic_light.css!';
 
 // calendar
-const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
