@@ -1,5 +1,6 @@
 import type { Properties } from 'csstype';
 
+import { combineClasses } from '../../../core/r1/utils/render_utils';
 import type { ViewType } from '../types';
 
 type CSSAttributes = Properties<string | number>;
@@ -36,13 +37,6 @@ export const addHeightToStyle = (
   const height = value ? `${value}px` : '';
   return addToStyles([{ attr: 'height', value: height }], style);
 };
-
-// TODO Vinogradov: move up this util function (core/r1).
-export const combineClasses = (
-  classesMap: { [key: string]: boolean },
-): string => Object.keys(classesMap)
-  .filter((cssClass) => !!cssClass && classesMap[cssClass])
-  .join(' ');
 
 export const getGroupCellClasses = (
   isFirstGroupCell: boolean | undefined = false,

@@ -66,6 +66,9 @@ const SKIPPED_TESTS = {
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
+    DataGrid: [
+      { demo: 'RightToLeftSupport', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Angular: {
     DataGrid: [
@@ -76,6 +79,7 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.generic] },
+      { demo: 'RightToLeftSupport', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -143,6 +147,7 @@ const SKIPPED_TESTS = {
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'RightToLeftSupport', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     Gantt: [
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -205,6 +210,7 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'PopupEditing', themes: [THEME.generic] },
       { demo: 'RecordPaging', themes: [THEME.generic] },
+      { demo: 'RightToLeftSupport', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     FieldSet: [
       { demo: 'Overview', themes: [THEME.fluent] },
