@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable spellcheck/spell-checker */
-import { interruptableComputed, Observable, toSubscribable } from './core';
+import { interruptableComputed, Observable } from './core';
 import { type Subscription, SubscriptionBag } from './subscription';
 import type {
   Gettable, MapMaybeSubscribable, MaybeSubscribable, Subscribable, Updatable,
 } from './types';
+import { isSubscribable } from './types';
 
 export function state<T>(value: T): Subscribable<T> & Updatable<T> & Gettable<T> {
   return new Observable<T>(value);
@@ -76,14 +79,24 @@ export function effect<TArgs extends readonly any[]>(
   return subscription;
 }
 
+export function toSubscribable<T>(v: MaybeSubscribable<T>): Subscribable<T> {
+  if (isSubscribable(v)) {
+    return v;
+  }
+
+  return new Observable(v);
+}
+
 export function iif<T>(
   cond: MaybeSubscribable<boolean>,
   ifTrue: MaybeSubscribable<T>,
   ifFalse: MaybeSubscribable<T>,
 ): Subscribable<T> {
   const obs = state<T>(undefined as any);
+  // eslint-disable-next-line @typescript-eslint/init-declarations
   let subscription: Subscription | undefined;
 
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   toSubscribable(cond).subscribe((cond) => {
     subscription?.unsubscribe();
     const newSource = cond ? ifTrue : ifFalse;

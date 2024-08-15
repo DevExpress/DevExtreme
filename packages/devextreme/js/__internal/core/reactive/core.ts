@@ -7,10 +7,8 @@ import { isFunction } from '@js/core/utils/type';
 import type { Subscription } from './subscription';
 import type {
   Callback, Gettable,
-  MaybeSubscribable,
   Subscribable, Updatable,
 } from './types';
-import { isSubscribable } from './types';
 
 export class Observable<T> implements Subscribable<T>, Updatable<T>, Gettable<T> {
   private readonly callbacks: Set<Callback<T>> = new Set();
@@ -41,14 +39,6 @@ export class Observable<T> implements Subscribable<T>, Updatable<T>, Gettable<T>
   unreactive_get(): T {
     return this.value;
   }
-}
-
-export function toSubscribable<T>(v: MaybeSubscribable<T>): Subscribable<T> {
-  if (isSubscribable(v)) {
-    return v;
-  }
-
-  return new Observable(v);
 }
 
 export function interruptableComputed<TArgs extends readonly any[], TValue>(

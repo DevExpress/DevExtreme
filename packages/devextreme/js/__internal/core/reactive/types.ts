@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import type { Subscription } from './subscription';
 
 export interface Subscribable<T> {
