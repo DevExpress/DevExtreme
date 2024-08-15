@@ -4634,6 +4634,7 @@ QUnit.module('Aria accessibility', {
         $element.dxCalendar({
             readOnly: false
         }).dxCalendar('instance');
+
         assert.notOk($element.attr('aria-label'), 'aria-label is not set');
         assert.notOk($element.attr('role'), 'role is not set');
     });
