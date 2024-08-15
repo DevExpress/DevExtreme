@@ -240,7 +240,7 @@ module('onSelectionChanging event', () => {
             const $element = $('#cmp');
             const instance = new TestComponent($element, {
                 items: [0, 1, 2, 3],
-                selectionMode: 'multiple',
+                selectionMode: 'single',
                 selectedIndex: 0,
                 onSelectionChanging: selectionChangingHandler,
                 onSelectionChanged: selectionChangedHandler

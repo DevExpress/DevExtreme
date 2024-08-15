@@ -575,7 +575,7 @@ QUnit.module('Tab select action', () => {
                     e.cancel = new Promise((resolve, reject) => {
                         setTimeout(() => {
                             reject('Cancellation error');
-                        }, this.CANCEL_DELAY);
+                        });
                     });
                 });
 
