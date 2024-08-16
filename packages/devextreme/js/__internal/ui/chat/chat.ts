@@ -2,7 +2,7 @@ import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import type {
-  Message, MessageSendEvent, Properties, User,
+  Message, MessageSendEvent, Properties,
 } from '@js/ui/chat';
 
 import Widget from '../widget';
@@ -24,8 +24,6 @@ class Chat extends Widget<Properties> {
   _messageList?: MessageList;
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
-
-  _sender?: User;
 
   _getDefaultOptions(): Properties {
     return {
@@ -112,17 +110,10 @@ class Chat extends Widget<Properties> {
     const valueLength = value.length;
     const previousValueLength = previousValue.length;
 
-    const lastValueItem = value[value.length - 1];
-    const lastPreviousValueItem = value[value.length - 1];
+    const lastValueItem = value[valueLength - 1];
+    const lastPreviousValueItem = previousValue[previousValueLength - 1];
 
-    if (
-      lastValueItem !== lastPreviousValueItem
-      && previousValueLength - valueLength === 1
-    ) {
-      return true;
-    }
-
-    return false;
+    return lastValueItem !== lastPreviousValueItem && valueLength - previousValueLength === 1;
   }
 
   _processItemsUpdating(value: Message[], previousValue: Message[]): void {
@@ -131,8 +122,10 @@ class Chat extends Widget<Properties> {
     if (shouldBeInvalidated) {
       this._messageList?.option('items', value);
     } else {
+      const newMessage = value[value.length - 1];
+
       // @ts-expect-error
-      this._messageList?._renderMessage(value[value.length - 1], value, this._sender);
+      this._messageList?._renderMessage(newMessage, value, newMessage.author);
     }
   }
 
@@ -160,16 +153,12 @@ class Chat extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message, sender: User): void {
-    this._sender = sender;
-
+  renderMessage(message: Message): void {
     const { items } = this.option();
 
     const newItems = items ? [...items, message] : [message];
 
     this.option('items', newItems);
-
-    this._sender = undefined;
   }
 }
 
