@@ -56,8 +56,7 @@ test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T12
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .rightClick(dataGrid.getHeaders().element)
-    .hover(dataGrid.element);
+    .rightClick(dataGrid.getHeaders().element);
   await takeScreenshot(
     'datagrid-alphabetical-icons-should-be-correct.png',
     dataGrid.element,
