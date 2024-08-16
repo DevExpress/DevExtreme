@@ -9,7 +9,7 @@ import {
 } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isPromise } from '@js/core/utils/type';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/data/data_source/utils';
 import eventsEngine from '@js/events/core/events_engine';
@@ -47,6 +47,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       keyExpr: null,
       selectedIndex: NOT_EXISTING_INDEX,
       selectedItem: null,
+      onSelectionChanging: null,
       onSelectionChanged: null,
       onItemReordered: null,
       onItemDeleting: null,
@@ -67,11 +68,28 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     this._initKeyGetter();
 
+    this._initActions();
+
     this._initSelectionModule();
   },
 
   _initKeyGetter() {
     this._keyGetter = compileGetter(this.option('keyExpr'));
+  },
+
+  _getActionsList() {
+    return ['onSelectionChanging', 'onSelectionChanged'];
+  },
+
+  _initActions() {
+    this._actions = {};
+    const actions = this._getActionsList();
+
+    actions.forEach((action) => {
+      this._actions[action] = this._createActionByOption(action, {
+        excludeValidators: ['disabled', 'readOnly'],
+      }) ?? noop;
+    });
   },
 
   _getKeysByItems(selectedItems) {
@@ -134,8 +152,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       equalByReference: !this._isKeySpecified(),
       onSelectionChanged(args) {
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-          that._updateSelectedItems(args);
+          that._processSelectionChanging(args);
         }
       },
       filter: that._getCombinedFilter.bind(that),
@@ -428,6 +445,39 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     this._setAriaSelectionAttribute($itemElement, String(isSelected));
   },
 
+  _processSelectionChanging(args) {
+    const updateSelectedItemsIfNeeded = (args, cancel: boolean): void => {
+      if (!cancel) {
+        this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+        this._updateSelectedItems(args);
+      }
+    };
+
+    if (!this._rendered) {
+      updateSelectedItemsIfNeeded(args, false);
+      return;
+    }
+
+    const selectionChangingArgs = {
+      removedItems: args.removedItems,
+      addedItems: args.addedItems,
+      cancel: false,
+    };
+    this._actions.onSelectionChanging(selectionChangingArgs);
+
+    if (isPromise(selectionChangingArgs.cancel)) {
+      selectionChangingArgs.cancel
+        .then((cancel) => {
+          updateSelectedItemsIfNeeded(args, cancel);
+        })
+        .catch(() => {
+          updateSelectedItemsIfNeeded(args, false);
+        });
+    } else {
+      updateSelectedItemsIfNeeded(args, selectionChangingArgs.cancel);
+    }
+  },
+
   _updateSelectedItems(args) {
     const that = this;
     const { addedItemKeys } = args;
@@ -462,15 +512,12 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       }
 
       when(selectionChangePromise).done(() => {
-        that._fireSelectionChangeEvent(args.addedItems, args.removedItems);
+        this._actions.onSelectionChanged({
+          addedItems: args.addedItems,
+          removedItems: args.removedItems,
+        });
       });
     }
-  },
-
-  _fireSelectionChangeEvent(addedItems, removedItems) {
-    this._createActionByOption('onSelectionChanged', {
-      excludeValidators: ['disabled', 'readOnly'],
-    })({ addedItems, removedItems });
   },
 
   _updateSelection: noop,
@@ -528,8 +575,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       case 'selectionRequired':
         this._normalizeSelectedItems();
         break;
-      case 'selectByClick':
       case 'onSelectionChanged':
+      case 'onSelectionChanging':
+        this._initActions();
+        break;
+      case 'selectByClick':
       case 'onItemDeleting':
       case 'onItemDeleted':
       case 'onItemReordered':
@@ -674,6 +724,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     if (this.option('selectionMode') === 'single') {
       return this._selection.setSelection([key]);
     }
+
     const selectedItemKeys = this.option('selectedItemKeys') || [];
     return this._selection.setSelection([...selectedItemKeys, key], [key]);
   },
