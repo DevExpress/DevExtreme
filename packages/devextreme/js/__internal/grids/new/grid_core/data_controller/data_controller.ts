@@ -83,15 +83,16 @@ export class DataController {
     );
 
     effect(
-      (pageIndex, pageSize, dataSource, filter) => {
+      (pageIndex, pageSize, dataSource, filter, searchText) => {
         dataSource.pageIndex(pageIndex!);
         dataSource.requireTotalCount(true);
         dataSource.pageSize(pageSize!);
         dataSource.filter(filter);
+        dataSource.searchValue(searchText);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dataSource.load();
       },
-      [this.pageIndex, this.pageSize, this.dataSource, this.filter],
+      [this.pageIndex, this.pageSize, this.dataSource, this.filter, this.search.searchText],
     );
   }
 }

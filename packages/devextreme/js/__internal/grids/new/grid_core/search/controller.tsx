@@ -8,7 +8,7 @@ import { SearchField } from './search_field';
 export class Search {
   static dependencies = [HeaderPanelController, OptionsController] as const;
 
-  private readonly searchText = this.options.twoWay('searchText');
+  public readonly searchText = this.options.twoWay('searchText');
 
   constructor(
     private readonly headerPanel: HeaderPanelController,
