@@ -9,9 +9,9 @@ export class PagerView extends View {
     (pageIndex, pageSize, pageCount) => <div>
       <Pager
         pageIndex={pageIndex}
-        pageIndexChange={this.dataController.pageIndex.update}
+        pageIndexChanged={this.dataController.pageIndex.update}
         pageSize={pageSize}
-        pageSizeChange={this.dataController.pageSize.update}
+        pageSizeChanged={this.dataController.pageSize.update}
         gridCompatibility={false}
         pageSizes={[2, 6, 18]}
         pageCount={pageCount}

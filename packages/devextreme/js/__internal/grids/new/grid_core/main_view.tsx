@@ -1,3 +1,5 @@
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import type { Subscribable } from '@ts/core/reactive';
 import type { InfernoNode } from 'inferno';
 

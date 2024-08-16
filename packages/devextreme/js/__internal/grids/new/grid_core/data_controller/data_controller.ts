@@ -30,11 +30,6 @@ export class DataController {
     [this.dataSourceConfiguration],
   );
 
-  private readonly paging = computed(
-    (paging) => paging ?? {},
-    [this.options.oneWay('paging')],
-  );
-
   public readonly pageIndex = this.options.twoWay('paging.pageIndex');
 
   public readonly pageSize = this.options.twoWay('paging.pageSize');
@@ -79,7 +74,7 @@ export class DataController {
         dataSource.on('changed', changedCallback);
         dataSource.on('loadingChanged', loadingChangedCallback);
 
-        return () => {
+        return (): void => {
           dataSource.off('changed', changedCallback);
           dataSource.off('loadingChanged', loadingChangedCallback);
         };
@@ -93,6 +88,7 @@ export class DataController {
         dataSource.requireTotalCount(true);
         dataSource.pageSize(pageSize!);
         dataSource.filter(filter);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dataSource.load();
       },
       [this.pageIndex, this.pageSize, this.dataSource, this.filter],

@@ -7,8 +7,8 @@ interface PagerProps {
   pageIndex?: number;
   pageSize?: number;
 
-  pageIndexChange?: (value: number) => void;
-  pageSizeChange?: (value: number) => void;
+  pageIndexChanged?: (value: number) => void;
+  pageSizeChanged?: (value: number) => void;
 
   gridCompatibility?: boolean;
 

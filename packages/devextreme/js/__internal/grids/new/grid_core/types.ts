@@ -14,6 +14,7 @@ export interface Properties {
   columns?: ColumnProperties[];
 
   filterPanelVisible?: boolean;
+
   noDataText?: string;
 
   dataSource?: DataSourceLike<unknown>;

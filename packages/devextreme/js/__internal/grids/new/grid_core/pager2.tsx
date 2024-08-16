@@ -1,58 +1,55 @@
 // @ts-nocheck
-import ButtonWidget from '@js/ui/button';
-import PagerWidget from '@js/ui/pager';
-import { combine, computed, Subscribable } from '@ts/core/reactive';
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable spellcheck/spell-checker */
 import type { InfernoNode } from 'inferno';
 import { Component } from 'inferno';
 
-import { View } from './core/view';
-import { createWidgetWrapper } from './core/widget_wrapper';
 import { DataController } from './data_controller/data_controller';
+import { Pager } from './inferno_wrappers/pager';
 
-interface PagerProps {
+interface State {
   pageIndex?: number;
   pageSize?: number;
-
-  pageIndexChange?: (value: number) => void;
-  pageSizeChange?: (value: number) => void;
-
-  gridCompatibility?: boolean;
-
-  pageSizes?: number[];
-
   pageCount?: number;
+
 }
 
-const Pager = createWidgetWrapper<PagerProps, any>(PagerWidget);
-const Button = createWidgetWrapper(ButtonWidget);
-
-export class PagerView2 extends Component {
+export class PagerView2 extends Component<{}, State> {
   static dependencies = [DataController] as const;
 
   constructor(private readonly dataController: DataController) {
     super();
 
-    const state$ = combine({
-      pageIndex: this.dataController.pageIndex,
-      pageSize: this.dataController.pageSize,
-      pageCount: this.dataController.pageCount,
-    });
+    this.state = {
+      pageIndex: this.dataController.pageIndex.unreactive_get(),
+      pageSize: this.dataController.pageSize.unreactive_get(),
+      pageCount: this.dataController.pageCount.unreactive_get(),
+    };
 
-    this.state = state$.unreactive_get();
-    state$.subscribe;
+    this.dataController.pageIndex.subscribe((pageIndex) => {
+      this.setState({ pageIndex });
+    });
+    this.dataController.pageSize.subscribe((pageSize) => {
+      this.setState({ pageSize });
+    });
+    this.dataController.pageCount.subscribe((pageCount) => {
+      this.setState({ pageCount });
+    });
   }
 
   render(): InfernoNode {
     return (
       <div>
         <Pager
-          pageIndex={props.pageIndex}
-          pageIndexChange={this.dataController.pageIndex.update}
-          pageSize={props.pageSize}
-          pageSizeChange={this.dataController.pageSize.update}
+          pageIndex={this.state?.pageIndex}
+          pageIndexChanged={this.dataController.pageIndex.update}
+          pageSize={this.state?.pageSize}
+          pageSizeChanged={this.dataController.pageSize.update}
           gridCompatibility={false}
           pageSizes={[1, 2, 5]}
-          pageCount={props.pageCount}
+          pageCount={this.state?.pageCount}
         ></Pager>
       </div>
     );

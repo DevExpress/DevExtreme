@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { computed } from '@ts/core/reactive';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
