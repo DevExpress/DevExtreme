@@ -195,6 +195,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Lista strukturalna",
+        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Szukaj w liście strukturalnej",
         "dxTreeList-ariaToolbar": "Pasek narzędzi listy strukturalnej",
         "dxTreeList-editingAddRowToNode": "Dodaj",
