@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelFilterEnabledHint": "Habilitar o filtro",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
+        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Pesquisar na lista de árvores",
         "dxTreeList-ariaToolbar": "Barra de ferramentas da lista de árvores",
         "dxTreeList-editingAddRowToNode": "Adicionar",

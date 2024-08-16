@@ -2783,8 +2783,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender e
     return cellOptions;
   }
 
-  protected _setCellAriaAttributes($cell, cellOptions) {
-    super._setCellAriaAttributes($cell, cellOptions);
+  protected _setCellAriaAttributes($cell, cellOptions, options?) {
+    super._setCellAriaAttributes($cell, cellOptions, options);
 
     if (cellOptions.removed) {
       this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaDeletedCell'), $cell);

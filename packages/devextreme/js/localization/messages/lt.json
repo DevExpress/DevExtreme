@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktyvuoti filtrą",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
+        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Ieškoti duomenų medyje",
         "dxTreeList-ariaToolbar": "Duomenų medžio įrankių juosta",
         "dxTreeList-editingAddRowToNode": "Pridėti",
