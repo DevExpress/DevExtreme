@@ -172,12 +172,12 @@ gulp.task('npm-sass', gulp.series(
             .pipe(gulp.dest(scssDir)),
 
         () => gulp
-            .src(`${ctx.SCSS_PACKAGE_PATH}/fonts/**/*`, { base: '.' })
-            .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
+            .src(`${ctx.SCSS_PACKAGE_PATH}/fonts/**/*`)
+            .pipe(gulp.dest(`${scssDir}/widgets/material/typography/fonts`)),
 
         () => gulp
-            .src(`${ctx.SCSS_PACKAGE_PATH}/icons/**/*`, { base: '.' })
-            .pipe(gulp.dest(`${scssDir}/widgets/base`)),
+            .src(`${ctx.SCSS_PACKAGE_PATH}/icons/**/*`)
+            .pipe(gulp.dest(`${scssDir}/widgets/base/icons`)),
     )
 ));
 
