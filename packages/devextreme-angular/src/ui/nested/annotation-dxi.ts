@@ -24,7 +24,6 @@ import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'allowDragging',
         'argument',

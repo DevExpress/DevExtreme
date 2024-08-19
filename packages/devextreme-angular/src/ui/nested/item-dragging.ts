@@ -26,7 +26,6 @@ import { DxoSortableOptions } from './base/sortable-options';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'allowDropInsideItem',
         'allowReordering',

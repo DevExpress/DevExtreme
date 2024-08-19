@@ -26,7 +26,6 @@ import { DxoFormat } from './base/format';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'currency',
         'formatter',

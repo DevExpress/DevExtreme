@@ -26,7 +26,6 @@ import { DxoAnimationState } from './base/animation-state';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'left',
         'opacity',

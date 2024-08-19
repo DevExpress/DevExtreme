@@ -26,7 +26,6 @@ import { DxoPositionConfig } from './base/position-config';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'at',
         'boundary',

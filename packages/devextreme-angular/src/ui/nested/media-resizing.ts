@@ -26,7 +26,6 @@ import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'allowedTargets',
         'enabled'

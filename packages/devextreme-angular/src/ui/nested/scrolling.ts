@@ -26,7 +26,6 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'columnRenderingMode',
         'mode',

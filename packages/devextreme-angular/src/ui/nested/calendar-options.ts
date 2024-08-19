@@ -29,7 +29,6 @@ import { DxoCalendarOptions } from './base/calendar-options';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'accessKey',
         'activeStateEnabled',

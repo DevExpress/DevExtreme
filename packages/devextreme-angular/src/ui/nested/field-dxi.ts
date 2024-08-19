@@ -24,7 +24,6 @@ import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'calculateFilterExpression',
         'caption',

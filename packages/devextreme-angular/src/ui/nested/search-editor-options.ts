@@ -32,7 +32,6 @@ import { DxiButtonComponent } from './button-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'accessKey',
         'activeStateEnabled',

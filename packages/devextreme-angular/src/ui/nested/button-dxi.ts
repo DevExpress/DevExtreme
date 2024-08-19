@@ -24,7 +24,6 @@ import { DxiTextEditorButton } from './base/text-editor-button-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'location',
         'name',

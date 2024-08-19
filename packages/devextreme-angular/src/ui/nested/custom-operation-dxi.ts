@@ -24,7 +24,6 @@ import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-op
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'calculateFilterExpression',
         'caption',

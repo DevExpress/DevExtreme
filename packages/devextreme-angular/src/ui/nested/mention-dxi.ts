@@ -24,7 +24,6 @@ import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'dataSource',
         'displayExpr',

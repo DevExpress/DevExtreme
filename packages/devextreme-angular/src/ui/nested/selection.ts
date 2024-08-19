@@ -26,7 +26,6 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'allowSelectAll',
         'recursive',

@@ -26,7 +26,6 @@ import { DxoUser } from './base/user';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'avatarUrl',
         'id',

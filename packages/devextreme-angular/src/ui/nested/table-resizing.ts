@@ -26,7 +26,6 @@ import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'enabled',
         'minColumnWidth',

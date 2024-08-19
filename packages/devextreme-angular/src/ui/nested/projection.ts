@@ -26,7 +26,6 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'aspectRatio',
         'from',

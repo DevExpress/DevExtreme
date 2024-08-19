@@ -26,7 +26,6 @@ import { DxoGanttHeaderFilter } from './base/gantt-header-filter';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'allowSearch',
         'allowSelectAll',

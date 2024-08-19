@@ -26,7 +26,6 @@ import { DxoGanttSorting } from './base/gantt-sorting';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'ascendingText',
         'clearText',

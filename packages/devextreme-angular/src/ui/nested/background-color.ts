@@ -26,7 +26,6 @@ import { DxoChartsColor } from './base/charts-color';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'base',
         'fillId'

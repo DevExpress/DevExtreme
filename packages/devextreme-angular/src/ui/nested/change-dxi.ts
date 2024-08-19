@@ -24,7 +24,6 @@ import { DxiDataChange } from './base/data-change-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'data',
         'insertAfterKey',

@@ -26,7 +26,6 @@ import { DxoButtonOptions } from './base/button-options';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'accessKey',
         'activeStateEnabled',

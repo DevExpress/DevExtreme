@@ -30,7 +30,6 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'colSpan',
         'cssClass',

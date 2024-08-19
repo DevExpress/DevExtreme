@@ -24,7 +24,6 @@ import { DxiGanttStripLine } from './base/gantt-strip-line-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'cssClass',
         'end',

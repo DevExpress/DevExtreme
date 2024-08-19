@@ -24,7 +24,6 @@ import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'endValue',
         'startValue'

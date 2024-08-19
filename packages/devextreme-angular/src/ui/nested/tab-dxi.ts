@@ -38,7 +38,6 @@ import { DxiGroupComponent } from './group-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     providers: [NestedOptionHost, DxTemplateHost],
-    
     inputs: [
         'alignItemLabels',
         'badge',

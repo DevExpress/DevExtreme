@@ -26,7 +26,6 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'aggregation',
         'area',

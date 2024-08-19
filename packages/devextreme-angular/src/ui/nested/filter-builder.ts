@@ -33,7 +33,6 @@ import { DxiFieldComponent } from './field-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'accessKey',
         'activeStateEnabled',

@@ -33,7 +33,6 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'allowKeyboardNavigation',
         'dataSource',

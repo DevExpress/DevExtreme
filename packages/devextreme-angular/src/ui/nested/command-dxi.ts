@@ -28,7 +28,6 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'icon',
         'items',

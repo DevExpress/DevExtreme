@@ -26,7 +26,6 @@ import { DxoAnimationConfig } from './base/animation-config';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'complete',
         'delay',

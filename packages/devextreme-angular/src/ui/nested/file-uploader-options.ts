@@ -28,7 +28,6 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'abortUpload',
         'accept',

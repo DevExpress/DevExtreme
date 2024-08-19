@@ -26,7 +26,6 @@ import { DxoVizFont } from './base/viz-font';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'color',
         'family',

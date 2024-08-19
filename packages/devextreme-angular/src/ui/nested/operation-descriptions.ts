@@ -26,7 +26,6 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'between',
         'contains',

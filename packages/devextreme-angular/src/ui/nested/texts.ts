@@ -26,7 +26,6 @@ import { DxoGanttHeaderFilterTexts } from './base/gantt-header-filter-texts';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'fix',
         'leftPosition',

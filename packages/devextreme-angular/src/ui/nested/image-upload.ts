@@ -30,7 +30,6 @@ import { DxiTabComponent } from './tab-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'fileUploaderOptions',
         'fileUploadMode',

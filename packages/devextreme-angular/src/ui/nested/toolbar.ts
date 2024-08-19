@@ -31,7 +31,6 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'disabled',
         'items',

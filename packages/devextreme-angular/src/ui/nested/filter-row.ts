@@ -26,7 +26,6 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'applyFilter',
         'applyFilterText',

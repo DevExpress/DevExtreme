@@ -24,7 +24,6 @@ import { DxiChartSeries } from './base/chart-series-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'aggregation',
         'argumentField',

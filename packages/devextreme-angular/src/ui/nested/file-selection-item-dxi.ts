@@ -24,7 +24,6 @@ import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi'
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'cssClass',
         'disabled',

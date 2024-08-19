@@ -26,7 +26,6 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'arrowLength',
         'backgroundColor',

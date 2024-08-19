@@ -26,7 +26,6 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'editorOptions',
         'enabled',

@@ -30,7 +30,6 @@ import { DxiFieldComponent } from './field-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'fields',
         'filter',

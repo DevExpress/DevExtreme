@@ -34,7 +34,6 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'accessKey',
         'animation',

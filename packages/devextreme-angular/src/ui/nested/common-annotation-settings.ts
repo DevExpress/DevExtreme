@@ -26,7 +26,6 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'allowDragging',
         'argument',

@@ -26,7 +26,6 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
-    
     inputs: [
         'dataSource',
         'escapeChar'
