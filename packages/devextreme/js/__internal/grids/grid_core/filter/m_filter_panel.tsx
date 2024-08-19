@@ -1,21 +1,19 @@
 /* eslint-disable max-classes-per-file */
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
-import CheckBox from '@js/ui/check_box';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
 } from '@ts/filter_builder/m_utils';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
+import { createRef, render } from 'inferno';
 
+import { CheckBox } from '../../new/grid_core/inferno_wrappers/checkbox';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
-import { registerKeyboardAction } from '../m_accessibility';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridUtils from '../m_utils';
@@ -52,7 +50,10 @@ export class FilterPanelView extends modules.View {
   protected _renderCore() {
     const $element = this.element();
 
-    $element.empty();
+    $element
+      .addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
+
+    render(null, $element.get(0));
 
     const isColumnsDefined = !!this._columnsController.getColumns().length;
 
@@ -60,70 +61,54 @@ export class FilterPanelView extends modules.View {
       return;
     }
 
-    $element
-      .addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
+    const hasFilterValue = !!this.option('filterValue') || !!this._filterValueBuffer;
+    const tabIndex = this.option('tabindex') || 0;
 
-    const $leftContainer = $('<div>')
-      .addClass(this.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER))
-      .appendTo($element);
+    const textRef = createRef<HTMLDivElement>();
 
-    this._renderFilterBuilderText($element, $leftContainer);
+    render(
+      <>
+        <div className={this.addWidgetPrefix(FILTER_PANEL_LEFT_CONTAINER)}>
+          {hasFilterValue && (
+            <CheckBox
+              elementAttr={{
+                class: this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS),
+                title: this.option('filterPanel.texts.filterEnabledHint')!,
+              }}
+              value={this.option('filterPanel.filterEnabled')}
+              onValueChanged={(e) => { this.option('filterPanel.filterEnabled', e.value); }}
+            />
+          )}
+          <div
+            onClick={() => this._showFilterBuilder()}
+            tabIndex={tabIndex}
+            className='dx-icon-filter'
+          />
+          <div
+            ref={textRef}
+            className={this.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS)}
+            onClick={() => this._showFilterBuilder()}
+            tabIndex={tabIndex}
+          />
+        </div>
+        {hasFilterValue && (
+          <div
+            className={this.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS)}
+            onClick={() => this.option('filterValue', null as any)}
+            tabIndex={tabIndex}
+          >
+            {this.option('filterPanel.texts.clearFilter')}
+          </div>
+        )}
+      </>,
+      $element.get(0),
+    );
+
+    this._renderTextElement($(textRef.current!));
   }
 
-  private _renderFilterBuilderText($element: dxElementWrapper, $leftContainer: dxElementWrapper): void {
-    const $filterElement = this._getFilterElement();
-    const $textElement = this._getTextElement();
-
-    if (this.option('filterValue') || this._filterValueBuffer) {
-      const $checkElement = this._getCheckElement();
-      const $removeButtonElement = this._getRemoveButtonElement();
-
-      $leftContainer
-        .append($checkElement)
-        .append($filterElement)
-        .append($textElement);
-
-      $element.append($removeButtonElement);
-
-      return;
-    }
-
-    $leftContainer
-      .append($filterElement)
-      .append($textElement);
-  }
-
-  private _getCheckElement() {
+  private _renderTextElement($textElement) {
     const that = this;
-    const $element = $('<div>')
-      .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
-
-    that._createComponent($element, CheckBox, {
-      value: that.option('filterPanel.filterEnabled'),
-      onValueChanged(e) {
-        that.option('filterPanel.filterEnabled', e.value);
-      },
-    });
-    $element.attr('title', this.option('filterPanel.texts.filterEnabledHint')!);
-    return $element;
-  }
-
-  private _getFilterElement() {
-    const that = this;
-    const $element = $('<div>').addClass('dx-icon-filter');
-
-    eventsEngine.on($element, 'click', () => that._showFilterBuilder());
-
-    registerKeyboardAction('filterPanel', that, $element, undefined, () => that._showFilterBuilder());
-
-    that._addTabIndexToElement($element);
-
-    return $element;
-  }
-
-  private _getTextElement() {
-    const that = this;
-    const $textElement = $('<div>').addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS));
     let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
@@ -146,34 +131,11 @@ export class FilterPanelView extends modules.View {
       $textElement.text(filterText);
     }
 
-    eventsEngine.on($textElement, 'click', () => that._showFilterBuilder());
-
-    registerKeyboardAction('filterPanel', that, $textElement, undefined, () => that._showFilterBuilder());
-
-    that._addTabIndexToElement($textElement);
-
     return $textElement;
   }
 
   private _showFilterBuilder() {
     this.option('filterBuilderPopup.visible', true);
-  }
-
-  private _getRemoveButtonElement() {
-    const that = this;
-    // @ts-expect-error
-    const clearFilterValue = () => that.option('filterValue', null);
-    const $element = $('<div>')
-      .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-      .text(that.option('filterPanel.texts.clearFilter')!);
-
-    eventsEngine.on($element, 'click', clearFilterValue);
-
-    registerKeyboardAction('filterPanel', this, $element, undefined, clearFilterValue);
-
-    that._addTabIndexToElement($element);
-
-    return $element;
   }
 
   private _addTabIndexToElement($element) {
