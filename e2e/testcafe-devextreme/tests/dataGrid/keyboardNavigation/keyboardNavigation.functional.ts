@@ -3,7 +3,6 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
-import { data } from 'jquery';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { getData } from '../helpers/generateDataSourceData';
