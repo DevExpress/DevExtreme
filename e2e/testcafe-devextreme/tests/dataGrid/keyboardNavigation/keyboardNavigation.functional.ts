@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import { data } from 'jquery';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { getData } from '../helpers/generateDataSourceData';
@@ -4764,3 +4765,39 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
     },
   });
 });
+
+test('Cancel button in the last column cannot be focused via the Tab key (T1248987)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const saveButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(0);
+  const cancelButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(1);
+  const inputCell = dataGrid.getDataCell(0, 0).element;
+
+  await t
+    .click(inputCell)
+    .pressKey('tab')
+    .expect(saveButton.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(cancelButton.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  keyExpr: 'ID',
+  dataSource: [
+    {
+      ID: 1,
+      FirstName: 'John',
+    },
+  ],
+  showBorders: true,
+  editing: {
+    allowAdding: true,
+    mode: 'row',
+    editRowKey: 1,
+  },
+  columnFixing: {
+    enabled: true,
+  },
+  columns: [
+    'FirstName',
+  ],
+}));
