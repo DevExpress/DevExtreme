@@ -404,6 +404,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return columns;
             },
 
+            getStickyColumns: function() {
+                return this.getVisibleColumns().filter(({ fixed }) => fixed);
+            },
+
             getVisibleIndexByColumn: function(column, rowIndex) {
                 const visibleColumns = this.getVisibleColumns(rowIndex);
                 const visibleColumn = visibleColumns.filter(col => col.index === column.index && col.command === column.command)[0];
