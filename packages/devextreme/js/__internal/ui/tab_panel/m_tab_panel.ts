@@ -262,6 +262,9 @@ const TabPanel = MultiView.inherit({
       onItemClick: this._titleClickAction.bind(this),
       onItemHold: this._titleHoldAction.bind(this),
       itemHoldTimeout: this.option('itemHoldTimeout'),
+      onSelectionChanging: function (selectionChangingArgs) {
+        this._actions.onSelectionChanging(selectionChangingArgs);
+      }.bind(this),
       onSelectionChanged: function (e) {
         this.option('selectedIndex', e.component.option('selectedIndex'));
         this._refreshActiveDescendant();
