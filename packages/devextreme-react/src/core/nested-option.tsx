@@ -6,6 +6,8 @@ import {
 } from 'react';
 
 import {
+  ElementType,
+  getElementType,
   getOptionInfo,
   IElementDescriptor,
 } from './configuration/react/element';
@@ -22,8 +24,11 @@ interface INestedOptionMeta {
 
 const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IElementDescriptor }): React.ReactElement | null {
   // @ts-expect-error TS2339
-  const { children } = props;
+  const { children: stateChildren } = props;
   const { elementDescriptor, ...restProps } = props;
+
+  if (!elementDescriptor)
+    return null;
 
   const {
     parentExpectedChildren,
@@ -37,18 +42,26 @@ const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IE
   const [
     config,
     context,
-    hasAnonymousTemplate,
     treeUpdateToken,
-  ] = useOptionScanning(optionElement, children);
+  ] = useOptionScanning(optionElement, stateChildren);
 
   useLayoutEffect(() => {
     triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
   }, [treeUpdateToken]);
 
+  const children = React.Children.map(
+    stateChildren,
+    (child) => {
+      const elementType = getElementType(child);
+
+      return elementType === ElementType.Option ? child : null;
+    },
+  );
+
   return (
     <React.Fragment>
       <NestedOptionContext.Provider value={context}>
-        { !hasAnonymousTemplate && children }
+        { children }
       </NestedOptionContext.Provider>
     </React.Fragment>
   );

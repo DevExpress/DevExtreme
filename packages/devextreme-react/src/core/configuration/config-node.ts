@@ -1,5 +1,7 @@
 interface IConfigNode {
-  readonly fullName: string;
+  parentNode?: IConfigNode | undefined;
+  index?: number | undefined;
+  readonly name: string;
   readonly predefinedOptions: Record<string, any>;
   readonly initialOptions: Record<string, any>;
   readonly options: Record<string, any>;

@@ -1,4 +1,5 @@
 import { ITemplateMeta, Template as TemplateComponent } from '../../template';
+import { NestedComponentMeta } from '../../types';
 
 enum ElementType {
   Option,
@@ -25,17 +26,6 @@ interface IOptionElement {
   descriptor: IOptionDescriptor;
   props: Record<string, any>;
 }
-
-interface ITemplateElement {
-  type: ElementType.Template;
-  props: Record<string, any>;
-}
-
-interface IUnknownElement {
-  type: ElementType.Unknown;
-}
-
-type IElement = IOptionElement | ITemplateElement | IUnknownElement;
 
 function getOptionInfo(
   elementDescriptor: IElementDescriptor,
@@ -67,33 +57,25 @@ function getOptionInfo(
   };
 }
 
-function getElementInfo(
+function getElementType(
   element: React.ReactNode,
-  parentExpectedChildren?: Record<string, IExpectedChild>,
-): IElement {
+): ElementType {
   const reactElement = element as unknown as React.ReactElement;
   if (!reactElement || !reactElement.type) {
-    return {
-      type: ElementType.Unknown,
-    };
+    return ElementType.Unknown;
   }
 
   if (reactElement.type === TemplateComponent) {
-    return {
-      type: ElementType.Template,
-      props: reactElement.props,
-    };
+    return ElementType.Template;
   }
 
-  const elementDescriptor = reactElement.type as any as IElementDescriptor;
+  const nestedComponentMeta = reactElement.type as any as NestedComponentMeta;
 
-  if (elementDescriptor.OptionName) {
-    return getOptionInfo(elementDescriptor, reactElement.props, parentExpectedChildren);
+  if (nestedComponentMeta.componentType === 'option') {
+    return ElementType.Option;
   }
 
-  return {
-    type: ElementType.Unknown,
-  };
+  return ElementType.Unknown;
 }
 
 interface IElementDescriptor {
@@ -106,7 +88,7 @@ interface IElementDescriptor {
 }
 
 export {
-  getElementInfo,
+  getElementType,
   getOptionInfo,
   ElementType,
   IOptionElement,

@@ -2,13 +2,14 @@
 import {
   Children,
   ReactNode,
+  ReactElement,
   useContext,
   useMemo,
   useRef,
 } from 'react';
 
 import { NestedOptionContext, NestedOptionContextContent } from './helpers';
-import { ElementType, getElementInfo, IOptionElement } from './configuration/react/element';
+import { ElementType, getElementType, IOptionElement } from './configuration/react/element';
 import { mergeNameParts } from './configuration/utils';
 import { separateProps } from './widget-config';
 import { IConfigNode, ITemplate } from './configuration/config-node';
@@ -18,7 +19,6 @@ import { ITemplateProps } from './template';
 export function useOptionScanning(optionElement: IOptionElement, children: ReactNode): [
   IConfigNode,
   NestedOptionContextContent,
-  boolean,
   number,
 ] {
   const parentContext = useContext(NestedOptionContext);
@@ -29,15 +29,6 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
   } = parentContext;
 
   const updateToken = parentUpdateToken ?? Math.random();
-
-  const path = optionElement.descriptor.isCollection ? `${mergeNameParts(
-    parentFullName,
-    optionElement.descriptor.name,
-  )}` : parentFullName;
-
-  const fullName = optionElement.descriptor.isCollection
-    ? path
-    : mergeNameParts(path, optionElement.descriptor.name);
 
   const separatedValues = separateProps(
     optionElement.props,
@@ -50,21 +41,21 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
   const configs: Record<string, IConfigNode> = {};
   const templates: ITemplate[] = [];
   let hasTranscludedContent = false;
-  let hasAnonymousTemplate = false;
 
   Children.map(
     children,
     (child) => {
-      const element = getElementInfo(child, optionElement.descriptor.expectedChildren);
-      if (element.type === ElementType.Unknown) {
+      const elementType = getElementType(child);
+      if (elementType === ElementType.Unknown) {
         if (child !== null && child !== undefined && child !== false) {
           hasTranscludedContent = true;
         }
         return;
       }
 
-      if (element.type === ElementType.Template) {
-        const template = getNamedTemplate(element.props as ITemplateProps);
+      if (elementType === ElementType.Template) {
+        const templateElement = child as ReactElement<ITemplateProps>;
+        const template = getNamedTemplate(templateElement.props);
 
         if (template) {
           templates.push(template);
@@ -73,29 +64,46 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
     },
   );
 
+  const getHasTranscludedContent = () => {
+    if (optionElement.descriptor.isCollection) {
+      return hasTranscludedContent;
+    } else {
+      return parentFullName.length > 0 ? hasTranscludedContent : false;
+    }
+  };
+
   optionElement.descriptor.templates.forEach((templateMeta) => {
     const template = getAnonymousTemplate(
       optionElement.props,
       templateMeta,
-      path.length > 0 ? hasTranscludedContent : false,
+      getHasTranscludedContent(),
     );
     if (template) {
-      hasAnonymousTemplate = true;
       templates.push(template);
     }
   });
 
   const childComponentCounter = useRef(0);
 
+  const configNode: IConfigNode = {
+    name: optionElement.descriptor.name,
+    predefinedOptions: optionElement.descriptor.predefinedValuesProps,
+    initialOptions: separatedValues.defaults,
+    options: separatedValues.options,
+    templates,
+    configCollections,
+    configs,
+  };
+
   const context: NestedOptionContextContent = useMemo(() => ({
     parentExpectedChildren: optionElement.descriptor.expectedChildren,
-    parentFullName: fullName,
+    parentFullName: mergeNameParts(parentFullName, optionElement.descriptor.name),
     treeUpdateToken: updateToken,
     getOptionComponentKey: () => {
       childComponentCounter.current += 1;
       return childComponentCounter.current;
     },
-    onChildOptionsReady: (configNode, childDescriptor, childUpdateToken, childComponentKey) => {
+    onChildOptionsReady: (childConfigNode, childDescriptor, childUpdateToken, childComponentKey) => {
       if (childUpdateToken !== updateToken) {
         return;
       }
@@ -114,26 +122,25 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
         }
 
         const itemIndex = collectionMap[childComponentKey] ?? collection.length;
-        const collectionItem = {
-          ...configNode,
-          fullName: `${configNode.fullName}[${itemIndex}]`,
-        };
+        childConfigNode.index = itemIndex;
+        childConfigNode.parentNode = configNode;
 
         if (itemIndex < collection.length) {
-          collection[itemIndex] = collectionItem;
+          collection[itemIndex] = childConfigNode;
         } else {
           collectionMap[childComponentKey] = itemIndex;
-          collection.push(collectionItem);
+          collection.push(childConfigNode);
         }
 
         return;
       }
 
-      configs[name] = configNode;
+      childConfigNode.parentNode = configNode;
+      configs[name] = childConfigNode;
     },
   }), [
     optionElement,
-    fullName,
+    configNode,
     updateToken,
     configCollections,
     configCollectionMaps,
@@ -141,15 +148,5 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
     childComponentCounter,
   ]);
 
-  const result: IConfigNode = {
-    fullName,
-    predefinedOptions: optionElement.descriptor.predefinedValuesProps,
-    initialOptions: separatedValues.defaults,
-    options: separatedValues.options,
-    templates,
-    configCollections,
-    configs,
-  };
-
-  return [result, context, hasAnonymousTemplate, updateToken];
+  return [configNode, context, updateToken];
 }

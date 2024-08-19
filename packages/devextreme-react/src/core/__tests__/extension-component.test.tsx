@@ -10,6 +10,7 @@ import {
   WidgetClass,
 } from './test-component';
 import { IHtmlOptions } from '../component-base';
+import { NestedComponentMeta } from '../types';
 
 const ExtensionWidgetClass = jest.fn<typeof Widget, any[]>(() => Widget);
 
@@ -20,11 +21,9 @@ const TestExtensionComponent = memo(function TestExtensionComponent(props: any) 
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  isExtensionComponent: boolean
-};;
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-TestExtensionComponent.isExtensionComponent = true;
+TestExtensionComponent.componentType = 'extension';
 
 afterEach(() => {
   WidgetClass.mockClear();
@@ -35,12 +34,15 @@ afterEach(() => {
 const NestedComponent = memo(function NestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ a: number }>
+      elementDescriptor={{
+        OptionName: 'option1'
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { OptionName: string };
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-NestedComponent.OptionName = 'option1';
+NestedComponent.componentType = 'option';
 
 it('is initialized as a plugin-component', () => {
   const onMounted = jest.fn();
