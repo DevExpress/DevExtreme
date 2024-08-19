@@ -112,7 +112,10 @@ class Chat extends Widget<Properties> {
     const lastValueItem = value[valueLength - 1];
     const lastPreviousValueItem = previousValue[previousValueLength - 1];
 
-    return lastValueItem !== lastPreviousValueItem && valueLength - previousValueLength === 1;
+    const isLastItemNotTheSame = lastValueItem !== lastPreviousValueItem;
+    const increasedNotByMoreThanOne = valueLength - previousValueLength === 1;
+
+    return isLastItemNotTheSame && increasedNotByMoreThanOne;
   }
 
   _processItemsUpdating(value: Message[], previousValue: Message[]): void {

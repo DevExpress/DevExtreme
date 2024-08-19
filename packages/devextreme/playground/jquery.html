@@ -52,16 +52,10 @@
         <div id="button"></div>
         <script>
             $(function() {
-                const user = {
-                    id: Math.random(),
-                }
-
-                const instance = $("#button").dxChat({ user }).dxChat('instance');
-
-                instance.renderMessage({
-                    text: 'custom',
-                    author: user,
-                }, user)
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
+                });
             });
         </script>
     </div>

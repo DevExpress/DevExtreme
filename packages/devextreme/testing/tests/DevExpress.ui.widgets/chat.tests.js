@@ -352,7 +352,6 @@ QUnit.module('renderMessage', moduleConfig, () => {
         assert.strictEqual($bubbles.eq($bubbles.length - 2).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), false);
     });
 
-
     QUnit.test('New bubble should be rendered after renderMessage with correct text', function(assert) {
         const text = 'NEW MESSAGE';
         const author = { id: MOCK_CURRENT_USER_ID };
@@ -370,6 +369,65 @@ QUnit.module('renderMessage', moduleConfig, () => {
         const lastBubble = $bubbles[$bubbles.length - 1];
 
         assert.strictEqual($(lastBubble).text(), text);
+    });
+
+    QUnit.test('Message list should not run invalidate if 1 new message has been added to items', function(assert) {
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        const { items } = this.instance.option();
+        const newMessage = {
+            timestamp: NOW,
+            author: userFirst,
+            text: 'NEW MESSAGE',
+        };
+
+        this.instance.option({ items: [...items, newMessage] });
+
+        assert.strictEqual(invalidateStub.callCount, 0);
+    });
+
+    QUnit.test('Message list should run renderMessage if 1 new message has been added to items', function(assert) {
+        const renderMessageStub = sinon.stub(this.instance._messageList, '_renderMessage');
+
+        const { items } = this.instance.option();
+        const newMessage = {
+            timestamp: NOW,
+            author: userFirst,
+            text: 'NEW MESSAGE',
+        };
+
+        this.instance.option({ items: [...items, newMessage] });
+
+        assert.strictEqual(renderMessageStub.callCount, 1);
+    });
+
+    QUnit.test('Message list should run invalidate if all items was updated, but the items length the same', function(assert) {
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        const { items } = this.instance.option();
+
+        const newItems = generateMessages(items.length);
+
+        this.instance.option({ items: newItems });
+
+        assert.strictEqual(invalidateStub.callCount, 1);
+    });
+
+    QUnit.test('Message list should run invalidate if more than 1 new message has been added to items', function(assert) {
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        const { items } = this.instance.option();
+        const newMessage = {
+            timestamp: NOW,
+            author: userFirst,
+            text: 'NEW MESSAGE',
+        };
+
+        const newItems = [...items, newMessage, newMessage];
+
+        this.instance.option({ items: newItems });
+
+        assert.strictEqual(invalidateStub.callCount, 1);
     });
 });
 
