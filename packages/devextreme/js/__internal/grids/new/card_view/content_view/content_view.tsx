@@ -6,6 +6,7 @@ import { ContentStatusView } from '@ts/grids/new/grid_core/content_view/content_
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 
+import { EditingController } from '../../grid_core/editing/controller';
 import { OptionsController } from '../options_controller';
 import { Card } from './card';
 
@@ -25,24 +26,29 @@ export class ContentView extends View {
   );
 
   public vdom = computed(
-    (items) => {
+    (items, isEditing) => {
       const ContentStatus = this.contentStatus.asInferno();
       return <>
         <div className={CLASSES.content} tabIndex={0}>
           <ContentStatus/>
           {items.map((item) => (
-            <Card row={item}></Card>
+            <Card
+              row={item}
+              isEditing={isEditing}
+              onChange={this.editing.onChanged.bind(this.editing)}
+            />
           ))}
         </div>
       </>;
     },
     [
       this.items,
+      this.editing.isEditing,
     ],
   );
 
   static dependencies = [
-    DataController, ColumnsController, OptionsController, ContentStatusView,
+    DataController, ColumnsController, OptionsController, ContentStatusView, EditingController,
   ] as const;
 
   constructor(
@@ -50,6 +56,7 @@ export class ContentView extends View {
     private readonly columnsController: ColumnsController,
     private readonly options: OptionsController,
     private readonly contentStatus: ContentStatusView,
+    private readonly editing: EditingController,
   ) {
     super();
   }

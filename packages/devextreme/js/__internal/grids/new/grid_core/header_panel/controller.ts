@@ -1,16 +1,15 @@
-// @ts-nocheck
+/* eslint-disable @typescript-eslint/no-dynamic-delete */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable spellcheck/spell-checker */
 import { isDefined } from '@js/core/utils/type';
-import type { Item as BaseToolbarItem } from '@js/ui/toolbar';
-import { computed, state } from '@ts/core/reactive';
+import type { MaybeSubscribable } from '@ts/core/reactive';
+import { computed, state, toSubscribable } from '@ts/core/reactive';
 
 import { OptionsController } from '../options_controller/options_controller';
+import type { PredefinedToolbarItem, ToolbarItem } from '../types';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
-
-interface ToolbarItem extends BaseToolbarItem {
-  name?: string;
-}
-
-export type ToolbarConfiguration = ToolbarItem | string;
 
 export class HeaderPanelController {
   private readonly defaultItems = state<Record<string, ToolbarItem>>({});
@@ -21,7 +20,9 @@ export class HeaderPanelController {
     (defaultItems, userItems) => {
       const defaultOrderedItems = Object.values(defaultItems)
         .sort((a, b) => {
+          // @ts-expect-error
           const aIndex = a.name ? DEFAULT_TOOLBAR_ITEMS.indexOf(a.name) : Number.MAX_SAFE_INTEGER;
+          // @ts-expect-error
           const bIndex = b.name ? DEFAULT_TOOLBAR_ITEMS.indexOf(b.name) : Number.MAX_SAFE_INTEGER;
           return bIndex - aIndex;
         });
@@ -44,11 +45,15 @@ export class HeaderPanelController {
     private readonly options: OptionsController,
   ) {}
 
-  public addDefaultItem(item: ToolbarItem & { name: typeof DEFAULT_TOOLBAR_ITEMS[number] }): void {
-    this.defaultItems.update((oldDefaultItems) => ({
-      ...oldDefaultItems,
-      [item.name]: item,
-    }));
+  public addDefaultItem(
+    item: MaybeSubscribable<PredefinedToolbarItem>,
+  ): void {
+    toSubscribable(item).subscribe((item) => {
+      this.defaultItems.update((oldDefaultItems) => ({
+        ...oldDefaultItems,
+        [item.name]: item,
+      }));
+    });
   }
 
   public removeDefaultItem(name: typeof DEFAULT_TOOLBAR_ITEMS[number]): void {

@@ -9,9 +9,14 @@ export const CLASSES = {
 
 export interface FieldProps {
   title: string | undefined;
+
   value: unknown;
 
   alignment: 'right' | 'center' | 'left';
+
+  isEditing?: boolean;
+
+  onChanged?: (v: unknown) => void;
 }
 
 export class Field extends PureComponent<FieldProps> {
@@ -19,7 +24,20 @@ export class Field extends PureComponent<FieldProps> {
     return (
       <div className={CLASSES.field} tabIndex={0}>
         <span className={CLASSES.fieldName}>{this.props.title}: </span>
-        <span style={{ 'text-align': this.props.alignment }} className={CLASSES.fieldName}>{this.props.value}</span>
+        { !this.props.isEditing && (
+          <span
+            style={{ 'text-align': this.props.alignment }}
+            className={CLASSES.fieldName}
+          >
+            {this.props.value}
+          </span>
+        )}
+        { this.props.isEditing && (
+          <input
+            defaultValue={this.props.value as string}
+            onChange={(e): void => this.props.onChanged?.(e.target.value)}
+          />
+        )}
       </div>
     );
   }

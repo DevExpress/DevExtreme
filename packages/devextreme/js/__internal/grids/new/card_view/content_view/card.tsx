@@ -10,6 +10,9 @@ export const CLASSES = {
 
 export interface CardProps {
   row: DataRow;
+  isEditing?: boolean;
+
+  onChange?: (columnName: string, value: unknown) => void;
 }
 
 export class Card extends PureComponent<CardProps> {
@@ -21,6 +24,13 @@ export class Card extends PureComponent<CardProps> {
             alignment={cell.column.alignment}
             title={cell.column.name}
             value={cell.value}
+            isEditing={this.props.isEditing}
+            onChanged={(v): void => {
+              if (!cell.column.name) {
+                return;
+              }
+              this.props.onChange?.(cell.column.name, v);
+            }}
           />
         ))}
       </div>
