@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, HorizontalEdge, NumericRule, PatternRule, RangeRule, RequiredRule, SearchMode, SortOrder, StringLengthRule } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
+import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, SearchMode, SortOrder, StringLengthRule } from 'devextreme/common';
+import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
@@ -263,10 +263,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('fixed', value);
     }
 
-    get fixedPosition(): HorizontalEdge | undefined {
+    get fixedPosition(): FixedPosition | undefined {
         return this._getOption('fixedPosition');
     }
-    set fixedPosition(value: HorizontalEdge | undefined) {
+    set fixedPosition(value: FixedPosition | undefined) {
         this._setOption('fixedPosition', value);
     }
 

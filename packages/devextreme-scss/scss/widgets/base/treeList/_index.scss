@@ -85,7 +85,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
     .dx-treelist-table .dx-row .dx-treelist-last-left-sticky-column {
       border-right: 2px solid $treelist-border-color;
 
-      & + td {
+      & + td:not(.dx-treelist-left-sticky-column) {
         border-left: none;
       }
     }
@@ -93,9 +93,22 @@ $treelist-row-error-color: $datagrid-row-error-color;
     .dx-treelist-table .dx-row .dx-treelist-first-right-sticky-column {
       border-left: 2px solid $treelist-border-color;
     }
+
+    .dx-treelist-table .dx-row .dx-treelist-sticky-column {
+      border-left: 2px solid $treelist-border-color;
+      border-right: 2px solid $treelist-border-color;
+
+      &:first-child, & + td {
+        border-left: none;
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+    }
   }
 
-  .dx-treelist-left-sticky-column, .dx-treelist-right-sticky-column {
+  .dx-treelist-sticky-column, .dx-treelist-left-sticky-column, .dx-treelist-right-sticky-column {
     background-color: $treelist-base-background-color;
   }
 }
@@ -305,6 +318,41 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
       &:last-child {
         border-left: none;
+      }
+    }
+
+    .dx-treelist-sticky-columns {
+      .dx-column-lines > td {
+        border-left: none;
+        border-right: $treelist-border;
+
+        &:first-child {
+          border-right: none;
+        }
+      }
+
+      .dx-treelist-table .dx-row {
+        .dx-treelist-sticky-column + td {
+          border-right: none;
+
+          &.dx-treelist-sticky-column {
+            border-left: 2px solid $treelist-border-color;
+          }
+        }
+
+        .dx-treelist-sticky-column:first-child {
+          border-right: none;
+          border-left: 2px solid $treelist-border-color;
+        }
+  
+        .dx-treelist-sticky-column:last-child {
+          border-left: none;
+          border-right: 2px solid $treelist-border-color;
+        }
+
+        .dx-treelist-first-right-sticky-column + td {
+          border-right: none;
+        }
       }
     }
   }

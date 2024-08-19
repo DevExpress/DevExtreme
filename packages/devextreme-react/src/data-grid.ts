@@ -405,7 +405,7 @@ type IColumnProps = React.PropsWithChildren<{
   filterValue?: any;
   filterValues?: Array<any>;
   fixed?: boolean;
-  fixedPosition?: "left" | "right";
+  fixedPosition?: "left" | "right" | "sticky";
   format?: LocalizationTypes.Format;
   formItem?: dxFormSimpleItem;
   groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;

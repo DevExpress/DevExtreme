@@ -373,7 +373,7 @@ type IColumnProps = React.PropsWithChildren<{
   filterValue?: any;
   filterValues?: Array<any>;
   fixed?: boolean;
-  fixedPosition?: "left" | "right";
+  fixedPosition?: "left" | "right" | "sticky";
   format?: LocalizationTypes.Format;
   formItem?: dxFormSimpleItem;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template;
