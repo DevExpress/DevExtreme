@@ -75,7 +75,7 @@ module.exports = {
             files: [
                 '**/*.ts?(x)',
             ],
-            excludedFiles: '**/m_*.ts',
+            excludedFiles: '**/m_*.ts?(x)',
             parser: '@typescript-eslint/parser',
             parserOptions: {
                 createDefaultProgram: true,
@@ -90,8 +90,8 @@ module.exports = {
         // Rules for migrated from JS files.
         {
             files: [
-                '**/m_*.ts',
-                '**/module*/**.ts',
+                '**/m_*.ts?(x)',
+                '**/module*/**.ts?(x)',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
