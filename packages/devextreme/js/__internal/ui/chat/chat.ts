@@ -101,12 +101,11 @@ class Chat extends Widget<Properties> {
       text,
     };
 
-    // @ts-expect-error
-    this.renderMessage(message, user);
+    this.renderMessage(message);
     this._messageSendAction?.({ message, event });
   }
 
-  _compareItems(value: Message[], previousValue: Message[]): boolean {
+  _oneMessageWasAddedToTheEnd(value: Message[], previousValue: Message[]): boolean {
     const valueLength = value.length;
     const previousValueLength = previousValue.length;
 
@@ -117,9 +116,9 @@ class Chat extends Widget<Properties> {
   }
 
   _processItemsUpdating(value: Message[], previousValue: Message[]): void {
-    const shouldBeInvalidated = !this._compareItems(value, previousValue);
+    const shouldItemsBeUpdatedCompletely = !this._oneMessageWasAddedToTheEnd(value, previousValue);
 
-    if (shouldBeInvalidated) {
+    if (shouldItemsBeUpdatedCompletely) {
       this._messageList?.option('items', value);
     } else {
       const newMessage = value[value.length - 1];
