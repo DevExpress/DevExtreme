@@ -155,6 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "不固定",
         "dxDataGrid-columnFixingLeftPosition": "向左",
         "dxDataGrid-columnFixingRightPosition": "向右",
+        "dxDataGrid-columnFixingStickyPosition": "Stick in place",
         "dxDataGrid-exportTo": "匯出",
         "dxDataGrid-exportToExcel": "匯出Excel文件",
         "dxDataGrid-exporting": "匯出...",

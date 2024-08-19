@@ -1,20 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { CLASSES, StickyPosition } from './const';
-
-const getStickyColumnPosition = (
-  { fixed, fixedPosition }: { fixed: boolean; fixedPosition: StickyPosition | undefined },
-): StickyPosition | '' => {
-  if (!fixed) {
-    return '';
-  }
-
-  return fixedPosition ?? StickyPosition.Left;
-};
+import { getColumnFixedPosition } from './utils';
 
 const addLeftStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidgetPrefix): void => {
   const lastLeftStickyColumn = [...stickyColumns]
     .reverse()
-    .find((col) => getStickyColumnPosition(col) === StickyPosition.Left);
+    .find((col) => getColumnFixedPosition(col) === StickyPosition.Left);
 
   $cell.addClass(addWidgetPrefix(CLASSES.leftStickyColumn));
 
@@ -25,7 +16,7 @@ const addLeftStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidge
 
 const addRightStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidgetPrefix): void => {
   const firstRightStickyColumn = stickyColumns
-    .find((col) => getStickyColumnPosition(col) === StickyPosition.Right);
+    .find((col) => getColumnFixedPosition(col) === StickyPosition.Right);
 
   $cell.addClass(addWidgetPrefix(CLASSES.rightStickyColumn));
 
@@ -34,12 +25,19 @@ const addRightStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidg
   }
 };
 
+const addStickyColumnClass = ($cell, addWidgetPrefix): void => {
+  $cell.addClass(addWidgetPrefix(CLASSES.stickyColumn));
+};
+
 const addStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidgetPrefix): void => {
-  const fixedPosition = getStickyColumnPosition(stickyColumn);
+  const fixedPosition = getColumnFixedPosition(stickyColumn);
 
   switch (fixedPosition) {
     case StickyPosition.Right:
       addRightStickyColumnClasses($cell, stickyColumn, stickyColumns, addWidgetPrefix);
+      break;
+    case StickyPosition.Sticky:
+      addStickyColumnClass($cell, addWidgetPrefix);
       break;
     default:
       addLeftStickyColumnClasses($cell, stickyColumn, stickyColumns, addWidgetPrefix);

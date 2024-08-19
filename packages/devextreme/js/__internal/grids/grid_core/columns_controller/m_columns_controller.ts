@@ -28,6 +28,7 @@ import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m
 import modules from '../m_modules';
 import type { Module } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import { StickyPosition } from '../sticky_columns/const';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_OPTION_REGEXP,
@@ -501,6 +502,12 @@ export class ColumnsController extends modules.Controller {
     return 0;
   }
 
+  public getStickyColumns(): any[] {
+    const visibleColumns = this.getVisibleColumns(null, true);
+
+    return visibleColumns.filter((column) => column.fixed);
+  }
+
   private _getFixedColumnsCore() {
     const that = this;
     const result: any = [];
@@ -742,7 +749,7 @@ export class ColumnsController extends modules.Controller {
           column.fixed = parentBandColumns[0]?.fixed ?? column.fixed;
           column.fixedPosition = parentBandColumns[0]?.fixedPosition ?? column.fixedPosition;
 
-          if (column.fixed) {
+          if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
             const isDefaultCommandColumn = !!column.command && !isCustomCommandColumn(this, column);
 
             let isFixedToEnd = column.fixedPosition === 'right';
