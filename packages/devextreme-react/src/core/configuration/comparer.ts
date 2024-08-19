@@ -1,6 +1,6 @@
 import { IConfigNode, ITemplate } from './config-node';
 import { buildNode, buildTemplates } from './tree';
-import { mergeNameParts } from './utils';
+import { buildFullName, mergeNameParts } from './utils';
 
 interface IConfigChanges {
   options: Record<string, any>;
@@ -10,7 +10,12 @@ interface IConfigChanges {
     currentOptions: Record<string, any>, prevOptions: Record<string, any>, path: string) => void;
 }
 
-function compareTemplates(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigChanges) {
+function compareTemplates(
+  current: IConfigNode,
+  currentFullName: string,
+  prev: IConfigNode,
+  changesAccum: IConfigChanges
+) {
   const currentTemplatesOptions: Record<string, any> = {};
   const currentTemplates: Record<string, ITemplate> = {};
   const prevTemplatesOptions: Record<string, any> = {};
@@ -19,7 +24,7 @@ function compareTemplates(current: IConfigNode, prev: IConfigNode, changesAccum:
   buildTemplates(current, currentTemplatesOptions, currentTemplates);
   buildTemplates(prev, prevTemplatesOptions, prevTemplates);
 
-  changesAccum.addRemovedValues(currentTemplatesOptions, prevTemplatesOptions, current.fullName);
+  changesAccum.addRemovedValues(currentTemplatesOptions, prevTemplatesOptions, currentFullName);
   // TODO: support switching to default templates
   // appendRemovedValues(currentTemplates, prevTemplates, "", changesAccum.templates);
 
@@ -28,7 +33,7 @@ function compareTemplates(current: IConfigNode, prev: IConfigNode, changesAccum:
       return;
     }
 
-    changesAccum.options[mergeNameParts(current.fullName, key)] = currentTemplatesOptions[key];
+    changesAccum.options[mergeNameParts(currentFullName, key)] = currentTemplatesOptions[key];
   });
 
   Object.keys(currentTemplates).forEach((key) => {
@@ -42,9 +47,12 @@ function compareTemplates(current: IConfigNode, prev: IConfigNode, changesAccum:
   });
 }
 
+
 function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigChanges) {
+  const fullName = buildFullName(current);
+
   if (!prev) {
-    changesAccum.options[current.fullName] = buildNode(
+    changesAccum.options[fullName] = buildNode(
       current,
       changesAccum.templates,
       true,
@@ -52,16 +60,16 @@ function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigC
     return;
   }
 
-  changesAccum.addRemovedValues(current.options, prev.options, current.fullName);
+  changesAccum.addRemovedValues(current.options, prev.options, fullName);
   changesAccum.addRemovedValues(
     current.configCollections,
     prev.configCollections,
-    current.fullName,
+    fullName,
   );
-  changesAccum.addRemovedValues(current.configs, prev.configs, current.fullName);
+  changesAccum.addRemovedValues(current.configs, prev.configs, fullName);
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  compareCollections(current, prev, changesAccum);
+  compareCollections(current, fullName, prev, changesAccum);
 
   Object.keys(current.configs).forEach((key) => {
     compare(current.configs[key], prev.configs[key], changesAccum);
@@ -72,10 +80,10 @@ function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigC
       return;
     }
 
-    changesAccum.options[mergeNameParts(current.fullName, key)] = current.options[key];
+    changesAccum.options[mergeNameParts(fullName, key)] = current.options[key];
   });
 
-  compareTemplates(current, prev, changesAccum);
+  compareTemplates(current, fullName, prev, changesAccum);
 }
 
 function appendRemovedValues(
@@ -108,6 +116,7 @@ function getChanges(current: IConfigNode, prev: IConfigNode): IConfigChanges {
 
 function compareCollections(
   current: IConfigNode,
+  currentFullName: string,
   prev: IConfigNode,
   changesAccum: IConfigChanges,
 ) {
@@ -122,7 +131,7 @@ function compareCollections(
           updatedCollection.push(config);
         },
       );
-      changesAccum.options[mergeNameParts(current.fullName, key)] = updatedCollection;
+      changesAccum.options[mergeNameParts(currentFullName, key)] = updatedCollection;
       return;
     }
 

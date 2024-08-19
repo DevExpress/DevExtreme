@@ -2,7 +2,7 @@
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { memo } from 'react';
-import { Component, IHtmlOptions } from '../component';
+import { Component, IHtmlOptions, NestedComponentMeta } from '../component';
 import ConfigurationComponent from '../nested-option';
 import { TestComponent, Widget, WidgetClass } from './test-component';
 
@@ -11,122 +11,132 @@ jest.useFakeTimers();
 const NestedComponent = memo(function NestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ a: number } & React.PropsWithChildren>
+      elementDescriptor={{
+        OptionName: 'option',
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { OptionName: string };
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-NestedComponent.OptionName = 'option';
+NestedComponent.componentType = 'option';
 
 const NestedComponentWithPredfeinedProps = memo(function NestedComponentWithPredfeinedProps(props: any) {
   return (
     <ConfigurationComponent<{ a: number } & React.PropsWithChildren>
+      elementDescriptor={{
+        OptionName: 'option',
+        PredefinedProps: {
+          predefinedProp: 'predefined-value',
+        },
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  PredefinedProps: Record<string, string>
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-NestedComponentWithPredfeinedProps.OptionName = 'option';
-NestedComponentWithPredfeinedProps.PredefinedProps = {
-  predefinedProp: 'predefined-value',
-};
+NestedComponentWithPredfeinedProps.componentType = 'option';
 
 const CollectionNestedWithPredfeinedProps1 = memo(function CollectionNestedWithPredfeinedProps1(props: any) {
   return (
     <ConfigurationComponent<{ a: number }>
+      elementDescriptor={{
+        IsCollectionItem: true,
+        OptionName: 'option',
+        PredefinedProps: {
+          predefinedProp: 'predefined-value-1',
+        },
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  PredefinedProps: Record<string, string>
-  IsCollectionItem: boolean
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-CollectionNestedWithPredfeinedProps1.IsCollectionItem = true;
-CollectionNestedWithPredfeinedProps1.OptionName = 'option';
-CollectionNestedWithPredfeinedProps1.PredefinedProps = {
-  predefinedProp: 'predefined-value-1',
-};
+CollectionNestedWithPredfeinedProps1.componentType = 'option';
 
 const CollectionNestedWithPredfeinedProps2 = memo(function CollectionNestedWithPredfeinedProps2(props: any) {
   return (
     <ConfigurationComponent<{ a: number }>
+      elementDescriptor={{
+        IsCollectionItem: true,
+        OptionName: 'option',
+        PredefinedProps: {
+          predefinedProp: 'predefined-value-2',
+        },
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  PredefinedProps: Record<string, string>
-  IsCollectionItem: boolean
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-CollectionNestedWithPredfeinedProps2.IsCollectionItem = true;
-CollectionNestedWithPredfeinedProps2.OptionName = 'option';
-CollectionNestedWithPredfeinedProps2.PredefinedProps = {
-  predefinedProp: 'predefined-value-2',
-};
+CollectionNestedWithPredfeinedProps2.componentType = 'option';
 
 const SubNestedComponent = memo(function SubNestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ d: string }>
+      elementDescriptor={{
+        OptionName: 'subOption',
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { OptionName: string };
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-SubNestedComponent.OptionName = 'subOption';
+SubNestedComponent.componentType = 'option';
 
 const AnotherSubNestedComponent = memo(function AnotherSubNestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ e: string }>
+      elementDescriptor={{
+        OptionName: 'anotherSubOption',
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { OptionName: string };
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-AnotherSubNestedComponent.OptionName = 'anotherSubOption';
+AnotherSubNestedComponent.componentType = 'option';
 
 const AnotherNestedComponent = memo(function AnotherNestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ b: string }>
+      elementDescriptor={{
+        OptionName: 'anotherOption',
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { OptionName: string };
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-AnotherNestedComponent.OptionName = 'anotherOption';
+AnotherNestedComponent.componentType = 'option';
 
 const CollectionNestedComponent = memo(function CollectionNestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ c?: number; d?: string }>
+      elementDescriptor={{
+        OptionName: 'itemOptions',
+        IsCollectionItem: true,
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  IsCollectionItem: boolean
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-CollectionNestedComponent.OptionName = 'itemOptions';
-CollectionNestedComponent.IsCollectionItem = true;
+CollectionNestedComponent.componentType = 'option';
 
 const CollectionSubNestedComponent = memo(function CollectionSubNestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ c?: number; d?: string }>
+      elementDescriptor={{
+        OptionName: 'subItemsOptions',
+        IsCollectionItem: true,
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  IsCollectionItem: boolean
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-CollectionSubNestedComponent.OptionName = 'subItemsOptions';
-CollectionSubNestedComponent.IsCollectionItem = true;
+CollectionSubNestedComponent.componentType = 'option';
 
 describe('nested option', () => {
   afterEach(() => {
@@ -576,25 +586,25 @@ describe('nested sub-option', () => {
     const NestedComponentWithExpectations = memo(function NestedComponentWithExpectations(props: any) {
       return (
         <ConfigurationComponent<{ a: number } & React.PropsWithChildren>
+          elementDescriptor={{
+            OptionName: 'option',
+            ExpectedChildren: {
+              subOption: {
+                optionName: 'expectedSubItemOptions',
+                isCollectionItem: true,
+              },
+              subItemsOptions: {
+                optionName: 'expectedSubOption',
+                isCollectionItem: false,
+              },
+            },
+          }}
           {...props}
         />
       );
-    }) as React.MemoExoticComponent<any> & {
-      OptionName: string
-      ExpectedChildren: Record<string, { optionName: string, isCollectionItem: boolean }>
-    };
+    }) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-    NestedComponentWithExpectations.OptionName = 'option';
-    NestedComponentWithExpectations.ExpectedChildren = {
-      subOption: {
-        optionName: 'expectedSubItemOptions',
-        isCollectionItem: true,
-      },
-      subItemsOptions: {
-        optionName: 'expectedSubOption',
-        isCollectionItem: false,
-      },
-    };
+    NestedComponentWithExpectations.componentType = 'option';
 
     render(
       <TestComponent>

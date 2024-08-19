@@ -14,6 +14,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+import { NestedComponentMeta } from '../types';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({
@@ -54,18 +55,18 @@ const NestedComponent = memo(function NestedComponent(props: any) {
       value?: number;
       onValueChange?: (value: number) => void;
     } & React.PropsWithChildren>
+      elementDescriptor={{
+        OptionName: 'nestedOption',
+        DefaultsProps: {
+          defaultC: 'c',
+        },
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  DefaultsProps: Record<string, string>
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-NestedComponent.DefaultsProps = {
-  defaultC: 'c',
-};
-NestedComponent.OptionName = 'nestedOption';
+NestedComponent.componentType = 'option';
 
 const CollectionNestedComponent = memo(function CollectionNestedComponent(props: any) {
   return (
@@ -73,23 +74,22 @@ const CollectionNestedComponent = memo(function CollectionNestedComponent(props:
       a?: number;
       onAChange?: (value: number) => void;
     } & React.PropsWithChildren>
+      elementDescriptor={{
+        OptionName: 'items',
+        IsCollectionItem: true,
+        ExpectedChildren: {
+          subItems: {
+            optionName: 'subItems',
+            isCollectionItem: true,
+          },
+        },
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  IsCollectionItem: boolean;
-  ExpectedChildren: Record<string, { optionName: string, isCollectionItem: boolean }>
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-CollectionNestedComponent.OptionName = 'items';
-CollectionNestedComponent.IsCollectionItem = true;
-CollectionNestedComponent.ExpectedChildren = {
-  subItems: {
-    optionName: 'subItems',
-    isCollectionItem: true,
-  },
-};
+CollectionNestedComponent.componentType = 'option';
 
 const CollectionSubNestedComponent = memo(function CollectionSubNestedComponent(props: any) {
   return (
@@ -97,16 +97,16 @@ const CollectionSubNestedComponent = memo(function CollectionSubNestedComponent(
       a?: number;
       onAChange?: (value: number) => void;
     }>
+      elementDescriptor={{
+        OptionName: 'subItems',
+        IsCollectionItem: true,
+      }}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & {
-  OptionName: string
-  IsCollectionItem: boolean;
-};
+}) as React.MemoExoticComponent<any> & NestedComponentMeta;
 
-CollectionSubNestedComponent.OptionName = 'subItems';
-CollectionSubNestedComponent.IsCollectionItem = true;
+CollectionSubNestedComponent.componentType = 'option';
 
 const TestComponentWithExpectation = memo(function TestComponentWithExpectation(props: any) {
   return (
@@ -742,7 +742,7 @@ describe('cfg-component option control', () => {
   it('apply cfg-component option value if value has changes', () => {
     const optionsManager = new OptionsManagerModule.OptionsManager();
     const config = {
-      fullName: '',
+      name: '',
       predefinedOptions: {},
       initialOptions: {},
       options: { value: 1 },

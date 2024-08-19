@@ -9,6 +9,8 @@ import {
   ReactElement,
 } from 'react';
 
+import type { NestedComponentMeta } from './types';
+
 import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base';
 import { IElementDescriptor, IExpectedChild } from './configuration/react/element';
 import { ITemplateMeta } from './template';
@@ -117,4 +119,5 @@ export {
   IHtmlOptions,
   IElementDescriptor,
   ComponentRef,
+  NestedComponentMeta,
 };

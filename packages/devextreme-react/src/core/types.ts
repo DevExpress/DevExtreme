@@ -5,6 +5,10 @@ interface DXTemplate {
   render: RenderFunc;
 }
 
+export interface NestedComponentMeta {
+  componentType: 'option' | 'extension';
+}
+
 type RenderFunc = (arg: RenderArgs) => HTMLElement;
 
 interface TemplateArgs {
