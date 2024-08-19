@@ -1437,7 +1437,6 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
       }
     }
 
-    this.updateCellState($element, validationResult, isHideBorder);
     return super.focus($element, isHideBorder);
   }
 
