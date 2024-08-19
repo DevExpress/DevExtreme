@@ -20,7 +20,7 @@ import {
 
 type Result = Promise<any> & { abort: () => void };
 type DeferredResult = DeferredObj<any>;
-interface Options {
+export interface Options {
   url: string;
   [key: string]: any;
 }
