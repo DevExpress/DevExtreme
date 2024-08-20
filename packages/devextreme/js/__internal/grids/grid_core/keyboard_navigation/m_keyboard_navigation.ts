@@ -724,9 +724,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     $(focusedViewElement).addClass(FOCUS_STATE_CLASS);
 
     if (editingOptions && eventTarget && !isOriginalHandlerRequired) {
-      if ($(eventTarget).hasClass(CELL_FOCUS_DISABLED_CLASS)) {
-        this._focus($(eventTarget));
-      }
       if ($(eventTarget).hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
         this._resetFocusedCell();
       }
