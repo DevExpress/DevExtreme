@@ -1,11 +1,13 @@
 import type { Orientation } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
+import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
+import { contains } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import {
   getOuterHeight,
@@ -214,17 +216,23 @@ class Splitter extends CollectionWidget<Properties> {
 
   _attachHoldEvent(): void {}
 
+  _isAttached(): boolean {
+    return !!contains(domAdapter.getBody(), $(this.element()).get(0));
+  }
+
+  _isVisible(): boolean {
+    return isElementVisible($(this.element())[0]);
+  }
+
   _resizeHandler(): void {
-    if (!this._shouldRecalculateLayout) {
-      return;
+    if (this._shouldRecalculateLayout && this._isAttached() && this._isVisible()) {
+      this._layout = this._getDefaultLayoutBasedOnSize();
+
+      this._applyStylesFromLayout(this._layout);
+      this._updateItemSizes();
+
+      this._shouldRecalculateLayout = false;
     }
-
-    this._layout = this._getDefaultLayoutBasedOnSize();
-
-    this._applyStylesFromLayout(this._layout);
-    this._updateItemSizes();
-
-    this._shouldRecalculateLayout = false;
   }
 
   _renderItems(items: Item[]): void {
@@ -233,7 +241,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    if (isElementVisible($(this.element())[0])) {
+    if (this._isVisible()) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._applyStylesFromLayout(this._layout);
 
