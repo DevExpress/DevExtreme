@@ -49,10 +49,7 @@ export class FilterPanelView extends modules.View {
   protected _renderCore(): void {
     const $element = this.element();
 
-    $element
-      .addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
-
-    render(null, $element.get(0));
+    $element.addClass(this.addWidgetPrefix(FILTER_PANEL_CLASS));
 
     const isColumnsDefined = !!this._columnsController.getColumns().length;
 
