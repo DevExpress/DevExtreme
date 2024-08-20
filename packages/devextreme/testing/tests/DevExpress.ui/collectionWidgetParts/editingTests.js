@@ -65,6 +65,23 @@ module('onSelectionChanging event', () => {
         });
     });
 
+    test('should not be raised on selected item click if previous selection was cancelled', function(assert) {
+        const selectionChangingStub = sinon.stub();
+        const $element = $('#cmp');
+
+        const instance = new TestComponent($element, {
+            items: [0, 1],
+            selectionMode: 'single',
+            selectedIndex: 0,
+            onSelectionChanging: selectionChangingStub
+        });
+
+        instance.selectItem(1);
+        instance.selectItem(0);
+
+        assert.strictEqual(selectionChangingStub.callCount, 1, 'selectionChanging is raised only once');
+    });
+
     module('should be triggered on selection change', () => {
         test('if is subscribed using "on" method', function(assert) {
             const selectionChangingHandler = sinon.stub();

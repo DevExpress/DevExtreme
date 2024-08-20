@@ -436,7 +436,6 @@ const MultiView = CollectionWidget.inherit({
       this.selectItem(newSelectedIndex);
       if (this.option('selectedIndex') !== newSelectedIndex) {
         this._animateItemContainer(0, noop);
-        return;
       }
 
       // TODO: change focusedElement on focusedItem
