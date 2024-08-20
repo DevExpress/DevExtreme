@@ -113,8 +113,6 @@ test('TreeList - Keyboard navigation on Expand/Collapse buttons is broken if the
     .pressKey('tab tab tab')
     .expect(target.element.focused)
     .ok();
-
-  await t.debug();
 }).before(
   async () => createWidget('dxTreeList', {
     dataSource: [
