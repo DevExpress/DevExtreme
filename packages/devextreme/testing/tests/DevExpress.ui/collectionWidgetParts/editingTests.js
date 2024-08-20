@@ -66,7 +66,9 @@ module('onSelectionChanging event', () => {
     });
 
     test('should not be raised on selected item click if previous selection was cancelled', function(assert) {
-        const selectionChangingStub = sinon.stub();
+        const selectionChangingStub = sinon.spy((args) => {
+            args.cancel = true;
+        });
         const $element = $('#cmp');
 
         const instance = new TestComponent($element, {
