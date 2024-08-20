@@ -52,7 +52,7 @@ if (!devMode) {
 if (devMode) {
     sh.exec('npx nx build devextreme-main');
 } else {
-    sh.exec('npm run build -w devextreme-scss', sh);
+    sh.exec('npx nx build devextreme-scss');
     sh.exec('npm run build-dist -w devextreme-main', {
         env: {
             ...sh.env,
