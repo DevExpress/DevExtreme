@@ -475,7 +475,7 @@ QUnit.module('interaction via swipe', {
 
             assert.strictEqual(this.multiView.option('selectedIndex'), 0, 'selected index is not changed');
 
-            const $itemContainer = this.$multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+            const $itemContainer = this.$multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
             assert.strictEqual(position($itemContainer), 0, 'container position is restored to initial');
         });
     });
