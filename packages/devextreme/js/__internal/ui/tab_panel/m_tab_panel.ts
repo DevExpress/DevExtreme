@@ -126,6 +126,14 @@ const TabPanel = MultiView.inherit({
           iconPosition: ICON_POSITION.top,
         },
       },
+      {
+        device() {
+          return true;
+        },
+        options: {
+          selectOnFocus: false,
+        },
+      },
     ]);
   },
 
@@ -262,14 +270,12 @@ const TabPanel = MultiView.inherit({
       onItemClick: this._titleClickAction.bind(this),
       onItemHold: this._titleHoldAction.bind(this),
       itemHoldTimeout: this.option('itemHoldTimeout'),
-      onSelectionChanging: (e): void => {
-        const newTabsSelectedItemData = e.addedItems[0];
-        const newTabsSelectedIndex = this._getIndexByItemData(newTabsSelectedItemData);
-        this.selectItem(newTabsSelectedIndex);
-
-        e.cancel = this.option('selectedIndex') !== newTabsSelectedIndex;
-      },
-      onSelectionChanged: (): void => {
+      onSelectionChanged: (e): void => {
+        this
+          .selectItem(e.component.option('selectedIndex'))
+          .fail(() => {
+            this._setTabsOption('selectedItem', e.removedItems[0]);
+          });
         this._refreshActiveDescendant();
       },
       onItemRendered: this._titleRenderedAction.bind(this),

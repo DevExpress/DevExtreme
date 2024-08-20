@@ -380,6 +380,30 @@ QUnit.module('onSelectionChanging', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('should be raised only once when tab is focused and clicked', function(assert) {
+        const clock = sinon.useFakeTimers();
+        this.onSelectionChangingStub = sinon.spy((e) => {
+            e.cancel = true;
+        });
+
+        this.reinit({
+            onSelectionChanging: this.onSelectionChangingStub,
+            focusStateEnabled: true
+        });
+
+        this.$tabPanel.trigger('focusin');
+        const $item = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+        $item.trigger('dxpointerdown');
+        $item.trigger('dxclick');
+        clock.tick(10);
+
+        assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+        assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged is not called');
+
+        assert.strictEqual(this.tabPanel.option('selectedIndex'), 0, 'tabPanel selected index is not changed');
+        clock.restore();
+    });
+
     QUnit.test('should cancel selection after multiView swipe if e.cancel = true', function(assert) {
         this.onSelectionChangingStub = sinon.spy((e) => {
             e.cancel = true;
@@ -402,7 +426,7 @@ QUnit.module('onSelectionChanging', {
         assert.strictEqual(translator.locate($itemContainer).left, 0, 'container was not swiped');
     });
 
-    QUnit.test('should apply the selection if e.cancel is not modified', function(assert) {
+    QUnit.test('should apply the selection after swipe if e.cancel is not modified', function(assert) {
         this.reinit({
             swipeEnabled: true
         });
@@ -487,7 +511,7 @@ QUnit.module('onSelectionChanging', {
                 });
             });
 
-            this.tabs.option('onSelectionChanging', this.onSelectionChangingStub);
+            this.tabPanel.option('onSelectionChanging', this.onSelectionChangingStub);
 
             const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
 
@@ -513,7 +537,7 @@ QUnit.module('onSelectionChanging', {
                 }, 0);
             });
 
-            this.tabs.option('onSelectionChanging', this.onSelectionChangingStub);
+            this.tabPanel.option('onSelectionChanging', this.onSelectionChangingStub);
 
             const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
             $item.trigger('dxclick');

@@ -245,24 +245,33 @@ export default class StandardStrategy extends SelectionStrategy {
   }
 
   selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
-    const that = this;
-    const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
-
+    const deferred = this._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
+    const selectionDeferred = Deferred();
     deferred.done((items) => {
+      const { selectedItemKeys, selectedItems } = this.options;
       if (preserve) {
-        that._preserveSelectionUpdate(items, isDeselect);
+        this._preserveSelectionUpdate(items, isDeselect);
       } else {
-        that._replaceSelectionUpdate(items);
+        this._replaceSelectionUpdate(items);
       }
       /// #DEBUG
       if (!isSelectAll && !isDeselect) {
-        that._warnOnIncorrectKeys(keys);
+        this._warnOnIncorrectKeys(keys);
       }
       /// #ENDDEBUG
-      that.onSelectionChanged();
+
+      this._callCallbackIfNotCanceled(() => {
+        this.onSelectionChanged();
+        selectionDeferred.resolve();
+      }, () => {
+        this._clearItemKeys();
+        this._setOption('selectedItemKeys', selectedItemKeys);
+        this._setOption('selectedItems', selectedItems);
+        selectionDeferred.reject();
+      });
     });
 
-    return deferred;
+    return selectionDeferred;
   }
 
   addSelectedItem(key, itemData) {
