@@ -35,9 +35,15 @@ export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
  * @docid _ui_chat_MessageSendEvent
  * @public
  * @type object
- * @inherits Cancelable,NativeEventInfo,Message
+ * @inherits Cancelable,NativeEventInfo
  */
-export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & Message;
+export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+    /**
+     * @docid
+     * @type Message
+     */
+    readonly message?: Message;
+};
 
 /**
  * @docid

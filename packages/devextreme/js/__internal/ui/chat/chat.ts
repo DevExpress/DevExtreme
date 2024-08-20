@@ -7,7 +7,10 @@ import type {
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
-import type { MessageBoxProperties } from './chat_message_box';
+import type {
+  MessageBoxProperties,
+  MessageSendEvent as MessageBoxMessageSendEvent,
+} from './chat_message_box';
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
@@ -20,7 +23,7 @@ class Chat extends Widget<Properties> {
 
   _messageList?: MessageList;
 
-  _messageSendAction?: (e: MessageSendEvent) => void;
+  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -88,7 +91,7 @@ class Chat extends Widget<Properties> {
     );
   }
 
-  _messageSendHandler(e: MessageSendEvent): void {
+  _messageSendHandler(e: MessageBoxMessageSendEvent): void {
     const { text, event } = e;
     const { user } = this.option();
 
@@ -100,7 +103,6 @@ class Chat extends Widget<Properties> {
 
     // @ts-expect-error
     this.renderMessage(message, user);
-    // @ts-expect-error
     this._messageSendAction?.({ message, event });
   }
 

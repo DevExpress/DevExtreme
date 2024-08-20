@@ -1,7 +1,8 @@
 import $ from '@js/core/renderer';
+import type { NativeEventInfo } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { MessageSendEvent } from '@js/ui/chat';
+import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
@@ -11,7 +12,11 @@ const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 
-export interface MessageBoxProperties {
+export type MessageSendEvent =
+  NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
+  { text?: string };
+
+export interface MessageBoxProperties extends WidgetOptions<MessageBox> {
   onMessageSend?: (e: MessageSendEvent) => void;
 }
 
