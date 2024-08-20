@@ -9439,8 +9439,12 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<
         dxChat,
         KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > &
-      Message;
+      > & {
+        /**
+         * [descr:MessageSendEvent.message]
+         */
+        readonly message?: Message;
+      };
     /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
