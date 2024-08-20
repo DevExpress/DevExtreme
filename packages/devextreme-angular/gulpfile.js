@@ -100,10 +100,10 @@ gulp.task('after-generate.rename-files', (done) => {
   const { renameGeneratedFiles } = buildConfig.afterGenerate;
   const rename = require('gulp-rename');
 
-  const actions = (renameGeneratedFiles || []).map(({ path, name }) =>
+  const actions = (renameGeneratedFiles || []).map(({ path, newName }) =>
       () =>  gulp
           .src(outputFolderPath + path)
-          .pipe(rename(name))
+          .pipe(rename(newName))
           .pipe(gulp.dest((file) => file.base))
   );
 
