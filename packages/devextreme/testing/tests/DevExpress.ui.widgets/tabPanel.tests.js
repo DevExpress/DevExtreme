@@ -45,6 +45,7 @@ const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const MULTIVIEW_ITEM_CONTAINER_CLASS = 'dx-multiview-item-container';
+const MULTIVIEW_HIDDEN_ITEM_CLASS = 'dx-multiview-item-hidden';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -402,6 +403,49 @@ QUnit.module('onSelectionChanging', {
 
         assert.strictEqual(this.tabPanel.option('selectedIndex'), 0, 'tabPanel selected index is not changed');
         clock.restore();
+    });
+
+    QUnit.test('should ignore previous requests if e.cancel is set to promise', function(assert) {
+        const done = assert.async();
+        const delay = 300;
+        this.onSelectionChangingStub = sinon.spy((e) => {
+            e.cancel = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(false);
+                }, delay);
+            });
+        });
+
+        this.reinit({
+            onSelectionChanging: this.onSelectionChangingStub,
+            items: [{ text: '1' }, { text: '2' }, { text: '3' }]
+        });
+
+        const $items = this.$tabPanel.find(`.${TABS_ITEM_CLASS}`);
+
+        $items.eq(2).trigger('dxclick');
+        $items.eq(0).trigger('dxclick');
+        $items.eq(1).trigger('dxclick');
+
+        setTimeout(() => {
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 3, 'onSelectionChanging should be called');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 1, 'onSelectionChanged should be called');
+
+            assert.strictEqual(this.tabs.option('selectedIndex'), 1, 'Tabs selectedIndex should be updated to 1');
+            assert.deepEqual(this.tabs.option('selectedItem'), this.items[1], 'Tabs selectedItem should be equal to the second item');
+            assert.deepEqual(this.tabs.option('selectedItems'), [this.items[1]], 'Tabs selectedItems should contain second item');
+            assert.deepEqual(this.tabs.option('selectedItemKeys'), [this.items[1]], 'Tabs selectedItemKeys should contain second item');
+
+            assert.strictEqual(this.tabPanel.option('selectedIndex'), 1, 'TabPanel selectedIndex should be updated to 1');
+            assert.deepEqual(this.tabPanel.option('selectedItem'), this.items[1], 'TabPanel selectedItem should be equal to the second item');
+            assert.deepEqual(this.tabPanel.option('selectedItems'), [this.items[1]], 'TabPanel selectedItems should contain second item');
+            assert.deepEqual(this.tabPanel.option('selectedItemKeys'), [this.items[1]], 'TabPanel selectedItemKeys should contain second item');
+
+            const $multiViewItems = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`);
+            assert.ok($multiViewItems.eq(1).hasClass(SELECTED_ITEM_CLASS), 'second multiview item is selected');
+            assert.notOk($multiViewItems.eq(1).hasClass(MULTIVIEW_HIDDEN_ITEM_CLASS), 'second multiview item is visible');
+            done();
+        }, delay);
     });
 
     QUnit.module('after multiView swipe', () => {
