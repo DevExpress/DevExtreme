@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
-import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
@@ -35,7 +34,7 @@ export class FilterPanelView extends modules.View {
 
   private readonly _filterValueBuffer: any;
 
-  public init() {
+  public init(): void {
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
     this._filterSyncController = this.getController('filterSync');
@@ -43,11 +42,11 @@ export class FilterPanelView extends modules.View {
     this._dataController.dataSourceChanged.add(() => this.render());
   }
 
-  public isVisible() {
-    return this.option('filterPanel.visible') && this._dataController.dataSource();
+  public isVisible(): boolean {
+    return !!this.option('filterPanel.visible') && !!this._dataController.dataSource();
   }
 
-  protected _renderCore() {
+  protected _renderCore(): void {
     const $element = this.element();
 
     $element
@@ -109,10 +108,14 @@ export class FilterPanelView extends modules.View {
 
   private _renderTextElement($textElement) {
     const that = this;
-    let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
-      when(that.getFilterText(filterValue, this._filterSyncController.getCustomFilterOperations())).done((filterText) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      (async (): Promise<void> => {
+        let filterText = await that.getFilterText(
+          filterValue,
+          this._filterSyncController.getCustomFilterOperations(),
+        );
         const customizeText = that.option('filterPanel.customizeText');
         if (customizeText) {
           const customText = customizeText({
@@ -125,16 +128,16 @@ export class FilterPanelView extends modules.View {
           }
         }
         $textElement.text(filterText);
-      });
+      })();
     } else {
-      filterText = that.option('filterPanel.texts.createFilter');
-      $textElement.text(filterText);
+      const filterText = that.option('filterPanel.texts.createFilter');
+      $textElement.text(filterText ?? '');
     }
 
     return $textElement;
   }
 
-  private _showFilterBuilder() {
+  private _showFilterBuilder(): void {
     this.option('filterBuilderPopup.visible', true);
   }
 
@@ -145,7 +148,7 @@ export class FilterPanelView extends modules.View {
     }
   }
 
-  public optionChanged(args) {
+  public optionChanged(args): void {
     switch (args.name) {
       case 'filterValue':
         this._invalidate();
@@ -161,7 +164,7 @@ export class FilterPanelView extends modules.View {
     }
   }
 
-  private _getConditionText(fieldText, operationText, valueText) {
+  private _getConditionText(fieldText, operationText, valueText): string {
     let result = `[${fieldText}] ${operationText}`;
     if (isDefined(valueText)) {
       result += valueText;
@@ -169,36 +172,31 @@ export class FilterPanelView extends modules.View {
     return result;
   }
 
-  private _getValueMaskedText(value) {
+  private _getValueMaskedText(value): string {
     return Array.isArray(value) ? `('${value.join('\', \'')}')` : ` '${value}'`;
   }
 
-  private _getValueText(field, customOperation, value) {
-    // @ts-expect-error
-    const deferred = new Deferred();
+  private async _getValueText(field, customOperation, value): Promise<string> {
     const hasCustomOperation = customOperation && customOperation.customizeText;
     if (isDefined(value) || hasCustomOperation) {
       if (!hasCustomOperation && field.lookup) {
-        getCurrentLookupValueText(field, value, (data) => {
-          deferred.resolve(this._getValueMaskedText(data));
+        const data = await new Promise((resolve) => {
+          getCurrentLookupValueText(field, value, resolve);
         });
-      } else {
-        const displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value, null);
-        when(getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done((data) => {
-          deferred.resolve(this._getValueMaskedText(data));
-        });
+
+        return this._getValueMaskedText(data);
       }
-    } else {
-      deferred.resolve('');
+      const displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value, null);
+      const data = await getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET);
+
+      return this._getValueMaskedText(data);
     }
-    return deferred.promise();
+    return '';
   }
 
-  private getConditionText(filterValue, options) {
+  private async getConditionText(filterValue, options) {
     const that = this;
     const operation = filterValue[1];
-    // @ts-expect-error
-    const deferred = new Deferred();
     const customOperation = getCustomOperation(options.customOperations, operation);
     let operationText;
     const field = getField(filterValue[0], options.columns);
@@ -212,17 +210,13 @@ export class FilterPanelView extends modules.View {
     } else {
       operationText = getCaptionByOperation(operation, options.filterOperationDescriptions);
     }
-    this._getValueText(field, customOperation, value).done((valueText) => {
-      deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
-    });
-    return deferred;
+    const valueText = await this._getValueText(field, customOperation, value);
+    return that._getConditionText(fieldText, operationText, valueText);
   }
 
-  private getGroupText(filterValue, options, isInnerGroup?) {
+  private async getGroupText(filterValue, options, isInnerGroup?) {
     const that = this;
-    // @ts-expect-error
-    const result = new Deferred();
-    const textParts: string[] = [];
+    const textParts: (string | Promise<string>)[] = [];
     const groupValue = getGroupValue(filterValue);
 
     filterValue.forEach((item) => {
@@ -233,20 +227,19 @@ export class FilterPanelView extends modules.View {
       }
     });
 
-    when.apply(this, textParts).done((...args) => {
-      let text;
-      if (groupValue.startsWith('!')) {
-        const groupText = options.groupOperationDescriptions[`not${groupValue.substring(1, 2).toUpperCase()}${groupValue.substring(2)}`].split(' ');
-        text = `${groupText[0]} ${args[0]}`;
-      } else {
-        text = args.join(` ${options.groupOperationDescriptions[groupValue]} `);
-      }
-      if (isInnerGroup) {
-        text = `(${text})`;
-      }
-      result.resolve(text);
-    });
-    return result;
+    const args = await Promise.all(textParts);
+    let text: string;
+    if (groupValue.startsWith('!')) {
+      const groupText = options.groupOperationDescriptions[`not${groupValue.substring(1, 2).toUpperCase()}${groupValue.substring(2)}`].split(' ');
+      text = `${groupText[0]} ${args[0]}`;
+    } else {
+      text = args.join(` ${options.groupOperationDescriptions[groupValue]} `);
+    }
+    if (isInnerGroup) {
+      text = `(${text})`;
+    }
+
+    return text;
   }
 
   private getFilterText(filterValue, customOperations) {
