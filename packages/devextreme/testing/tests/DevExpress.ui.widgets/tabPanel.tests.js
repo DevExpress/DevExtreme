@@ -10,6 +10,7 @@ import TabPanel from 'ui/tab_panel';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import translator from 'animation/translator';
 
 
 QUnit.testStart(() => {
@@ -380,27 +381,25 @@ QUnit.module('onSelectionChanging', {
     }
 }, () => {
     QUnit.test('should cancel selection after multiView swipe if e.cancel = true', function(assert) {
-        this.selectionChangingStub = sinon.spy((e) => {
+        this.onSelectionChangingStub = sinon.spy((e) => {
             e.cancel = true;
         });
 
         this.reinit({
-            onSelectionChanging: this.selectionChangingStub,
+            onSelectionChanging: this.onSelectionChangingStub,
             swipeEnabled: true
         });
 
-        const $multiView = this.$tabPanel.find(`.${MULTIVIEW_WRAPPER_CLASS}`);
-
-        const pointer = pointerMock($multiView.get(0));
+        const pointer = pointerMock(this.$tabPanel);
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
 
-        assert.strictEqual(this.selectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
-        assert.strictEqual(this.selectionChangedStub.callCount, 0, 'onSelectionChanged is not called');
+        assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+        assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged is not called');
 
         assert.strictEqual(this.tabPanel.option('selectedIndex'), 0, 'tabPanel selected index is not changed');
 
-        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
-        assert.strictEqual($itemContainer.position().left, 0, 'container was not swiped');
+        const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+        assert.strictEqual(translator.locate($itemContainer).left, 0, 'container was not swiped');
     });
 
     QUnit.module('should cancel selection', () => {
