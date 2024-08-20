@@ -405,6 +405,10 @@ const TabPanel = MultiView.inherit({
     }
   },
 
+  _postprocessSwipe({ swipedTabsIndex }): void {
+    this._setTabsOption('selectedIndex', swipedTabsIndex);
+  },
+
   _visibilityChanged(visible) {
     if (visible) {
       this._tabs._dimensionChanged();

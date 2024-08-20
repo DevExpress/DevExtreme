@@ -428,6 +428,8 @@ const MultiView = CollectionWidget.inherit({
     return index;
   },
 
+  _postprocessSwipe() {},
+
   _swipeEndHandler(e) {
     const targetOffset = e.targetOffset * this._getRTLSignCorrection();
 
@@ -439,7 +441,7 @@ const MultiView = CollectionWidget.inherit({
           this._animateItemContainer(0, noop);
         })
         .done(() => {
-          this._setTabsOption('selectedIndex', newSelectedIndex);
+          this._postprocessSwipe({ swipedTabsIndex: newSelectedIndex });
         });
 
       // TODO: change focusedElement on focusedItem
