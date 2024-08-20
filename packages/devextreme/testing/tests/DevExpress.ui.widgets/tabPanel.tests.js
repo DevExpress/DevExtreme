@@ -623,7 +623,7 @@ QUnit.module('onSelectionChanging', {
         });
     });
 
-    QUnit.test('should apply the selection if e.cancel is not modified', function(assert) {
+    QUnit.test('should apply the selection after swipe if e.cancel is not modified', function(assert) {
         this.reinit({
             swipeEnabled: true
         });
