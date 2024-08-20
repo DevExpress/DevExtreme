@@ -102,3 +102,42 @@ test('TreeList - Template button in a data row isn\'t navigable with Tab button 
     },
   }, '#otherContainer');
 });
+
+test.only('TreeList - Keyboard navigation on Expand/Collapse buttons is broken if the mouse used before (T1234949)', async (t) => {
+  const treeList = new TreeList('#container');
+  const target = treeList.getDataRow(0).getDataCell(0);
+
+  await t
+    .click(treeList.getDataRow(0).getDataCell(0).element.child(0))
+    .click(treeList.getContainer(), { offsetX: 100, offsetY: 600 })
+    .pressKey('tab tab tab')
+    .expect(target.element.focused)
+    .ok();
+
+  await t.debug();
+}).before(
+  async () => createWidget('dxTreeList', {
+    dataSource: [
+      {
+        Task_ID: 1,
+        Task_Subject: 'Plans 2015',
+        Task_Parent_ID: 0,
+      },
+      {
+        Task_ID: 2,
+        Task_Subject: 'Health Insurance',
+        Task_Parent_ID: 1,
+      },
+    ],
+    keyExpr: 'Task_ID',
+    parentIdExpr: 'Task_Parent_ID',
+    columns: [
+      {
+        dataField: 'Task_Subject',
+      },
+      {
+        dataField: 'Task_Assigned_Employee_ID',
+      },
+    ],
+  }),
+);
