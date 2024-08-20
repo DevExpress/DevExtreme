@@ -9472,6 +9472,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.onMessageSend]
      */
     onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
+    /**
+     * [descr:dxChatOptions.renderMessage]
+     */
+    renderMessage?: (message?: DevExpress.ui.dxChat.Message) => void;
   }
   /**
    * [descr:dxCheckBox]

@@ -134,6 +134,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     onMessageSend?: ((e: MessageSendEvent) => void);
+    /**
+     * @docid
+     * @type_function_param1 message?:Message
+     * @type_function_return void
+     * @public
+     */
+    renderMessage?: ((message?: Message) => void);
 }
 
 /**
