@@ -103,7 +103,7 @@ test('TreeList - Template button in a data row isn\'t navigable with Tab button 
   }, '#otherContainer');
 });
 
-test.only('TreeList - Keyboard navigation on Expand/Collapse buttons is broken if the mouse used before (T1234949)', async (t) => {
+test('TreeList - Keyboard navigation on Expand/Collapse buttons is broken if the mouse used before (T1234949)', async (t) => {
   const treeList = new TreeList('#container');
   const target = treeList.getDataRow(0).getDataCell(0);
 
