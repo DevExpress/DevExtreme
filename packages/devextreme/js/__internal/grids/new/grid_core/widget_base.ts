@@ -83,6 +83,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
         pageIndex: 0,
       },
       searchText: '',
+      editingChanges: [],
     };
   }
 

@@ -1,17 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable } from '@ts/core/reactive';
 import { computed, state } from '@ts/core/reactive';
 
 import { HeaderPanelController } from '../header_panel/controller';
+import { OptionsController } from '../options_controller/options_controller';
 import type { PredefinedToolbarItem } from '../types';
+import type { Change } from './types';
 
 export class EditingController {
-  static dependencies = [HeaderPanelController] as const;
+  static dependencies = [HeaderPanelController, OptionsController] as const;
 
   private readonly _isEditing = state(false);
 
   public isEditing: Subscribable<boolean> = this._isEditing;
+
+  public readonly changes = this.options.twoWay('editingChanges');
 
   private readonly saveButtonConfig = computed(
     (isEditing) => ({
@@ -29,11 +34,11 @@ export class EditingController {
     [this.isEditing],
   );
   private readonly revertButtonConfig = computed(
-    (isEditing) => ({
+    (changes) => ({
       name: 'revertButton',
       location: 'after',
       widget: 'dxButton',
-      disabled: !isEditing,
+      disabled: !changes?.length,
       options: {
         text: 'revert',
         onClick: () => {
@@ -41,7 +46,7 @@ export class EditingController {
         },
       },
     } as PredefinedToolbarItem),
-    [this.isEditing],
+    [this.changes],
   );
 
   private readonly editButtonConfig = computed(
@@ -62,6 +67,7 @@ export class EditingController {
 
   constructor(
     private readonly headerPanel: HeaderPanelController,
+    private readonly options: OptionsController,
   ) {
     this.headerPanel.addDefaultItem(this.saveButtonConfig);
     this.headerPanel.addDefaultItem(this.editButtonConfig);
@@ -73,6 +79,7 @@ export class EditingController {
   }
 
   public revert(): void {
+    this.changes.update([]);
     this._isEditing.update(false);
   }
 
@@ -80,7 +87,16 @@ export class EditingController {
     this._isEditing.update(true);
   }
 
-  public onChanged(columnName: string, value: unknown): void {
-    console.log(columnName, value);
+  public onChanged(key: unknown, columnName: string, value: unknown): void {
+    this.changes.update([
+      ...this.changes.unreactive_get() ?? [],
+      {
+        type: 'update',
+        key,
+        data: {
+          [columnName]: value,
+        },
+      },
+    ]);
   }
 }

@@ -102,7 +102,8 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
 
   public twoWay<TProp extends string>(
     name: TProp,
-  ): SubsUpts<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
+  // eslint-disable-next-line max-len
+  ): SubsUpts<PropertyWithDefaults<TProps, TDefaultProps, TProp>> & Gettable<PropertyWithDefaults<TProps, TDefaultProps, TProp>> {
     const obs = state(this.component.option(name));
     this.oneWay(name).subscribe(obs.update.bind(obs) as any);
     return {
@@ -119,6 +120,8 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
           callback?.(value);
         }
       },
+      // @ts-expect-error
+      unreactive_get: obs.unreactive_get.bind(obs),
     };
   }
 }

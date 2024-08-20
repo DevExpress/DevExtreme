@@ -38,12 +38,13 @@ export class ColumnsController {
     private readonly dataController: DataController,
   ) {}
 
-  public createDataRow(dataObject: unknown, columns: Column[]): DataRow {
+  public createDataRow(data: unknown, columns: Column[]): DataRow {
     return {
       cells: columns.map((c) => ({
         column: c,
-        value: c.calculateCellValue(dataObject),
+        value: c.calculateCellValue(data),
       })),
+      key: this.dataController.getDataKey(data),
     };
   }
 }

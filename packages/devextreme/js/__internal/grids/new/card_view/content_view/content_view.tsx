@@ -22,7 +22,7 @@ export class ContentView extends View {
         columns,
       ),
     ),
-    [this.dataController.items, this.columnsController.columns],
+    [this.dataController.itemsWithChanges, this.columnsController.columns],
   );
 
   public vdom = computed(
@@ -35,7 +35,9 @@ export class ContentView extends View {
             <Card
               row={item}
               isEditing={isEditing}
-              onChange={this.editing.onChanged.bind(this.editing)}
+              onChange={
+                (columnName, value): void => this.editing.onChanged(item.key, columnName, value)
+              }
             />
           ))}
         </div>

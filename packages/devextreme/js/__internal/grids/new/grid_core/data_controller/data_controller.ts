@@ -8,6 +8,8 @@ import {
   computed, effect, state,
 } from '@ts/core/reactive';
 
+import { EditingController } from '../editing/controller';
+import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
 import { Search } from '../search/controller';
 
@@ -24,6 +26,8 @@ export function normalizeDataSource(
 
 export class DataController {
   private readonly dataSourceConfiguration = this.options.oneWay('dataSource');
+
+  public readonly keyExpr = this.options.oneWay('keyExpr');
 
   private readonly dataSource = computed(
     normalizeDataSource,
@@ -48,16 +52,27 @@ export class DataController {
 
   public readonly filter = state<any>(undefined);
 
+  public itemsWithChanges = computed(
+    (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
+      (change) => change.key === this.getDataKey(item),
+    ).reduce((p, v) => ({
+      // @ts-expect-error
+      ...item, ...v.data,
+    }), item)),
+    [this.items, this.editing.changes],
+  );
+
   public readonly pageCount = computed(
     (totalCount, pageSize) => Math.ceil(totalCount / pageSize!),
     [this.totalCount, this.pageSize],
   );
 
-  static dependencies = [OptionsController, Search] as const;
+  static dependencies = [OptionsController, Search, EditingController] as const;
 
   constructor(
     private readonly options: OptionsController,
     private readonly search: Search,
+    private readonly editing: EditingController,
   ) {
     effect(
       (dataSource) => {
@@ -83,16 +98,20 @@ export class DataController {
     );
 
     effect(
-      (pageIndex, pageSize, dataSource, filter, searchText) => {
+      (pageIndex, pageSize, dataSource, filter) => {
         dataSource.pageIndex(pageIndex!);
         dataSource.requireTotalCount(true);
         dataSource.pageSize(pageSize!);
         dataSource.filter(filter);
-        dataSource.searchValue(searchText);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dataSource.load();
       },
-      [this.pageIndex, this.pageSize, this.dataSource, this.filter, this.search.searchText],
+      [this.pageIndex, this.pageSize, this.dataSource, this.filter],
     );
+  }
+
+  public getDataKey(data: unknown): unknown {
+    // @ts-expect-error
+    return data[this.keyExpr.unreactive_get()];
   }
 }

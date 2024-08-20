@@ -21,4 +21,6 @@ export interface Cell {
 
 export interface DataRow {
   cells: Cell[];
+
+  key: unknown;
 }
