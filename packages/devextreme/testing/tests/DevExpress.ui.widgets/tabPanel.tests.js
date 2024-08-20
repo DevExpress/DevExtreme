@@ -623,6 +623,20 @@ QUnit.module('onSelectionChanging', {
         });
     });
 
+    QUnit.test('should apply the selection if e.cancel is not modified', function(assert) {
+        this.reinit({
+            swipeEnabled: true
+        });
+
+        const pointer = pointerMock(this.$tabPanel);
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+        assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+        assert.strictEqual(this.onSelectionChangedStub.callCount, 1, 'onSelectionChanged is called');
+
+        assert.strictEqual(this.tabPanel.option('selectedIndex'), 1, 'tabPanel selected index is updated');
+    });
+
     QUnit.module('should cancel selection', () => {
         QUnit.test('when it sets cancel=true in initial config', function(assert) {
             this.onSelectionChangingStub = sinon.spy(function(e) {

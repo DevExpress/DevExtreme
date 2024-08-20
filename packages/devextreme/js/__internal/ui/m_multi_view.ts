@@ -432,10 +432,8 @@ const MultiView = CollectionWidget.inherit({
 
   _swipeEndHandler(e) {
     const targetOffset = e.targetOffset * this._getRTLSignCorrection();
-    const args = { cancel: false };
-    this._actions.onSelectionChanging(args);
 
-    if (targetOffset && !args.cancel) {
+    if (targetOffset) {
       const newSelectedIndex = this._findNextAvailableIndex(this.option('selectedIndex'), -targetOffset);
       this
         .selectItem(newSelectedIndex)
