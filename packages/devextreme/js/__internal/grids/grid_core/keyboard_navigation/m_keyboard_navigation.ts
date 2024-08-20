@@ -732,7 +732,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     if (isOriginalHandlerRequired) {
-      if (isLastValidCell) {
+      const $cell = this._getFocusedCell();
+      const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+      if (isLastValidCell && !isCommandCell) {
         this._toggleInertAttr(true);
       }
       this._editorFactory.loseFocus();
