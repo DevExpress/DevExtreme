@@ -430,10 +430,11 @@ const MultiView = CollectionWidget.inherit({
 
   _swipeEndHandler(e) {
     const targetOffset = e.targetOffset * this._getRTLSignCorrection();
+    const args = { cancel: false };
+    this._actions.onSelectionChanging(args);
 
-    if (targetOffset) {
+    if (targetOffset && !args.cancel) {
       const newSelectedIndex = this._findNextAvailableIndex(this.option('selectedIndex'), -targetOffset);
-
       this.option('selectedIndex', newSelectedIndex);
 
       // TODO: change focusedElement on focusedItem
