@@ -404,40 +404,133 @@ QUnit.module('onSelectionChanging', {
         clock.restore();
     });
 
-    QUnit.test('should cancel selection after multiView swipe if e.cancel = true', function(assert) {
-        this.onSelectionChangingStub = sinon.spy((e) => {
-            e.cancel = true;
+    QUnit.module('after multiView swipe', () => {
+        QUnit.test('should cancel selection if e.cancel = true', function(assert) {
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = true;
+            });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            this.assertSelectionNotChanged(assert);
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+            assert.strictEqual(translator.locate($itemContainer).left, 0, 'container was not swiped');
         });
 
-        this.reinit({
-            onSelectionChanging: this.onSelectionChangingStub,
-            swipeEnabled: true
+        QUnit.test('should cancel selection if e.cancel is a promise resolving with true', function(assert) {
+            const done = assert.async();
+
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(true);
+                    });
+                });
+            });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+
+            setTimeout(() => {
+                this.assertSelectionNotChanged(assert);
+
+                assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+                done();
+            });
         });
 
-        const pointer = pointerMock(this.$tabPanel);
-        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        QUnit.test('should apply selection if e.cancel is a promise resolving with false', function(assert) {
+            const done = assert.async();
 
-        assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
-        assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged is not called');
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(false);
+                    });
+                });
+            });
 
-        assert.strictEqual(this.tabPanel.option('selectedIndex'), 0, 'tabPanel selected index is not changed');
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
 
-        const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
-        assert.strictEqual(translator.locate($itemContainer).left, 0, 'container was not swiped');
-    });
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
 
-    QUnit.test('should apply the selection after swipe if e.cancel is not modified', function(assert) {
-        this.reinit({
-            swipeEnabled: true
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+            assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+
+            setTimeout(() => {
+                this.assertSecondItemSelected(assert);
+
+                assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+                done();
+            });
         });
 
-        const pointer = pointerMock(this.$tabPanel);
-        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+        QUnit.test('should apply selection if e.cancel is a promise which rejects', function(assert) {
+            const done = assert.async();
 
-        assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
-        assert.strictEqual(this.onSelectionChangedStub.callCount, 1, 'onSelectionChanged is called');
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject();
+                    });
+                });
+            });
 
-        assert.strictEqual(this.tabPanel.option('selectedIndex'), 1, 'tabPanel selected index is updated');
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+
+            setTimeout(() => {
+                this.assertSecondItemSelected(assert);
+
+                assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+
+                done();
+            });
+        });
+
+        QUnit.test('should apply the selection if e.cancel is not modified', function(assert) {
+            this.reinit({
+                swipeEnabled: true
+            });
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+
+            this.assertSecondItemSelected(assert);
+
+            assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+        });
     });
 
     QUnit.module('should cancel selection', () => {

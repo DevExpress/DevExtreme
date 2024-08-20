@@ -433,10 +433,14 @@ const MultiView = CollectionWidget.inherit({
 
     if (targetOffset) {
       const newSelectedIndex = this._findNextAvailableIndex(this.option('selectedIndex'), -targetOffset);
-      this.selectItem(newSelectedIndex);
-      if (this.option('selectedIndex') !== newSelectedIndex) {
-        this._animateItemContainer(0, noop);
-      }
+      this
+        .selectItem(newSelectedIndex)
+        .fail(() => {
+          this._animateItemContainer(0, noop);
+        })
+        .done(() => {
+          this._setTabsOption('selectedIndex', newSelectedIndex);
+        });
 
       // TODO: change focusedElement on focusedItem
       const $selectedElement = this.itemElements().filter('.dx-item-selected');
