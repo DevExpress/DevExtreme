@@ -262,13 +262,16 @@ const TabPanel = MultiView.inherit({
       onItemClick: this._titleClickAction.bind(this),
       onItemHold: this._titleHoldAction.bind(this),
       itemHoldTimeout: this.option('itemHoldTimeout'),
-      onSelectionChanging: function (selectionChangingArgs) {
-        this._actions.onSelectionChanging(selectionChangingArgs);
-      }.bind(this),
-      onSelectionChanged: function (e) {
-        this.option('selectedIndex', e.component.option('selectedIndex'));
+      onSelectionChanging: (e): void => {
+        const newTabsSelectedItemData = e.addedItems[0];
+        const newTabsSelectedIndex = this._getIndexByItemData(newTabsSelectedItemData);
+        this.selectItem(newTabsSelectedIndex);
+
+        e.cancel = this.option('selectedIndex') !== newTabsSelectedIndex;
+      },
+      onSelectionChanged: (): void => {
         this._refreshActiveDescendant();
-      }.bind(this),
+      },
       onItemRendered: this._titleRenderedAction.bind(this),
       itemTemplate: this._getTemplateByOption('itemTitleTemplate'),
       items: this.option('items'),
