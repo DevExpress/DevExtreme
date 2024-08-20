@@ -726,6 +726,7 @@ const Calendar = Editor.inherit({
     this._updateNavigatorLabels();
 
     this.setAria('role', 'application');
+    this._updateAriaLabelAndRole();
 
     this._moveToClosestAvailableDate();
   },
@@ -742,6 +743,18 @@ const Calendar = Editor.inherit({
       this._$viewsWrapper = $('<div>').addClass(CALENDAR_VIEWS_WRAPPER_CLASS);
       this.$body.append(this._$viewsWrapper);
     }
+  },
+
+  _updateAriaLabelAndRole() {
+    const readOnly = this.option('readOnly');
+    const $element = this.$element();
+
+    const aria = {
+      role: readOnly ? 'group' : undefined,
+      label: readOnly ? messageLocalization.format('dxCalendar-readOnlyLabel') : undefined,
+    };
+
+    this.setAria(aria, $element);
   },
 
   _setAriaReadonly: noop,
@@ -1541,6 +1554,10 @@ const Calendar = Editor.inherit({
       case 'cellTemplate':
       case 'showTodayButton':
         this._invalidate();
+        break;
+      case 'readOnly':
+        this.callBase(args);
+        this._updateAriaLabelAndRole();
         break;
       case 'skipFocusCheck':
         break;

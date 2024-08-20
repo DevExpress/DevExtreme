@@ -792,11 +792,18 @@ export class ColumnsView extends ColumnStateMixin(View) {
     }
   }
 
-  protected _updateCells($rowElement, $newRowElement, columnIndices) {
+  protected _updateCells($rowElement, $newRowElement, columnIndices, options?) {
+    const that = this;
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
     const cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
+
+    if (options?.node?.hasChildren) {
+      $cells.each(function () {
+        that.setAria('expanded', options.isExpanded, $(this));
+      });
+    }
 
     columnIndices.forEach((columnIndex, index) => {
       const $cell = $cells.eq(columnIndex);
@@ -815,9 +822,13 @@ export class ColumnsView extends ColumnStateMixin(View) {
   /**
    * @extended: editing
    */
-  protected _setCellAriaAttributes($cell, cellOptions) {
+  protected _setCellAriaAttributes($cell, cellOptions, options?) {
     if (cellOptions.rowType !== 'freeSpace') {
       this.setAria('role', 'gridcell', $cell);
+      if (options?.row?.node?.hasChildren) {
+        const { row } = options;
+        this.setAria('expanded', row.isExpanded, $cell);
+      }
 
       const columnIndexOffset = this._columnsController.getColumnIndexOffset();
       const ariaColIndex = cellOptions.columnIndex + columnIndexOffset + 1;
@@ -839,7 +850,7 @@ export class ColumnsView extends ColumnStateMixin(View) {
 
     const $cell = this._createCell(cellOptions);
 
-    this._setCellAriaAttributes($cell, cellOptions);
+    this._setCellAriaAttributes($cell, cellOptions, options);
 
     this._renderCellContent($cell, cellOptions, options);
 

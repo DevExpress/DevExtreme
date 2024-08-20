@@ -186,7 +186,7 @@ QUnit.module('General', () => {
             ]
         });
 
-        tabsEl.find('.dx-tab').eq(1).trigger('dxclick');
+        tabsEl.find(`.${TABS_ITEM_CLASS}`).eq(1).trigger('dxclick');
         assert.equal(selectedIndex, 1);
 
     });
@@ -204,7 +204,7 @@ QUnit.module('General', () => {
             ]
         });
 
-        tabsEl.find('.dx-tab').eq(1).trigger('dxclick');
+        tabsEl.find(`.${TABS_ITEM_CLASS}`).eq(1).trigger('dxclick');
         assert.equal(selectedIndex, undefined);
     });
 
@@ -422,6 +422,214 @@ QUnit.module('General', () => {
 });
 
 QUnit.module('Tab select action', () => {
+    QUnit.module('onSelectionChanging', {
+        beforeEach() {
+            this.onSelectionChangingStub = sinon.stub();
+            this.onSelectionChangedStub = sinon.stub();
+            this.firstItem = { text: '0' };
+            this.secondItem = { text: '1' };
+            const initialOptions = {
+                items: [
+                    this.firstItem,
+                    this.secondItem,
+                    { text: '2' },
+                    { text: '3' }
+                ],
+                onSelectionChanging: this.onSelectionChangingStub,
+                onSelectionChanged: this.onSelectionChangedStub,
+                selectByClick: true,
+                selectedIndex: 0
+            };
+            this.init = (options) => {
+                this.$tabs = $('#tabs');
+                this.tabs = this.$tabs
+                    .dxTabs($.extend({}, initialOptions, options))
+                    .dxTabs('instance');
+            };
+            this.reinit = (options) => {
+                this.tabs.dispose();
+
+                this.init(options);
+            };
+
+            this.init();
+
+            this.assertSelectionNotChanged = (assert) => {
+                assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called once');
+                assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged should not be called');
+
+                assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'selectedIndex should remain 0');
+                assert.deepEqual(this.tabs.option('selectedItem'), this.firstItem, 'selectedItem should remain the first item');
+                assert.deepEqual(this.tabs.option('selectedItems'), [this.firstItem], 'selectedItems should remain the first item');
+                assert.deepEqual(this.tabs.option('selectedItemKeys'), [this.firstItem], 'selectedItemKeys should remain the first key');
+            };
+            this.assertSecondItemSelected = (assert) => {
+                assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+                assert.strictEqual(this.onSelectionChangedStub.callCount, 1, 'onSelectionChanged should be called');
+
+                assert.strictEqual(this.tabs.option('selectedIndex'), 1, 'selectedIndex should be updated to 1');
+                assert.deepEqual(this.tabs.option('selectedItem'), this.secondItem, 'selectedItem should be equal to the second item');
+                assert.deepEqual(this.tabs.option('selectedItems'), [this.secondItem], 'selectedItems should contain second item');
+                assert.deepEqual(this.tabs.option('selectedItemKeys'), [this.secondItem], 'selectedItemKeys should contain second item');
+            };
+        }
+    }, () => {
+        QUnit.module('selection should be cancelled when onSelectionChanging', () => {
+            QUnit.test('is specified on init and sets cancel=true', function(assert) {
+                this.onSelectionChangingStub = sinon.spy((e) => {
+                    e.cancel = true;
+                });
+
+                this.reinit({
+                    onSelectionChanging: this.onSelectionChangingStub,
+                });
+
+                const $item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+                $item.trigger('dxclick');
+
+                this.assertSelectionNotChanged(assert);
+            });
+
+            QUnit.test('is changed at runtime and sets cancel=true', function(assert) {
+                this.onSelectionChangingStub = sinon.spy(function(e) {
+                    e.cancel = true;
+                });
+
+                this.tabs.option({
+                    onSelectionChanging: this.onSelectionChangingStub,
+                });
+
+                this.$item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+                this.$item.trigger('dxclick');
+
+                this.assertSelectionNotChanged(assert);
+            });
+
+            QUnit.test('sets e.cancel to promise resolved with true', function(assert) {
+                const done = assert.async();
+
+                this.onSelectionChangingStub = sinon.spy(function(e) {
+                    e.cancel = new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve(true);
+                        });
+                    });
+                });
+
+                this.tabs.option('onSelectionChanging', this.onSelectionChangingStub);
+
+                const $item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+
+                assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'initial selectedIndex should be 0');
+                assert.strictEqual(this.onSelectionChangingStub.callCount, 0, 'onSelectionChanging should not be called initially');
+
+                $item.trigger('dxclick');
+
+                setTimeout(() => {
+                    this.assertSelectionNotChanged(assert);
+                    done();
+                });
+            });
+        });
+
+        QUnit.module('selection should be applied when onSelectionChanging', () => {
+            QUnit.test('does not update e.cancel', function(assert) {
+                this.$item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+                this.$item.trigger('dxclick');
+
+                assert.strictEqual(this.onSelectionChangingStub.getCall(0).args[0].cancel, false, 'e.cancel should be set to false');
+
+                this.assertSecondItemSelected(assert);
+            });
+
+            QUnit.test('sets e.cancel to a promise resolved with false', function(assert) {
+                const done = assert.async();
+
+                this.onSelectionChangingStub = sinon.spy(function(e) {
+                    e.cancel = new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve(false);
+                        });
+                    });
+                });
+
+                this.tabs.option('onSelectionChanging', this.onSelectionChangingStub);
+
+                const $item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+
+                assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'initial selectedIndex should be 0');
+                assert.strictEqual(this.onSelectionChangingStub.callCount, 0, 'onSelectionChanging should not be called initially');
+
+                $item.trigger('dxclick');
+
+                setTimeout(() => {
+                    this.assertSecondItemSelected(assert);
+                    done();
+                });
+            });
+
+            QUnit.test('sets e.cancel to a rejected promise', function(assert) {
+                const done = assert.async();
+
+                this.onSelectionChangingStub = sinon.spy((e) => {
+                    e.cancel = new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            reject('Cancellation error');
+                        });
+                    });
+                });
+
+                this.tabs.option('onSelectionChanging', this.onSelectionChangingStub);
+
+                const $item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+                $item.trigger('dxclick');
+
+                assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called after click');
+                assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged should not be called before promise resolves');
+
+                setTimeout(() => {
+                    this.assertSecondItemSelected(assert);
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('multiple items should be selected and one item deselected correctly', function(assert) {
+            this.tabs.option('selectionMode', 'multiple');
+
+            const expectedResult = [
+                { 'text': '1' },
+                { 'text': '2' }
+            ];
+            this.reinit({
+                selectedIndex: -1,
+                selectionMode: 'multiple'
+            });
+
+            const $item1 = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+            const $item2 = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+            const $item3 = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(2);
+
+            // NOTE: Select items.
+            $item1.trigger('dxclick');
+            $item2.trigger('dxclick');
+            $item3.trigger('dxclick');
+
+            // NOTE: Deselect the first item.
+            $item1.trigger('dxclick');
+
+            const selectedItems = this.tabs.option('selectedItems');
+
+            assert.deepEqual(selectedItems, expectedResult, 'Items with indexes 1 and 2 should be selected');
+            assert.deepEqual(this.tabs.option('selectedItem'), this.secondItem, 'selectedItem should be updated properly');
+            assert.deepEqual(this.tabs.option('selectedItems'), expectedResult, 'selectedItems should be updated properly');
+            assert.deepEqual(this.tabs.option('selectedItemKeys'), expectedResult, 'selectedItemKeys should be updated properly');
+
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 4, 'onSelectionChanging should be called for each action');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 4, 'onSelectionChanged should be called for each complete selection change');
+        });
+    });
+
     QUnit.test('should not be triggered when is already selected', function(assert) {
         let count = 0;
 

@@ -25,6 +25,242 @@ class TestComponent extends CollectionWidget {
 
 const getItemElement = (instance, itemIndex) => instance.itemElements().eq(itemIndex);
 
+module('onSelectionChanging event', () => {
+    module('parameters', () => {
+        test('should have corect parameters', function(assert) {
+            const selectionChangingStub = sinon.stub();
+            const $element = $('#cmp');
+
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'multiple',
+                onSelectionChanging: selectionChangingStub
+            });
+
+            instance.selectItem(0);
+
+            const e = selectionChangingStub.getCall(0).args[0];
+            assert.strictEqual(Object.keys(e).length, 5, '5 parameters are presented');
+            assert.strictEqual(e.component, instance, 'component parameter is correct');
+            assert.strictEqual(e.element, instance.element(), 'element parameter is correct');
+            assert.deepEqual(e.addedItems, [0], 'addedItems parameter is correct');
+            assert.deepEqual(e.removedItems, [], 'removedItems parameter is correct');
+            assert.strictEqual(e.cancel, false, 'cancel parameter is correct');
+        });
+
+        test('addedItems and removedItems patameters should be correct when new selection is applied', function(assert) {
+            const $element = $('#cmp');
+
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'multiple',
+                selectedItemKeys: [0, 1, 2],
+                onSelectionChanging: function({ addedItems, removedItems }) {
+                    assert.deepEqual(addedItems, [3], 'addedItems is correct');
+                    assert.deepEqual(removedItems, [0], 'removedItems is correct');
+                }
+            });
+
+            instance.option('selectedItemKeys', [1, 2, 3]);
+        });
+    });
+
+    module('should be triggered on selection change', () => {
+        test('if is subscribed using "on" method', function(assert) {
+            const selectionChangingHandler = sinon.stub();
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'multiple'
+            });
+
+            instance.on('selectionChanging', selectionChangingHandler);
+
+            instance.selectItem(1);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+        });
+
+        test('if is passed on initial config', function(assert) {
+            const selectionChangingHandler = sinon.stub();
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'multiple',
+                onSelectionChanging: selectionChangingHandler
+            });
+
+            instance.selectItem(1);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+        });
+
+        test('if is changed at runtime', function(assert) {
+            const selectionChangingHandler = sinon.stub();
+
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'multiple',
+            });
+
+            instance.option('onSelectionChanging', selectionChangingHandler);
+            instance.selectItem(1);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+        });
+    });
+
+    QUnit.module('should cancel selection change', () => {
+        QUnit.test('if e.cancel=true', function(assert) {
+            const selectionChangingHandler = sinon.spy((e) => {
+                e.cancel = true;
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'multiple',
+                selectedIndex: 0,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
+
+            instance.selectItem(1);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged should not be raised');
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex should be remain unchanged');
+        });
+
+        QUnit.test('if e.cancel is a promise resolved with true', function(assert) {
+            const done = assert.async();
+
+            const selectionChangingHandler = sinon.spy((e) => {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(true);
+                    });
+                });
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'multiple',
+                selectedIndex: 0,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
+
+            instance.selectItem(1);
+
+            setTimeout(() => {
+                assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+                assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged should not be raised');
+                assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex should be remain unchanged');
+                done();
+            });
+        });
+    });
+
+    QUnit.module('should not prevent selection change', () => {
+        QUnit.test('if e.cancel is false', function(assert) {
+            const selectionChangingHandler = sinon.stub();
+            const selectionChangedHandler = sinon.stub();
+
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectedIndex: 0,
+                selectionMode: 'single',
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
+
+            instance.selectItem(1);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+            assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged should be raised once');
+            assert.strictEqual(instance.option('selectedIndex'), 1, 'selectedIndex should be updated');
+        });
+
+        QUnit.test('if e.cancel is a promise resolved with false', function(assert) {
+            const done = assert.async();
+
+            const selectionChangingHandler = sinon.spy((e) => {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(false);
+                    });
+                });
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'single',
+                selectedIndex: 0,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
+
+            instance.selectItem(1);
+
+            setTimeout(() => {
+                assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+                assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged should be raised once');
+                assert.strictEqual(instance.option('selectedIndex'), 1, 'selectedIndex should be updated');
+                done();
+            });
+        });
+
+        QUnit.test('if e.cancel is a rejected promise', function(assert) {
+            const done = assert.async();
+
+            const selectionChangingHandler = sinon.spy((e) => {
+                e.cancel = new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject();
+                    });
+                });
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                items: [0, 1, 2, 3],
+                selectionMode: 'single',
+                selectedIndex: 0,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
+
+            instance.selectItem(1);
+
+            setTimeout(() => {
+                assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+                assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged should be raised once');
+                assert.strictEqual(instance.option('selectedIndex'), 1, 'selectedIndex should be updated');
+                done();
+            });
+        });
+    });
+});
+
 module('selecting of items', {
     beforeEach: function() {
         this.items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
@@ -272,6 +508,20 @@ module('selecting of items', {
         });
 
         this.instance.option('selectedItems', [this.items[0]]);
+    });
+
+    test('onSelectionChanged should have correct parameters', function(assert) {
+        const selectionChangedStub = sinon.stub();
+        this.instance.option('onSelectionChanged', selectionChangedStub);
+
+        this.instance.option('selectedIndex', 1);
+
+        const e = selectionChangedStub.getCall(0).args[0];
+        assert.strictEqual(Object.keys(e).length, 4, '4 parameters are presented');
+        assert.strictEqual(e.component, this.instance, 'component parameter is correct');
+        assert.strictEqual(e.element, this.instance.element(), 'element parameter is correct');
+        assert.deepEqual(e.addedItems, [{ 'a': 1 }], 'addedItems parameter is correct');
+        assert.deepEqual(e.removedItems, [], 'removedItems parameter is correct');
     });
 
     test('onSelectionChanged should not be fired if selection not changed', function(assert) {

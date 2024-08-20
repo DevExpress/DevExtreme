@@ -742,7 +742,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     if (isOriginalHandlerRequired) {
-      if (isLastValidCell) {
+      const $cell = this._getFocusedCell();
+      const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+      if (isLastValidCell && !isCommandCell) {
         this._toggleInertAttr(true);
       }
       this._editorFactory.loseFocus();
@@ -1656,7 +1658,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   public _resetFocusedCell(preventScroll?) {
     const $cell = this._getFocusedCell();
 
-    isElementDefined($cell) && $cell.removeAttr('tabindex');
+    isElementDefined($cell) && $cell.removeAttr('tabindex').removeClass(CELL_FOCUS_DISABLED_CLASS);
     this._isNeedFocus = false;
     this._isNeedScroll = false;
     this._focusedCellPosition = {};
