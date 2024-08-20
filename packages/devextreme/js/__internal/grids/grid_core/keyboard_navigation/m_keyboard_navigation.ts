@@ -1656,7 +1656,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   public _resetFocusedCell(preventScroll?) {
     const $cell = this._getFocusedCell();
 
-    isElementDefined($cell) && $cell.removeAttr('tabindex');
+    isElementDefined($cell) && $cell.removeAttr('tabindex').removeClass(CELL_FOCUS_DISABLED_CLASS);
     this._isNeedFocus = false;
     this._isNeedScroll = false;
     this._focusedCellPosition = {};
