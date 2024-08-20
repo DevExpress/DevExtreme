@@ -311,16 +311,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
 .dx-scheduler-appointment-collector {
   height: $generic-scheduler-appointment-collector-height;
-
-  &.dx-state-hover {
-    &::before {
-      border-radius: $generic-scheduler-appointment-collector-height;
-    }
-  }
-
-  &.dx-button.dx-button-default {
-    border-radius: $generic-scheduler-appointment-collector-height;
-  }
 }
 
 .dx-scheduler-appointment {

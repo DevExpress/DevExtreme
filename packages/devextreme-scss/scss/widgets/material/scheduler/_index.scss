@@ -58,8 +58,6 @@ $material-scheduler-month-date-text-size: 14px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
-$material-scheduler-compact-appointment-button-border-radius: 12px;
-
 $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
@@ -357,7 +355,6 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   position: absolute;
 
   &.dx-button {
-    border-radius: $material-scheduler-compact-appointment-button-border-radius;
     height: $material-scheduler-dropdown-button-height;
     min-width: auto;
     width: auto;

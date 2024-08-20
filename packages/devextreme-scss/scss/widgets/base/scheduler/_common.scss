@@ -37,6 +37,7 @@ $scheduler-popup-scrollable-content-padding: 20px;
 }
 
 .dx-scheduler-appointment-collector {
+  box-shadow: none;
   position: absolute;
   display: block;
   height: $scheduler-appointment-collector-height;
@@ -63,7 +64,6 @@ $scheduler-popup-scrollable-content-padding: 20px;
   &.dx-button.dx-button-default {
     padding: 0;
     max-width: none;
-    border-radius: $scheduler-appointment-collector-height;
   }
 }
 
