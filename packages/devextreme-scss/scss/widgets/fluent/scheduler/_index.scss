@@ -55,6 +55,8 @@ $fluent-scheduler-month-date-text-size: 14px;
 
 $scheduler-first-of-month-border: 1px solid $scheduler-first-month-border-color;
 
+$fluent-scheduler-compact-appointment-button-border-radius: 12px;
+
 $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
 @include baseScheduler.scheduler-mixin();
@@ -419,6 +421,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
   position: absolute;
 
   &.dx-button {
+    border-radius: $fluent-scheduler-compact-appointment-button-border-radius;
     height: $fluent-scheduler-dropdown-button-height;
     min-width: auto;
     width: auto;
