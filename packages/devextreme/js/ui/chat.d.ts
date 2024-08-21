@@ -145,8 +145,9 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
 export default class dxChat extends Widget<Properties> {
     /**
      * @docid
-     * @type_function_param1 message?:Message
-     * @type_function_return void
+     * @publicName renderMessage(message)
+     * @param1 message:Message
+     * @return void
      * @public
      */
     renderMessage(message: Message): void;

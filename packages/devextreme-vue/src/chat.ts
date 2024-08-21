@@ -12,7 +12,6 @@ type AccessibleOptions = Pick<Properties,
   "onInitialized" |
   "onMessageSend" |
   "onOptionChanged" |
-  "renderMessage" |
   "rtlEnabled" |
   "title" |
   "user" |
@@ -34,7 +33,6 @@ const DxChat = createComponent({
     onInitialized: Function,
     onMessageSend: Function,
     onOptionChanged: Function,
-    renderMessage: Function,
     rtlEnabled: Boolean,
     title: String,
     user: Object,
@@ -53,7 +51,6 @@ const DxChat = createComponent({
     "update:onInitialized": null,
     "update:onMessageSend": null,
     "update:onOptionChanged": null,
-    "update:renderMessage": null,
     "update:rtlEnabled": null,
     "update:title": null,
     "update:user": null,

@@ -128,19 +128,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
-     * [descr:dxChatOptions.renderMessage]
-    
-     */
-    @Input()
-    get renderMessage(): Function {
-        return this._getOption('renderMessage');
-    }
-    set renderMessage(value: Function) {
-        this._setOption('renderMessage', value);
-    }
-
-
-    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -276,13 +263,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() renderMessageChange: EventEmitter<Function>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -346,7 +326,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'heightChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
-            { emit: 'renderMessageChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'titleChange' },
             { emit: 'userChange' },
