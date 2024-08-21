@@ -965,6 +965,52 @@ QUnit.module('Templates', () => {
         }
     });
 
+    QUnit.test('should not raise E1010 error if onRendered is received for a previous render function call (T1247338)', function(assert) {
+        const clock = sinon.useFakeTimers();
+        let renderCounter = 0;
+        const items = [{ id: 1, text: 'Item_1' }, { id: 12, text: 'Item_2' }];
+
+        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            dataSource: items,
+            value: 1,
+            valueExpr: 'id',
+            fieldTemplate: 'field',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    field: {
+                        render: function({ container, model, onRendered }) {
+                            const $textBox = $('<div>').dxTextBox({ text: model });
+
+                            $textBox.appendTo(container);
+
+                            setTimeout(() => {
+                                renderCounter++;
+
+                                if(renderCounter === 1) {
+                                    domAdapter.removeElement(dropDownEditor.$element().find(`.${TEXT_EDITOR_INPUT_CLASS}`).get(0));
+                                    onRendered();
+                                }
+                            });
+                        }
+                    }
+                }
+            },
+        }).dxDropDownEditor('instance');
+
+        try {
+            dropDownEditor.option('value', 2);
+            dropDownEditor.option('value', 1);
+
+            clock.tick(110);
+        } catch(e) {
+            assert.ok(false, `Error E1010 is raised: ${e.message}`);
+        } finally {
+            clock.restore();
+            assert.ok(true);
+        }
+    });
+
     QUnit.test('should not raise error if onRendered is received for a removed template (T1178295, T1059261)', function(assert) {
         const clock = sinon.useFakeTimers();
 
