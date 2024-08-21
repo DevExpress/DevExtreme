@@ -9435,16 +9435,15 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_chat_MessageSendEvent]
      */
-    export type MessageSendEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<
-        dxChat,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > & {
-        /**
-         * [descr:MessageSendEvent.message]
-         */
-        readonly message?: Message;
-      };
+    export type MessageSendEvent = DevExpress.events.NativeEventInfo<
+      dxChat,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > & {
+      /**
+       * [descr:MessageSendEvent.message]
+       */
+      readonly message?: Message;
+    };
     /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
