@@ -2702,7 +2702,7 @@ test('Focus behavior should be correct when editing cells', async (t) => {
   },
 }));
 
-test.only('DataGrid - Revert button flickers in `cell` editing mode (T1247323)', async (t) => {
+test('DataGrid - Revert button flickers in `cell` editing mode (T1247323)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const revertButton = dataGrid.getRevertButton();
 
