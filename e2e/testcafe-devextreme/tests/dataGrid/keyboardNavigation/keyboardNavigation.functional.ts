@@ -4738,7 +4738,6 @@ test('Cancel button in the last column cannot be focused via the Tab key (T12489
   const saveButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(0);
   const cancelButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(1);
   const inputCell = dataGrid.getDataCell(0, 0).element;
-
   await t
     .click(inputCell)
     .pressKey('tab')
