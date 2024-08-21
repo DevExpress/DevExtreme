@@ -2,6 +2,7 @@ import { setWidth, getWidth, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 
 import 'generic_light.css!';
 import Pager from 'ui/pager';
@@ -26,6 +27,16 @@ function getText(element) {
 
 function isLightMode(pager) {
     return pager.$element().hasClass('dx-light-mode');
+}
+
+let resizingInProcess = false;
+function _dimensionChanged(pager) {
+    if(!resizingInProcess) {
+        resizingInProcess = true;
+        resizeCallbacks.fire();
+        pager._refresh();
+    }
+    resizingInProcess = false;
 }
 
 QUnit.module('Pager', {
@@ -907,7 +918,7 @@ function() {
         assert.equal($pager.find('.dx-next-button').length, 1, 'next button');
     });
 
-    QUnit.test.skip('Light mode. Change page index after clicked on the pages count element', function(assert) {
+    QUnit.test('Light mode. Change page index after clicked on the pages count element', function(assert) {
         $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 110,
@@ -1033,7 +1044,7 @@ function() {
         assert.equal(selectBox.option('value'), 13);
     });
 
-    QUnit.test.skip('Light mode. Change page sizes via option method', function(assert) {
+    QUnit.test('Light mode. Change page sizes via option method', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
@@ -1150,7 +1161,7 @@ function() {
         assert.equal(pageIndex, 1, 'prev page index');
     });
 
-    QUnit.test.skip('Light mode. Min and max for the pageIndex editor', function(assert) {
+    QUnit.test('Light mode. Min and max for the pageIndex editor', function(assert) {
         let pageIndex;
 
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
@@ -1183,7 +1194,7 @@ function() {
         assert.equal(pageIndex, 10, '23 value');
     });
 
-    QUnit.test.skip('Apply light mode when width of pager is less of min width', function(assert) {
+    QUnit.test('Apply light mode when width of pager is less of min width', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
@@ -1199,11 +1210,12 @@ function() {
         assert.equal(isLightMode(pager), false, 'lightModeEnabled by default');
 
         $pager.width(100);
+        _dimensionChanged(pager);
 
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
-    QUnit.test.skip('Apply light mode when width equal optimal pager\'s width', function(assert) {
+    QUnit.test('Apply light mode when width equal optimal pager\'s width', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
@@ -1216,12 +1228,16 @@ function() {
         });
 
         const pager = $pager.dxPager('instance');
+        const pagesElement = getPagesElement($('#container'));
 
-        const optimalPagerWidth = getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - getWidth(pager._pages[pager._pages.length - 1]._$page);
+        const optimalPagerWidth = getWidth(
+            $pager.find('.dx-page-sizes')) +
+            getWidth($pager.find('.dx-pages')) -
+            getWidth(pagesElement[pagesElement.length - 1]);
 
-        $pager.width(optimalPagerWidth - getOuterWidth(pager._$info, true) - 1);
+        $pager.width(optimalPagerWidth - getOuterWidth($pager.find('.dx-info'), true) - 1);
 
-        pager._dimensionChanged();
+        _dimensionChanged(pager);
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
     });
 
@@ -1405,8 +1421,8 @@ function() {
         });
         const pager = $pager.dxPager('instance');
 
-        $pager.width(getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - 50);
-        pager._dimensionChanged();
+        $pager.width(getWidth(pager.find('.dx-page-sizes')) + getWidth(pager.find('.dx-pages')) - 50);
+        _dimensionChanged(pager);
 
         assert.ok(!isLightMode(pager), 'lightModeEnabled');
         assert.ok(pager._$info.length === 0 || pager._$info.css('display') === 'none', 'info element is hidden');

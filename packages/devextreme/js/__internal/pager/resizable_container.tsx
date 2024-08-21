@@ -157,6 +157,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       showPageSizes,
       totalCount,
       visible,
+      style,
     } = this.props.pagerProps;
 
     return {
@@ -183,6 +184,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       totalCount,
       onKeyDown,
       label,
+      style,
     };
   }
 

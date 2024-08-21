@@ -194,6 +194,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
       pageIndexChangedInternal,
       pagesCountText,
       showNavigationButtons,
+      style,
     } = this.props;
 
     return (
@@ -203,6 +204,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
         classes={this.getClasses()}
         visible={visible}
         aria={this.getAria()}
+        {...style as []}
       >
         {showPageSizes && (
           <PageSizeSelector
