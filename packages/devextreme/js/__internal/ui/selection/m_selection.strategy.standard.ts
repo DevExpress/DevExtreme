@@ -245,9 +245,9 @@ export default class StandardStrategy extends SelectionStrategy {
   }
 
   selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
-    const deferred = this._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
+    const loadingDeferred = this._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
     const selectionDeferred = Deferred();
-    deferred.done((items) => {
+    loadingDeferred.done((items) => {
       const { selectedItemKeys, selectedItems } = this.options;
       if (preserve) {
         this._preserveSelectionUpdate(items, isDeselect);
@@ -262,7 +262,7 @@ export default class StandardStrategy extends SelectionStrategy {
 
       this._callCallbackIfNotCanceled(() => {
         this.onSelectionChanged();
-        selectionDeferred.resolve();
+        selectionDeferred.resolve(items);
       }, () => {
         this._clearItemKeys();
         this._setOption('selectedItemKeys', selectedItemKeys);
