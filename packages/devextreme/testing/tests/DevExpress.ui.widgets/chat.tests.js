@@ -401,7 +401,7 @@ QUnit.module('renderMessage', moduleConfig, () => {
         assert.strictEqual(renderMessageStub.callCount, 1);
     });
 
-    QUnit.test('Message list should run invalidate if all items was updated, but the items length the same', function(assert) {
+    QUnit.test('Message list should run invalidate if new items length is the same as current items length', function(assert) {
         const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
 
         const { items } = this.instance.option();

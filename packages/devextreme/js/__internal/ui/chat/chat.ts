@@ -105,7 +105,7 @@ class Chat extends Widget<Properties> {
     this._messageSendAction?.({ message, event });
   }
 
-  _oneMessageWasAddedToTheEnd(value: Message[], previousValue: Message[]): boolean {
+  _isMessageAddedToEnd(value: Message[], previousValue: Message[]): boolean {
     const valueLength = value.length;
     const previousValueLength = previousValue.length;
 
@@ -113,13 +113,13 @@ class Chat extends Widget<Properties> {
     const lastPreviousValueItem = previousValue[previousValueLength - 1];
 
     const isLastItemNotTheSame = lastValueItem !== lastPreviousValueItem;
-    const increasedNotByMoreThanOne = valueLength - previousValueLength === 1;
+    const isLengthIncreasedByOne = valueLength - previousValueLength === 1;
 
-    return isLastItemNotTheSame && increasedNotByMoreThanOne;
+    return isLastItemNotTheSame && isLengthIncreasedByOne;
   }
 
   _processItemsUpdating(value: Message[], previousValue: Message[]): void {
-    const shouldItemsBeUpdatedCompletely = !this._oneMessageWasAddedToTheEnd(value, previousValue);
+    const shouldItemsBeUpdatedCompletely = !this._isMessageAddedToEnd(value, previousValue);
 
     if (shouldItemsBeUpdatedCompletely) {
       this._messageList?.option('items', value);
