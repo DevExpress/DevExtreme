@@ -626,6 +626,8 @@ QUnit.module('onSelectionChanging', {
             const pointer = pointerMock(this.$tabPanel);
             pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
             assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'selectionChanged is not called until promise is resolved');
 
             setTimeout(() => {
                 this.assertSecondItemSelected(assert);
@@ -657,6 +659,8 @@ QUnit.module('onSelectionChanging', {
             pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
 
             assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'selectionChanged is not called until promise is resolved');
 
             setTimeout(() => {
                 this.assertSecondItemSelected(assert);
