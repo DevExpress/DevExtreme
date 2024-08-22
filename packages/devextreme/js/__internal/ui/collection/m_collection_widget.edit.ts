@@ -690,11 +690,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   selectItem(itemElement) {
-    if (this.option('selectionMode') === 'none') return Deferred().reject();
+    if (this.option('selectionMode') === 'none') return Deferred().resolve();
 
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
-      return Deferred().reject();
+      return Deferred().resolve();
     }
 
     const key = this._getKeyByIndex(itemIndex);
