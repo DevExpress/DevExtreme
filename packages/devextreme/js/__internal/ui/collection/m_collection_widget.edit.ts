@@ -700,7 +700,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     const key = this._getKeyByIndex(itemIndex);
 
     if (this._selection.isItemSelected(key)) {
-      return Deferred().reject();
+      return Deferred().resolve();
     }
 
     if (this.option('selectionMode') === 'single') {
