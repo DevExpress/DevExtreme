@@ -370,7 +370,9 @@ QUnit.module('renderMessage', moduleConfig, () => {
 
         assert.strictEqual($(lastBubble).text(), text);
     });
+});
 
+QUnit.module('Items change performance', moduleConfig, () => {
     QUnit.test('Message list should not run invalidate if 1 new message has been added to items', function(assert) {
         const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
 
