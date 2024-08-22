@@ -270,12 +270,30 @@ const TabPanel = MultiView.inherit({
       onItemClick: this._titleClickAction.bind(this),
       onItemHold: this._titleHoldAction.bind(this),
       itemHoldTimeout: this.option('itemHoldTimeout'),
-      onSelectionChanged: (e): void => {
-        this
-          .selectItem(e.component.option('selectedIndex'))
-          .fail(() => {
-            this._setTabsOption('selectedItem', e.removedItems[0]);
-          });
+      onSelectionChanging: (e): void => {
+        const newTabsSelectedItemData = e.addedItems[0];
+        const newTabsSelectedIndex = this._getIndexByItemData(newTabsSelectedItemData);
+
+        const selectingResult = this.selectItem(newTabsSelectedIndex);
+
+        const promiseState = selectingResult.state();
+        if (promiseState !== 'pending') {
+          // NOTE: Keep selection change process synchronious if possible.
+          e.cancel = promiseState === 'rejected';
+          return;
+        }
+
+        e.cancel = new Promise((resolve) => {
+          selectingResult
+            .done(() => {
+              resolve(false);
+            })
+            .fail(() => {
+              resolve(true);
+            });
+        });
+      },
+      onSelectionChanged: (): void => {
         this._refreshActiveDescendant();
       },
       onItemRendered: this._titleRenderedAction.bind(this),
