@@ -150,9 +150,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       mode: this.option('selectionMode'),
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
-      onSelectionChanging(args): void {
+      onSelectionChanging: (args): void => {
         const isSelectionChanged = args.addedItemKeys.length || args.removedItemKeys.length;
-        if (!that._rendered || !isSelectionChanged) {
+        if (!this._rendered || !isSelectionChanged) {
           return;
         }
 
@@ -161,13 +161,13 @@ const CollectionWidget = BaseCollectionWidget.inherit({
           addedItems: args.addedItems,
           cancel: false,
         };
-        that._actions.onSelectionChanging(selectionChangingArgs);
+        this._actions?.onSelectionChanging(selectionChangingArgs);
         args.cancel = selectionChangingArgs.cancel;
       },
-      onSelectionChanged(args): void {
+      onSelectionChanged: (args): void => {
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-          that._updateSelectedItems(args);
+          this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+          this._updateSelectedItems(args);
         }
       },
       filter: that._getCombinedFilter.bind(that),
