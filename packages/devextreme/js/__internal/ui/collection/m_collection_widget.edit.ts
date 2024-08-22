@@ -690,17 +690,17 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   selectItem(itemElement) {
-    if (this.option('selectionMode') === 'none') return Deferred().resolve();
+    if (this.option('selectionMode') === 'none') return Deferred().reject();
 
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
-      return Deferred().resolve();
+      return Deferred().reject();
     }
 
     const key = this._getKeyByIndex(itemIndex);
 
     if (this._selection.isItemSelected(key)) {
-      return Deferred().resolve();
+      return Deferred().reject();
     }
 
     if (this.option('selectionMode') === 'single') {

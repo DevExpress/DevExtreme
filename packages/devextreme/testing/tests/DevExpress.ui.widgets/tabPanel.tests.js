@@ -419,6 +419,21 @@ QUnit.module('onSelectionChanging', {
                     resolve(false);
                 }, delay);
             });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                focusStateEnabled: true
+            });
+
+            this.tabPanel.focus();
+
+            const keyboard = keyboardMock(this.$tabs);
+            keyboard.press('right');
+
+            this.assertSelectionNotChanged(assert);
+
+            const $secondTab = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+            assert.ok($secondTab.hasClass(FOCUS_STATE_CLASS), 'focus is moved to the second tab');
         });
 
         const items = [{ text: '1' }, { text: '2' }, { text: '3' }];
@@ -632,8 +647,9 @@ QUnit.module('onSelectionChanging', {
             setTimeout(() => {
                 this.assertSecondItemSelected(assert);
 
-                assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
-                done();
+                    assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+                    done();
+                });
             });
         });
 
@@ -663,11 +679,13 @@ QUnit.module('onSelectionChanging', {
             assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'selectionChanged is not called until promise is resolved');
 
             setTimeout(() => {
-                this.assertSecondItemSelected(assert);
+                setTimeout(() => {
+                    this.assertSecondItemSelected(assert);
 
-                assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+                    assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
 
-                done();
+                    done();
+                });
             });
         });
 
