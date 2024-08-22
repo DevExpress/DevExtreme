@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
@@ -12,14 +13,16 @@ const CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS = 'dx-chat-message-group-alignmen
 const CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS = 'dx-chat-message-group-alignment-end';
 const CHAT_MESSAGE_GROUP_INFORMATION_CLASS = 'dx-chat-message-group-information';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
-const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
+const CHAT_MESSAGE_AUTHOR_NAME_CLASS = 'dx-chat-message-author-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 
+export type MessageGroupAlignment = 'start' | 'end';
+
 export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
   items: Message[];
-  alignment: 'start' | 'end';
+  alignment: MessageGroupAlignment;
 }
 
 class MessageGroup extends Widget<MessageGroupOptions> {
@@ -33,39 +36,52 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     };
   }
 
-  _getAlignmentClass(): string {
+  _updateAlignmentClass(): void {
     const { alignment } = this.option();
+
+    $(this.element())
+      .removeClass(CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS)
+      .removeClass(CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS);
 
     const alignmentClass = alignment === 'start'
       ? CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS
       : CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS;
 
-    return alignmentClass;
+    $(this.element())
+      .addClass(alignmentClass);
   }
 
   _initMarkup(): void {
     const { alignment, items } = this.option();
 
-    const alignmentClass = this._getAlignmentClass();
-
     $(this.element())
-      .addClass(CHAT_MESSAGE_GROUP_CLASS)
-      .addClass(alignmentClass);
+      .addClass(CHAT_MESSAGE_GROUP_CLASS);
+
+    this._updateAlignmentClass();
 
     super._initMarkup();
 
+    if (items.length === 0) {
+      return;
+    }
+
     if (alignment === 'start') {
-      const authorName = items[0].author?.name;
-
-      const $avatar = $('<div>').appendTo(this.element());
-
-      this._avatar = this._createComponent($avatar, Avatar, {
-        name: authorName,
-      });
+      this._renderAvatar();
     }
 
     this._renderMessageGroupInformation(items?.[0]);
     this._renderMessageBubbles(items);
+  }
+
+  _renderAvatar(): void {
+    const $avatar = $('<div>').appendTo(this.element());
+
+    const { items } = this.option();
+    const authorName = items[0].author?.name;
+
+    this._avatar = this._createComponent($avatar, Avatar, {
+      name: authorName,
+    });
   }
 
   _renderMessageBubble(message: Message, index: number, length: number): void {
@@ -97,35 +113,38 @@ class MessageGroup extends Widget<MessageGroupOptions> {
 
   _renderName(name: string, $element: dxElementWrapper): void {
     $('<div>')
-      .addClass(CHAT_MESSAGE_NAME_CLASS)
+      .addClass(CHAT_MESSAGE_AUTHOR_NAME_CLASS)
       .text(name)
       .appendTo($element);
   }
 
-  _renderTime(timestamp: string, $element: dxElementWrapper): void {
+  _getTimeValue(timestamp: string): string {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
     const dateTime = new Date(Number(timestamp));
-    const dateTimeString = dateTime.toLocaleTimeString(undefined, options);
 
-    $('<div>')
-      .addClass(CHAT_MESSAGE_TIME_CLASS)
-      .text(dateTimeString)
-      .appendTo($element);
+    return dateTime.toLocaleTimeString(undefined, options);
   }
 
   _renderMessageGroupInformation(message: Message): void {
     const { timestamp, author } = message;
-    const $messageGroupInformation = $('<div>').addClass(CHAT_MESSAGE_GROUP_INFORMATION_CLASS);
 
-    if (author?.name) {
-      this._renderName(author.name, $messageGroupInformation);
+    const $information = $('<div>')
+      .addClass(CHAT_MESSAGE_GROUP_INFORMATION_CLASS);
+
+    $('<div>')
+      .addClass(CHAT_MESSAGE_AUTHOR_NAME_CLASS)
+      .text(author?.name ?? '')
+      .appendTo($information);
+
+    const $time = $('<div>')
+      .addClass(CHAT_MESSAGE_TIME_CLASS)
+      .appendTo($information);
+
+    if (isDefined(timestamp)) {
+      $time.text(this._getTimeValue(timestamp));
     }
 
-    if (timestamp) {
-      this._renderTime(timestamp, $messageGroupInformation);
-    }
-
-    $messageGroupInformation.appendTo(this.element());
+    $information.appendTo(this.element());
   }
 
   _updateLastBubbleClasses(): void {

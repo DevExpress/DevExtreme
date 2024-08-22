@@ -35,13 +35,6 @@ $chat-text-area-height: 40px;
   overflow: hidden;
 }
 
-.dx-chat-message-list-content {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-}
-
 .dx-chat-message-group {
   display: grid;
   align-items: start;
@@ -68,12 +61,12 @@ $chat-text-area-height: 40px;
 }
 
 .dx-chat-message-time,
-.dx-chat-message-name {
+.dx-chat-message-author-name {
   font-size: $chat-information-font-size;
   color: $chat-information-color;
 }
 
-.dx-chat-message-name {
+.dx-chat-message-author-name {
   margin-right: 8px;
 }
 
