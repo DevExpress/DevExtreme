@@ -331,9 +331,11 @@ module('onSelectionChanging event', () => {
                 onSelectionChanged: selectionChangedHandler
             });
 
-            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
-
             instance.selectItem(1);
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised immediately after click');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged should not be raised until promise resolves');
 
             setTimeout(() => {
                 assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
@@ -364,9 +366,11 @@ module('onSelectionChanging event', () => {
                 onSelectionChanged: selectionChangedHandler
             });
 
-            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
-
             instance.selectItem(1);
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'initially selectedIndex should be 0');
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised immediately after click');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged should not be raised until promise resolves');
 
             setTimeout(() => {
                 assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
