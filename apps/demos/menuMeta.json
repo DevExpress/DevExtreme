@@ -609,6 +609,14 @@
             "DemoType": "Web"
           },
           {
+            "Title": "Fixed and Sticky Columns",
+            "Name": "FixedAndStickyColumns",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-sticky-columns.xml"
+          },
+          {
             "Title": "Command Column Customization",
             "Name": "CommandColumnCustomization",
             "Widget": "DataGrid",
@@ -1557,6 +1565,14 @@
               "/Models/SampleData/TreeListEmployees.cs"
             ],
             "DemoType": "Web"
+          },
+          {
+            "Title": "Sticky Columns",
+            "Name": "StickyColumns",
+            "Widget": "TreeList",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-sticky-columns.xml"
           }
         ]
       },
@@ -2034,6 +2050,26 @@
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
             "DemoType": "Web"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Chat",
+    "Equivalents": "dxChat, dx-chat",
+    "Groups": [
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Chat component",
+            "Name": "Overview",
+            "Widget": "Chat",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-chat.xml"
           }
         ]
       }
@@ -3955,6 +3991,20 @@
               "/Models/SimpleData.cs",
               "/Models/SampleData/ToolbarData.cs"
             ]
+          }
+        ]
+      },
+      {
+        "Name": "Pagination",
+        "Equivalents": "dxPagination, dx-pagination",
+        "Demos": [
+          {
+            "Title": "Pagination component",
+            "Name": "Overview",
+            "Widget": "Pagination",
+            "DemoType": "Web",
+            "Badge": "Roadmap",
+            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-pagination.xml"
           }
         ]
       },
