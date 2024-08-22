@@ -59,6 +59,7 @@ const EDIT_MODE_POPUP = 'popup';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const GROUP_CELL_CLASS = 'dx-group-cell';
 const GROUP_ROW_CLASS = 'dx-group-row';
+const FILTER_ROW_CLASS = 'dx-datagrid-filter-row';
 
 const EXPAND_ARIA_NAME = 'dxDataGrid-ariaAdaptiveExpand';
 const COLLAPSE_ARIA_NAME = 'dxDataGrid-ariaAdaptiveCollapse';
@@ -1022,12 +1023,13 @@ const editing = (
 
   protected _closeEditItem($targetElement) {
     const $itemContents = $targetElement.closest(`.${FORM_ITEM_CONTENT_CLASS}`);
+    const isFilterRow = !!$targetElement.closest(`.${FILTER_ROW_CLASS}`).length;
     // @ts-expect-error
     const rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()) + 1;
     const formItem = $itemContents.length ? $itemContents.first().data('dx-form-item') : null;
     const columnIndex = formItem && formItem.column && this._columnsController.getVisibleIndex(formItem.column.index);
 
-    if (!this.isEditCell(rowIndex, columnIndex)) {
+    if (!this.isEditCell(rowIndex, columnIndex) && !isFilterRow) {
       super._closeEditItem($targetElement);
     }
   }
