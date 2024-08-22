@@ -161,7 +161,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
           addedItems: args.addedItems,
           cancel: false,
         };
-        this._actions?.onSelectionChanging(selectionChangingArgs);
+        this._actions.onSelectionChanging?.(selectionChangingArgs);
         args.cancel = selectionChangingArgs.cancel;
       },
       onSelectionChanged: (args): void => {
