@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { render } from '@testing-library/react';
 import * as React from 'react';
-import { memo } from 'react';
 import ConfigurationComponent from '../../../nested-option';
 import { Template } from '../../../template';
 
@@ -17,14 +16,14 @@ const minimalComponentDescriptor: IElementDescriptor = {
   IsCollectionItem: false,
 };
 
-let MinimalConfigurationComponent = memo(function MinimalConfigurationComponent(props: any) {
+let MinimalConfigurationComponent = function MinimalConfigurationComponent(props: any) {
   return (
     <ConfigurationComponent<any>
       elementDescriptor={minimalComponentDescriptor}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { elementDescriptor: IElementDescriptor };
+} as React.ComponentType<any> & { elementDescriptor: IElementDescriptor };
 
 MinimalConfigurationComponent = Object.assign(MinimalConfigurationComponent, {
   elementDescriptor: minimalComponentDescriptor,
@@ -42,14 +41,14 @@ const richComponentDescriptor: IElementDescriptor = {
   PredefinedProps: { type: 'numeric' },
 };
 
-let RichConfigurationComponent = memo(function RichConfigurationComponent(props: any) {
+let RichConfigurationComponent = function RichConfigurationComponent(props: any) {
   return (
     <ConfigurationComponent<any>
       elementDescriptor={richComponentDescriptor}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { elementDescriptor: IElementDescriptor };
+} as React.ComponentType<any> & { elementDescriptor: IElementDescriptor };
 
 RichConfigurationComponent = Object.assign(RichConfigurationComponent, {
   elementDescriptor: richComponentDescriptor,
@@ -67,20 +66,20 @@ const collectionComponentDescriptor: IElementDescriptor = {
   PredefinedProps: { type: 'numeric' },
 };
 
-let CollectionConfigurationComponent = memo(function CollectionConfigurationComponent(props: any) {
+let CollectionConfigurationComponent = function CollectionConfigurationComponent(props: any) {
   return (
     <ConfigurationComponent<any>
       elementDescriptor={collectionComponentDescriptor}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & { elementDescriptor: IElementDescriptor };
+} as React.ComponentType<any> & { elementDescriptor: IElementDescriptor };
 
 CollectionConfigurationComponent = Object.assign(CollectionConfigurationComponent, {
   elementDescriptor: collectionComponentDescriptor,
 });
 
-const configurationComponents: (React.MemoExoticComponent<any> & { elementDescriptor: IElementDescriptor })[] = [
+const configurationComponents: (React.ComponentType<any> & { elementDescriptor: IElementDescriptor })[] = [
   MinimalConfigurationComponent,
   RichConfigurationComponent,
   CollectionConfigurationComponent,
