@@ -146,8 +146,6 @@ export default class dxChat extends Widget<Properties> {
     /**
      * @docid
      * @publicName renderMessage(message)
-     * @param1 message:Message
-     * @return void
      * @public
      */
     renderMessage(message: Message): void;
