@@ -467,6 +467,18 @@ QUnit.module('Items change performance', moduleConfig, () => {
         assert.strictEqual(invalidateStub.callCount, 1);
     });
 
+    QUnit.test('Message list should run invalidate if new items length less than current items length', function(assert) {
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        const { items } = this.instance.option();
+
+        const newItems = generateMessages(items.length - 1);
+
+        this.instance.option({ items: newItems });
+
+        assert.strictEqual(invalidateStub.callCount, 1);
+    });
+
     QUnit.test('Message list should run invalidate if more than 1 new message has been added to items', function(assert) {
         const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
 
