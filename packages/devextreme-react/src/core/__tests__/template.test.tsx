@@ -11,6 +11,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+import customConfigurationComponent from '../custom-configuration-component';
 
 jest.useFakeTimers();
 
@@ -562,7 +563,7 @@ describe('component/render in nested options', () => {
     cleanup();
   });
 
-  const NestedComponent = memo(function NestedComponent(props: any) {
+  const NestedComponent = function NestedComponent(props: any) {
     return (
       <ConfigurationComponent<{
         item?: any;
@@ -580,11 +581,11 @@ describe('component/render in nested options', () => {
         {...props}
       />
     );
-  }) as React.MemoExoticComponent<any> & NestedComponentMeta;
+  } as React.ComponentType<any> & NestedComponentMeta;
 
   NestedComponent.componentType = 'option';
 
-  const CollectionNestedComponent = memo(function CollectionNestedComponent(props: any) {
+  const CollectionNestedComponent = function CollectionNestedComponent(props: any) {
     return (
       <ConfigurationComponent<{
         template?: any;
@@ -603,7 +604,7 @@ describe('component/render in nested options', () => {
         {...props}
       />
     );
-  }) as React.MemoExoticComponent<any> & NestedComponentMeta;
+  } as React.ComponentType<any> & NestedComponentMeta;
 
   CollectionNestedComponent.componentType = 'option';
 
@@ -669,6 +670,7 @@ describe('component/render in nested options', () => {
 
   it('pass integrationOptions options for collection nested components', () => {
     const UserTemplate = () => <div>Template</div>;
+
     render(
       <TestComponent>
         <CollectionNestedComponent render={UserTemplate} />
@@ -679,8 +681,11 @@ describe('component/render in nested options', () => {
         </CollectionNestedComponent>
         // @ts-expect-error TS2769
         <CollectionNestedComponent>
-          <NestedComponent />
+          <NestedComponent prop='value' />
           abc
+        </CollectionNestedComponent>
+        <CollectionNestedComponent>
+          <NestedComponent prop='value' />
         </CollectionNestedComponent>
         // @ts-expect-error TS2769
         <NestedComponent>
@@ -691,13 +696,13 @@ describe('component/render in nested options', () => {
 
     const options = WidgetClass.mock.calls[0][1];
 
-    console.log(JSON.stringify(options));
-
     expect(options.collection[0].template).toBe('collection[0].template');
     expect(options.collection[1].template).toBe('collection[1].template');
     expect(options.collection[2].option.item).toBe('collection[2].option.item');
+    expect(options.collection[3].option.prop).toBe('value');
+    expect(options.collection[4].option.prop).toBe('value');
     expect(options.option.collection[0].template).toBe('option.collection[0].template');
-
+    
     const { integrationOptions } = options;
 
     expect(Object.keys(integrationOptions.templates)).toEqual([
@@ -705,6 +710,52 @@ describe('component/render in nested options', () => {
       'collection[0].template',
       'collection[1].template',
       'collection[2].option.item',
+      'collection[3].template',
+    ]);
+  });
+
+  it('pass integrationOptions options for collection nested components with custom components', () => {
+    const UserTemplate = () => <div>Template</div>;
+
+    const CustomComponentWithTemplateContent = () => <NestedComponent itemRender={UserTemplate} />;
+    const CustomComponentWithPropContent = () => <NestedComponent prop='value' />;
+    const CustomComponentWithTemplate = customConfigurationComponent(CustomComponentWithTemplateContent);
+    const CustomComponentWithProp = customConfigurationComponent(CustomComponentWithPropContent);
+
+    render(
+      <TestComponent>
+        <CollectionNestedComponent>
+          <CustomComponentWithTemplate />
+        </CollectionNestedComponent>
+        // @ts-expect-error TS2769
+        <CollectionNestedComponent>
+          <CustomComponentWithProp />
+          abc
+        </CollectionNestedComponent>
+        <CollectionNestedComponent>
+          <CustomComponentWithProp />
+        </CollectionNestedComponent>
+        <CollectionNestedComponent>
+          <CustomComponentWithProp />
+          <UserTemplate />
+        </CollectionNestedComponent>
+      </TestComponent>,
+    );
+
+    const options = WidgetClass.mock.calls[0][1];
+
+    expect(options.collection[0].option.item).toBe('collection[0].option.item');
+    expect(options.collection[1].option.prop).toBe('value');
+    expect(options.collection[1].template).toBe('collection[1].template');
+    expect(options.collection[2].option.prop).toBe('value');
+    expect(options.collection[3].option.prop).toBe('value');
+    expect(options.collection[3].template).toBe('collection[3].template');
+
+    const { integrationOptions } = options;
+
+    expect(Object.keys(integrationOptions.templates)).toEqual([
+      'collection[0].option.item',
+      'collection[1].template',
       'collection[3].template',
     ]);
   });

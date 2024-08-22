@@ -31,7 +31,7 @@ afterEach(() => {
   cleanup();
 });
 
-const NestedComponent = memo(function NestedComponent(props: any) {
+const NestedComponent = function NestedComponent(props: any) {
   return (
     <ConfigurationComponent<{ a: number }>
       elementDescriptor={{
@@ -40,7 +40,7 @@ const NestedComponent = memo(function NestedComponent(props: any) {
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & NestedComponentMeta;
+} as React.ComponentType<any> & NestedComponentMeta;
 
 NestedComponent.componentType = 'option';
 
