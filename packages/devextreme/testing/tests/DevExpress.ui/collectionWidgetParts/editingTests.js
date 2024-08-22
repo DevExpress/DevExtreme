@@ -4,6 +4,7 @@ import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
+import keyboardMock from '../../../helpers/keyboardMock.js';
 
 const ITEM_CLASS = 'dx-item';
 const ITEM_SELECTED_CLASS = `${ITEM_CLASS}-selected`;
@@ -151,7 +152,7 @@ module('onSelectionChanging event', () => {
         const $items = $(instance.itemElements());
         const $item = $items.eq(1);
 
-        $item.trigger('dxpointerdown');
+        $item.trigger('pointerdown');
         $item.trigger('dxclick');
         clock.tick();
 
@@ -161,6 +162,39 @@ module('onSelectionChanging event', () => {
 
         clock.restore();
     });
+
+    QUnit.test('should not be raised on component focusin', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const selectionChangingHandler = sinon.spy((e) => {
+            e.cancel = true;
+        });
+        const selectionChangedHandler = sinon.stub();
+
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: [0, 1, 2, 3],
+            selectionMode: 'multiple',
+            selectedIndex: 0,
+            focusStateEnabled: true,
+            selectOnFocus: true,
+            onSelectionChanging: selectionChangingHandler,
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        const $items = $(instance.itemElements());
+        const $item = $items.eq(1);
+
+        instance.option('focusedElement', $item.get(0));
+
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called because of item focusing');
+
+        instance.focus();
+        clock.tick();
+
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is not called after component focusin');
+        clock.restore();
+    });
+
 
     QUnit.module('should cancel selection change', () => {
         QUnit.test('if e.cancel=true', function(assert) {
@@ -187,7 +221,7 @@ module('onSelectionChanging event', () => {
             assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex should be remain unchanged');
         });
 
-        QUnit.test('if e.cancel=true and selectOnFocus=true', function(assert) {
+        QUnit.test('after focusing if e.cancel=true and selectOnFocus=true', function(assert) {
             const clock = sinon.useFakeTimers();
             const selectionChangingHandler = sinon.spy((e) => {
                 e.cancel = true;
@@ -205,10 +239,11 @@ module('onSelectionChanging event', () => {
                 onSelectionChanged: selectionChangedHandler
             });
 
-            const $items = $(instance.itemElements());
-            const $item = $items.eq(1);
+            const keyboard = keyboardMock($element);
 
-            $item.trigger('dxpointerdown');
+            $element.trigger('focusin');
+            keyboard.keyDown('right');
+
             clock.tick();
 
             assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
