@@ -386,9 +386,7 @@ QUnit.module('renderMessage', moduleConfig, () => {
         assert.strictEqual(invalidateStub.callCount, 0);
     });
 
-    QUnit.test('Message list should run renderMessage if 1 new message has been added to items', function(assert) {
-        const renderMessageStub = sinon.stub(this.instance._messageList, '_renderMessage');
-
+    QUnit.test('Message list should render 1 new message if items has been changed by it', function(assert) {
         const { items } = this.instance.option();
         const newMessage = {
             timestamp: NOW,
@@ -398,7 +396,10 @@ QUnit.module('renderMessage', moduleConfig, () => {
 
         this.instance.option({ items: [...items, newMessage] });
 
-        assert.strictEqual(renderMessageStub.callCount, 1);
+        const $messageList = this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`);
+        const $bubbles = $messageList.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+        assert.strictEqual($bubbles.length, items.length + 1);
     });
 
     QUnit.test('Message list should run invalidate if new items length is the same as current items length', function(assert) {
