@@ -109,6 +109,14 @@ class Chat extends Widget<Properties> {
     const valueLength = value.length;
     const previousValueLength = previousValue.length;
 
+    if (valueLength === 0) {
+      return false;
+    }
+
+    if (previousValueLength === 0) {
+      return valueLength === 1;
+    }
+
     const lastValueItem = value[valueLength - 1];
     const lastPreviousValueItem = previousValue[previousValueLength - 1];
 
