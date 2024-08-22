@@ -105,42 +105,8 @@ class Chat extends Widget<Properties> {
     this._messageSendAction?.({ message, event });
   }
 
-  _isMessageAddedToEnd(value: Message[], previousValue: Message[]): boolean {
-    const valueLength = value.length;
-    const previousValueLength = previousValue.length;
-
-    if (valueLength === 0) {
-      return false;
-    }
-
-    if (previousValueLength === 0) {
-      return valueLength === 1;
-    }
-
-    const lastValueItem = value[valueLength - 1];
-    const lastPreviousValueItem = previousValue[previousValueLength - 1];
-
-    const isLastItemNotTheSame = lastValueItem !== lastPreviousValueItem;
-    const isLengthIncreasedByOne = valueLength - previousValueLength === 1;
-
-    return isLastItemNotTheSame && isLengthIncreasedByOne;
-  }
-
-  _processItemsUpdating(value: Message[], previousValue: Message[]): void {
-    const shouldItemsBeUpdatedCompletely = !this._isMessageAddedToEnd(value, previousValue);
-
-    if (shouldItemsBeUpdatedCompletely) {
-      this._messageList?.option('items', value);
-    } else {
-      const newMessage = value[value.length - 1];
-
-      // @ts-expect-error
-      this._messageList?._renderMessage(newMessage, value, newMessage.author);
-    }
-  }
-
   _optionChanged(args: Record<string, unknown>): void {
-    const { name, value, previousValue } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'title':
@@ -153,7 +119,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'items':
         // @ts-expect-error
-        this._processItemsUpdating(value, previousValue);
+        this._messageList?.option('items', value);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
