@@ -27,6 +27,7 @@ import {
   EDITING_EDITCOLUMNNAME_OPTION_NAME,
   EDITING_EDITROWKEY_OPTION_NAME,
   EDITOR_CELL_CLASS,
+  FILTER_ROW_CLASS,
   FOCUS_OVERLAY_CLASS,
   ROW_CLASS,
   ROW_REMOVED,
@@ -88,7 +89,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
           const isAddRowButton = !!$target.closest(`.${this.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
           const isFocusOverlay = $target.hasClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
           const isCellEditMode = this.isCellEditMode();
-          if (!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && this.isEditing()) && (isElementInDom($target) || isAnotherComponent)) {
+          const isFilterRow = !!$target.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+          if (!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && this.isEditing()) && (isElementInDom($target) || isAnotherComponent) && !isFilterRow) {
             this._closeEditItem.bind(this)($target);
           }
         }
