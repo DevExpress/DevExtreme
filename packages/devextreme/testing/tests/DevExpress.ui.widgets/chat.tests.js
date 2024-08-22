@@ -373,6 +373,57 @@ QUnit.module('renderMessage', moduleConfig, () => {
 });
 
 QUnit.module('Items change performance', moduleConfig, () => {
+    QUnit.test('Message list should run invalidate if new value is empty', function(assert) {
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        this.instance.option({ items: [] });
+
+        assert.strictEqual(invalidateStub.callCount, 1);
+    });
+
+    QUnit.test('Message list should run invalidate if previousValue is empty and new value is empty', function(assert) {
+        this.reinit();
+
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        this.instance.option({ items: [] });
+
+        assert.strictEqual(invalidateStub.callCount, 1);
+    });
+
+    QUnit.test('Message list should not run invalidate if previousValue is empty and new value has 1 item', function(assert) {
+        this.reinit();
+
+        const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
+
+        const newMessage = {
+            timestamp: NOW,
+            author: userFirst,
+            text: 'NEW MESSAGE',
+        };
+
+        this.instance.option({ items: [ newMessage ] });
+
+        assert.strictEqual(invalidateStub.callCount, 0);
+    });
+
+    QUnit.test('Message list should render only 1 message if new value has 1 item', function(assert) {
+        this.reinit();
+
+        const newMessage = {
+            timestamp: NOW,
+            author: userFirst,
+            text: 'NEW MESSAGE',
+        };
+
+        this.instance.option({ items: [ newMessage ] });
+
+        const $messageList = this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`);
+        const $bubbles = $messageList.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+        assert.strictEqual($bubbles.length, 1);
+    });
+
     QUnit.test('Message list should not run invalidate if 1 new message has been added to items', function(assert) {
         const invalidateStub = sinon.stub(this.instance._messageList, '_invalidate');
 
