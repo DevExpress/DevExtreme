@@ -40,8 +40,11 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/nested';
 
 
 /**
@@ -491,12 +494,24 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiButtonGroupItemComponent)
+    get itemsChildren(): QueryList<DxiButtonGroupItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiButtonGroupItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -588,6 +603,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiButtonGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -597,6 +613,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
   exports: [
     DxButtonGroupComponent,
     DxiItemModule,
+    DxiButtonGroupItemModule,
     DxTemplateModule
   ]
 })

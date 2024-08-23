@@ -45,10 +45,18 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiLocationModule } from 'devextreme-angular/ui/nested';
 import { DxiRowModule } from 'devextreme-angular/ui/nested';
 
+import { DxiResponsiveBoxColModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxItemModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
+
 import { DxiColComponent } from 'devextreme-angular/ui/nested';
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 import { DxiRowComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiResponsiveBoxColComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxItemComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxRowComponent } from 'devextreme-angular/ui/responsive-box/nested';
 
 
 /**
@@ -434,28 +442,62 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 
 
-    @ContentChildren(DxiColComponent)
-    get colsChildren(): QueryList<DxiColComponent> {
+    @ContentChildren(DxiResponsiveBoxColComponent)
+    get colsChildren(): QueryList<DxiResponsiveBoxColComponent> {
         return this._getOption('cols');
     }
     set colsChildren(value) {
+        this.setContentChildren('cols', value, 'DxiResponsiveBoxColComponent');
         this.setChildren('cols', value);
     }
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiResponsiveBoxItemComponent)
+    get itemsChildren(): QueryList<DxiResponsiveBoxItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiResponsiveBoxItemComponent');
         this.setChildren('items', value);
     }
 
-    @ContentChildren(DxiRowComponent)
-    get rowsChildren(): QueryList<DxiRowComponent> {
+    @ContentChildren(DxiResponsiveBoxRowComponent)
+    get rowsChildren(): QueryList<DxiResponsiveBoxRowComponent> {
         return this._getOption('rows');
     }
     set rowsChildren(value) {
+        this.setContentChildren('rows', value, 'DxiResponsiveBoxRowComponent');
         this.setChildren('rows', value);
+    }
+
+
+    @ContentChildren(DxiColComponent)
+    get colsLegacyChildren(): QueryList<DxiColComponent> {
+        return this._getOption('cols');
+    }
+    set colsLegacyChildren(value) {
+        if (this.checkContentChildren('cols', value, 'DxiColComponent')) {
+           this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiRowComponent)
+    get rowsLegacyChildren(): QueryList<DxiRowComponent> {
+        return this._getOption('rows');
+    }
+    set rowsLegacyChildren(value) {
+        if (this.checkContentChildren('rows', value, 'DxiRowComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -550,6 +592,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     DxiItemModule,
     DxiLocationModule,
     DxiRowModule,
+    DxiResponsiveBoxColModule,
+    DxiResponsiveBoxItemModule,
+    DxiResponsiveBoxLocationModule,
+    DxiResponsiveBoxRowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -562,6 +608,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     DxiItemModule,
     DxiLocationModule,
     DxiRowModule,
+    DxiResponsiveBoxColModule,
+    DxiResponsiveBoxItemModule,
+    DxiResponsiveBoxLocationModule,
+    DxiResponsiveBoxRowModule,
     DxTemplateModule
   ]
 })

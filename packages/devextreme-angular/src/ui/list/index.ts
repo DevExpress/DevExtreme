@@ -51,9 +51,19 @@ import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxoListItemDraggingModule } from 'devextreme-angular/ui/list/nested';
+import { DxoListCursorOffsetModule } from 'devextreme-angular/ui/list/nested';
+import { DxiListItemModule } from 'devextreme-angular/ui/list/nested';
+import { DxiListMenuItemModule } from 'devextreme-angular/ui/list/nested';
+import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
+import { DxiListButtonModule } from 'devextreme-angular/ui/list/nested';
+import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 import { DxiMenuItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiListItemComponent } from 'devextreme-angular/ui/list/nested';
+import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
 
 
 /**
@@ -1319,20 +1329,43 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiListItemComponent)
+    get itemsChildren(): QueryList<DxiListItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiListItemComponent');
         this.setChildren('items', value);
     }
 
-    @ContentChildren(DxiMenuItemComponent)
-    get menuItemsChildren(): QueryList<DxiMenuItemComponent> {
+    @ContentChildren(DxiListMenuItemComponent)
+    get menuItemsChildren(): QueryList<DxiListMenuItemComponent> {
         return this._getOption('menuItems');
     }
     set menuItemsChildren(value) {
+        this.setContentChildren('menuItems', value, 'DxiListMenuItemComponent');
         this.setChildren('menuItems', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiMenuItemComponent)
+    get menuItemsLegacyChildren(): QueryList<DxiMenuItemComponent> {
+        return this._getOption('menuItems');
+    }
+    set menuItemsLegacyChildren(value) {
+        if (this.checkContentChildren('menuItems', value, 'DxiMenuItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -1484,6 +1517,13 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
+    DxoListItemDraggingModule,
+    DxoListCursorOffsetModule,
+    DxiListItemModule,
+    DxiListMenuItemModule,
+    DxoListSearchEditorOptionsModule,
+    DxiListButtonModule,
+    DxoListOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1499,6 +1539,13 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
+    DxoListItemDraggingModule,
+    DxoListCursorOffsetModule,
+    DxiListItemModule,
+    DxiListMenuItemModule,
+    DxoListSearchEditorOptionsModule,
+    DxiListButtonModule,
+    DxoListOptionsModule,
     DxTemplateModule
   ]
 })

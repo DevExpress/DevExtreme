@@ -43,8 +43,12 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 
+import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
+import { DxoBoxBoxModule } from 'devextreme-angular/ui/box/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiBoxItemComponent } from 'devextreme-angular/ui/box/nested';
 
 
 /**
@@ -410,12 +414,24 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiBoxItemComponent)
+    get itemsChildren(): QueryList<DxiBoxItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiBoxItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -503,6 +519,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
   imports: [
     DxiItemModule,
     DxoBoxModule,
+    DxiBoxItemModule,
+    DxoBoxBoxModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -513,6 +531,8 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     DxBoxComponent,
     DxiItemModule,
     DxoBoxModule,
+    DxiBoxItemModule,
+    DxoBoxBoxModule,
     DxTemplateModule
   ]
 })

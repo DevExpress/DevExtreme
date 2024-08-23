@@ -42,8 +42,11 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiGalleryItemModule } from 'devextreme-angular/ui/gallery/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
 
 
 /**
@@ -717,12 +720,24 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiGalleryItemComponent)
+    get itemsChildren(): QueryList<DxiGalleryItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiGalleryItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -825,6 +840,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiGalleryItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -834,6 +850,7 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
   exports: [
     DxGalleryComponent,
     DxiItemModule,
+    DxiGalleryItemModule,
     DxTemplateModule
   ]
 })

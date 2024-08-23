@@ -56,6 +56,23 @@ import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
+import { DxoBarGaugeAnimationModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeExportModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeGeometryModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLabelModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeFontModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeFormatModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLegendModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeItemTextFormatModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeMarginModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeTitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeSubtitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeLoadingIndicatorModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeSizeModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeTooltipModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBarGaugeShadowModule } from 'devextreme-angular/ui/bar-gauge/nested';
+
 
 
 
@@ -702,6 +719,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -813,6 +831,22 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     DxoSizeModule,
     DxoTooltipModule,
     DxoShadowModule,
+    DxoBarGaugeAnimationModule,
+    DxoBarGaugeExportModule,
+    DxoBarGaugeGeometryModule,
+    DxoBarGaugeLabelModule,
+    DxoBarGaugeFontModule,
+    DxoBarGaugeFormatModule,
+    DxoBarGaugeLegendModule,
+    DxoBarGaugeBorderModule,
+    DxoBarGaugeItemTextFormatModule,
+    DxoBarGaugeMarginModule,
+    DxoBarGaugeTitleModule,
+    DxoBarGaugeSubtitleModule,
+    DxoBarGaugeLoadingIndicatorModule,
+    DxoBarGaugeSizeModule,
+    DxoBarGaugeTooltipModule,
+    DxoBarGaugeShadowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -837,6 +871,22 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     DxoSizeModule,
     DxoTooltipModule,
     DxoShadowModule,
+    DxoBarGaugeAnimationModule,
+    DxoBarGaugeExportModule,
+    DxoBarGaugeGeometryModule,
+    DxoBarGaugeLabelModule,
+    DxoBarGaugeFontModule,
+    DxoBarGaugeFormatModule,
+    DxoBarGaugeLegendModule,
+    DxoBarGaugeBorderModule,
+    DxoBarGaugeItemTextFormatModule,
+    DxoBarGaugeMarginModule,
+    DxoBarGaugeTitleModule,
+    DxoBarGaugeSubtitleModule,
+    DxoBarGaugeLoadingIndicatorModule,
+    DxoBarGaugeSizeModule,
+    DxoBarGaugeTooltipModule,
+    DxoBarGaugeShadowModule,
     DxTemplateModule
   ]
 })
