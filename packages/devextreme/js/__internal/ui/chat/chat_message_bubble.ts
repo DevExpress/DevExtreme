@@ -27,11 +27,9 @@ class MessageBubble extends Widget<MessageBubbleOptions> {
   }
 
   _updateText(): void {
-    const { text } = this.option();
+    const { text = '' } = this.option();
 
-    $(this.element())
-      // @ts-expect-error
-      .text(text);
+    $(this.element()).text(text);
   }
 
   _optionChanged(args: Record<string, unknown>): void {

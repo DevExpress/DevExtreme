@@ -3,7 +3,7 @@ import $ from 'jquery';
 import MessageList from '__internal/ui/chat/chat_message_list';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
-    generateMessages, userFirst,
+    generateMessages, userFirst, userSecond,
     NOW, MOCK_COMPANION_USER_ID, MOCK_CURRENT_USER_ID
 } from './chat.tests.js';
 import MessageGroup from '__internal/ui/chat/chat_message_group';
@@ -41,8 +41,16 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.ok(this.instance instanceof MessageList);
         });
 
-        QUnit.test('scrollabel should be rendered inside root element', function(assert) {
+        QUnit.test('scrollable should be rendered inside root element', function(assert) {
             assert.ok(Scrollable.getInstance(this.$element.children().first()) instanceof Scrollable);
+        });
+    });
+
+    QUnit.module('MessageGroup integration', () => {
+        QUnit.test('message group component should not be rendered if items is empty', function(assert) {
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 0);
         });
 
         QUnit.test('new message group component should be rendered only when a message with a different user ID is encountered', function(assert) {
@@ -59,7 +67,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($messageGroups.length, 3);
         });
 
-        QUnit.test('new message group component should not be rendered when a message with a different user ID is encountered', function(assert) {
+        QUnit.test('new message group component should not be rendered when a message with the same user ID is encountered', function(assert) {
             this.reinit({
                 items: [
                     { author: { id: 'UserID' } },
@@ -73,67 +81,54 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($messageGroups.length, 1);
         });
 
-        QUnit.test('essage group component should not be rendered if items is empty', function(assert) {
-            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+        QUnit.test('new message group component should be rendered when a new message with a different user ID is added to the data at runtime', function(assert) {
+            const items = [
+                { author: { id: 'UserID' } },
+                { author: { id: 'UserID_1' } },
+                { author: { id: 'UserID' } }
+            ];
 
-            assert.strictEqual($messageGroups.length, 0);
-        });
-    });
+            this.reinit({
+                items
+            });
 
-    QUnit.module('Options', function() {
-        QUnit.test('Message list should render 1 new message if items has been changed by it', function(assert) {
-            const { items } = this.instance.option();
             const newMessage = {
-                timestamp: NOW,
-                author: userFirst,
+                author: { id: 'UserID_1' },
                 text: 'NEW MESSAGE',
             };
 
             this.instance.option({ items: [...items, newMessage] });
 
-            const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
 
-            assert.strictEqual($bubbles.length, items.length + 1);
+            assert.strictEqual($messageGroups.length, 4);
         });
 
-        QUnit.test('should run invalidate after changing user in runtime', function(assert) {
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
+        QUnit.test('new message group component should not be rendered when a new message with the same user ID is added to the data at runtime', function(assert) {
+            const items = [
+                { author: { id: 'UserID' } },
+                { author: { id: 'UserID_1' } },
+                { author: { id: 'UserID' } }
+            ];
 
-            this.instance.option({ currentUserId: 'newUserID' });
+            this.reinit({
+                items
+            });
 
-            assert.strictEqual(invalidateStub.callCount, 1);
+            const newMessage = {
+                author: { id: 'UserID' },
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.option({ items: [...items, newMessage] });
+
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 3);
         });
 
-        QUnit.test('should run invalidate after changing items in runtime', function(assert) {
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
-
-            this.instance.option({ items: [] });
-
-            assert.strictEqual(invalidateStub.callCount, 1);
-        });
-
-        QUnit.test('Message list should run invalidate if new value is empty', function(assert) {
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
-
-            this.instance.option({ items: [] });
-
-            assert.strictEqual(invalidateStub.callCount, 1);
-        });
-
-        QUnit.test('Message list should run invalidate if previousValue is empty and new value is empty', function(assert) {
+        QUnit.test('should render a message if the new items value contains a single item', function(assert) {
             this.reinit();
-
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
-
-            this.instance.option({ items: [] });
-
-            assert.strictEqual(invalidateStub.callCount, 1);
-        });
-
-        QUnit.test('Message list should not run invalidate if previousValue is empty and new value has 1 item', function(assert) {
-            this.reinit();
-
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
 
             const newMessage = {
                 timestamp: NOW,
@@ -143,12 +138,87 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [ newMessage ] });
 
-            assert.strictEqual(invalidateStub.callCount, 0);
+            const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+            assert.strictEqual($bubbles.length, 1);
+        });
+
+        QUnit.test('message group should be rendered with start alignment if user.id is not equal message.author.id', function(assert) {
+            this.reinit({
+                items: [{ author: { id: 'JohnID' } }],
+                currentUserId: 'MikeID',
+            });
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('alignment'), 'start');
+        });
+
+        QUnit.test('message group should be rendered with end alignment if user.id is equal message.author.id', function(assert) {
+            this.reinit({
+                items: [{ author: { id: 'MikeID' } }],
+                currentUserId: 'MikeID',
+            });
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('alignment'), 'end');
+        });
+    });
+
+    QUnit.module('Items option change performance', {
+        beforeEach: function() {
+            const createInvalidateStub = () => {
+                this.invalidateStub = sinon.stub(this.instance, '_invalidate');
+            };
+
+            this.recreateInvalidateStub = () => {
+                createInvalidateStub();
+            };
+
+            createInvalidateStub();
+        },
+        afterEach: function() {
+            this.invalidateStub.restore();
+        }
+    }, function() {
+        QUnit.test('should run invalidate after changing user in runtime', function(assert) {
+            this.instance.option({ currentUserId: 'newUserID' });
+
+            assert.strictEqual(this.invalidateStub.callCount, 1);
+        });
+
+        QUnit.test('Message list should run invalidate if new value is empty', function(assert) {
+            this.instance.option({ items: [] });
+
+            assert.strictEqual(this.invalidateStub.callCount, 1);
+        });
+
+        QUnit.test('Message list should run invalidate if previousValue is empty and new value is empty', function(assert) {
+            this.reinit({});
+            this.recreateInvalidateStub();
+
+            this.instance.option({ items: [] });
+
+            assert.strictEqual(this.invalidateStub.callCount, 1);
+        });
+
+        QUnit.test('Message list should not run invalidate if previousValue is empty and new value has 1 item', function(assert) {
+            this.reinit({});
+            this.recreateInvalidateStub();
+
+            const newMessage = {
+                timestamp: NOW,
+                author: userFirst,
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.option({ items: [ newMessage ] });
+
+            assert.strictEqual(this.invalidateStub.callCount, 0);
         });
 
         QUnit.test('Message list should not run invalidate if 1 new message has been added to items', function(assert) {
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
-
             const { items } = this.instance.option();
             const newMessage = {
                 timestamp: NOW,
@@ -158,36 +228,30 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [...items, newMessage] });
 
-            assert.strictEqual(invalidateStub.callCount, 0);
+            assert.strictEqual(this.invalidateStub.callCount, 0);
         });
 
         QUnit.test('Message list should run invalidate if new items length is the same as current items length', function(assert) {
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
-
             const { items } = this.instance.option();
 
             const newItems = generateMessages(items.length);
 
             this.instance.option({ items: newItems });
 
-            assert.strictEqual(invalidateStub.callCount, 1);
+            assert.strictEqual(this.invalidateStub.callCount, 1);
         });
 
         QUnit.test('Message list should run invalidate if new items length less than current items length', function(assert) {
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
-
             const { items } = this.instance.option();
 
             const newItems = generateMessages(items.length - 1);
 
             this.instance.option({ items: newItems });
 
-            assert.strictEqual(invalidateStub.callCount, 1);
+            assert.strictEqual(this.invalidateStub.callCount, 1);
         });
 
         QUnit.test('Message list should run invalidate if more than 1 new message has been added to items', function(assert) {
-            const invalidateStub = sinon.stub(this.instance, '_invalidate');
-
             const { items } = this.instance.option();
             const newMessage = {
                 timestamp: NOW,
@@ -199,7 +263,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: newItems });
 
-            assert.strictEqual(invalidateStub.callCount, 1);
+            assert.strictEqual(this.invalidateStub.callCount, 1);
         });
     });
 
@@ -264,32 +328,8 @@ QUnit.module('MessageList', moduleConfig, () => {
                     assert.strictEqual($item, lastMessageGroup);
                 };
 
-                this.instance._renderMessage(newMessage, [...items, newMessage]);
+                this.instance.option('items', [...items, newMessage]);
             });
-        });
-    });
-
-    QUnit.module('MessageGroup integration', () => {
-        QUnit.test('message group component should be rendered with start alignment if user.id is not equal message.author.id', function(assert) {
-            this.reinit({
-                items: [{ author: { id: 'JohnID' } }],
-                currentUserId: 'MikeID',
-            });
-
-            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`));
-
-            assert.strictEqual(messageGroup.option('alignment'), 'start');
-        });
-
-        QUnit.test('message group component should be rendered with end alignment if user.id is equal message.author.id', function(assert) {
-            this.reinit({
-                items: [{ author: { id: 'MikeID' } }],
-                currentUserId: 'MikeID',
-            });
-
-            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`));
-
-            assert.strictEqual(messageGroup.option('alignment'), 'end');
         });
     });
 });

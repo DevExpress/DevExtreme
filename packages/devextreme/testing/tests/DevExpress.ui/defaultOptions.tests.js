@@ -1385,7 +1385,7 @@ testComponentDefaults(ChatMessageGroup,
 testComponentDefaults(ChatMessageList,
     {},
     {
-        currentUserId: undefined,
+        currentUserId: '',
     }
 );
 

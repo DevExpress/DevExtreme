@@ -36,7 +36,7 @@ QUnit.module('MessageBubble', moduleConfig, () => {
     });
 
     QUnit.module('Options', () => {
-        QUnit.test('text option should be possible to update at runtime', function(assert) {
+        QUnit.test('text option should be updatable at runtime', function(assert) {
             this.instance.option('text', 'new message text');
 
             assert.strictEqual(this.$element.text(), 'new message text');

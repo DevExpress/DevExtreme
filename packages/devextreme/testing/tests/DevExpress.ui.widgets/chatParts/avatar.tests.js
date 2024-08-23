@@ -40,7 +40,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             assert.strictEqual(this.$element.text(), 'C');
         });
 
-        QUnit.test('name option should be possible to update at runtime', function(assert) {
+        QUnit.test('name option should be updatable at runtime', function(assert) {
             this.instance.option('name', 'New Value');
 
             assert.strictEqual(this.$element.text(), 'N');

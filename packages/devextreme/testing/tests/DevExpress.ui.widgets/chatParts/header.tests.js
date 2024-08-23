@@ -40,7 +40,7 @@ QUnit.module('ChatHeader', moduleConfig, () => {
             assert.strictEqual(this.$element.text(), 'Chat title');
         });
 
-        QUnit.test('title option should be possible to update at runtime', function(assert) {
+        QUnit.test('title option should be updatable at runtime', function(assert) {
             this.instance.option('title', 'new message text');
 
             assert.strictEqual(this.$element.text(), 'new message text');

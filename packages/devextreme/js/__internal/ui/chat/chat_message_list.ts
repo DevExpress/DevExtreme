@@ -13,8 +13,8 @@ import MessageGroup from './chat_message_group';
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
 
 export interface MessageListOptions extends WidgetOptions<MessageList> {
-  items?: Message[];
-  currentUserId?: number | string;
+  items: Message[];
+  currentUserId: number | string | undefined;
 }
 
 class MessageList extends Widget<MessageListOptions> {
@@ -28,7 +28,7 @@ class MessageList extends Widget<MessageListOptions> {
     return {
       ...super._getDefaultOptions(),
       items: [],
-      currentUserId: undefined,
+      currentUserId: '',
     };
   }
 
@@ -49,17 +49,17 @@ class MessageList extends Widget<MessageListOptions> {
     this._scrollContentToLastMessageGroup();
   }
 
-  _isCurrentUser(id): boolean {
+  _isCurrentUser(id: string | number | undefined): boolean {
     const { currentUserId } = this.option();
 
     return currentUserId === id;
   }
 
-  _messageGroupAlignment(id): MessageGroupAlignment {
+  _messageGroupAlignment(id: string | number | undefined): MessageGroupAlignment {
     return this._isCurrentUser(id) ? 'end' : 'start';
   }
 
-  _createMessageGroupComponent(items, userId): void {
+  _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
     const $messageGroup = $('<div>').appendTo(this._$content);
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
@@ -119,7 +119,7 @@ class MessageList extends Widget<MessageListOptions> {
       const lastMessageGroupUserId = lastMessageGroup.option('items')[0].author?.id;
 
       if (sender?.id === lastMessageGroupUserId) {
-        lastMessageGroup._renderMessage(message);
+        lastMessageGroup.renderMessage(message);
 
         this._scrollContentToLastMessageGroup();
 
@@ -189,8 +189,7 @@ class MessageList extends Widget<MessageListOptions> {
         this._invalidate();
         break;
       case 'items':
-        // @ts-expect-error
-        this._processItemsUpdating(value, previousValue);
+        this._processItemsUpdating(value as MessageListOptions['items'], previousValue as MessageListOptions['items']);
         break;
       default:
         super._optionChanged(args);

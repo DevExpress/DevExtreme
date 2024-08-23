@@ -5,6 +5,7 @@ import ChatAvatar from '__internal/ui/chat/chat_avatar';
 
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
+const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -49,6 +50,30 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             const $time = this.$element.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
 
             assert.strictEqual($time.text(), '21:34');
+        });
+    });
+
+    QUnit.module('renderMessage()', () => {
+        QUnit.test('new message bubble should be rendered into the group after calling the renderMessage function', function(assert) {
+            this.reinit({
+                items: [{}, {}, {}],
+            });
+
+            let $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+            assert.strictEqual($messageBubble.length, 3);
+
+            const newMessage = {
+                author: { id: 'MikeID' },
+                timestamp: Date.now(),
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.renderMessage(newMessage);
+
+            $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+            assert.strictEqual($messageBubble.length, 4);
         });
     });
 

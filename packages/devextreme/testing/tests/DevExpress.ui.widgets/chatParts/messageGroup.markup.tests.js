@@ -283,7 +283,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 text: 'NEW MESSAGE',
             };
 
-            this.instance._renderMessage(newMessage);
+            this.instance.renderMessage(newMessage);
 
             $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
 

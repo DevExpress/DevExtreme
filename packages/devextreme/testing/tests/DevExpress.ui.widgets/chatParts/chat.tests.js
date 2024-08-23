@@ -76,14 +76,14 @@ QUnit.module('Chat', moduleConfig, () => {
     });
 
     QUnit.module('Default options', () => {
-        QUnit.test('There is an user id by default if user has not been set', function(assert) {
+        QUnit.test('user should be set to an object with generated id if property is not passed', function(assert) {
             const { user } = this.instance.option();
 
             // eslint-disable-next-line no-prototype-builtins
             assert.strictEqual(user.hasOwnProperty('id'), true);
         });
 
-        QUnit.test('User id should be generate as a string if user has not been set', function(assert) {
+        QUnit.test('User id should be generated as a string if user has not been set', function(assert) {
             assert.strictEqual(typeof this.instance.option('user.id') === 'string', true);
         });
     });
@@ -154,7 +154,7 @@ QUnit.module('Chat', moduleConfig, () => {
             assert.deepEqual(messageList.option('currentUserId'), newUserID, 'currentUserId value is updated');
         });
 
-        QUnit.test('items should be updated when user has been changed in runtime', function(assert) {
+        QUnit.test('items should be passed to messageList after update', function(assert) {
             const newItems = [{ author: { name: 'Mike' } }, { author: { name: 'John' } }];
 
             this.instance.option('items', newItems);
@@ -162,22 +162,6 @@ QUnit.module('Chat', moduleConfig, () => {
             const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`));
 
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
-        });
-
-        QUnit.test('should render only 1 message if new value has 1 item', function(assert) {
-            this.reinit();
-
-            const newMessage = {
-                timestamp: NOW,
-                author: userFirst,
-                text: 'NEW MESSAGE',
-            };
-
-            this.instance.option({ items: [ newMessage ] });
-
-            const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-
-            assert.strictEqual($bubbles.length, 1);
         });
     });
 
@@ -197,7 +181,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 assert.strictEqual(onMessageSend.callCount, 1);
             });
 
-            QUnit.test('should be get correct arguments after clicking the send button', function(assert) {
+            QUnit.test('should get correct arguments after clicking the send button', function(assert) {
                 assert.expect(6);
 
                 const text = 'new text message';
@@ -311,96 +295,6 @@ QUnit.module('Chat', moduleConfig, () => {
             const lastItem = items[items.length - 1];
 
             assert.strictEqual(lastItem, newMessage);
-        });
-
-        QUnit.test('Last Message Group items should be updated if its user ids are equal with new message', function(assert) {
-            this.reinit({
-                items: [
-                    {
-                        timestamp: NOW,
-                        author: userFirst,
-                        text: 'userFirst',
-                    },
-                    {
-                        timestamp: NOW,
-                        author: userFirst,
-                        text: 'userFirst',
-                    },
-                    {
-                        timestamp: NOW,
-                        author: userSecond,
-                        text: 'userSecond',
-                    },
-                ]
-            });
-
-
-            const author = {
-                id: MOCK_CURRENT_USER_ID,
-            };
-
-            const newMessage = {
-                author,
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            };
-
-            const messageGroups = this.instance._messageList._messageGroups;
-            const lastMessageGroup = messageGroups[messageGroups.length - 1];
-            const lastMessageGroupElement = lastMessageGroup.element();
-
-            assert.strictEqual($(lastMessageGroupElement).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 1);
-
-            this.instance.renderMessage(newMessage);
-
-            const { items: messages } = lastMessageGroup.option();
-            const lastMessage = messages[messages.length - 1];
-
-            assert.strictEqual(lastMessage, newMessage);
-            assert.strictEqual($(lastMessageGroupElement).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 2);
-        });
-
-        QUnit.test('Message Group should be created if its user ids are not equal with new message', function(assert) {
-            this.reinit({
-                items: [
-                    {
-                        timestamp: NOW,
-                        author: userFirst,
-                        text: 'userFirst',
-                    },
-                    {
-                        timestamp: NOW,
-                        author: userFirst,
-                        text: 'userFirst',
-                    },
-                    {
-                        timestamp: NOW,
-                        author: userSecond,
-                        text: 'userSecond',
-                    },
-                ]
-            });
-
-            const author = {
-                id: MOCK_COMPANION_USER_ID,
-            };
-
-            const newMessage = {
-                author,
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            };
-
-            const getMessageGroupElements = () => this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
-            const messageGroups = this.instance._messageList._messageGroups;
-
-            assert.strictEqual(messageGroups.length, 2);
-            assert.strictEqual(getMessageGroupElements().length, 2);
-
-            this.instance.renderMessage(newMessage);
-
-            assert.strictEqual(messageGroups.length, 3);
-            assert.strictEqual(getMessageGroupElements().length, 3);
         });
 
         QUnit.test('Message Group should be created if items are empty', function(assert) {

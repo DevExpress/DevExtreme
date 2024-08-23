@@ -92,7 +92,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onMessageSendStub.callCount, 1);
         });
 
-        QUnit.test('should be fired when the send button is clicked if the textarea input does not contain a value', function(assert) {
+        QUnit.test('should not be fired when the send button is clicked if the textarea input does not contain a value', function(assert) {
             const onMessageSendStub = sinon.stub();
 
             this.reinit({ onMessageSend: onMessageSendStub });
@@ -116,7 +116,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(eventHandlerStub.callCount, 1);
         });
 
-        QUnit.test('should be fired when the send button is clicked if the textarea input contains a value consisting only of spaces', function(assert) {
+        QUnit.test('should not be fired when the send button is clicked if the textarea input contains a value consisting only of spaces', function(assert) {
             const onMessageSendStub = sinon.stub();
 
             this.reinit({ onMessageSend: onMessageSendStub });

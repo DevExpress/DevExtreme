@@ -154,17 +154,6 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     $lastBubble.removeClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
   }
 
-  _renderMessage(message: Message): void {
-    const { items } = this.option();
-
-    const newItems = [...items, message];
-
-    this._setOptionWithoutOptionChange('items', newItems);
-
-    this._updateLastBubbleClasses();
-    this._renderMessageBubble(message, newItems.length - 1, newItems.length);
-  }
-
   _optionChanged(args: Record<string, unknown>): void {
     const { name } = args;
 
@@ -176,6 +165,17 @@ class MessageGroup extends Widget<MessageGroupOptions> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  renderMessage(message: Message): void {
+    const { items } = this.option();
+
+    const newItems = [...items, message];
+
+    this._setOptionWithoutOptionChange('items', newItems);
+
+    this._updateLastBubbleClasses();
+    this._renderMessageBubble(message, newItems.length - 1, newItems.length);
   }
 }
 
