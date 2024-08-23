@@ -16,7 +16,7 @@ const options: Options<any> = {
     showInfo: [true, false],
     showNavigationButtons: [true, false],
     showPageSizeSelector: [true, false],
-    visible: [true, false],
+    visible: [true],
 };
 
 const defaultCreated = async (): Promise<void> => {};

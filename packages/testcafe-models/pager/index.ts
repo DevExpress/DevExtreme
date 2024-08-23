@@ -19,6 +19,7 @@ const CLASS = {
   numberBox: 'dx-numberbox',
 
   overlayContent: 'dx-overlay-content',
+  focusedState: 'dx-state-focused',
 };
 
 export default class Pager extends Widget {
@@ -56,5 +57,9 @@ export default class Pager extends Widget {
 
   getInfoText(): Selector {
     return this.element.find(`.${CLASS.info}`);
+  }
+
+  hasFocusedState(): Promise<boolean> {
+    return this.element.hasClass(CLASS.focusedState);
   }
 }
