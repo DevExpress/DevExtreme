@@ -9415,7 +9415,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxChat]
    */
-  export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {}
+  export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
+    /**
+     * [descr:dxChat.renderMessage(message)]
+     */
+    renderMessage(message: DevExpress.ui.dxChat.Message): void;
+  }
   module dxChat {
     /**
      * [descr:_ui_chat_DisposingEvent]

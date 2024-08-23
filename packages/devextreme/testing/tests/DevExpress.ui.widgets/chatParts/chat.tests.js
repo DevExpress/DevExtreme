@@ -286,7 +286,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 text: 'NEW MESSAGE',
             };
 
-            this.instance.renderMessage(newMessage, author);
+            this.instance.renderMessage(newMessage);
 
             const { items } = this.instance.option();
             const lastItem = items[items.length - 1];
@@ -305,7 +305,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 text: 'NEW MESSAGE',
             };
 
-            this.instance.renderMessage(newMessage, author);
+            this.instance.renderMessage(newMessage);
 
             const { items } = this.instance._messageList.option();
             const lastItem = items[items.length - 1];
@@ -351,7 +351,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
             assert.strictEqual($(lastMessageGroupElement).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`).length, 1);
 
-            this.instance.renderMessage(newMessage, author);
+            this.instance.renderMessage(newMessage);
 
             const { items: messages } = lastMessageGroup.option();
             const lastMessage = messages[messages.length - 1];
@@ -397,7 +397,7 @@ QUnit.module('Chat', moduleConfig, () => {
             assert.strictEqual(messageGroups.length, 2);
             assert.strictEqual(getMessageGroupElements().length, 2);
 
-            this.instance.renderMessage(newMessage, author);
+            this.instance.renderMessage(newMessage);
 
             assert.strictEqual(messageGroups.length, 3);
             assert.strictEqual(getMessageGroupElements().length, 3);
@@ -420,7 +420,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
             assert.strictEqual(getMessageGroups().length, 0);
 
-            this.instance.renderMessage(newMessage, author);
+            this.instance.renderMessage(newMessage);
 
             assert.strictEqual(getMessageGroups().length, 1);
         });
@@ -434,7 +434,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 text,
             };
 
-            this.instance.renderMessage(newMessage, author);
+            this.instance.renderMessage(newMessage);
 
             const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
             const lastMessageGroup = messageGroups[messageGroups.length - 1];

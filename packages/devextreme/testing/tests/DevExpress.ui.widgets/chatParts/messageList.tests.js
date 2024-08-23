@@ -264,7 +264,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                     assert.strictEqual($item, lastMessageGroup);
                 };
 
-                this.instance._renderMessage(newMessage, [...items, newMessage], author);
+                this.instance._renderMessage(newMessage, [...items, newMessage]);
             });
         });
     });

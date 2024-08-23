@@ -2,7 +2,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { hasWindow } from '@js/core/utils/window';
-import type { Message, User } from '@js/ui/chat';
+import type { Message } from '@js/ui/chat';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
@@ -108,7 +108,9 @@ class MessageList extends Widget<MessageListOptions> {
     });
   }
 
-  _renderMessage(message: Message, newItems: Message[], sender: User): void {
+  _renderMessage(message: Message, newItems: Message[]): void {
+    const sender = message.author;
+
     this._setOptionWithoutOptionChange('items', newItems);
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
@@ -116,7 +118,7 @@ class MessageList extends Widget<MessageListOptions> {
     if (lastMessageGroup) {
       const lastMessageGroupUserId = lastMessageGroup.option('items')[0].author?.id;
 
-      if (sender.id === lastMessageGroupUserId) {
+      if (sender?.id === lastMessageGroupUserId) {
         lastMessageGroup._renderMessage(message);
 
         this._scrollContentToLastMessageGroup();
@@ -125,7 +127,7 @@ class MessageList extends Widget<MessageListOptions> {
       }
     }
 
-    this._createMessageGroupComponent([message], sender.id);
+    this._createMessageGroupComponent([message], sender?.id);
     this._scrollContentToLastMessageGroup();
   }
 
@@ -175,8 +177,7 @@ class MessageList extends Widget<MessageListOptions> {
     } else {
       const newMessage = value[value.length - 1];
 
-      // @ts-expect-error
-      this._renderMessage(newMessage, value, newMessage.author);
+      this._renderMessage(newMessage, value);
     }
   }
 
