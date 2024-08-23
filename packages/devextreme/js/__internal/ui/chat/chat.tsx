@@ -2,24 +2,18 @@ import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import type {
-  Message, MessageSendEvent, Properties, User,
+  Message, MessageSendEvent, Properties,
 } from '@js/ui/chat';
+import { render } from 'inferno';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
-import type { MessageBoxProperties } from './chat_message_box';
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
 
 class Chat extends Widget<Properties> {
-  _chatHeader?: ChatHeader;
-
-  _messageBox?: MessageBox;
-
-  _messageList?: MessageList;
-
   _messageSendAction?: (e: MessageSendEvent) => void;
 
   _getDefaultOptions(): Properties {
@@ -43,42 +37,25 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._renderHeader();
-    this._renderMessageList();
-    this._renderMessageBox();
+    this._infernoRender();
   }
 
-  _renderHeader(): void {
-    const { title } = this.option();
-
-    const $header = $('<div>').appendTo(this.element());
-
-    // @ts-expect-error
-    this._chatHeader = this._createComponent($header, ChatHeader, { title });
-  }
-
-  _renderMessageList(): void {
-    const { items, user } = this.option();
-
-    const currentUserId = user?.id;
-    const $messageList = $('<div>').appendTo(this.element());
-
-    this._messageList = this._createComponent($messageList, MessageList, {
-      items,
-      currentUserId,
-    });
-  }
-
-  _renderMessageBox(): void {
-    const $messageBox = $('<div>').appendTo(this.element());
-
-    const configuration: MessageBoxProperties = {
-      onMessageSend: (e) => {
-        this._messageSendHandler(e);
-      },
-    };
-
-    this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
+  _infernoRender(): void {
+    render(
+      <>
+        <ChatHeader
+          title={this.option('title')}
+        />
+        <MessageList
+          currentUserId={this.option('user')?.id}
+          items={this.option('items')}
+        />
+        <MessageBox
+          onMessageSend={this._messageSendHandler.bind(this)}
+        />
+      </>,
+      this.element(),
+    );
   }
 
   _createMessageSendAction(): void {
@@ -105,20 +82,13 @@ class Chat extends Widget<Properties> {
   }
 
   _optionChanged(args: Record<string, unknown>): void {
-    const { name, value } = args;
+    const { name } = args;
 
     switch (name) {
       case 'title':
-        // @ts-expect-error
-        this._chatHeader?.option(name, value);
-        break;
       case 'user':
-        // @ts-expect-error
-        this._messageList?.option('currentUserId', value.id);
-        break;
       case 'items':
-        // @ts-expect-error
-        this._messageList?.option(name, value);
+        this._infernoRender();
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -128,14 +98,17 @@ class Chat extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message, sender: User): void {
+  renderMessage(message: Message): void {
     const { items } = this.option();
 
     const newItems = items ? [...items, message] : [message];
 
-    this._setOptionWithoutOptionChange('items', newItems);
+    this.option('items', newItems);
+  }
 
-    this._messageList?._renderMessage(message, newItems, sender);
+  _clean(): void {
+    render(null, this.element());
+    super._clean();
   }
 }
 
