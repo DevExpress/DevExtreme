@@ -4,7 +4,6 @@ import {
   ReactNode,
   ReactElement,
   useContext,
-  useMemo,
   useRef,
 } from 'react';
 
@@ -28,7 +27,7 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
     treeUpdateToken: parentUpdateToken,
   } = parentContext;
 
-  const updateToken = parentUpdateToken ?? Math.random();
+  const updateToken = Math.random();
 
   const separatedValues = separateProps(
     optionElement.props,
@@ -95,7 +94,7 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
     configs,
   };
 
-  const context: NestedOptionContextContent = useMemo(() => ({
+  const context: NestedOptionContextContent = {
     parentExpectedChildren: optionElement.descriptor.expectedChildren,
     parentFullName: mergeNameParts(parentFullName, optionElement.descriptor.name),
     treeUpdateToken: updateToken,
@@ -138,15 +137,7 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
       childConfigNode.parentNode = configNode;
       configs[name] = childConfigNode;
     },
-  }), [
-    optionElement,
-    configNode,
-    updateToken,
-    configCollections,
-    configCollectionMaps,
-    configs,
-    childComponentCounter,
-  ]);
+  };
 
-  return [configNode, context, updateToken];
+  return [configNode, context, parentUpdateToken];
 }

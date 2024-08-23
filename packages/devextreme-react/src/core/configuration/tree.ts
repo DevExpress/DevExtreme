@@ -16,9 +16,6 @@ function buildTemplates(
   node.templates.forEach(
     (template) => {
       if (template.isAnonymous) {
-        // console.log(fullName);
-        // console.log(template.optionName);
-
         const templateName = mergeNameParts(fullName, template.optionName);
         optionsAccum[template.optionName] = templateName;
         templatesAccum[templateName] = template;
