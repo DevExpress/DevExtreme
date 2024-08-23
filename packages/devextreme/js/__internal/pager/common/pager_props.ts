@@ -15,8 +15,6 @@ export const PagerDefaultProps: PagerProps = {
   ...BasePagerDefaultProps,
   pageSize: 5,
   pageIndex: 1,
-  pageIndexChanged: () => { },
-  pageSizeChanged: () => { },
   pageIndexChangedInternal: () => { },
   pageSizeChangedInternal: () => { },
 };
