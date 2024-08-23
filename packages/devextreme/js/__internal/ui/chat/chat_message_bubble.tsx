@@ -1,43 +1,20 @@
-import $ from '@js/core/renderer';
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-
-import Widget from '../widget';
+import type { InfernoNode } from 'inferno';
+import { Component } from 'inferno';
 
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 
-export interface MessageBubbleOptions extends WidgetOptions<MessageBubble> {
+export interface MessageBubbleOptions {
   text?: string;
+  className?: string;
 }
 
-class MessageBubble extends Widget<MessageBubbleOptions> {
-  _getDefaultOptions(): MessageBubbleOptions {
-    return {
-      ...super._getDefaultOptions(),
-      text: '',
-    };
-  }
-
-  _initMarkup(): void {
-    const $bubble = $(this.element()).addClass(CHAT_MESSAGE_BUBBLE_CLASS);
-
-    const { text } = this.option();
-
-    if (text) {
-      $bubble.text(text);
-    }
-
-    super._initMarkup();
-  }
-
-  _optionChanged(args: Record<string, unknown>): void {
-    const { name } = args;
-
-    switch (name) {
-      case 'text':
-        break;
-      default:
-        super._optionChanged(args);
-    }
+class MessageBubble extends Component<MessageBubbleOptions> {
+  render(): InfernoNode {
+    return (
+      <div className={`${CHAT_MESSAGE_BUBBLE_CLASS} ${this.props.className}`}>
+        {this.props.text}
+      </div>
+    );
   }
 }
 
