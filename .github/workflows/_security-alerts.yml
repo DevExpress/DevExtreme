@@ -18,7 +18,7 @@ jobs:
         run: |
           RESPONSE=$(curl \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Authorization: Bearer ${{ secrets.DX_ROBOT_PAT }}" \
           https://api.github.com/repos/${{ github.repository }}/dependabot/alerts?state=open)
           echo 'ALERTS<<EOF' >> $GITHUB_OUTPUT
           echo $RESPONSE >> $GITHUB_OUTPUT
