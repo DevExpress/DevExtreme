@@ -23,7 +23,7 @@ export interface NestedOptionContextContent {
     optionComponentKey: number
   ) => void;
   getOptionComponentKey: () => number;
-  treeUpdateToken: number | undefined;
+  treeUpdateToken: number;
 }
 
 export const NestedOptionContext = createContext<NestedOptionContextContent>({
@@ -31,7 +31,7 @@ export const NestedOptionContext = createContext<NestedOptionContextContent>({
   parentFullName: '',
   onChildOptionsReady: () => undefined,
   getOptionComponentKey: () => 0,
-  treeUpdateToken: undefined,
+  treeUpdateToken: 0,
 });
 
 export function generateID(): string {
