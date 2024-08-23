@@ -7,6 +7,7 @@ import { Component } from 'inferno';
 
 import Avatar from './chat_avatar';
 import MessageBubble from './chat_message_bubble';
+import { getMessageKey } from './utils';
 
 const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS = 'dx-chat-message-group-alignment-start';
@@ -61,6 +62,7 @@ class MessageGroup extends Component<MessageGroupOptions> {
 
     return (
       <MessageBubble
+        key={getMessageKey(message)}
         className={className}
         text={message.text}
       />
