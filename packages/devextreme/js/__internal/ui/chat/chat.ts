@@ -2,7 +2,7 @@ import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import type {
-  Message, MessageSendEvent, Properties, User,
+  Message, MessageSendEvent, Properties,
 } from '@js/ui/chat';
 
 import Widget from '../widget';
@@ -101,8 +101,7 @@ class Chat extends Widget<Properties> {
       text,
     };
 
-    // @ts-expect-error
-    this.renderMessage(message, user);
+    this.renderMessage(message);
     this._messageSendAction?.({ message, event });
   }
 
@@ -112,7 +111,7 @@ class Chat extends Widget<Properties> {
     switch (name) {
       case 'title':
         // @ts-expect-error
-        this._chatHeader?.option(name, value);
+        this._chatHeader?.option('title', value);
         break;
       case 'user':
         // @ts-expect-error
@@ -120,7 +119,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'items':
         // @ts-expect-error
-        this._messageList?.option(name, value);
+        this._messageList?.option('items', value);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -130,14 +129,12 @@ class Chat extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message, sender: User): void {
+  renderMessage(message: Message): void {
     const { items } = this.option();
 
     const newItems = items ? [...items, message] : [message];
 
-    this._setOptionWithoutOptionChange('items', newItems);
-
-    this._messageList?._renderMessage(message, newItems, sender);
+    this.option('items', newItems);
   }
 }
 
