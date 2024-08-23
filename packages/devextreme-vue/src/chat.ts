@@ -3,9 +3,13 @@ import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
+  "accessKey" |
+  "activeStateEnabled" |
   "disabled" |
   "elementAttr" |
+  "focusStateEnabled" |
   "height" |
+  "hint" |
   "hoverStateEnabled" |
   "items" |
   "onDisposing" |
@@ -24,9 +28,13 @@ interface DxChat extends AccessibleOptions {
 }
 const DxChat = createComponent({
   props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
     disabled: Boolean,
     elementAttr: Object,
+    focusStateEnabled: Boolean,
     height: [Function, Number, String],
+    hint: String,
     hoverStateEnabled: Boolean,
     items: Array,
     onDisposing: Function,
@@ -42,9 +50,13 @@ const DxChat = createComponent({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:focusStateEnabled": null,
     "update:height": null,
+    "update:hint": null,
     "update:hoverStateEnabled": null,
     "update:items": null,
     "update:onDisposing": null,
