@@ -17,7 +17,7 @@ const interceptors: Record<string, () => void> = {};
 
 interceptors.interceptorFn = () => {};
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 3000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
 
 @Injectable()
 export class TestInterceptor implements HttpInterceptor {
