@@ -192,7 +192,7 @@ class Scheduler extends Widget<any> {
 
   _appointmentPopup: any;
 
-  _compactAppointmentsHelper: any;
+  _compactAppointmentsHelper!: CompactAppointmentsHelper;
 
   _asyncTemplatesTimers!: any[];
 

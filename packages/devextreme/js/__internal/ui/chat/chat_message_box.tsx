@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import type { NativeEventInfo } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { MessageSendEvent } from '@js/ui/chat';
 import type { InfernoNode } from 'inferno';
 import { Component, createRef } from 'inferno';
 
@@ -11,6 +11,10 @@ import TextArea from '../m_text_area';
 const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+
+export type MessageSendEvent =
+  NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
+  { text?: string };
 
 export interface MessageBoxProperties {
   onMessageSend?: (e: MessageSendEvent) => void;

@@ -8,13 +8,16 @@ import { render } from 'inferno';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
+import type {
+  MessageSendEvent as MessageBoxMessageSendEvent,
+} from './chat_message_box';
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
 
 class Chat extends Widget<Properties> {
-  _messageSendAction?: (e: MessageSendEvent) => void;
+  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -65,7 +68,7 @@ class Chat extends Widget<Properties> {
     );
   }
 
-  _messageSendHandler(e: MessageSendEvent): void {
+  _messageSendHandler(e: MessageBoxMessageSendEvent): void {
     const { text, event } = e;
     const { user } = this.option();
 
@@ -75,9 +78,7 @@ class Chat extends Widget<Properties> {
       text,
     };
 
-    // @ts-expect-error
-    this.renderMessage(message, user);
-    // @ts-expect-error
+    this.renderMessage(message);
     this._messageSendAction?.({ message, event });
   }
 

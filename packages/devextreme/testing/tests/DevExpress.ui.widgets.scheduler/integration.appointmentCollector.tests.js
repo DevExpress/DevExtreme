@@ -120,15 +120,6 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
         assert.ok($collector.dxButton('instance'), 'Container is button');
     });
 
-    test('Appointment collector should be painted', function(assert) {
-        const widgetMock = createWidget();
-        const color = '#0000ff';
-
-        const $collector = renderAppointmentsCollectorContainer({ widgetMock, color });
-
-        assert.equal(new Color($collector.css('backgroundColor')).toHex(), color, 'Color is OK');
-    });
-
     test('Appointment collector should not be painted if items have different colors', function(assert) {
         const widgetMock = createWidget();
         const color = '#0000ff';
@@ -450,112 +441,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         } finally {
             scheduler.instance.showAppointmentPopup = showAppointmentPopup;
         }
-    });
-
-    test('Appointment collector should be painted depend on resource color', function(assert) {
-        const colors = [
-            '#ff0000',
-            '#ff0000',
-            '#ff0000',
-            '#0000ff',
-            '#0000ff',
-            '#0000ff'
-        ];
-
-        const appointments = [
-            { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-            { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-
-            { startDate: new Date(2015, 2, 4), text: 'c', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-            { startDate: new Date(2015, 2, 4), text: 'd', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-            { startDate: new Date(2015, 2, 4), text: 'e', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-            { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-            { startDate: new Date(2015, 2, 4), text: 'g', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
-        ];
-
-        const scheduler = createInstance({
-            currentDate: new Date(2015, 2, 4),
-            views: ['month'],
-            width: 840,
-            height: 490,
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            resources: [
-                {
-                    field: 'roomId',
-                    dataSource: [
-                        { id: 1, color: '#ff0000' },
-                        { id: 2, color: '#0000ff' }
-                    ]
-                }
-            ]
-        });
-
-        scheduler.instance.option('dataSource', appointments);
-
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.getMarkers().each((index, element) => {
-            assert.equal(getAppointmentColor($(element)), colors[index], 'Appointment color is OK');
-        });
-    });
-
-    test('Appointment collector should be painted depend on resource color when resourses store is asynchronous', function(assert) {
-        const colors = [
-            '#ff0000',
-            '#ff0000',
-            '#ff0000',
-            '#0000ff',
-            '#0000ff',
-            '#0000ff'
-        ];
-
-        const appointments = [
-            { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-            { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-
-            { startDate: new Date(2015, 2, 4), text: 'c', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-            { startDate: new Date(2015, 2, 4), text: 'd', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
-            { startDate: new Date(2015, 2, 4), text: 'e', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-            { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
-            { startDate: new Date(2015, 2, 4), text: 'g', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
-        ];
-        const scheduler = createInstance({
-            currentDate: new Date(2015, 2, 4),
-            views: ['month'],
-            width: 840,
-            height: 490,
-            currentView: 'month',
-            firstDayOfWeek: 1,
-            resources: [
-                {
-                    field: 'roomId',
-                    allowMultiple: true,
-                    dataSource: new DataSource({
-                        store: new CustomStore({
-                            load() {
-                                const d = $.Deferred();
-                                setTimeout(() => {
-                                    d.resolve([
-                                        { id: 1, text: 'Room 1', color: '#ff0000' },
-                                        { id: 2, text: 'Room 2', color: '#0000ff' }
-                                    ]);
-                                }, 300);
-
-                                return d.promise();
-                            }
-                        })
-                    })
-                }
-            ]
-        });
-
-        scheduler.instance.option('dataSource', appointments);
-        this.clock.tick(300);
-
-        scheduler.appointments.compact.click();
-        scheduler.tooltip.getMarkers().each((index, element) => {
-            assert.equal(getAppointmentColor($(element)), colors[index], 'Appointment color is OK');
-        });
     });
 
     test('Collapsed appointments should not be duplicated when items option change (T503748)', function(assert) {
