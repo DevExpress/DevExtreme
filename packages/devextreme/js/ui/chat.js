@@ -16,7 +16,7 @@ export default Chat;
  */
 
 /**
- * @name dxAutocomplete.focus
+ * @name dxChatOptions.focus
  * @publicName focus()
  * @hidden
  */
