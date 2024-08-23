@@ -1,8 +1,8 @@
 DevExtreme DataGrid and TreeList ship with built-in paging support. We expect to release Pagination as a separate component to simplify data navigation/improve browsing. This component will allow users to navigate extensive datasets by dividing them into individual pages.
 
-Pagination in full and compact modes:
-
 <!--split-->
+Pagination in full and compact modes
+
 Primary features will include:
 
 - **Page Navigator**\
