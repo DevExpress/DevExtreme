@@ -1,56 +1,28 @@
-import $ from '@js/core/renderer';
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-
-import Widget from '../widget';
+import type { InfernoNode } from 'inferno';
+import { Component } from 'inferno';
 
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
-export interface AvatarOptions extends WidgetOptions<Avatar> {
+export interface AvatarOptions {
   name?: string;
 }
 
-class Avatar extends Widget<AvatarOptions> {
-  _getDefaultOptions(): AvatarOptions {
-    return {
-      ...super._getDefaultOptions(),
-      name: '',
-    };
-  }
-
+class Avatar extends Component<AvatarOptions> {
   _getAvatarInitials(name: string): string {
     const initials = name.charAt(0).toUpperCase();
 
     return initials;
   }
 
-  _initMarkup(): void {
-    $(this.element()).addClass(CHAT_MESSAGE_AVATAR_CLASS);
-
-    super._initMarkup();
-
-    const $initials = $('<div>').addClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS);
-
-    const { name } = this.option();
-
-    if (name) {
-      const text = this._getAvatarInitials(name);
-
-      $initials.text(text);
-    }
-
-    $initials.appendTo(this.element());
-  }
-
-  _optionChanged(args: Record<string, unknown>): void {
-    const { name } = args;
-
-    switch (name) {
-      case 'name':
-        break;
-      default:
-        super._optionChanged(args);
-    }
+  render(): InfernoNode {
+    return (
+      <div className={CHAT_MESSAGE_AVATAR_CLASS}>
+        <div className={CHAT_MESSAGE_AVATAR_INITIALS_CLASS}>
+          {this.props.name && this._getAvatarInitials(this.props.name)}
+        </div>
+      </div>
+    );
   }
 }
 
