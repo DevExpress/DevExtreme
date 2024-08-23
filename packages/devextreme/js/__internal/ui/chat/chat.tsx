@@ -107,7 +107,7 @@ class Chat extends Widget<Properties> {
   }
 
   _clean(): void {
-    render(null, this.element());
+    render(null, $(this.element()).get(0));
     super._clean();
   }
 }
