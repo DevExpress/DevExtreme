@@ -54,7 +54,7 @@ class Chat extends Widget<Properties> {
           onMessageSend={this._messageSendHandler.bind(this)}
         />
       </>,
-      this.element(),
+      $(this.element()).get(0),
     );
   }
 
