@@ -1,11 +1,12 @@
-import $ from '@js/core/renderer';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { MessageSendEvent } from '@js/ui/chat';
+import type { InfernoNode } from 'inferno';
+import { Component, createRef } from 'inferno';
 
 import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
-import Widget from '../widget';
 
 const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
@@ -15,62 +16,39 @@ export interface MessageBoxProperties {
   onMessageSend?: (e: MessageSendEvent) => void;
 }
 
-class MessageBox extends Widget<MessageBoxProperties> {
-  _textArea?: dxTextArea;
+class MessageBox extends Component<MessageBoxProperties> {
+  textAreaRef = createRef<HTMLDivElement>();
 
-  _button?: Button;
+  buttonRef = createRef<HTMLDivElement>();
 
-  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
+  _textArea!: dxTextArea;
 
-  _getDefaultOptions(): MessageBoxProperties {
-    return {
-      ...super._getDefaultOptions(),
-      onMessageSend: undefined,
-    };
+  _button!: Button;
+
+  render(): InfernoNode {
+    return (
+      <div className={CHAT_MESSAGE_BOX_CLASS}>
+        <div
+          className={CHAT_MESSAGE_BOX_TEXTAREA_CLASS}
+          ref={this.textAreaRef}
+        />
+        <div
+          className={CHAT_MESSAGE_BOX_BUTTON_CLASS}
+          ref={this.buttonRef}
+        />
+      </div>
+    );
   }
 
-  _init(): void {
-    super._init();
-
-    this._createMessageSendAction();
-  }
-
-  _initMarkup(): void {
-    $(this.element()).addClass(CHAT_MESSAGE_BOX_CLASS);
-
-    super._initMarkup();
-
-    this._renderTextArea();
-    this._renderButton();
-  }
-
-  _renderTextArea(): void {
-    const $textArea = $('<div>')
-      .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
-      .appendTo(this.element());
-
-    this._textArea = this._createComponent($textArea, TextArea, {});
-  }
-
-  _renderButton(): void {
-    const $button = $('<div>')
-      .addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS)
-      .appendTo(this.element());
-
-    this._button = this._createComponent($button, Button, {
+  componentDidMount(): void {
+    this._textArea = new TextArea(this.textAreaRef.current!, {});
+    this._button = new Button(this.buttonRef.current!, {
       icon: 'send',
       stylingMode: 'text',
       onClick: (e): void => {
         this._sendHandler(e);
       },
     });
-  }
-
-  _createMessageSendAction(): void {
-    this._messageSendAction = this._createActionByOption(
-      'onMessageSend',
-      { excludeValidators: ['disabled', 'readOnly'] },
-    );
   }
 
   _sendHandler(e: ClickEvent): void {
@@ -80,20 +58,9 @@ class MessageBox extends Widget<MessageBoxProperties> {
       return;
     }
 
-    this._messageSendAction?.({ text, event: e.event });
+    // @ts-expect-error
+    this.props.onMessageSend?.({ text, event: e.event });
     this._textArea?.reset();
-  }
-
-  _optionChanged(args: Record<string, unknown>): void {
-    const { name } = args;
-
-    switch (name) {
-      case 'onMessageSend':
-        this._createMessageSendAction();
-        break;
-      default:
-        super._optionChanged(args);
-    }
   }
 }
 
