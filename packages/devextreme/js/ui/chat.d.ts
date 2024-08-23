@@ -142,7 +142,14 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxChat extends Widget<Properties> { }
+export default class dxChat extends Widget<Properties> {
+    /**
+     * @docid
+     * @publicName renderMessage(message)
+     * @public
+     */
+    renderMessage(message: Message): void;
+}
 
 /** @public */
 export type ExplicitTypes = {
