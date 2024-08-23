@@ -1,11 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
-  HttpRequest,
   provideHttpClient,
   withInterceptors,
   HttpInterceptorFn,
-  HttpHandlerFn,
   HttpClient,
 } from '@angular/common/http';
 import { ApplicationRef, Component } from '@angular/core';
@@ -13,17 +11,19 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { DxHttpModule } from 'devextreme-angular/http';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
+import { throwError } from 'rxjs';
 
-const TEST_URL = 'http://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems';
+const TEST_URL = '';
 const interceptors: Record<string, () => void> = {};
 
 interceptors.interceptorFn = () => {};
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
-
-const testInterceptorFn: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
+const testInterceptorFn: HttpInterceptorFn = () => {
   interceptors.interceptorFn();
-  return next(req);
+  return throwError(() => ({
+    status: 403,
+    statusText: 'Request intercepted. Access Denied',
+  }));
 };
 
 @Component({
@@ -87,8 +87,7 @@ describe('Using DxHttpModule in application with interceptors provided in bootst
 
     component
       .fetchData()
-      .then((data: Record<string, unknown>) => {
-        expect(data.value).toBeTruthy();
+      .catch(() => {
         expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
         done();
       }).finally(() => {});
@@ -99,8 +98,7 @@ describe('Using DxHttpModule in application with interceptors provided in bootst
 
     // eslint-disable-next-line no-void
     void component.loadDataSource()
-      .then((data: unknown[]) => {
-        expect(data.length).toBeGreaterThan(0);
+      .catch(() => {
         expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
         done();
       });
