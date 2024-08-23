@@ -1,6 +1,5 @@
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
-    Cancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -35,9 +34,14 @@ export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
  * @docid _ui_chat_MessageSendEvent
  * @public
  * @type object
- * @inherits Cancelable,NativeEventInfo,Message
+ * @inherits NativeEventInfo
  */
-export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & Message;
+export type MessageSendEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+    /**
+     * @docid
+     */
+    readonly message?: Message;
+};
 
 /**
  * @docid
