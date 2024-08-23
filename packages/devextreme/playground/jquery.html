@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,6 +43,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +51,38 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="chat"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            let i = 0;
+
+            window.createMessage = () => {
+                i++;
+                return {
+                    timestamp: 123123,
+                    text: 'asd' + i,
+                    author: {
+                        id: (i / 2) % 2,
+                        name: 'asd',
+                    }
+                }
+            }
+
+            $(function () {
+                window.chat = $("#chat").dxChat({
+                    currentUserId: 1,
+                    items: [
+                        createMessage(),
+                        createMessage(),
+                        createMessage(),
+                    ]
+                }).dxChat('instance');
+
+                setInterval(() => {
+                    chat.option('items', [createMessage(), ...chat.option('items')])
+                }, 1000)
             });
         </script>
     </div>
 </body>
+
 </html>
