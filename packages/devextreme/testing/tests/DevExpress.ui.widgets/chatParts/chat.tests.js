@@ -20,11 +20,11 @@ export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 export const NOW = '1721747399083';
 
-const userFirst = {
+export const userFirst = {
     id: MOCK_COMPANION_USER_ID,
     name: 'First',
 };
-const userSecond = {
+export const userSecond = {
     id: MOCK_CURRENT_USER_ID,
     name: 'Second',
 };
@@ -162,6 +162,22 @@ QUnit.module('Chat', moduleConfig, () => {
             const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`));
 
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
+        });
+
+        QUnit.test('should render only 1 message if new value has 1 item', function(assert) {
+            this.reinit();
+
+            const newMessage = {
+                timestamp: NOW,
+                author: userFirst,
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.option({ items: [ newMessage ] });
+
+            const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+            assert.strictEqual($bubbles.length, 1);
         });
     });
 
