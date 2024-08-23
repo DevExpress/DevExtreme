@@ -1,9 +1,10 @@
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { Message } from '@js/ui/chat';
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import { combineClasses } from '@ts/core/r1/utils/render_utils';
+import type { InfernoNode, RefObject } from 'inferno';
+import { Component } from 'inferno';
 
-import Widget from '../widget';
 import Avatar from './chat_avatar';
 import MessageBubble from './chat_message_bubble';
 
@@ -13,28 +14,18 @@ const CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS = 'dx-chat-message-group-alignment-
 const CHAT_MESSAGE_GROUP_INFORMATION_CLASS = 'dx-chat-message-group-information';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_NAME_CLASS = 'dx-chat-message-name';
-const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
 const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 
-export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
-  items: Message[];
-  alignment: 'start' | 'end';
+export interface MessageGroupOptions {
+  items?: Message[];
+  alignment?: 'start' | 'end';
+  innerRef?: RefObject<HTMLDivElement>;
 }
 
-class MessageGroup extends Widget<MessageGroupOptions> {
-  _avatar?: Avatar;
-
-  _getDefaultOptions(): MessageGroupOptions {
-    return {
-      ...super._getDefaultOptions(),
-      items: [],
-      alignment: 'start',
-    };
-  }
-
+class MessageGroup extends Component<MessageGroupOptions> {
   _getAlignmentClass(): string {
-    const { alignment } = this.option();
+    const alignment = this.props.alignment ?? 'start';
 
     const alignmentClass = alignment === 'start'
       ? CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS
@@ -43,120 +34,78 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     return alignmentClass;
   }
 
-  _initMarkup(): void {
-    const { alignment, items } = this.option();
+  render(): InfernoNode {
+    const alignment = this.props.alignment ?? 'start';
 
-    const alignmentClass = this._getAlignmentClass();
-
-    $(this.element())
-      .addClass(CHAT_MESSAGE_GROUP_CLASS)
-      .addClass(alignmentClass);
-
-    super._initMarkup();
-
-    if (alignment === 'start') {
-      const authorName = items[0].author?.name;
-
-      const $avatar = $('<div>').appendTo(this.element());
-
-      this._avatar = this._createComponent($avatar, Avatar, {
-        name: authorName,
-      });
-    }
-
-    this._renderMessageGroupInformation(items?.[0]);
-    this._renderMessageBubbles(items);
+    return (
+      <div className={`${CHAT_MESSAGE_GROUP_CLASS} ${this._getAlignmentClass()}`} ref={this.props.innerRef}>
+        {alignment === 'start' && (
+          <Avatar
+            name={this.props.items?.[0].author?.name}
+          />
+        )}
+        {this._renderMessageGroupInformation(this.props.items?.[0]!)}
+        {this._renderMessageBubbles(this.props.items ?? [])}
+      </div>
+    );
   }
 
-  _renderMessageBubble(message: Message, index: number, length: number): void {
-    const $bubble = $('<div>');
-
+  _renderMessageBubble(message: Message, index: number, length: number): InfernoNode {
     const isFirst = index === 0;
     const isLast = index === length - 1;
 
-    if (isFirst) {
-      $bubble.addClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS);
-    }
-
-    if (isLast) {
-      $bubble.addClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
-    }
-
-    $bubble.appendTo(this.element());
-
-    this._createComponent($bubble, MessageBubble, {
-      text: message.text,
+    const className = combineClasses({
+      [CHAT_MESSAGE_BUBBLE_FIRST_CLASS]: isFirst,
+      [CHAT_MESSAGE_BUBBLE_LAST_CLASS]: isLast,
     });
+
+    return (
+      <MessageBubble
+        className={className}
+        text={message.text}
+      />
+    );
   }
 
-  _renderMessageBubbles(items: Message[]): void {
-    items.forEach((message, index) => {
-      this._renderMessageBubble(message, index, items.length);
-    });
+  _renderMessageBubbles(items: Message[]): InfernoNode {
+    return (
+      <>
+        {items.map(
+          (message, index) => this._renderMessageBubble(message, index, items.length),
+        )}
+      </>
+    );
   }
 
-  _renderName(name: string, $element: dxElementWrapper): void {
-    $('<div>')
-      .addClass(CHAT_MESSAGE_NAME_CLASS)
-      .text(name)
-      .appendTo($element);
+  _renderName(name: string): InfernoNode {
+    return (
+      <div className={CHAT_MESSAGE_NAME_CLASS}>
+        {name}
+      </div>
+    );
   }
 
-  _renderTime(timestamp: string, $element: dxElementWrapper): void {
+  _renderTime(timestamp: string): InfernoNode {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
     const dateTime = new Date(Number(timestamp));
     const dateTimeString = dateTime.toLocaleTimeString(undefined, options);
 
-    $('<div>')
-      .addClass(CHAT_MESSAGE_TIME_CLASS)
-      .text(dateTimeString)
-      .appendTo($element);
+    return (
+      <div className={CHAT_MESSAGE_TIME_CLASS}>
+        {dateTimeString}
+      </div>
+    );
   }
 
-  _renderMessageGroupInformation(message: Message): void {
+  _renderMessageGroupInformation(message: Message): InfernoNode {
     const { timestamp, author } = message;
-    const $messageGroupInformation = $('<div>').addClass(CHAT_MESSAGE_GROUP_INFORMATION_CLASS);
 
-    if (author?.name) {
-      this._renderName(author.name, $messageGroupInformation);
-    }
-
-    if (timestamp) {
-      this._renderTime(timestamp, $messageGroupInformation);
-    }
-
-    $messageGroupInformation.appendTo(this.element());
-  }
-
-  _updateLastBubbleClasses(): void {
-    const $bubbles = $(this.element()).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-    const $lastBubble = $bubbles.eq($bubbles.length - 1);
-
-    $lastBubble.removeClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
-  }
-
-  _renderMessage(message: Message): void {
-    const { items } = this.option();
-
-    const newItems = [...items, message];
-
-    this._setOptionWithoutOptionChange('items', newItems);
-
-    this._updateLastBubbleClasses();
-    this._renderMessageBubble(message, newItems.length - 1, newItems.length);
-  }
-
-  _optionChanged(args: Record<string, unknown>): void {
-    const { name } = args;
-
-    switch (name) {
-      case 'items':
-      case 'alignment':
-        this._invalidate();
-        break;
-      default:
-        super._optionChanged(args);
-    }
+    return (
+      <div className={CHAT_MESSAGE_GROUP_INFORMATION_CLASS}>
+        {author?.name && this._renderName(author.name)}
+        {timestamp && this._renderTime(timestamp)}
+      </div>
+    );
   }
 }
 
