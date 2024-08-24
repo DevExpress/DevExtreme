@@ -29,7 +29,7 @@ export class ModuleItem {
   // We don't have type for GridBase widget
   // There's no such class, DataGrid and TreeList don't have common ancestor
   // so I just added 'component' id as string
-  static dependencies: unknown[] = ['component'];
+  public static dependencies: unknown[] = ['component'];
 
   public _updateLockCount: any;
 

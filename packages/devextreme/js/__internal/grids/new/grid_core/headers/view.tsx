@@ -23,7 +23,7 @@ export class HeadersView extends View {
     [this.columnsController.columns],
   );
 
-  static dependencies = [ColumnsController, ColumnsDraggingController] as const;
+  public static dependencies = [ColumnsController, ColumnsDraggingController] as const;
 
   constructor(
     private readonly columnsController: ColumnsController,

@@ -17,7 +17,7 @@ interface State {
 }
 
 export class PagerView2 extends Component<{}, State> {
-  static dependencies = [DataController] as const;
+  public static dependencies = [DataController] as const;
 
   constructor(private readonly dataController: DataController) {
     super();

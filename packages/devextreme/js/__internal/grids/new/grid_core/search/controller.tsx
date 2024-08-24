@@ -6,7 +6,7 @@ import { OptionsController } from '../options_controller/options_controller';
 import { SearchField } from './search_field';
 
 export class Search {
-  static dependencies = [HeaderPanelController, OptionsController] as const;
+  public static dependencies = [HeaderPanelController, OptionsController] as const;
 
   public readonly searchText = this.options.twoWay('searchText');
 

@@ -16,7 +16,7 @@ interface Mapping<T> {
 }
 
 export class StateStoringController {
-  static dependencies = [];
+  public static dependencies = [];
 
   private readonly mappings: Set<Mapping<unknown>> = new Set();
 

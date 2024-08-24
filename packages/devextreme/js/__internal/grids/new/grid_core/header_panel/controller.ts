@@ -39,7 +39,7 @@ export class HeaderPanelController {
     [this.defaultItems, this.userItems],
   );
 
-  static dependencies = [OptionsController] as const;
+  public static dependencies = [OptionsController] as const;
 
   constructor(
     private readonly options: OptionsController,

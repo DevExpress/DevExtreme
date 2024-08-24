@@ -5,7 +5,7 @@ import { Toolbar } from '../inferno_wrappers/toolbar';
 import { HeaderPanelController } from './controller';
 
 export class HeaderPanelView extends View {
-  static dependencies = [HeaderPanelController] as const;
+  public static dependencies = [HeaderPanelController] as const;
 
   public vdom = computed(
     (items) => <Toolbar items={items}></Toolbar>,

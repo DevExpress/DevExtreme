@@ -7,7 +7,7 @@ interface State {
 }
 
 export class MyView extends Component<{}, State> {
-  static dependencies = [OptionsController];
+  public static dependencies = [OptionsController];
 
   constructor(
     private readonly options: OptionsController,

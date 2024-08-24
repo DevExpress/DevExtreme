@@ -10,7 +10,7 @@ import type { PredefinedToolbarItem } from '../types';
 import type { Change } from './types';
 
 export class EditingController {
-  static dependencies = [HeaderPanelController, OptionsController] as const;
+  public static dependencies = [HeaderPanelController, OptionsController] as const;
 
   private readonly _isEditing = state(false);
 

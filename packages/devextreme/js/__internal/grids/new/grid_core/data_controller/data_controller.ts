@@ -67,7 +67,7 @@ export class DataController {
     [this.totalCount, this.pageSize],
   );
 
-  static dependencies = [OptionsController, Search, EditingController] as const;
+  public static dependencies = [OptionsController, Search, EditingController] as const;
 
   constructor(
     private readonly options: OptionsController,

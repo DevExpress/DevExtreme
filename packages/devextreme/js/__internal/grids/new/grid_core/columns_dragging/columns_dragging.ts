@@ -41,7 +41,7 @@ export function createVerticalHoverIndexFunc(elements: HTMLElement): DraggingAre
 }
 
 export class ColumnsDraggingController {
-  static dependencies = [] as const;
+  public static dependencies = [] as const;
 
   public registerDraggingArea(area: DraggingArea): Subscription {
     throw new Error('not implemented');

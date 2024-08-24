@@ -68,7 +68,7 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
 
   private readonly defaults: TDefaultProps;
 
-  static dependencies = [Component];
+  public static dependencies = [Component];
 
   constructor(
     private readonly component: Component<TProps>,

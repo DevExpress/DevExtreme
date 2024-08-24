@@ -56,7 +56,7 @@ export class ContentView extends View {
     ],
   );
 
-  static dependencies = [
+  public static dependencies = [
     DataController, ColumnsController, OptionsController, ContentStatusView, EditingController,
   ] as const;
 

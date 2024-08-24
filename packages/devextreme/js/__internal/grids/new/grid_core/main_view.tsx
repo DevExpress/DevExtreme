@@ -13,7 +13,7 @@ import { PagerView } from './pager';
 export class MainView extends View {
   public vdom: InfernoNode | Subscribable<InfernoNode>;
 
-  static dependencies = [
+  public static dependencies = [
     ContentView, PagerView, HeaderPanelView, HeadersView, FilterPanelView,
   ] as const;
 

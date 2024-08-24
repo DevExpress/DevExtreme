@@ -27,7 +27,7 @@ export class ContentStatusView extends View {
     ],
   );
 
-  static dependencies = [DataController, OptionsController] as const;
+  public static dependencies = [DataController, OptionsController] as const;
 
   constructor(
     private readonly dataController: DataController,

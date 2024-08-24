@@ -1,7 +1,7 @@
 import { HeaderPanelController } from '../header_panel/controller';
 
 export class ColumnsChooser {
-  static dependencies = [HeaderPanelController] as const;
+  public static dependencies = [HeaderPanelController] as const;
 
   constructor(
     private readonly headerPanel: HeaderPanelController,

@@ -31,7 +31,7 @@ export class ColumnsController {
     ],
   );
 
-  static dependencies = [OptionsController, DataController] as const;
+  public static dependencies = [OptionsController, DataController] as const;
 
   constructor(
     private readonly options: OptionsController,

@@ -14,7 +14,7 @@ export class FilterPanelView extends View {
     ],
   );
 
-  static dependencies = [OptionsController] as const;
+  public static dependencies = [OptionsController] as const;
 
   constructor(
     private readonly options: OptionsController,
