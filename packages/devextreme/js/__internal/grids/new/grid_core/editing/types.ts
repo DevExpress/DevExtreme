@@ -3,3 +3,7 @@ export interface Change {
   key: unknown;
   data: unknown;
 }
+
+export interface EditingProperties {
+  editingChanges?: Change[];
+}

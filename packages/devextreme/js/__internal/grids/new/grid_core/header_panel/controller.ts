@@ -8,8 +8,8 @@ import type { MaybeSubscribable } from '@ts/core/reactive';
 import { computed, state, toSubscribable } from '@ts/core/reactive';
 
 import { OptionsController } from '../options_controller/options_controller';
-import type { PredefinedToolbarItem, ToolbarItem } from '../types';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
+import type { PredefinedToolbarItem, ToolbarItem } from './types';
 
 export class HeaderPanelController {
   private readonly defaultItems = state<Record<string, ToolbarItem>>({});

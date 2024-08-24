@@ -5,9 +5,8 @@ import type { Subscribable } from '@ts/core/reactive';
 import { computed, state } from '@ts/core/reactive';
 
 import { HeaderPanelController } from '../header_panel/controller';
+import type { PredefinedToolbarItem } from '../header_panel/types';
 import { OptionsController } from '../options_controller/options_controller';
-import type { PredefinedToolbarItem } from '../types';
-import type { Change } from './types';
 
 export class EditingController {
   public static dependencies = [HeaderPanelController, OptionsController] as const;

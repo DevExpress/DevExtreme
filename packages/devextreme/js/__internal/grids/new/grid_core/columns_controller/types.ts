@@ -24,3 +24,7 @@ export interface DataRow {
 
   key: unknown;
 }
+
+export interface ColumnsControllerProperties {
+  columns?: ColumnProperties[];
+}
