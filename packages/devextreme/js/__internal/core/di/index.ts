@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -53,6 +54,7 @@ export class DIContext {
     if (fabric) {
       const res: T = this.create(fabric as any);
       this.instances.set(id, res);
+      this.instances.set(fabric, res);
       return res;
     }
 
