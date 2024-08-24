@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should be rendered 1`] = `"<div class="dx-cardview-card" tabindex="0"><div class="dx-cardview-field" tabindex="0"><span class="dx-cardview-field-name">asd: </span><span class="dx-cardview-field-name" style="text-align: left;">qwe</span></div></div>"`;
