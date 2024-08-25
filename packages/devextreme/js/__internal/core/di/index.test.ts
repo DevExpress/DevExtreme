@@ -6,24 +6,61 @@
 import { DIContext } from './index';
 
 describe('basic', () => {
-  class MyClass {
-    static dependencies = [] as const;
+  describe('register', () => {
+    class MyClass {
+      static dependencies = [] as const;
 
-    getNumber(): number {
-      return 1;
+      getNumber(): number {
+        return 1;
+      }
     }
-  }
 
-  const ctx = new DIContext();
-  ctx.register(MyClass);
+    const ctx = new DIContext();
+    ctx.register(MyClass);
 
-  it('should return registered class', () => {
-    expect(ctx.get(MyClass)).toBeInstanceOf(MyClass);
-    expect(ctx.get(MyClass).getNumber()).toBe(1);
+    it('should return registered class', () => {
+      expect(ctx.get(MyClass)).toBeInstanceOf(MyClass);
+      expect(ctx.get(MyClass).getNumber()).toBe(1);
+    });
+
+    it('should return same instance each time', () => {
+      expect(ctx.get(MyClass)).toBe(ctx.get(MyClass));
+    });
   });
 
-  it('should return same instance each time', () => {
-    expect(ctx.get(MyClass)).toBe(ctx.get(MyClass));
+  describe('registerInstance', () => {
+    class MyClass {
+      static dependencies = [] as const;
+
+      getNumber(): number {
+        return 1;
+      }
+    }
+
+    const ctx = new DIContext();
+    const instance = new MyClass();
+    ctx.registerInstance(MyClass, instance);
+
+    it('should work', () => {
+      expect(ctx.get(MyClass)).toBe(instance);
+    });
+  });
+
+  describe('non registered items', () => {
+    const ctx = new DIContext();
+    class MyClass {
+      static dependencies = [] as const;
+
+      getNumber(): number {
+        return 1;
+      }
+    }
+    it('should throw', () => {
+      expect(() => ctx.get(MyClass)).toThrow();
+    });
+    it('should not throw if tryGet', () => {
+      expect(ctx.tryGet(MyClass)).toBe(undefined);
+    });
   });
 });
 
@@ -109,4 +146,28 @@ it('should work regardless of registration order', () => {
   ctx.register(MyDependentClass);
   ctx.register(MyClass);
   expect(ctx.get(MyDependentClass).getSuperNumber()).toBe(2);
+});
+
+describe('dependency cycle', () => {
+  class MyClass1 {
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    static dependencies = [MyClass2] as const;
+
+    constructor(private readonly myClass2: MyClass2) {}
+  }
+  class MyClass2 {
+    static dependencies = [MyClass1] as const;
+
+    constructor(private readonly myClass1: MyClass1) {}
+  }
+
+  const ctx = new DIContext();
+  ctx.register(MyClass1);
+  ctx.register(MyClass2);
+
+  it('should throw', () => {
+    expect(() => ctx.get(MyClass1)).toThrow();
+    expect(() => ctx.get(MyClass2)).toThrow();
+  });
 });

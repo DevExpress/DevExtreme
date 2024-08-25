@@ -12,7 +12,8 @@ module.exports = {
     ],
     preset: 'ts-jest',
     testMatch: [
-        '<rootDir>/js/__internal/grids/new/**/*.test.(ts|tsx)',
+        '<rootDir>/js/__internal/**/*.test.(ts|tsx)',
+        '!**/scheduler/**',
     ],
     transform: {
         '\\.[jt]sx?$': ['ts-jest', {

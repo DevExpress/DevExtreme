@@ -75,7 +75,7 @@ export class DIContext {
 
     this.antiRecursionSet.add(fabric);
 
-    const args = (fabric.dependencies ?? []).map((dependency) => this.get(dependency));
+    const args = fabric.dependencies.map((dependency) => this.get(dependency));
 
     this.antiRecursionSet.delete(fabric);
 
