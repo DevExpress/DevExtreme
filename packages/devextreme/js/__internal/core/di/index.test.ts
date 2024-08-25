@@ -15,15 +15,26 @@ describe('basic', () => {
       }
     }
 
-    const ctx = new DIContext();
-    ctx.register(MyClass);
-
     it('should return registered class', () => {
+      const ctx = new DIContext();
+      ctx.register(MyClass);
+
       expect(ctx.get(MyClass)).toBeInstanceOf(MyClass);
       expect(ctx.get(MyClass).getNumber()).toBe(1);
     });
 
+    it('should return registered class with tryGet', () => {
+      const ctx = new DIContext();
+      ctx.register(MyClass);
+
+      expect(ctx.tryGet(MyClass)).toBeInstanceOf(MyClass);
+      expect(ctx.tryGet(MyClass)?.getNumber()).toBe(1);
+    });
+
     it('should return same instance each time', () => {
+      const ctx = new DIContext();
+      ctx.register(MyClass);
+
       expect(ctx.get(MyClass)).toBe(ctx.get(MyClass));
     });
   });
@@ -59,7 +70,7 @@ describe('basic', () => {
       expect(() => ctx.get(MyClass)).toThrow();
     });
     it('should not throw if tryGet', () => {
-      expect(ctx.tryGet(MyClass)).toBe(undefined);
+      expect(ctx.tryGet(MyClass)).toBe(null);
     });
   });
 });

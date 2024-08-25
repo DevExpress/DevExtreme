@@ -46,6 +46,18 @@ export class DIContext {
   public get<T>(
     id: AbstractType<T>,
   ): T {
+    const instance = this.tryGet(id);
+
+    if (instance) {
+      return instance;
+    }
+
+    throw new Error('DI item is not registered');
+  }
+
+  public tryGet<T>(
+    id: AbstractType<T>,
+  ): T | null {
     if (this.instances.get(id)) {
       return this.instances.get(id) as T;
     }
@@ -58,17 +70,10 @@ export class DIContext {
       return res;
     }
 
-    throw new Error('DI item is not registered');
+    return null;
   }
 
-  public tryGet<T, TDeps extends readonly any[]>(
-    id: Constructor<T, TDeps>,
-  ): T | null {
-    const res = this.instances.get(id);
-    return res as T;
-  }
-
-  public create<T, TDeps extends readonly any[]>(fabric: DIItem<T, TDeps>): T {
+  private create<T, TDeps extends readonly any[]>(fabric: DIItem<T, TDeps>): T {
     if (this.antiRecursionSet.has(fabric)) {
       throw new Error('dependency cycle in DI');
     }
