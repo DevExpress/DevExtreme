@@ -14,6 +14,7 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 import numberLocalization from '@js/localization/number';
 
 import gridCoreUtils from '../m_utils';
+import type { StickyPosition } from '../sticky_columns/const';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
@@ -938,4 +939,57 @@ export const strictParseNumber = function (text, format): any {
       return parsedValue;
     }
   }
+};
+
+export const isFirstOrLastColumn = function (
+  that: ColumnsController,
+  targetColumn: any,
+  rowIndex: number,
+  onlyWithinBandColumn = false,
+  isLast = false,
+  fixedPosition?: StickyPosition,
+): boolean {
+  const targetColumnIndex = targetColumn.index;
+  const bandColumnsCache = that.getBandColumnsCache();
+  const bandColumns = getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
+  const getColumns = (index: number, column?): any => that.getVisibleColumns(index)
+    .filter((col) => {
+      let res = true;
+
+      if (onlyWithinBandColumn && column) {
+        res &&= col.ownerBand === column.ownerBand;
+      } else if (fixedPosition) {
+        res &&= col.fixed && col.fixedPosition === fixedPosition;
+      }
+
+      return res;
+    });
+
+  if (bandColumns?.length) {
+    return bandColumns
+      .concat([targetColumn])
+      .every((column, index) => {
+        if (onlyWithinBandColumn && index === 0) {
+          return true;
+        }
+
+        const visibleColumnIndex = that.getVisibleIndex(column.index, index);
+        const columns = getColumns(index, column);
+
+        return isLast
+          ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1].index, index)
+          : visibleColumnIndex === that.getVisibleIndex(columns[0].index, index);
+      });
+  }
+
+  if (onlyWithinBandColumn) {
+    return true;
+  }
+
+  const columns = getColumns(rowIndex);
+  const visibleColumnIndex = that.getVisibleIndex(targetColumnIndex, rowIndex);
+
+  return isLast
+    ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1].index, rowIndex)
+    : visibleColumnIndex === that.getVisibleIndex(columns[0].index, rowIndex);
 };

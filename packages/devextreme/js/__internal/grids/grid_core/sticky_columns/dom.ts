@@ -2,46 +2,35 @@
 import { CLASSES, StickyPosition } from './const';
 import { getColumnFixedPosition } from './utils';
 
-const addLeftStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidgetPrefix): void => {
-  const lastLeftStickyColumn = [...stickyColumns]
-    .reverse()
-    .find((col) => getColumnFixedPosition(col) === StickyPosition.Left);
-
-  $cell.addClass(addWidgetPrefix(CLASSES.leftStickyColumn));
-
-  if (stickyColumn.index === lastLeftStickyColumn.index) {
-    $cell.addClass(addWidgetPrefix(CLASSES.lastLeftStickyColumn));
-  }
+const addStickyColumnBorderLeftClass = ($cell, addWidgetPrefix): void => {
+  $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
 };
 
-const addRightStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidgetPrefix): void => {
-  const firstRightStickyColumn = stickyColumns
-    .find((col) => getColumnFixedPosition(col) === StickyPosition.Right);
-
-  $cell.addClass(addWidgetPrefix(CLASSES.rightStickyColumn));
-
-  if (stickyColumn.index === firstRightStickyColumn.index) {
-    $cell.addClass(addWidgetPrefix(CLASSES.firstRightStickyColumn));
-  }
+const addStickyColumnBorderRightClass = ($cell, addWidgetPrefix): void => {
+  $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnBorderRight));
 };
 
-const addStickyColumnClass = ($cell, addWidgetPrefix): void => {
-  $cell.addClass(addWidgetPrefix(CLASSES.stickyColumn));
-};
-
-const addStickyColumnClasses = ($cell, stickyColumn, stickyColumns, addWidgetPrefix): void => {
+const addStickyColumnClass = ($cell, stickyColumn, addWidgetPrefix): void => {
   const fixedPosition = getColumnFixedPosition(stickyColumn);
 
   switch (fixedPosition) {
     case StickyPosition.Right:
-      addRightStickyColumnClasses($cell, stickyColumn, stickyColumns, addWidgetPrefix);
+      $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnRight));
       break;
     case StickyPosition.Sticky:
-      addStickyColumnClass($cell, addWidgetPrefix);
+      $cell.addClass(addWidgetPrefix(CLASSES.stickyColumn));
       break;
     default:
-      addLeftStickyColumnClasses($cell, stickyColumn, stickyColumns, addWidgetPrefix);
+      $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnLeft));
   }
+};
+
+const addFirstHeaderClass = ($cell, addWidgetPrefix): void => {
+  $cell.addClass(addWidgetPrefix(CLASSES.firstHeader));
+};
+
+const addColumnNoBorderClass = ($cell, addWidgetPrefix): void => {
+  $cell.addClass(addWidgetPrefix(CLASSES.columnNoBorder));
 };
 
 const toggleStickyColumnsClass = ($element, isStickyColumns, addWidgetPrefix): void => {
@@ -49,6 +38,10 @@ const toggleStickyColumnsClass = ($element, isStickyColumns, addWidgetPrefix): v
 };
 
 export const GridCoreStickyColumnsDom = {
-  addStickyColumnClasses,
+  addFirstHeaderClass,
+  addColumnNoBorderClass,
+  addStickyColumnClass,
+  addStickyColumnBorderLeftClass,
+  addStickyColumnBorderRightClass,
   toggleStickyColumnsClass,
 };

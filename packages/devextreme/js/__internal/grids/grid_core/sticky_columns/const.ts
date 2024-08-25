@@ -8,9 +8,11 @@ export enum StickyPosition {
 
 export const CLASSES = {
   stickyColumn: 'sticky-column',
-  leftStickyColumn: 'left-sticky-column',
-  rightStickyColumn: 'right-sticky-column',
-  firstRightStickyColumn: 'first-right-sticky-column',
-  lastLeftStickyColumn: 'last-left-sticky-column',
+  stickyColumnLeft: 'sticky-column-left',
+  stickyColumnRight: 'sticky-column-right',
+  stickyColumnBorderRight: 'sticky-column-border-right',
+  stickyColumnBorderLeft: 'sticky-column-border-left',
   stickyColumns: 'sticky-columns',
+  firstHeader: 'first-header',
+  columnNoBorder: 'column-no-border',
 };

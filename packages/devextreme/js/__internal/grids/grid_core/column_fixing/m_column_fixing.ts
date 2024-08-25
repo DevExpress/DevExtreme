@@ -403,8 +403,8 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getColumnWidths(fixedTableElement?: any) {
-    const result = super.getColumnWidths();
+  public getColumnWidths(fixedTableElement?: any, rowIndex?: number) {
+    const result = super.getColumnWidths(fixedTableElement, rowIndex);
     const fixedColumns = this.getFixedColumns();
     const fixedWidths = this._fixedTableElement && result.length
       ? super.getColumnWidths(this._fixedTableElement)
@@ -637,10 +637,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return columnElements;
   }
 
-  public getColumnWidths() {
+  public getColumnWidths(fixedTableElement?: any, rowIndex?: number) {
     const that = this;
     let fixedWidths;
-    const result = super.getColumnWidths();
+    const result = super.getColumnWidths(fixedTableElement, rowIndex);
     const $fixedColumnElements = that.getFixedColumnElements();
     const fixedColumns = that.getFixedColumns();
 

@@ -66,6 +66,7 @@ import {
   getValueDataType,
   isColumnFixed,
   isCustomCommandColumn,
+  isFirstOrLastColumn,
   isSortOrderValid,
   mergeColumns,
   moveColumnToGroup,
@@ -502,8 +503,8 @@ export class ColumnsController extends modules.Controller {
     return 0;
   }
 
-  public getStickyColumns(): any[] {
-    const visibleColumns = this.getVisibleColumns(null, true);
+  public getStickyColumns(rowIndex?: number): any[] {
+    const visibleColumns = this.getVisibleColumns(rowIndex, true);
 
     return visibleColumns.filter((column) => column.fixed);
   }
@@ -1810,6 +1811,31 @@ export class ColumnsController extends modules.Controller {
     });
 
     return result;
+  }
+
+  public getParentColumn(column) {
+    const bandColumnsCache = this.getBandColumnsCache();
+    const bandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
+
+    return bandColumns[0];
+  }
+
+  public isFirstColumn(
+    column,
+    rowIndex: number,
+    onlyWithinBandColumn = false,
+    fixedPosition?: StickyPosition,
+  ): boolean {
+    return isFirstOrLastColumn(this, column, rowIndex, onlyWithinBandColumn, false, fixedPosition);
+  }
+
+  public isLastColumn(
+    column,
+    rowIndex: number,
+    onlyWithinBandColumn = false,
+    fixedPosition?: StickyPosition,
+  ): boolean {
+    return isFirstOrLastColumn(this, column, rowIndex, onlyWithinBandColumn, true, fixedPosition);
   }
 
   public getColumnId(column) {
