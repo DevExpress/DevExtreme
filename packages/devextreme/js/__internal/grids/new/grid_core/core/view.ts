@@ -12,8 +12,8 @@ export abstract class View {
 
   public readonly abstract vdom: InfernoNode | Subscribable<InfernoNode>;
 
-  public render(root: Element): void {
-    toSubscribable(this.vdom).subscribe((node: InfernoNode) => {
+  public render(root: Element): Subscription {
+    return toSubscribable(this.vdom).subscribe((node: InfernoNode) => {
       render(node, root);
     });
   }

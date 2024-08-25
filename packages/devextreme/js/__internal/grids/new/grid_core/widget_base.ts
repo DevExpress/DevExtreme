@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import type { Subscription } from '@js/__internal/core/reactive';
 import browser from '@js/core/utils/browser';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
@@ -14,11 +15,14 @@ import { HeadersView } from '@ts/grids/new/grid_core/headers/view';
 import { MainView } from '@ts/grids/new/grid_core/main_view';
 import { PagerView } from '@ts/grids/new/grid_core/pager';
 import { Search } from '@ts/grids/new/grid_core/search/controller';
+import { render } from 'inferno';
 
 import { ContentStatusView } from './content_view/content_status_view';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
 
 export class GridCoreNew<Properties> extends Widget<Properties> {
+  protected renderSubscription?: Subscription;
+
   protected diContext!: DIContext;
 
   private dataController!: DataController;
@@ -133,6 +137,14 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     // @ts-expect-error
     super._initMarkup();
     // @ts-expect-error
-    this.diContext.get(MainView).render(this.$element().get(0));
+    this.renderSubscription = this.diContext.get(MainView).render(this.$element().get(0));
+  }
+
+  protected _clean(): void {
+    this.renderSubscription?.unsubscribe();
+    // @ts-expect-error
+    render(null, this.$element().get(0));
+    // @ts-expect-error
+    super._clean();
   }
 }
