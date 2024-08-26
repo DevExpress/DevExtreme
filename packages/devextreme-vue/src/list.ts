@@ -48,6 +48,7 @@ type AccessibleOptions = Pick<Properties,
   "onScroll" |
   "onSelectAllValueChanged" |
   "onSelectionChanged" |
+  "onSelectionChanging" |
   "pageLoadingText" |
   "pageLoadMode" |
   "pulledDownText" |
@@ -128,6 +129,7 @@ const DxList = createComponent({
     onScroll: Function,
     onSelectAllValueChanged: Function,
     onSelectionChanged: Function,
+    onSelectionChanging: Function,
     pageLoadingText: String,
     pageLoadMode: String,
     pulledDownText: String,
@@ -205,6 +207,7 @@ const DxList = createComponent({
     "update:onScroll": null,
     "update:onSelectAllValueChanged": null,
     "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:pageLoadingText": null,
     "update:pageLoadMode": null,
     "update:pulledDownText": null,

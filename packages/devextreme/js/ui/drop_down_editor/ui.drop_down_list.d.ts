@@ -44,6 +44,32 @@ export interface SelectionChangedInfo<T = any> {
 }
 
 /**
+ * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
+ * @hidden
+ */
+export interface SelectionChangingInfo<T = any> {
+    /**
+     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo.selectedItem
+     * @type object
+     */
+    readonly selectedItem: T;
+}
+
+/**
+ * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TComponent> = EventInfo<TComponent> & SelectionChangingInfo & {
+    /**
+     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent.cancel
+     * @type Boolean|Promise<Boolean>
+     */
+    cancel: boolean | PromiseLike<boolean>;
+};
+
+/**
  * @namespace DevExpress.ui
  * @docid
  * @hidden
@@ -106,6 +132,11 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @public
      */
     onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
+    /**
+     * @docid
+     * @type_function_param1 e:{ui/drop_down_list:SelectionChangingEvent}
+     */
+    onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
     /**
      * @docid
      * @default null

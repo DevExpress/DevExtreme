@@ -8,7 +8,7 @@ import dxSelectBox, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CustomItemCreatingEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/select_box";
+import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CustomItemCreatingEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, PasteEvent, SelectionChangingEvent, ValueChangedEvent } from "devextreme/ui/select_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { event, EventInfo } from "devextreme/events/index";
@@ -44,6 +44,7 @@ type ISelectBoxOptionsNarrowedEvents = {
   onKeyUp?: ((e: KeyUpEvent) => void);
   onOpened?: ((e: OpenedEvent) => void);
   onPaste?: ((e: PasteEvent) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onValueChanged?: ((e: ValueChangedEvent) => void);
 }
 
@@ -80,7 +81,7 @@ const SelectBox = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["opened","value"]), []);
-      const independentEvents = useMemo(() => (["onChange","onClosed","onContentReady","onCopy","onCustomItemCreating","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onOpened","onPaste","onValueChanged"]), []);
+      const independentEvents = useMemo(() => (["onChange","onClosed","onContentReady","onCopy","onCustomItemCreating","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onOpened","onPaste","onSelectionChanging","onValueChanged"]), []);
 
       const defaults = useMemo(() => ({
         defaultOpened: "opened",

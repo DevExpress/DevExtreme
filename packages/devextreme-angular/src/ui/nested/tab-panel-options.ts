@@ -60,6 +60,7 @@ import { DxiItemComponent } from './item-dxi';
         'onItemRendered',
         'onOptionChanged',
         'onSelectionChanged',
+        'onSelectionChanging',
         'onTitleClick',
         'onTitleHold',
         'onTitleRendered',

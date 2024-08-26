@@ -9,7 +9,7 @@ import dxTabs, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxTabsItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/tabs";
+import type { dxTabsItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent } from "devextreme/ui/tabs";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
 
@@ -25,6 +25,7 @@ type ITabsOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
   onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent<TItem, TKey>) => void);
 }
 
 type ITabsOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ITabsOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {
@@ -61,7 +62,7 @@ const Tabs = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem","selectedItemKeys","selectedItems"]), []);
-      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered","onSelectionChanging"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",

@@ -25,6 +25,22 @@ export type ItemLike = string | CollectionWidgetItem | any;
  * @docid
  * @hidden
  */
+export interface SelectionChangingInfo<TItem extends ItemLike = any> {
+    /** @docid */
+    readonly addedItems: Array<TItem>;
+    /** @docid */
+    readonly removedItems: Array<TItem>;
+    /**
+     * @docid
+     * @type boolean|Promise<boolean>
+     */
+    cancel?: boolean | PromiseLike<boolean>;
+}
+
+/**
+ * @docid
+ * @hidden
+ */
 export interface SelectionChangedInfo<TItem extends ItemLike = any> {
     /** @docid */
     readonly addedItems: Array<TItem>;
@@ -126,6 +142,18 @@ export interface CollectionWidgetOptions<
      * @public
      */
     onItemRendered?: ((e: EventInfo<TComponent> & ItemInfo<TItem>) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field addedItems:array<any>
+     * @type_function_param1_field removedItems:array<any>
+     * @type_function_param1_field component:this
+     * @type_function_param1_field cancel:boolean|Promise<boolean>
+     * @action
+     * @public
+     */
+    onSelectionChanging?: ((e: EventInfo<TComponent> & SelectionChangingInfo<TItem>) => void);
     /**
      * @docid
      * @default null

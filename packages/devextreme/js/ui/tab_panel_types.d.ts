@@ -10,6 +10,7 @@ export {
   ItemHoldEvent,
   ItemRenderedEvent,
   OptionChangedEvent,
+  SelectionChangingEvent,
   SelectionChangedEvent,
   TitleClickEvent,
   TitleHoldEvent,

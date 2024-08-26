@@ -12,6 +12,7 @@ export {
   ItemRenderedEvent,
   OptionChangedEvent,
   SelectionChangedEvent,
+  SelectionChangingEvent,
   dxTabsOptions,
   Item,
   Properties,

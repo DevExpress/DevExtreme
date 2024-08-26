@@ -21,6 +21,7 @@ import {
 
 import dxDropDownList, {
     dxDropDownListOptions,
+    SelectionChangingInfo,
     SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
@@ -192,6 +193,20 @@ export type OptionChangedEvent = EventInfo<dxSelectBox> & ChangedOptionInfo;
  * @inherits NativeEventInfo
  */
 export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
+
+/**
+ * @docid _ui_select_box_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
+ */
+export type SelectionChangingEvent = EventInfo<dxSelectBox> & SelectionChangingInfo & {
+    /**
+     * @docid _ui_select_box_SelectionChangingEvent.cancel
+     * @type Boolean|Promise<Boolean>
+     */
+     cancel: boolean | PromiseLike<boolean>;
+};
 
 /**
  * @docid _ui_select_box_SelectionChangedEvent
@@ -398,6 +413,11 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  * @type_function_param1 e:{ui/select_box:PasteEvent}
  */
 onPaste?: ((e: PasteEvent) => void);
+/**
+ * @docid dxSelectBoxOptions.onSelectionChanging
+ * @type_function_param1 e:{ui/select_box:SelectionChangingEvent}
+ */
+onSelectionChanging?: ((e: SelectionChangingEvent) => void);
 /**
  * @docid dxSelectBoxOptions.onSelectionChanged
  * @type_function_param1 e:{ui/select_box:SelectionChangedEvent}

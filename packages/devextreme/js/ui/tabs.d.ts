@@ -12,6 +12,7 @@ import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
     SelectionChangedInfo,
+    SelectionChangingInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -101,6 +102,20 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @inherits EventInfo,SelectionChangedInfo
  */
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/**
+ * @docid _ui_tabs_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & SelectionChangingInfo<TItem> & {
+    /**
+     * @docid _ui_tabs_SelectionChangingEvent.cancel
+     * @type Boolean|Promise<Boolean>
+     */
+    cancel: boolean | PromiseLike<boolean>;
+};
 
 /**
  * @deprecated use Properties instead
@@ -254,6 +269,7 @@ export type ExplicitTypes<
     ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
     OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
     SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
 };
 
 /** @public */
@@ -325,5 +341,10 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  * @type_function_param1 e:{ui/tabs:SelectionChangedEvent}
  */
 onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+/**
+ * @docid dxTabsOptions.onSelectionChanging
+ * @type_function_param1 e:{ui/tabs:SelectionChangingEvent}
+ */
+onSelectionChanging?: ((e: SelectionChangingEvent) => void);
 };
 ///#ENDDEBUG

@@ -30,7 +30,7 @@ import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_s
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CustomItemCreatingEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/select_box';
+import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CustomItemCreatingEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, SelectionChangingEvent, ValueChangedEvent } from 'devextreme/ui/select_box';
 
 import DxSelectBox from 'devextreme/ui/select_box';
 
@@ -1043,6 +1043,14 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
     /**
     
+     * [descr:dxSelectBoxOptions.onSelectionChanging]
+    
+    
+     */
+    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
+
+    /**
+    
      * [descr:dxSelectBoxOptions.onValueChanged]
     
     
@@ -1537,6 +1545,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'paste', emit: 'onPaste' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { subscribe: 'valueChanged', emit: 'onValueChanged' },
             { emit: 'acceptCustomValueChange' },
             { emit: 'accessKeyChange' },

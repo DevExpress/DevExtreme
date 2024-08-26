@@ -30,6 +30,12 @@ export default ResponsiveBox;
  */
 
 /**
+ * @name dxResponsiveBoxOptions.onSelectionChanging
+ * @action
+ * @hidden
+ */
+
+/**
  * @name dxResponsiveBoxOptions.onSelectionChanged
  * @action
  * @hidden

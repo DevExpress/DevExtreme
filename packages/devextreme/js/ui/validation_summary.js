@@ -101,6 +101,12 @@ export default ValidationSummary;
  */
 
 /**
+ * @name dxValidationSummaryOptions.onSelectionChanging
+ * @hidden
+ * @action
+ */
+
+/**
  * @name dxValidationSummaryOptions.onSelectionChanged
  * @hidden
  * @action
