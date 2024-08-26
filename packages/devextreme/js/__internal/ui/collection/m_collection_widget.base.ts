@@ -252,7 +252,7 @@ const CollectionWidget = Widget.inherit({
 
     const $focusedElement = $(this.option('focusedElement'));
     if ($focusedElement.length) {
-      // NOTE: If focusedUItem is set, selection was already processed on its focusing.
+      // NOTE: If focusedElement is set, selection was already processed on its focusing.
       this._shouldSkipSelectOnFocus = true;
       this._setFocusedItem($focusedElement);
       this._shouldSkipSelectOnFocus = false;
