@@ -410,6 +410,51 @@ QUnit.module('onSelectionChanging', {
         clock.restore();
     });
 
+    QUnit.test('should be ignored if previous request is not processed yet', function(assert) {
+        const done = assert.async();
+        const delay = 300;
+        this.onSelectionChangingStub = sinon.spy((e) => {
+            e.cancel = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(false);
+                }, delay);
+            });
+        });
+
+        const items = [{ text: '1' }, { text: '2' }, { text: '3' }];
+        this.reinit({
+            onSelectionChanging: this.onSelectionChangingStub,
+            items
+        });
+
+        const $items = this.$tabPanel.find(`.${TABS_ITEM_CLASS}`);
+
+        $items.eq(2).trigger('dxclick');
+        $items.eq(0).trigger('dxclick');
+        $items.eq(1).trigger('dxclick');
+
+        setTimeout(() => {
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 1, 'onSelectionChanged should be called');
+
+            assert.strictEqual(this.tabs.option('selectedIndex'), 2, 'Tabs selectedIndex should be updated to 2');
+            assert.deepEqual(this.tabs.option('selectedItem'), items[2], 'Tabs selectedItem should be equal to the third item');
+            assert.deepEqual(this.tabs.option('selectedItems'), [items[2]], 'Tabs selectedItems should contain third item');
+            assert.deepEqual(this.tabs.option('selectedItemKeys'), [items[2]], 'Tabs selectedItemKeys should contain third item');
+
+            assert.strictEqual(this.tabPanel.option('selectedIndex'), 2, 'TabPanel selectedIndex should be updated to 2');
+            assert.deepEqual(this.tabPanel.option('selectedItem'), items[2], 'TabPanel selectedItem should be equal to the third item');
+            assert.deepEqual(this.tabPanel.option('selectedItems'), [items[2]], 'TabPanel selectedItems should contain third item');
+            assert.deepEqual(this.tabPanel.option('selectedItemKeys'), [items[2]], 'TabPanel selectedItemKeys should contain third item');
+
+            const $multiViewItems = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`);
+            assert.ok($multiViewItems.eq(2).hasClass(SELECTED_ITEM_CLASS), 'second multiview item is selected');
+            assert.notOk($multiViewItems.eq(2).hasClass(MULTIVIEW_HIDDEN_ITEM_CLASS), 'second multiview item is visible');
+
+            done();
+        }, delay);
+    });
+
     QUnit.module('after keyboard navigation', () => {
         QUnit.test('should keep new item focused even if selection is cancelled', function(assert) {
             this.onSelectionChangingStub = sinon.spy((e) => {

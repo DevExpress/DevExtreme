@@ -2,6 +2,7 @@ import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
 // @ts-expect-error
 import { getKeyHash } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isObject } from '@js/core/utils/type';
@@ -16,6 +17,8 @@ export default class StandardStrategy extends SelectionStrategy {
   _lastLoadDeferred?: any;
 
   _lastRequestData?: any;
+
+  _lastSelectionDeferred?: DeferredObj<unknown>;
 
   constructor(options) {
     super(options);
@@ -245,8 +248,16 @@ export default class StandardStrategy extends SelectionStrategy {
   }
 
   selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
+    const isPreviousSelectionChangeProcessed = this._lastSelectionDeferred?.state() !== 'pending';
+    if (!isPreviousSelectionChangeProcessed) {
+      return Deferred().reject();
+    }
+
     const loadingDeferred = this._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
+
     const selectionDeferred = Deferred();
+    this._lastSelectionDeferred = selectionDeferred;
+
     loadingDeferred.done((items) => {
       const { selectedItemKeys, selectedItems } = this.options;
       if (preserve) {
@@ -261,13 +272,13 @@ export default class StandardStrategy extends SelectionStrategy {
       /// #ENDDEBUG
 
       this._callCallbackIfNotCanceled(() => {
-        this.onSelectionChanged();
         selectionDeferred.resolve(items);
+        this.onSelectionChanged();
       }, () => {
+        selectionDeferred.reject();
         this._clearItemKeys();
         this._setOption('selectedItemKeys', selectedItemKeys);
         this._setOption('selectedItems', selectedItems);
-        selectionDeferred.reject();
       });
     });
 
