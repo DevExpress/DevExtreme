@@ -562,6 +562,10 @@ const HtmlEditor = Editor.inherit({
 
   _optionChanged(args) {
     switch (args.name) {
+      case 'converter': {
+        this._htmlConverter = args.value;
+        break;
+      }
       case 'value': {
         if (this._quillInstance) {
           if (this._isEditorUpdating) {

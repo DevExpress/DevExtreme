@@ -45,6 +45,9 @@
         window.rehypeRaw = rehypeRaw;
     </script>
 
+    <script src="https://unpkg.com/turndown@7.1.2/dist/turndown.js"></script>
+    <script src="https://unpkg.com/showdown@2.1.0/dist/showdown.js"></script>
+
     <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
@@ -76,6 +79,13 @@
         </select>
         <br />
 
+        <label>
+            <input type="checkbox" id="checkbox" checked>
+            Use Unified?
+        </label>
+
+        <br />
+        <br />
 
         <div class="dx-viewport demo-container">
             <div class="html-editor"></div>
@@ -84,7 +94,9 @@
 
         <script>
             $(() => {
-                class MarkdownConverter {
+                const checkbox = document.getElementById('checkbox');
+
+                class UnifiedMarkdownConverter {
                     constructor(repositoryUrl = 'https://github.com/DevExpress/DevExtreme/') {
                         this.repositoryUrl = repositoryUrl;
                     }
@@ -115,7 +127,52 @@
                     }
                 }
 
-                const converter = new MarkdownConverter();
+                class ShowdownTurndownMarkdownConverter {
+                    constructor() {
+                        const turndown = TurndownService;
+                        const showdown = window.showdown;
+
+                        this.turndown = new turndown();
+
+                        this.turndown.addRule('emptyLine', {
+                            filter: (element) => element.nodeName.toLowerCase() === 'p' && element.innerHTML === '<br>',
+                            replacement() {
+                                return '<br>';
+                            },
+                        });
+
+                        this.turndown.keep(['table']);
+
+                        this.showdown = new showdown.Converter({
+                            simpleLineBreaks: true,
+                            strikethrough: true,
+                            tables: true,
+                        });
+                    }
+
+                    toHtml(value) {
+                        let markup = this.showdown.makeHtml(value);
+
+                        if (markup) {
+                            markup = markup.replace(new RegExp('\\r?\\n', 'g'), '');
+                        }
+
+                        return markup;
+                    }
+
+                    fromHtml(value) {
+                        const result = this.turndown.turndown(value || '');
+
+                        return result;
+                    }
+                }
+
+                const unifiedConverter = new UnifiedMarkdownConverter();
+                const showdownTurndownConverter = new ShowdownTurndownMarkdownConverter();
+
+                const useUnified = true;
+
+                const converter = useUnified ? unifiedConverter : showdownTurndownConverter;
 
                 const editorInstance = $('.html-editor').dxHtmlEditor({
                     height: 300,
@@ -125,7 +182,23 @@
                     },
                 }).dxHtmlEditor('instance');
 
-                editorInstance.option({ value: 'Commit: f603d5534f876a18a6cf553b7a03b47208adf5b5' });
+                const setValue = (useUnified) => {
+                    if (useUnified) {
+                        editorInstance.option({ value: 'Commit: f603d5534f876a18a6cf553b7a03b47208adf5b5' });
+                    } else {
+                        editorInstance.option({ value: '| Month    | Savings |\n| -------- | ------- |\n| January  | $250    |\n| February | $80     |\n| March    | $420    |\n' });
+                    }
+                }
+
+                checkbox.addEventListener('change', () => {
+                    const { checked } = checkbox;
+
+                    editorInstance.option({ converter: checked ? unifiedConverter : showdownTurndownConverter });
+
+                    setValue(checked);
+                });
+
+                setValue(useUnified);
             });
         </script>
     </div>
