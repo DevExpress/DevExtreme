@@ -14,6 +14,12 @@ import Accordion from 'ui/accordion';
 import Button from 'ui/button';
 import ColorBox from 'ui/color_box';
 import Chat from 'ui/chat';
+import ChatHeader from '__internal/ui/chat/chat_header';
+import ChatAvatar from '__internal/ui/chat/chat_avatar';
+import ChatMessageBox from '__internal/ui/chat/chat_message_box';
+import ChatMessageBubble from '__internal/ui/chat/chat_message_bubble';
+import ChatMessageGroup from '__internal/ui/chat/chat_message_group';
+import ChatMessageList from '__internal/ui/chat/chat_message_list';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -1338,6 +1344,48 @@ testComponentDefaults(Chat,
     {
         title: '',
         onMessageSend: null,
+    }
+);
+
+testComponentDefaults(ChatAvatar,
+    {},
+    {
+        name: '',
+    }
+);
+
+testComponentDefaults(ChatHeader,
+    {},
+    {
+        title: '',
+    }
+);
+
+testComponentDefaults(ChatMessageBox,
+    {},
+    {
+        onMessageSend: undefined,
+    }
+);
+
+testComponentDefaults(ChatMessageBubble,
+    {},
+    {
+        text: '',
+    }
+);
+
+testComponentDefaults(ChatMessageGroup,
+    {},
+    {
+        alignment: 'start',
+    }
+);
+
+testComponentDefaults(ChatMessageList,
+    {},
+    {
+        currentUserId: '',
     }
 );
 

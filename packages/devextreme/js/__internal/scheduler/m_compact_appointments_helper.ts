@@ -1,11 +1,8 @@
 import { locate, move } from '@js/animation/translator';
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
-import { when } from '@js/core/utils/deferred';
-import { getBoundingRect } from '@js/core/utils/position';
 import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
-import { getOverflowIndicatorColor } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import { LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
@@ -25,14 +22,11 @@ export class CompactAppointmentsHelper {
   }
 
   render(options) {
-    const { isCompact, items, buttonColor } = options;
+    const { isCompact, items } = options;
 
     const template = this._createTemplate(items.data.length, isCompact);
     const button = this._createCompactButton(template, options);
     const $button = button.$element();
-
-    this._makeBackgroundColor($button, items.colors, buttonColor);
-    this._makeBackgroundDarker($button);
 
     this.elements.push($button);
     $button.data('items', this._createTooltipInfos(items));
@@ -121,25 +115,6 @@ export class CompactAppointmentsHelper {
     return this.instance.getRenderingStrategyInstance()._isCompactTheme()
       ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
       : WEEK_VIEW_COLLECTOR_OFFSET;
-  }
-
-  _makeBackgroundDarker(button) {
-    button.css('boxShadow', `inset ${getBoundingRect(button.get(0)).width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
-  }
-
-  _makeBackgroundColor($button, colors, color) {
-    when.apply(null, colors).done(function () {
-      this._makeBackgroundColorCore($button, color, [...arguments]);
-    }.bind(this));
-  }
-
-  _makeBackgroundColorCore($button, color, itemColors) {
-    color && color.done((color) => {
-      const backgroundColor = getOverflowIndicatorColor(color, itemColors);
-      if (backgroundColor) {
-        $button.css('backgroundColor', backgroundColor);
-      }
-    });
   }
 
   _setPosition(element, position) {

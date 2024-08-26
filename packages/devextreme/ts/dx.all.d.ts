@@ -9415,7 +9415,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxChat]
    */
-  export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {}
+  export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
+    /**
+     * [descr:dxChat.renderMessage(message)]
+     */
+    renderMessage(message: DevExpress.ui.dxChat.Message): void;
+  }
   module dxChat {
     /**
      * [descr:_ui_chat_DisposingEvent]
@@ -9435,12 +9440,15 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_chat_MessageSendEvent]
      */
-    export type MessageSendEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<
-        dxChat,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > &
-      Message;
+    export type MessageSendEvent = DevExpress.events.NativeEventInfo<
+      dxChat,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > & {
+      /**
+       * [descr:MessageSendEvent.message]
+       */
+      readonly message?: Message;
+    };
     /**
      * [descr:_ui_chat_OptionChangedEvent]
      */
