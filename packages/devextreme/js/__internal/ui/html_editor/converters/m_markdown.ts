@@ -1,7 +1,7 @@
 // import { getWindow } from '@js/core/utils/window';
 // import Errors from '@js/ui/widget/ui.errors';
 
-import converterController from '../m_converterController';
+// import converterController from '../m_converterController';
 
 class MarkdownConverter {
   // _markdown2Html: any;
@@ -10,6 +10,7 @@ class MarkdownConverter {
 
   constructor() {
     // const window = getWindow();
+    // eslint-disable-next-line no-console
     console.log('custom');
   }
 
@@ -30,6 +31,6 @@ class MarkdownConverter {
   }
 }
 
-converterController.addConverter('markdown', MarkdownConverter);
+// converterController.addConverter('markdown', MarkdownConverter);
 
 export default MarkdownConverter;

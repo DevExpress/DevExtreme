@@ -9,7 +9,7 @@ import { EmptyTemplate } from '@js/core/templates/empty_template';
 import Callbacks from '@js/core/utils/callbacks';
 import {
   deferRender,
-  ensureDefined,
+  // ensureDefined,
   // @ts-expect-error
   executeAsync,
   noop,
@@ -24,7 +24,7 @@ import { Event as dxEvent } from '@js/events/index';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
 import Editor from '@js/ui/editor/editor';
-import Errors from '@js/ui/widget/ui.errors';
+// import Errors from '@js/ui/widget/ui.errors';
 import { prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
 import ConverterController from './m_converterController';
@@ -51,6 +51,7 @@ const HtmlEditor = Editor.inherit({
 
   _getDefaultOptions() {
     return extend(this.callBase(), {
+      converter: null,
       focusStateEnabled: true,
       // valueType: 'html',
       placeholder: '',
@@ -69,8 +70,6 @@ const HtmlEditor = Editor.inherit({
 
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       stylingMode: config().editorStylingMode || 'outlined',
-
-      onProcessMarkdownToHtml: () => {},
     });
   },
 
@@ -239,9 +238,13 @@ const HtmlEditor = Editor.inherit({
   _updateContainerMarkup() {
     let markup = this.option('value');
 
-    if (this._isMarkdownValue()) {
-      this._prepareMarkdownConverter();
-      markup = this._markdownConverter.toHtml(markup);
+    // if (this._isMarkdownValue()) {
+    //   // this._prepareMarkdownConverter();
+    //   // markup = this._markdownConverter.toHtml(markup);
+    // }
+
+    if (this._htmlConverter) {
+      markup = this._htmlConverter.toHtml(markup);
     }
 
     if (markup) {
@@ -250,15 +253,15 @@ const HtmlEditor = Editor.inherit({
     }
   },
 
-  _prepareMarkdownConverter() {
-    const MarkdownConverter = ConverterController.getConverter('markdown');
+  // _prepareMarkdownConverter() {
+  //   const MarkdownConverter = ConverterController.getConverter('markdown');
 
-    if (MarkdownConverter) {
-      this._markdownConverter = new MarkdownConverter();
-    } else {
-      throw Errors.Error('E1051', 'markdown');
-    }
-  },
+  //   if (MarkdownConverter) {
+  //     this._markdownConverter = new MarkdownConverter();
+  //   } else {
+  //     throw Errors.Error('E1051', 'markdown');
+  //   }
+  // },
 
   _render() {
     this._prepareConverters();
@@ -284,6 +287,12 @@ const HtmlEditor = Editor.inherit({
       if (DeltaConverter) {
         this._deltaConverter = new DeltaConverter();
       }
+    }
+
+    const { converter } = this.option();
+
+    if (converter && !this._htmlConverter) {
+      this._htmlConverter = converter;
     }
 
     // if (this.option('valueType') === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
@@ -451,13 +460,21 @@ const HtmlEditor = Editor.inherit({
     return modules;
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _textChangeHandler(newDelta, oldDelta, source) {
+  _textChangeHandler(): void {
     const htmlMarkup = this._deltaConverter.toHtml();
-    const convertedValue = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
+    // const convertedValue = this._isMarkdownValue()
+    //  ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
+
+    const convertedValue = this._htmlConverter
+      ? this._htmlConverter.fromHtml(htmlMarkup)
+      : htmlMarkup;
+
     const currentValue = this.option('value');
 
-    if (currentValue !== convertedValue && !this._isNullValueConverted(currentValue, convertedValue)) {
+    if (
+      currentValue !== convertedValue
+      && !this._isNullValueConverted(currentValue, convertedValue)
+    ) {
       this._isEditorUpdating = true;
       this.option('value', convertedValue);
     }
@@ -478,20 +495,17 @@ const HtmlEditor = Editor.inherit({
     }
   },
 
-  _updateValueByType(valueType, value) {
-    const converter = {};
+  // _updateValueByType(valueType, value) {
+  //   const converter = this._markdownConverter;
 
-    if (!isDefined(converter)) {
-      return;
-    }
+  //   if (!isDefined(converter)) {
+  //     return;
+  //   }
 
-    const currentValue = ensureDefined(value, this.option('value'));
+  //   const currentValue = ensureDefined(value, this.option('value'));
 
-    const markup = currentValue;
-    // converter.toHtml(currentValue);
-
-    return markup;
-  },
+  //   return valueType === MARKDOWN_VALUE_TYPE ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
+  // },
 
   // _isMarkdownValue() {
   //   return this.option('valueType') === MARKDOWN_VALUE_TYPE;
@@ -553,7 +567,12 @@ const HtmlEditor = Editor.inherit({
           if (this._isEditorUpdating) {
             this._isEditorUpdating = false;
           } else {
-            const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
+            // const updatedValue = this._isMarkdownValue()
+            // ? this._updateValueByType('HTML', args.value) : args.value;
+
+            const updatedValue = this._htmlConverter
+              ? this._htmlConverter.toHtml(args.value)
+              : args.value;
 
             this._suppressValueChangeAction();
             this._updateHtmlContent(updatedValue);
@@ -582,19 +601,17 @@ const HtmlEditor = Editor.inherit({
       case 'tableResizing':
         this._moduleOptionChanged('tableResizing', args);
         break;
-      case 'valueType': {
-        // debugger
+        // case 'valueType': {
+        //   this._prepareConverters();
+        //   const newValue = this._updateValueByType(args.value);
 
-        this._prepareConverters();
-        const newValue = this._updateValueByType(args.value);
-
-        if (args.value === 'html' && this._quillInstance) {
-          this._updateHtmlContent(newValue);
-        } else {
-          this.option('value', newValue);
-        }
-        break;
-      }
+      //   if (args.value === 'html' && this._quillInstance) {
+      //     this._updateHtmlContent(newValue);
+      //   } else {
+      //     this.option('value', newValue);
+      //   }
+      //   break;
+      // }
       case 'stylingMode':
         this._renderStylingMode();
         break;

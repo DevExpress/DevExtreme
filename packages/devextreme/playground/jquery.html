@@ -21,9 +21,6 @@
     <!-- HtmlEditor -->
     <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
 
-    <script src="https://unpkg.com/turndown@7.1.2/dist/turndown.js"></script>
-    <script src="https://unpkg.com/showdown@2.1.0/dist/showdown.js"></script>
-
     <script type="module">
         import { unified } from 'https://esm.sh/unified@11?bundle';
         import remarkParse from 'https://esm.sh/remark-parse@11?bundle';
@@ -31,6 +28,10 @@
         import remarkRehype from 'https://esm.sh/remark-rehype@11?bundle';
         import rehypeStringify from 'https://esm.sh/rehype-stringify@10?bundle';
         import remarkGithub from 'https://esm.sh/remark-github@12?bundle';
+        import rehypeParse from 'https://esm.sh/rehype-parse@9?bundle';
+        import rehypeRemark from 'https://esm.sh/rehype-remark@10?bundle';
+        import remarkStringify from 'https://esm.sh/remark-stringify@11?bundle';
+        import rehypeRaw from 'https://esm.sh/rehype-raw@7?bundle';
 
         window.unified = unified;
         window.remarkParse = remarkParse;
@@ -38,6 +39,10 @@
         window.remarkGithub = remarkGithub;
         window.remarkRehype = remarkRehype;
         window.rehypeStringify = rehypeStringify;
+        window.rehypeParse = rehypeParse;
+        window.rehypeRemark = rehypeRemark;
+        window.remarkStringify = remarkStringify;
+        window.rehypeRaw = rehypeRaw;
     </script>
 
     <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
@@ -61,29 +66,6 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <style>
-        .dx-htmleditor-content img {
-            vertical-align: middle;
-            padding-right: 10px;
-        }
-
-        .value-content {
-            margin-top: 20px;
-            overflow: auto;
-            height: 110px;
-            width: 100%;
-            white-space: pre-wrap;
-        }
-
-        .options {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: rgba(191, 191, 191, 0.15);
-            box-sizing: border-box;
-            width: 100%;
-        }
-    </style>
 </head>
 
 <body class="dx-surface">
@@ -102,41 +84,47 @@
 
         <script>
             $(() => {
-                const htmlTable = '<table><tbody><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr><tr><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td><td><p>test</p></td></tr></tbody></table>';
-                const mdTable = `| Month    | Savings |\n| -------- | ------- |\n| January  | $250    |\n| February | $80     |\n| March    | $420    |\n`;
+                class MarkdownConverter {
+                    constructor(repositoryUrl = 'https://github.com/DevExpress/DevExtreme/') {
+                        this.repositoryUrl = repositoryUrl;
+                    }
 
-                const editorInstance = $('.html-editor').dxHtmlEditor({
-                    height: 300,
-                    valueType: 'markdown',
-                    toolbar: {
-                        items: [
-                            'insertTable',
-                        ],
-                    },
-                    onValueChanged({ value }) {
-                        // debugger
-                    },
-                    // Right now it only works with synchronous plugins. But plugins can be asynchronous. We should support them
-                    onProcessMarkdownToHtml: (value) => {
+                    toHtml(value) {
                         const result = window.unified()
                             .use(window.remarkParse)
                             .use(window.remarkGfm)
-                            .use(window.remarkGithub, { repository: 'https://github.com/DevExpress/DevExtreme/' })
+                            .use(window.remarkGithub, { repository: this.repositoryUrl })
                             .use(window.remarkRehype)
                             .use(window.rehypeStringify)
-                            .processSync(value.actionValue);
+                            .processSync(value);
 
                         return result.value;
+                    }
+
+                    fromHtml(value) {
+                        const markup = value.replace(/<code>\s*<a href="([^"]+)"[^>]*>([^<]+)<\/a>\s*<\/code>/g, '`[$2]($1)`');
+
+                        const result = window.unified()
+                            .use(window.rehypeParse, { fragment: true })
+                            .use(window.rehypeRaw)
+                            .use(window.rehypeRemark)
+                            .use(window.remarkStringify)
+                            .processSync(markup);
+
+                        return result.value;
+                    }
+                }
+
+                const converter = new MarkdownConverter();
+
+                const editorInstance = $('.html-editor').dxHtmlEditor({
+                    height: 300,
+                    converter,
+                    onValueChanged: (e) => {
+                        // debugger;
                     },
                 }).dxHtmlEditor('instance');
 
-                // editorInstance.option({ valueType: 'markdown' });
-                // editorInstance.option({ valueType: 'html' });
-
-                // editorInstance.option({ value: '~~user~~' });
-                // editorInstance.option({ valueType: 'html' });
-
-                // https://unifiedjs.com/explore/package/remark-github/
                 editorInstance.option({ value: 'Commit: f603d5534f876a18a6cf553b7a03b47208adf5b5' });
             });
         </script>
