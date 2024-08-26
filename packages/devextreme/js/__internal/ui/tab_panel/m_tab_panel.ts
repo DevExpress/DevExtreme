@@ -127,14 +127,6 @@ const TabPanel = MultiView.inherit({
           iconPosition: ICON_POSITION.top,
         },
       },
-      {
-        device() {
-          return true;
-        },
-        options: {
-          selectOnFocus: false,
-        },
-      },
     ]);
   },
 
