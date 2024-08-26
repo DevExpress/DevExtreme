@@ -455,6 +455,11 @@ QUnit.module('onSelectionChanging', {
         }, delay);
     });
 
+    QUnit.test('tabPanel selectOnFocus should be false to not raise excess selectionChanging', function(assert) {
+        assert.strictEqual(this.tabPanel.option('selectOnFocus'), false, 'selectOnFocus = false');
+    });
+
+
     QUnit.module('after keyboard navigation', () => {
         QUnit.test('should keep new item focused even if selection is cancelled', function(assert) {
             this.onSelectionChangingStub = sinon.spy((e) => {

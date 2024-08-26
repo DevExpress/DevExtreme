@@ -69,6 +69,7 @@ const TabPanel = MultiView.inherit({
     return extend(this.callBase(), {
       itemTitleTemplate: 'title',
       hoverStateEnabled: true,
+      selectOnFocus: false,
       showNavButtons: false,
       scrollByContent: true,
       scrollingEnabled: true,
@@ -124,14 +125,6 @@ const TabPanel = MultiView.inherit({
         },
         options: {
           iconPosition: ICON_POSITION.top,
-        },
-      },
-      {
-        device() {
-          return true;
-        },
-        options: {
-          selectOnFocus: false,
         },
       },
     ]);
