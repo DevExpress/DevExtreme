@@ -17,11 +17,11 @@ import MessageList from './chat_message_list';
 const CHAT_CLASS = 'dx-chat';
 
 class Chat extends Widget<Properties> {
-  _chatHeader?: ChatHeader;
+  _chatHeader!: ChatHeader;
 
-  _messageBox?: MessageBox;
+  _messageBox!: MessageBox;
 
-  _messageList?: MessageList;
+  _messageList!: MessageList;
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
@@ -52,16 +52,17 @@ class Chat extends Widget<Properties> {
   }
 
   _renderHeader(): void {
-    const { title } = this.option();
+    const { title = '' } = this.option();
 
     const $header = $('<div>').appendTo(this.element());
 
-    // @ts-expect-error
-    this._chatHeader = this._createComponent($header, ChatHeader, { title });
+    this._chatHeader = this._createComponent($header, ChatHeader, {
+      title,
+    });
   }
 
   _renderMessageList(): void {
-    const { items, user } = this.option();
+    const { items = [], user } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>').appendTo(this.element());
@@ -110,16 +111,13 @@ class Chat extends Widget<Properties> {
 
     switch (name) {
       case 'title':
-        // @ts-expect-error
-        this._chatHeader?.option('title', value);
+        this._chatHeader.option('title', (value as Properties['title']) ?? '');
         break;
       case 'user':
-        // @ts-expect-error
-        this._messageList?.option('currentUserId', value.id);
+        this._messageList.option('currentUserId', (value as Properties['user'])?.id);
         break;
       case 'items':
-        // @ts-expect-error
-        this._messageList?.option('items', value);
+        this._messageList.option('items', (value as Properties['items']) ?? []);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();

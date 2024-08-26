@@ -21,9 +21,9 @@ export interface MessageBoxProperties extends WidgetOptions<MessageBox> {
 }
 
 class MessageBox extends Widget<MessageBoxProperties> {
-  _textArea?: dxTextArea;
+  _textArea!: dxTextArea;
 
-  _button?: Button;
+  _button!: Button;
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
@@ -79,9 +79,9 @@ class MessageBox extends Widget<MessageBoxProperties> {
   }
 
   _sendHandler(e: ClickEvent): void {
-    const text = this._textArea?.option('text');
+    const { text } = this._textArea.option();
 
-    if (!text) {
+    if (!text?.trim()) {
       return;
     }
 
