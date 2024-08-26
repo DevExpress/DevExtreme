@@ -236,16 +236,14 @@ const HtmlEditor = Editor.inherit({
   },
 
   _updateContainerMarkup() {
-    let markup = this.option('value');
+    const { value } = this.option();
 
     // if (this._isMarkdownValue()) {
     //   // this._prepareMarkdownConverter();
     //   // markup = this._markdownConverter.toHtml(markup);
     // }
 
-    if (this._htmlConverter) {
-      markup = this._htmlConverter.toHtml(markup);
-    }
+    const markup = this._htmlConverter ? this._htmlConverter?.toHtml(value) : value;
 
     if (markup) {
       const sanitizedMarkup = this._removeXSSVulnerableHtml(markup);
