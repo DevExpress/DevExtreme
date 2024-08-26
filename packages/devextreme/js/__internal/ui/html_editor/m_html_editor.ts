@@ -39,7 +39,7 @@ const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
-const MARKDOWN_VALUE_TYPE = 'markdown';
+// const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
@@ -52,7 +52,7 @@ const HtmlEditor = Editor.inherit({
   _getDefaultOptions() {
     return extend(this.callBase(), {
       focusStateEnabled: true,
-      valueType: 'html',
+      // valueType: 'html',
       placeholder: '',
       toolbar: null,
       variables: null,
@@ -264,12 +264,6 @@ const HtmlEditor = Editor.inherit({
     this._prepareConverters();
 
     this.callBase();
-
-    this._createActions();
-  },
-
-  _createActions() {
-    this._processMarkdownToHtmlAction = this._createActionByOption('onProcessMarkdownToHtml');
   },
 
   _prepareQuillRegistrator() {
@@ -292,9 +286,9 @@ const HtmlEditor = Editor.inherit({
       }
     }
 
-    if (this.option('valueType') === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
-      this._prepareMarkdownConverter();
-    }
+    // if (this.option('valueType') === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
+    //   this._prepareMarkdownConverter();
+    // }
   },
 
   _renderContentImpl() {
@@ -485,7 +479,7 @@ const HtmlEditor = Editor.inherit({
   },
 
   _updateValueByType(valueType, value) {
-    const converter = this._markdownConverter;
+    const converter = {};
 
     if (!isDefined(converter)) {
       return;
@@ -493,28 +487,15 @@ const HtmlEditor = Editor.inherit({
 
     const currentValue = ensureDefined(value, this.option('value'));
 
-    if (valueType === MARKDOWN_VALUE_TYPE) {
-      const markup = converter.toMarkdown(currentValue);
-
-      return markup;
-    }
-
-    if (this._processMarkdownToHtmlAction) {
-      const processedValue = this._processMarkdownToHtmlAction(currentValue);
-
-      const markup = converter.toHtmlWithCustomConverter(processedValue);
-
-      return markup;
-    }
-
-    const markup = converter.toHtml(currentValue);
+    const markup = currentValue;
+    // converter.toHtml(currentValue);
 
     return markup;
   },
 
-  _isMarkdownValue() {
-    return this.option('valueType') === MARKDOWN_VALUE_TYPE;
-  },
+  // _isMarkdownValue() {
+  //   return this.option('valueType') === MARKDOWN_VALUE_TYPE;
+  // },
 
   _resetEnabledState() {
     if (this._quillInstance) {
@@ -602,6 +583,8 @@ const HtmlEditor = Editor.inherit({
         this._moduleOptionChanged('tableResizing', args);
         break;
       case 'valueType': {
+        // debugger
+
         this._prepareConverters();
         const newValue = this._updateValueByType(args.value);
 

@@ -65,8 +65,5 @@
     "lint-staged",
     "pre-commit"
   ],
-  "packageManager": "pnpm@9.1.2",
-  "dependencies": {
-    "remark-html": "^16.0.1"
-  }
+  "packageManager": "pnpm@9.1.2"
 }
