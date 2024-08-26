@@ -2,7 +2,6 @@ import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
 // @ts-expect-error
 import { getKeyHash } from '@js/core/utils/common';
-import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isObject } from '@js/core/utils/type';
@@ -275,11 +274,13 @@ export default class StandardStrategy extends SelectionStrategy {
         this.onSelectionChanged();
         selectionDeferred.resolve(items);
         this.onSelectionChanged();
+        selectionDeferred.resolve(items);
       }, () => {
         this._isCancelingInProgress = false;
         this._clearItemKeys();
         this._setOption('selectedItemKeys', selectedItemKeys);
         this._setOption('selectedItems', selectedItems);
+        selectionDeferred.reject();
       });
     });
 
