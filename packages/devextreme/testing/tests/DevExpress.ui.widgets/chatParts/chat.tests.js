@@ -16,6 +16,7 @@ const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
+
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 export const NOW = '1721747399083';
@@ -24,6 +25,7 @@ export const userFirst = {
     id: MOCK_COMPANION_USER_ID,
     name: 'First',
 };
+
 export const userSecond = {
     id: MOCK_CURRENT_USER_ID,
     name: 'Second',
@@ -336,6 +338,14 @@ QUnit.module('Chat', moduleConfig, () => {
             const lastBubble = $bubbles[$bubbles.length - 1];
 
             assert.strictEqual($(lastBubble).text(), text);
+        });
+    });
+
+    QUnit.module('focus', () => {
+        QUnit.test('The textarea element must be active after the Chat focus is invoked', function(assert) {
+            this.instance.focus();
+
+            assert.strictEqual(document.activeElement, this.$input.get(0));
         });
     });
 });
