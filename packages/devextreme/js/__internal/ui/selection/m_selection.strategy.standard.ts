@@ -2,6 +2,7 @@ import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
 // @ts-expect-error
 import { getKeyHash } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isObject } from '@js/core/utils/type';
@@ -494,5 +495,32 @@ export default class StandardStrategy extends SelectionStrategy {
     const combinedFilter = selectionFilterCreator.getCombinedFilter(keyExpr, filter, true);
 
     return this._loadFilteredData(combinedFilter);
+  }
+
+  _onePageSelectAll(isDeselect: boolean): DeferredObj<unknown> {
+    if (this._lastSelectAllPageDeferred.state() === 'pending') {
+      return Deferred().reject();
+    }
+
+    const { selectedItems, selectedItemKeys } = this.options;
+    const keyHashIndices = { ...this.options.keyHashIndices };
+
+    this._selectAllPlainItems(isDeselect);
+
+    this._lastSelectAllPageDeferred = Deferred();
+
+    this._callCallbackIfNotCanceled(() => {
+      this.onSelectionChanged();
+      this._lastSelectAllPageDeferred.resolve();
+    }, () => {
+      this._clearItemKeys();
+      this._setOption('selectedItemKeys', selectedItemKeys);
+      this._setOption('selectedItems', selectedItems);
+      this._setOption('keyHashIndices', keyHashIndices);
+      this.options.keyHashIndices = keyHashIndices;
+      this._lastSelectAllPageDeferred.reject();
+    });
+
+    return this._lastSelectAllPageDeferred;
   }
 }

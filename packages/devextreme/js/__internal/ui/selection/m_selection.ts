@@ -1,5 +1,4 @@
 import { noop } from '@js/core/utils/common';
-import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
@@ -15,8 +14,6 @@ export default class Selection {
   _focusedItemIndex: number;
 
   _shiftFocusedItemIndex!: number;
-
-  _lastSelectAllPageDeferred?: DeferredObj<void>;
 
   constructor(options) {
     this.options = extend(this._getDefaultOptions(), options, {
@@ -317,7 +314,7 @@ export default class Selection {
     this._resetFocusedItemIndex();
 
     if (isOnePage) {
-      return this._onePageSelectAll(false);
+      return this._selectionStrategy._onePageSelectAll(false);
     }
     return this.selectedItemKeys([], true, false, true);
   }
@@ -326,54 +323,9 @@ export default class Selection {
     this._resetFocusedItemIndex();
 
     if (isOnePage) {
-      return this._onePageSelectAll(true);
+      return this._selectionStrategy._onePageSelectAll(true);
     }
     return this.selectedItemKeys([], true, true, true);
-  }
-
-  _onePageSelectAll(isDeselect) {
-    if (this._lastSelectAllPageDeferred?.state() === 'pending') {
-      return Deferred().reject();
-    }
-
-    const items = this._selectionStrategy.getSelectableItems(this.options.plainItems());
-
-    const { selectedItems, selectedItemKeys } = this._selectionStrategy.options;
-    const keyHashIndices = { ...this._selectionStrategy.options.keyHashIndices };
-
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-
-      if (this.isDataItem(item)) {
-        const itemData = this.options.getItemData(item);
-        const itemKey = this.options.keyOf(itemData);
-        const isSelected = this.isItemSelected(itemKey);
-
-        if (!isSelected && !isDeselect) {
-          this._addSelectedItem(itemData, itemKey);
-        }
-
-        if (isSelected && isDeselect) {
-          this._removeSelectedItem(itemKey);
-        }
-      }
-    }
-
-    this._lastSelectAllPageDeferred = Deferred();
-
-    this._selectionStrategy._callCallbackIfNotCanceled(() => {
-      this.onSelectionChanged();
-      this._lastSelectAllPageDeferred!.resolve();
-    }, () => {
-      this._selectionStrategy._clearItemKeys();
-      this._selectionStrategy._setOption('selectedItemKeys', selectedItemKeys);
-      this._selectionStrategy._setOption('selectedItems', selectedItems);
-      this._selectionStrategy._setOption('keyHashIndices', keyHashIndices);
-      this._selectionStrategy.options.keyHashIndices = keyHashIndices;
-      this._lastSelectAllPageDeferred!.reject();
-    });
-
-    return this._lastSelectAllPageDeferred;
   }
 
   getSelectAllState(visibleOnly) {

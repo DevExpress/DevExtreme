@@ -1,3 +1,4 @@
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
@@ -342,5 +343,13 @@ export default class DeferredStrategy extends SelectionStrategy {
       : selectionFilter;
 
     return this._loadFilteredData(filter);
+  }
+
+  _onePageSelectAll(isDeselect: boolean): DeferredObj<unknown> {
+    this._selectAllPlainItems(isDeselect);
+
+    this.onSelectionChanged();
+
+    return Deferred().resolve();
   }
 }
