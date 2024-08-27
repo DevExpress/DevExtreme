@@ -16,7 +16,7 @@ export default Chat;
  */
 
 /**
- * @name dxChatOptions.focus
- * @publicName focus()
+ * @name dxChatOptions.registerKeyHandler
+ * @publicName registerKeyHandler(key, handler)
  * @hidden
  */
