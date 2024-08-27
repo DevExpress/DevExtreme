@@ -127,10 +127,10 @@ class Chat extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message): void {
+  renderMessage(message: Message = {}): void {
     const { items } = this.option();
 
-    const newItems = items ? [...items, message] : [message];
+    const newItems = [...items ?? [], message];
 
     this.option('items', newItems);
   }
