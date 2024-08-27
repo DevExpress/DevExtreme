@@ -54,7 +54,11 @@
             $(function() {
                 const dxChat = $("#button").dxChat().dxChat('instance');
 
-                // dxChat.focus();
+                setTimeout(() => {
+                    dxChat.focus();
+
+                    debugger
+                }, 0);
             });
         </script>
     </div>

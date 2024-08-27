@@ -1,9 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type {
-  Message, MessageSendEvent, Properties,
-} from '@js/ui/chat';
+import type { Message, MessageSendEvent, Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
@@ -107,12 +106,8 @@ class Chat extends Widget<Properties> {
     this._messageSendAction?.({ message, event });
   }
 
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-    debugger;
 
     return $input;
   }
