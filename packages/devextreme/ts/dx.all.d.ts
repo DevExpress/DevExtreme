@@ -21276,10 +21276,6 @@ declare module DevExpress.ui {
      * [descr:dxMultiViewOptions.swipeEnabled]
      */
     swipeEnabled?: boolean;
-    /**
-     * [descr:dxMultiViewOptions.visible]
-     */
-    visible?: boolean;
   }
   /**
    * @deprecated Use Item instead
@@ -26148,10 +26144,6 @@ declare module DevExpress.ui {
      * [descr:dxTabPanelOptions.tabsPosition]
      */
     tabsPosition?: DevExpress.common.Position;
-    /**
-     * [descr:dxTabPanelOptions.visible]
-     */
-    visible?: boolean;
   }
   /**
    * [descr:dxTabs]

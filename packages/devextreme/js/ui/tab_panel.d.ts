@@ -270,12 +270,6 @@ export interface dxTabPanelOptions<
      * @public
      */
     tabsPosition?: Position;
-    /**
-     * @docid
-     * @default undefined
-     * @public
-     */
-    visible?: boolean;
 }
 /**
  * @docid
