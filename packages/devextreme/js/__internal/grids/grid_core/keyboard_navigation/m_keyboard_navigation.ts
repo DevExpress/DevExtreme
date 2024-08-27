@@ -2854,7 +2854,7 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
   }
 
   private _getFocusedElement() {
-    const $element = $(this.component.element());
+    const $element = $(this.component.element?.());
     const $focusedElement = $element?.find(':focus');
 
     return $focusedElement;
