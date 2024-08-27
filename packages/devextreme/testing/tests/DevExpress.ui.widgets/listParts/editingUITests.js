@@ -26,6 +26,7 @@ const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
+const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
 const SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready';
 const SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-shield-positioning';
@@ -2479,10 +2480,66 @@ QUnit.test('onContentReady event should be called after update the state Select 
     clock.restore();
 });
 
+QUnit.module('onSelectionChanging', {
+    beforeEach: function() {
+        this.dataSource = new DataSource({
+            store: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            paginate: true,
+            pageSize: 3
+        });
+    }
+}, () => {
+    QUnit.test('checkBox state should not be updated if selection is cancelled', function(assert) {
+        const $list = $('#list').dxList({
+            dataSource: this.dataSource,
+            showSelectionControls: true,
+            onSelectionChanging: (args) => {
+                args.cancel = true;
+            },
+            selectionMode: 'multiple'
+        });
+
+        const $firstCheckbox = $list.find(`.${SELECT_CHECKBOX_CLASS}`).eq(0);
+        $firstCheckbox.trigger('dxclick');
+
+        assert.strictEqual($firstCheckbox.dxCheckBox('option', 'value'), false, 'checkbox is not checked');
+    });
+
+    QUnit.test('selectAll checkBox state should not be updated if selection is cancelled', function(assert) {
+        const $list = $('#list').dxList({
+            dataSource: this.dataSource,
+            showSelectionControls: true,
+            onSelectionChanging: (args) => {
+                args.cancel = true;
+            },
+            selectionMode: 'all',
+        });
+
+        const $selectAllCheckbox = $list.find('.dx-list-select-all-checkbox').eq(0);
+        $selectAllCheckbox.trigger('dxclick');
+
+        assert.strictEqual($selectAllCheckbox.dxCheckBox('option', 'value'), false, 'selectAll checkbox is not checked');
+    });
+
+    QUnit.test('radioButton state should not be updated if selection is cancelled', function(assert) {
+        const $list = $('#list').dxList({
+            dataSource: this.dataSource,
+            showSelectionControls: true,
+            onSelectionChanging: (args) => {
+                args.cancel = true;
+            },
+            selectionMode: 'single'
+        });
+
+        const $firstRadioButton = $list.find(`.${SELECT_RADIO_BUTTON_CLASS}`).eq(0);
+        $firstRadioButton.trigger('dxclick');
+
+        assert.strictEqual($firstRadioButton.dxRadioButton('option', 'value'), false, 'radioButton is not checked');
+    });
+});
+
 
 QUnit.module('item select decorator with single selection mode');
-
-const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
 QUnit.test('item click changes radio button state only to true in single selection mode', function(assert) {
     const $list = $('#templated-list').dxList({
