@@ -2439,6 +2439,7 @@ QUnit.module('onSelectionChanging', {
         assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
         assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
         assert.deepEqual(selection.getSelectedItemKeys(), this.firstThreeItems, 'selectedItemKeys is updated correctly');
+        assert.strictEqual(selection.isItemSelected(this.data[0]), true, 'isItemSelected returns true');
     });
 
     QUnit.test('cancelling should prevent selectedItems change and selectionChanged raise', function(assert) {
@@ -2461,6 +2462,7 @@ QUnit.module('onSelectionChanging', {
         assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
         assert.deepEqual(selection.getSelectedItems(), [], 'selectedItems is not updated');
         assert.deepEqual(selection.getSelectedItemKeys(), [], 'selectedItemKeys is not updated');
+        assert.strictEqual(selection.isItemSelected(this.data[0]), false, 'isItemSelected returns false');
     });
 
     QUnit.test('cancelling should prevent selectedItems change and selectionChanged raise (e.cancel=promise)', function(assert) {
@@ -2490,6 +2492,7 @@ QUnit.module('onSelectionChanging', {
             assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
             assert.deepEqual(selection.getSelectedItems(), [], 'selectedItems is not updated');
             assert.deepEqual(selection.getSelectedItemKeys(), [], 'selectedItemKeys is not updated');
+            assert.strictEqual(selection.isItemSelected(this.data[0]), false, 'isItemSelected returns false');
             done();
         });
     });

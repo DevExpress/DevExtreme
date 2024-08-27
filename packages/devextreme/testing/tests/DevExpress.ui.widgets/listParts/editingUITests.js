@@ -26,7 +26,8 @@ const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
-const LIST_SELECT_ALL_CHECKBOX = 'dx-list-select-all-checkbox';
+const LIST_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
+const LIST_SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
 const SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready';
@@ -1957,7 +1958,7 @@ QUnit.test('next loaded page should be selected when selectAll is enabled', func
         pageLoadMode: 'nextButton',
         selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CLASS} .dx-checkbox`);
     const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
     $selectAll.trigger('dxclick');
@@ -1978,7 +1979,7 @@ QUnit.test('selectAll should have active state', function(assert) {
         selectionMode: 'all',
         selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find('.dx-list-select-all');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CLASS}`);
     const pointer = pointerMock($selectAll);
 
     pointer.start('touch').down();
@@ -2004,7 +2005,7 @@ QUnit.test('selectAll should not select items if they are not in current filter'
         selectionMode: 'all',
         selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
     $selectAll.trigger('dxclick');
 
@@ -2026,7 +2027,7 @@ QUnit.test('selectAll checkbox should change it\'s state to undefined when one i
         pageLoadMode: 'nextButton',
         selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     const $checkBox = $list.find('.dx-checkbox').eq(1);
     const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
@@ -2052,7 +2053,7 @@ QUnit.test('selectAll should change state after page loading when all items was 
         pageLoadMode: 'nextButton',
         selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     const $checkBox = $list.find('.dx-checkbox:gt(0)');
     const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
@@ -2082,7 +2083,7 @@ QUnit.test('selectAll should change state after page loading if selectAllMode wa
 
     $list.dxList('option', 'selectAllMode', 'allPages');
 
-    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     const $checkBox = $list.find('.dx-checkbox').eq(1);
     const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
@@ -2150,7 +2151,7 @@ QUnit.test('selectAll and unselectAll should log warning if selectAllMode is all
         selectionMode: 'all',
         selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
     sinon.spy(errors, 'log');
 
@@ -2160,7 +2161,7 @@ QUnit.test('selectAll and unselectAll should log warning if selectAllMode is all
     // assert
     assert.strictEqual(errors.log.callCount, 1);
     assert.strictEqual(errors.log.lastCall.args[0], 'W1010', 'Warning about selectAllMode allPages and grouped data');
-    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), true, 'selectAll checkbox is in selected state');
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), false, 'selectAll checkbox value is not changed');
     assert.strictEqual($list.dxList('option', 'selectedItems').length, 0, 'items are not selected');
 
 
@@ -2170,7 +2171,7 @@ QUnit.test('selectAll and unselectAll should log warning if selectAllMode is all
     // assert
     assert.strictEqual(errors.log.callCount, 2);
     assert.strictEqual(errors.log.lastCall.args[0], 'W1010', 'Warning about selectAllMode allPages and grouped data');
-    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), false, 'selectAll checkbox is in selected state');
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), false, 'selectAll checkbox value is not changed');
     assert.strictEqual($list.dxList('option', 'selectedItems').length, 0, 'items are not selected');
 
     errors.log.restore();
@@ -2185,7 +2186,7 @@ QUnit.test('render selectAll item when showSelectedAll is true', function(assert
         selectionMode: 'all',
         selectAllText: 'Test'
     });
-    const $multipleContainer = $list.find('.dx-list-select-all');
+    const $multipleContainer = $list.find(`.${LIST_SELECT_ALL_CLASS}`);
 
     assert.ok($multipleContainer.is(':hidden'), 'container for SelectAll is hidden');
 });
@@ -2197,7 +2198,7 @@ QUnit.test('selectAll updated on init', function(assert) {
         showSelectionControls: true,
         selectionMode: 'all'
     });
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), false, 'selectAll updated after init');
 });
@@ -2209,13 +2210,13 @@ QUnit.test('selectAll should be removed when editEnabled switched off', function
         selectionMode: 'all'
     });
 
-    assert.strictEqual($list.find('.dx-list-select-all').length, 0, 'selectAll not rendered');
+    assert.strictEqual($list.find(`.${LIST_SELECT_ALL_CLASS}`).length, 0, 'selectAll not rendered');
 
     $list.dxList('option', 'showSelectionControls', true);
-    assert.strictEqual($list.find('.dx-list-select-all').length, 1, 'selectAll rendered');
+    assert.strictEqual($list.find(`.${LIST_SELECT_ALL_CLASS}`).length, 1, 'selectAll rendered');
 
     $list.dxList('option', 'showSelectionControls', false);
-    assert.strictEqual($list.find('.dx-list-select-all').length, 0, 'selectAll not rendered');
+    assert.strictEqual($list.find(`.${LIST_SELECT_ALL_CLASS}`).length, 0, 'selectAll not rendered');
 });
 
 QUnit.test('selectAll selects all items', function(assert) {
@@ -2227,7 +2228,7 @@ QUnit.test('selectAll selects all items', function(assert) {
         selectionMode: 'all'
     });
 
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     $checkbox.trigger('dxclick');
 
     assert.deepEqual($list.dxList('option', 'selectedItems'), items, 'all items selected');
@@ -2244,7 +2245,7 @@ QUnit.test('selectAll triggers callback when selects all items', function(assert
         onSelectAllValueChanged: selectAllSpy
     });
 
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     $checkbox.trigger('dxclick');
 
     assert.strictEqual(selectAllSpy.callCount, 1);
@@ -2264,7 +2265,7 @@ QUnit.test('selectAll triggers changed callback when selects all items', functio
     const list = $list.dxList('instance');
 
     list.option('onSelectAllValueChanged', selectAllSpy);
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     $checkbox.trigger('dxclick');
 
     assert.strictEqual(selectAllSpy.callCount, 1);
@@ -2282,7 +2283,7 @@ QUnit.test('selectAll triggers selectAllValueChanged event when selects all item
     const list = $list.dxList('instance');
 
     list.on('selectAllValueChanged', selectAllSpy);
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     $checkbox.trigger('dxclick');
 
     assert.strictEqual(selectAllSpy.callCount, 1);
@@ -2296,7 +2297,7 @@ QUnit.test('selectAll unselect all items when all items selected', function(asse
         showSelectionControls: true,
         selectionMode: 'all'
     });
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
     $checkbox.trigger('dxclick');
     assert.strictEqual($list.dxList('option', 'selectedItems').length, 0, 'all items unselected');
@@ -2313,7 +2314,7 @@ QUnit.test('selectAll triggers callback when unselect all items when all items s
             assert.strictEqual(args.value, false, 'all items selected');
         }
     });
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
     $checkbox.trigger('dxclick');
 });
@@ -2325,7 +2326,7 @@ QUnit.test('selectAll selects all items when click on item', function(assert) {
         showSelectionControls: true,
         selectionMode: 'all'
     });
-    const $selectAll = $list.find('.dx-list-select-all');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CLASS}`);
 
     $selectAll.trigger('dxclick');
 
@@ -2339,7 +2340,7 @@ QUnit.test('selectAll selects all items when click on checkBox and selectionType
         showSelectionControls: true,
         selectionMode: 'all'
     });
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
     $checkbox.trigger('dxclick');
 
@@ -2356,7 +2357,7 @@ QUnit.test('selectAll checkbox is selected when all items selected', function(as
 
     $items.trigger('dxclick');
 
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox selected');
 });
 
@@ -2375,7 +2376,7 @@ QUnit.test('selectAll checkbox is selected when all items selected (ds w/o total
 
     $items.trigger('dxclick');
 
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox selected');
 });
 
@@ -2395,7 +2396,7 @@ QUnit.test('selectAll checkbox is selected when all items selected (ds with tota
 
     $items.trigger('dxclick');
 
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox checked');
 });
 
@@ -2410,7 +2411,7 @@ QUnit.test('selectAll checkbox has indeterminate state when not all items select
     $items.trigger('dxclick'); // NOTE: select all
     $items.eq(0).trigger('dxclick'); // NOTE: unselect first
 
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), undefined, 'selectAll checkbox has indeterminate state');
 });
 
@@ -2425,7 +2426,7 @@ QUnit.test('selectAll checkbox is unselected when all items unselected', functio
     $items.trigger('dxclick'); // NOTE: select all
     $items.trigger('dxclick'); // NOTE: unselect all
 
-    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     assert.strictEqual($checkbox.dxCheckBox('option', 'value'), false, 'selectAll checkbox is unselected');
 });
 
@@ -2441,7 +2442,7 @@ QUnit.test('selectAll checkbox should be updated after load next page', function
         selectionMode: 'all'
     });
 
-    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $selectAll = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
     $selectAll.trigger('dxclick');
 
     assert.strictEqual($selectAll.dxCheckBox('option', 'value'), true, 'selectAll checkbox is selected');
@@ -2470,13 +2471,13 @@ QUnit.test('onContentReady event should be called after update the state Select 
         showSelectionControls: true,
         selectionMode: 'all',
         onContentReady: (e) => {
-            $(e.element).find(`.${LIST_SELECT_ALL_CHECKBOX}`).dxCheckBox('instance').option('value', undefined);
+            $(e.element).find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance').option('value', undefined);
         }
     });
 
     clock.tick(100);
 
-    assert.ok($list.find(`.${LIST_SELECT_ALL_CHECKBOX}`).hasClass('dx-checkbox-indeterminate'), 'checkbox in an indeterminate state');
+    assert.ok($list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`).hasClass('dx-checkbox-indeterminate'), 'checkbox in an indeterminate state');
 
     clock.restore();
 });
@@ -2516,9 +2517,11 @@ QUnit.module('onSelectionChanging', {
             selectionMode: 'all',
         });
 
-        const $selectAllCheckbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX}`).eq(0);
+        const $selectAllCheckbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`).eq(0);
         $selectAllCheckbox.trigger('dxclick');
 
+        assert.strictEqual($selectAllCheckbox.dxCheckBox('option', 'value'), false, 'selectAll checkbox is not checked');
+        $selectAllCheckbox.trigger('dxclick');
         assert.strictEqual($selectAllCheckbox.dxCheckBox('option', 'value'), false, 'selectAll checkbox is not checked');
     });
 

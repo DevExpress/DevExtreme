@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
@@ -59,11 +60,7 @@ registerDecorator(
         elementAttr: { 'aria-label': 'Check State' },
         focusStateEnabled: false,
         hoverStateEnabled: false,
-        onValueChanged: function (e) {
-          e.event && this._list._saveSelectionChangeEvent(e.event);
-          this._processCheckedState($itemElement, e.value);
-          e.event && e.event.stopPropagation();
-        }.bind(this),
+        readOnly: true,
       }));
     },
 
@@ -121,7 +118,7 @@ registerDecorator(
       if (this._$selectAll && this._$selectAll.hasClass(FOCUSED_STATE_CLASS)) {
         e.target = this._$selectAll.get(0);
         this._list._saveSelectionChangeEvent(e);
-        this._selectAllCheckBox.option('value', !this._selectAllCheckBox.option('value'));
+        this._selectAllHandler(e);
         return true;
       }
     },
@@ -142,6 +139,7 @@ registerDecorator(
           elementAttr: { 'aria-label': messageLocalization.format('dxList-selectAll') },
           focusStateEnabled: false,
           hoverStateEnabled: false,
+          readOnly: true,
         },
       );
 
@@ -159,10 +157,13 @@ registerDecorator(
     },
 
     _attachSelectAllHandler() {
-      this._selectAllCheckBox.option('onValueChanged', this._selectAllHandler.bind(this));
+      this._selectAllCheckBox.option('onValueChanged', ({ value }) => {
+        this._updateSelectAllAriaLabel();
+        this._list._createActionByOption('onSelectAllValueChanged')({ value });
+      });
 
       eventsEngine.off(this._$selectAll, CLICK_EVENT_NAME);
-      eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, this._selectAllClickHandler.bind(this));
+      eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, this._selectAllHandler.bind(this));
     },
 
     _updateSelectAllAriaLabel() {
@@ -180,21 +181,22 @@ registerDecorator(
       this._$selectAll.attr({ 'aria-label': label });
     },
 
-    _selectAllHandler(e) {
-      e.event && e.event.stopPropagation();
-      e.event && this._list._saveSelectionChangeEvent(e.event);
+    _selectAllHandler(event): DeferredObj<unknown> {
+      event.stopPropagation();
+      this._list._saveSelectionChangeEvent(event);
 
       const { value } = this._selectAllCheckBox.option();
 
-      if (value) {
-        this._selectAllItems();
-      } else if (value === false) {
-        this._unselectAllItems();
+      let selectionDeferred;
+      if (value !== true) {
+        selectionDeferred = this._selectAllItems();
+      } else {
+        selectionDeferred = this._unselectAllItems();
       }
 
-      this._updateSelectAllAriaLabel();
+      this._list.option('focusedElement', this._$selectAll.get(0));
 
-      this._list._createActionByOption('onSelectAllValueChanged')({ value });
+      return selectionDeferred;
     },
 
     _checkSelectAllCapability() {
@@ -209,32 +211,19 @@ registerDecorator(
     },
 
     _selectAllItems() {
-      if (!this._checkSelectAllCapability()) return;
+      if (!this._checkSelectAllCapability()) return Deferred().resolve();
 
-      this._list._selection.selectAll(this._list.option('selectAllMode') === 'page');
+      return this._list._selection.selectAll(this._list.option('selectAllMode') === 'page');
     },
 
     _unselectAllItems() {
-      if (!this._checkSelectAllCapability()) return;
+      if (!this._checkSelectAllCapability()) return Deferred().resolve();
 
-      this._list._selection.deselectAll(this._list.option('selectAllMode') === 'page');
-    },
-
-    _selectAllClickHandler(e) {
-      this._list._saveSelectionChangeEvent(e);
-      this._selectAllCheckBox.option('value', !this._selectAllCheckBox.option('value'));
+      return this._list._selection.deselectAll(this._list.option('selectAllMode') === 'page');
     },
 
     _isSelected($itemElement) {
       return this._list.isItemSelected($itemElement);
-    },
-
-    _processCheckedState($itemElement, checked) {
-      if (checked) {
-        this._list.selectItem($itemElement);
-      } else {
-        this._list.unselectItem($itemElement);
-      }
     },
 
     dispose() {

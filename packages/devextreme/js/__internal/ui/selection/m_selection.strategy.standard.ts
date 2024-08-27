@@ -513,8 +513,8 @@ export default class StandardStrategy extends SelectionStrategy {
 
     this._storedSelectionState = {
       keyHashIndices: { ...keyHashIndices },
-      selectedItems,
-      selectedItemKeys,
+      selectedItems: [...selectedItems],
+      selectedItemKeys: [...selectedItemKeys],
     };
   }
 
