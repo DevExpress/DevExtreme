@@ -1,5 +1,5 @@
 import { NgModule, Injector, createNgModuleRef } from '@angular/core';
-import * as angularCommonHttp from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import devextremeAjax from 'devextreme/core/utils/ajax';
 import { sendRequestFactory } from './ajax';
 
@@ -10,12 +10,12 @@ import { sendRequestFactory } from './ajax';
 })
 export class DxHttpModule {
   constructor(injector: Injector) {
-    let httpClient: angularCommonHttp.HttpClient = injector.get(angularCommonHttp.HttpClient, null);
+    let httpClient: HttpClient = injector.get(HttpClient, null);
 
     if (!httpClient) {
-      const moduleRef = createNgModuleRef(angularCommonHttp.HttpClientModule, injector);
+      const moduleRef = createNgModuleRef(HttpClientModule, injector);
 
-      httpClient = moduleRef.injector.get(angularCommonHttp.HttpClient);
+      httpClient = moduleRef.injector.get(HttpClient);
     }
 
     devextremeAjax.inject({ sendRequest: sendRequestFactory(httpClient) });
