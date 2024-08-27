@@ -27,7 +27,6 @@ import {
   EDITING_EDITCOLUMNNAME_OPTION_NAME,
   EDITING_EDITROWKEY_OPTION_NAME,
   EDITOR_CELL_CLASS,
-  FILTER_ROW_CLASS,
   FOCUS_OVERLAY_CLASS,
   ROW_CLASS,
   ROW_REMOVED,
@@ -41,7 +40,7 @@ export interface ICellBasedEditingControllerExtender {
   isCellOrBatchEditMode(): any;
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  closeEditCell(isError?, withoutSaveEditData?, isFilterCell?): any;
+  closeEditCell(isError?, withoutSaveEditData?): any;
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   editCell(rowIndex, columnIndex): any;
@@ -147,9 +146,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   protected _closeEditItem($targetElement) {
-    const isFilterCell = !!$targetElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
     if (this._needToCloseEditableCell($targetElement)) {
-      this.closeEditCell(false, false, isFilterCell);
+      this.closeEditCell();
     }
   }
 
@@ -357,8 +355,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   /**
    * interface override
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public closeEditCell(isError?, withoutSaveEditData?, isFilterCell?) {
+  public closeEditCell(isError?, withoutSaveEditData?) {
     let result = when();
     const oldEditRowIndex = this._getVisibleEditRowIndex();
 

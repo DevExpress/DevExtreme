@@ -37,6 +37,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_ROW,
   EDITOR_CELL_CLASS,
+  FILTER_ROW_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
@@ -1349,7 +1350,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     element && this._focusElement($(element), isHighlighted);
   }
 
-  private getFocusedView() {
+  public getFocusedView() {
     return this._focusedView;
   }
 
@@ -2836,11 +2837,14 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
   /**
    * interface override
    */
-  public closeEditCell(isError?, withoutSaveEditData?, isFilterCell?) {
+  public closeEditCell(isError?, withoutSaveEditData?) {
     const keyboardNavigation = this._keyboardNavigationController;
     keyboardNavigation._fastEditingStarted = false;
 
-    const result = super.closeEditCell(isError, withoutSaveEditData, isFilterCell);
+    const result = super.closeEditCell(isError, withoutSaveEditData);
+
+    const $focusedElement = $('body').find(':focus');
+    const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
 
     if (!isFilterCell) {
       keyboardNavigation._updateFocus();
