@@ -52,10 +52,9 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+                const dxChat = $("#button").dxChat().dxChat('instance');
+
+                // dxChat.focus();
             });
         </script>
     </div>

@@ -15,6 +15,7 @@ import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 class Chat extends Widget<Properties> {
   _chatHeader!: ChatHeader;
@@ -104,6 +105,16 @@ class Chat extends Widget<Properties> {
 
     this.renderMessage(message);
     this._messageSendAction?.({ message, event });
+  }
+
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  _focusTarget() {
+    const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+    debugger;
+
+    return $input;
   }
 
   _optionChanged(args: Record<string, unknown>): void {
