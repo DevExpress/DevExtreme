@@ -2843,8 +2843,7 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 
     const result = super.closeEditCell.apply(this, arguments as any);
 
-    const $element = $(this.component.element?.());
-    const $focusedElement = $element.find(':focus');
+    const $focusedElement = this._getFocusedElement();
     const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
 
     if (!isFilterCell) {
@@ -2852,6 +2851,13 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
     }
 
     return result;
+  }
+
+  private _getFocusedElement() {
+    const $element = $(this.component.element());
+    const $focusedElement = $element?.find(':focus');
+
+    return $focusedElement;
   }
 
   protected _delayedInputFocus() {
