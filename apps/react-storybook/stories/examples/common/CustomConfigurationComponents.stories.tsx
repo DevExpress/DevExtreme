@@ -12,7 +12,7 @@ import DataGrid, {
 import TabPanel, { Item } from "devextreme-react/tab-panel";
 import ODataStore from "devextreme/data/odata/store";
 
-import customConfigurationComponent from 'devextreme-react/cjs/core/custom-configuration-component';
+import customConfigurationComponent from 'devextreme-react/core/custom-configuration-component';
 
 const meta: Meta<typeof DataGrid> = {
   title: 'Example/Common/Custom Configuration Components',
