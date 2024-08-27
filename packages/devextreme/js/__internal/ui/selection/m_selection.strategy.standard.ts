@@ -17,6 +17,8 @@ export default class StandardStrategy extends SelectionStrategy {
 
   _lastRequestData?: any;
 
+  _isCancelingInProgress?: boolean;
+
   constructor(options) {
     super(options);
     this._initSelectedItemKeyHash();
@@ -245,24 +247,42 @@ export default class StandardStrategy extends SelectionStrategy {
   }
 
   selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
-    const that = this;
-    const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
+    if (this._isCancelingInProgress) {
+      return Deferred().reject();
+    }
 
-    deferred.done((items) => {
+    const loadingDeferred = this._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
+
+    const selectionDeferred = Deferred();
+
+    loadingDeferred.done((items) => {
+      const { selectedItemKeys, selectedItems } = this.options;
       if (preserve) {
-        that._preserveSelectionUpdate(items, isDeselect);
+        this._preserveSelectionUpdate(items, isDeselect);
       } else {
-        that._replaceSelectionUpdate(items);
+        this._replaceSelectionUpdate(items);
       }
       /// #DEBUG
       if (!isSelectAll && !isDeselect) {
-        that._warnOnIncorrectKeys(keys);
+        this._warnOnIncorrectKeys(keys);
       }
       /// #ENDDEBUG
-      that.onSelectionChanged();
+
+      this._isCancelingInProgress = true;
+      this._callCallbackIfNotCanceled(() => {
+        this._isCancelingInProgress = false;
+        this.onSelectionChanged();
+        selectionDeferred.resolve(items);
+      }, () => {
+        this._isCancelingInProgress = false;
+        this._clearItemKeys();
+        this._setOption('selectedItemKeys', selectedItemKeys);
+        this._setOption('selectedItems', selectedItems);
+        selectionDeferred.reject();
+      });
     });
 
-    return deferred;
+    return selectionDeferred;
   }
 
   addSelectedItem(key, itemData) {

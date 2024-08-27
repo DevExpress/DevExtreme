@@ -10,6 +10,7 @@ import TabPanel from 'ui/tab_panel';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import translator from 'animation/translator';
 
 
 QUnit.testStart(() => {
@@ -43,6 +44,8 @@ const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
 const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
+const MULTIVIEW_ITEM_CONTAINER_CLASS = 'dx-multiview-item-container';
+const MULTIVIEW_HIDDEN_ITEM_CLASS = 'dx-multiview-item-hidden';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -314,6 +317,433 @@ QUnit.module('options', {
     QUnit.test('loop option (T318329)', function(assert) {
         this.tabPanelInstance.option('loop', true);
         assert.ok(this.tabWidgetInstance.option('loopItemFocus'), 'option has been passed to tabs');
+    });
+});
+
+QUnit.module('onSelectionChanging', {
+    beforeEach() {
+        fx.off = true;
+        this.onSelectionChangingStub = sinon.stub();
+        this.onSelectionChangedStub = sinon.stub();
+        this.items = [{ text: '1' }, { text: '2' }];
+
+        const initialOptions = {
+            items: this.items,
+            selectionMode: 'single',
+            onSelectionChanging: this.onSelectionChangingStub,
+            onSelectionChanged: this.onSelectionChangedStub,
+        };
+
+        this.init = (options) => {
+            this.$tabPanel = $('#tabPanel');
+            this.tabPanel = this.$tabPanel
+                .dxTabPanel($.extend({}, initialOptions, options))
+                .dxTabPanel('instance');
+            this.$tabs = this.$tabPanel.find(toSelector(TABS_CLASS));
+            this.tabs = this.$tabs.dxTabs('instance');
+        };
+        this.reinit = (options) => {
+            this.tabPanel.dispose();
+            this.init(options);
+        };
+        this.init();
+
+        this.assertSelectionNotChanged = (assert) =>{
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called once');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged should not be called');
+
+            assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'Tabs selectedIndex should remain 0');
+            assert.deepEqual(this.tabs.option('selectedItem'), this.items[0], 'Tabs selectedItem should remain the first item');
+            assert.deepEqual(this.tabs.option('selectedItems'), [this.items[0]], 'Tabs selectedItems should remain the first item');
+            assert.deepEqual(this.tabs.option('selectedItemKeys'), [this.items[0]], 'Tabs selectedItemKeys should remain the first key');
+            assert.ok(this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(0).hasClass(SELECTED_TAB_CLASS), 'First tab had a selected class');
+
+
+            assert.strictEqual(this.tabPanel.option('selectedIndex'), 0, 'TabPanel selectedIndex should remain 0');
+            assert.deepEqual(this.tabPanel.option('selectedItem'), this.items[0], 'TabPanel selectedItem should remain the first item');
+            assert.deepEqual(this.tabPanel.option('selectedItems'), [this.items[0]], 'TabPanel selectedItems should remain the first item');
+            assert.deepEqual(this.tabPanel.option('selectedItemKeys'), [this.items[0]], 'TabPanel selectedItemKeys should remain the first key');
+            assert.ok(this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0).hasClass(SELECTED_ITEM_CLASS), 'First multiView had a selected class');
+        };
+        this.assertSecondItemSelected = (assert) => {
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 1, 'onSelectionChanged should be called');
+
+            assert.strictEqual(this.tabs.option('selectedIndex'), 1, 'Tabs selectedIndex should be updated to 1');
+            assert.deepEqual(this.tabs.option('selectedItem'), this.items[1], 'Tabs selectedItem should be equal to the second item');
+            assert.deepEqual(this.tabs.option('selectedItems'), [this.items[1]], 'Tabs selectedItems should contain second item');
+            assert.deepEqual(this.tabs.option('selectedItemKeys'), [this.items[1]], 'Tabs selectedItemKeys should contain second item');
+            assert.ok(this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1).hasClass(SELECTED_TAB_CLASS), 'Second tab had a selected class');
+
+            assert.strictEqual(this.tabPanel.option('selectedIndex'), 1, 'TabPanel selectedIndex should be updated to 1');
+            assert.deepEqual(this.tabPanel.option('selectedItem'), this.items[1], 'TabPanel selectedItem should be equal to the second item');
+            assert.deepEqual(this.tabPanel.option('selectedItems'), [this.items[1]], 'TabPanel selectedItems should contain second item');
+            assert.deepEqual(this.tabPanel.option('selectedItemKeys'), [this.items[1]], 'TabPanel selectedItemKeys should contain second item');
+            assert.ok(this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1).hasClass(SELECTED_ITEM_CLASS), 'Second multiView had a selected class');
+        };
+    },
+    afterEach() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('should be raised only once when tab is focused and clicked', function(assert) {
+        const clock = sinon.useFakeTimers();
+        this.onSelectionChangingStub = sinon.spy((e) => {
+            e.cancel = true;
+        });
+
+        this.reinit({
+            onSelectionChanging: this.onSelectionChangingStub,
+            focusStateEnabled: true
+        });
+
+        this.$tabPanel.trigger('focusin');
+        const $item = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+        $item.trigger('dxpointerdown');
+        $item.trigger('dxclick');
+        clock.tick(10);
+
+        assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+        assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged is not called');
+
+        assert.strictEqual(this.tabPanel.option('selectedIndex'), 0, 'tabPanel selected index is not changed');
+        clock.restore();
+    });
+
+    QUnit.test('should be ignored if previous request is not processed yet', function(assert) {
+        const done = assert.async();
+        const delay = 300;
+        this.onSelectionChangingStub = sinon.spy((e) => {
+            e.cancel = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(false);
+                }, delay);
+            });
+        });
+
+        const items = [{ text: '1' }, { text: '2' }, { text: '3' }];
+        this.reinit({
+            onSelectionChanging: this.onSelectionChangingStub,
+            items
+        });
+
+        const $items = this.$tabPanel.find(`.${TABS_ITEM_CLASS}`);
+
+        $items.eq(2).trigger('dxclick');
+        $items.eq(0).trigger('dxclick');
+        $items.eq(1).trigger('dxclick');
+
+        setTimeout(() => {
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 1, 'onSelectionChanged should be called');
+
+            assert.strictEqual(this.tabs.option('selectedIndex'), 2, 'Tabs selectedIndex should be updated to 2');
+            assert.deepEqual(this.tabs.option('selectedItem'), items[2], 'Tabs selectedItem should be equal to the third item');
+            assert.deepEqual(this.tabs.option('selectedItems'), [items[2]], 'Tabs selectedItems should contain third item');
+            assert.deepEqual(this.tabs.option('selectedItemKeys'), [items[2]], 'Tabs selectedItemKeys should contain third item');
+
+            assert.strictEqual(this.tabPanel.option('selectedIndex'), 2, 'TabPanel selectedIndex should be updated to 2');
+            assert.deepEqual(this.tabPanel.option('selectedItem'), items[2], 'TabPanel selectedItem should be equal to the third item');
+            assert.deepEqual(this.tabPanel.option('selectedItems'), [items[2]], 'TabPanel selectedItems should contain third item');
+            assert.deepEqual(this.tabPanel.option('selectedItemKeys'), [items[2]], 'TabPanel selectedItemKeys should contain third item');
+
+            const $multiViewItems = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`);
+            assert.ok($multiViewItems.eq(2).hasClass(SELECTED_ITEM_CLASS), 'second multiview item is selected');
+            assert.notOk($multiViewItems.eq(2).hasClass(MULTIVIEW_HIDDEN_ITEM_CLASS), 'second multiview item is visible');
+
+            done();
+        }, delay);
+    });
+
+    QUnit.test('tabPanel selectOnFocus should be false to not raise excess selectionChanging', function(assert) {
+        assert.strictEqual(this.tabPanel.option('selectOnFocus'), false, 'selectOnFocus = false');
+    });
+
+
+    QUnit.module('after keyboard navigation', () => {
+        QUnit.test('should keep new item focused even if selection is cancelled', function(assert) {
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = true;
+            });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                focusStateEnabled: true
+            });
+
+            this.tabPanel.focus();
+
+            const keyboard = keyboardMock(this.$tabs);
+            keyboard.press('right');
+
+            this.assertSelectionNotChanged(assert);
+
+            const $secondTab = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+            assert.ok($secondTab.hasClass(FOCUS_STATE_CLASS), 'focus is moved to the second tab');
+        });
+    });
+
+    QUnit.module('after multiView swipe', () => {
+        QUnit.test('should cancel selection if e.cancel = true', function(assert) {
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = true;
+            });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            this.assertSelectionNotChanged(assert);
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+            assert.strictEqual(translator.locate($itemContainer).left, 0, 'container was not swiped');
+        });
+
+        QUnit.test('should cancel selection if e.cancel is a promise resolving with true', function(assert) {
+            const done = assert.async();
+
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(true);
+                    });
+                });
+            });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+
+            setTimeout(() => {
+                setTimeout(() => {
+                    this.assertSelectionNotChanged(assert);
+
+                    assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('should apply selection if e.cancel is a promise resolving with false', function(assert) {
+            const done = assert.async();
+
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(false);
+                    });
+                });
+            });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'selectionChanged is not called until promise is resolved');
+
+            setTimeout(() => {
+                setTimeout(() => {
+                    this.assertSecondItemSelected(assert);
+
+                    assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('should apply selection if e.cancel is a promise which rejects', function(assert) {
+            const done = assert.async();
+
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject();
+                    });
+                });
+            });
+
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+                swipeEnabled: true
+            });
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.notEqual(translator.locate($itemContainer).left, 0, 'container scroll is not restored immediately');
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'selectionChanged is not called until promise is resolved');
+
+            setTimeout(() => {
+                setTimeout(() => {
+                    this.assertSecondItemSelected(assert);
+
+                    assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('should apply the selection if e.cancel is not modified', function(assert) {
+            this.reinit({
+                swipeEnabled: true
+            });
+
+            const pointer = pointerMock(this.$tabPanel);
+            pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            const $itemContainer = this.$tabPanel.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+
+            this.assertSecondItemSelected(assert);
+
+            assert.strictEqual(translator.locate($itemContainer).left, 0, 'container scroll is restored');
+        });
+    });
+
+    QUnit.module('should cancel selection', () => {
+        QUnit.test('when it sets cancel=true in initial config', function(assert) {
+            this.onSelectionChangingStub = sinon.spy(function(e) {
+                e.cancel = true;
+            });
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+            });
+            const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
+            $item.trigger('dxclick');
+
+            this.assertSelectionNotChanged(assert);
+        });
+
+        QUnit.test('when it sets cancel=true in runtime', function(assert) {
+            this.onSelectionChangingStub = sinon.spy(function(e) {
+                e.cancel = true;
+            });
+            this.tabPanel.option({
+                onSelectionChanging: this.onSelectionChangingStub,
+            });
+
+            const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
+            $item.trigger('dxclick');
+
+            this.assertSelectionNotChanged(assert);
+        });
+
+        QUnit.test('when it sets cancel to promise in initial config and resolves it with true', function(assert) {
+            const done = assert.async();
+            this.onSelectionChangingStub = sinon.spy(function(e) {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(true);
+                    });
+                });
+            });
+            this.reinit({
+                onSelectionChanging: this.onSelectionChangingStub,
+            });
+            const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
+            $item.trigger('dxclick');
+
+            assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'selectedIndex is not changed until promise is resolved');
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called immediatelly');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged should not be called until promise is resolved');
+
+            setTimeout(() => {
+                setTimeout(() => {
+                    this.assertSelectionNotChanged(assert);
+                    done();
+                });
+            });
+        });
+    });
+
+    QUnit.module('should apply new selection', () => {
+        QUnit.test('when e.cancel is not modified', function(assert) {
+            const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
+            $item.trigger('dxclick');
+
+            assert.strictEqual(this.onSelectionChangingStub.getCall(0).args[0].cancel, false, 'e.cancel should be set to false');
+
+            this.assertSecondItemSelected(assert);
+        });
+
+        QUnit.test('when it sets e.cancel to a promise resolved with false', function(assert) {
+            const done = assert.async();
+
+            this.onSelectionChangingStub = sinon.spy(function(e) {
+                e.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(false);
+                    });
+                });
+            });
+
+            this.tabPanel.option('onSelectionChanging', this.onSelectionChangingStub);
+
+            const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
+
+            $item.trigger('dxclick');
+            assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'selectedIndex is not changed until promise is resolved');
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called immediatelly');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged should not be called until promise is resolved');
+
+            setTimeout(() => {
+                setTimeout(() => {
+                    this.assertSecondItemSelected(assert);
+                    done();
+                });
+            });
+        });
+
+        QUnit.test('when it sets e.cancel to a rejected promise', function(assert) {
+            const done = assert.async();
+
+            this.onSelectionChangingStub = sinon.spy((e) => {
+                e.cancel = new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject('Cancellation error');
+                    });
+                }, 0);
+            });
+
+            this.tabPanel.option('onSelectionChanging', this.onSelectionChangingStub);
+
+            const $item = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`).eq(1);
+            $item.trigger('dxclick');
+
+            assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'selectedIndex is not changed until promise is resolved');
+            assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging should be called after click');
+            assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged should not be called before promise resolves');
+
+            setTimeout(() => {
+                setTimeout(() => {
+                    this.assertSecondItemSelected(assert);
+                    done();
+                });
+            });
+        });
     });
 });
 
