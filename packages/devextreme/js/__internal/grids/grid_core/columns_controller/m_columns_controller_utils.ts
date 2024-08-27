@@ -977,8 +977,8 @@ export const isFirstOrLastColumn = function (
         const columns = getColumns(index, column);
 
         return isLast
-          ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1].index, index)
-          : visibleColumnIndex === that.getVisibleIndex(columns[0].index, index);
+          ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1]?.index, index)
+          : visibleColumnIndex === that.getVisibleIndex(columns[0]?.index, index);
       });
   }
 
@@ -990,6 +990,6 @@ export const isFirstOrLastColumn = function (
   const visibleColumnIndex = that.getVisibleIndex(targetColumnIndex, rowIndex);
 
   return isLast
-    ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1].index, rowIndex)
-    : visibleColumnIndex === that.getVisibleIndex(columns[0].index, rowIndex);
+    ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1]?.index, rowIndex)
+    : visibleColumnIndex === that.getVisibleIndex(columns[0]?.index, rowIndex);
 };
