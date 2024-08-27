@@ -117,7 +117,6 @@ registerDecorator(
     handleEnterPressing(e) {
       if (this._$selectAll && this._$selectAll.hasClass(FOCUSED_STATE_CLASS)) {
         e.target = this._$selectAll.get(0);
-        this._list._saveSelectionChangeEvent(e);
         this._selectAllHandler(e);
         return true;
       }
