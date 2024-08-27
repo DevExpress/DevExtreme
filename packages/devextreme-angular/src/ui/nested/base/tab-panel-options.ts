@@ -301,10 +301,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('tabsPosition', value);
     }
 
-    get visible(): boolean {
+    get visible(): boolean | undefined {
         return this._getOption('visible');
     }
-    set visible(value: boolean) {
+    set visible(value: boolean | undefined) {
         this._setOption('visible', value);
     }
 

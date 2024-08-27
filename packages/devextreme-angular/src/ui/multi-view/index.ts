@@ -337,14 +337,14 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 
     /**
-     * [descr:WidgetOptions.visible]
+     * [descr:dxMultiViewOptions.visible]
     
      */
     @Input()
-    get visible(): boolean {
+    get visible(): boolean | undefined {
         return this._getOption('visible');
     }
-    set visible(value: boolean) {
+    set visible(value: boolean | undefined) {
         this._setOption('visible', value);
     }
 
@@ -585,7 +585,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() visibleChange: EventEmitter<boolean>;
+    @Output() visibleChange: EventEmitter<boolean | undefined>;
 
     /**
     
