@@ -15,6 +15,7 @@ import numberLocalization from '@js/localization/number';
 
 import gridCoreUtils from '../m_utils';
 import type { StickyPosition } from '../sticky_columns/const';
+import { getColumnFixedPosition } from '../sticky_columns/utils';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
@@ -959,7 +960,7 @@ export const isFirstOrLastColumn = function (
       if (onlyWithinBandColumn && column) {
         res &&= col.ownerBand === column.ownerBand;
       } else if (fixedPosition) {
-        res &&= col.fixed && col.fixedPosition === fixedPosition;
+        res &&= col.fixed && getColumnFixedPosition(col) === fixedPosition;
       }
 
       return res;
