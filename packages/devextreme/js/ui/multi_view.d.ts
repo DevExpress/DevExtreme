@@ -159,6 +159,12 @@ export interface dxMultiViewBaseOptions<
      * @public
      */
     swipeEnabled?: boolean;
+    /**
+     * @docid dxMultiViewOptions.visible
+     * @default undefined
+     * @public
+     */
+    visible?: boolean;
 }
 
 /**
