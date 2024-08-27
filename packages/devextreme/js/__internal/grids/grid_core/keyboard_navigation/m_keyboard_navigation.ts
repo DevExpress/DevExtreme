@@ -2841,8 +2841,11 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
     keyboardNavigation._fastEditingStarted = false;
 
     const result = super.closeEditCell.apply(this, arguments as any);
+    const [,,isFilter] = arguments;
 
-    keyboardNavigation._updateFocus();
+    if (!isFilter) {
+      keyboardNavigation._updateFocus();
+    }
 
     return result;
   }

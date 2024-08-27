@@ -41,7 +41,7 @@ export interface ICellBasedEditingControllerExtender {
   isCellOrBatchEditMode(): any;
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style
-  closeEditCell(isError?, withoutSaveEditData?): any;
+  closeEditCell(isError?, withoutSaveEditData?, isFilter?): any;
 
   // eslint-disable-next-line @typescript-eslint/method-signature-style
   editCell(rowIndex, columnIndex): any;
@@ -51,6 +51,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   private _pointerUpEditorHandler: any;
 
   private _pointerDownEditorHandler: any;
+
+  protected _isFilterRowFocused: any;
 
   public init() {
     const needCreateHandlers = !this._saveEditorHandler;
@@ -89,9 +91,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
           const isAddRowButton = !!$target.closest(`.${this.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)}`).length;
           const isFocusOverlay = $target.hasClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
           const isCellEditMode = this.isCellEditMode();
-          const isFilterRow = !!$target.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
-          if (!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && this.isEditing()) && (isElementInDom($target) || isAnotherComponent) && !isFilterRow) {
-            this._closeEditItem.bind(this)($target);
+          const isFilterCell = !!$target.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+          if (!isResizing && !isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && this.isEditing()) && (isElementInDom($target) || isAnotherComponent)) {
+            this._closeEditItem.bind(this)($target, isFilterCell);
           }
         }
       });
@@ -145,9 +147,13 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return result || super._needToCloseEditableCell($targetElement);
   }
 
-  protected _closeEditItem($targetElement) {
+  protected _closeEditItem($targetElement, isFilterCell?) {
     if (this._needToCloseEditableCell($targetElement)) {
-      this.closeEditCell();
+      if (isFilterCell) {
+        this.closeEditCell(undefined, undefined, isFilterCell);
+      } else {
+        this.closeEditCell();
+      }
     }
   }
 
@@ -355,7 +361,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   /**
    * interface override
    */
-  public closeEditCell(isError?, withoutSaveEditData?) {
+  public closeEditCell(isError?, withoutSaveEditData?, isFilter?) {
+    this._isFilterRowFocused = isFilter;
     let result = when();
     const oldEditRowIndex = this._getVisibleEditRowIndex();
 
