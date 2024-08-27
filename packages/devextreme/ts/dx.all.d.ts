@@ -10120,6 +10120,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.AdaptiveDetailRowPreparingInfo;
+    export type CaseSensitivity = 'base' | 'accent' | 'case' | 'variant';
     /**
      * [descr:_ui_data_grid_CellClickEvent]
      */
@@ -10546,11 +10547,6 @@ declare module DevExpress.ui {
       readonly isSelected?: boolean;
       readonly isExpanded?: boolean;
     };
-    export type DeferredCaseSensitivity =
-      | 'base'
-      | 'accent'
-      | 'case'
-      | 'variant';
     /**
      * [descr:_ui_data_grid_DisposingEvent]
      */
@@ -11638,9 +11634,9 @@ declare module DevExpress.ui {
        */
       deferred?: boolean;
       /**
-       * [descr:dxDataGridOptions.selection.deferredCaseSensitivity]
+       * [descr:dxDataGridOptions.selection.caseSensitivity]
        */
-      deferredCaseSensitivity?: DeferredCaseSensitivity;
+      caseSensitivity?: CaseSensitivity;
       /**
        * [descr:dxDataGridOptions.selection.selectAllMode]
        */

@@ -7,7 +7,7 @@ import {
 
 import { SelectAllMode, SingleMultipleOrNone } from 'devextreme/common';
 import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
-import { DeferredCaseSensitivity } from 'devextreme/ui/data_grid';
+import { CaseSensitivity } from 'devextreme/ui/data_grid';
 
 @Component({
     template: ''
@@ -34,18 +34,18 @@ export abstract class DxoColumnChooserSelectionConfig extends NestedOption {
         this._setOption('selectByClick', value);
     }
 
+    get caseSensitivity(): CaseSensitivity {
+        return this._getOption('caseSensitivity');
+    }
+    set caseSensitivity(value: CaseSensitivity) {
+        this._setOption('caseSensitivity', value);
+    }
+
     get deferred(): boolean {
         return this._getOption('deferred');
     }
     set deferred(value: boolean) {
         this._setOption('deferred', value);
-    }
-
-    get deferredCaseSensitivity(): DeferredCaseSensitivity {
-        return this._getOption('deferredCaseSensitivity');
-    }
-    set deferredCaseSensitivity(value: DeferredCaseSensitivity) {
-        this._setOption('deferredCaseSensitivity', value);
     }
 
     get mode(): SingleMultipleOrNone {

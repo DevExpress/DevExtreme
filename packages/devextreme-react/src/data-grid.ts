@@ -870,8 +870,8 @@ const DataGridHeaderFilterTexts: typeof _componentDataGridHeaderFilterTexts & IE
 // DataGrid
 type IDataGridSelectionProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
+  caseSensitivity?: "base" | "accent" | "case" | "variant";
   deferred?: boolean;
-  deferredCaseSensitivity?: "base" | "accent" | "case" | "variant";
   mode?: "single" | "multiple" | "none";
   selectAllMode?: "allPages" | "page";
   showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap";
@@ -2349,8 +2349,8 @@ const SearchPanel: typeof _componentSearchPanel & IElementDescriptor = Object.as
 // ColumnChooser
 type ISelectionProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
+  caseSensitivity?: "base" | "accent" | "case" | "variant";
   deferred?: boolean;
-  deferredCaseSensitivity?: "base" | "accent" | "case" | "variant";
   mode?: "single" | "multiple" | "none";
   selectAllMode?: "allPages" | "page";
   showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap";

@@ -30,8 +30,8 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
         'allowSelectAll',
         'recursive',
         'selectByClick',
+        'caseSensitivity',
         'deferred',
-        'deferredCaseSensitivity',
         'mode',
         'selectAllMode',
         'showCheckBoxesMode'
