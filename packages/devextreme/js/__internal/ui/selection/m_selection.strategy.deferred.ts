@@ -68,7 +68,7 @@ export default class DeferredStrategy extends SelectionStrategy {
   }
 
   isItemKeySelected(itemData) {
-    const { selectionFilter, deferredCaseSensitivity } = this.options;
+    const { selectionFilter, caseSensitivity } = this.options;
 
     if (!selectionFilter) {
       return true;
@@ -77,7 +77,7 @@ export default class DeferredStrategy extends SelectionStrategy {
     const queryParams = {
       langParams: {
         collatorOptions: {
-          sensitivity: deferredCaseSensitivity,
+          sensitivity: caseSensitivity,
         },
       },
     };

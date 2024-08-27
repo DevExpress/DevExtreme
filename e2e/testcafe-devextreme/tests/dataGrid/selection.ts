@@ -184,7 +184,7 @@ const DATA_GRID_SELECTOR = '#container';
     selection: {
       mode: 'multiple',
       deferred: true,
-      deferredCaseSensitivity: caseSensitivity,
+      caseSensitivity,
     },
   }));
 });
@@ -208,11 +208,11 @@ test('Deferred selection should work correctly with deferred sensitivity: \'case
   selection: {
     mode: 'multiple',
     deferred: true,
-    deferredCaseSensitivity: 'case',
+    caseSensitivity: 'case',
   },
 }));
 
-test('DeferredCaseSensitivity option change should be correctly handled during runtime change', async (t) => {
+test('CaseSensitivity option change should be correctly handled during runtime change', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const checkBoxCell = dataGrid.getDataCell(0, 0);
   const firstRow = dataGrid.getDataRow(0);
@@ -224,7 +224,7 @@ test('DeferredCaseSensitivity option change should be correctly handled during r
     .expect(firstRow.isSelected).ok()
     .expect(secondRow.isSelected).ok();
 
-  await dataGrid.apiChangeDeferredCaseSensitivity('case');
+  await dataGrid.apiChangeCaseSensitivity('case');
 
   await t
     .expect(firstRow.isSelected).notOk()
@@ -243,7 +243,7 @@ test('DeferredCaseSensitivity option change should be correctly handled during r
   selection: {
     mode: 'multiple',
     deferred: true,
-    deferredCaseSensitivity: 'base',
+    caseSensitivity: 'base',
   },
 }));
 
