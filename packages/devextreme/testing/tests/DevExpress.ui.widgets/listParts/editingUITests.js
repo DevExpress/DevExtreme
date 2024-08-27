@@ -26,6 +26,7 @@ const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
 const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
+const LIST_SELECT_ALL_CHECKBOX = 'dx-list-select-all-checkbox';
 const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
 const SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready';
@@ -2469,13 +2470,13 @@ QUnit.test('onContentReady event should be called after update the state Select 
         showSelectionControls: true,
         selectionMode: 'all',
         onContentReady: (e) => {
-            $(e.element).find('.dx-list-select-all-checkbox').dxCheckBox('instance').option('value', undefined);
+            $(e.element).find(`.${LIST_SELECT_ALL_CHECKBOX}`).dxCheckBox('instance').option('value', undefined);
         }
     });
 
     clock.tick(100);
 
-    assert.ok($list.find('.dx-list-select-all-checkbox').hasClass('dx-checkbox-indeterminate'), 'checkbox in an indeterminate state');
+    assert.ok($list.find(`.${LIST_SELECT_ALL_CHECKBOX}`).hasClass('dx-checkbox-indeterminate'), 'checkbox in an indeterminate state');
 
     clock.restore();
 });
@@ -2515,7 +2516,7 @@ QUnit.module('onSelectionChanging', {
             selectionMode: 'all',
         });
 
-        const $selectAllCheckbox = $list.find('.dx-list-select-all-checkbox').eq(0);
+        const $selectAllCheckbox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX}`).eq(0);
         $selectAllCheckbox.trigger('dxclick');
 
         assert.strictEqual($selectAllCheckbox.dxCheckBox('option', 'value'), false, 'selectAll checkbox is not checked');
