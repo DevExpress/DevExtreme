@@ -1350,7 +1350,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     element && this._focusElement($(element), isHighlighted);
   }
 
-  public getFocusedView() {
+  private getFocusedView() {
     return this._focusedView;
   }
 
@@ -2837,11 +2837,11 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
   /**
    * interface override
    */
-  public closeEditCell(isError?, withoutSaveEditData?) {
+  public closeEditCell() {
     const keyboardNavigation = this._keyboardNavigationController;
     keyboardNavigation._fastEditingStarted = false;
 
-    const result = super.closeEditCell(isError, withoutSaveEditData);
+    const result = super.closeEditCell.apply(this, arguments as any);
 
     const $focusedElement = $('body').find(':focus');
     const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;

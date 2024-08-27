@@ -51,8 +51,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   private _pointerDownEditorHandler: any;
 
-  protected _isFilterCellFocused: any;
-
   public init() {
     const needCreateHandlers = !this._saveEditorHandler;
 
