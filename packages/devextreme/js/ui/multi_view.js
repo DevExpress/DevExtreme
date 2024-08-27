@@ -20,11 +20,6 @@ export default MultiView;
  */
 
 /**
- * @name dxMultiViewItem.visible
- * @hidden
- */
-
-/**
  * @name dxMultiViewItem
  * @inherits CollectionWidgetItem
  * @type object

@@ -5,11 +5,6 @@ export default TabPanel;
 // STYLE tabPanel
 
 /**
- * @name dxTabPanelItem.visible
- * @hidden
- */
-
-/**
  * @name dxTabPanelItem
  * @inherits dxMultiViewItem
  * @type object
