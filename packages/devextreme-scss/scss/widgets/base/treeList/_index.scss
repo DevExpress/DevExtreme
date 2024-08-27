@@ -83,16 +83,6 @@ $treelist-row-error-color: $datagrid-row-error-color;
     }
   
     &:not(.dx-header-multi-row) .dx-treelist-table .dx-row {
-      .dx-treelist-sticky-column {
-        &:first-child {
-          border-left: none;
-        }
-
-        &:last-child {
-          border-right: none;
-        }
-      }
-
       .dx-treelist-sticky-column-border-right + td {
         border-left: none;
       }
@@ -334,25 +324,6 @@ $treelist-row-error-color: $datagrid-row-error-color;
       }
 
       &:not(.dx-header-multi-row) .dx-row {
-        .dx-treelist-sticky-column {
-          &:first-child {
-            border-right: none;
-
-            &.dx-treelist-sticky-column-border-left {
-              border-left: 2px solid $treelist-border-color;
-            }
-          }
-    
-          &:last-child {
-            border-left: none;
-            border-right: $treelist-border;
-
-            &.dx-treelist-sticky-column-border-right {
-              border-right: 2px solid $treelist-border-color;
-            }
-          }
-        }
-
         .dx-treelist-sticky-column-border-left + td {
           border-right: none;
 
@@ -425,12 +396,12 @@ $treelist-row-error-color: $datagrid-row-error-color;
   }
 }
 
-.dx-treelist-sticky-columns {
-  .dx-treelist-table .dx-row td.dx-treelist-sticky-column-border-right {
+.dx-treelist .dx-treelist-sticky-columns .dx-treelist-table .dx-row {
+  td.dx-treelist-sticky-column-border-right {
     border-right: 2px solid $treelist-border-color;
   }
 
-  .dx-treelist-table .dx-row td.dx-treelist-sticky-column-border-left {
+  td.dx-treelist-sticky-column-border-left {
     border-left: 2px solid $treelist-border-color;
   }
 }
