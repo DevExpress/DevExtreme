@@ -152,7 +152,7 @@ test('Should remove dx-focused class on blur event from the cell', async (t) => 
 
 test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and editing is in batch mode (T1246926)', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const filterEditor = dataGrid.getFilterTextEditor(0, FilterTextBox).element;
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox).getInput();
 
   await t
     .click(dataGrid.getDataCell(0, 0).element)

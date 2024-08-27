@@ -2836,12 +2836,11 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
   /**
    * interface override
    */
-  public closeEditCell() {
+  public closeEditCell(isError?, withoutSaveEditData?, isFilterCell?) {
     const keyboardNavigation = this._keyboardNavigationController;
     keyboardNavigation._fastEditingStarted = false;
 
-    const result = super.closeEditCell.apply(this, arguments as any);
-    const [,,isFilterCell] = arguments;
+    const result = super.closeEditCell(isError, withoutSaveEditData, isFilterCell);
 
     if (!isFilterCell) {
       keyboardNavigation._updateFocus();

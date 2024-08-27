@@ -201,13 +201,6 @@ export default class DataGrid extends Widget {
     return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
   }
 
-  getFilterTextEditor<T>(
-    columnIndex: number,
-    EditorType: new(mainElement: Selector) => T,
-  ): T {
-    return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor().find(`.${CLASS.textEditorInput}`));
-  }
-
   getSearchBox(): TextBox {
     return new TextBox(this.element.find(`.${CLASS.searchBox}`));
   }

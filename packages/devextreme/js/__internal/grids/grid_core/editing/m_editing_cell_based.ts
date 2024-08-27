@@ -149,11 +149,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   protected _closeEditItem($targetElement) {
     const isFilterCell = !!$targetElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
     if (this._needToCloseEditableCell($targetElement)) {
-      if (isFilterCell) {
-        this.closeEditCell(undefined, undefined, isFilterCell);
-      } else {
-        this.closeEditCell();
-      }
+      this.closeEditCell(false, false, isFilterCell);
     }
   }
 
@@ -361,8 +357,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   /**
    * interface override
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public closeEditCell(isError?, withoutSaveEditData?, isFilterCell?) {
-    this._isFilterCellFocused = isFilterCell;
     let result = when();
     const oldEditRowIndex = this._getVisibleEditRowIndex();
 
