@@ -2843,7 +2843,8 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 
     const result = super.closeEditCell.apply(this, arguments as any);
 
-    const $focusedElement = $('body').find(':focus');
+    const $element = $(this.component.element());
+    const $focusedElement = $element.find(':focus');
     const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
 
     if (!isFilterCell) {
