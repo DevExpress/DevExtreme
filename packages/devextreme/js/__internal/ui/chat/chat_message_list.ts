@@ -90,16 +90,18 @@ class MessageList extends Widget<MessageListOptions> {
     let currentMessageGroupItems: Message[] = [];
 
     items.forEach((item, index) => {
-      const id = item?.author?.id;
+      const newMessageGroupItem = item ?? {};
+
+      const id = newMessageGroupItem.author?.id;
 
       if (id === currentMessageGroupUserId) {
-        currentMessageGroupItems.push(item);
+        currentMessageGroupItems.push(newMessageGroupItem);
       } else {
         this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
 
         currentMessageGroupUserId = id;
         currentMessageGroupItems = [];
-        currentMessageGroupItems.push(item);
+        currentMessageGroupItems.push(newMessageGroupItem);
       }
 
       if (items.length - 1 === index) {
@@ -177,7 +179,7 @@ class MessageList extends Widget<MessageListOptions> {
     } else {
       const newMessage = value[value.length - 1];
 
-      this._renderMessage(newMessage, value);
+      this._renderMessage(newMessage ?? {}, value);
     }
   }
 

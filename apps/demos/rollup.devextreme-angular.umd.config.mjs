@@ -10,13 +10,14 @@ const componentNames = fs.readdirSync(baseDir)
     .map((fileName) => fileName.replace('.mjs.map', ''));
 
 const inputs = {
-   'devextreme-angular-core': `${baseDir}devextreme-angular-core.mjs`,
-   'devextreme-angular': `${baseDir}devextreme-angular.mjs`,
-  ...componentNames.reduce((acc, name) => {
-    acc[name] = `${baseDir}${name}.mjs`;
+    'devextreme-angular': `${baseDir}devextreme-angular.mjs`,
+    'devextreme-angular-core': `${baseDir}devextreme-angular-core.mjs`,
+    'devextreme-angular-http': `${baseDir}devextreme-angular-http.mjs`,
+    ...componentNames.reduce((acc, name) => {
+        acc[name] = `${baseDir}${name}.mjs`;
 
-    return acc;
-  }, {}),
+        return acc;
+    }, {}),
 };
 
 const getLibName =  (file) => file

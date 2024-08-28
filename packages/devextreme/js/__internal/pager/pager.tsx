@@ -13,20 +13,20 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
 
   constructor(props) {
     super(props);
-    this.pageIndexChanged = this.pageIndexChanged.bind(this);
-    this.pageSizeChanged = this.pageSizeChanged.bind(this);
+    this.pageIndexChangedInternal = this.pageIndexChangedInternal.bind(this);
+    this.pageSizeChangedInternal = this.pageSizeChangedInternal.bind(this);
   }
 
   createEffects(): InfernoEffect[] {
     return [createReRenderEffect()];
   }
 
-  pageIndexChanged(newPageIndex: number): void {
+  pageIndexChangedInternal(newPageIndex: number): void {
     const newValue = this.props.gridCompatibility ? newPageIndex + 1 : newPageIndex;
     this.setState(() => ({
       pageIndex: newValue,
     }));
-    this.props.pageIndexChanged(newValue);
+    this.props.pageIndexChangedInternal(newValue);
   }
 
   getPageIndex(): number {
@@ -36,11 +36,11 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
     return this.props.pageIndex;
   }
 
-  pageSizeChanged(newPageSize: number): void {
+  pageSizeChangedInternal(newPageSize: number): void {
     this.setState(() => ({
       pageSize: newPageSize,
     }));
-    this.props.pageSizeChanged(newPageSize);
+    this.props.pageSizeChangedInternal(newPageSize);
   }
 
   getClassName(): string | undefined {
@@ -58,8 +58,9 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
       ...this.props,
       className: this.getClassName(),
       pageIndex: this.getPageIndex(),
-      pageIndexChanged: (pageIndex: number): void => this.pageIndexChanged(pageIndex),
-      pageSizeChanged: (pageSize: number): void => this.pageSizeChanged(pageSize),
+      // eslint-disable-next-line max-len
+      pageIndexChangedInternal: (pageIndex: number): void => this.pageIndexChangedInternal(pageIndex),
+      pageSizeChangedInternal: (pageSize: number): void => this.pageSizeChangedInternal(pageSize),
     };
   }
 

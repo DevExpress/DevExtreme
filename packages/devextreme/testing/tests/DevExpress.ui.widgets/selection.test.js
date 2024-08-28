@@ -2378,3 +2378,182 @@ QUnit.test('filterLengthRestriction is 0', function(assert) {
 
     assert.deepEqual(selectedKeys, [1, 2, 6], 'selected keys');
 });
+
+QUnit.module('onSelectionChanging', {
+    beforeEach: function() {
+        this.data = [
+            { id: 1, name: 'Alex', age: 15 },
+            { id: 2, name: 'Dan', age: 16 },
+            { id: 3, name: 'Vadim', age: 17 },
+            { id: 4, name: 'Dmitry', age: 18 },
+            { id: 5, name: 'Sergey', age: 18 },
+            { id: 6, name: 'Kate', age: 20 },
+            { id: 7, name: 'Dan', age: 21 }
+        ];
+
+        this.dataSource = createDataSource(this.data, {}, {});
+        this.firstThreeItems = this.data.slice(0, 3);
+        this.basicSelectionConfig = {
+            key: () => {
+                const store = this.dataSource.store();
+                return store && store.key();
+            },
+            keyOf: (item) => {
+                const store = this.dataSource.store();
+                return store && store.keyOf(item);
+            },
+            dataFields: () => {
+                return this.dataSource.select();
+            },
+            plainItems: () => {
+                return this.dataSource.items();
+            },
+        };
+    }
+}, () => {
+    QUnit.test('should be called with correct parameters', function(assert) {
+        const selectionChangingHandler = sinon.spy((args) => {
+            assert.deepEqual(args.selectedItems, this.firstThreeItems, 'selectedItems is correct');
+            assert.deepEqual(args.selectedItemKeys, this.firstThreeItems, 'selectedItemsKeys is correct');
+            assert.deepEqual(args.addedItemKeys, this.firstThreeItems, 'addedItemKeys is correct');
+            assert.deepEqual(args.addedItems, this.firstThreeItems, 'addedItems is correct');
+            assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is correct');
+            assert.deepEqual(args.removedItems, [], 'removedItems is correct');
+            assert.strictEqual(args.cancel, false, 'cancel is correct');
+        });
+        const selectionChangedHandler = sinon.stub();
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            onSelectionChanging: selectionChangingHandler,
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        this.dataSource.load();
+        selection
+            .selectedItemKeys(this.firstThreeItems)
+            .then((appliedSelectedItems) => {
+                assert.deepEqual(appliedSelectedItems, this.firstThreeItems, 'deferred is resolved with correct parameters');
+            });
+
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+        assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
+        assert.deepEqual(selection.getSelectedItemKeys(), this.firstThreeItems, 'selectedItemKeys is updated correctly');
+    });
+
+    QUnit.test('cancelling should prevent selectedItems change and selectionChanged raise', function(assert) {
+        const selectionChangingHandler = sinon.spy(function(e) {
+            e.cancel = true;
+        });
+        const selectionChangedHandler = sinon.stub();
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            onSelectionChanging: selectionChangingHandler,
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        this.dataSource.load();
+        const selectionDeferred = selection.selectedItemKeys(this.firstThreeItems);
+
+        assert.strictEqual(selectionDeferred.state(), 'rejected', 'selection deferred is rejected');
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+        assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
+        assert.deepEqual(selection.getSelectedItems(), [], 'selectedItems is not updated');
+        assert.deepEqual(selection.getSelectedItemKeys(), [], 'selectedItemKeys is not updated');
+    });
+
+    QUnit.test('cancelling should prevent selectedItems change and selectionChanged raise (e.cancel=promise)', function(assert) {
+        const done = assert.async();
+
+        const selectionChangingHandler = sinon.spy(function(e) {
+            e.cancel = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(true);
+                });
+            });
+        });
+        const selectionChangedHandler = sinon.stub();
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            onSelectionChanging: selectionChangingHandler,
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        this.dataSource.load();
+        const selectionDeferred = selection.selectedItemKeys(this.firstThreeItems);
+
+        setTimeout(() => {
+            assert.strictEqual(selectionDeferred.state(), 'rejected', 'selection deferred is rejected');
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
+            assert.deepEqual(selection.getSelectedItems(), [], 'selectedItems is not updated');
+            assert.deepEqual(selection.getSelectedItemKeys(), [], 'selectedItemKeys is not updated');
+            done();
+        });
+    });
+
+    QUnit.test('requests should be ignored while previous request is not processed', function(assert) {
+        const done = assert.async();
+        const delay = 100;
+
+        const selectionChangingHandler = sinon.spy(function(e) {
+            e.cancel = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(false);
+                }, delay);
+            });
+        });
+        const selectionChangedHandler = sinon.stub();
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            onSelectionChanging: selectionChangingHandler,
+            onSelectionChanged: selectionChangedHandler
+        });
+
+        this.dataSource.load();
+        const selectionDeferred = selection.selectedItemKeys(this.firstThreeItems);
+        assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+
+        setTimeout(() => {
+            const secondSelectionDeferred = selection.selectedItemKeys([this.data[0]]);
+            assert.strictEqual(secondSelectionDeferred.state(), 'rejected', 'second selection request is immediately rejected');
+            assert.strictEqual(selectionDeferred.state(), 'pending', 'first request is still in progress');
+
+            setTimeout(() => {
+                assert.strictEqual(selectionDeferred.state(), 'resolved', 'first request is resolved');
+
+                assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+                assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
+                assert.deepEqual(selection.getSelectedItems(), this.firstThreeItems, 'selectedItems are update correctly');
+                done();
+            }, delay / 2);
+        }, delay / 2);
+    });
+
+    QUnit.test('should have correct parameters on repeative call if previous request was canceled', function(assert) {
+        const selectionChangingHandler = sinon.spy((args) => {
+            args.cancel = true;
+            if(selectionChangingHandler.callCount === 2) {
+                assert.deepEqual(args.selectedItems, this.firstThreeItems, 'selectedItems is correct');
+                assert.deepEqual(args.selectedItemKeys, this.firstThreeItems, 'selectedItemsKeys is correct');
+                assert.deepEqual(args.addedItemKeys, this.firstThreeItems, 'addedItemKeys is correct');
+                assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is correct');
+            }
+        });
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            onSelectionChanging: selectionChangingHandler
+        });
+
+        this.dataSource.load();
+
+        selection.selectedItemKeys(this.data[4]);
+        selection.selectedItemKeys(this.firstThreeItems);
+
+        assert.strictEqual(selectionChangingHandler.callCount, 2, 'selectionChanging is called once');
+    });
+});

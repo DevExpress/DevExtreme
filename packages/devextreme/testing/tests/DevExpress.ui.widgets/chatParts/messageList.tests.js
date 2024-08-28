@@ -41,6 +41,22 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.ok(this.instance instanceof MessageList);
         });
 
+        QUnit.test('should not be any errors if the items contain undefined values', function(assert) {
+            const items = [{}, undefined, {}];
+
+            try {
+                this.reinit({
+                    items,
+                });
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+                assert.strictEqual($bubbles.length, 3);
+            }
+        });
+
         QUnit.test('scrollable should be rendered inside root element', function(assert) {
             assert.ok(Scrollable.getInstance(this.$element.children().first()) instanceof Scrollable);
         });
@@ -163,6 +179,25 @@ QUnit.module('MessageList', moduleConfig, () => {
             const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`));
 
             assert.strictEqual(messageGroup.option('alignment'), 'end');
+        });
+    });
+
+    QUnit.module('Items option change', () => {
+        QUnit.test('should not be any errors if the new message in items is undefined', function(assert) {
+            const newMessage = undefined;
+            const items = [{}];
+
+            this.reinit({
+                items,
+            });
+
+            try {
+                this.instance.option('items', [...items, newMessage]);
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                assert.ok(true, 'there is no error');
+            }
         });
     });
 

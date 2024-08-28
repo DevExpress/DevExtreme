@@ -43,7 +43,7 @@ type PageIndexSelectorPropsType = Pick<PagerProps, 'hasKnownLastPage'
 | 'maxPagesCount'
 | 'pageCount'
 | 'pageIndex'
-| 'pageIndexChanged'
+| 'pageIndexChangedInternal'
 | 'pagesCountText'
 | 'showNavigationButtons'
 | 'totalCount'
@@ -55,7 +55,7 @@ const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   maxPagesCount: PagerDefaultProps.maxPagesCount,
   pageCount: PagerDefaultProps.pageCount,
   pageIndex: PagerDefaultProps.pageIndex,
-  pageIndexChanged: PagerDefaultProps.pageIndexChanged,
+  pageIndexChangedInternal: PagerDefaultProps.pageIndexChangedInternal,
   showNavigationButtons: PagerDefaultProps.showNavigationButtons,
   totalCount: PagerDefaultProps.totalCount,
 };
@@ -79,7 +79,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
 
   constructor(props) {
     super(props);
-    this.pageIndexChanged = this.pageIndexChanged.bind(this);
+    this.pageIndexChangedInternal = this.pageIndexChangedInternal.bind(this);
     this.getButtonProps = this.getButtonProps.bind(this);
     this.canNavigateToPage = this.canNavigateToPage.bind(this);
     this.getNextPageIndex = this.getNextPageIndex.bind(this);
@@ -94,9 +94,9 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
     return ConfigContext.defaultValue;
   }
 
-  pageIndexChanged(pageIndex: number): void {
+  pageIndexChangedInternal(pageIndex: number): void {
     if (this.canNavigateToPage(pageIndex)) {
-      this.props.pageIndexChanged(pageIndex);
+      this.props.pageIndexChangedInternal(pageIndex);
     }
   }
 
@@ -128,7 +128,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
   }
 
   navigateToPage(direction: Direction): void {
-    this.pageIndexChanged(this.getNextPageIndex(direction));
+    this.pageIndexChangedInternal(this.getNextPageIndex(direction));
   }
 
   getRenderPrevButton(): boolean {
@@ -166,7 +166,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
     || this.props.hasKnownLastPage !== nextProps.hasKnownLastPage
     || this.props.pageCount !== nextProps.pageCount
     || this.props.pageIndex !== nextProps.pageIndex
-    || this.props.pageIndexChanged !== nextProps.pageIndexChanged;
+    || this.props.pageIndexChangedInternal !== nextProps.pageIndexChangedInternal;
 
     if (isComponentUpdated) {
       this.__getterCache.prevButtonProps = undefined;
@@ -186,7 +186,6 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
       maxPagesCount,
       pageCount,
       pageIndex,
-      pageIndexChanged,
       pagesCountText,
     } = this.props;
 
@@ -205,14 +204,14 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
             maxPagesCount={maxPagesCount}
             pageCount={pageCount}
             pageIndex={pageIndex}
-            pageIndexChanged={pageIndexChanged}
+            pageIndexChangedInternal={this.pageIndexChangedInternal}
           />
         )}
         {!isLargeDisplayMode && (
           <PagesSmall
             pageCount={pageCount}
             pageIndex={pageIndex}
-            pageIndexChanged={pageIndexChanged}
+            pageIndexChangedInternal={this.pageIndexChangedInternal}
             pagesCountText={pagesCountText}
           />
         )}

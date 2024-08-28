@@ -9,7 +9,7 @@ import {
 } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
-import { isDefined, isPromise } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/data/data_source/utils';
 import eventsEngine from '@js/events/core/events_engine';
@@ -150,9 +150,24 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       mode: this.option('selectionMode'),
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
-      onSelectionChanged(args) {
+      onSelectionChanging: (args): void => {
+        const isSelectionChanged = args.addedItemKeys.length || args.removedItemKeys.length;
+        if (!this._rendered || !isSelectionChanged) {
+          return;
+        }
+
+        const selectionChangingArgs = {
+          removedItems: args.removedItems,
+          addedItems: args.addedItems,
+          cancel: false,
+        };
+        this._actions.onSelectionChanging?.(selectionChangingArgs);
+        args.cancel = selectionChangingArgs.cancel;
+      },
+      onSelectionChanged: (args): void => {
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          that._processSelectionChanging(args);
+          this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+          this._updateSelectedItems(args);
         }
       },
       filter: that._getCombinedFilter.bind(that),
@@ -445,39 +460,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     this._setAriaSelectionAttribute($itemElement, String(isSelected));
   },
 
-  _processSelectionChanging(args) {
-    const updateSelectedItemsIfNeeded = (args, cancel: boolean): void => {
-      if (!cancel) {
-        this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-        this._updateSelectedItems(args);
-      }
-    };
-
-    if (!this._rendered) {
-      updateSelectedItemsIfNeeded(args, false);
-      return;
-    }
-
-    const selectionChangingArgs = {
-      removedItems: args.removedItems,
-      addedItems: args.addedItems,
-      cancel: false,
-    };
-    this._actions.onSelectionChanging(selectionChangingArgs);
-
-    if (isPromise(selectionChangingArgs.cancel)) {
-      selectionChangingArgs.cancel
-        .then((cancel) => {
-          updateSelectedItemsIfNeeded(args, cancel);
-        })
-        .catch(() => {
-          updateSelectedItemsIfNeeded(args, false);
-        });
-    } else {
-      updateSelectedItemsIfNeeded(args, selectionChangingArgs.cancel);
-    }
-  },
-
   _updateSelectedItems(args) {
     const that = this;
     const { addedItemKeys } = args;
@@ -708,17 +690,17 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   selectItem(itemElement) {
-    if (this.option('selectionMode') === 'none') return;
+    if (this.option('selectionMode') === 'none') return Deferred().resolve();
 
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
-      return;
+      return Deferred().resolve();
     }
 
     const key = this._getKeyByIndex(itemIndex);
 
     if (this._selection.isItemSelected(key)) {
-      return;
+      return Deferred().resolve();
     }
 
     if (this.option('selectionMode') === 'single') {
