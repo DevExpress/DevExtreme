@@ -5,7 +5,7 @@ import {
   noop,
 } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { isObject, isPlainObject } from '@js/core/utils/type';
+import { isObject, isPlainObject, isPromise } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
 
 export default class SelectionStrategy {
@@ -33,14 +33,63 @@ export default class SelectionStrategy {
     this.options[name] = value;
   }
 
+  onSelectionChanging(): boolean | Promise<boolean> {
+    const {
+      selectedItems,
+      selectedItemKeys,
+      addedItemKeys,
+      removedItemKeys,
+      addedItems,
+      removedItems,
+      onSelectionChanging = noop,
+    } = this.options;
+
+    const selectionChangingArgs = {
+      selectedItems,
+      selectedItemKeys,
+      addedItemKeys,
+      removedItemKeys,
+      addedItems,
+      removedItems,
+      cancel: false,
+    };
+
+    onSelectionChanging(selectionChangingArgs);
+    return selectionChangingArgs.cancel;
+  }
+
+  _callCallbackIfNotCanceled(callback: () => void, cancelCallback: () => void): void {
+    const cancelResult = this.onSelectionChanging();
+
+    if (isPromise(cancelResult)) {
+      cancelResult
+        .then((cancel) => {
+          if (!cancel) {
+            callback();
+          } else {
+            cancelCallback();
+          }
+        })
+        .catch(() => {
+          callback();
+        });
+    } else if (!cancelResult) {
+      callback();
+    } else {
+      cancelCallback();
+    }
+  }
+
   onSelectionChanged() {
-    const { addedItemKeys } = this.options;
-    const { removedItemKeys } = this.options;
-    const { addedItems } = this.options;
-    const { removedItems } = this.options;
-    const { selectedItems } = this.options;
-    const { selectedItemKeys } = this.options;
-    const onSelectionChanged = this.options.onSelectionChanged || noop;
+    const {
+      selectedItems,
+      selectedItemKeys,
+      addedItemKeys,
+      removedItemKeys,
+      addedItems,
+      removedItems,
+      onSelectionChanged = noop,
+    } = this.options;
 
     this._clearItemKeys();
     onSelectionChanged({

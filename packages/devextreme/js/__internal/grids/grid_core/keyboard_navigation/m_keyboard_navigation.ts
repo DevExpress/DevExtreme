@@ -37,6 +37,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_ROW,
   EDITOR_CELL_CLASS,
+  FILTER_ROW_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
@@ -742,7 +743,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     if (isOriginalHandlerRequired) {
-      if (isLastValidCell) {
+      const $cell = this._getFocusedCell();
+      const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
+      if (isLastValidCell && !isCommandCell) {
         this._toggleInertAttr(true);
       }
       this._editorFactory.loseFocus();
@@ -1656,7 +1659,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   public _resetFocusedCell(preventScroll?) {
     const $cell = this._getFocusedCell();
 
-    isElementDefined($cell) && $cell.removeAttr('tabindex');
+    isElementDefined($cell) && $cell.removeAttr('tabindex').removeClass(CELL_FOCUS_DISABLED_CLASS);
     this._isNeedFocus = false;
     this._isNeedScroll = false;
     this._focusedCellPosition = {};
@@ -2840,9 +2843,21 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 
     const result = super.closeEditCell.apply(this, arguments as any);
 
-    keyboardNavigation._updateFocus();
+    const $focusedElement = this._getFocusedElement();
+    const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+
+    if (!isFilterCell) {
+      keyboardNavigation._updateFocus();
+    }
 
     return result;
+  }
+
+  private _getFocusedElement() {
+    const $element = $(this.component.element?.());
+    const $focusedElement = $element.find(':focus');
+
+    return $focusedElement;
   }
 
   protected _delayedInputFocus() {

@@ -1,4 +1,6 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
@@ -11,6 +13,8 @@ export interface AvatarOptions extends WidgetOptions<Avatar> {
 }
 
 class Avatar extends Widget<AvatarOptions> {
+  _$initials!: dxElementWrapper;
+
   _getDefaultOptions(): AvatarOptions {
     return {
       ...super._getDefaultOptions(),
@@ -18,28 +22,33 @@ class Avatar extends Widget<AvatarOptions> {
     };
   }
 
-  _getAvatarInitials(name: string): string {
-    const initials = name.charAt(0).toUpperCase();
-
-    return initials;
-  }
-
   _initMarkup(): void {
     $(this.element()).addClass(CHAT_MESSAGE_AVATAR_CLASS);
 
     super._initMarkup();
 
-    const $initials = $('<div>').addClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS);
+    this._renderInitialsElement();
+    this._updateInitials();
+  }
 
+  _renderInitialsElement(): void {
+    this._$initials = $('<div>')
+      .addClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS)
+      .appendTo(this.element());
+  }
+
+  _updateInitials(): void {
     const { name } = this.option();
 
-    if (name) {
-      const text = this._getAvatarInitials(name);
+    this._$initials.text(this._getInitials(name));
+  }
 
-      $initials.text(text);
+  _getInitials(name: string | undefined): string {
+    if (isDefined(name)) {
+      return String(name).charAt(0).toUpperCase();
     }
 
-    $initials.appendTo(this.element());
+    return '';
   }
 
   _optionChanged(args: Record<string, unknown>): void {
@@ -47,6 +56,7 @@ class Avatar extends Widget<AvatarOptions> {
 
     switch (name) {
       case 'name':
+        this._updateInitials();
         break;
       default:
         super._optionChanged(args);

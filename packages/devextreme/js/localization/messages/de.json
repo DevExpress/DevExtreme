@@ -195,6 +195,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "TreeList mit {0} Zeilen und {1} Spalten",
+        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Suchen in der Strukturliste",
         "dxTreeList-ariaToolbar": "Symbolleiste der Strukturliste",
         "dxTreeList-editingAddRowToNode": "Hinzufügen",
@@ -229,6 +230,8 @@
         "dxPivotGrid-dataFieldArea": "Datenfelder hierher ziehen",
         "dxPivotGrid-rowFieldArea": "Zeilenfelder hierher ziehen",
         "dxPivotGrid-filterFieldArea": "Filterfelder hierher ziehen",
+
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
 
         "dxScheduler-editorLabelTitle": "Betreff",
         "dxScheduler-editorLabelStartDate": "Anfangszeit",
@@ -309,6 +312,7 @@
         "dxCalendar-captionCenturyLabel": "Century selection",
         "dxCalendar-selectedDate": "The selected date is {0}",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
+        "dxCalendar-readOnlyLabel": "Read-only calendar",
 
         "dxColorView-ariaRed": "Rot",
         "dxColorView-ariaGreen": "Grün",

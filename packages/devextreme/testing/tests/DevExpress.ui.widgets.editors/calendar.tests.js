@@ -4617,6 +4617,67 @@ QUnit.module('Aria accessibility', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('aria-label should be "Read-only calendar" and role = group when readOnly option is true', function(assert) {
+        const $element = this.$element;
+
+        $element.dxCalendar({
+            readOnly: true
+        }).dxCalendar('instance');
+
+        assert.strictEqual($element.attr('aria-label'), 'Read-only calendar', 'aria-label is set correctly');
+        assert.strictEqual($element.attr('role'), 'group', 'role is set correctly');
+    });
+
+    QUnit.test('aria-label and role should be removed when readOnly option is false', function(assert) {
+        const $element = this.$element;
+
+        $element.dxCalendar({
+            readOnly: false
+        }).dxCalendar('instance');
+
+        assert.notOk($element.attr('aria-label'), 'aria-label is not set');
+        assert.notOk($element.attr('role'), 'role is not set');
+    });
+
+    QUnit.test('aria-label and role should be removed when readOnly option is set to false on runtime', function(assert) {
+        const $element = this.$element;
+
+        const calendar = $element.dxCalendar({
+            readOnly: true
+        }).dxCalendar('instance');
+
+        calendar.option('readOnly', false);
+
+        assert.notOk($element.attr('aria-label'), 'aria-label is removed');
+        assert.notOk($element.attr('role'), 'role is removed');
+    });
+
+    QUnit.test('aria-label and role should be setted when readOnly option is set to true on runtime', function(assert) {
+        const $element = this.$element;
+
+        const calendar = $element.dxCalendar({
+            readOnly: false
+        }).dxCalendar('instance');
+
+        calendar.option('readOnly', true);
+
+        assert.strictEqual($element.attr('aria-label'), 'Read-only calendar', 'aria-label is set correctly');
+        assert.strictEqual($element.attr('role'), 'group', 'role is set correctly');
+    });
+
+    QUnit.test('aria-label attribute should be equal to custom localized text', function(assert) {
+        const localizedText = 'For Testing';
+        localization.loadMessages({ 'en': { 'dxCalendar-readOnlyLabel': localizedText } });
+
+        const $element = this.$element;
+
+        $element.dxCalendar({
+            readOnly: true
+        });
+
+        assert.strictEqual($element.attr('aria-label'), localizedText, 'aria-label is set correctly');
+    });
+
     QUnit.test('aria-activedescendant on views wrapper should point to the focused cell', function(assert) {
         const $element = this.$element;
 

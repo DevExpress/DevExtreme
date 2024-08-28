@@ -88,10 +88,7 @@
       "dependsOn": [
         "build:dev"
       ],
-      "outputs": [
-        "{projectRoot}/artifacts/*-systemjs"
-      ],
-      "cache": true
+      "cache": false
     },
     "compile:r": {
       "executor": "nx:run-script",

@@ -20,7 +20,7 @@ import { clampIntoRange } from '../utils/clamp_into_range';
 import { AnimatedScrollbarProps } from '../common/animated_scrollbar_props';
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 import { DIRECTION_HORIZONTAL } from '../common/consts';
-import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
+import { ConfigContextValue, ConfigContext } from '../../../../__internal/core/r1/config_context';
 
 export const OUT_BOUNDS_ACCELERATION = 0.5;
 

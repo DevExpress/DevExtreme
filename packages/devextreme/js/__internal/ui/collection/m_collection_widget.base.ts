@@ -252,7 +252,10 @@ const CollectionWidget = Widget.inherit({
 
     const $focusedElement = $(this.option('focusedElement'));
     if ($focusedElement.length) {
+      // NOTE: If focusedElement is set, selection was already processed on its focusing.
+      this._shouldSkipSelectOnFocus = true;
       this._setFocusedItem($focusedElement);
+      this._shouldSkipSelectOnFocus = false;
     } else {
       const $activeItem = this._getActiveItem();
       if ($activeItem.length) {
@@ -406,7 +409,7 @@ const CollectionWidget = Widget.inherit({
     const { selectOnFocus } = this.option();
     const isTargetDisabled = this._isDisabled($target);
 
-    if (selectOnFocus && !isTargetDisabled) {
+    if (selectOnFocus && !isTargetDisabled && !this._shouldSkipSelectOnFocus) {
       this._selectFocusedItem($target);
     }
   },
@@ -725,7 +728,10 @@ const CollectionWidget = Widget.inherit({
       const $closestFocusable = this._closestFocusable($target);
 
       if ($closestItem.length && this._isFocusTarget($closestFocusable?.get(0))) {
+        // NOTE: Selection here is already processed in click handler.
+        this._shouldSkipSelectOnFocus = true;
         this.option('focusedElement', getPublicElement($closestItem));
+        this._shouldSkipSelectOnFocus = false;
       }
     }.bind(this);
 

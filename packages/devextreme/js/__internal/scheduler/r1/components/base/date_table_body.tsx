@@ -3,7 +3,7 @@ import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Fragment } from 'inferno';
 
-import { renderUtils } from '../../utils/index';
+import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { DATE_TABLE_ROW_CLASS } from '../const';
 import type { CellTemplateProps, DefaultProps } from '../types';
 import { AllDayPanelTableBody, AllDayPanelTableBodyDefaultProps } from './all_day_panel_table_body';
@@ -31,7 +31,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
       cellTemplate,
       dataCellTemplate,
     } = this.props;
-    const rowClasses = renderUtils.combineClasses({
+    const rowClasses = combineClasses({
       [DATE_TABLE_ROW_CLASS]: true,
       'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
     });

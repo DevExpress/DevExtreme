@@ -438,6 +438,48 @@ QUnit.module('interaction via swipe', {
         animation.complete = this.origCompleteAnimation;
     }
 }, () => {
+    QUnit.module('onSelectionChanging', {
+        beforeEach: function() {
+            this.selectionChangingStub = sinon.stub();
+            this.selectionChangedStub = sinon.stub();
+            this.$multiView = $('#multiView').dxMultiView({
+                items: [1, 2, 3],
+                selectedIndex: 0,
+                swipeEnabled: true,
+                onSelectionChanging: this.selectionChangingStub,
+                onSelectionChanged: this.selectionChangedStub
+            });
+            this.multiView = $('#multiView').dxMultiView('instance');
+            this.pointer = pointerMock(this.$multiView);
+        }
+    }, () => {
+        QUnit.test('should not cancel selection if e.cancel is not modified', function(assert) {
+            this.pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.strictEqual(this.selectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+            assert.strictEqual(this.selectionChangedStub.callCount, 1, 'onSelectionChanged should be called');
+
+            assert.strictEqual(this.multiView.option('selectedIndex'), 1, 'selected index is updated');
+        });
+
+        QUnit.test('should cancel selection if e.cancel=true', function(assert) {
+            this.selectionChangingStub = sinon.spy((e) => {
+                e.cancel = true;
+            });
+            this.multiView.option('onSelectionChanging', this.selectionChangingStub);
+
+            this.pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+            assert.strictEqual(this.selectionChangingStub.callCount, 1, 'onSelectionChanging should be called');
+            assert.strictEqual(this.selectionChangedStub.callCount, 0, 'onSelectionChanged is not called');
+
+            assert.strictEqual(this.multiView.option('selectedIndex'), 0, 'selected index is not changed');
+
+            const $itemContainer = this.$multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+            assert.strictEqual(position($itemContainer), 0, 'container position is restored to initial');
+        });
+    });
+
     QUnit.test('item container should not be moved by swipe if items count less then 2', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1]

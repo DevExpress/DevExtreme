@@ -14,8 +14,8 @@ $chat-bubble-border-radius: 12px;
 $chat-text-area-height: 40px;
 
 .dx-chat {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 24px 1fr minmax(40px, auto);
   width: $chat-width;
   height: $chat-height;
   padding: $chat-padding;
@@ -30,29 +30,16 @@ $chat-text-area-height: 40px;
   padding-bottom: 4px;
 }
 
-.dx-chat-header-text {
-  margin: 0;
-}
-
 .dx-chat-message-list {
   box-sizing: border-box;
-  flex: 1;
-  overflow: auto;
-}
-
-.dx-chat-message-list-content {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .dx-chat-message-group {
   display: grid;
   align-items: start;
   row-gap: 4px;
-  margin: 24px 0;
+  padding: 24px 0;
 }
 
 .dx-chat-message-group-alignment-start {
@@ -74,12 +61,12 @@ $chat-text-area-height: 40px;
 }
 
 .dx-chat-message-time,
-.dx-chat-message-name {
+.dx-chat-message-author-name {
   font-size: $chat-information-font-size;
   color: $chat-information-color;
 }
 
-.dx-chat-message-name {
+.dx-chat-message-author-name {
   margin-right: 8px;
 }
 

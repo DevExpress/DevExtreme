@@ -357,6 +357,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   position: absolute;
 
   &.dx-button {
+    box-shadow: none;
     border-radius: $material-scheduler-compact-appointment-button-border-radius;
     height: $material-scheduler-dropdown-button-height;
     min-width: auto;

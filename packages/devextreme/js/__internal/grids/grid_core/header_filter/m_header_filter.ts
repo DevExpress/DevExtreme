@@ -67,6 +67,7 @@ function convertDataFromUTCToLocal(data, column) {
     ...column,
     calculateCellValue: (date) => date,
   });
+  // @ts-expect-error
   return storeHelper.queryByOptions(query, { group }).toArray();
 }
 
@@ -228,6 +229,7 @@ export class HeaderFilterController extends Modules.ViewController {
     if (!dataSource) return;
 
     if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
+      // @ts-expect-error
       options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
     } else if (column.lookup) {
       isLookup = true;

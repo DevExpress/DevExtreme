@@ -192,7 +192,7 @@ class Scheduler extends Widget<any> {
 
   _appointmentPopup: any;
 
-  _compactAppointmentsHelper: any;
+  _compactAppointmentsHelper!: CompactAppointmentsHelper;
 
   _asyncTemplatesTimers!: any[];
 
@@ -1558,6 +1558,7 @@ class Scheduler extends Widget<any> {
   _appointmentsConfig() {
     const config = {
       getResources: () => this.option('resources'),
+      getLoadedResources: () => this.option('loadedResources'),
       getResourceDataAccessors: this.getResourceDataAccessors.bind(this),
       getAgendaResourceProcessor: () => this.agendaResourceProcessor,
       getAppointmentColor: this.createGetAppointmentColor(),

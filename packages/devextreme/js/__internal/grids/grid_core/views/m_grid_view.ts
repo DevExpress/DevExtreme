@@ -199,12 +199,17 @@ export class ResizingController extends modules.ViewController {
     const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
     const widgetStatusText = messageLocalization
-      // @ts-expect-error Badly typed format method
+    // @ts-expect-error Badly typed format method
       .format(widgetAriaLabel, totalItemsCount, columnCount);
     // @ts-expect-error Badly typed dxElementWrapper
     const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
-
-    this.component.setAria('label', widgetStatusText, $ariaLabelElement);
+    // @ts-expect-error Treelist Variable
+    const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
+    const labelParts = [widgetStatusText];
+    if (expandableWidgetAriaLabel) {
+      labelParts.push(expandableWidgetAriaLabel);
+    }
+    this.component.setAria('label', labelParts.join('. '), $ariaLabelElement);
     this._gridView.setWidgetA11yStatusText(widgetStatusText);
   }
 
@@ -939,7 +944,7 @@ export class GridView extends modules.View {
     if (!this._a11yGeneralStatusElement) {
       this._a11yGeneralStatusElement = A11yStatusContainerComponent({});
       this._a11yGeneralStatusElement.attr(E2E_ATTRIBUTES.a11yStatusContainer, 'true');
-      this._rootElement.append(this._a11yGeneralStatusElement);
+      $groupElement.append(this._a11yGeneralStatusElement);
     }
 
     this._renderViews($groupElement);

@@ -47,6 +47,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       keyExpr: null,
       selectedIndex: NOT_EXISTING_INDEX,
       selectedItem: null,
+      onSelectionChanging: null,
       onSelectionChanged: null,
       onItemReordered: null,
       onItemDeleting: null,
@@ -67,11 +68,28 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     this._initKeyGetter();
 
+    this._initActions();
+
     this._initSelectionModule();
   },
 
   _initKeyGetter() {
     this._keyGetter = compileGetter(this.option('keyExpr'));
+  },
+
+  _getActionsList() {
+    return ['onSelectionChanging', 'onSelectionChanged'];
+  },
+
+  _initActions() {
+    this._actions = {};
+    const actions = this._getActionsList();
+
+    actions.forEach((action) => {
+      this._actions[action] = this._createActionByOption(action, {
+        excludeValidators: ['disabled', 'readOnly'],
+      }) ?? noop;
+    });
   },
 
   _getKeysByItems(selectedItems) {
@@ -132,10 +150,24 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       mode: this.option('selectionMode'),
       maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
       equalByReference: !this._isKeySpecified(),
-      onSelectionChanged(args) {
+      onSelectionChanging: (args): void => {
+        const isSelectionChanged = args.addedItemKeys.length || args.removedItemKeys.length;
+        if (!this._rendered || !isSelectionChanged) {
+          return;
+        }
+
+        const selectionChangingArgs = {
+          removedItems: args.removedItems,
+          addedItems: args.addedItems,
+          cancel: false,
+        };
+        this._actions.onSelectionChanging?.(selectionChangingArgs);
+        args.cancel = selectionChangingArgs.cancel;
+      },
+      onSelectionChanged: (args): void => {
         if (args.addedItemKeys.length || args.removedItemKeys.length) {
-          that.option('selectedItems', that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-          that._updateSelectedItems(args);
+          this.option('selectedItems', this._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
+          this._updateSelectedItems(args);
         }
       },
       filter: that._getCombinedFilter.bind(that),
@@ -158,7 +190,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             if (that._disposed) {
               return;
             }
-
+            // @ts-expect-error
             const items = normalizeLoadResult(loadResult).data;
 
             dataController.applyMapFunction(items);
@@ -462,15 +494,12 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       }
 
       when(selectionChangePromise).done(() => {
-        that._fireSelectionChangeEvent(args.addedItems, args.removedItems);
+        this._actions.onSelectionChanged({
+          addedItems: args.addedItems,
+          removedItems: args.removedItems,
+        });
       });
     }
-  },
-
-  _fireSelectionChangeEvent(addedItems, removedItems) {
-    this._createActionByOption('onSelectionChanged', {
-      excludeValidators: ['disabled', 'readOnly'],
-    })({ addedItems, removedItems });
   },
 
   _updateSelection: noop,
@@ -528,8 +557,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
       case 'selectionRequired':
         this._normalizeSelectedItems();
         break;
-      case 'selectByClick':
       case 'onSelectionChanged':
+      case 'onSelectionChanging':
+        this._initActions();
+        break;
+      case 'selectByClick':
       case 'onItemDeleting':
       case 'onItemDeleted':
       case 'onItemReordered':
@@ -658,22 +690,23 @@ const CollectionWidget = BaseCollectionWidget.inherit({
   },
 
   selectItem(itemElement) {
-    if (this.option('selectionMode') === 'none') return;
+    if (this.option('selectionMode') === 'none') return Deferred().resolve();
 
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
-      return;
+      return Deferred().resolve();
     }
 
     const key = this._getKeyByIndex(itemIndex);
 
     if (this._selection.isItemSelected(key)) {
-      return;
+      return Deferred().resolve();
     }
 
     if (this.option('selectionMode') === 'single') {
       return this._selection.setSelection([key]);
     }
+
     const selectedItemKeys = this.option('selectedItemKeys') || [];
     return this._selection.setSelection([...selectedItemKeys, key], [key]);
   },

@@ -195,6 +195,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
+        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "جستجو در لیست درختی",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "افزودن",
@@ -229,6 +230,8 @@
         "dxPivotGrid-dataFieldArea": "فیلدهای داده ای را به اینجا انتقال دهید (درگ نمایید)",
         "dxPivotGrid-rowFieldArea": "فیلدهای مربوط به سطر را به اینجا انتقال دهید (درگ نمایید)",
         "dxPivotGrid-filterFieldArea": "فیلدهای مربوط به فیلتر را به اینجا انتقال دهید (درگ نمایید)",
+
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
 
         "dxScheduler-editorLabelTitle": "موضوع",
         "dxScheduler-editorLabelStartDate": "تاریخ شروع",
@@ -309,6 +312,7 @@
         "dxCalendar-captionCenturyLabel": "Century selection",
         "dxCalendar-selectedDate": "The selected date is {0}",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
+        "dxCalendar-readOnlyLabel": "Read-only calendar",
 
         "dxColorView-ariaRed": "قرمز",
         "dxColorView-ariaGreen": "سبز",

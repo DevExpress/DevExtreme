@@ -428,13 +428,21 @@ const MultiView = CollectionWidget.inherit({
     return index;
   },
 
+  _postprocessSwipe() {},
+
   _swipeEndHandler(e) {
     const targetOffset = e.targetOffset * this._getRTLSignCorrection();
 
     if (targetOffset) {
       const newSelectedIndex = this._findNextAvailableIndex(this.option('selectedIndex'), -targetOffset);
-
-      this.option('selectedIndex', newSelectedIndex);
+      this
+        .selectItem(newSelectedIndex)
+        .fail(() => {
+          this._animateItemContainer(0, noop);
+        })
+        .done(() => {
+          this._postprocessSwipe({ swipedTabsIndex: newSelectedIndex });
+        });
 
       // TODO: change focusedElement on focusedItem
       const $selectedElement = this.itemElements().filter('.dx-item-selected');

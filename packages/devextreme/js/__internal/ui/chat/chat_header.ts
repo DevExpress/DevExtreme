@@ -11,7 +11,7 @@ export interface ChatHeaderProperties extends Properties {
 }
 
 class ChatHeader extends DOMComponent<ChatHeaderProperties> {
-  private _$text?: dxElementWrapper;
+  private _$text!: dxElementWrapper;
 
   _getDefaultOptions(): ChatHeaderProperties {
     return {
@@ -32,25 +32,28 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
     // @ts-expect-error
     super._initMarkup();
 
-    this._renderText();
+    this._renderTextElement();
+    this._updateText();
   }
 
-  _renderText(): void {
-    const { title } = this.option();
-
+  _renderTextElement(): void {
     this._$text = $('<div>')
       .addClass(CHAT_HEADER_TEXT_CLASS)
-      .text(title)
       .appendTo(this.element());
   }
 
+  _updateText(): void {
+    const { title } = this.option();
+
+    this._$text.text(title);
+  }
+
   _optionChanged(args: Record<string, unknown>): void {
-    const { name, value } = args;
+    const { name } = args;
 
     switch (name) {
       case 'title':
-        // @ts-expect-error
-        this._$text?.text(value);
+        this._updateText();
         break;
       default:
         // @ts-expect-error

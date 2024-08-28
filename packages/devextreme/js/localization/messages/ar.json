@@ -195,6 +195,7 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
+        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "اضافة",
@@ -229,6 +230,8 @@
         "dxPivotGrid-dataFieldArea": "إفلات حقول البيانات هنا",
         "dxPivotGrid-rowFieldArea": "إفلات حقول الصف هنا",
         "dxPivotGrid-filterFieldArea": "إفلات حقول التصفية هنا",
+
+        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
 
         "dxScheduler-editorLabelTitle": "الموضوع",
         "dxScheduler-editorLabelStartDate": "تاريخ البدء",
@@ -309,6 +312,7 @@
         "dxCalendar-captionCenturyLabel": "Century selection",
         "dxCalendar-selectedDate": "The selected date is {0}",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
+        "dxCalendar-readOnlyLabel": "Read-only calendar",
 
         "dxColorView-ariaRed": "أحمر",
         "dxColorView-ariaGreen": "أخضر",

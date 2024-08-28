@@ -223,8 +223,8 @@ export class ColumnHeadersView extends ColumnsView {
     return $cell;
   }
 
-  protected _setCellAriaAttributes($cell, cellOptions) {
-    super._setCellAriaAttributes($cell, cellOptions);
+  protected _setCellAriaAttributes($cell, cellOptions, options?) {
+    super._setCellAriaAttributes($cell, cellOptions, options);
     if (cellOptions.rowType === 'header') {
       if (!cellOptions.column.type) {
         this.setAria('role', 'columnheader', $cell);

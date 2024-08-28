@@ -52,9 +52,12 @@ gulp.task(GENERATE,
     }
 );
 
-gulp.task(NPM_PACKAGE,
-    () => gulp.src(config.npm.package).pipe(gulp.dest(config.npm.dist))
-);
+gulp.task(NPM_PACKAGE, (done) => {
+    const pkg = require('./package.json');
+    delete pkg.publishConfig;
+    fs.writeFileSync(path.join(config.npm.dist, 'package.json'), JSON.stringify(pkg, null, 2))
+    done();
+});
 
 gulp.task(NPM_LICENSE,
     () => gulp.src(config.npm.license).pipe(gulp.dest(config.npm.dist))
@@ -89,11 +92,11 @@ gulp.task(
   gulp.series(
     gulp.parallel(
       NPM_LICENSE,
-      NPM_PACKAGE,
       NPM_README,
       NPM_BUILD_ESM,
       NPM_BUILD_CJS
-    )
+    ),
+    NPM_PACKAGE
   )
 );
 

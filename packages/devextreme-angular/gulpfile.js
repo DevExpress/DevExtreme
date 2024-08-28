@@ -154,11 +154,20 @@ gulp.task('npm.content', gulp.series(
 
     return gulp.src([`${cmpConfig.outputPath}/**/collection.json`, ...npmConfig.content])
       .pipe(gulp.dest(npmConfig.distPath));
-  },
+  }
 ));
+
+gulp.task('npm.package-json', (cb) => {
+  const pkgPath = path.join('.', buildConfig.npm.distPath, 'package.json');
+  const pkg = require(`./${pkgPath}`);
+  delete pkg.publishConfig;
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2))
+  cb();
+})
 
 gulp.task('npm.pack', gulp.series(
   'npm.content',
+  'npm.package-json',
   (cb) => {
     argv.withDescriptions ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err)) : cb();
   },
