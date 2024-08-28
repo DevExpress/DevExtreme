@@ -66,9 +66,9 @@ export function useOptionScanning(optionElement: IOptionElement, children: React
   const getHasTranscludedContent = () => {
     if (optionElement.descriptor.isCollection) {
       return hasTranscludedContent;
-    } else {
-      return parentFullName.length > 0 ? hasTranscludedContent : false;
     }
+
+    return parentFullName.length > 0 ? hasTranscludedContent : false;
   };
 
   optionElement.descriptor.templates.forEach((templateMeta) => {

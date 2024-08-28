@@ -25,7 +25,7 @@ export function buildFullName(node: IConfigNode): string {
   let currentNode: IConfigNode | undefined = node;
   let fullName = '';
 
-  while(currentNode && currentNode.name) {
+  while (currentNode && currentNode.name) {
     fullName = currentNode.name.concat(
       typeof currentNode.index === 'number' ? `[${currentNode.index}]` : '',
       fullName ? `.${fullName}` : '',
