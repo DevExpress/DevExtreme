@@ -1,3 +1,6 @@
+import {
+  describe, expect, it, jest,
+} from '@jest/globals';
 import { OptionsValidatorErrorHandler } from '@ts/scheduler/options_validator/core/options_validator_error_handler';
 import type { GlobalErrorHandler } from '@ts/scheduler/options_validator/core/types';
 

@@ -52,6 +52,7 @@
     "@devextreme-generator/inferno": "3.0.12",
     "@devextreme-generator/react": "3.0.12",
     "@devextreme-generator/vue": "3.0.12",
+    "@jest/globals": "29.7.0",
     "@testcafe-community/axe": "3.5.0",
     "@types/enzyme": "3.10.18",
     "@types/jquery": "3.5.29",

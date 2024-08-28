@@ -1,4 +1,8 @@
 import {
+  describe, expect, it, jest,
+} from '@jest/globals';
+
+import {
   filterOffsets,
   getAreaFromElement, getAreaFromObject, getDragOffsets, getMovingSides,
 } from './utils';

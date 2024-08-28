@@ -1,3 +1,4 @@
+import { describe, expect, it } from '@jest/globals';
 import { titleize } from '@js/core/utils/inflector';
 import { setWindow } from '@js/core/utils/window';
 import each from 'jest-each';

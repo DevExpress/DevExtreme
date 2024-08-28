@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../consts';
 import { getScrollbarSize } from './get_scrollbar_size';
 

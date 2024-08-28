@@ -1,3 +1,6 @@
+import {
+  beforeEach, describe, expect, it, jest,
+} from '@jest/globals';
 import dateUtils from '@js/core/utils/date';
 
 import { TimeZoneCalculator } from '../calculator';
@@ -19,7 +22,7 @@ describe('TimeZoneCalculator', () => {
     };
 
     ['Grid', 'Appointment'].forEach((path) => {
-      test(`converting operations with '${path}' should be symmetrical`, () => {
+      it(`converting operations with '${path}' should be symmetrical`, () => {
         const calculator = new TimeZoneCalculator(mock);
 
         const convertedDate = calculator.createDate(
@@ -47,7 +50,7 @@ describe('TimeZoneCalculator', () => {
       undefined,
     ].forEach((appointmentTimezone) => {
       ['toGrid', 'fromGrid'].forEach((path) => {
-        test(`should use common time zone [path: ${path}
+        it(`should use common time zone [path: ${path}
         if converting to common timezone, appointmentTimezone: ${appointmentTimezone}]`, () => {
           const calculator = new TimeZoneCalculator(mock);
 
@@ -85,7 +88,7 @@ describe('TimeZoneCalculator', () => {
         'toAppointment',
         'fromAppointment',
       ].forEach((path) => {
-        test(`if converting to appointment timezone, should use appointment time zone
+        it(`if converting to appointment timezone, should use appointment time zone
               [path: ${path}, appointmentTimezone: ${appointmentTimezone}]`, () => {
           const calculator = new TimeZoneCalculator(mock);
 
@@ -117,7 +120,7 @@ describe('TimeZoneCalculator', () => {
         });
       });
 
-      test('createDate should throw error if wrong path', () => {
+      it('createDate should throw error if wrong path', () => {
         const calculator = new TimeZoneCalculator(mock);
 
         expect(() => {
@@ -151,7 +154,7 @@ describe('TimeZoneCalculator', () => {
       });
     });
 
-    test('should return correct offset for not utc date if appointment timezone set', () => {
+    it('should return correct offset for not utc date if appointment timezone set', () => {
       const expectedOffset = (appointmentOffset - commonOffset) * hoursInMs;
       const testDate = new Date(2021, 1, 1, 10, 0, 0);
 
@@ -160,7 +163,7 @@ describe('TimeZoneCalculator', () => {
       expect(result).toEqual(expectedOffset);
     });
 
-    test('should return correct offset for utc date if appointment timezone set', () => {
+    it('should return correct offset for utc date if appointment timezone set', () => {
       const expectedOffset = (appointmentOffset - clientOffset) * hoursInMs;
       const testDate = new Date(2021, 1, 1, 10, 0, 0);
 
@@ -169,7 +172,7 @@ describe('TimeZoneCalculator', () => {
       expect(result).toEqual(expectedOffset);
     });
 
-    test('should return correct offset for utc date if appointment timezone not set', () => {
+    it('should return correct offset for utc date if appointment timezone not set', () => {
       const expectedOffset = (commonOffset - clientOffset) * hoursInMs;
       const testDate = new Date(2021, 1, 1, 10, 0, 0);
 
@@ -178,7 +181,7 @@ describe('TimeZoneCalculator', () => {
       expect(result).toEqual(expectedOffset);
     });
 
-    test('should return zero offset for not utc date if appointment timezone not set', () => {
+    it('should return zero offset for not utc date if appointment timezone not set', () => {
       const expectedOffset = 0;
       const testDate = new Date(2021, 1, 1, 10, 0, 0);
 
