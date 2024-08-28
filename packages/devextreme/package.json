@@ -41,7 +41,6 @@
     "turndown": "~7.1.0"
   },
   "devDependencies": {
-    "inferno-test-utils": "7.4.11",
     "@babel/core": "7.23.9",
     "@babel/eslint-parser": "7.23.10",
     "@babel/parser": "7.23.9",
@@ -55,6 +54,7 @@
     "@devextreme-generator/inferno": "3.0.12",
     "@devextreme-generator/react": "3.0.12",
     "@devextreme-generator/vue": "3.0.12",
+    "@jest/globals": "^29.7.0",
     "@testcafe-community/axe": "3.5.0",
     "@types/enzyme": "3.10.18",
     "@types/jquery": "3.5.29",
@@ -134,6 +134,7 @@
     "gulp-watch": "5.0.1",
     "ignore": "5.3.1",
     "inferno-create-element": "7.4.11",
+    "inferno-test-utils": "7.4.11",
     "intl": "1.2.5",
     "jest-each": "29.7.0",
     "jest-environment-jsdom": "29.7.0",

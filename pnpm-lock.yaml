@@ -851,6 +851,9 @@ importers:
       '@devextreme-generator/vue':
         specifier: 3.0.12
         version: 3.0.12(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)(typescript@4.9.5))(eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.29.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0))(eslint@8.56.0))(eslint-config-airbnb-typescript@17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)(typescript@4.9.5))(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint-plugin-import@2.29.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0))(eslint@8.56.0))(eslint-plugin-import@2.29.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0))(eslint-plugin-jest-formatting@3.1.0(eslint@8.56.0))(eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)(typescript@4.9.5))(eslint@8.56.0)(jest@29.7.0(@types/node@20.12.8)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.4.17)(@types/node@20.12.8)(typescript@5.4.5)))(typescript@4.9.5))(eslint-plugin-jsx-a11y@6.8.0(eslint@8.56.0))(eslint-plugin-qunit@7.3.4(eslint@8.56.0))(eslint-plugin-rulesdir@0.2.2)(eslint-plugin-spellcheck@0.0.20(eslint@8.56.0))(eslint@8.56.0)
+      '@jest/globals':
+        specifier: ^29.7.0
+        version: 29.7.0
       '@testcafe-community/axe':
         specifier: 3.5.0
         version: 3.5.0(axe-core@4.10.0)(testcafe@3.6.0)

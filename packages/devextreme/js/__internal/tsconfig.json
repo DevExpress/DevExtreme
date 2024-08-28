@@ -39,7 +39,7 @@
         "./__internal/*"
       ],
     },
-    "types": [ "jest" ]
+    "types": []
   },
   "tsc-alias": {
     "verbose": false,

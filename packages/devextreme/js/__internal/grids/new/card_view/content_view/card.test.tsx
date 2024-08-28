@@ -1,3 +1,4 @@
+import { expect, it } from '@jest/globals';
 import { render } from 'inferno';
 
 import { normalizeColumn } from '../../grid_core/columns_controller/utils';
