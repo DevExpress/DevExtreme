@@ -7,7 +7,7 @@ import {
 
 import { SelectAllMode, SingleMultipleOrNone } from 'devextreme/common';
 import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
-import { Sensitivity } from 'devextreme/ui/data_grid';
+import { SelectionSensitivity } from 'devextreme/ui/data_grid';
 
 @Component({
     template: ''
@@ -55,10 +55,10 @@ export abstract class DxoColumnChooserSelectionConfig extends NestedOption {
         this._setOption('selectAllMode', value);
     }
 
-    get sensitivity(): Sensitivity {
+    get sensitivity(): SelectionSensitivity {
         return this._getOption('sensitivity');
     }
-    set sensitivity(value: Sensitivity) {
+    set sensitivity(value: SelectionSensitivity) {
         this._setOption('sensitivity', value);
     }
 
