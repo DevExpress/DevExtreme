@@ -13,6 +13,7 @@ import {
     EventInfo,
     NativeEventInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../../events/index';
 
 import {
@@ -32,18 +33,6 @@ import {
 } from '../../common';
 
 /**
- * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
- * @hidden
- */
-export interface SelectionChangedInfo<T = any> {
-    /**
-     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo.selectedItem
-     * @type object
-     */
-    readonly selectedItem: T;
-}
-
-/**
  * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
  * @hidden
  */
@@ -59,15 +48,21 @@ export interface SelectionChangingInfo<T = any> {
  * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangingInfo
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
  */
-export type SelectionChangingEvent<TComponent> = EventInfo<TComponent> & SelectionChangingInfo & {
+export type SelectionChangingEvent<TComponent> = AsyncCancelable & EventInfo<TComponent> & SelectionChangingInfo;
+
+/**
+ * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
+ * @hidden
+ */
+export interface SelectionChangedInfo<T = any> {
     /**
-     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent.cancel
-     * @type Boolean|Promise<Boolean>
+     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo.selectedItem
+     * @type object
      */
-    cancel: boolean | PromiseLike<boolean>;
-};
+    readonly selectedItem: T;
+}
 
 /**
  * @namespace DevExpress.ui
@@ -125,6 +120,14 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:{ui/drop_down_editor/ui.drop_down_list:SelectionChangingEvent}
+     * @action
+     * @public
+     */
+    onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
+    /**
+     * @docid
+     * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field selectedItem:object
      * @type_function_param1_field component:this
@@ -132,11 +135,6 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @public
      */
     onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
-    /**
-     * @docid
-     * @type_function_param1 e:{ui/drop_down_editor/ui.drop_down_list:SelectionChangingEvent}
-     */
-    onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
     /**
      * @docid
      * @default null

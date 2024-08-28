@@ -13,6 +13,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../events/index';
 
 import {
@@ -198,15 +199,9 @@ export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
  * @docid _ui_select_box_SelectionChangingEvent
  * @public
  * @type object
- * @inherits EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
+ * @inherits AsyncCancelable,EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
  */
-export type SelectionChangingEvent = EventInfo<dxSelectBox> & SelectionChangingInfo & {
-    /**
-     * @docid _ui_select_box_SelectionChangingEvent.cancel
-     * @type Boolean|Promise<Boolean>
-     */
-     cancel: boolean | PromiseLike<boolean>;
-};
+export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxSelectBox> & SelectionChangingInfo;
 
 /**
  * @docid _ui_select_box_SelectionChangedEvent

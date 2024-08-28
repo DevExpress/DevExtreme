@@ -9,6 +9,7 @@ import {
 
 import {
     Cancelable,
+    AsyncCancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -195,15 +196,9 @@ export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
  * @docid _ui_tag_box_SelectionChangingEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangingInfo
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
  */
-export type SelectionChangingEvent = EventInfo<dxTagBox> & SelectionChangingInfo<string | number | any> & {
-    /**
-     * @docid _ui_tag_box_SelectionChangingEvent.cancel
-     * @type Boolean|Promise<Boolean>
-     */
-    cancel: boolean | PromiseLike<boolean>;
-};
+export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxTagBox> & SelectionChangingInfo<string | number | any>;
 
 /**
  * @docid _ui_tag_box_SelectionChangedEvent

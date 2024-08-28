@@ -17,6 +17,8 @@
     </script>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+
+    
     <!-- HtmlEditor -->
     <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
 
@@ -39,6 +41,7 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://unpkg.com/devextreme-aspnet-data@3.0.0/js/dx.aspnet.data.js"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
@@ -49,14 +52,102 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
+       
+    <div class="dx-viewport demo-container">
+        <div id="list"></div>
+      </div>
+
+      <div style="display: inline-flex; align-items: center; gap: 20px;">
+        <div>Default</div>
         <div id="button"></div>
+        <div>Hover</div>
+        <div id="buttonHover"></div>
+        <div>Focus</div>
+        <div id="buttonFocus"></div>
+  <div>Active</div>
+        <div id="buttonActive"></div>
+        <div>Disabled</div>
+        <div id="buttonDisabled"></div>
+      </div>
+   
+    
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
-            });
+            $(() => {
+  const listData = new DevExpress.data.DataSource({
+    store: DevExpress.data.AspNet.createStore({
+      key: 'ProductID',
+      loadUrl: 'https://js.devexpress.com/Demos/Mvc/api/ListData/Orders',
+    }),
+    paginate: true,
+    loadMode: 'raw',
+  });
+
+  $('#list').dxList({
+
+    accessKey: 's',
+    dataSource: listData,
+    displayExpr: 'ProductName',
+    height: 400,
+    selectionMode: 'all',
+
+    showSelectionControls: true,
+    selectedItemKeys: [25]
+  });
+
+  $('#list').dxResizable()
+});
+
+$('#button').dxButton({
+  icon: 'send',
+  stylingMode: 'text',
+  type: 'default',
+})
+
+$('#buttonHover').dxButton({
+  icon: 'send',
+  stylingMode: 'text',
+  type: 'default',
+  onInitialized: (e) => {
+    setTimeout(() => {
+      e.component.$element().addClass('dx-state-hover')
+    })
+   
+  }
+})
+
+$('#buttonFocus').dxButton({
+  icon: 'send',
+  stylingMode: 'text',
+  type: 'default',
+  onInitialized: (e) => {
+    setTimeout(() => {
+      e.component.$element().addClass('dx-state-focused')
+    })
+   
+  }
+})
+
+$('#buttonActive').dxButton({
+  icon: 'send',
+  stylingMode: 'text',
+  type: 'default',
+  onInitialized: (e) => {
+    setTimeout(() => {
+      e.component.$element().addClass('dx-state-active')
+    })
+   
+  }
+})
+
+
+$('#buttonDisabled').dxButton({
+  icon: 'send',
+  stylingMode: 'text',
+  type: 'default',
+  disabled: true,
+})
+
+
         </script>
     </div>
 </body>

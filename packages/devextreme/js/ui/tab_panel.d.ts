@@ -14,6 +14,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../events/index';
 
 import {
@@ -122,15 +123,9 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @docid _ui_tab_panel_SelectionChangingEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangingInfo
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
  */
-export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & SelectionChangingInfo<TItem> & {
-    /**
-     * @docid _ui_tab_panel_SelectionChangingEvent.cancel
-     * @type Boolean|Promise<Boolean>
-     */
-    cancel: boolean | PromiseLike<boolean>;
-};
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = AsyncCancelable & EventInfo<dxTabPanel<TItem, TKey>> & SelectionChangingInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_SelectionChangedEvent

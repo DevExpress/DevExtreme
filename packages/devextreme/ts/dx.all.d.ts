@@ -6701,6 +6701,15 @@ declare module DevExpress.data.utils.odata {
 }
 declare module DevExpress.events {
   /**
+   * [descr:AsyncCancelable]
+   */
+  export interface AsyncCancelable {
+    /**
+     * [descr:AsyncCancelable.cancel]
+     */
+    cancel: boolean | PromiseLike<boolean>;
+  }
+  /**
    * [descr:Cancelable]
    */
   export interface Cancelable {
@@ -7961,6 +7970,13 @@ declare module DevExpress.ui {
       readonly removedItems: Array<TItem>;
     }
     /**
+     * [descr:SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<TComponent> =
+      DevExpress.events.AsyncCancelable &
+        DevExpress.events.EventInfo<TComponent> &
+        SelectionChangingInfo;
+    /**
      * [descr:SelectionChangingInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -7973,10 +7989,6 @@ declare module DevExpress.ui {
        * [descr:SelectionChangingInfo.removedItems]
        */
       readonly removedItems: Array<TItem>;
-      /**
-       * [descr:SelectionChangingInfo.cancel]
-       */
-      cancel?: boolean | PromiseLike<boolean>;
     }
   }
   /**
@@ -8093,8 +8105,7 @@ declare module DevExpress.ui {
      * [descr:CollectionWidgetOptions.onSelectionChanging]
      */
     onSelectionChanging?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem>
+      e: DevExpress.ui.CollectionWidget.SelectionChangingEvent<TComponent>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onSelectionChanged]
@@ -8875,14 +8886,9 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_autocomplete_SelectionChangingEvent]
      */
-    export type SelectionChangingEvent =
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
       DevExpress.events.EventInfo<dxAutocomplete> &
-        DevExpress.ui.dxDropDownList.SelectionChangingInfo & {
-          /**
-           * [descr:_ui_autocomplete_SelectionChangingEvent.cancel]
-           */
-          cancel: boolean | PromiseLike<boolean>;
-        };
+      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
     /**
      * [descr:_ui_autocomplete_ValueChangedEvent]
      */
@@ -14870,13 +14876,9 @@ declare module DevExpress.ui {
      * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent]
      */
     export type SelectionChangingEvent<TComponent> =
-      DevExpress.events.EventInfo<TComponent> &
-        SelectionChangingInfo & {
-          /**
-           * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent.cancel]
-           */
-          cancel: boolean | PromiseLike<boolean>;
-        };
+      DevExpress.events.AsyncCancelable &
+        DevExpress.events.EventInfo<TComponent> &
+        SelectionChangingInfo;
     /**
      * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -14932,17 +14934,17 @@ declare module DevExpress.ui {
         DevExpress.events.ItemInfo
     ) => void;
     /**
+     * [descr:dxDropDownListOptions.onSelectionChanging]
+     */
+    onSelectionChanging?: (
+      e: DevExpress.ui.dxDropDownList.SelectionChangingEvent<TComponent>
+    ) => void;
+    /**
      * [descr:dxDropDownListOptions.onSelectionChanged]
      */
     onSelectionChanged?: (
       e: DevExpress.events.EventInfo<TComponent> &
         DevExpress.ui.dxDropDownList.SelectionChangedInfo
-    ) => void;
-    /**
-     * [descr:dxDropDownListOptions.onSelectionChanging]
-     */
-    onSelectionChanging?: (
-      e: DevExpress.ui.dxDropDownList.SelectionChangingEvent<TComponent>
     ) => void;
     /**
      * [descr:dxDropDownListOptions.onValueChanged]
@@ -19911,13 +19913,9 @@ declare module DevExpress.ui {
     export type SelectionChangingEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
-      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem> & {
-        /**
-         * [descr:_ui_list_SelectionChangingEvent.cancel]
-         */
-        cancel: boolean | PromiseLike<boolean>;
-      };
+    > = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem>;
   }
   /**
    * @deprecated Use Item instead
@@ -20391,13 +20389,9 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_lookup_SelectionChangingEvent]
      */
-    export type SelectionChangingEvent = DevExpress.events.EventInfo<dxLookup> &
-      DevExpress.ui.dxDropDownList.SelectionChangingInfo & {
-        /**
-         * [descr:_ui_lookup_SelectionChangingEvent.cancel]
-         */
-        cancel: boolean | PromiseLike<boolean>;
-      };
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxLookup> &
+      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxLookup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
     /**
@@ -24973,14 +24967,9 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_select_box_SelectionChangingEvent]
      */
-    export type SelectionChangingEvent =
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
       DevExpress.events.EventInfo<dxSelectBox> &
-        DevExpress.ui.dxDropDownList.SelectionChangingInfo & {
-          /**
-           * [descr:_ui_select_box_SelectionChangingEvent.cancel]
-           */
-          cancel: boolean | PromiseLike<boolean>;
-        };
+      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
     /**
      * [descr:_ui_select_box_ValueChangedEvent]
      */
@@ -26095,13 +26084,9 @@ declare module DevExpress.ui {
     export type SelectionChangingEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.EventInfo<dxTabPanel<TItem, TKey>> &
-      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem> & {
-        /**
-         * [descr:_ui_tab_panel_SelectionChangingEvent.cancel]
-         */
-        cancel: boolean | PromiseLike<boolean>;
-      };
+    > = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxTabPanel<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem>;
     /**
      * [descr:TabPanelItemInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -26374,13 +26359,9 @@ declare module DevExpress.ui {
     export type SelectionChangingEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.EventInfo<dxTabs<TItem, TKey>> &
-      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem> & {
-        /**
-         * [descr:_ui_tabs_SelectionChangingEvent.cancel]
-         */
-        cancel: boolean | PromiseLike<boolean>;
-      };
+    > = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxTabs<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem>;
   }
   /**
    * [descr:dxTabsOptions]
@@ -26599,15 +26580,11 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_tag_box_SelectionChangingEvent]
      */
-    export type SelectionChangingEvent = DevExpress.events.EventInfo<dxTagBox> &
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxTagBox> &
       DevExpress.ui.CollectionWidget.SelectionChangingInfo<
         string | number | any
-      > & {
-        /**
-         * [descr:_ui_tag_box_SelectionChangingEvent.cancel]
-         */
-        cancel: boolean | PromiseLike<boolean>;
-      };
+      >;
     /**
      * [descr:_ui_tag_box_ValueChangedEvent]
      */

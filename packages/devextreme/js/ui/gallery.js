@@ -32,7 +32,6 @@ export default Gallery;
  * @hidden
  */
 
-
 /**
  * @name dxGalleryItem.visible
  * @hidden

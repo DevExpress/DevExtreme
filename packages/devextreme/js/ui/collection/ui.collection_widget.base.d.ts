@@ -13,6 +13,7 @@ import {
     EventInfo,
     NativeEventInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../../events/index';
 
 import Widget, {
@@ -30,12 +31,15 @@ export interface SelectionChangingInfo<TItem extends ItemLike = any> {
     readonly addedItems: Array<TItem>;
     /** @docid */
     readonly removedItems: Array<TItem>;
-    /**
-     * @docid
-     * @type boolean|Promise<boolean>
-     */
-    cancel?: boolean | PromiseLike<boolean>;
 }
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TComponent> = AsyncCancelable & EventInfo<TComponent> & SelectionChangingInfo;
 
 /**
  * @docid
@@ -145,15 +149,11 @@ export interface CollectionWidgetOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field addedItems:array<any>
-     * @type_function_param1_field removedItems:array<any>
-     * @type_function_param1_field component:this
-     * @type_function_param1_field cancel:boolean|Promise<boolean>
+     * @type_function_param1 e:{ui/collection/ui.collection_widget.base:SelectionChangingEvent}
      * @action
      * @public
      */
-    onSelectionChanging?: ((e: EventInfo<TComponent> & SelectionChangingInfo<TItem>) => void);
+    onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
     /**
      * @docid
      * @default null

@@ -6,6 +6,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../events/index';
 
 import CollectionWidget, {
@@ -96,26 +97,20 @@ export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventI
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & ChangedOptionInfo;
 
 /**
+ * @docid _ui_tabs_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = AsyncCancelable & EventInfo<dxTabs<TItem, TKey>> & SelectionChangingInfo<TItem>;
+
+/**
  * @docid _ui_tabs_SelectionChangedEvent
  * @public
  * @type object
  * @inherits EventInfo,SelectionChangedInfo
  */
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & SelectionChangedInfo<TItem>;
-
-/**
- * @docid _ui_tabs_SelectionChangingEvent
- * @public
- * @type object
- * @inherits EventInfo,SelectionChangingInfo
- */
-export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & SelectionChangingInfo<TItem> & {
-    /**
-     * @docid _ui_tabs_SelectionChangingEvent.cancel
-     * @type Boolean|Promise<Boolean>
-     */
-    cancel: boolean | PromiseLike<boolean>;
-};
 
 /**
  * @deprecated use Properties instead
@@ -337,14 +332,14 @@ onItemRendered?: ((e: ItemRenderedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxTabsOptions.onSelectionChanged
- * @type_function_param1 e:{ui/tabs:SelectionChangedEvent}
- */
-onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-/**
  * @docid dxTabsOptions.onSelectionChanging
  * @type_function_param1 e:{ui/tabs:SelectionChangingEvent}
  */
 onSelectionChanging?: ((e: SelectionChangingEvent) => void);
+/**
+ * @docid dxTabsOptions.onSelectionChanged
+ * @type_function_param1 e:{ui/tabs:SelectionChangedEvent}
+ */
+onSelectionChanged?: ((e: SelectionChangedEvent) => void);
 };
 ///#ENDDEBUG

@@ -13,6 +13,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../events/index';
 
 import {
@@ -131,15 +132,9 @@ export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & Scroll
  * @docid _ui_lookup_SelectionChangingEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangingInfo
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
  */
-export type SelectionChangingEvent = EventInfo<dxLookup> & SelectionChangingInfo & {
-    /**
-     * @docid _ui_lookup_SelectionChangingEvent.cancel
-     * @type Boolean|Promise<Boolean>
-     */
-     cancel: boolean | PromiseLike<boolean>;
-};
+export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxLookup> & SelectionChangingInfo;
 
 /**
  * @docid _ui_lookup_SelectionChangedEvent
