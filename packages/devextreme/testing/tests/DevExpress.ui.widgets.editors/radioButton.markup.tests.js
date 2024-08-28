@@ -52,6 +52,13 @@ QUnit.module('aria accessibility', () => {
         assert.equal($element.attr('role'), 'radio', 'aria role is correct');
     });
 
+    QUnit.test('should not have aria-readonly even if readOnly = true', function(assert) {
+        const $element = $('#radioButton').dxRadioButton({
+            readOnly: true
+        });
+        assert.equal($element.attr('aria-readonly'), undefined, 'aria-readonly is not set');
+    });
+
     QUnit.test('aria properties if value is set to true', function(assert) {
         const $element = $('#radioButton').dxRadioButton({ value: true });
 

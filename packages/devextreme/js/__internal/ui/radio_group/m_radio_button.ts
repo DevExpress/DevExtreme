@@ -66,6 +66,8 @@ const RadioButton = Editor.inherit({
     this.setAria('role', 'radio');
   },
 
+  _setAriaReadonly() {},
+
   _renderIcon() {
     this._$icon = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
