@@ -2439,6 +2439,7 @@ QUnit.module('onSelectionChanging', {
         assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
         assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
         assert.deepEqual(selection.getSelectedItemKeys(), this.firstThreeItems, 'selectedItemKeys is updated correctly');
+        assert.strictEqual(selection.isItemSelected(this.data[0]), true, 'isItemSelected returns true');
     });
 
     QUnit.test('cancelling should prevent selectedItems change and selectionChanged raise', function(assert) {
@@ -2461,6 +2462,7 @@ QUnit.module('onSelectionChanging', {
         assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
         assert.deepEqual(selection.getSelectedItems(), [], 'selectedItems is not updated');
         assert.deepEqual(selection.getSelectedItemKeys(), [], 'selectedItemKeys is not updated');
+        assert.strictEqual(selection.isItemSelected(this.data[0]), false, 'isItemSelected returns false');
     });
 
     QUnit.test('cancelling should prevent selectedItems change and selectionChanged raise (e.cancel=promise)', function(assert) {
@@ -2490,6 +2492,7 @@ QUnit.module('onSelectionChanging', {
             assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
             assert.deepEqual(selection.getSelectedItems(), [], 'selectedItems is not updated');
             assert.deepEqual(selection.getSelectedItemKeys(), [], 'selectedItemKeys is not updated');
+            assert.strictEqual(selection.isItemSelected(this.data[0]), false, 'isItemSelected returns false');
             done();
         });
     });
@@ -2555,5 +2558,195 @@ QUnit.module('onSelectionChanging', {
         selection.selectedItemKeys(this.firstThreeItems);
 
         assert.strictEqual(selectionChangingHandler.callCount, 2, 'selectionChanging is called once');
+    });
+
+    QUnit.module('select all by one page', {
+        beforeEach: function() {
+            this.dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
+        }
+    }, () => {
+        QUnit.test('should call selectionChanging with correct parameters', function(assert) {
+            const selectionChangingHandler = sinon.spy((args) => {
+                assert.deepEqual(args.selectedItems, this.firstThreeItems, 'selectedItems is correct');
+                assert.deepEqual(args.selectedItemKeys, this.firstThreeItems, 'selectedItemsKeys is correct');
+                assert.deepEqual(args.addedItemKeys, this.firstThreeItems, 'addedItemKeys is correct');
+                assert.deepEqual(args.addedItems, this.firstThreeItems, 'addedItems is correct');
+                assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is correct');
+                assert.deepEqual(args.removedItems, [], 'removedItems is correct');
+                assert.strictEqual(args.cancel, false, 'cancel is correct');
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const selection = new Selection({
+                ...this.basicSelectionConfig,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            this.dataSource.load();
+            selection.selectAll(true);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+            assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
+            assert.strictEqual(selection.getSelectAllState(true), true, 'select all is true');
+        });
+
+        QUnit.test('selection should be canceled if e.cancel = true', function(assert) {
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = true;
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const selection = new Selection({
+                ...this.basicSelectionConfig,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            this.dataSource.load();
+            selection.selectAll(true);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
+            assert.strictEqual(selection.getSelectAllState(true), false, 'select all is not changed');
+        });
+
+        QUnit.test('selection should be canceled if e.cancel is a promise resolving with true', function(assert) {
+            const done = assert.async();
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(true);
+                    });
+                });
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const selection = new Selection({
+                ...this.basicSelectionConfig,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            this.dataSource.load();
+            selection.selectAll(true);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called until promise is resolved');
+
+            setTimeout(() => {
+                assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+                assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called');
+                assert.strictEqual(selection.getSelectAllState(true), false, 'select all is not changed');
+                done();
+            });
+        });
+
+        QUnit.test('selection should be applied if e.cancel is a promise resolving with false', function(assert) {
+            const done = assert.async();
+
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(false);
+                    });
+                });
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const selection = new Selection({
+                ...this.basicSelectionConfig,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            this.dataSource.load();
+            selection.selectAll(true);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called until promise is resolved');
+
+            setTimeout(() => {
+                assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+                assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
+                assert.strictEqual(selection.getSelectAllState(true), true, 'select all is changed');
+                done();
+            });
+        });
+
+        QUnit.test('selection should be applied if e.cancel is a promise which will be rejected', function(assert) {
+            const done = assert.async();
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        reject();
+                    });
+                });
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const selection = new Selection({
+                ...this.basicSelectionConfig,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            this.dataSource.load();
+            selection.selectAll(true);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called until promise is resolved');
+
+            setTimeout(() => {
+                assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+                assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
+                assert.strictEqual(selection.getSelectAllState(true), true, 'select all is changed');
+                done();
+            });
+        });
+
+        QUnit.test('selecton requests should be ignored until previous one is not processed', function(assert) {
+            const done = assert.async();
+            const delay = 100;
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(false);
+                    }, delay);
+                });
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const selection = new Selection({
+                ...this.basicSelectionConfig,
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            this.dataSource.load();
+            const selectionDeferred = selection.selectAll(true);
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called immediately');
+            assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged is not called until promise is resolved');
+
+            setTimeout(() => {
+                const secondSelectionDeferred = selection.deselectAll(true);
+                assert.strictEqual(secondSelectionDeferred.state(), 'rejected', 'second request is immediately rejected');
+                assert.strictEqual(selectionDeferred.state(), 'pending', 'first request is still in progress');
+
+                setTimeout(() => {
+                    assert.strictEqual(selectionDeferred.state(), 'resolved', 'first request is resolved');
+                    assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is called once');
+                    assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is called once');
+                    assert.strictEqual(selection.getSelectAllState(true), true, 'select all is changed');
+
+                    setTimeout(() => {
+                        assert.strictEqual(selectionChangingHandler.callCount, 1, 'additional selectionChanging is not called');
+                        assert.strictEqual(selection.getSelectAllState(true), true, 'second selection request is ignored');
+                        done();
+                    }, delay / 2);
+                }, delay / 2);
+            }, delay / 2);
+        });
     });
 });

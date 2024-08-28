@@ -423,10 +423,10 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     });
   },
 
-  _itemSelectHandler(e) {
+  _itemSelectHandler(e, shouldIgnoreSelectByClick) {
     let itemSelectPromise;
 
-    if (!this.option('selectByClick')) {
+    if (!shouldIgnoreSelectByClick && !this.option('selectByClick')) {
       return;
     }
 
