@@ -217,7 +217,7 @@ export class SelectionController extends modules.Controller {
       selectionFilter: this.option('selectionFilter'),
       ignoreDisabledItems: true,
       isVirtualPaging: virtualPaging,
-      caseSensitivity: this.option('selection.caseSensitivity'),
+      sensitivity: this.option('selection.sensitivity'),
       allowLoadByRange() {
         const hasGroupColumns = columnsController.getGroupColumns().length > 0;
         return virtualPaging && !legacyScrollingMode && !hasGroupColumns && allowSelectAll && !deferred;
@@ -417,8 +417,8 @@ export class SelectionController extends modules.Controller {
 
         this.init();
 
-        if (selectionOptionsExists && args.fullName === 'selection.caseSensitivity') {
-          this._selection.options.caseSensitivity = args.value;
+        if (selectionOptionsExists && args.fullName === 'selection.sensitivity') {
+          this._selection.options.sensitivity = args.value;
         }
 
         if (args.fullName !== 'selection.showCheckBoxesMode') {

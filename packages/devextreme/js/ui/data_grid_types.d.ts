@@ -143,7 +143,7 @@ export {
   Editing,
   EditingTexts,
   Scrolling,
-  CaseSensitivity,
+  Sensitivity,
   Selection,
   Column,
   ColumnButton,

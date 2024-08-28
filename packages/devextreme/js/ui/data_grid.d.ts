@@ -1989,7 +1989,7 @@ export type Scrolling = ScrollingBase & {
 export type dxDataGridSelection = Selection;
 
 /** @public */
-export type CaseSensitivity = 'base' | 'accent' | 'case' | 'variant';
+export type Sensitivity = 'base' | 'accent' | 'case' | 'variant';
 
 /** @public */
 export type Selection = SelectionBase & {
@@ -2000,11 +2000,11 @@ export type Selection = SelectionBase & {
      */
     deferred?: boolean;
     /**
-      * @docid dxDataGridOptions.selection.caseSensitivity
+      * @docid dxDataGridOptions.selection.sensitivity
       * @default "base"
       * @public
     */
-    caseSensitivity?: CaseSensitivity;
+    sensitivity?: Sensitivity;
     /**
      * @docid dxDataGridOptions.selection.selectAllMode
      * @default "allPages"
