@@ -20,6 +20,8 @@ export default class StandardStrategy extends SelectionStrategy {
 
   _isCancelingInProgress?: boolean;
 
+  _lastSelectAllPageDeferred = Deferred().reject();
+
   _storedSelectionState?: {
     selectedItems: any;
     selectedItemKeys: any;
@@ -285,8 +287,6 @@ export default class StandardStrategy extends SelectionStrategy {
       this._isCancelingInProgress = true;
       this._callCallbackIfNotCanceled(() => {
         this._isCancelingInProgress = false;
-        this.onSelectionChanged();
-        selectionDeferred.resolve(items);
         this.onSelectionChanged();
         selectionDeferred.resolve(items);
       }, () => {
