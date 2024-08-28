@@ -63,7 +63,8 @@ registerDecorator(
         onValueChanged: ({ value, component, event }) => {
           const isUiClick = !!event;
           if (isUiClick) {
-            component._setOptionWithoutOptionChange('value', !value);
+            component._valueChangeEventInstance = undefined;
+            component.option('value', !value);
           }
         },
       }));
