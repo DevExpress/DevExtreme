@@ -345,7 +345,10 @@ QUnit.module('Chat', moduleConfig, () => {
         QUnit.test('The textarea element must be active after the Chat focus is invoked', function(assert) {
             this.instance.focus();
 
-            assert.strictEqual(document.activeElement, this.$input.get(0));
+            const root = document.querySelector('#qunit-fixture');
+            const activeElement = root.shadowRoot ? root.shadowRoot.activeElement : document.activeElement;
+
+            assert.strictEqual(activeElement, this.$input.get(0));
         });
     });
 });
