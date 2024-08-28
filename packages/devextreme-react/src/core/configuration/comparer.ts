@@ -14,7 +14,7 @@ function compareTemplates(
   current: IConfigNode,
   currentFullName: string,
   prev: IConfigNode,
-  changesAccum: IConfigChanges
+  changesAccum: IConfigChanges,
 ) {
   const currentTemplatesOptions: Record<string, any> = {};
   const currentTemplates: Record<string, ITemplate> = {};
@@ -46,7 +46,6 @@ function compareTemplates(
     changesAccum.templates[key] = currentTemplate;
   });
 }
-
 
 function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigChanges) {
   const fullName = buildFullName(current);

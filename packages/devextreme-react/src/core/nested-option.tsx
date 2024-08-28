@@ -27,8 +27,9 @@ const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IE
   const { children: stateChildren } = props;
   const { elementDescriptor, ...restProps } = props;
 
-  if (!elementDescriptor)
+  if (!elementDescriptor) {
     return null;
+  }
 
   const {
     parentExpectedChildren,
