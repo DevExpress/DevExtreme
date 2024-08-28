@@ -60,7 +60,12 @@ registerDecorator(
         elementAttr: { 'aria-label': 'Check State' },
         focusStateEnabled: false,
         hoverStateEnabled: false,
-        readOnly: true,
+        onValueChanged: ({ value, component, event }) => {
+          const isUiClick = !!event;
+          if (isUiClick) {
+            component._setOptionWithoutOptionChange('value', !value);
+          }
+        },
       }));
     },
 
@@ -138,7 +143,6 @@ registerDecorator(
           elementAttr: { 'aria-label': messageLocalization.format('dxList-selectAll') },
           focusStateEnabled: false,
           hoverStateEnabled: false,
-          readOnly: true,
         },
       );
 
@@ -156,7 +160,13 @@ registerDecorator(
     },
 
     _attachSelectAllHandler() {
-      this._selectAllCheckBox.option('onValueChanged', ({ value }) => {
+      this._selectAllCheckBox.option('onValueChanged', ({ value, event, component }) => {
+        const isUiClick = !!event;
+        if (isUiClick) {
+          component._setOptionWithoutOptionChange('value', !value);
+          return;
+        }
+
         this._updateSelectAllAriaLabel();
         this._list._createActionByOption('onSelectAllValueChanged')({ value });
       });
