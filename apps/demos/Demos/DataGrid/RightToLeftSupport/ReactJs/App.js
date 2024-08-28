@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, { Column, Paging, SearchPanel, Pager } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column, Paging, SearchPanel, Pager,
+} from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import { europeanUnion } from './data.js';
 

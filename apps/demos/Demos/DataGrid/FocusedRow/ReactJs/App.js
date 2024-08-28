@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { DataGrid, Column, Paging, Pager } from 'devextreme-react/data-grid';
+import {
+  DataGrid, Column, Paging, Pager,
+} from 'devextreme-react/data-grid';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
 import 'devextreme/data/odata/store';
