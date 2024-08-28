@@ -134,7 +134,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
     onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
     /**
      * @docid
-     * @type_function_param1 e:{ui/drop_down_list:SelectionChangingEvent}
+     * @type_function_param1 e:{ui/drop_down_editor/ui.drop_down_list:SelectionChangingEvent}
      */
     onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
     /**
