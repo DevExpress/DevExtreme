@@ -7,7 +7,7 @@ import {
 
 import { SelectAllMode, SingleMultipleOrNone } from 'devextreme/common';
 import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
-import { CaseSensitivity } from 'devextreme/ui/data_grid';
+import { Sensitivity } from 'devextreme/ui/data_grid';
 
 @Component({
     template: ''
@@ -34,13 +34,6 @@ export abstract class DxoColumnChooserSelectionConfig extends NestedOption {
         this._setOption('selectByClick', value);
     }
 
-    get caseSensitivity(): CaseSensitivity {
-        return this._getOption('caseSensitivity');
-    }
-    set caseSensitivity(value: CaseSensitivity) {
-        this._setOption('caseSensitivity', value);
-    }
-
     get deferred(): boolean {
         return this._getOption('deferred');
     }
@@ -60,6 +53,13 @@ export abstract class DxoColumnChooserSelectionConfig extends NestedOption {
     }
     set selectAllMode(value: SelectAllMode) {
         this._setOption('selectAllMode', value);
+    }
+
+    get sensitivity(): Sensitivity {
+        return this._getOption('sensitivity');
+    }
+    set sensitivity(value: Sensitivity) {
+        this._setOption('sensitivity', value);
     }
 
     get showCheckBoxesMode(): SelectionColumnDisplayMode {
