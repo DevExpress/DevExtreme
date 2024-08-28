@@ -364,7 +364,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 });
             });
 
-            QUnit.test('state options should be updated when chat state options are changed in runtime', function(assert) {
+            QUnit.test('passed state options should be updated when chat state options are changed in runtime', function(assert) {
                 const options = {
                     activeStateEnabled: value,
                     focusStateEnabled: value,

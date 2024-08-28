@@ -4,6 +4,8 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
 import MessageBox from '__internal/ui/chat/chat_message_box';
+import TextArea from '__internal/ui/m_text_area';
+import Button from 'ui/button';
 
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
@@ -157,6 +159,46 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .type(text);
 
             this.$sendButton.trigger('dxclick');
+        });
+    });
+
+    QUnit.module('Proxy state options', () => {
+        [true, false].forEach(value => {
+            QUnit.test('passed state options should be equal message box state options', function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.reinit(options);
+
+                const button = Button.getInstance(this.$sendButton);
+                const textArea = TextArea.getInstance(this.$textArea);
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, button.option(key), `button ${key} value is correct`);
+                    assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
+                });
+            });
+
+            QUnit.test('passed state options should be updated when state options are changed in runtime', function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.instance.option(options);
+
+                const button = Button.getInstance(this.$sendButton);
+                const textArea = TextArea.getInstance(this.$textArea);
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, button.option(key), `button ${key} value is correct`);
+                    assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
+                });
+            });
         });
     });
 });
