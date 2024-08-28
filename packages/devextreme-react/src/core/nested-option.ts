@@ -59,12 +59,16 @@ const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IE
     },
   );
 
-  return (
-    <React.Fragment>
-      <NestedOptionContext.Provider value={context}>
-        { children }
-      </NestedOptionContext.Provider>
-    </React.Fragment>
+  return React.createElement(
+    React.Fragment,
+    {},
+    React.createElement(
+      NestedOptionContext.Provider,
+      {
+        value: context,
+      },
+      children,
+    ),
   );
 };
 
