@@ -1,6 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
-import type { Sensitivity } from 'devextreme/ui/data_grid';
+import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
@@ -791,7 +791,7 @@ export default class DataGrid extends Widget {
   }
 
   apiChangeSensitivity(
-    sensitivity: Sensitivity,
+    sensitivity: SelectionSensitivity,
   ): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
