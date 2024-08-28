@@ -259,6 +259,21 @@ QUnit.module('Chat', moduleConfig, () => {
     });
 
     QUnit.module('renderMessage', moduleConfig, () => {
+        QUnit.test('should allow calling without arguments without any errors', function(assert) {
+            this.reinit();
+
+            try {
+                this.instance.renderMessage();
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                const { items } = this.instance.option();
+
+                assert.strictEqual(items.length, 1, 'message count is correct');
+                assert.deepEqual(items[0], {}, 'message data is correct');
+            }
+        });
+
         QUnit.test('Chat items should be updated after renderMessage has been called', function(assert) {
             const author = {
                 id: MOCK_CURRENT_USER_ID,
@@ -273,25 +288,6 @@ QUnit.module('Chat', moduleConfig, () => {
             this.instance.renderMessage(newMessage);
 
             const { items } = this.instance.option();
-            const lastItem = items[items.length - 1];
-
-            assert.strictEqual(lastItem, newMessage);
-        });
-
-        QUnit.test('Message List items should be updated after renderMessage has been called', function(assert) {
-            const author = {
-                id: MOCK_CURRENT_USER_ID,
-            };
-
-            const newMessage = {
-                author,
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            };
-
-            this.instance.renderMessage(newMessage);
-
-            const { items } = this.instance._messageList.option();
             const lastItem = items[items.length - 1];
 
             assert.strictEqual(lastItem, newMessage);
@@ -319,23 +315,32 @@ QUnit.module('Chat', moduleConfig, () => {
             assert.strictEqual(getMessageGroups().length, 1);
         });
 
-        QUnit.test('New bubble should be rendered after renderMessage with correct text', function(assert) {
-            const text = 'NEW MESSAGE';
-            const author = { id: MOCK_CURRENT_USER_ID };
-            const newMessage = {
-                author,
-                timestamp: NOW,
-                text,
-            };
+        [
+            { text: undefined, },
+            { text: 'new message text', },
+            { text: '', },
+            { text: '    ' }
+        ].forEach((renderMessageArgs) => {
+            const { text } = renderMessageArgs;
 
-            this.instance.renderMessage(newMessage);
+            QUnit.test(`New bubble should be rendered correctly after renderMessage call passed argument ${JSON.stringify(renderMessageArgs)}`, function(assert) {
+                this.reinit({
+                    items: [{}, {}, {}],
+                });
 
-            const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
-            const lastMessageGroup = messageGroups[messageGroups.length - 1];
-            const $bubbles = $(lastMessageGroup).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-            const lastBubble = $bubbles[$bubbles.length - 1];
+                const author = { id: MOCK_CURRENT_USER_ID };
+                const newMessage = {
+                    author,
+                    text,
+                };
 
-            assert.strictEqual($(lastBubble).text(), text);
+                this.instance.renderMessage(newMessage);
+
+                const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+                assert.strictEqual($bubbles.length, 4, 'false');
+                assert.strictEqual($bubbles.last().text(), text ? text : '', 'text value is correct');
+            });
         });
     });
 });

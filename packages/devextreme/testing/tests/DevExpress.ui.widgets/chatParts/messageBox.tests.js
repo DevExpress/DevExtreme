@@ -64,16 +64,19 @@ QUnit.module('MessageBox', moduleConfig, () => {
             this.$sendButton.trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), '');
+            assert.strictEqual(this.$input.val(), '');
         });
 
-        QUnit.skip('textarea should be cleared when the send button is clicked if the input contains a value consisting only of spaces', function(assert) {
+        QUnit.test('textarea should be cleared when the send button is clicked if the input contains a value consisting only of spaces', function(assert) {
+            const emptyValue = '    ';
+
             keyboardMock(this.$input)
                 .focus()
-                .type('    ');
+                .type(emptyValue);
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(this.$input.val(), '');
+            assert.strictEqual(this.$input.val(), emptyValue);
         });
     });
 
@@ -117,13 +120,14 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should not be fired when the send button is clicked if the textarea input contains a value consisting only of spaces', function(assert) {
+            const emptyText = '    ';
             const onMessageSendStub = sinon.stub();
 
             this.reinit({ onMessageSend: onMessageSendStub });
 
             keyboardMock(this.$input)
                 .focus()
-                .type('    ');
+                .type(emptyText);
 
             this.$sendButton.trigger('dxclick');
 
