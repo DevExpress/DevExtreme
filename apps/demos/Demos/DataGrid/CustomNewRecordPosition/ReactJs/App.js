@@ -53,7 +53,6 @@ const App = () => {
         onRowInserted={onRowInserted}
       >
         <Scrolling mode={scrollingMode} />
-        <Pager visible={true} />
 
         <Editing
           mode="row"
@@ -68,6 +67,7 @@ const App = () => {
           editRowKey={editRowKey}
           onEditRowKeyChange={setEditRowKey}
         />
+        <Pager visible={true} />
 
         <Column
           dataField="OrderID"
