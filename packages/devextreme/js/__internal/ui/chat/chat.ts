@@ -1,9 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type {
-  Message, MessageSendEvent, Properties,
-} from '@js/ui/chat';
+import type { Message, MessageSendEvent, Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
@@ -15,6 +14,7 @@ import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 class Chat extends Widget<Properties> {
   _chatHeader!: ChatHeader;
@@ -113,6 +113,12 @@ class Chat extends Widget<Properties> {
 
     this.renderMessage(message);
     this._messageSendAction?.({ message, event });
+  }
+
+  _focusTarget(): dxElementWrapper {
+    const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+    return $input;
   }
 
   _optionChanged(args: Record<string, unknown>): void {
