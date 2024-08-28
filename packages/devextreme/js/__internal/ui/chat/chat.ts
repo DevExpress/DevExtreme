@@ -74,9 +74,18 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageBox(): void {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
+
     const $messageBox = $('<div>').appendTo(this.element());
 
     const configuration: MessageBoxProperties = {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
@@ -110,6 +119,11 @@ class Chat extends Widget<Properties> {
     const { name, value } = args;
 
     switch (name) {
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
+        this._messageBox.option({ [name]: value });
+        break;
       case 'title':
         this._chatHeader.option('title', (value as Properties['title']) ?? '');
         break;
