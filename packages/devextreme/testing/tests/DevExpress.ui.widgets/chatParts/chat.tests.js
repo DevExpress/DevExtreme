@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/chat_message_list';
+import MessageBox from '__internal/ui/chat/chat_message_box';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -10,6 +11,7 @@ const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 
@@ -340,6 +342,42 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 assert.strictEqual($bubbles.length, 4, 'false');
                 assert.strictEqual($bubbles.last().text(), text ? text : '', 'text value is correct');
+            });
+        });
+    });
+
+    QUnit.module('Proxy state options', () => {
+        [true, false].forEach(value => {
+            QUnit.test('passed state enabled options should be equal chat state enabled options', function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.reinit(options);
+
+                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGE_BOX_CLASS}`));
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, messageBox.option(key), `${key} value is correct`);
+                });
+            });
+
+            QUnit.test('passed state options should be updated when chat state options are changed in runtime', function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.instance.option(options);
+
+                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGE_BOX_CLASS}`));
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, messageBox.option(key), `${key} value is correct`);
+                });
             });
         });
     });
