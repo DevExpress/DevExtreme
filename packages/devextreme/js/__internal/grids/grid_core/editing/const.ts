@@ -97,6 +97,7 @@ export const ADD_ROW_BUTTON_CLASS = 'addrow-button';
 export const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 export const DATA_ROW_CLASS = 'dx-data-row';
 export const ROW_REMOVED = 'dx-row-removed';
+export const FILTER_ROW_CLASS = 'filter-row';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isRenovatedScrollable = !!(Scrollable as any).IS_RENOVATED_WIDGET;
