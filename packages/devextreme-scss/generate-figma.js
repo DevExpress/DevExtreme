@@ -13,7 +13,8 @@ function setFigmaVarAlias(figmaName, scssName, collection) {
   figmaMapping[collection][figmaName] = scssName;
 }
 
-function getFigmaVarValue(figmaName, collectionName, modeName) {
+function getFigmaVarValue(figmaName, collectionName, modeNameMapping) {
+  const modeName = modeNameMapping[collectionName];
   console.log('getFigmaVarValue', figmaName, collectionName, modeName);
 
   const collection = variables.collections.find(
@@ -31,6 +32,7 @@ function getFigmaVarValue(figmaName, collectionName, modeName) {
   if (variable.isAlias) {
     if (figmaMapping?.[variable.value.collection]?.[variable.value.name] === undefined) {
       console.warn(`${variable.value.name} for ${variable.value.collection} is undefined`)
+      return getFigmaVarValue(variable.value.name, variable.value.collection, modeNameMapping);
     }
     return figmaMapping[variable.value.collection][variable.value.name];
   } else {

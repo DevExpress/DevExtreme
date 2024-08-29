@@ -55,7 +55,12 @@ gulp.task('generate', gulp.series(
         .pipe(through.obj(function(file, encoding, callback) {
             const content = file.contents.toString(encoding);
             const newContent = content.replace(/(\s*\/\/ getFigmaVariable\('(.+?)', *'(.+?)', *'(.+?)' *\)\n\s*(\$.+?): *)(.+?)( !default;)/g, function(match, beginning,  name, collection, mode, scssName, scssValue, end) {
-                return beginning + getFigmaVarValue(name, collection, mode) + end;
+                return beginning + getFigmaVarValue(name, collection, {
+                    'Fluent (Colors)': 'Light',
+                    'Material (Colors)': 'Light',
+                    'Generic (Colors)': 'Light',
+                    [collection]: mode
+                }) + end;
             })
             file.contents = Buffer.from(newContent)
             callback(null, file);

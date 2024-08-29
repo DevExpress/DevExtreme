@@ -138,6 +138,6 @@ task('style-compiler-themes-watch', () => {
             return null;
         });
 
-    watch('scss/**/*', parallel(() => compileBundles(bundles), 'copy-fonts-and-icons'))
+    watch('scss/**/*', parallel(() => compileBundles(getBundleSourcePath('*')), 'copy-fonts-and-icons'))
         .on('ready', () => console.log('style-compiler-themes task is watching for changes...'));
 });
