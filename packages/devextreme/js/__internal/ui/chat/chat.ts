@@ -46,21 +46,24 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._renderHeader();
+    const { title } = this.option();
+
+    if (title) {
+      this._renderHeader(title);
+    }
+
     this._renderMessageList();
     this._renderMessageBox();
   }
 
-  _renderHeader(): void {
-    const { title = '' } = this.option();
+  _renderHeader(title: string): void {
+    const $header = $('<div>');
 
-    if (title !== '') {
-      const $header = $('<div>').appendTo(this.element());
+    this.element().prepend($header.get(0));
 
-      this._chatHeader = this._createComponent($header, ChatHeader, {
-        title,
-      });
-    }
+    this._chatHeader = this._createComponent($header, ChatHeader, {
+      title,
+    });
   }
 
   _renderMessageList(): void {
@@ -133,10 +136,15 @@ class Chat extends Widget<Properties> {
         this._messageBox.option({ [name]: value });
         break;
       case 'title': {
-        if (this._chatHeader) {
-          this._chatHeader.option('title', (value as Properties['title']) ?? '');
-        } else {
-          this._renderHeader();
+        if (value) {
+          if (this._chatHeader) {
+            this._chatHeader.option('title', (value as Properties['title']) ?? '');
+          } else {
+            this._renderHeader((value as Properties['title']) ?? '');
+          }
+        } else if (this._chatHeader) {
+          this._chatHeader.dispose();
+          this._chatHeader.$element().remove();
         }
         break;
       }
