@@ -33,6 +33,7 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
         'deferred',
         'mode',
         'selectAllMode',
+        'sensitivity',
         'showCheckBoxesMode'
     ]
 })

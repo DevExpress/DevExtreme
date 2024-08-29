@@ -69,13 +69,20 @@ export default class DeferredStrategy extends SelectionStrategy {
   }
 
   isItemKeySelected(itemData) {
-    const { selectionFilter } = this.options;
+    const { selectionFilter, sensitivity } = this.options;
 
     if (!selectionFilter) {
       return true;
     }
 
-    return !!dataQuery([itemData]).filter(selectionFilter).toArray().length;
+    const queryParams = {
+      langParams: {
+        collatorOptions: {
+          sensitivity,
+        },
+      },
+    };
+    return !!dataQuery([itemData], queryParams).filter(selectionFilter).toArray().length;
   }
 
   _getKeyExpr() {
