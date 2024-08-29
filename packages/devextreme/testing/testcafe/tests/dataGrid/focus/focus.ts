@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
+import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
