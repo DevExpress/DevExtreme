@@ -37,6 +37,7 @@ import {
   EDIT_MODE_FORM,
   EDIT_MODE_ROW,
   EDITOR_CELL_CLASS,
+  FILTER_ROW_CLASS,
   FOCUSABLE_ELEMENT_SELECTOR,
   ROW_CLASS,
 } from '../editing/const';
@@ -2820,9 +2821,21 @@ const editing = (Base: ModuleType<EditingController>) => class EditingController
 
     const result = super.closeEditCell.apply(this, arguments as any);
 
-    keyboardNavigation._updateFocus();
+    const $focusedElement = this._getFocusedElement();
+    const isFilterCell = !!$focusedElement.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
+
+    if (!isFilterCell) {
+      keyboardNavigation._updateFocus();
+    }
 
     return result;
+  }
+
+  private _getFocusedElement() {
+    const $element = $(this.component.element?.());
+    const $focusedElement = $element.find(':focus');
+
+    return $focusedElement;
   }
 
   protected _delayedInputFocus() {
