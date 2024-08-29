@@ -140,9 +140,9 @@ class Chat extends Widget<Properties & { title: Title }> {
       case 'title': {
         if (value) {
           if (this._chatHeader) {
-            this._chatHeader.option('title', (value as Title) ?? '');
+            this._chatHeader.option('title', (value as Title));
           } else {
-            this._renderHeader((value as Title) ?? '');
+            this._renderHeader((value as Title));
           }
         } else if (this._chatHeader) {
           this._chatHeader.dispose();
