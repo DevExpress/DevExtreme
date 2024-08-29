@@ -10,7 +10,6 @@ import { getData } from './helpers/generateDataSourceData';
 fixture.disablePageReloads`Column Fixing`.page(
   url(__dirname, '../container.html'),
 );
-
 [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
   (theme) => {
     test('Sticky columns: add icons for context menu', async (t) => {
