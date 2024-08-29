@@ -45,7 +45,7 @@ const App = () => {
           storageKey="storage"
         />
         <Pager
-          visbile={true}
+          visible={true}
           showPageSizeSelector={true}
           allowedPageSizes={allowedPageSizes}
         />
