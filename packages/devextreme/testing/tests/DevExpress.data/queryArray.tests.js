@@ -388,6 +388,48 @@ QUnit.test('filter with collatorOptions.sensitivity set to "base"', function(ass
     assert.false(containsUnwantedValue);
 });
 
+QUnit.test('filtering use correct case insensitivity equal', function(assert) {
+    const input = [{ ID: 1, Name: 'AΙΤΗΣ' }, { ID: 2, Name: 'aιτης' }, { ID: 3, Name: 'abcde' }];
+
+    const array = QUERY(input, {
+        langParams: {
+            locale: 'el-GR'
+        }
+    }).filter(['Name', '=', 'AΙΤΗΣ']).toArray();
+
+    assert.equal(array.length, 2);
+
+    const containsUnwantedValue = array.some(item => item.ID === 3);
+    assert.false(containsUnwantedValue);
+});
+
+QUnit.test('filtering use correct case insensitivity search', function(assert) {
+    const input = [
+        { ID: 1, Name: 'AΙΤΗΣ' },
+        { ID: 2, Name: 'aιτης' },
+        { ID: 3, Name: 'aιτησa' },
+        { ID: 4, Name: 'AΙΤΗΣΗ' },
+        { ID: 5, Name: 'ΑBΤΗΣΗ' },
+        { ID: 6, Name: 'BΑΙΤΗΣΗ' },
+        { ID: 7, Name: 'baιτησa' },
+    ];
+
+    const arrayStartsWith = QUERY(input).filter(['Name', 'startswith', 'AΙΤΗΣ']).toArray();
+
+    const arrayEndsWith = QUERY(input).filter(['Name', 'endswith', 'ΙΤΗΣ']).toArray();
+
+    const arrayContains = QUERY(input).filter(['Name', 'contains', 'ΙΤΗΣ']).toArray();
+
+    assert.equal(arrayStartsWith.length, 4);
+    assert.equal(arrayEndsWith.length, 2);
+    assert.equal(arrayContains.length, 6);
+
+    const containsUnwantedValue = arrayStartsWith.some(item => [5, 6, 7].includes(item.ID))
+        || arrayEndsWith.some(item => [5, 4, 3, 6, 7].includes(item.ID))
+        || arrayContains.some(item => [5].includes(item.ID));
+    assert.false(containsUnwantedValue);
+});
+
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
