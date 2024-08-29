@@ -1344,6 +1344,7 @@ testComponentDefaults(Chat,
     {
         title: '',
         onMessageSend: null,
+        dataSource: null,
     }
 );
 

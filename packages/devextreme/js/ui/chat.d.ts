@@ -5,6 +5,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 /**
  * @docid _ui_chat_DisposingEvent
@@ -110,6 +111,13 @@ export type Message = {
 export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
+     * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
+     * @default null
+     * @public
+     */
+    dataSource?: DataSourceLike<Message> | null;
+    /**
+     * @docid
      * @default { id: new Guid().toString() }
      * @public
      */
@@ -122,6 +130,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     title?: string;
     /**
      * @docid
+     * @type Array<Message>
      * @fires dxChatOptions.onOptionChanged
      * @public
      */
@@ -138,7 +147,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
 
 /**
  * @docid
- * @inherits Widget
+ * @inherits Widget, DataHelperMixin
  * @namespace DevExpress.ui
  * @public
  */
@@ -149,6 +158,8 @@ export default class dxChat extends Widget<Properties> {
      * @public
      */
     renderMessage(message: Message): void;
+
+    getDataSource(): DataSource<Message>;
 }
 
 /** @public */

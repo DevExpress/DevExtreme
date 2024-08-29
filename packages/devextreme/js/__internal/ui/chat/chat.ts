@@ -30,6 +30,7 @@ class Chat extends Widget<Properties> {
       ...super._getDefaultOptions(),
       title: '',
       items: [],
+      dataSource: null,
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };

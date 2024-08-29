@@ -9420,6 +9420,8 @@ declare module DevExpress.ui {
      * [descr:dxChat.renderMessage(message)]
      */
     renderMessage(message: DevExpress.ui.dxChat.Message): void;
+
+    getDataSource(): DevExpress.data.DataSource<DevExpress.ui.dxChat.Message>;
   }
   module dxChat {
     /**
@@ -9461,6 +9463,10 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxChatOptions]
    */
   export interface dxChatOptions extends WidgetOptions<dxChat> {
+    /**
+     * [descr:dxChatOptions.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
      * [descr:dxChatOptions.user]
      */
