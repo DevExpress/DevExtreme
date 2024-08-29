@@ -114,7 +114,10 @@ export interface Cancelable {
  * @public
  */
 export interface AsyncCancelable {
-    /** @docid */
+    /**
+     * @docid
+     * @type boolean|Promise<boolean>
+     */
     cancel: boolean | PromiseLike<boolean>;
 }
 
