@@ -388,6 +388,49 @@ QUnit.test('filter with collatorOptions.sensitivity set to "base"', function(ass
     assert.false(containsUnwantedValue);
 });
 
+QUnit.test('filtering use real case insensitivity equal', function(assert) {
+    const input = [{ ID: 1, Name: 'AΙΤΗΣ' }, { ID: 2, Name: 'aιτης' }, { ID: 3, Name: 'abcde' }];
+
+    const array = QUERY(input, {
+        langParams: {
+            locale: 'el-GR'
+        }
+    }).filter(['Name', '=', 'AΙΤΗΣ']).toArray();
+
+    assert.equal(array.length, 2);
+
+    const containsUnwantedValue = array.some(item => item.ID === 3);
+    assert.false(containsUnwantedValue);
+});
+
+QUnit.test('filtering use real case insensitivity search', function(assert) {
+    const input = [
+        { ID: 1, Name: 'AΙΤΗΣ' },
+        { ID: 2, Name: 'aιτης' },
+        { ID: 3, Name: 'aιτησa' },
+        { ID: 4, Name: 'AΙΤΗΣΗ' },
+        { ID: 5, Name: 'ΑBΤΗΣΗ' },
+    ];
+
+    const array = QUERY(input, {
+        langParams: {
+            locale: 'el-GR'
+        }
+    }).filter(['Name', 'startswith', 'AΙΤΗΣ']).toArray();
+
+    const array2 = QUERY(input, {
+        langParams: {
+            locale: 'el-GR'
+        }
+    }).filter(['Name', 'endswith', 'ΙΤΗΣ']).toArray();
+
+    assert.equal(array.length, 4);
+    assert.equal(array2.length, 2);
+
+    const containsUnwantedValue = array.some(item => item.ID === 5) || array2.some(item => [5, 4, 3].includes(item.ID));
+    assert.false(containsUnwantedValue);
+});
+
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
