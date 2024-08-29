@@ -30,7 +30,7 @@ import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
-import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DataGridExportFormat, DataGridScrollMode, DisposingEvent, dxDataGridColumn, dxDataGridToolbar, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent } from 'devextreme/ui/data_grid';
+import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DataGridExportFormat, DataGridScrollMode, DisposingEvent, dxDataGridColumn, dxDataGridToolbar, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, SelectionSensitivity, ToolbarPreparingEvent } from 'devextreme/ui/data_grid';
 import { Properties as dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
@@ -896,10 +896,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get selection(): { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, showCheckBoxesMode?: SelectionColumnDisplayMode } {
+    get selection(): { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode } {
         return this._getOption('selection');
     }
-    set selection(value: { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, showCheckBoxesMode?: SelectionColumnDisplayMode }) {
+    set selection(value: { allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode }) {
         this._setOption('selection', value);
     }
 
@@ -1850,7 +1850,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, showCheckBoxesMode?: SelectionColumnDisplayMode }>;
+    @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, deferred?: boolean, mode?: SingleMultipleOrNone, selectAllMode?: SelectAllMode, sensitivity?: SelectionSensitivity, showCheckBoxesMode?: SelectionColumnDisplayMode }>;
 
     /**
     
