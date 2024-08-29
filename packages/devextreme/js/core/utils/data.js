@@ -201,7 +201,7 @@ export const toComparable = function(value, caseSensitive, options = {}) {
     const isCaseSensitive = collatorSensitivity === 'case' || caseSensitive;
 
     if(typeof value === 'string' && !isCaseSensitive) {
-        return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
+        return options?.locale ? value.toLocaleUpperCase(options.locale) : value.toUpperCase();
     }
 
     return value;

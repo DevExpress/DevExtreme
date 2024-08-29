@@ -242,14 +242,7 @@ const SortIterator = Iterator.inherit({
 const compileCriteria = (function() {
     let langParams = {};
 
-    const _toComparable = (value, caseSensitivity = false) => toComparable(value, caseSensitivity, langParams);
-
-    const toLowerCase = (value) => langParams?.locale ? value.toLocaleLowerCase(langParams.locale) : value.toLowerCase();
-    const toUpperCase = (value) => langParams?.locale ? value.toLocaleUpperCase(langParams.locale) : value.toUpperCase();
-
-    const compareCaseInsensitive = (value1, value2) => {
-        return toLowerCase(value1) === toLowerCase(value2) || toUpperCase(value1) === toUpperCase(value2);
-    };
+    const _toComparable = (value) => toComparable(value, false, langParams);
 
     const compileUniformEqualsCriteria = (crit) => {
         const getter = compileGetter(crit[0][0]);
@@ -316,9 +309,9 @@ const compileCriteria = (function() {
         crit = normalizeBinaryCriterion(crit);
         const getter = compileGetter(crit[0]);
         const op = crit[1];
-        const origValue = crit[2];
+        let value = crit[2];
 
-        const value = _toComparable(origValue);
+        value = _toComparable(value);
 
         const compare = (obj, operatorFn) => {
             obj = _toComparable(getter(obj));
@@ -327,9 +320,9 @@ const compileCriteria = (function() {
 
         switch(op.toLowerCase()) {
             case '=':
-                return compileEquals(getter, origValue);
+                return compileEquals(getter, value);
             case '<>':
-                return compileEquals(getter, origValue, true);
+                return compileEquals(getter, value, true);
             case '>':
                 return (obj) => compare(obj, (a, b) => a > b);
             case '<':
@@ -339,52 +332,13 @@ const compileCriteria = (function() {
             case '<=':
                 return (obj) => compare(obj, (a, b) => a <= b);
             case 'startswith':
-                return function(obj) {
-                    let objValue = toString(getter(obj));
-                    let result;
-
-                    if(objValue.length < origValue.length) {
-                        return false;
-                    }
-
-                    if(langParams.collatorOptions?.sensitivity !== 'case') {
-                        objValue = _toComparable(objValue, true);
-                        const searchValue = _toComparable(origValue, true);
-
-                        result = toUpperCase(objValue).startsWith(toUpperCase(searchValue)) ||
-                            toLowerCase(objValue).startsWith(toLowerCase(searchValue));
-                    } else {
-                        result = _toComparable(objValue).startsWith(value);
-                    }
-
-                    return result;
-                };
+                return (obj) => _toComparable(toString(getter(obj))).startsWith(value);
             case 'endswith':
-                return function(obj) {
-                    let objValue = toString(getter(obj));
-                    let searchValue = toString(origValue);
-
-                    if(objValue.length < searchValue.length) {
-                        return false;
-                    }
-
-                    let result = _toComparable(objValue).endsWith(_toComparable(searchValue));
-
-                    if(!result && langParams.collatorOptions?.sensitivity !== 'case') {
-                        objValue = _toComparable(objValue, true);
-                        searchValue = _toComparable(searchValue, true);
-
-                        result = toUpperCase(objValue).endsWith(toUpperCase(searchValue));
-                    }
-
-                    return result;
-                };
+                return (obj) => _toComparable(toString(getter(obj))).endsWith(value);
             case 'contains':
-                return function(obj) {
-                    return _toComparable(toString(getter(obj))).indexOf(value) > -1;
-                };
+                return (obj) => _toComparable(toString(getter(obj))).includes(value);
             case 'notcontains':
-                return function(obj) { return _toComparable(toString(getter(obj))).indexOf(value) === -1; };
+                return (obj) => !_toComparable(toString(getter(obj))).includes(value);
         }
 
         throw errors.Error('E4003', op);
@@ -392,25 +346,13 @@ const compileCriteria = (function() {
 
     function compileEquals(getter, value, negate) {
         return function(obj) {
-            obj = getter(obj);
+            obj = _toComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
-            let result;
-
-            if(typeof obj === 'string' && typeof value === 'string' && langParams.collatorOptions?.sensitivity !== 'case' && !useStrictComparison(value)) {
-                /* eslint-disable-next-line no-undef */
-                result = compareCaseInsensitive(_toComparable(value, true), _toComparable(obj, true));
-            } else {
-                obj = _toComparable(obj);
-                value = _toComparable(value);
-
-                // eslint-disable-next-line eqeqeq
-                result = useStrictComparison(value) ? obj === value : obj == value;
-            }
+            let result = useStrictComparison(value) ? obj === value : obj == value;
 
             if(negate) {
                 result = !result;
             }
-
             return result;
         };
     }
