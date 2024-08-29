@@ -8,6 +8,10 @@ import ArrayStore from 'data/array_store';
 import 'ui/list';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
+const LIST_SELECT_ALL_CLASS = 'dx-list-select-all';
+const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
+const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
 const toSelector = function(cssClass) {
     return '.' + cssClass;
@@ -1277,4 +1281,130 @@ QUnit.test('selection should be updated after items reordered', function(assert)
 
     list.reorderItem(this.movedItem, this.destinationItem);
     assert.deepEqual(list.option('selectedItems'), selection, 'selectedItems option updated');
+});
+
+QUnit.module('onSelectionChanging', {
+    beforeEach: function() {
+        this.dataSource = new DataSource({
+            store: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            paginate: true,
+            pageSize: 3
+        });
+    }
+}, () => {
+    [true, false].forEach(selectByClick => {
+        QUnit.test(`should be raised only once on checkBox click if selectByClick=${selectByClick} and selection is cancelled`, function(assert) {
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = true;
+            });
+
+            const $list = $('#list').dxList({
+                dataSource: this.dataSource,
+                showSelectionControls: true,
+                selectByClick,
+                onSelectionChanging: selectionChangingHandler,
+                selectionMode: 'multiple'
+            });
+
+            const $firstCheckbox = $list.find(`.${SELECT_CHECKBOX_CLASS}`).eq(0);
+            $firstCheckbox.trigger('dxclick');
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
+        });
+
+        QUnit.test(`should be raised only once on radioButton click if selectByClick=${selectByClick} and selection is cancelled`, function(assert) {
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = true;
+            });
+
+            const $list = $('#list').dxList({
+                dataSource: this.dataSource,
+                showSelectionControls: true,
+                selectByClick,
+                onSelectionChanging: selectionChangingHandler,
+                selectionMode: 'single'
+            });
+
+            const $firstRadioButton = $list.find(`.${SELECT_RADIO_BUTTON_CLASS}`).eq(0);
+            $firstRadioButton.trigger('dxclick');
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
+        });
+
+        QUnit.test(`should be raised only once on checkBox click if selectByClick=${selectByClick} and selection is applied`, function(assert) {
+            const selectionChangingHandler = sinon.stub();
+
+            const $list = $('#list').dxList({
+                dataSource: this.dataSource,
+                showSelectionControls: true,
+                selectByClick,
+                onSelectionChanging: selectionChangingHandler,
+                selectionMode: 'multiple'
+            });
+
+            const $firstCheckbox = $list.find(`.${SELECT_CHECKBOX_CLASS}`).eq(0);
+            $firstCheckbox.trigger('dxclick');
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
+
+            const $firstItem = $list.find(`.${LIST_ITEM_CLASS}`);
+            assert.strictEqual($list.dxList('option', 'focusedElement'), $firstItem.get(0), 'focusedElement is updated correctly');
+        });
+
+        QUnit.test(`should be raised only once on radioButton click if selectByClick=${selectByClick} and selection is applied`, function(assert) {
+            const selectionChangingHandler = sinon.stub();
+
+            const $list = $('#list').dxList({
+                dataSource: this.dataSource,
+                showSelectionControls: true,
+                selectByClick,
+                onSelectionChanging: selectionChangingHandler,
+                selectionMode: 'single'
+            });
+
+            const $firstRadioButton = $list.find(`.${SELECT_RADIO_BUTTON_CLASS}`).eq(0);
+            $firstRadioButton.trigger('dxclick');
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
+        });
+
+        QUnit.test(`should be raised only once on selectAll checkBox click if selectByClick=${selectByClick} and selection is applied`, function(assert) {
+            const selectionChangingHandler = sinon.stub();
+
+            const $list = $('#list').dxList({
+                dataSource: this.dataSource,
+                showSelectionControls: true,
+                selectByClick,
+                onSelectionChanging: selectionChangingHandler,
+                selectionMode: 'all'
+            });
+
+            const $selectAllCheckBox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`).eq(0);
+            $selectAllCheckBox.trigger('dxclick');
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
+
+            const $selectAllItem = $list.find(`.${LIST_SELECT_ALL_CLASS}`);
+            assert.strictEqual($list.dxList('option', 'focusedElement'), $selectAllItem.get(0), 'focusedElement is updated correctly');
+        });
+
+        QUnit.test(`should be raised only once on selectAll checkbox click if selectByClick=${selectByClick} and selection is cancelled`, function(assert) {
+            const selectionChangingHandler = sinon.spy((args) => {
+                args.cancel = true;
+            });
+
+            const $list = $('#list').dxList({
+                dataSource: this.dataSource,
+                showSelectionControls: true,
+                selectByClick,
+                onSelectionChanging: selectionChangingHandler,
+                selectionMode: 'all'
+            });
+
+            const $selectAllCheckBox = $list.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`).eq(0);
+            $selectAllCheckBox.trigger('dxclick');
+
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
+        });
+    });
 });

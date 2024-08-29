@@ -18,15 +18,18 @@ class MessageBubble extends Widget<MessageBubbleOptions> {
   }
 
   _initMarkup(): void {
-    const $bubble = $(this.element()).addClass(CHAT_MESSAGE_BUBBLE_CLASS);
-
-    const { text } = this.option();
-
-    if (text) {
-      $bubble.text(text);
-    }
+    $(this.element())
+      .addClass(CHAT_MESSAGE_BUBBLE_CLASS);
 
     super._initMarkup();
+
+    this._updateText();
+  }
+
+  _updateText(): void {
+    const { text = '' } = this.option();
+
+    $(this.element()).text(text);
   }
 
   _optionChanged(args: Record<string, unknown>): void {
@@ -34,6 +37,7 @@ class MessageBubble extends Widget<MessageBubbleOptions> {
 
     switch (name) {
       case 'text':
+        this._updateText();
         break;
       default:
         super._optionChanged(args);

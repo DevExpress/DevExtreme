@@ -11,15 +11,20 @@ export default class Pager extends GridPagerWrapper {
 
   get _propsInfo(): any {
     return {
-      twoWay: [],
+      twoWay: [
+        ['pageSize', 'defaultPageSize', 'pageSizeChangedInternal', 'pageSizeChanged'],
+        ['pageIndex', 'defaultPageIndex', 'pageIndexChangedInternal', 'pageIndexChanged'],
+      ],
       allowNull: [],
       elements: [],
       templates: [],
       props: [
         'defaultPageSize',
         'pageSizeChanged',
+        'pageSizeChangedInternal',
         'defaultPageIndex',
         'pageIndexChanged',
+        'pageIndexChangedInternal',
         'gridCompatibility',
         'className',
         'showInfo',

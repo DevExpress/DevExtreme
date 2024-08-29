@@ -5,32 +5,18 @@ export default Chat;
 // STYLE chat
 
 /**
- * @name dxChatOptions.accessKey
- * @hidden
- */
-
-/**
- * @name dxChatOptions.activeStateEnabled
- * @hidden
- */
-
-/**
- * @name dxChatOptions.focusStateEnabled
- * @hidden
- */
-
-/**
- * @name dxChatOptions.hint
- * @hidden
- */
-
-/**
  * @name dxChatOptions.onContentReady
- * @hidden true
+ * @hidden
  * @action
  */
 
 /**
  * @name dxChatOptions.tabIndex
+ * @hidden
+ */
+
+/**
+ * @name dxChatOptions.registerKeyHandler
+ * @publicName registerKeyHandler(key, handler)
  * @hidden
  */

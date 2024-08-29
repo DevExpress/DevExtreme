@@ -1,26 +1,29 @@
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type {
-  Message, MessageSendEvent, Properties, User,
-} from '@js/ui/chat';
+import type { Message, MessageSendEvent, Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
-import type { MessageBoxProperties } from './chat_message_box';
+import type {
+  MessageBoxProperties,
+  MessageSendEvent as MessageBoxMessageSendEvent,
+} from './chat_message_box';
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 class Chat extends Widget<Properties> {
-  _chatHeader?: ChatHeader;
+  _chatHeader!: ChatHeader;
 
-  _messageBox?: MessageBox;
+  _messageBox!: MessageBox;
 
-  _messageList?: MessageList;
+  _messageList!: MessageList;
 
-  _messageSendAction?: (e: MessageSendEvent) => void;
+  _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -49,16 +52,17 @@ class Chat extends Widget<Properties> {
   }
 
   _renderHeader(): void {
-    const { title } = this.option();
+    const { title = '' } = this.option();
 
     const $header = $('<div>').appendTo(this.element());
 
-    // @ts-expect-error
-    this._chatHeader = this._createComponent($header, ChatHeader, { title });
+    this._chatHeader = this._createComponent($header, ChatHeader, {
+      title,
+    });
   }
 
   _renderMessageList(): void {
-    const { items, user } = this.option();
+    const { items = [], user } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>').appendTo(this.element());
@@ -70,9 +74,18 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageBox(): void {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
+
     const $messageBox = $('<div>').appendTo(this.element());
 
     const configuration: MessageBoxProperties = {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
@@ -88,7 +101,7 @@ class Chat extends Widget<Properties> {
     );
   }
 
-  _messageSendHandler(e: MessageSendEvent): void {
+  _messageSendHandler(e: MessageBoxMessageSendEvent): void {
     const { text, event } = e;
     const { user } = this.option();
 
@@ -98,27 +111,33 @@ class Chat extends Widget<Properties> {
       text,
     };
 
-    // @ts-expect-error
-    this.renderMessage(message, user);
-    // @ts-expect-error
+    this.renderMessage(message);
     this._messageSendAction?.({ message, event });
+  }
+
+  _focusTarget(): dxElementWrapper {
+    const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+    return $input;
   }
 
   _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
+        this._messageBox.option({ [name]: value });
+        break;
       case 'title':
-        // @ts-expect-error
-        this._chatHeader?.option(name, value);
+        this._chatHeader.option('title', (value as Properties['title']) ?? '');
         break;
       case 'user':
-        // @ts-expect-error
-        this._messageList?.option('currentUserId', value.id);
+        this._messageList.option('currentUserId', (value as Properties['user'])?.id);
         break;
       case 'items':
-        // @ts-expect-error
-        this._messageList?.option(name, value);
+        this._messageList.option('items', (value as Properties['items']) ?? []);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -128,14 +147,12 @@ class Chat extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message, sender: User): void {
+  renderMessage(message: Message = {}): void {
     const { items } = this.option();
 
-    const newItems = items ? [...items, message] : [message];
+    const newItems = [...items ?? [], message];
 
-    this._setOptionWithoutOptionChange('items', newItems);
-
-    this._messageList?._renderMessage(message, newItems, sender);
+    this.option('items', newItems);
   }
 }
 

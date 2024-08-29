@@ -4848,11 +4848,11 @@ QUnit.module('Header Filter with real columnsController', {
         this.headerFilterController.showHeaderFilterMenu(0);
 
         const $popupContent = $(this.headerFilterView.getPopupContainer().$overlayContent());
-        const checkbox = $popupContent.find('.dx-checkbox').first().dxCheckBox('instance');
-        const applyButton = $popupContent.find('.dx-button').first();
+        const $checkbox = $popupContent.find('.dx-checkbox').first();
+        const $applyButton = $popupContent.find('.dx-button').first();
 
-        checkbox.option('value', true);
-        applyButton.trigger('dxclick');
+        $checkbox.trigger('dxclick');
+        $applyButton.trigger('dxclick');
 
         this.clock.tick(500);
 

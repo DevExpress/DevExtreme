@@ -3,7 +3,6 @@ import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import Pager from '@js/ui/pager';
 
-import type { PagerProps } from '../../../pager/common/pager_props';
 import { View } from '../m_modules';
 
 const PAGER_CLASS = 'pager';
@@ -84,7 +83,7 @@ export class PagerView extends View {
     const pagerOptions = that.option('pager') ?? {};
     const dataController = that.getController('data');
     const keyboardController = that.getController('keyboardNavigation');
-    const options: PagerProps = {
+    const options: any = {
       maxPagesCount: MAX_PAGES_COUNT,
       pageIndex: getPageIndex(dataController),
       pageCount: dataController.pageCount(),

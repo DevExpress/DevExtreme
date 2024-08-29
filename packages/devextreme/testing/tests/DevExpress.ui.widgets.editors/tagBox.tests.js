@@ -4499,8 +4499,8 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT * 3);
         const $selectAllCheckbox = $(tagBox._list.$element().find(`.${SELECT_ALL_CHECKBOX_CLASS}`).eq(0));
         $selectAllCheckbox.trigger('dxclick');
-        $selectAllCheckbox.trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 4);
+        $selectAllCheckbox.trigger('dxclick');
 
         const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
         assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 0, 'no tags');
@@ -6929,7 +6929,7 @@ QUnit.module('performance', () => {
             this.resetGetterCallCount();
             $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6254, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6154, 'key getter call count');
             assert.strictEqual(isValueEqualsSpy.callCount, 5050, '_isValueEquals call count');
         });
 
@@ -6940,7 +6940,7 @@ QUnit.module('performance', () => {
             const checkboxes = $(`.${LIST_CHECKBOX_CLASS}`);
             checkboxes.eq(checkboxes.length - 1).trigger('dxclick');
 
-            assert.strictEqual(this.getValueGetterCallCount(), 6052, 'key getter call count');
+            assert.strictEqual(this.getValueGetterCallCount(), 6054, 'key getter call count');
         });
     });
 
