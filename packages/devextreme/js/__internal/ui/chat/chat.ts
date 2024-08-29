@@ -13,6 +13,8 @@ import type {
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
+export const shouldHeaderBeRendered = false;
+
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -46,7 +48,10 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._renderHeader();
+    if (shouldHeaderBeRendered) {
+      this._renderHeader();
+    }
+
     this._renderMessageList();
     this._renderMessageBox();
   }

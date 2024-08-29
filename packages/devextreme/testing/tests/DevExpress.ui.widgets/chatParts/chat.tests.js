@@ -4,7 +4,10 @@ import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/chat_message_list';
 import MessageBox from '__internal/ui/chat/chat_message_box';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+
+import { shouldHeaderBeRendered } from '__internal/ui/chat/chat';
 import { isRenderer } from 'core/utils/type';
+
 import config from 'core/config';
 
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
@@ -93,7 +96,9 @@ QUnit.module('Chat', moduleConfig, () => {
     });
 
     QUnit.module('Header integration', () => {
-        QUnit.test('Header text element should have correct text', function(assert) {
+        const method = shouldHeaderBeRendered ? 'test' : 'skip';
+
+        QUnit[method]('Header text element should have correct text', function(assert) {
             this.reinit({
                 title: MOCK_CHAT_HEADER_TEXT
             });
@@ -103,7 +108,7 @@ QUnit.module('Chat', moduleConfig, () => {
             assert.strictEqual($header.text(), MOCK_CHAT_HEADER_TEXT);
         });
 
-        QUnit.test('Header text element should have correct text after runtime change', function(assert) {
+        QUnit[method]('Header text element should have correct text after runtime change', function(assert) {
             this.instance.option({ title: 'new title' });
 
             const $header = this.$element.find(`.${CHAT_HEADER_TEXT_CLASS}`);

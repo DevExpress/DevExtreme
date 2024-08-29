@@ -117,7 +117,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default ''
-     * @public
+     * @hidden
      */
     title?: string;
     /**

@@ -2,6 +2,8 @@ import $ from 'jquery';
 
 import Chat from 'ui/chat';
 
+import { shouldHeaderBeRendered } from '__internal/ui/chat/chat';
+
 const CHAT_CLASS = 'dx-chat';
 const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
@@ -29,7 +31,9 @@ const moduleConfig = {
 
 QUnit.module('Chat', moduleConfig, () => {
     QUnit.module('Render', () => {
-        QUnit.test('Header should be rendered', function(assert) {
+        const method = shouldHeaderBeRendered ? 'test' : 'skip';
+
+        QUnit[method]('Header should be rendered', function(assert) {
             const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
 
             assert.strictEqual($header.length, 1);
