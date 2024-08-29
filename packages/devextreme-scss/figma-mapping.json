@@ -1,0 +1,14 @@
+{
+  "Components": {
+    "Header item/neutrals/background/1/rest": "$cardview-header-item-background-color"
+  },
+  "Generic (Colors)": {
+    "colors/neutral/grey/0": "$cardview-background-color"
+  },
+  "Material (Colors)": {
+    "Colors/Neutral/300": "$cardview-background-color"
+  },
+  "Fluent (Colors)": {
+    "Colors/Grey/10": "$cardview-background-color"
+  }
+}

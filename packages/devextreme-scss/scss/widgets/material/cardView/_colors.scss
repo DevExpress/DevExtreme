@@ -1,3 +1,4 @@
 @use '../../base/cardView/colors' as *;
 
-$cardview-color: black;
+// getFigmaVariable('Header item/neutrals/background/1/rest', 'Components', 'Material')
+$cardview-header-item-background-color: $colors-neutral-300 !default;

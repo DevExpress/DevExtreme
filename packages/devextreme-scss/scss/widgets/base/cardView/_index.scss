@@ -8,11 +8,15 @@
 
 .dx-cardview-card {
   width: 300px;
-  border: 1px solid $cardview-color;
+  border: 1px solid black;
   padding: 15px 30px;
 }
 
 .dx-cardview-field span {
   display: inline-block;
   width: 50%; 
+}
+
+.dx-gridcore-header-item {
+  background-color: $cardview-header-item-background-color;
 }
