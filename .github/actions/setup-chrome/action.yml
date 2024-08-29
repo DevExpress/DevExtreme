@@ -22,12 +22,6 @@ runs:
       if: ${{ inputs.chrome-version == 'latest' }}
       shell: bash
       run: google-chrome-stable --version
-    - name: Install dependencies for specific Chrome version
-      if: ${{ inputs.chrome-version != 'latest' }}
-      shell: bash
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libu2f-udev
     - name: Setup Chrome with specific version
       if: ${{ inputs.chrome-version != 'latest' }}
       shell: bash
