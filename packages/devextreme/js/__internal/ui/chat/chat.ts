@@ -13,13 +13,11 @@ import type {
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
-export const shouldHeaderBeRendered = false;
-
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 class Chat extends Widget<Properties> {
-  _chatHeader!: ChatHeader;
+  _chatHeader?: ChatHeader;
 
   _messageBox!: MessageBox;
 
@@ -48,10 +46,7 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
-    if (shouldHeaderBeRendered) {
-      this._renderHeader();
-    }
-
+    this._renderHeader();
     this._renderMessageList();
     this._renderMessageBox();
   }
@@ -59,11 +54,13 @@ class Chat extends Widget<Properties> {
   _renderHeader(): void {
     const { title = '' } = this.option();
 
-    const $header = $('<div>').appendTo(this.element());
+    if (title !== '') {
+      const $header = $('<div>').appendTo(this.element());
 
-    this._chatHeader = this._createComponent($header, ChatHeader, {
-      title,
-    });
+      this._chatHeader = this._createComponent($header, ChatHeader, {
+        title,
+      });
+    }
   }
 
   _renderMessageList(): void {
@@ -135,9 +132,14 @@ class Chat extends Widget<Properties> {
       case 'hoverStateEnabled':
         this._messageBox.option({ [name]: value });
         break;
-      case 'title':
-        this._chatHeader.option('title', (value as Properties['title']) ?? '');
+      case 'title': {
+        if (this._chatHeader) {
+          this._chatHeader.option('title', (value as Properties['title']) ?? '');
+        } else {
+          this._renderHeader();
+        }
         break;
+      }
       case 'user':
         this._messageList.option('currentUserId', (value as Properties['user'])?.id);
         break;
