@@ -116,12 +116,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     user?: User;
     /**
      * @docid
-     * @default ''
-     * @hidden
-     */
-    title?: string;
-    /**
-     * @docid
      * @fires dxChatOptions.onOptionChanged
      * @public
      */

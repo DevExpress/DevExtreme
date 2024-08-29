@@ -16,7 +16,9 @@ import MessageList from './chat_message_list';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-class Chat extends Widget<Properties> {
+type Title = string;
+
+class Chat extends Widget<Properties & { title: Title }> {
   _chatHeader?: ChatHeader;
 
   _messageBox!: MessageBox;
@@ -25,7 +27,7 @@ class Chat extends Widget<Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): Properties & { title: Title } {
     return {
       ...super._getDefaultOptions(),
       title: '',
@@ -138,9 +140,9 @@ class Chat extends Widget<Properties> {
       case 'title': {
         if (value) {
           if (this._chatHeader) {
-            this._chatHeader.option('title', (value as Properties['title']) ?? '');
+            this._chatHeader.option('title', (value as Title) ?? '');
           } else {
-            this._renderHeader((value as Properties['title']) ?? '');
+            this._renderHeader((value as Title) ?? '');
           }
         } else if (this._chatHeader) {
           this._chatHeader.dispose();
