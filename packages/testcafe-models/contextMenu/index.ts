@@ -14,7 +14,7 @@ const CLASS = {
 export default class ContextMenu extends Widget {
   items: Selector;
 
-  contextMenu: SelectorAPI;
+  contextMenu: Selector;
 
   overlay: Overlay;
 
