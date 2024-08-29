@@ -41,21 +41,26 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        .main {
+            height: 600px;
+        }
+    </style>
 </head>
 <body class="dx-surface">
-    <div role="main">
+    <div class="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
+
         <div id="button"></div>
+    
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+                $("#button").dxChat();
             });
         </script>
     </div>
