@@ -25,6 +25,9 @@ runs:
     - name: Setup Chrome with specific version
       if: ${{ inputs.chrome-version != 'latest' }}
       shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libu2f-udev
       env:
         CHROME_VERSION: ${{ inputs.chrome-version }}
       run: |
