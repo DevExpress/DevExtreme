@@ -6,12 +6,15 @@ import type { WidgetName } from '../types';
 const CLASS = {
   contextMenu: 'dx-context-menu',
   item: 'dx-menu-item',
+  itemList: 'dx-menu-items-container',
   overlay: 'dx-overlay',
   itemText: 'dx-menu-item-text',
 };
 
 export default class ContextMenu extends Widget {
   items: Selector;
+
+  contextMenu: SelectorAPI;
 
   overlay: Overlay;
 
@@ -21,6 +24,7 @@ export default class ContextMenu extends Widget {
     super(id);
 
     this.items = Selector(`.${CLASS.contextMenu}`).find(`.${CLASS.item}`);
+    this.contextMenu = Selector(`.${CLASS.contextMenu}`);
     this.overlay = new Overlay(`.${CLASS.overlay}`);
     this.isOpened = this.overlay.isVisible();
   }
@@ -43,6 +47,10 @@ export default class ContextMenu extends Widget {
 
   getItemCount(): Promise<number> {
     return this.items.count;
+  }
+
+  getItemByOrder(order: number): Selector {
+    return this.contextMenu.find(`.${CLASS.itemList}`).child(order);
   }
 
   show(): Promise<void> {

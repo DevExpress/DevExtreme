@@ -63,6 +63,31 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
           @include dx-icon(sortdowntext);
           @include dx-icon-sizing(16px);
         }
+
+        .dx-icon-fix-column {
+          @include dx-icon(fixcolumn);
+          @include dx-icon-sizing(16px);
+        }
+
+        .dx-icon-fix-column-left {
+          @include dx-icon(fixcolumnleft);
+          @include dx-icon-sizing(16px);
+        }
+
+        .dx-icon-fix-column-right {
+          @include dx-icon(fixcolumnright);
+          @include dx-icon-sizing(16px);
+        }
+
+        .dx-icon-stick-column {
+          @include dx-icon(stickcolumn);
+          @include dx-icon-sizing(16px);
+        }
+        
+        .dx-icon-unfix-column {
+          @include dx-icon(unfixcolumn);
+          @include dx-icon-sizing(16px);
+        }
       }
     }
 

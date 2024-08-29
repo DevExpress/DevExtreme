@@ -41,6 +41,11 @@ const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
 const COMMAND_TRANSPARENT = 'transparent';
 const GROUP_ROW_CLASS = 'dx-group-row';
 const DETAIL_ROW_CLASS = 'dx-master-detail-row';
+const FIXED_COLUMN_ICON_CLASS = 'fix-column';
+const FIXED_COLUMN_LEFT_ICON_CLASS = 'fix-column-left';
+const FIXED_COLUMN_RIGHT_ICON_CLASS = 'fix-column-right';
+const STICKY_COLUMN_ICON_CLASS = 'stick-column';
+const UNFIXED_COLUMN_ICON_CLASS = 'unfix-column';
 
 const getTransparentColumnIndex = function (fixedColumns: any[]) {
   let transparentColumnIndex = -1;
@@ -1159,6 +1164,13 @@ export const columnFixingModule = {
           leftPosition: messageLocalization.format('dxDataGrid-columnFixingLeftPosition'),
           rightPosition: messageLocalization.format('dxDataGrid-columnFixingRightPosition'),
           stickyPosition: messageLocalization.format('dxDataGrid-columnFixingStickyPosition'),
+        },
+        icons: {
+          fix: FIXED_COLUMN_ICON_CLASS,
+          unfix: UNFIXED_COLUMN_ICON_CLASS,
+          leftPosition: FIXED_COLUMN_LEFT_ICON_CLASS,
+          rightPosition: FIXED_COLUMN_RIGHT_ICON_CLASS,
+          stickyPosition: STICKY_COLUMN_ICON_CLASS,
         },
       },
     };
