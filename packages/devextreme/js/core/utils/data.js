@@ -138,10 +138,6 @@ function combineGetters(getters) {
     };
 }
 
-function toLowerCase(value, options) {
-    return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
-}
-
 const ensurePropValueDefined = function(obj, propName, value, options) {
     if(isDefined(value)) {
         return value;
@@ -194,18 +190,18 @@ export const toComparable = function(value, caseSensitive, options = {}) {
         return value.valueOf();
     }
 
-    const isCaseSensitive = options?.collatorOptions?.sensitivity === 'case' || caseSensitive;
+    const collatorSensitivity = options?.collatorOptions?.sensitivity;
 
-    if(!isCaseSensitive && typeof value === 'string') {
-        if(options?.collatorOptions?.sensitivity === 'base') {
-            const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
+    if(typeof value === 'string' && collatorSensitivity === 'base') {
+        const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
-            value = toLowerCase(value, options).normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+        value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+    }
 
-            return value;
-        }
+    const isCaseSensitive = collatorSensitivity === 'case' || caseSensitive;
 
-        return toLowerCase(value, options);
+    if(typeof value === 'string' && !isCaseSensitive) {
+        return options?.locale ? value.toLocaleUpperCase(options.locale) : value.toUpperCase();
     }
 
     return value;
