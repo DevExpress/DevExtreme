@@ -111,11 +111,22 @@ export type Message = {
 export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
-     * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
-     * @default null
+     * @default true
      * @public
      */
-    dataSource?: DataSourceLike<Message> | null;
+    activeStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    focusStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hoverStateEnabled?: boolean;
     /**
      * @docid
      * @default { id: new Guid().toString() }
@@ -135,6 +146,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     items?: Array<Message>;
+    /**
+     * @docid
+     * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
+     * @default null
+     * @public
+     */
+    dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
      * @default null
