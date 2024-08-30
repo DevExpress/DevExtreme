@@ -21,7 +21,6 @@ fixture.disablePageReloads`Column Fixing`.page(
         .expect(
           await takeScreenshot(
             `sticky_columns_menu_icons_(${theme}).png`,
-            dataGrid.element,
           ),
         )
         .ok()
