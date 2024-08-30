@@ -178,7 +178,7 @@
     "uuid": "9.0.1",
     "vinyl": "2.2.1",
     "vinyl-named": "1.1.0",
-    "webpack": "5.76.0",
+    "webpack": "5.94.0",
     "webpack-stream": "7.0.0",
     "yaml": "2.5.0",
     "yargs": "17.7.2"
