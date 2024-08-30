@@ -141,7 +141,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     title?: string;
     /**
      * @docid
-     * @type Array<Message>
      * @fires dxChatOptions.onOptionChanged
      * @public
      */
