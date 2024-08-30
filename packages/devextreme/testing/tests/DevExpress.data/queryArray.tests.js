@@ -414,11 +414,17 @@ QUnit.test('filtering use correct case insensitivity search', function(assert) {
         { ID: 7, Name: 'baιτησa' },
     ];
 
-    const arrayStartsWith = QUERY(input).filter(['Name', 'startswith', 'AΙΤΗΣ']).toArray();
+    const query = QUERY(input, {
+        langParams: {
+            locale: 'el-GR'
+        }
+    });
 
-    const arrayEndsWith = QUERY(input).filter(['Name', 'endswith', 'ΙΤΗΣ']).toArray();
+    const arrayStartsWith = query.filter(['Name', 'startswith', 'AΙΤΗΣ']).toArray();
 
-    const arrayContains = QUERY(input).filter(['Name', 'contains', 'ΙΤΗΣ']).toArray();
+    const arrayEndsWith = query.filter(['Name', 'endswith', 'ΙΤΗΣ']).toArray();
+
+    const arrayContains = query.filter(['Name', 'contains', 'ΙΤΗΣ']).toArray();
 
     assert.equal(arrayStartsWith.length, 4);
     assert.equal(arrayEndsWith.length, 2);
@@ -430,13 +436,17 @@ QUnit.test('filtering use correct case insensitivity search', function(assert) {
     assert.false(containsUnwantedValue);
 });
 
-QUnit.test('filtering use correct case insensitivity search for AM locale', function(assert) {
+QUnit.test('filtering use correct case insensitivity search for Armenian locale', function(assert) {
     const input = [
         { ID: 1, Name: 'ԵՐԵՒԱՆ' },
         { ID: 2, Name: 'Երևան' },
     ];
 
-    const arrayStartsWith = QUERY(input).filter(['Name', 'startswith', 'Երև']).toArray();
+    const arrayStartsWith = QUERY(input, {
+        langParams: {
+            locale: 'hy'
+        }
+    }).filter(['Name', 'startswith', 'Երև']).toArray();
 
     assert.equal(arrayStartsWith.length, 2);
 });

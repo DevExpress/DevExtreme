@@ -7724,8 +7724,9 @@ QUnit.module('DataSource with diacritical marks', {
                     assert.deepEqual(dataSource.items()[2], { id: 3, city: 'İZMİR' }, 'third item');
                 } else {
                     // assert
-                    assert.strictEqual(dataSource.items().length, 1, 'item count');
-                    assert.deepEqual(dataSource.items()[0], { id: 3, city: 'İZMİR' }, 'second item');
+                    assert.strictEqual(dataSource.items().length, 2, 'item count');
+                    assert.deepEqual(dataSource.items()[0], { id: 2, city: 'İzmi̇r' }, 'first item');
+                    assert.deepEqual(dataSource.items()[1], { id: 3, city: 'İZMİR' }, 'second item');
                 }
             });
 
