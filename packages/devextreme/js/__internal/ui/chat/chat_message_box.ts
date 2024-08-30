@@ -81,6 +81,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       // TODO: Add rules for different themes
       // TODO: Need get ML height and set into max-height 30% of it
       // maxHeight: '100%',
+      maxHeight: '300px',
     };
 
     this._textArea = this._createComponent($textArea, TextArea, configuration);
@@ -102,6 +103,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled,
       hoverStateEnabled,
       icon: 'send',
+      type: 'default',
       stylingMode: 'text',
       onClick: (e): void => {
         this._sendHandler(e);
