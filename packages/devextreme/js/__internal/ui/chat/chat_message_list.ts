@@ -60,7 +60,10 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    const $messageGroup = $('<div>').appendTo(this._$content);
+    const scrollableContent = this._scrollable?.content();
+    const messageGroupContainer = scrollableContent || this._$content;
+
+    const $messageGroup = $('<div>').appendTo(messageGroupContainer);
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
