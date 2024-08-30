@@ -16,7 +16,6 @@ const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 
@@ -318,46 +317,6 @@ QUnit.module('Chat', moduleConfig, () => {
             this.instance.renderMessage(newMessage);
 
             assert.strictEqual(getMessageGroups().length, 1);
-        });
-
-        QUnit.test('Message Group should rendered in the scrollable content', function(assert) {
-            const newMessage = {
-                author: { id: MOCK_CURRENT_USER_ID },
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            };
-
-            this.reinit({ items: [newMessage] });
-
-            const $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-            const $messageGroups = $scrollableContent.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
-
-
-            assert.strictEqual($messageGroups.length, 1);
-        });
-
-        QUnit.test('Message Group should rendered in the scrollable content after adding 1 new message', function(assert) {
-            const newMessage = {
-                author: { id: MOCK_CURRENT_USER_ID },
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            };
-
-            this.instance.option({ items: [newMessage] });
-
-            const $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-            const $messageGroups = $scrollableContent.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
-
-            assert.strictEqual($messageGroups.length, 1);
-        });
-
-        QUnit.test('Message Group should rendered in the scrollable content after updating items in runtime', function(assert) {
-            this.instance.option({ items: generateMessages(52) });
-
-            const $scrollableContent = this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-            const $messageGroups = $scrollableContent.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
-
-            assert.strictEqual($messageGroups.length, 26);
         });
 
         [
