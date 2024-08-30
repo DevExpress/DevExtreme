@@ -1,0 +1,28 @@
+@use "../sizes" as *;
+
+// adduse
+
+$chat-bubble-border-radius: 12px;
+$chat-bubble-padding: 8px 12px;
+$chat-message-box-padding: 20px;
+$chat-message-list-padding: 20px;
+$chat-message-group-gap: 4px;
+$chat-message-group-padding: 24px 0;
+$chat-message-author-name: 8px;
+$chat-text-area-height: 40px;
+$chat-message-group-alignment-start-template: 44px 1fr;
+$chat-message-box-gap: 8px;
+$chat-avatar-size: 32px;
+$chat-border-radius: 24px;
+$chat-header-padding: 20px;
+$chat-information-font-size: 12px;
+
+@if $size == "default" {
+  // $fluent-checkbox-text-padding-start: 12px !default;
+  // $fluent-checkbox-text-padding-end: 8px !default;
+}
+
+@else if $size == "compact" {
+  // $fluent-checkbox-text-padding-start: 8px !default;
+  // $fluent-checkbox-text-padding-end: 6px !default;
+}

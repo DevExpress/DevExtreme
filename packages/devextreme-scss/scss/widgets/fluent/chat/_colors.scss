@@ -1,0 +1,11 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$chat-avatar-background-color: #878787;
+$chat-bubble-background-color-primary: #EBF3FC;
+$chat-bubble-background-color-secondary: #F5F5F5;
+$chat-information-color: #707070;
+$chat-box-shadow: 0 0 2px 0 #0000001F, 0 4px 8px 0 #00000014;
