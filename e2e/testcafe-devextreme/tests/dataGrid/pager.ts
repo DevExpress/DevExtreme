@@ -36,7 +36,7 @@ safeSizeTest('Full size pager', async (t) => {
     .ok('page size 5 selected')
     .expect(pager.getNavPage('6').selected)
     .ok('page 6 selected')
-    .expect(pager.infoText.textContent)
+    .expect(pager.getInfoText().textContent)
     .eql('Page 6 of 20 (100 items)')
     .expect(dataGrid.getDataCell(29, 2).element.textContent)
     .eql('29');
@@ -50,17 +50,17 @@ safeSizeTest('Full size pager', async (t) => {
     .click(pager.getNavPage('7').element)
     .expect(dataGrid.getDataCell(10 * 7 - 1, 2).element.textContent)
     .eql('69')
-    .expect(pager.infoText.textContent)
+    .expect(pager.getInfoText().textContent)
     .eql('Page 7 of 10 (100 items)');
   // navigate to prev page (6)
   await t
     .click(pager.getPrevNavButton().element)
-    .expect(pager.infoText.textContent)
+    .expect(pager.getInfoText().textContent)
     .eql('Page 6 of 10 (100 items)');
   // navigate to next page (7)
   await t
     .click(pager.getNextNavButton().element)
-    .expect(pager.infoText.textContent)
+    .expect(pager.getInfoText().textContent)
     .eql('Page 7 of 10 (100 items)')
     .expect(await compareScreenshot(t, 'pager-full-allpages.png'))
     .ok();

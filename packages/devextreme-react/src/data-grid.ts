@@ -873,6 +873,7 @@ type IDataGridSelectionProps = React.PropsWithChildren<{
   deferred?: boolean;
   mode?: "single" | "multiple" | "none";
   selectAllMode?: "allPages" | "page";
+  sensitivity?: "base" | "accent" | "case" | "variant";
   showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap";
 }>
 const _componentDataGridSelection = memo(
@@ -2351,6 +2352,7 @@ type ISelectionProps = React.PropsWithChildren<{
   deferred?: boolean;
   mode?: "single" | "multiple" | "none";
   selectAllMode?: "allPages" | "page";
+  sensitivity?: "base" | "accent" | "case" | "variant";
   showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap";
   recursive?: boolean;
   selectByClick?: boolean;

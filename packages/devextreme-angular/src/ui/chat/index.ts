@@ -63,6 +63,32 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     instance: DxChat = null;
 
     /**
+     * [descr:WidgetOptions.accessKey]
+    
+     */
+    @Input()
+    get accessKey(): string | undefined {
+        return this._getOption('accessKey');
+    }
+    set accessKey(value: string | undefined) {
+        this._setOption('accessKey', value);
+    }
+
+
+    /**
+     * [descr:WidgetOptions.activeStateEnabled]
+    
+     */
+    @Input()
+    get activeStateEnabled(): boolean {
+        return this._getOption('activeStateEnabled');
+    }
+    set activeStateEnabled(value: boolean) {
+        this._setOption('activeStateEnabled', value);
+    }
+
+
+    /**
      * [descr:WidgetOptions.disabled]
     
      */
@@ -89,6 +115,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:WidgetOptions.focusStateEnabled]
+    
+     */
+    @Input()
+    get focusStateEnabled(): boolean {
+        return this._getOption('focusStateEnabled');
+    }
+    set focusStateEnabled(value: boolean) {
+        this._setOption('focusStateEnabled', value);
+    }
+
+
+    /**
      * [descr:DOMComponentOptions.height]
     
      */
@@ -98,6 +137,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set height(value: number | Function | string | undefined) {
         this._setOption('height', value);
+    }
+
+
+    /**
+     * [descr:WidgetOptions.hint]
+    
+     */
+    @Input()
+    get hint(): string | undefined {
+        return this._getOption('hint');
+    }
+    set hint(value: string | undefined) {
+        this._setOption('hint', value);
     }
 
 
@@ -228,6 +280,20 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() accessKeyChange: EventEmitter<string | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() activeStateEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
@@ -242,7 +308,21 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() focusStateEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() hintChange: EventEmitter<string | undefined>;
 
     /**
     
@@ -321,9 +401,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'messageSend', emit: 'onMessageSend' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { emit: 'accessKeyChange' },
+            { emit: 'activeStateEnabledChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
+            { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
+            { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
             { emit: 'rtlEnabledChange' },
