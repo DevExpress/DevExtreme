@@ -138,6 +138,15 @@ function combineGetters(getters) {
     };
 }
 
+
+function toLowerCase(value, options) {
+    return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
+}
+
+function toUpperCase(value, options) {
+    return options?.locale ? value.toLocaleUpperCase(options.locale) : value.toUpperCase();
+}
+
 const ensurePropValueDefined = function(obj, propName, value, options) {
     if(isDefined(value)) {
         return value;
@@ -181,7 +190,7 @@ export const compileSetter = function(expr) {
     };
 };
 
-export const toComparable = function(value, caseSensitive, options = {}) {
+export const toComparable = function(value, caseSensitive, langParams = {}, options = { useUpperCase: false }) {
     if(value instanceof Date) {
         return value.getTime();
     }
@@ -191,13 +200,13 @@ export const toComparable = function(value, caseSensitive, options = {}) {
     }
 
     if(!caseSensitive && typeof value === 'string') {
-        if(options?.collatorOptions?.sensitivity === 'base') {
+        if(langParams?.collatorOptions?.sensitivity === 'base') {
             const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
             value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
         }
 
-        return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
+        return (options?.useUpperCase ? toUpperCase : toLowerCase)(value, langParams);
     }
 
     return value;
