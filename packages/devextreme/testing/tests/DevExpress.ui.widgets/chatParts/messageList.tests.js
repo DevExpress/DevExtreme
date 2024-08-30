@@ -3,8 +3,11 @@ import $ from 'jquery';
 import MessageList from '__internal/ui/chat/chat_message_list';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
-    generateMessages, userFirst, userSecond,
-    NOW, MOCK_COMPANION_USER_ID, MOCK_CURRENT_USER_ID
+    generateMessages,
+    userFirst,
+    NOW,
+    MOCK_COMPANION_USER_ID,
+    MOCK_CURRENT_USER_ID,
 } from './chat.tests.js';
 import MessageGroup from '__internal/ui/chat/chat_message_group';
 
@@ -22,7 +25,9 @@ const moduleConfig = {
             this.instance = new MessageList($('#messageList'), options);
             this.$element = $(this.instance.$element());
 
-            this.scrollable = Scrollable.getInstance(this.$element.find(`.${SCROLLABLE_CLASS}`));
+            this.getScrollable = () => Scrollable.getInstance(this.$element.find(`.${SCROLLABLE_CLASS}`));
+
+            this.scrollable = this.getScrollable();
         };
 
         this.reinit = (options) => {
@@ -59,6 +64,61 @@ QUnit.module('MessageList', moduleConfig, () => {
 
         QUnit.test('scrollable should be rendered inside root element', function(assert) {
             assert.ok(Scrollable.getInstance(this.$element.children().first()) instanceof Scrollable);
+        });
+
+        QUnit.test('Message Group should be rendered in the scrollable content', function(assert) {
+            const newMessage = {
+                author: { id: MOCK_CURRENT_USER_ID },
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            this.reinit({ items: [newMessage] });
+
+            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 1);
+        });
+
+        QUnit.test('Message Group should be rendered in the scrollable content after adding 1 new message', function(assert) {
+            const newMessage = {
+                author: { id: MOCK_CURRENT_USER_ID },
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.option({ items: [newMessage] });
+
+            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 1);
+        });
+
+        QUnit.test('Message Group should be rendered in the scrollable content after adding 1 new message to items', function(assert) {
+            const items = generateMessages(52);
+
+            this.reinit({ items });
+
+            const newMessage = {
+                author: { id: 'another user' },
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.option({ items: [...items, newMessage] });
+
+            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 27);
+        });
+
+        QUnit.test('Message Group should be rendered in the scrollable content after updating items at runtime', function(assert) {
+            this.instance.option({ items: generateMessages(52) });
+
+            const scrollableContent = this.getScrollable().content();
+            const $messageGroups = $(scrollableContent).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 26);
         });
     });
 

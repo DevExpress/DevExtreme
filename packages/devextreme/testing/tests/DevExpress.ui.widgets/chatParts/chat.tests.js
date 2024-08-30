@@ -299,7 +299,7 @@ QUnit.module('Chat', moduleConfig, () => {
             assert.strictEqual(lastItem, newMessage);
         });
 
-        QUnit.test('Message Group should be created if items are empty', function(assert) {
+        QUnit.test('Message Group should be created if items was empty', function(assert) {
             this.instance.option({ items: [] });
 
             const author = {
