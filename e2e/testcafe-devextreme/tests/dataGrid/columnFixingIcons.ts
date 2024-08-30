@@ -21,6 +21,7 @@ fixture.disablePageReloads`Column Fixing`.page(
         .expect(
           await takeScreenshot(
             `sticky_columns_menu_icons_(${theme}).png`,
+            dataGrid.element,
           ),
         )
         .ok()
@@ -30,7 +31,7 @@ fixture.disablePageReloads`Column Fixing`.page(
       .before(async () => {
         await changeTheme(theme);
         await createWidget('dxDataGrid', {
-          dataSource: getData(1, 5),
+          dataSource: getData(10, 5),
           width: '100%',
           columnFixing: {
             enabled: true,
