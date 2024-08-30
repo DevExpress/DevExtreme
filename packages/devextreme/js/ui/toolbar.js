@@ -68,7 +68,6 @@ export default Toolbar;
  * @hidden
  */
 
-
 /**
  * @name dxToolbarOptions.onSelectionChanged
  * @action

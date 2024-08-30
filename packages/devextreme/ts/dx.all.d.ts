@@ -6703,12 +6703,12 @@ declare module DevExpress.events {
   /**
    * [descr:AsyncCancelable]
    */
-  export interface AsyncCancelable {
+  export type AsyncCancelable = {
     /**
      * [descr:AsyncCancelable.cancel]
      */
     cancel: boolean | PromiseLike<boolean>;
-  }
+  };
   /**
    * [descr:Cancelable]
    */
