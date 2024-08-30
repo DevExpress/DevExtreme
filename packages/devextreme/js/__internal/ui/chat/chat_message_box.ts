@@ -70,11 +70,20 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
       .appendTo(this.element());
 
-    this._textArea = this._createComponent($textArea, TextArea, {
+    const configuration = {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-    });
+      placeholder: 'Type a message',
+      autoResizeEnabled: true,
+      // TODO: Add rules for different themes
+      minHeight: '40px',
+      // TODO: Add rules for different themes
+      // TODO: Need get ML height and set into max-height 30% of it
+      // maxHeight: '100%',
+    };
+
+    this._textArea = this._createComponent($textArea, TextArea, configuration);
   }
 
   _renderButton(): void {

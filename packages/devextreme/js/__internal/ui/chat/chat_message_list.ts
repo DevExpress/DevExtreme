@@ -122,7 +122,7 @@ class MessageList extends Widget<Properties> {
       const lastMessageGroupUserId = lastMessageGroup.option('items')[0].author?.id;
 
       if (sender?.id === lastMessageGroupUserId) {
-        lastMessageGroup.renderMessage(message);
+        lastMessageGroup._renderMessage(message);
 
         this._scrollContentToLastMessageGroup();
 

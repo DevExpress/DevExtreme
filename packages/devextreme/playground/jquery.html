@@ -60,7 +60,22 @@
     
         <script>
             $(function() {
-                $("#button").dxChat();
+                const NOW = '1721747399083';
+                const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
+                const userFirst = {
+                    id: MOCK_COMPANION_USER_ID,
+                    name: 'First',
+                };
+
+                $("#button").dxChat({
+                    items: [
+                        {
+                            timestamp: NOW,
+                            author: userFirst,
+                            text: 'custom',
+                        }
+                    ],
+                });
             });
         </script>
     </div>

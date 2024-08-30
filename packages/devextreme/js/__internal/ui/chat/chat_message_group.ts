@@ -156,7 +156,7 @@ class MessageGroup extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message): void {
+  _renderMessage(message: Message): void {
     const { items } = this.option();
 
     const newItems = [...items, message];
