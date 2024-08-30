@@ -110,6 +110,24 @@ export type Message = {
 export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    activeStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    focusStateEnabled?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hoverStateEnabled?: boolean;
+    /**
+     * @docid
      * @default { id: new Guid().toString() }
      * @public
      */

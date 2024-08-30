@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/chat_message_list';
+import MessageBox from '__internal/ui/chat/chat_message_box';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -10,12 +11,14 @@ const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const MOCK_CHAT_HEADER_TEXT = 'Chat title';
+
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 export const NOW = '1721747399083';
@@ -24,6 +27,7 @@ export const userFirst = {
     id: MOCK_COMPANION_USER_ID,
     name: 'First',
 };
+
 export const userSecond = {
     id: MOCK_CURRENT_USER_ID,
     name: 'Second',
@@ -259,6 +263,21 @@ QUnit.module('Chat', moduleConfig, () => {
     });
 
     QUnit.module('renderMessage', moduleConfig, () => {
+        QUnit.test('should allow calling without arguments without any errors', function(assert) {
+            this.reinit();
+
+            try {
+                this.instance.renderMessage();
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                const { items } = this.instance.option();
+
+                assert.strictEqual(items.length, 1, 'message count is correct');
+                assert.deepEqual(items[0], {}, 'message data is correct');
+            }
+        });
+
         QUnit.test('Chat items should be updated after renderMessage has been called', function(assert) {
             const author = {
                 id: MOCK_CURRENT_USER_ID,
@@ -273,25 +292,6 @@ QUnit.module('Chat', moduleConfig, () => {
             this.instance.renderMessage(newMessage);
 
             const { items } = this.instance.option();
-            const lastItem = items[items.length - 1];
-
-            assert.strictEqual(lastItem, newMessage);
-        });
-
-        QUnit.test('Message List items should be updated after renderMessage has been called', function(assert) {
-            const author = {
-                id: MOCK_CURRENT_USER_ID,
-            };
-
-            const newMessage = {
-                author,
-                timestamp: NOW,
-                text: 'NEW MESSAGE',
-            };
-
-            this.instance.renderMessage(newMessage);
-
-            const { items } = this.instance._messageList.option();
             const lastItem = items[items.length - 1];
 
             assert.strictEqual(lastItem, newMessage);
@@ -319,23 +319,79 @@ QUnit.module('Chat', moduleConfig, () => {
             assert.strictEqual(getMessageGroups().length, 1);
         });
 
-        QUnit.test('New bubble should be rendered after renderMessage with correct text', function(assert) {
-            const text = 'NEW MESSAGE';
-            const author = { id: MOCK_CURRENT_USER_ID };
-            const newMessage = {
-                author,
-                timestamp: NOW,
-                text,
-            };
+        [
+            { text: undefined, },
+            { text: 'new message text', },
+            { text: '', },
+            { text: '    ' }
+        ].forEach((renderMessageArgs) => {
+            const { text } = renderMessageArgs;
 
-            this.instance.renderMessage(newMessage);
+            QUnit.test(`New bubble should be rendered correctly after renderMessage call passed argument ${JSON.stringify(renderMessageArgs)}`, function(assert) {
+                this.reinit({
+                    items: [{}, {}, {}],
+                });
 
-            const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
-            const lastMessageGroup = messageGroups[messageGroups.length - 1];
-            const $bubbles = $(lastMessageGroup).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-            const lastBubble = $bubbles[$bubbles.length - 1];
+                const author = { id: MOCK_CURRENT_USER_ID };
+                const newMessage = {
+                    author,
+                    text,
+                };
 
-            assert.strictEqual($(lastBubble).text(), text);
+                this.instance.renderMessage(newMessage);
+
+                const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+
+                assert.strictEqual($bubbles.length, 4, 'false');
+                assert.strictEqual($bubbles.last().text(), text ? text : '', 'text value is correct');
+            });
+        });
+    });
+
+    QUnit.module('Proxy state options', () => {
+        [true, false].forEach(value => {
+            QUnit.test('passed state enabled options should be equal chat state enabled options', function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.reinit(options);
+
+                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGE_BOX_CLASS}`));
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, messageBox.option(key), `${key} value is correct`);
+                });
+            });
+
+            QUnit.test('passed state options should be updated when chat state options are changed in runtime', function(assert) {
+                const options = {
+                    activeStateEnabled: value,
+                    focusStateEnabled: value,
+                    hoverStateEnabled: value,
+                };
+
+                this.instance.option(options);
+
+                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGE_BOX_CLASS}`));
+
+                Object.entries(options).forEach(([key, value]) => {
+                    assert.deepEqual(value, messageBox.option(key), `${key} value is correct`);
+                });
+            });
+        });
+    });
+
+    QUnit.module('Methods', () => {
+        QUnit.test('The textarea input element must be active after the focus() method is invoked', function(assert) {
+            this.instance.focus();
+
+            const root = document.querySelector('#qunit-fixture');
+            const activeElement = root.shadowRoot ? root.shadowRoot.activeElement : document.activeElement;
+
+            assert.strictEqual(activeElement, this.$input.get(0));
         });
     });
 });

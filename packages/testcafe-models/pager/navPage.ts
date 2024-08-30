@@ -1,4 +1,4 @@
-import { SelectableElement } from './SelectableElement';
+import { SelectableElement } from './selectableElement';
 
 const CLASS = {
   pagerPage: 'dx-page',

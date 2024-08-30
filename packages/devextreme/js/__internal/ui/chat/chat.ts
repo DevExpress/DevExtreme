@@ -1,9 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type {
-  Message, MessageSendEvent, Properties,
-} from '@js/ui/chat';
+import type { Message, MessageSendEvent, Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
@@ -15,6 +14,7 @@ import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 class Chat extends Widget<Properties> {
   _chatHeader!: ChatHeader;
@@ -28,6 +28,9 @@ class Chat extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      activeStateEnabled: true,
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
       title: '',
       items: [],
       user: { id: new Guid().toString() },
@@ -74,9 +77,18 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageBox(): void {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
+
     const $messageBox = $('<div>').appendTo(this.element());
 
     const configuration: MessageBoxProperties = {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
@@ -106,10 +118,21 @@ class Chat extends Widget<Properties> {
     this._messageSendAction?.({ message, event });
   }
 
+  _focusTarget(): dxElementWrapper {
+    const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+    return $input;
+  }
+
   _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
+        this._messageBox.option({ [name]: value });
+        break;
       case 'title':
         this._chatHeader.option('title', (value as Properties['title']) ?? '');
         break;
@@ -127,10 +150,10 @@ class Chat extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message): void {
+  renderMessage(message: Message = {}): void {
     const { items } = this.option();
 
-    const newItems = items ? [...items, message] : [message];
+    const newItems = [...items ?? [], message];
 
     this.option('items', newItems);
   }

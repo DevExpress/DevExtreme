@@ -44,6 +44,8 @@ const LIST_GROUP_COLLAPSED_CLASS = 'dx-list-group-collapsed';
 const LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator';
 const LIST_HAS_NEXT_CLASS = 'dx-has-next';
 const LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button';
+const LIST_SELECT_CHECKBOX = 'dx-list-select-checkbox';
+const LIST_SELECT_RADIOBUTTON = 'dx-list-select-radiobutton';
 const WRAP_ITEM_TEXT_CLASS = 'dx-wrap-item-text';
 const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 
@@ -323,11 +325,20 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _itemSelectHandler(e) {
-    if (this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
+    const isSingleSelectedItemClicked = this.option('selectionMode') === 'single'
+      && this.isItemSelected(e.currentTarget);
+    if (isSingleSelectedItemClicked) {
       return;
     }
 
-    return this.callBase(e);
+    const isSelectionControlClicked = $(e.target).closest(`.${LIST_SELECT_CHECKBOX}`).length
+      || $(e.target).closest(`.${LIST_SELECT_RADIOBUTTON}`).length;
+
+    if (isSelectionControlClicked) {
+      this.option('focusedElement', e.currentTarget);
+    }
+
+    return this.callBase(e, isSelectionControlClicked);
   },
 
   _allowDynamicItemsAppend() {

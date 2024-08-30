@@ -2,7 +2,9 @@
 import { Selector } from 'testcafe';
 import NavPage from './navPage';
 import FocusableElement from '../internal/focusable';
-import { SelectableElement } from './SelectableElement';
+import { SelectableElement } from './selectableElement';
+import Widget from '../internal/widget';
+import { WidgetName } from '../types';
 
 const CLASS = {
   pagerPageSize: 'dx-page-size',
@@ -17,9 +19,12 @@ const CLASS = {
   numberBox: 'dx-numberbox',
 
   overlayContent: 'dx-overlay-content',
+  focusedState: 'dx-state-focused',
 };
 
-export default class Pager extends FocusableElement {
+export default class Pager extends Widget {
+  getName(): WidgetName { return 'dxPager'; }
+
   getPageSize(index: number): SelectableElement {
     return new SelectableElement(this.element
       .find(`.${CLASS.pagerPageSize}`)
@@ -42,7 +47,6 @@ export default class Pager extends FocusableElement {
     return this.element.find(`.${CLASS.pagerPageSizes} .${CLASS.select}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getPopupPageSizes(): Selector {
     return Selector(`.${CLASS.overlayContent} .${CLASS.item}`);
   }
@@ -51,7 +55,11 @@ export default class Pager extends FocusableElement {
     return this.element.find(`.${CLASS.pagerPageIndex}.${CLASS.numberBox}`);
   }
 
-  get infoText(): Selector {
+  getInfoText(): Selector {
     return this.element.find(`.${CLASS.info}`);
+  }
+
+  hasFocusedState(): Promise<boolean> {
+    return this.element.hasClass(CLASS.focusedState);
   }
 }
