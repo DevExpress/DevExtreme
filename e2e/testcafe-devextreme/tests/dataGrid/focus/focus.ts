@@ -1,5 +1,6 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClientFunction } from 'testcafe';
+import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
@@ -148,3 +149,32 @@ test('Should remove dx-focused class on blur event from the cell', async (t) => 
     })();
   });
 });
+
+// T1246926
+test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and editing is in batch mode', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox).getInput();
+
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .click(filterEditor)
+    .expect(filterEditor.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      ID: 1,
+      FirstName: 'John',
+    },
+  ],
+  keyExpr: 'ID',
+  filterRow: {
+    visible: true,
+  },
+  focusedRowEnabled: true,
+  editing: {
+    mode: 'batch',
+    allowUpdating: true,
+  },
+  columns: ['FirstName'],
+}));
