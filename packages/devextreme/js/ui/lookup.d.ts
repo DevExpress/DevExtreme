@@ -132,7 +132,7 @@ export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & Scroll
  * @docid _ui_lookup_SelectionChangingEvent
  * @public
  * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ * @inherits AsyncCancelable,EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
  */
 export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxLookup> & SelectionChangingInfo;
 
@@ -140,7 +140,7 @@ export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxLookup> & Sel
  * @docid _ui_lookup_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
  */
 export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
 
