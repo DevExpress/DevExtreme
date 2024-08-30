@@ -4,7 +4,9 @@ import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/chat_message_list';
 import MessageBox from '__internal/ui/chat/chat_message_box';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+
 import { isRenderer } from 'core/utils/type';
+
 import config from 'core/config';
 
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
