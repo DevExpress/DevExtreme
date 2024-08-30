@@ -24,3 +24,9 @@ export default TreeView;
  * @name dxTreeViewOptions.selectedIndex
  * @hidden
  */
+/**
+ * @name dxTreeViewOptions.onSelectionChanging
+ * @hidden
+ * @action
+ */
+

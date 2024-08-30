@@ -13,6 +13,7 @@ import {
     EventInfo,
     NativeEventInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../../events/index';
 
 import Widget, {
@@ -20,6 +21,25 @@ import Widget, {
 } from '../widget/ui.widget';
 
 export type ItemLike = string | CollectionWidgetItem | any;
+
+/**
+ * @docid
+ * @hidden
+ */
+export interface SelectionChangingInfo<TItem extends ItemLike = any> {
+    /** @docid */
+    readonly addedItems: Array<TItem>;
+    /** @docid */
+    readonly removedItems: Array<TItem>;
+}
+
+/**
+ * @docid
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TComponent> = AsyncCancelable & EventInfo<TComponent> & SelectionChangingInfo;
 
 /**
  * @docid
@@ -126,6 +146,14 @@ export interface CollectionWidgetOptions<
      * @public
      */
     onItemRendered?: ((e: EventInfo<TComponent> & ItemInfo<TItem>) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/collection/ui.collection_widget.base:SelectionChangingEvent}
+     * @action
+     * @public
+     */
+    onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
     /**
      * @docid
      * @default null

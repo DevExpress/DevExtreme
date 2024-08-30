@@ -27,6 +27,12 @@ export default Gallery;
  */
 
 /**
+ * @name dxGalleryOptions.onSelectionChanging
+ * @action
+ * @hidden
+ */
+
+/**
  * @name dxGalleryItem.visible
  * @hidden
  */

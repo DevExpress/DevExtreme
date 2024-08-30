@@ -48,6 +48,7 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onPaste" |
   "onSelectionChanged" |
+  "onSelectionChanging" |
   "onValueChanged" |
   "opened" |
   "openOnFieldClick" |
@@ -128,6 +129,7 @@ const DxAutocomplete = createComponent({
     onOptionChanged: Function,
     onPaste: Function,
     onSelectionChanged: Function,
+    onSelectionChanging: Function,
     onValueChanged: Function,
     opened: Boolean,
     openOnFieldClick: Boolean,
@@ -205,6 +207,7 @@ const DxAutocomplete = createComponent({
     "update:onOptionChanged": null,
     "update:onPaste": null,
     "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:onValueChanged": null,
     "update:opened": null,
     "update:openOnFieldClick": null,
