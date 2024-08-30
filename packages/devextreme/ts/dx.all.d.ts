@@ -9480,10 +9480,6 @@ declare module DevExpress.ui {
      */
     user?: DevExpress.ui.dxChat.User;
     /**
-     * [descr:dxChatOptions.title]
-     */
-    title?: string;
-    /**
      * [descr:dxChatOptions.items]
      */
     items?: Array<DevExpress.ui.dxChat.Message>;

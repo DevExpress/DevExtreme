@@ -208,19 +208,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
-     * [descr:dxChatOptions.title]
-    
-     */
-    @Input()
-    get title(): string {
-        return this._getOption('title');
-    }
-    set title(value: string) {
-        this._setOption('title', value);
-    }
-
-
-    /**
      * [descr:dxChatOptions.user]
     
      */
@@ -372,13 +359,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() userChange: EventEmitter<User>;
 
     /**
@@ -434,7 +414,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
             { emit: 'rtlEnabledChange' },
-            { emit: 'titleChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
