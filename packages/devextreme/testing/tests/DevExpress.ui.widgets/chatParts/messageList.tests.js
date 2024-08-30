@@ -66,7 +66,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.ok(Scrollable.getInstance(this.$element.children().first()) instanceof Scrollable);
         });
 
-        QUnit.test('Message Group should rendered in the scrollable content', function(assert) {
+        QUnit.test('Message Group should be rendered in the scrollable content', function(assert) {
             const newMessage = {
                 author: { id: MOCK_CURRENT_USER_ID },
                 timestamp: NOW,
@@ -80,7 +80,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($messageGroups.length, 1);
         });
 
-        QUnit.test('Message Group should rendered in the scrollable content after adding 1 new message', function(assert) {
+        QUnit.test('Message Group should be rendered in the scrollable content after adding 1 new message', function(assert) {
             const newMessage = {
                 author: { id: MOCK_CURRENT_USER_ID },
                 timestamp: NOW,
@@ -94,7 +94,25 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($messageGroups.length, 1);
         });
 
-        QUnit.test('Message Group should rendered in the scrollable content after updating items in runtime', function(assert) {
+        QUnit.test('Message Group should be rendered in the scrollable content after adding 1 new message to items', function(assert) {
+            const items = generateMessages(52);
+
+            this.reinit({ items });
+
+            const newMessage = {
+                author: { id: 'another user' },
+                timestamp: NOW,
+                text: 'NEW MESSAGE',
+            };
+
+            this.instance.option({ items: [...items, newMessage] });
+
+            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 27);
+        });
+
+        QUnit.test('Message Group should be rendered in the scrollable content after updating items at runtime', function(assert) {
             this.instance.option({ items: generateMessages(52) });
 
             const scrollableContent = this.getScrollable().content();
