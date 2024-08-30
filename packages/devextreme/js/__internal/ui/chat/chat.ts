@@ -1,3 +1,4 @@
+import type { ComponentFactory } from '@js/core/component_registrator';
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -63,13 +64,14 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user } = this.option();
+    const { items = [], dataSource, user } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>').appendTo(this.element());
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
+      dataSource,
       currentUserId,
     });
   }
@@ -129,16 +131,17 @@ class Chat extends Widget<Properties> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-        this._messageBox.option({ [name]: value });
+        this._messageBox.option(name, value as Properties[typeof name]);
         break;
       case 'title':
-        this._chatHeader.option('title', (value as Properties['title']) ?? '');
+        this._chatHeader.option('title', (value as Properties[typeof name]) ?? '');
         break;
       case 'user':
-        this._messageList.option('currentUserId', (value as Properties['user'])?.id);
+        this._messageList.option('currentUserId', (value as Properties[typeof name])?.id);
         break;
       case 'items':
-        this._messageList.option('items', (value as Properties['items']) ?? []);
+      case 'dataSource':
+        this._messageList.option(name, value as Properties[typeof name]);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -157,7 +160,6 @@ class Chat extends Widget<Properties> {
   }
 }
 
-// @ts-expect-error ts-error
-registerComponent('dxChat', Chat);
+registerComponent('dxChat', Chat as ComponentFactory<Chat>);
 
 export default Chat;
