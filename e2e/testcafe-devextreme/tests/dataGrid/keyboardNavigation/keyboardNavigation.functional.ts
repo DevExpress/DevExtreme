@@ -4759,6 +4759,10 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
         fixed: true,
       },
     ],
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     dataSource: {
       store: [],
     },
