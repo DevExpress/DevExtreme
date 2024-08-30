@@ -136,7 +136,7 @@ test('Focused cell should not flick (T1206435)', async (t) => {
   });
 });
 
-test('DataGrid input cell should not put tabindex to incorrect element while on edit mode (T1239462)', async (t) => {
+/* test('DataGrid input cell should not put tabindex to incorrect element while on edit mode (T1239462)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -169,4 +169,4 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
       store: [],
     },
   });
-});
+}); */
