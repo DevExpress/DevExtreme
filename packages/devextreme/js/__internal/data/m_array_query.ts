@@ -249,7 +249,7 @@ const SortIterator = Iterator.inherit({
 const compileCriteria = (function () {
   let langParams = {};
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const _toComparable = (value) => toComparable(value, false, langParams);
+  const _toComparable = (value) => toComparable(value, false, langParams, { useUpperCase: true });
 
   const compileUniformEqualsCriteria = (crit) => {
     const getter = compileGetter(crit[0][0]);

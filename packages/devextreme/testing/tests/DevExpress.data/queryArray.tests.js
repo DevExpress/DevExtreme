@@ -430,6 +430,17 @@ QUnit.test('filtering use correct case insensitivity search', function(assert) {
     assert.false(containsUnwantedValue);
 });
 
+QUnit.test('filtering use correct case insensitivity search for AM locale', function(assert) {
+    const input = [
+        { ID: 1, Name: 'ԵՐԵՒԱՆ' },
+        { ID: 2, Name: 'Երևան' },
+    ];
+
+    const arrayStartsWith = QUERY(input).filter(['Name', 'startswith', 'Երև']).toArray();
+
+    assert.equal(arrayStartsWith.length, 2);
+});
+
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
