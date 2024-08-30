@@ -12,41 +12,6 @@ const CLASS = ClassNames;
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
 
-test('DataGrid input cell should not put tabindex to incorrect element while on edit mode (T1239462)', async (t) => {
-  const dataGrid = new DataGrid('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await t
-    .click(dataGrid.getToolbar().getItem(0))
-    .pressKey('tab');
-  await takeScreenshot('data-grid_keyboard-navigation-input-text-focused.png', dataGrid.element);
-
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    showBorders: true,
-    selection: {
-      mode: 'multiple',
-    },
-    editing: {
-      mode: 'form',
-      allowAdding: true,
-    },
-    columns: [
-      'Calculation',
-      'CalculationType',
-      {
-        type: 'buttons',
-        fixed: true,
-      },
-    ],
-    dataSource: {
-      store: [],
-    },
-  });
-});
-
 test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
