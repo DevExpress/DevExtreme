@@ -9462,6 +9462,18 @@ declare module DevExpress.ui {
    */
   export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
+     * [descr:dxChatOptions.activeStateEnabled]
+     */
+    activeStateEnabled?: boolean;
+    /**
+     * [descr:dxChatOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: boolean;
+    /**
+     * [descr:dxChatOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
      * [descr:dxChatOptions.user]
      */
     user?: DevExpress.ui.dxChat.User;

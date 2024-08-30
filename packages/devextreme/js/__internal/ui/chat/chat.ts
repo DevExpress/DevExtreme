@@ -28,6 +28,9 @@ class Chat extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      activeStateEnabled: true,
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
       title: '',
       items: [],
       user: { id: new Guid().toString() },

@@ -1342,8 +1342,11 @@ testComponentDefaults(ColorBox,
 testComponentDefaults(Chat,
     {},
     {
+        activeStateEnabled: true,
+        focusStateEnabled: true,
+        hoverStateEnabled: true,
         title: '',
-        onMessageSend: null,
+        onMessageSend: undefined,
     }
 );
 

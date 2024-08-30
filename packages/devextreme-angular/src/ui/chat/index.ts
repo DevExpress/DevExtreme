@@ -76,7 +76,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
-     * [descr:WidgetOptions.activeStateEnabled]
+     * [descr:dxChatOptions.activeStateEnabled]
     
      */
     @Input()
@@ -115,7 +115,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
-     * [descr:WidgetOptions.focusStateEnabled]
+     * [descr:dxChatOptions.focusStateEnabled]
     
      */
     @Input()
@@ -154,7 +154,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
-     * [descr:WidgetOptions.hoverStateEnabled]
+     * [descr:dxChatOptions.hoverStateEnabled]
     
      */
     @Input()
