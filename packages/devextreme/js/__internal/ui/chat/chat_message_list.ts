@@ -11,6 +11,7 @@ import type { MessageGroupAlignment } from './chat_message_group';
 import MessageGroup from './chat_message_group';
 
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
+const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 export interface MessageListOptions extends WidgetOptions<MessageList> {
   items: Message[];
@@ -60,7 +61,7 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    const scrollableContent = this._scrollable?.content();
+    const scrollableContent = $(this.$element()).find(`.${SCROLLABLE_CONTENT_CLASS}`).get(0);
     const messageGroupContainer = scrollableContent || this._$content;
 
     const $messageGroup = $('<div>').appendTo(messageGroupContainer);
