@@ -1,3 +1,4 @@
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { isString } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
@@ -68,13 +69,20 @@ export default class DeferredStrategy extends SelectionStrategy {
   }
 
   isItemKeySelected(itemData) {
-    const { selectionFilter } = this.options;
+    const { selectionFilter, sensitivity } = this.options;
 
     if (!selectionFilter) {
       return true;
     }
 
-    return !!dataQuery([itemData]).filter(selectionFilter).toArray().length;
+    const queryParams = {
+      langParams: {
+        collatorOptions: {
+          sensitivity,
+        },
+      },
+    };
+    return !!dataQuery([itemData], queryParams).filter(selectionFilter).toArray().length;
   }
 
   _getKeyExpr() {
@@ -342,5 +350,13 @@ export default class DeferredStrategy extends SelectionStrategy {
       : selectionFilter;
 
     return this._loadFilteredData(filter);
+  }
+
+  _onePageSelectAll(isDeselect: boolean): DeferredObj<unknown> {
+    this._selectAllPlainItems(isDeselect);
+
+    this.onSelectionChanged();
+
+    return Deferred().resolve();
   }
 }

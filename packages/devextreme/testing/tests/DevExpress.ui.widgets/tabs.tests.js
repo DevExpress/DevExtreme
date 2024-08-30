@@ -37,6 +37,7 @@ QUnit.testStart(function() {
 
 const TABS_ITEM_CLASS = 'dx-tab';
 const TAB_SELECTED_CLASS = 'dx-tab-selected';
+const FOCUS_STATE_CLASS = 'dx-state-focused';
 const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
 const TABS_ORIENTATION_CLASS = {
     vertical: 'dx-tabs-vertical',
@@ -151,7 +152,7 @@ QUnit.module('General', () => {
         assert.equal(tabsInstance.option('selectedIndex'), 2);
     });
 
-    QUnit.test('dxpointerup event should call changing active tab', function(assert) {
+    QUnit.test('dxpointerup event should change focused tab', function(assert) {
         const clock = sinon.useFakeTimers();
 
         const $tabs = $('#tabs').dxTabs({
@@ -163,11 +164,10 @@ QUnit.module('General', () => {
         try {
             $secondTab.trigger('dxpointerdown');
             clock.tick(10);
-            assert.strictEqual($secondTab.hasClass(TAB_SELECTED_CLASS), false);
-
+            assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), false);
             $secondTab.trigger('dxpointerup');
             clock.tick(10);
-            assert.strictEqual($secondTab.hasClass(TAB_SELECTED_CLASS), true);
+            assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), true);
         } finally {
             clock.restore();
         }
@@ -520,10 +520,12 @@ QUnit.module('Tab select action', () => {
 
                 const $item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
 
-                assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'initial selectedIndex should be 0');
-                assert.strictEqual(this.onSelectionChangingStub.callCount, 0, 'onSelectionChanging should not be called initially');
-
                 $item.trigger('dxclick');
+
+                assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging is called immediately after click');
+                assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged is not called yet');
+                assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'initial selectedIndex should be 0');
+
 
                 setTimeout(() => {
                     this.assertSelectionNotChanged(assert);
@@ -557,10 +559,11 @@ QUnit.module('Tab select action', () => {
 
                 const $item = this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
 
-                assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'initial selectedIndex should be 0');
-                assert.strictEqual(this.onSelectionChangingStub.callCount, 0, 'onSelectionChanging should not be called initially');
-
                 $item.trigger('dxclick');
+
+                assert.strictEqual(this.onSelectionChangingStub.callCount, 1, 'onSelectionChanging is called immediately after click');
+                assert.strictEqual(this.onSelectionChangedStub.callCount, 0, 'onSelectionChanged is not called yet');
+                assert.strictEqual(this.tabs.option('selectedIndex'), 0, 'initial selectedIndex should be 0');
 
                 setTimeout(() => {
                     this.assertSecondItemSelected(assert);

@@ -11642,6 +11642,10 @@ declare module DevExpress.ui {
        */
       deferred?: boolean;
       /**
+       * [descr:dxDataGridOptions.selection.sensitivity]
+       */
+      sensitivity?: SelectionSensitivity;
+      /**
        * [descr:dxDataGridOptions.selection.selectAllMode]
        */
       selectAllMode?: DevExpress.common.SelectAllMode;
@@ -11663,6 +11667,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DevExpress.common.grids.SelectionChangedInfo<TRowData, TKey>;
+    export type SelectionSensitivity = 'base' | 'accent' | 'case' | 'variant';
     /**
      * [descr:dxDataGridSortByGroupSummaryInfoItem]
      */

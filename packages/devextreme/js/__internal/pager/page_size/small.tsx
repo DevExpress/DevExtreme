@@ -23,12 +23,12 @@ const PagerSmallDefaultProps: PagerSmallProps = {
   pageSizes: [],
 };
 
-type PageSizeSmallPropsType = PagerSmallProps & Pick<PagerProps, 'pageSize' | 'pageSizeChanged'>;
+type PageSizeSmallPropsType = PagerSmallProps & Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal'>;
 
 const PageSizeSmallDefaultProps: PageSizeSmallPropsType = {
   ...PagerSmallDefaultProps,
   pageSize: PagerDefaultProps.pageSize,
-  pageSizeChanged: PagerDefaultProps.pageSizeChanged,
+  pageSizeChangedInternal: PagerDefaultProps.pageSizeChangedInternal,
 };
 
 export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
@@ -52,7 +52,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.props,
       this.state.minWidth,
       this.props.pageSize,
-      this.props.pageSizeChanged,
+      this.props.pageSizeChangedInternal,
       this.props.pageSizes,
       this.props.inputAttr,
     ];
@@ -64,7 +64,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.props,
       this.state.minWidth,
       this.props.pageSize,
-      this.props.pageSizeChanged,
+      this.props.pageSizeChangedInternal,
       this.props.pageSizes,
       this.props.inputAttr,
     ];
@@ -89,7 +89,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       inputAttr,
       pageSizes,
       pageSize,
-      pageSizeChanged,
+      pageSizeChangedInternal,
     } = this.props;
     return (
       <SelectBox
@@ -97,7 +97,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
         valueExpr="value"
         dataSource={pageSizes}
         value={pageSize}
-        valueChange={pageSizeChanged}
+        valueChange={pageSizeChangedInternal}
         width={this.getWidth()}
         inputAttr={inputAttr}
       />

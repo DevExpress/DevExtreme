@@ -5,11 +5,13 @@ import {
   noop,
 } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { isObject, isPlainObject } from '@js/core/utils/type';
+import { isObject, isPlainObject, isPromise } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
 
 export default class SelectionStrategy {
   options: any;
+
+  _lastSelectAllPageDeferred = Deferred().reject();
 
   constructor(options) {
     this.options = options;
@@ -31,6 +33,53 @@ export default class SelectionStrategy {
 
   _setOption(name, value) {
     this.options[name] = value;
+  }
+
+  onSelectionChanging(): boolean | Promise<boolean> {
+    const {
+      selectedItems,
+      selectedItemKeys,
+      addedItemKeys,
+      removedItemKeys,
+      addedItems,
+      removedItems,
+      onSelectionChanging = noop,
+    } = this.options;
+
+    const selectionChangingArgs = {
+      selectedItems,
+      selectedItemKeys,
+      addedItemKeys,
+      removedItemKeys,
+      addedItems,
+      removedItems,
+      cancel: false,
+    };
+
+    onSelectionChanging(selectionChangingArgs);
+    return selectionChangingArgs.cancel;
+  }
+
+  _callCallbackIfNotCanceled(callback: () => void, cancelCallback: () => void): void {
+    const cancelResult = this.onSelectionChanging();
+
+    if (isPromise(cancelResult)) {
+      cancelResult
+        .then((cancel) => {
+          if (!cancel) {
+            callback();
+          } else {
+            cancelCallback();
+          }
+        })
+        .catch(() => {
+          callback();
+        });
+    } else if (!cancelResult) {
+      callback();
+    } else {
+      cancelCallback();
+    }
   }
 
   onSelectionChanged() {
@@ -175,7 +224,6 @@ export default class SelectionStrategy {
       const key = this.options.keyOf(itemData);
 
       if (this.options.isSelectableItem(item)) {
-        // @ts-expect-error
         if (this.isItemKeySelected(key)) {
           hasSelectedItems = true;
         } else {
@@ -188,5 +236,41 @@ export default class SelectionStrategy {
       return !hasUnselectedItems ? true : undefined;
     }
     return false;
+  }
+
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  isItemKeySelected(itemKey): boolean {
+    throw new Error('isItemKeySelected method should be overriden');
+  }
+
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  addSelectedItem(itemKey, itemData): void {
+    throw new Error('addSelectedItem method should be overriden');
+  }
+
+  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+  removeSelectedItem(itemKey): void {
+    throw new Error('removeSelectedItem method should be overriden');
+  }
+
+  _selectAllPlainItems(isDeselect: boolean): void {
+    const items = this.getSelectableItems(this.options.plainItems());
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      if (this.options.isSelectableItem(item)) {
+        const itemData = this.options.getItemData(item);
+        const itemKey = this.options.keyOf(itemData);
+        const isSelected = this.isItemKeySelected(itemKey);
+
+        if (!isSelected && !isDeselect) {
+          this.addSelectedItem(itemKey, itemData);
+        }
+
+        if (isSelected && isDeselect) {
+          this.removeSelectedItem(itemKey);
+        }
+      }
+    }
   }
 }

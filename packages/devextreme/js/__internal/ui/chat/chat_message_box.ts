@@ -21,9 +21,9 @@ export interface MessageBoxProperties extends WidgetOptions<MessageBox> {
 }
 
 class MessageBox extends Widget<MessageBoxProperties> {
-  _textArea?: dxTextArea;
+  _textArea!: dxTextArea;
 
-  _button?: Button;
+  _button!: Button;
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
@@ -50,19 +50,38 @@ class MessageBox extends Widget<MessageBoxProperties> {
   }
 
   _renderTextArea(): void {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
+
     const $textArea = $('<div>')
       .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
       .appendTo(this.element());
 
-    this._textArea = this._createComponent($textArea, TextArea, {});
+    this._textArea = this._createComponent($textArea, TextArea, {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    });
   }
 
   _renderButton(): void {
+    const {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
+    } = this.option();
+
     const $button = $('<div>')
       .addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS)
       .appendTo(this.element());
 
     this._button = this._createComponent($button, Button, {
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
       icon: 'send',
       stylingMode: 'text',
       onClick: (e): void => {
@@ -79,9 +98,9 @@ class MessageBox extends Widget<MessageBoxProperties> {
   }
 
   _sendHandler(e: ClickEvent): void {
-    const text = this._textArea?.option('text');
+    const { text } = this._textArea.option();
 
-    if (!text) {
+    if (!text?.trim()) {
       return;
     }
 
@@ -90,9 +109,19 @@ class MessageBox extends Widget<MessageBoxProperties> {
   }
 
   _optionChanged(args: Record<string, unknown>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
+      case 'activeStateEnabled':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled': {
+        const options = { [name]: value };
+
+        this._button.option(options);
+        this._textArea.option(options);
+
+        break;
+      }
       case 'onMessageSend':
         this._createMessageSendAction();
         break;

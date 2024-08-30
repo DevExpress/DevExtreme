@@ -314,7 +314,7 @@ export default class Selection {
     this._resetFocusedItemIndex();
 
     if (isOnePage) {
-      return this._onePageSelectAll(false);
+      return this._selectionStrategy._onePageSelectAll(false);
     }
     return this.selectedItemKeys([], true, false, true);
   }
@@ -323,34 +323,9 @@ export default class Selection {
     this._resetFocusedItemIndex();
 
     if (isOnePage) {
-      return this._onePageSelectAll(true);
+      return this._selectionStrategy._onePageSelectAll(true);
     }
     return this.selectedItemKeys([], true, true, true);
-  }
-
-  _onePageSelectAll(isDeselect) {
-    const items = this._selectionStrategy.getSelectableItems(this.options.plainItems());
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-
-      if (this.isDataItem(item)) {
-        const itemData = this.options.getItemData(item);
-        const itemKey = this.options.keyOf(itemData);
-        const isSelected = this.isItemSelected(itemKey);
-
-        if (!isSelected && !isDeselect) {
-          this._addSelectedItem(itemData, itemKey);
-        }
-
-        if (isSelected && isDeselect) {
-          this._removeSelectedItem(itemKey);
-        }
-      }
-    }
-
-    this.onSelectionChanged();
-
-    return Deferred().resolve();
   }
 
   getSelectAllState(visibleOnly) {

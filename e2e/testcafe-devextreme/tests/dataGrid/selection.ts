@@ -155,3 +155,96 @@ test('Select rows by shift should work when grid has real time updates', async (
     pageSize: 10,
   },
 }));
+
+// --- T1234676 ---
+
+const data = [
+  { ID: 'aaa', Name: 'Name 1' },
+  { ID: 'AAA', Name: 'Name 2' },
+  { ID: 'BBB', Name: 'Name 3' },
+];
+const DATA_GRID_SELECTOR = '#container';
+(['base', undefined] as ('base' | undefined)[]).forEach((sensitivity) => {
+  test(`Deferred selection should work correctly with deferred sensitivity: ${sensitivity}`, async (t) => {
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const checkBoxCell = dataGrid.getDataCell(0, 0);
+    const firstRow = dataGrid.getDataRow(0);
+    const secondRow = dataGrid.getDataRow(1);
+
+    await t.click(checkBoxCell.element);
+
+    await t
+      .expect(firstRow.isSelected).ok()
+      .expect(secondRow.isSelected).ok();
+  }).before(() => createWidget('dxDataGrid', {
+    dataSource: data,
+    keyExpr: 'ID',
+    columns: ['ID', 'Name'],
+    showBorders: true,
+    selection: {
+      mode: 'multiple',
+      deferred: true,
+      sensitivity,
+    },
+  }));
+});
+
+test('Deferred selection should work correctly with deferred sensitivity: \'case\'', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const checkBoxCell = dataGrid.getDataCell(0, 0);
+  const firstRow = dataGrid.getDataRow(0);
+  const secondRow = dataGrid.getDataRow(1);
+
+  await t.click(checkBoxCell.element);
+
+  await t
+    .expect(firstRow.isSelected).ok()
+    .expect(secondRow.isSelected).notOk();
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: data,
+  keyExpr: 'ID',
+  columns: ['ID', 'Name'],
+  showBorders: true,
+  selection: {
+    mode: 'multiple',
+    deferred: true,
+    sensitivity: 'case',
+  },
+}));
+
+test('Sensitivity option change should be correctly handled during runtime change', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const checkBoxCell = dataGrid.getDataCell(0, 0);
+  const firstRow = dataGrid.getDataRow(0);
+  const secondRow = dataGrid.getDataRow(1);
+
+  await t.click(checkBoxCell.element);
+
+  await t
+    .expect(firstRow.isSelected).ok()
+    .expect(secondRow.isSelected).ok();
+
+  await dataGrid.apiChangeSensitivity('case');
+
+  await t
+    .expect(firstRow.isSelected).notOk()
+    .expect(secondRow.isSelected).notOk();
+
+  await t.click(checkBoxCell.element);
+
+  await t
+    .expect(firstRow.isSelected).ok()
+    .expect(secondRow.isSelected).notOk();
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: data,
+  keyExpr: 'ID',
+  columns: ['ID', 'Name'],
+  showBorders: true,
+  selection: {
+    mode: 'multiple',
+    deferred: true,
+    sensitivity: 'base',
+  },
+}));
+
+// ---

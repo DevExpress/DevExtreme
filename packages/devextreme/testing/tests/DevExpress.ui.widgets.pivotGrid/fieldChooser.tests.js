@@ -1382,7 +1382,7 @@ QUnit.module('dxPivotGridFieldChooser', {
         this.clock.tick(500);
 
         const $filterMenuList = $('.dx-header-filter-menu .dx-list');
-        $filterMenuList.find('.dx-list-select-all-checkbox').dxCheckBox('instance').option('value', true);
+        $filterMenuList.find('.dx-list-select-all-checkbox').trigger('dxclick');
 
         // act
         $filterMenuList.dxScrollView('option', 'onReachBottom')();

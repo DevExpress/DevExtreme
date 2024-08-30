@@ -69,6 +69,7 @@ const TabPanel = MultiView.inherit({
     return extend(this.callBase(), {
       itemTitleTemplate: 'title',
       hoverStateEnabled: true,
+      selectOnFocus: false,
       showNavButtons: false,
       scrollByContent: true,
       scrollingEnabled: true,
@@ -262,10 +263,32 @@ const TabPanel = MultiView.inherit({
       onItemClick: this._titleClickAction.bind(this),
       onItemHold: this._titleHoldAction.bind(this),
       itemHoldTimeout: this.option('itemHoldTimeout'),
-      onSelectionChanged: function (e) {
-        this.option('selectedIndex', e.component.option('selectedIndex'));
+      onSelectionChanging: (e): void => {
+        const newTabsSelectedItemData = e.addedItems[0];
+        const newTabsSelectedIndex = this._getIndexByItemData(newTabsSelectedItemData);
+
+        const selectingResult = this.selectItem(newTabsSelectedIndex);
+
+        const promiseState = selectingResult.state();
+        if (promiseState !== 'pending') {
+          // NOTE: Keep selection change process synchronious if possible.
+          e.cancel = promiseState === 'rejected';
+          return;
+        }
+
+        e.cancel = new Promise((resolve) => {
+          selectingResult
+            .done(() => {
+              resolve(false);
+            })
+            .fail(() => {
+              resolve(true);
+            });
+        });
+      },
+      onSelectionChanged: (): void => {
         this._refreshActiveDescendant();
-      }.bind(this),
+      },
       onItemRendered: this._titleRenderedAction.bind(this),
       itemTemplate: this._getTemplateByOption('itemTitleTemplate'),
       items: this.option('items'),
@@ -391,6 +414,10 @@ const TabPanel = MultiView.inherit({
     if (this._tabs) {
       this._tabs.option(name, value);
     }
+  },
+
+  _postprocessSwipe({ swipedTabsIndex }): void {
+    this._setTabsOption('selectedIndex', swipedTabsIndex);
   },
 
   _visibilityChanged(visible) {

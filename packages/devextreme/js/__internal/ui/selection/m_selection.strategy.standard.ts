@@ -2,6 +2,7 @@ import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
 // @ts-expect-error
 import { getKeyHash } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { SelectionFilterCreator } from '@js/core/utils/selection_filter';
 import { isDefined, isObject } from '@js/core/utils/type';
@@ -16,6 +17,16 @@ export default class StandardStrategy extends SelectionStrategy {
   _lastLoadDeferred?: any;
 
   _lastRequestData?: any;
+
+  _isCancelingInProgress?: boolean;
+
+  _lastSelectAllPageDeferred = Deferred().reject();
+
+  _storedSelectionState?: {
+    selectedItems: any;
+    selectedItemKeys: any;
+    keyHashIndices: any;
+  };
 
   constructor(options) {
     super(options);
@@ -245,24 +256,47 @@ export default class StandardStrategy extends SelectionStrategy {
   }
 
   selectedItemKeys(keys, preserve, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter = false) {
-    const that = this;
-    const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll, updatedKeys, forceCombinedFilter);
+    if (this._isCancelingInProgress) {
+      return Deferred().reject();
+    }
 
-    deferred.done((items) => {
+    const loadingDeferred = this._loadSelectedItems(
+      keys,
+      isDeselect,
+      isSelectAll,
+      updatedKeys,
+      forceCombinedFilter,
+    );
+
+    const selectionDeferred = Deferred();
+
+    loadingDeferred.done((items) => {
+      this._storeSelectionState();
+
       if (preserve) {
-        that._preserveSelectionUpdate(items, isDeselect);
+        this._preserveSelectionUpdate(items, isDeselect);
       } else {
-        that._replaceSelectionUpdate(items);
+        this._replaceSelectionUpdate(items);
       }
       /// #DEBUG
       if (!isSelectAll && !isDeselect) {
-        that._warnOnIncorrectKeys(keys);
+        this._warnOnIncorrectKeys(keys);
       }
       /// #ENDDEBUG
-      that.onSelectionChanged();
+
+      this._isCancelingInProgress = true;
+      this._callCallbackIfNotCanceled(() => {
+        this._isCancelingInProgress = false;
+        this.onSelectionChanged();
+        selectionDeferred.resolve(items);
+      }, () => {
+        this._isCancelingInProgress = false;
+        this._restoreSelectionState();
+        selectionDeferred.reject();
+      });
     });
 
-    return deferred;
+    return selectionDeferred;
   }
 
   addSelectedItem(key, itemData) {
@@ -472,5 +506,46 @@ export default class StandardStrategy extends SelectionStrategy {
     const combinedFilter = selectionFilterCreator.getCombinedFilter(keyExpr, filter, true);
 
     return this._loadFilteredData(combinedFilter);
+  }
+
+  _storeSelectionState(): void {
+    const { selectedItems, selectedItemKeys, keyHashIndices } = this.options;
+
+    this._storedSelectionState = {
+      keyHashIndices: { ...keyHashIndices },
+      selectedItems: [...selectedItems],
+      selectedItemKeys: [...selectedItemKeys],
+    };
+  }
+
+  _restoreSelectionState(): void {
+    this._clearItemKeys();
+
+    const { selectedItemKeys, selectedItems, keyHashIndices } = this._storedSelectionState!;
+    this._setOption('selectedItemKeys', selectedItemKeys);
+    this._setOption('selectedItems', selectedItems);
+    this._setOption('keyHashIndices', keyHashIndices);
+  }
+
+  _onePageSelectAll(isDeselect: boolean): DeferredObj<unknown> {
+    if (this._lastSelectAllPageDeferred.state() === 'pending') {
+      return Deferred().reject();
+    }
+
+    this._storeSelectionState();
+
+    this._selectAllPlainItems(isDeselect);
+
+    this._lastSelectAllPageDeferred = Deferred();
+
+    this._callCallbackIfNotCanceled(() => {
+      this.onSelectionChanged();
+      this._lastSelectAllPageDeferred.resolve();
+    }, () => {
+      this._restoreSelectionState();
+      this._lastSelectAllPageDeferred.reject();
+    });
+
+    return this._lastSelectAllPageDeferred;
   }
 }
