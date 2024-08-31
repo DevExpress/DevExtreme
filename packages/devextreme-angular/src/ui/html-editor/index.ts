@@ -55,8 +55,20 @@ import { DxoTableResizingModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoVariablesModule } from 'devextreme-angular/ui/nested';
 
+import { DxoHtmlEditorImageUploadModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoHtmlEditorFileUploaderOptionsModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiHtmlEditorTabModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoHtmlEditorMediaResizingModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiHtmlEditorMentionModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoHtmlEditorTableContextMenuModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiHtmlEditorItemModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoHtmlEditorTableResizingModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
+
 import { DxiMentionComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiHtmlEditorMentionComponent } from 'devextreme-angular/ui/html-editor/nested';
 
 
 
@@ -831,12 +843,24 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiMentionComponent)
-    get mentionsChildren(): QueryList<DxiMentionComponent> {
+    @ContentChildren(DxiHtmlEditorMentionComponent)
+    get mentionsChildren(): QueryList<DxiHtmlEditorMentionComponent> {
         return this._getOption('mentions');
     }
     set mentionsChildren(value) {
+        this.setContentChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
         this.setChildren('mentions', value);
+    }
+
+
+    @ContentChildren(DxiMentionComponent)
+    get mentionsLegacyChildren(): QueryList<DxiMentionComponent> {
+        return this._getOption('mentions');
+    }
+    set mentionsLegacyChildren(value) {
+        if (this.checkContentChildren('mentions', value, 'DxiMentionComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -972,6 +996,16 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoTableResizingModule,
     DxoToolbarModule,
     DxoVariablesModule,
+    DxoHtmlEditorImageUploadModule,
+    DxoHtmlEditorFileUploaderOptionsModule,
+    DxiHtmlEditorTabModule,
+    DxoHtmlEditorMediaResizingModule,
+    DxiHtmlEditorMentionModule,
+    DxoHtmlEditorTableContextMenuModule,
+    DxiHtmlEditorItemModule,
+    DxoHtmlEditorTableResizingModule,
+    DxoHtmlEditorToolbarModule,
+    DxoHtmlEditorVariablesModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -990,6 +1024,16 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoTableResizingModule,
     DxoToolbarModule,
     DxoVariablesModule,
+    DxoHtmlEditorImageUploadModule,
+    DxoHtmlEditorFileUploaderOptionsModule,
+    DxiHtmlEditorTabModule,
+    DxoHtmlEditorMediaResizingModule,
+    DxiHtmlEditorMentionModule,
+    DxoHtmlEditorTableContextMenuModule,
+    DxiHtmlEditorItemModule,
+    DxoHtmlEditorTableResizingModule,
+    DxoHtmlEditorToolbarModule,
+    DxoHtmlEditorVariablesModule,
     DxTemplateModule
   ]
 })

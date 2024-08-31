@@ -43,8 +43,12 @@ import {
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
 
+import { DxoValidatorAdapterModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
+
 import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiValidatorValidationRuleComponent } from 'devextreme-angular/ui/validator/nested';
 
 
 /**
@@ -238,12 +242,24 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 
 
-    @ContentChildren(DxiValidationRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+    @ContentChildren(DxiValidatorValidationRuleComponent)
+    get validationRulesChildren(): QueryList<DxiValidatorValidationRuleComponent> {
         return this._getOption('validationRules');
     }
     set validationRulesChildren(value) {
+        this.setContentChildren('validationRules', value, 'DxiValidatorValidationRuleComponent');
         this.setChildren('validationRules', value);
+    }
+
+
+    @ContentChildren(DxiValidationRuleComponent)
+    get validationRulesLegacyChildren(): QueryList<DxiValidationRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set validationRulesLegacyChildren(value) {
+        if (this.checkContentChildren('validationRules', value, 'DxiValidationRuleComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -334,6 +350,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
   imports: [
     DxoAdapterModule,
     DxiValidationRuleModule,
+    DxoValidatorAdapterModule,
+    DxiValidatorValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -344,6 +362,8 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     DxValidatorComponent,
     DxoAdapterModule,
     DxiValidationRuleModule,
+    DxoValidatorAdapterModule,
+    DxiValidatorValidationRuleModule,
     DxTemplateModule
   ]
 })

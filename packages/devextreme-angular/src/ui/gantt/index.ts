@@ -60,9 +60,31 @@ import { DxoTasksModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoValidationModule } from 'devextreme-angular/ui/nested';
 
+import { DxiGanttColumnModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttFormatModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttSearchModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttContextMenuModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxiGanttItemModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttDependenciesModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttEditingModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttFilterRowModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttOperationDescriptionsModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttTextsModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttResourceAssignmentsModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttResourcesModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttScaleTypeRangeModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttSortingModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxiGanttStripLineModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttTasksModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
+
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 import { DxiStripLineComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiGanttColumnComponent } from 'devextreme-angular/ui/gantt/nested';
+import { DxiGanttStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
 
 
 /**
@@ -1152,20 +1174,43 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-    @ContentChildren(DxiColumnComponent)
-    get columnsChildren(): QueryList<DxiColumnComponent> {
+    @ContentChildren(DxiGanttColumnComponent)
+    get columnsChildren(): QueryList<DxiGanttColumnComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
+        this.setContentChildren('columns', value, 'DxiGanttColumnComponent');
         this.setChildren('columns', value);
     }
 
-    @ContentChildren(DxiStripLineComponent)
-    get stripLinesChildren(): QueryList<DxiStripLineComponent> {
+    @ContentChildren(DxiGanttStripLineComponent)
+    get stripLinesChildren(): QueryList<DxiGanttStripLineComponent> {
         return this._getOption('stripLines');
     }
     set stripLinesChildren(value) {
+        this.setContentChildren('stripLines', value, 'DxiGanttStripLineComponent');
         this.setChildren('stripLines', value);
+    }
+
+
+    @ContentChildren(DxiColumnComponent)
+    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsLegacyChildren(value) {
+        if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
+           this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiStripLineComponent)
+    get stripLinesLegacyChildren(): QueryList<DxiStripLineComponent> {
+        return this._getOption('stripLines');
+    }
+    set stripLinesLegacyChildren(value) {
+        if (this.checkContentChildren('stripLines', value, 'DxiStripLineComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -1320,6 +1365,25 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoTasksModule,
     DxoToolbarModule,
     DxoValidationModule,
+    DxiGanttColumnModule,
+    DxoGanttFormatModule,
+    DxoGanttHeaderFilterModule,
+    DxoGanttSearchModule,
+    DxoGanttContextMenuModule,
+    DxiGanttItemModule,
+    DxoGanttDependenciesModule,
+    DxoGanttEditingModule,
+    DxoGanttFilterRowModule,
+    DxoGanttOperationDescriptionsModule,
+    DxoGanttTextsModule,
+    DxoGanttResourceAssignmentsModule,
+    DxoGanttResourcesModule,
+    DxoGanttScaleTypeRangeModule,
+    DxoGanttSortingModule,
+    DxiGanttStripLineModule,
+    DxoGanttTasksModule,
+    DxoGanttToolbarModule,
+    DxoGanttValidationModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1347,6 +1411,25 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoTasksModule,
     DxoToolbarModule,
     DxoValidationModule,
+    DxiGanttColumnModule,
+    DxoGanttFormatModule,
+    DxoGanttHeaderFilterModule,
+    DxoGanttSearchModule,
+    DxoGanttContextMenuModule,
+    DxiGanttItemModule,
+    DxoGanttDependenciesModule,
+    DxoGanttEditingModule,
+    DxoGanttFilterRowModule,
+    DxoGanttOperationDescriptionsModule,
+    DxoGanttTextsModule,
+    DxoGanttResourceAssignmentsModule,
+    DxoGanttResourcesModule,
+    DxoGanttScaleTypeRangeModule,
+    DxoGanttSortingModule,
+    DxiGanttStripLineModule,
+    DxoGanttTasksModule,
+    DxoGanttToolbarModule,
+    DxoGanttValidationModule,
     DxTemplateModule
   ]
 })

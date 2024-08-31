@@ -40,8 +40,11 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validation-summary/nested';
 
 
 /**
@@ -203,12 +206,24 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiValidationSummaryItemComponent)
+    get itemsChildren(): QueryList<DxiValidationSummaryItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiValidationSummaryItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -281,6 +296,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiValidationSummaryItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -290,6 +306,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
   exports: [
     DxValidationSummaryComponent,
     DxiItemModule,
+    DxiValidationSummaryItemModule,
     DxTemplateModule
   ]
 })

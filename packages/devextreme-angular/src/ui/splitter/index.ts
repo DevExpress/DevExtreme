@@ -44,8 +44,12 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
+import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
+import { DxoSplitterSplitterModule } from 'devextreme-angular/ui/splitter/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested';
 
 
 /**
@@ -423,12 +427,24 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiSplitterItemComponent)
+    get itemsChildren(): QueryList<DxiSplitterItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiSplitterItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -519,6 +535,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
   imports: [
     DxiItemModule,
     DxoSplitterModule,
+    DxiSplitterItemModule,
+    DxoSplitterSplitterModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -529,6 +547,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     DxSplitterComponent,
     DxiItemModule,
     DxoSplitterModule,
+    DxiSplitterItemModule,
+    DxoSplitterSplitterModule,
     DxTemplateModule
   ]
 })

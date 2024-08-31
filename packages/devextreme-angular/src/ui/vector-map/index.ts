@@ -64,10 +64,34 @@ import { DxoProjectionModule } from 'devextreme-angular/ui/nested';
 import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
+import { DxiVectorMapAnnotationModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapBorderModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapFontModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapImageModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapShadowModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapBackgroundModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapCommonAnnotationSettingsModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapControlBarModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapExportModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiVectorMapLayerModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapLabelModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiVectorMapLegendModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapMarginModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapSourceModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapTitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapLoadingIndicatorModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapProjectionModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapSizeModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoVectorMapTooltipModule } from 'devextreme-angular/ui/vector-map/nested';
+
 import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
 import { DxiLayerComponent } from 'devextreme-angular/ui/nested';
 import { DxiLegendComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiVectorMapAnnotationComponent } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiVectorMapLayerComponent } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiVectorMapLegendComponent } from 'devextreme-angular/ui/vector-map/nested';
 
 
 /**
@@ -742,28 +766,62 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiAnnotationComponent> {
+    @ContentChildren(DxiVectorMapAnnotationComponent)
+    get annotationsChildren(): QueryList<DxiVectorMapAnnotationComponent> {
         return this._getOption('annotations');
     }
     set annotationsChildren(value) {
+        this.setContentChildren('annotations', value, 'DxiVectorMapAnnotationComponent');
         this.setChildren('annotations', value);
     }
 
-    @ContentChildren(DxiLayerComponent)
-    get layersChildren(): QueryList<DxiLayerComponent> {
+    @ContentChildren(DxiVectorMapLayerComponent)
+    get layersChildren(): QueryList<DxiVectorMapLayerComponent> {
         return this._getOption('layers');
     }
     set layersChildren(value) {
+        this.setContentChildren('layers', value, 'DxiVectorMapLayerComponent');
         this.setChildren('layers', value);
     }
 
-    @ContentChildren(DxiLegendComponent)
-    get legendsChildren(): QueryList<DxiLegendComponent> {
+    @ContentChildren(DxiVectorMapLegendComponent)
+    get legendsChildren(): QueryList<DxiVectorMapLegendComponent> {
         return this._getOption('legends');
     }
     set legendsChildren(value) {
+        this.setContentChildren('legends', value, 'DxiVectorMapLegendComponent');
         this.setChildren('legends', value);
+    }
+
+
+    @ContentChildren(DxiAnnotationComponent)
+    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
+        return this._getOption('annotations');
+    }
+    set annotationsLegacyChildren(value) {
+        if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
+           this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiLayerComponent)
+    get layersLegacyChildren(): QueryList<DxiLayerComponent> {
+        return this._getOption('layers');
+    }
+    set layersLegacyChildren(value) {
+        if (this.checkContentChildren('layers', value, 'DxiLayerComponent')) {
+           this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiLegendComponent)
+    get legendsLegacyChildren(): QueryList<DxiLegendComponent> {
+        return this._getOption('legends');
+    }
+    set legendsLegacyChildren(value) {
+        if (this.checkContentChildren('legends', value, 'DxiLegendComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -894,6 +952,26 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     DxoProjectionModule,
     DxoSizeModule,
     DxoTooltipModule,
+    DxiVectorMapAnnotationModule,
+    DxoVectorMapBorderModule,
+    DxoVectorMapFontModule,
+    DxoVectorMapImageModule,
+    DxoVectorMapShadowModule,
+    DxoVectorMapBackgroundModule,
+    DxoVectorMapCommonAnnotationSettingsModule,
+    DxoVectorMapControlBarModule,
+    DxoVectorMapExportModule,
+    DxiVectorMapLayerModule,
+    DxoVectorMapLabelModule,
+    DxiVectorMapLegendModule,
+    DxoVectorMapMarginModule,
+    DxoVectorMapSourceModule,
+    DxoVectorMapTitleModule,
+    DxoVectorMapSubtitleModule,
+    DxoVectorMapLoadingIndicatorModule,
+    DxoVectorMapProjectionModule,
+    DxoVectorMapSizeModule,
+    DxoVectorMapTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -922,6 +1000,26 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     DxoProjectionModule,
     DxoSizeModule,
     DxoTooltipModule,
+    DxiVectorMapAnnotationModule,
+    DxoVectorMapBorderModule,
+    DxoVectorMapFontModule,
+    DxoVectorMapImageModule,
+    DxoVectorMapShadowModule,
+    DxoVectorMapBackgroundModule,
+    DxoVectorMapCommonAnnotationSettingsModule,
+    DxoVectorMapControlBarModule,
+    DxoVectorMapExportModule,
+    DxiVectorMapLayerModule,
+    DxoVectorMapLabelModule,
+    DxiVectorMapLegendModule,
+    DxoVectorMapMarginModule,
+    DxoVectorMapSourceModule,
+    DxoVectorMapTitleModule,
+    DxoVectorMapSubtitleModule,
+    DxoVectorMapLoadingIndicatorModule,
+    DxoVectorMapProjectionModule,
+    DxoVectorMapSizeModule,
+    DxoVectorMapTooltipModule,
     DxTemplateModule
   ]
 })
