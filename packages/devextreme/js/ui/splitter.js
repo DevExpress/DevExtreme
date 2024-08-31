@@ -25,6 +25,12 @@ export default Splitter;
  */
 
 /**
+ * @name dxSplitterOptions.onSelectionChanging
+ * @action
+ * @hidden
+ */
+
+/**
  * @name dxSplitterOptions.onSelectionChanged
  * @action
  * @hidden

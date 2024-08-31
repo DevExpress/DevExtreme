@@ -109,6 +109,18 @@ export interface Cancelable {
     cancel?: boolean;
 }
 
+/**
+ * @docid
+ * @public
+ */
+export type AsyncCancelable = {
+    /**
+     * @docid
+     * @type boolean|Promise<boolean>
+     */
+    cancel: boolean | PromiseLike<boolean>;
+};
+
 /** @deprecated EventObject */
 export type dxEvent = EventObject;
 

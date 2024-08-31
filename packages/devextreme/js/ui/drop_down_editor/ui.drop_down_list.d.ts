@@ -13,6 +13,7 @@ import {
     EventInfo,
     NativeEventInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../../events/index';
 
 import {
@@ -30,6 +31,26 @@ import dxDropDownEditor, {
 import {
     SimplifiedSearchMode,
 } from '../../common';
+
+/**
+ * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
+ * @hidden
+ */
+export interface SelectionChangingInfo<T = any> {
+    /**
+     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo.selectedItem
+     * @type object
+     */
+    readonly selectedItem: T;
+}
+
+/**
+ * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TComponent> = AsyncCancelable & EventInfo<TComponent> & SelectionChangingInfo;
 
 /**
  * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
@@ -96,6 +117,14 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @public
      */
     onItemClick?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/drop_down_editor/ui.drop_down_list:SelectionChangingEvent}
+     * @action
+     * @public
+     */
+    onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
     /**
      * @docid
      * @default null

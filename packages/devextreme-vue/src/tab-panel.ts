@@ -31,6 +31,7 @@ type AccessibleOptions = Pick<Properties,
   "onItemRendered" |
   "onOptionChanged" |
   "onSelectionChanged" |
+  "onSelectionChanging" |
   "onTitleClick" |
   "onTitleHold" |
   "onTitleRendered" |
@@ -81,6 +82,7 @@ const DxTabPanel = createComponent({
     onItemRendered: Function,
     onOptionChanged: Function,
     onSelectionChanged: Function,
+    onSelectionChanging: Function,
     onTitleClick: Function,
     onTitleHold: Function,
     onTitleRendered: Function,
@@ -128,6 +130,7 @@ const DxTabPanel = createComponent({
     "update:onItemRendered": null,
     "update:onOptionChanged": null,
     "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:onTitleClick": null,
     "update:onTitleHold": null,
     "update:onTitleRendered": null,

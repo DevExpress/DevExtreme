@@ -26,7 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/tab_panel';
 import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxTabPanelItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
+import { ContentReadyEvent, DisposingEvent, dxTabPanelItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
 
 import DxTabPanel from 'devextreme/ui/tab_panel';
 
@@ -540,6 +540,14 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
     /**
     
+     * [descr:dxTabPanelOptions.onSelectionChanging]
+    
+    
+     */
+    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
+
+    /**
+    
      * [descr:dxTabPanelOptions.onTitleClick]
     
     
@@ -812,6 +820,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
             { subscribe: 'itemRendered', emit: 'onItemRendered' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { subscribe: 'titleClick', emit: 'onTitleClick' },
             { subscribe: 'titleHold', emit: 'onTitleHold' },
             { subscribe: 'titleRendered', emit: 'onTitleRendered' },

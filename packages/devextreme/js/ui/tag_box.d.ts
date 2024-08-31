@@ -9,6 +9,7 @@ import {
 
 import {
     Cancelable,
+    AsyncCancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -17,6 +18,7 @@ import {
 } from '../events/index';
 
 import {
+    SelectionChangingInfo,
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
@@ -191,6 +193,14 @@ export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
 };
 
 /**
+ * @docid _ui_tag_box_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxTagBox> & SelectionChangingInfo<string | number | any>;
+
+/**
  * @docid _ui_tag_box_SelectionChangedEvent
  * @public
  * @type object
@@ -214,7 +224,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @namespace DevExpress.ui
  * @docid
  */
-export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
+export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged' | 'onSelectionChanging'>> {
     /**
      * @docid
      * @default "instantly"
@@ -255,6 +265,14 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @public
      */
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
+    /**
+     * @docid
+     * @default null
+     * @type_function_param1 e:{ui/tag_box:SelectionChangingEvent}
+     * @action
+     * @public
+     */
+    onSelectionChanging?: ((e: SelectionChangingEvent) => void);
     /**
      * @docid
      * @default null
@@ -335,7 +353,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged' | 'onSelectionChanging'>;
 
 /**
 * @hidden

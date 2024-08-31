@@ -26,6 +26,12 @@ export default ActionSheet;
  */
 
 /**
+ * @name dxActionSheetOptions.onSelectionChanging
+ * @action
+ * @hidden
+ */
+
+/**
  * @name dxActionSheetOptions.onSelectionChanged
  * @action
  * @hidden

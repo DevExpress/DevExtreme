@@ -17,6 +17,7 @@ export {
   OpenedEvent,
   OptionChangedEvent,
   PasteEvent,
+  SelectionChangingEvent,
   SelectionChangedEvent,
   ValueChangedEvent,
   DropDownButtonTemplateData,

@@ -6,12 +6,14 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
     SelectionChangedInfo,
+    SelectionChangingInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -93,6 +95,14 @@ export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventI
  * @inherits EventInfo,ChangedOptionInfo
  */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabs<TItem, TKey>> & ChangedOptionInfo;
+
+/**
+ * @docid _ui_tabs_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = AsyncCancelable & EventInfo<dxTabs<TItem, TKey>> & SelectionChangingInfo<TItem>;
 
 /**
  * @docid _ui_tabs_SelectionChangedEvent
@@ -254,6 +264,7 @@ export type ExplicitTypes<
     ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
     OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
     SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
 };
 
 /** @public */
@@ -320,6 +331,11 @@ onItemRendered?: ((e: ItemRenderedEvent) => void);
  * @type_function_param1 e:{ui/tabs:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @docid dxTabsOptions.onSelectionChanging
+ * @type_function_param1 e:{ui/tabs:SelectionChangingEvent}
+ */
+onSelectionChanging?: ((e: SelectionChangingEvent) => void);
 /**
  * @docid dxTabsOptions.onSelectionChanged
  * @type_function_param1 e:{ui/tabs:SelectionChangedEvent}

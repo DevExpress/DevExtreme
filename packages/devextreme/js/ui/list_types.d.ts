@@ -21,6 +21,7 @@ export {
   PullRefreshEvent,
   ScrollEvent,
   SelectAllValueChangedEvent,
+  SelectionChangingEvent,
   SelectionChangedEvent,
   dxListOptions,
   Item,

@@ -9,7 +9,7 @@ import dxTabPanel, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxTabPanelItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
+import type { dxTabPanelItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
@@ -25,6 +25,7 @@ type ITabPanelOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
   onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent<TItem, TKey>) => void);
   onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void);
   onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void);
   onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void);
@@ -62,7 +63,7 @@ const TabPanel = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem"]), []);
-      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered","onTitleClick","onTitleHold","onTitleRendered"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered","onSelectionChanging","onTitleClick","onTitleHold","onTitleRendered"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",

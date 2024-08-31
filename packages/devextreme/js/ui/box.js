@@ -23,6 +23,11 @@ export default Box;
  * @hidden
  */
 /**
+ * @name dxBoxOptions.onSelectionChanging
+ * @action
+ * @hidden
+ */
+/**
  * @name dxBoxOptions.onSelectionChanged
  * @action
  * @hidden

@@ -48,6 +48,7 @@ type AccessibleOptions = Pick<Properties,
   "onPullRefresh" |
   "onScroll" |
   "onSelectionChanged" |
+  "onSelectionChanging" |
   "onValueChanged" |
   "opened" |
   "pageLoadingText" |
@@ -137,6 +138,7 @@ const DxLookup = createComponent({
     onPullRefresh: Function,
     onScroll: Function,
     onSelectionChanged: Function,
+    onSelectionChanging: Function,
     onValueChanged: Function,
     opened: Boolean,
     pageLoadingText: String,
@@ -223,6 +225,7 @@ const DxLookup = createComponent({
     "update:onPullRefresh": null,
     "update:onScroll": null,
     "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:onValueChanged": null,
     "update:opened": null,
     "update:pageLoadingText": null,
