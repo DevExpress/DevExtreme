@@ -26,7 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/tabs';
 import { Orientation, SingleOrMultiple, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxTabsItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/tabs';
+import { ContentReadyEvent, DisposingEvent, dxTabsItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/tabs';
 
 import DxTabs from 'devextreme/ui/tabs';
 
@@ -514,6 +514,14 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
     
+     * [descr:dxTabsOptions.onSelectionChanging]
+    
+    
+     */
+    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
+
+    /**
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
@@ -748,6 +756,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
             { subscribe: 'itemRendered', emit: 'onItemRendered' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { emit: 'accessKeyChange' },
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },

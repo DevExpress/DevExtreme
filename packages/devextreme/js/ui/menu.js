@@ -16,7 +16,7 @@ export default Menu;
  */
 
 /**
- * @name dxMenuOptions.onSelectionChange
+ * @name dxMenuOptions.onSelectionChanging
  * @hidden
  * @action
  */

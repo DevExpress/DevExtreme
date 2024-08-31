@@ -28,7 +28,7 @@ import { ApplyValueMode, EditorStyle, LabelMode, Mode, PageLoadMode, Position, S
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/lookup';
+import { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangedEvent, SelectionChangingEvent, ValueChangedEvent } from 'devextreme/ui/lookup';
 import { Properties as dxPopoverOptions } from 'devextreme/ui/popover';
 
 import DxLookup from 'devextreme/ui/lookup';
@@ -1096,6 +1096,14 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
+     * [descr:dxLookupOptions.onSelectionChanging]
+    
+    
+     */
+    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
+
+    /**
+    
      * [descr:dxLookupOptions.onValueChanged]
     
     
@@ -1637,6 +1645,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
             { subscribe: 'pullRefresh', emit: 'onPullRefresh' },
             { subscribe: 'scroll', emit: 'onScroll' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { subscribe: 'valueChanged', emit: 'onValueChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },

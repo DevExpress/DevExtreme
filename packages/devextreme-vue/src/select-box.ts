@@ -53,6 +53,7 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onPaste" |
   "onSelectionChanged" |
+  "onSelectionChanging" |
   "onValueChanged" |
   "opened" |
   "openOnFieldClick" |
@@ -141,6 +142,7 @@ const DxSelectBox = createComponent({
     onOptionChanged: Function,
     onPaste: Function,
     onSelectionChanged: Function,
+    onSelectionChanging: Function,
     onValueChanged: Function,
     opened: Boolean,
     openOnFieldClick: Boolean,
@@ -226,6 +228,7 @@ const DxSelectBox = createComponent({
     "update:onOptionChanged": null,
     "update:onPaste": null,
     "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:onValueChanged": null,
     "update:opened": null,
     "update:openOnFieldClick": null,

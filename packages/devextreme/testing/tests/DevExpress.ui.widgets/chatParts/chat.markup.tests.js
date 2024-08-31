@@ -29,10 +29,44 @@ const moduleConfig = {
 
 QUnit.module('Chat', moduleConfig, () => {
     QUnit.module('Render', () => {
-        QUnit.test('Header should be rendered', function(assert) {
+        QUnit.test('Header should be rendered if title is not empty', function(assert) {
+            this.reinit({ title: 'custom' });
+
             const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
 
             assert.strictEqual($header.length, 1);
+        });
+
+        QUnit.test('Header should not be rendered if title is empty', function(assert) {
+            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
+
+            assert.strictEqual($header.length, 0);
+        });
+
+        QUnit.test('Header should be rendered if title is not empty on init and in runtime', function(assert) {
+            this.reinit({ title: 'custom' });
+            this.instance.option({ title: 'new custom' });
+
+            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
+
+            assert.strictEqual($header.length, 1);
+        });
+
+        QUnit.test('Header should be rendered if title is empty on init and not empty in runtime', function(assert) {
+            this.instance.option({ title: 'new custom' });
+
+            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
+
+            assert.strictEqual($header.length, 1);
+        });
+
+        QUnit.test('Header should be removed if title is empty in runtime', function(assert) {
+            this.reinit({ title: 'custom' });
+            this.instance.option({ title: '' });
+
+            const $header = this.$element.find(`.${CHAT_HEADER_CLASS}`);
+
+            assert.strictEqual($header.length, 0);
         });
 
         QUnit.test('Message list should be rendered', function(assert) {
