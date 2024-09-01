@@ -8,7 +8,7 @@ import { Scrollable } from '../inferno_wrappers/scrollable';
 import { ContentViewContent } from './content_view_content';
 
 export const CLASSES = {
-  content: 'dx-cardview-content',
+  content: 'dx-gridcore-content',
 };
 
 export class ContentView extends View {

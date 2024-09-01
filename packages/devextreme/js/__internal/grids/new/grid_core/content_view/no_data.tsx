@@ -5,7 +5,7 @@ export interface NoDataProperties {
 }
 
 export const CLASSES = {
-  noData: 'dx-cardview-nodata',
+  noData: 'dx-gridcore-nodata',
 };
 
 export class NoData extends Component<NoDataProperties> {
