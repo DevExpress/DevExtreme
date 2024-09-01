@@ -27,7 +27,7 @@ export function normalizeDataSource(
 export class DataController {
   private readonly dataSourceConfiguration = this.options.oneWay('dataSource');
 
-  public readonly keyExpr = this.options.oneWay('keyExpr');
+  private readonly keyExpr = this.options.oneWay('keyExpr');
 
   private readonly dataSource = computed(
     normalizeDataSource,
@@ -111,7 +111,6 @@ export class DataController {
   }
 
   public getDataKey(data: unknown): unknown {
-    // @ts-expect-error
-    return data[this.keyExpr.unreactive_get()];
+    return this.dataSource.unreactive_get().store().keyOf(data);
   }
 }

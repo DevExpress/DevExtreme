@@ -2,6 +2,7 @@
 import { computed } from '@ts/core/reactive';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
+import type { ContentViewContent as BaseContentViewContent } from '@ts/grids/new/grid_core/content_view/content_view_content';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 
@@ -12,7 +13,7 @@ export const CLASSES = {
   content: 'dx-cardview-content',
 };
 
-export class ContentViewContent extends View {
+export class ContentViewContent extends View implements BaseContentViewContent {
   private readonly items = computed(
     (dataItems, columns: Column[]) => dataItems.map(
       (item) => this.columnsController.createDataRow(
