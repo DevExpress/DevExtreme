@@ -1,6 +1,5 @@
+import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { ComponentType } from 'inferno';
-
-import type { Column } from '../columns_controller/types';
 
 export const CLASSES = {
   headerItem: 'dx-gridcore-header-item',

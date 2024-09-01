@@ -1,7 +1,7 @@
 import { computed } from '@ts/core/reactive';
+import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
+import { View } from '@ts/grids/new/grid_core/core/view';
 
-import { ColumnsController } from '../columns_controller/columns_controller';
-import { View } from '../core/view';
 import { Headers } from './headers';
 
 export class HeadersView extends View {

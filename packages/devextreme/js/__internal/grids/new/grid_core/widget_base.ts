@@ -13,7 +13,6 @@ import { DataController } from '@ts/grids/new/grid_core/data_controller/data_con
 import { EditingController } from '@ts/grids/new/grid_core/editing/controller';
 import { HeaderPanelController } from '@ts/grids/new/grid_core/header_panel/controller';
 import { HeaderPanelView } from '@ts/grids/new/grid_core/header_panel/view';
-import { HeadersView } from '@ts/grids/new/grid_core/headers/view';
 import { MainView } from '@ts/grids/new/grid_core/main_view';
 import { PagerView } from '@ts/grids/new/grid_core/pager';
 import { Search } from '@ts/grids/new/grid_core/search/controller';
@@ -55,7 +54,6 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(MainView);
     this.diContext.register(ColumnsChooser);
     this.diContext.register(ColumnsDraggingController);
-    this.diContext.register(HeadersView);
     this.diContext.register(Search);
     this.diContext.register(ContentStatusView);
     this.diContext.register(FilterPanelView);

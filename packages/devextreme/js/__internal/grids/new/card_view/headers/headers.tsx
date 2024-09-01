@@ -1,4 +1,5 @@
-import type { Column } from '../columns_controller/types';
+import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
+
 import { HeaderItem } from './header_item';
 
 export const CLASSES = {

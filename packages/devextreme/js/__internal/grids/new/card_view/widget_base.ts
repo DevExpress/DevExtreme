@@ -6,12 +6,15 @@ import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_c
 import { GridCoreNew } from '@ts/grids/new/grid_core/widget_base';
 
 import { ContentViewContent } from './content_view/content_view_content';
+import { HeadersView } from './headers/view';
 import { OptionsController } from './options_controller';
 import type { Properties } from './types';
 
 class CardView extends GridCoreNew<Properties> {
   protected _registerDIContext(): void {
     super._registerDIContext();
+    this.diContext.register(HeadersView);
+
     this.diContext.register(ContentViewContentBase, ContentViewContent);
 
     const optionsController = new OptionsController(this);
