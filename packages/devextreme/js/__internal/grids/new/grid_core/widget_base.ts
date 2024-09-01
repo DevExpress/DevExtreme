@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 import browser from '@js/core/utils/browser';
+import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
@@ -18,6 +20,7 @@ import { Search } from '@ts/grids/new/grid_core/search/controller';
 import { render } from 'inferno';
 
 import { ContentStatusView } from './content_view/content_status_view';
+import { ContentView } from './content_view/content_view';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
 
 export class GridCoreNew<Properties> extends Widget<Properties> {
@@ -56,6 +59,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(Search);
     this.diContext.register(ContentStatusView);
     this.diContext.register(FilterPanelView);
+    this.diContext.register(ContentView);
   }
 
   protected _initDIContext(): void {
@@ -146,5 +150,9 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     render(null, this.$element().get(0));
     // @ts-expect-error
     super._clean();
+  }
+
+  public getScrollable(): dxScrollable {
+    return this.diContext.get(ContentView).scrollableRef.current!;
   }
 }
