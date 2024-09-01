@@ -1,13 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import type { Subscribable } from '@ts/core/reactive';
+import { HeadersView } from '@ts/grids/new/card_view/headers/view';
 import type { InfernoNode } from 'inferno';
 
 import { ContentView } from './content_view/content_view';
 import { View } from './core/view';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
 import { HeaderPanelView } from './header_panel/view';
-import { HeadersView } from './headers/view';
 import { PagerView } from './pager';
 
 export class MainView extends View {
