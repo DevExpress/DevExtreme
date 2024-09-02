@@ -58,7 +58,11 @@ module.exports = {
             metadataPath: './metadata/NGMetaData.json',
             outputPath: './src/'
         },
-
+    },
+    afterGenerate: {
+        preserveComponentFiles: ['popup/service', 'popup/index.ts'],
+        renameGeneratedFiles: [{ path: 'popup/index.ts', newName: 'component.ts' }],
+        temporaryFolderForPreserved: './tmp-preserved/'
     },
     components: {
         srcFilesPattern: '**/*.ts',
