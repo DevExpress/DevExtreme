@@ -7,6 +7,11 @@ import { LoadPanel } from '../inferno_wrappers/load_panel';
 import { OptionsController } from '../options_controller/options_controller';
 import { NoData } from './no_data';
 
+/**
+ * Shows content status:
+ * - if not loaded yet, shows Load Panel
+ * - if loaded, but no records to show, shows No Data Panel
+ */
 export class ContentStatusView extends View {
   private readonly isNoData = computed(
     (isLoading, items) => !isLoading && items.length === 0,

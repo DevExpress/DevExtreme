@@ -175,6 +175,7 @@
     "through2": "2.0.5",
     "ts-jest": "29.1.2",
     "tsc-alias": "1.8.10",
+    "typedoc": "^0.26.6",
     "typescript": "4.9.5",
     "typescript-min": "npm:typescript@4.9.5",
     "uuid": "9.0.1",
@@ -223,7 +224,8 @@
     "test-jest": "jest --no-coverage --runInBand",
     "test-jest:watch": "jest --watch",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
-    "tcd-update": "tcd-update"
+    "tcd-update": "tcd-update",
+    "gen-doc": "typedoc 'js/__internal/grids/new/**/*.ts' 'js/__internal/grids/new/**/*.tsx'  --tsconfig js/__internal/tsconfig.json --excludePrivate false"
   },
   "browserslist": [
     "last 2 versions",
