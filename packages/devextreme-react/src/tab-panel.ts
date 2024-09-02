@@ -116,6 +116,7 @@ type IItemProps = React.PropsWithChildren<{
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   title?: string;
+  visible?: boolean;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;

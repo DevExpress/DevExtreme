@@ -859,6 +859,7 @@ const DxTabPanelOptionsItem = createConfigurationComponent({
     "update:template": null,
     "update:text": null,
     "update:title": null,
+    "update:visible": null,
   },
   props: {
     badge: String,
@@ -868,7 +869,8 @@ const DxTabPanelOptionsItem = createConfigurationComponent({
     tabTemplate: {},
     template: {},
     text: String,
-    title: String
+    title: String,
+    visible: Boolean
   }
 });
 (DxTabPanelOptionsItem as any).$_optionName = "items";
