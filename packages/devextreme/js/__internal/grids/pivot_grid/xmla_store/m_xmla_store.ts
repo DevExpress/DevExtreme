@@ -668,18 +668,20 @@ const XmlaStore = Class.inherit((function () {
     return cells;
   }
 
-  function preparePathValue(pathValue, dataField?) {
-    if (pathValue) {
-      const shouldWrapPathValue = isString(pathValue) && (
-        pathValue.includes('&') || pathValue.startsWith(`${dataField}.`)
-      );
-      pathValue = shouldWrapPathValue ? pathValue : `[${pathValue}]`;
-
-      if (dataField && pathValue.indexOf(`${dataField}.`) === 0) {
-        pathValue = pathValue.slice(dataField.length + 1, pathValue.length);
-      }
+  function preparePathValue(pathValue, dataField?): string | undefined {
+    if (!pathValue) {
+      return undefined;
     }
-    return pathValue;
+    if (!isString(pathValue)) {
+      return `[${pathValue}]`;
+    }
+
+    const isStartedWithDataField = dataField && pathValue.startsWith(`${dataField}.`);
+    const preparedPath = isStartedWithDataField
+      ? pathValue.slice(dataField.length + 1, pathValue.length)
+      : `[${pathValue}]`;
+
+    return preparedPath;
   }
 
   function getItem(hash, name, member?, index?) {
