@@ -36,6 +36,10 @@ import {
 
 
 
+
+
+
+
 /**
  * [descr:dxResizable]
 
@@ -325,6 +329,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -377,6 +383,8 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxResizableComponent,
+    
+    
     DxTemplateModule
   ]
 })

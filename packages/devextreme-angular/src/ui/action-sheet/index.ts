@@ -42,9 +42,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nested';
+
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+
+import { DxiActionSheetItemComponent } from 'devextreme-angular/ui/action-sheet/nested';
 
 
 
@@ -499,12 +505,31 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    hasNewItems: boolean = false;
+
+    @ContentChildren(DxiActionSheetItemComponent)
+    get itemsChildren(): QueryList<DxiActionSheetItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -596,6 +621,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiActionSheetItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -605,6 +631,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
   exports: [
     DxActionSheetComponent,
     DxiItemModule,
+    DxiActionSheetItemModule,
     DxTemplateModule
   ]
 })

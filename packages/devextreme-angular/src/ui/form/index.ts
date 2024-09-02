@@ -38,6 +38,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
@@ -46,7 +47,18 @@ import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
 import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxoFormColCountByScreenModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormLabelModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormTabModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
+
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+
+import { DxiFormItemComponent } from 'devextreme-angular/ui/form/nested';
 
 
 
@@ -797,12 +809,31 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    hasNewItems: boolean = false;
+
+    @ContentChildren(DxiFormItemComponent)
+    get itemsChildren(): QueryList<DxiFormItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -911,6 +942,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoFormColCountByScreenModule,
+    DxiFormItemModule,
+    DxoFormLabelModule,
+    DxiFormValidationRuleModule,
+    DxoFormTabPanelOptionsModule,
+    DxiFormTabModule,
+    DxoFormButtonOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -919,13 +957,8 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
   ],
   exports: [
     DxFormComponent,
-    DxoColCountByScreenModule,
-    DxiItemModule,
-    DxoLabelModule,
-    DxiValidationRuleModule,
-    DxoTabPanelOptionsModule,
-    DxiTabModule,
-    DxoButtonOptionsModule,
+    DxoColCountByScreenModule,DxiItemModule,DxoLabelModule,DxiValidationRuleModule,DxoTabPanelOptionsModule,DxiTabModule,DxoButtonOptionsModule,
+    DxoFormColCountByScreenModule,DxiFormItemModule,DxoFormLabelModule,DxiFormValidationRuleModule,DxoFormTabPanelOptionsModule,DxiFormTabModule,DxoFormButtonOptionsModule,
     DxTemplateModule
   ]
 })

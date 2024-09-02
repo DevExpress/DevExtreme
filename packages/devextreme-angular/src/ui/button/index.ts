@@ -36,6 +36,10 @@ import {
 
 
 
+
+
+
+
 /**
  * [descr:dxButton]
 
@@ -477,6 +481,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -536,6 +542,8 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxButtonComponent,
+    
+    
     DxTemplateModule
   ]
 })

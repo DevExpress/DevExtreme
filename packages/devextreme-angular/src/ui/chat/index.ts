@@ -37,11 +37,19 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
 import { DxoUserModule } from 'devextreme-angular/ui/nested';
 
+import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatAuthorModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
+
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+
+import { DxiChatItemComponent } from 'devextreme-angular/ui/chat/nested';
 
 
 
@@ -356,12 +364,31 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    hasNewItems: boolean = false;
+
+    @ContentChildren(DxiChatItemComponent)
+    get itemsChildren(): QueryList<DxiChatItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -443,6 +470,9 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxiItemModule,
     DxoAuthorModule,
     DxoUserModule,
+    DxiChatItemModule,
+    DxoChatAuthorModule,
+    DxoChatUserModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -451,9 +481,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   ],
   exports: [
     DxChatComponent,
-    DxiItemModule,
-    DxoAuthorModule,
-    DxoUserModule,
+    DxiItemModule,DxoAuthorModule,DxoUserModule,
+    DxiChatItemModule,DxoChatAuthorModule,DxoChatUserModule,
     DxTemplateModule
   ]
 })

@@ -40,6 +40,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
 import { DxoGeometryModule } from 'devextreme-angular/ui/nested';
@@ -65,6 +66,34 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoBorderModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
+
+import { DxoLinearGaugeAnimationModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeExportModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeGeometryModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeLoadingIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeFontModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeMarginModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeRangeContainerModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeBackgroundColorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxiLinearGaugeRangeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeColorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeScaleModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeLabelModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeFormatModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeMinorTickModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeTickModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeSizeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeSubvalueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeTextModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeTitleModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeSubtitleModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeTooltipModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeBorderModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeShadowModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+
+
 
 
 
@@ -592,6 +621,8 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -704,6 +735,31 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     DxoBorderModule,
     DxoShadowModule,
     DxoValueIndicatorModule,
+    DxoLinearGaugeAnimationModule,
+    DxoLinearGaugeExportModule,
+    DxoLinearGaugeGeometryModule,
+    DxoLinearGaugeLoadingIndicatorModule,
+    DxoLinearGaugeFontModule,
+    DxoLinearGaugeMarginModule,
+    DxoLinearGaugeRangeContainerModule,
+    DxoLinearGaugeBackgroundColorModule,
+    DxiLinearGaugeRangeModule,
+    DxoLinearGaugeColorModule,
+    DxoLinearGaugeWidthModule,
+    DxoLinearGaugeScaleModule,
+    DxoLinearGaugeLabelModule,
+    DxoLinearGaugeFormatModule,
+    DxoLinearGaugeMinorTickModule,
+    DxoLinearGaugeTickModule,
+    DxoLinearGaugeSizeModule,
+    DxoLinearGaugeSubvalueIndicatorModule,
+    DxoLinearGaugeTextModule,
+    DxoLinearGaugeTitleModule,
+    DxoLinearGaugeSubtitleModule,
+    DxoLinearGaugeTooltipModule,
+    DxoLinearGaugeBorderModule,
+    DxoLinearGaugeShadowModule,
+    DxoLinearGaugeValueIndicatorModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -712,31 +768,8 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
   ],
   exports: [
     DxLinearGaugeComponent,
-    DxoAnimationModule,
-    DxoExportModule,
-    DxoGeometryModule,
-    DxoLoadingIndicatorModule,
-    DxoFontModule,
-    DxoMarginModule,
-    DxoRangeContainerModule,
-    DxoBackgroundColorModule,
-    DxiRangeModule,
-    DxoColorModule,
-    DxoWidthModule,
-    DxoScaleModule,
-    DxoLabelModule,
-    DxoFormatModule,
-    DxoMinorTickModule,
-    DxoTickModule,
-    DxoSizeModule,
-    DxoSubvalueIndicatorModule,
-    DxoTextModule,
-    DxoTitleModule,
-    DxoSubtitleModule,
-    DxoTooltipModule,
-    DxoBorderModule,
-    DxoShadowModule,
-    DxoValueIndicatorModule,
+    DxoAnimationModule,DxoExportModule,DxoGeometryModule,DxoLoadingIndicatorModule,DxoFontModule,DxoMarginModule,DxoRangeContainerModule,DxoBackgroundColorModule,DxiRangeModule,DxoColorModule,DxoWidthModule,DxoScaleModule,DxoLabelModule,DxoFormatModule,DxoMinorTickModule,DxoTickModule,DxoSizeModule,DxoSubvalueIndicatorModule,DxoTextModule,DxoTitleModule,DxoSubtitleModule,DxoTooltipModule,DxoBorderModule,DxoShadowModule,DxoValueIndicatorModule,
+    DxoLinearGaugeAnimationModule,DxoLinearGaugeExportModule,DxoLinearGaugeGeometryModule,DxoLinearGaugeLoadingIndicatorModule,DxoLinearGaugeFontModule,DxoLinearGaugeMarginModule,DxoLinearGaugeRangeContainerModule,DxoLinearGaugeBackgroundColorModule,DxiLinearGaugeRangeModule,DxoLinearGaugeColorModule,DxoLinearGaugeWidthModule,DxoLinearGaugeScaleModule,DxoLinearGaugeLabelModule,DxoLinearGaugeFormatModule,DxoLinearGaugeMinorTickModule,DxoLinearGaugeTickModule,DxoLinearGaugeSizeModule,DxoLinearGaugeSubvalueIndicatorModule,DxoLinearGaugeTextModule,DxoLinearGaugeTitleModule,DxoLinearGaugeSubtitleModule,DxoLinearGaugeTooltipModule,DxoLinearGaugeBorderModule,DxoLinearGaugeShadowModule,DxoLinearGaugeValueIndicatorModule,
     DxTemplateModule
   ]
 })

@@ -40,14 +40,25 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxiColModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxiLocationModule } from 'devextreme-angular/ui/nested';
 import { DxiRowModule } from 'devextreme-angular/ui/nested';
 
+import { DxiResponsiveBoxColModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxItemModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
+
+
 import { DxiColComponent } from 'devextreme-angular/ui/nested';
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 import { DxiRowComponent } from 'devextreme-angular/ui/nested';
+
+import { DxiResponsiveBoxColComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxItemComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiResponsiveBoxRowComponent } from 'devextreme-angular/ui/responsive-box/nested';
 
 
 
@@ -434,28 +445,81 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 
 
-    @ContentChildren(DxiColComponent)
-    get colsChildren(): QueryList<DxiColComponent> {
+    hasNewCols: boolean = false;
+
+    @ContentChildren(DxiResponsiveBoxColComponent)
+    get colsChildren(): QueryList<DxiResponsiveBoxColComponent> {
         return this._getOption('cols');
     }
     set colsChildren(value) {
+        this.hasNewCols = value.length > 0;
         this.setChildren('cols', value);
     }
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    hasNewItems: boolean = false;
+
+    @ContentChildren(DxiResponsiveBoxItemComponent)
+    get itemsChildren(): QueryList<DxiResponsiveBoxItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
     }
 
-    @ContentChildren(DxiRowComponent)
-    get rowsChildren(): QueryList<DxiRowComponent> {
+    hasNewRows: boolean = false;
+
+    @ContentChildren(DxiResponsiveBoxRowComponent)
+    get rowsChildren(): QueryList<DxiResponsiveBoxRowComponent> {
         return this._getOption('rows');
     }
     set rowsChildren(value) {
+        this.hasNewRows = value.length > 0;
         this.setChildren('rows', value);
+    }
+
+
+
+    @ContentChildren(DxiColComponent)
+    get colsLegacyChildren(): QueryList<DxiColComponent> {
+        return this._getOption('cols');
+    }
+    set colsLegacyChildren(value) {
+        if (this.hasNewCols) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('cols', value);
+        }
+    }
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiRowComponent)
+    get rowsLegacyChildren(): QueryList<DxiRowComponent> {
+        return this._getOption('rows');
+    }
+    set rowsLegacyChildren(value) {
+        if (this.hasNewRows) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('rows', value);
+        }
     }
 
 
@@ -550,6 +614,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     DxiItemModule,
     DxiLocationModule,
     DxiRowModule,
+    DxiResponsiveBoxColModule,
+    DxiResponsiveBoxItemModule,
+    DxiResponsiveBoxLocationModule,
+    DxiResponsiveBoxRowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -558,10 +626,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
   ],
   exports: [
     DxResponsiveBoxComponent,
-    DxiColModule,
-    DxiItemModule,
-    DxiLocationModule,
-    DxiRowModule,
+    DxiColModule,DxiItemModule,DxiLocationModule,DxiRowModule,
+    DxiResponsiveBoxColModule,DxiResponsiveBoxItemModule,DxiResponsiveBoxLocationModule,DxiResponsiveBoxRowModule,
     DxTemplateModule
   ]
 })

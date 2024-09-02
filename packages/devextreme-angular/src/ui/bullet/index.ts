@@ -34,6 +34,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxoMarginModule } from 'devextreme-angular/ui/nested';
 import { DxoSizeModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
@@ -41,6 +42,16 @@ import { DxoBorderModule } from 'devextreme-angular/ui/nested';
 import { DxoFontModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+
+import { DxoBulletMarginModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletSizeModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletBorderModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletFontModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletFormatModule } from 'devextreme-angular/ui/bullet/nested';
+import { DxoBulletShadowModule } from 'devextreme-angular/ui/bullet/nested';
+
+
 
 
 
@@ -487,6 +498,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -548,6 +561,13 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
+    DxoBulletMarginModule,
+    DxoBulletSizeModule,
+    DxoBulletTooltipModule,
+    DxoBulletBorderModule,
+    DxoBulletFontModule,
+    DxoBulletFormatModule,
+    DxoBulletShadowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -556,13 +576,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxBulletComponent,
-    DxoMarginModule,
-    DxoSizeModule,
-    DxoTooltipModule,
-    DxoBorderModule,
-    DxoFontModule,
-    DxoFormatModule,
-    DxoShadowModule,
+    DxoMarginModule,DxoSizeModule,DxoTooltipModule,DxoBorderModule,DxoFontModule,DxoFormatModule,DxoShadowModule,
+    DxoBulletMarginModule,DxoBulletSizeModule,DxoBulletTooltipModule,DxoBulletBorderModule,DxoBulletFontModule,DxoBulletFormatModule,DxoBulletShadowModule,
     DxTemplateModule
   ]
 })

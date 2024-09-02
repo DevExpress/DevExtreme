@@ -42,6 +42,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
 import { DxoFromModule } from 'devextreme-angular/ui/nested';
@@ -53,9 +54,23 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
+import { DxoPopupAnimationModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupHideModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupFromModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupPositionModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupAtModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupBoundaryOffsetModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupCollisionModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupMyModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupOffsetModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupToModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupShowModule } from 'devextreme-angular/ui/popup/nested';
+import { DxiPopupToolbarItemModule } from 'devextreme-angular/ui/popup/nested';
+
+
+
+import { DxiPopupToolbarItemComponent } from 'devextreme-angular/ui/popup/nested';
 
 
 
@@ -916,13 +931,18 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-    @ContentChildren(DxiToolbarItemComponent)
-    get toolbarItemsChildren(): QueryList<DxiToolbarItemComponent> {
+    hasNewToolbarItems: boolean = false;
+
+    @ContentChildren(DxiPopupToolbarItemComponent)
+    get toolbarItemsChildren(): QueryList<DxiPopupToolbarItemComponent> {
         return this._getOption('toolbarItems');
     }
     set toolbarItemsChildren(value) {
+        this.hasNewToolbarItems = value.length > 0;
         this.setChildren('toolbarItems', value);
     }
+
+
 
 
 
@@ -1043,7 +1063,18 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
+    DxoPopupAnimationModule,
+    DxoPopupHideModule,
+    DxoPopupFromModule,
+    DxoPopupPositionModule,
+    DxoPopupAtModule,
+    DxoPopupBoundaryOffsetModule,
+    DxoPopupCollisionModule,
+    DxoPopupMyModule,
+    DxoPopupOffsetModule,
+    DxoPopupToModule,
+    DxoPopupShowModule,
+    DxiPopupToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1052,18 +1083,8 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
   ],
   exports: [
     DxPopupComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxiToolbarItemModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,
+    DxoPopupAnimationModule,DxoPopupHideModule,DxoPopupFromModule,DxoPopupPositionModule,DxoPopupAtModule,DxoPopupBoundaryOffsetModule,DxoPopupCollisionModule,DxoPopupMyModule,DxoPopupOffsetModule,DxoPopupToModule,DxoPopupShowModule,DxiPopupToolbarItemModule,
     DxTemplateModule
   ]
 })

@@ -37,6 +37,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
 import { DxiCenterModule } from 'devextreme-angular/ui/nested';
 import { DxiMarkerModule } from 'devextreme-angular/ui/nested';
@@ -44,9 +45,21 @@ import { DxiLocationModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxiRouteModule } from 'devextreme-angular/ui/nested';
 
+import { DxoMapApiKeyModule } from 'devextreme-angular/ui/map/nested';
+import { DxiMapCenterModule } from 'devextreme-angular/ui/map/nested';
+import { DxiMapMarkerModule } from 'devextreme-angular/ui/map/nested';
+import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
+import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
+import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
+
+
 import { DxiCenterComponent } from 'devextreme-angular/ui/nested';
 import { DxiMarkerComponent } from 'devextreme-angular/ui/nested';
 import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
+
+import { DxiMapCenterComponent } from 'devextreme-angular/ui/map/nested';
+import { DxiMapMarkerComponent } from 'devextreme-angular/ui/map/nested';
+import { DxiMapRouteComponent } from 'devextreme-angular/ui/map/nested';
 
 
 
@@ -581,28 +594,81 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
 
 
-    @ContentChildren(DxiCenterComponent)
-    get centerChildren(): QueryList<DxiCenterComponent> {
+    hasNewCenter: boolean = false;
+
+    @ContentChildren(DxiMapCenterComponent)
+    get centerChildren(): QueryList<DxiMapCenterComponent> {
         return this._getOption('center');
     }
     set centerChildren(value) {
+        this.hasNewCenter = value.length > 0;
         this.setChildren('center', value);
     }
 
-    @ContentChildren(DxiMarkerComponent)
-    get markersChildren(): QueryList<DxiMarkerComponent> {
+    hasNewMarkers: boolean = false;
+
+    @ContentChildren(DxiMapMarkerComponent)
+    get markersChildren(): QueryList<DxiMapMarkerComponent> {
         return this._getOption('markers');
     }
     set markersChildren(value) {
+        this.hasNewMarkers = value.length > 0;
         this.setChildren('markers', value);
     }
 
-    @ContentChildren(DxiRouteComponent)
-    get routesChildren(): QueryList<DxiRouteComponent> {
+    hasNewRoutes: boolean = false;
+
+    @ContentChildren(DxiMapRouteComponent)
+    get routesChildren(): QueryList<DxiMapRouteComponent> {
         return this._getOption('routes');
     }
     set routesChildren(value) {
+        this.hasNewRoutes = value.length > 0;
         this.setChildren('routes', value);
+    }
+
+
+
+    @ContentChildren(DxiCenterComponent)
+    get centerLegacyChildren(): QueryList<DxiCenterComponent> {
+        return this._getOption('center');
+    }
+    set centerLegacyChildren(value) {
+        if (this.hasNewCenter) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('center', value);
+        }
+    }
+
+    @ContentChildren(DxiMarkerComponent)
+    get markersLegacyChildren(): QueryList<DxiMarkerComponent> {
+        return this._getOption('markers');
+    }
+    set markersLegacyChildren(value) {
+        if (this.hasNewMarkers) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('markers', value);
+        }
+    }
+
+    @ContentChildren(DxiRouteComponent)
+    get routesLegacyChildren(): QueryList<DxiRouteComponent> {
+        return this._getOption('routes');
+    }
+    set routesLegacyChildren(value) {
+        if (this.hasNewRoutes) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('routes', value);
+        }
     }
 
 
@@ -705,6 +771,12 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxiLocationModule,
     DxoTooltipModule,
     DxiRouteModule,
+    DxoMapApiKeyModule,
+    DxiMapCenterModule,
+    DxiMapMarkerModule,
+    DxiMapLocationModule,
+    DxoMapTooltipModule,
+    DxiMapRouteModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -713,12 +785,8 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
   ],
   exports: [
     DxMapComponent,
-    DxoApiKeyModule,
-    DxiCenterModule,
-    DxiMarkerModule,
-    DxiLocationModule,
-    DxoTooltipModule,
-    DxiRouteModule,
+    DxoApiKeyModule,DxiCenterModule,DxiMarkerModule,DxiLocationModule,DxoTooltipModule,DxiRouteModule,
+    DxoMapApiKeyModule,DxiMapCenterModule,DxiMapMarkerModule,DxiMapLocationModule,DxoMapTooltipModule,DxiMapRouteModule,
     DxTemplateModule
   ]
 })

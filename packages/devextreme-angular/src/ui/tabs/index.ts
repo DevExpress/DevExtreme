@@ -41,9 +41,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiTabsItemModule } from 'devextreme-angular/ui/tabs/nested';
+
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+
+import { DxiTabsItemComponent } from 'devextreme-angular/ui/tabs/nested';
 
 
 
@@ -726,12 +732,31 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    hasNewItems: boolean = false;
+
+    @ContentChildren(DxiTabsItemComponent)
+    get itemsChildren(): QueryList<DxiTabsItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -839,6 +864,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiTabsItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -848,6 +874,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
   exports: [
     DxTabsComponent,
     DxiItemModule,
+    DxiTabsItemModule,
     DxTemplateModule
   ]
 })

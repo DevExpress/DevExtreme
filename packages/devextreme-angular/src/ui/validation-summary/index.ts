@@ -38,9 +38,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
+
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+
+import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validation-summary/nested';
 
 
 
@@ -203,12 +209,31 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    hasNewItems: boolean = false;
+
+    @ContentChildren(DxiValidationSummaryItemComponent)
+    get itemsChildren(): QueryList<DxiValidationSummaryItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.hasNewItems = value.length > 0;
         this.setChildren('items', value);
+    }
+
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.hasNewItems) {
+            if (value.length > 0) {
+                console.log('Use only one type of nested items');
+            }
+        } else {
+            this.setChildren('items', value);
+        }
     }
 
 
@@ -281,6 +306,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiValidationSummaryItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -290,6 +316,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
   exports: [
     DxValidationSummaryComponent,
     DxiItemModule,
+    DxiValidationSummaryItemModule,
     DxTemplateModule
   ]
 })

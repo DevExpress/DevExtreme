@@ -35,6 +35,10 @@ import {
 
 
 
+
+
+
+
 /**
  * [descr:dxDrawer]
 
@@ -480,6 +484,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -538,6 +544,8 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxDrawerComponent,
+    
+    
     DxTemplateModule
   ]
 })

@@ -35,6 +35,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
 import { DxoHideModule } from 'devextreme-angular/ui/nested';
 import { DxoFromModule } from 'devextreme-angular/ui/nested';
@@ -48,6 +49,22 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
+
+import { DxoTooltipAnimationModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipHideModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipFromModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipPositionModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipAtModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipBoundaryOffsetModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipCollisionModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipMyModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipOffsetModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipShowModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipHideEventModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipShowEventModule } from 'devextreme-angular/ui/tooltip/nested';
+
+
 
 
 
@@ -639,6 +656,8 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -712,6 +731,19 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     DxoShowModule,
     DxoHideEventModule,
     DxoShowEventModule,
+    DxoTooltipAnimationModule,
+    DxoTooltipHideModule,
+    DxoTooltipFromModule,
+    DxoTooltipPositionModule,
+    DxoTooltipAtModule,
+    DxoTooltipBoundaryOffsetModule,
+    DxoTooltipCollisionModule,
+    DxoTooltipMyModule,
+    DxoTooltipOffsetModule,
+    DxoTooltipToModule,
+    DxoTooltipShowModule,
+    DxoTooltipHideEventModule,
+    DxoTooltipShowEventModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -720,19 +752,8 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
   ],
   exports: [
     DxTooltipComponent,
-    DxoAnimationModule,
-    DxoHideModule,
-    DxoFromModule,
-    DxoPositionModule,
-    DxoAtModule,
-    DxoBoundaryOffsetModule,
-    DxoCollisionModule,
-    DxoMyModule,
-    DxoOffsetModule,
-    DxoToModule,
-    DxoShowModule,
-    DxoHideEventModule,
-    DxoShowEventModule,
+    DxoAnimationModule,DxoHideModule,DxoFromModule,DxoPositionModule,DxoAtModule,DxoBoundaryOffsetModule,DxoCollisionModule,DxoMyModule,DxoOffsetModule,DxoToModule,DxoShowModule,DxoHideEventModule,DxoShowEventModule,
+    DxoTooltipAnimationModule,DxoTooltipHideModule,DxoTooltipFromModule,DxoTooltipPositionModule,DxoTooltipAtModule,DxoTooltipBoundaryOffsetModule,DxoTooltipCollisionModule,DxoTooltipMyModule,DxoTooltipOffsetModule,DxoTooltipToModule,DxoTooltipShowModule,DxoTooltipHideEventModule,DxoTooltipShowEventModule,
     DxTemplateModule
   ]
 })

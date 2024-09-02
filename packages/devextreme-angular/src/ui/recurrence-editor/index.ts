@@ -47,6 +47,10 @@ import {
 
 
 
+
+
+
+
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxRecurrenceEditorComponent),
@@ -545,6 +549,8 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
 
 
 
+
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -656,6 +662,8 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
   ],
   exports: [
     DxRecurrenceEditorComponent,
+    
+    
     DxTemplateModule
   ]
 })
