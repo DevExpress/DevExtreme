@@ -2,7 +2,15 @@ $(() => {
   const tabsInstance = $('.tabs-container').dxTabs({
     dataSource: employees,
     selectedItem: employees[0],
+    onSelectionChanging(e) {
+      const itemText = e.addedItems[0].text;
 
+      e.cancel = new Promise((resolve)=>{
+        DevExpress.ui.dialog.confirm(`Change tab to ${itemText}?`, "Confirm Tab Change").then((result) => {
+          resolve(!result);
+        });
+      })
+    },
     onSelectionChanged({ component }) {
       const { selectedItem } = component.option();
 
