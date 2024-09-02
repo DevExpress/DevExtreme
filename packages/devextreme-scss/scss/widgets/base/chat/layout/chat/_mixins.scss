@@ -1,0 +1,5 @@
+@mixin chat($background-color) {
+  .dx-chat {
+    background-color: $background-color;
+  }
+}

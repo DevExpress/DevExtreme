@@ -70,21 +70,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
       .appendTo(this.element());
 
-    const configuration = {
+    this._textArea = this._createComponent($textArea, TextArea, {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      placeholder: 'Type a message',
-      autoResizeEnabled: true,
-      // TODO: Add rules for different themes
-      minHeight: '40px',
-      // TODO: Add rules for different themes
-      // TODO: Need get ML height and set into max-height 30% of it
-      // maxHeight: '100%',
-      maxHeight: '300px',
-    };
-
-    this._textArea = this._createComponent($textArea, TextArea, configuration);
+    });
   }
 
   _renderButton(): void {
@@ -103,7 +93,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled,
       hoverStateEnabled,
       icon: 'send',
-      type: 'default',
       stylingMode: 'text',
       onClick: (e): void => {
         this._sendHandler(e);

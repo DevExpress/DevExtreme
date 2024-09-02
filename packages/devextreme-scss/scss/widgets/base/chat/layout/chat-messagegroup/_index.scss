@@ -1,0 +1,21 @@
+.dx-chat-message-group {
+  display: grid;
+  align-items: start;
+}
+
+.dx-chat-message-group-information {
+  display: flex;
+  grid-row: 1;
+}
+
+.dx-chat-message-group-alignment-start {
+  justify-items: start;
+
+  .dx-chat-message-group-information {
+    grid-column: 2;
+  }
+}
+
+.dx-chat-message-group-alignment-end {
+  justify-items: end;
+}

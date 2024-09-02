@@ -70,13 +70,43 @@
                     id: MOCK_COMPANION_USER_ID,
                     name: 'First',
                 };
+                const userSecond = {
+                    id: 'erhgoerhg',
+                    name: 'Second',
+                };
 
                 $("#button").dxChat({
+                    user: userSecond,
                     items: [
                         {
                             timestamp: NOW,
                             author: userFirst,
                             text: 'custom',
+                        },
+                        {
+                            timestamp: NOW,
+                            author: userFirst,
+                            text: 'custom 2',
+                        },
+                        {
+                            timestamp: NOW,
+                            author: userFirst,
+                            text: 'custom 3',
+                        },
+                        {
+                            timestamp: NOW,
+                            author: userSecond,
+                            text: 'custom',
+                        },
+                        {
+                            timestamp: NOW,
+                            author: userSecond,
+                            text: 'custom 2',
+                        },
+                        {
+                            timestamp: NOW,
+                            author: userSecond,
+                            text: 'custom 3',
                         }
                     ],
                 });

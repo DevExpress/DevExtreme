@@ -1,0 +1,5 @@
+@mixin chat-messagelist($padding) {
+  .dx-chat-message-list {
+    padding: $padding;
+  }
+}

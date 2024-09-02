@@ -1,0 +1,31 @@
+@mixin chat-messagebox(
+  $padding,
+  $border-color,
+  $gap,
+  $border-radius,
+  $offset
+) {
+  .dx-chat-message-box {
+    padding: $padding;
+    border-top: 1px solid $border-color;
+  }
+
+  .dx-chat-message-box-text-area {
+    &.dx-textarea.dx-texteditor {
+      border-radius: $border-radius;
+
+      &::before {
+        // TODO: Get rid of the hack
+        left: 1px;
+        right: 0;
+        width: calc(100% - $offset);
+        border-bottom-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+    }
+  }
+  
+  .dx-chat-message-box-button {
+    margin-left: $gap;
+  }
+}

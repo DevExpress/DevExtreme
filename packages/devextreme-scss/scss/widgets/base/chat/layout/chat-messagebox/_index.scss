@@ -1,0 +1,9 @@
+.dx-chat-message-box {
+  display: flex;
+  max-height: 30%;
+  align-items: center;
+}
+
+.dx-chat-message-box-text-area {
+  flex-grow: 1;
+}

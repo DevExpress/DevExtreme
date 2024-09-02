@@ -5,23 +5,10 @@
 
 // adduse
 
-@include chat((
-  chat-border-radius: $chat-border-radius,
-  chat-box-shadow: $chat-box-shadow,
-  chat-header-padding: $chat-header-padding,
-  chat-message-group-gap: $chat-message-group-gap,
-  chat-message-group-padding: $chat-message-group-padding,
-  chat-message-group-alignment-start-template: $chat-message-group-alignment-start-template,
-  chat-information-font-size: $chat-information-font-size,
-  chat-information-color: $chat-information-color,
-  chat-message-author-name: $chat-message-author-name,
-  chat-avatar-size: $chat-avatar-size,
-  chat-avatar-background-color: $chat-avatar-background-color,
-  chat-bubble-padding: $chat-bubble-padding,
-  chat-bubble-border-radius: $chat-bubble-border-radius,
-  chat-bubble-background-color-secondary: $chat-bubble-background-color-secondary,
-  chat-bubble-background-color-primary: $chat-bubble-background-color-primary,
-  chat-message-list-padding: $chat-message-list-padding,
-  chat-message-box-padding: $chat-message-box-padding,
-  chat-message-box-gap: $chat-message-box-gap
-));
+@include chat($chat-background-color);
+@include chat-avatar($chat-avatar-size, $chat-avatar-background-color);
+@include chat-header($chat-header-padding);
+@include chat-messagebox($chat-message-box-padding, $chat-messagebox-border-color, $chat-message-box-gap, $chat-message-box-border-radius, $chat-message-box-before-offset);
+@include chat-messagebubble($chat-bubble-padding, $chat-bubble-border-radius, $chat-bubble-background-color-secondary, $chat-bubble-background-color-primary);
+@include chat-messagegroup($chat-message-group-gap, $chat-message-group-padding-top, $chat-message-group-alignment-start-template, $chat-information-font-size, $chat-information-color, $chat-message-author-name-gap);
+@include chat-messagelist($chat-message-list-padding);

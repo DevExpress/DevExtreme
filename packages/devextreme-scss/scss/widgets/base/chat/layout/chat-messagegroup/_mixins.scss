@@ -1,0 +1,30 @@
+@mixin chat-messagegroup(
+  $gap,
+  $padding-top,
+  $start-template,
+  $information-font-size,
+  $information-color,
+  $author-name-gap
+) {
+  .dx-chat-message-group {
+    row-gap: $gap;
+    
+    &:not(&:first-child) {
+      padding-top: $padding-top;
+    }
+  }
+  
+  .dx-chat-message-group-alignment-start {
+    grid-template-columns: $start-template;
+  }
+  
+  .dx-chat-message-time,
+  .dx-chat-message-author-name {
+    font-size: $information-font-size;
+    color: $information-color;
+  }
+  
+  .dx-chat-message-author-name {
+    margin-right: $author-name-gap;
+  }
+}

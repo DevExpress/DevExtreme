@@ -1,67 +1,7 @@
-@mixin chat($params) {
-  .dx-chat {
-    border-radius: map-get($params, 'chat-border-radius');
-    box-shadow: map-get($params, 'chat-box-shadow');
-  }
-  
-  .dx-chat-header {
-    padding: map-get($params, 'chat-header-padding');
-  }
-  
-  .dx-chat-message-group {
-    row-gap: map-get($params, 'chat-message-group-gap');
-    padding: map-get($params, 'chat-message-group-padding');
-  }
-  
-  .dx-chat-message-group-alignment-start {
-    grid-template-columns: map-get($params, 'chat-message-group-alignment-start-template');
-  }
-  
-  .dx-chat-message-time,
-  .dx-chat-message-author-name {
-    font-size: map-get($params, 'chat-information-font-size');
-    color: map-get($params, 'chat-information-color');
-  }
-  
-  .dx-chat-message-author-name {
-    margin-right: map-get($params, 'chat-message-author-name');
-  }
-  
-  .dx-chat-message-avatar {
-    width: map-get($params, 'chat-avatar-size');
-    height: map-get($params, 'chat-avatar-size');
-    background-color: map-get($params, 'chat-avatar-background-color');
-  }
-  
-  .dx-chat-message-bubble {
-    padding: map-get($params, 'chat-bubble-padding');
-    border-radius: map-get($params, 'chat-bubble-border-radius');
-    background-color: map-get($params, 'chat-bubble-background-color-secondary');
-  }
-  
-  .dx-chat-message-group-alignment-start .dx-chat-message-bubble-first.dx-chat-message-bubble-last {
-    border-bottom-left-radius: map-get($params, 'chat-bubble-border-radius');
-    border-top-left-radius: map-get($params, 'chat-bubble-border-radius');
-  }
-  
-  .dx-chat-message-group-alignment-end .dx-chat-message-bubble-first.dx-chat-message-bubble-last {
-    border-bottom-right-radius: map-get($params, 'chat-bubble-border-radius');
-    border-top-right-radius: map-get($params, 'chat-bubble-border-radius');
-  }
-  
-  .dx-chat-message-group-alignment-end .dx-chat-message-bubble {
-    background-color: map-get($params, 'chat-bubble-background-color-primary');
-  }
-  
-  .dx-chat-message-list {
-    padding: map-get($params, 'chat-message-list-padding');
-  }
-  
-  .dx-chat-message-box {
-    padding: map-get($params, 'chat-message-box-padding');
-  }
-  
-  .dx-chat-message-box-button {
-    margin-left: map-get($params, 'chat-message-box-gap');
-  }  
-}
+@import 'layout/chat/mixins';
+@import 'layout/chat-avatar/mixins';
+@import 'layout/chat-header/mixins';
+@import 'layout/chat-messagebox/mixins';
+@import 'layout/chat-messagebubble/mixins';
+@import 'layout/chat-messagegroup/mixins';
+@import 'layout/chat-messagelist/mixins';

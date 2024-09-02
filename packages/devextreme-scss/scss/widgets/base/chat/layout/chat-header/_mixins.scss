@@ -1,0 +1,5 @@
+@mixin chat-header($padding) {
+  .dx-chat-header {
+    padding: $padding;
+  }
+}
