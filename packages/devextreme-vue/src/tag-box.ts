@@ -56,6 +56,7 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onSelectAllValueChanged" |
   "onSelectionChanged" |
+  "onSelectionChanging" |
   "onValueChanged" |
   "opened" |
   "openOnFieldClick" |
@@ -150,6 +151,7 @@ const DxTagBox = createComponent({
     onOptionChanged: Function,
     onSelectAllValueChanged: Function,
     onSelectionChanged: Function,
+    onSelectionChanging: Function,
     onValueChanged: Function,
     opened: Boolean,
     openOnFieldClick: Boolean,
@@ -241,6 +243,7 @@ const DxTagBox = createComponent({
     "update:onOptionChanged": null,
     "update:onSelectAllValueChanged": null,
     "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:onValueChanged": null,
     "update:opened": null,
     "update:openOnFieldClick": null,

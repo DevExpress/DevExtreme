@@ -22,7 +22,7 @@ class MessageList extends Widget<MessageListOptions> {
 
   private _$content!: dxElementWrapper;
 
-  private _scrollable!: Scrollable<unknown>;
+  private _scrollable?: Scrollable<unknown>;
 
   _getDefaultOptions(): MessageListOptions {
     return {
@@ -60,7 +60,8 @@ class MessageList extends Widget<MessageListOptions> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    const $messageGroup = $('<div>').appendTo(this._$content);
+    const $messageGroupContainer = this._scrollable ? this._scrollable.content() : this._$content;
+    const $messageGroup = $('<div>').appendTo($messageGroupContainer);
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
@@ -141,11 +142,12 @@ class MessageList extends Widget<MessageListOptions> {
     const lastMessageGroup = this._messageGroups[this._messageGroups.length - 1];
     const element = lastMessageGroup.$element()[0];
 
-    this._scrollable.scrollToElement(element);
+    this._scrollable?.scrollToElement(element);
   }
 
   _clean(): void {
     this._messageGroups = [];
+    this._scrollable = undefined;
 
     super._clean();
   }

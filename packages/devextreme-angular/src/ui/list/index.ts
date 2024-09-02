@@ -26,7 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/list';
 import { PageLoadMode, ScrollbarMode, SearchMode, SelectAllMode, SingleMultipleAllOrNone } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxListItem, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeleteMode, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, ListMenuMode, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent } from 'devextreme/ui/list';
+import { ContentReadyEvent, DisposingEvent, dxListItem, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeleteMode, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, ListMenuMode, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
 import { Properties as dxSortableOptions } from 'devextreme/ui/sortable';
 import { Properties as dxTextBoxOptions } from 'devextreme/ui/text_box';
 
@@ -933,6 +933,14 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     /**
     
+     * [descr:dxListOptions.onSelectionChanging]
+    
+    
+     */
+    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
+
+    /**
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
@@ -1366,6 +1374,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
             { subscribe: 'scroll', emit: 'onScroll' },
             { subscribe: 'selectAllValueChanged', emit: 'onSelectAllValueChanged' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
+            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'allowItemDeletingChange' },

@@ -18,11 +18,13 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
+    SelectionChangingInfo,
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
@@ -252,6 +254,14 @@ export type SelectAllValueChangedEvent<TItem extends ItemLike = any, TKey = any>
     /** @docid _ui_list_SelectAllValueChangedEvent.value */
     readonly value: boolean;
 };
+
+/**
+ * @docid _ui_list_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = AsyncCancelable & EventInfo<dxList<TItem, TKey>> & SelectionChangingInfo<TItem>;
 
 /**
  * @docid _ui_list_SelectionChangedEvent
@@ -833,6 +843,7 @@ export type ExplicitTypes<
     PullRefreshEvent: PullRefreshEvent<TItem, TKey>;
     ScrollEvent: ScrollEvent<TItem, TKey>;
     SelectAllValueChangedEvent: SelectAllValueChangedEvent<TItem, TKey>;
+    SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
     SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
 };
 
@@ -885,6 +896,11 @@ onItemRendered?: ((e: ItemRenderedEvent) => void);
  * @type_function_param1 e:{ui/list:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @docid dxListOptions.onSelectionChanging
+ * @type_function_param1 e:{ui/list:SelectionChangingEvent}
+ */
+onSelectionChanging?: ((e: SelectionChangingEvent) => void);
 /**
  * @docid dxListOptions.onSelectionChanged
  * @type_function_param1 e:{ui/list:SelectionChangedEvent}

@@ -776,6 +776,7 @@ const DxTabPanelOptions = createConfigurationComponent({
     "update:onItemRendered": null,
     "update:onOptionChanged": null,
     "update:onSelectionChanged": null,
+    "update:onSelectionChanging": null,
     "update:onTitleClick": null,
     "update:onTitleHold": null,
     "update:onTitleRendered": null,
@@ -822,6 +823,7 @@ const DxTabPanelOptions = createConfigurationComponent({
     onItemRendered: Function,
     onOptionChanged: Function,
     onSelectionChanged: Function,
+    onSelectionChanging: Function,
     onTitleClick: Function,
     onTitleHold: Function,
     onTitleRendered: Function,
@@ -857,6 +859,7 @@ const DxTabPanelOptionsItem = createConfigurationComponent({
     "update:template": null,
     "update:text": null,
     "update:title": null,
+    "update:visible": null,
   },
   props: {
     badge: String,
@@ -866,7 +869,8 @@ const DxTabPanelOptionsItem = createConfigurationComponent({
     tabTemplate: {},
     template: {},
     text: String,
-    title: String
+    title: String,
+    visible: Boolean
   }
 });
 (DxTabPanelOptionsItem as any).$_optionName = "items";

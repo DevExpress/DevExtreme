@@ -8,7 +8,7 @@ import dxLookup, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, ValueChangedEvent } from "devextreme/ui/lookup";
+import type { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangingEvent, ValueChangedEvent } from "devextreme/ui/lookup";
 import type { ContentReadyEvent as PopoverContentReadyEvent, DisposingEvent as PopoverDisposingEvent, InitializedEvent as PopoverInitializedEvent, HiddenEvent, HidingEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from "devextreme/ui/popover";
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { event } from "devextreme/events/index";
@@ -31,6 +31,7 @@ type ILookupOptionsNarrowedEvents = {
   onPageLoading?: ((e: PageLoadingEvent) => void);
   onPullRefresh?: ((e: PullRefreshEvent) => void);
   onScroll?: ((e: ScrollEvent) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onValueChanged?: ((e: ValueChangedEvent) => void);
 }
 
@@ -65,7 +66,7 @@ const Lookup = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["opened","value"]), []);
-      const independentEvents = useMemo(() => (["onClosed","onContentReady","onDisposing","onInitialized","onItemClick","onOpened","onPageLoading","onPullRefresh","onScroll","onValueChanged"]), []);
+      const independentEvents = useMemo(() => (["onClosed","onContentReady","onDisposing","onInitialized","onItemClick","onOpened","onPageLoading","onPullRefresh","onScroll","onSelectionChanging","onValueChanged"]), []);
 
       const defaults = useMemo(() => ({
         defaultOpened: "opened",

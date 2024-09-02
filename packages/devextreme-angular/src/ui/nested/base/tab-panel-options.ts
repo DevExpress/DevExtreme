@@ -8,7 +8,7 @@ import {
 import { Position, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxTabPanelItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
+import { ContentReadyEvent, DisposingEvent, dxTabPanelItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
 
 @Component({
     template: ''
@@ -105,10 +105,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('itemHoldTimeout', value);
     }
 
-    get items(): Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, tabTemplate?: any, template?: any, text?: string, title?: string }> {
+    get items(): Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, tabTemplate?: any, template?: any, text?: string, title?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, tabTemplate?: any, template?: any, text?: string, title?: string }>) {
+    set items(value: Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, tabTemplate?: any, template?: any, text?: string, title?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -201,6 +201,13 @@ export abstract class DxoTabPanelOptions extends NestedOption {
     }
     set onSelectionChanged(value: ((e: SelectionChangedEvent) => void)) {
         this._setOption('onSelectionChanged', value);
+    }
+
+    get onSelectionChanging(): ((e: SelectionChangingEvent) => void) {
+        return this._getOption('onSelectionChanging');
+    }
+    set onSelectionChanging(value: ((e: SelectionChangingEvent) => void)) {
+        this._setOption('onSelectionChanging', value);
     }
 
     get onTitleClick(): ((e: TitleClickEvent) => void) {

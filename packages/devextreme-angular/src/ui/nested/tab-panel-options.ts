@@ -60,6 +60,7 @@ import { DxiItemComponent } from './item-dxi';
         'onItemRendered',
         'onOptionChanged',
         'onSelectionChanged',
+        'onSelectionChanging',
         'onTitleClick',
         'onTitleHold',
         'onTitleRendered',
@@ -85,7 +86,7 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, tabTemplate?: any, template?: any, text?: string, title?: string }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, tabTemplate?: any, template?: any, text?: string, title?: string, visible?: boolean }>>;
 
     /**
     

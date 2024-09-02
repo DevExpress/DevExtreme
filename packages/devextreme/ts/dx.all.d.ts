@@ -6701,6 +6701,15 @@ declare module DevExpress.data.utils.odata {
 }
 declare module DevExpress.events {
   /**
+   * [descr:AsyncCancelable]
+   */
+  export type AsyncCancelable = {
+    /**
+     * [descr:AsyncCancelable.cancel]
+     */
+    cancel: boolean | PromiseLike<boolean>;
+  };
+  /**
    * [descr:Cancelable]
    */
   export interface Cancelable {
@@ -7960,6 +7969,27 @@ declare module DevExpress.ui {
        */
       readonly removedItems: Array<TItem>;
     }
+    /**
+     * [descr:SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<TComponent> =
+      DevExpress.events.AsyncCancelable &
+        DevExpress.events.EventInfo<TComponent> &
+        SelectionChangingInfo;
+    /**
+     * [descr:SelectionChangingInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface SelectionChangingInfo<TItem extends ItemLike = any> {
+      /**
+       * [descr:SelectionChangingInfo.addedItems]
+       */
+      readonly addedItems: Array<TItem>;
+      /**
+       * [descr:SelectionChangingInfo.removedItems]
+       */
+      readonly removedItems: Array<TItem>;
+    }
   }
   /**
    * [descr:CollectionWidgetItem]
@@ -8070,6 +8100,12 @@ declare module DevExpress.ui {
     onItemRendered?: (
       e: DevExpress.events.EventInfo<TComponent> &
         DevExpress.events.ItemInfo<TItem>
+    ) => void;
+    /**
+     * [descr:CollectionWidgetOptions.onSelectionChanging]
+     */
+    onSelectionChanging?: (
+      e: DevExpress.ui.CollectionWidget.SelectionChangingEvent<TComponent>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onSelectionChanged]
@@ -8848,6 +8884,12 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxAutocomplete> &
         DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     /**
+     * [descr:_ui_autocomplete_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxAutocomplete> &
+      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
+    /**
      * [descr:_ui_autocomplete_ValueChangedEvent]
      */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
@@ -9477,10 +9519,6 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.user]
      */
     user?: DevExpress.ui.dxChat.User;
-    /**
-     * [descr:dxChatOptions.title]
-     */
-    title?: string;
     /**
      * [descr:dxChatOptions.items]
      */
@@ -14847,6 +14885,23 @@ declare module DevExpress.ui {
        */
       readonly selectedItem: T;
     }
+    /**
+     * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<TComponent> =
+      DevExpress.events.AsyncCancelable &
+        DevExpress.events.EventInfo<TComponent> &
+        SelectionChangingInfo;
+    /**
+     * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface SelectionChangingInfo<T = any> {
+      /**
+       * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo.selectedItem]
+       */
+      readonly selectedItem: T;
+    }
   }
   /**
    * [descr:dxDropDownListOptions]
@@ -14890,6 +14945,12 @@ declare module DevExpress.ui {
         KeyboardEvent | MouseEvent | PointerEvent
       > &
         DevExpress.events.ItemInfo
+    ) => void;
+    /**
+     * [descr:dxDropDownListOptions.onSelectionChanging]
+     */
+    onSelectionChanging?: (
+      e: DevExpress.ui.dxDropDownList.SelectionChangingEvent<TComponent>
     ) => void;
     /**
      * [descr:dxDropDownListOptions.onSelectionChanged]
@@ -19625,6 +19686,7 @@ declare module DevExpress.ui {
       PullRefreshEvent: PullRefreshEvent<TItem, TKey>;
       ScrollEvent: ScrollEvent<TItem, TKey>;
       SelectAllValueChangedEvent: SelectAllValueChangedEvent<TItem, TKey>;
+      SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
       SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
     };
     /**
@@ -19858,6 +19920,15 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
+    /**
+     * [descr:_ui_list_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem>;
   }
   /**
    * @deprecated Use Item instead
@@ -20328,6 +20399,12 @@ declare module DevExpress.ui {
      */
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxLookup> &
       DevExpress.ui.dxDropDownList.SelectionChangedInfo;
+    /**
+     * [descr:_ui_lookup_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxLookup> &
+      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxLookup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
     /**
@@ -24901,6 +24978,12 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxSelectBox> &
         DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     /**
+     * [descr:_ui_select_box_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxSelectBox> &
+      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
+    /**
      * [descr:_ui_select_box_ValueChangedEvent]
      */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
@@ -25930,6 +26013,7 @@ declare module DevExpress.ui {
       ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
       ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
       OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+      SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
       SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
       TitleClickEvent: TitleClickEvent<TItem, TKey>;
       TitleHoldEvent: TitleHoldEvent<TItem, TKey>;
@@ -26008,6 +26092,15 @@ declare module DevExpress.ui {
     > = DevExpress.events.EventInfo<dxTabPanel<TItem, TKey>> &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
     /**
+     * [descr:_ui_tab_panel_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxTabPanel<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem>;
+    /**
      * [descr:TabPanelItemInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
@@ -26056,8 +26149,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTabPanelItem
-    extends Omit<DevExpress.ui.dxMultiView.Item, 'visible'> {
+  export interface dxTabPanelItem extends DevExpress.ui.dxMultiView.Item {
     /**
      * [descr:dxTabPanelItem.badge]
      */
@@ -26199,6 +26291,7 @@ declare module DevExpress.ui {
       ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
       OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
       SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+      SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
     };
     /**
      * [descr:_ui_tabs_InitializedEvent]
@@ -26272,6 +26365,15 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTabs<TItem, TKey>> &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
+    /**
+     * [descr:_ui_tabs_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxTabs<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangingInfo<TItem>;
   }
   /**
    * [descr:dxTabsOptions]
@@ -26488,6 +26590,14 @@ declare module DevExpress.ui {
         string | number | any
       >;
     /**
+     * [descr:_ui_tag_box_SelectionChangingEvent]
+     */
+    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
+      DevExpress.events.EventInfo<dxTagBox> &
+      DevExpress.ui.CollectionWidget.SelectionChangingInfo<
+        string | number | any
+      >;
+    /**
      * [descr:_ui_tag_box_ValueChangedEvent]
      */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
@@ -26504,7 +26614,10 @@ declare module DevExpress.ui {
   export interface dxTagBoxOptions
     extends Pick<
       dxSelectBoxOptions<dxTagBox>,
-      Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>
+      Exclude<
+        keyof dxSelectBoxOptions<dxTagBox>,
+        'onSelectionChanged' | 'onSelectionChanging'
+      >
     > {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
@@ -26533,6 +26646,12 @@ declare module DevExpress.ui {
      */
     onSelectAllValueChanged?: (
       e: DevExpress.ui.dxTagBox.SelectAllValueChangedEvent
+    ) => void;
+    /**
+     * [descr:dxTagBoxOptions.onSelectionChanging]
+     */
+    onSelectionChanging?: (
+      e: DevExpress.ui.dxTagBox.SelectionChangingEvent
     ) => void;
     /**
      * [descr:dxTagBoxOptions.onSelectionChanged]

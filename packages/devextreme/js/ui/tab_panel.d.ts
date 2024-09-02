@@ -14,6 +14,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
+    AsyncCancelable,
 } from '../events/index';
 
 import {
@@ -23,6 +24,7 @@ import {
 } from '../common';
 
 import CollectionWidget, {
+    SelectionChangingInfo,
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
@@ -116,6 +118,14 @@ export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventI
  * @inherits EventInfo,ChangedOptionInfo
  */
 export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ChangedOptionInfo;
+
+/**
+ * @docid _ui_tab_panel_SelectionChangingEvent
+ * @public
+ * @type object
+ * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ */
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = AsyncCancelable & EventInfo<dxTabPanel<TItem, TKey>> & SelectionChangingInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_SelectionChangedEvent
@@ -292,7 +302,7 @@ export type Item = dxTabPanelItem;
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTabPanelItem extends Omit<dxMultiViewItem, 'visible'> {
+export interface dxTabPanelItem extends dxMultiViewItem {
     /**
      * @docid
      * @public
@@ -330,6 +340,7 @@ export type ExplicitTypes<
     ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
     ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
     OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangingEvent: SelectionChangingEvent<TItem, TKey>;
     SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
     TitleClickEvent: TitleClickEvent<TItem, TKey>;
     TitleHoldEvent: TitleHoldEvent<TItem, TKey>;
@@ -400,6 +411,11 @@ onItemRendered?: ((e: ItemRenderedEvent) => void);
  * @type_function_param1 e:{ui/tab_panel:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
+/**
+ * @docid dxTabPanelOptions.onSelectionChanging
+ * @type_function_param1 e:{ui/tab_panel:SelectionChangingEvent}
+ */
+onSelectionChanging?: ((e: SelectionChangingEvent) => void);
 /**
  * @docid dxTabPanelOptions.onSelectionChanged
  * @type_function_param1 e:{ui/tab_panel:SelectionChangedEvent}

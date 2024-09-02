@@ -16,8 +16,10 @@ import MessageList from './chat_message_list';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-class Chat extends Widget<Properties> {
-  _chatHeader!: ChatHeader;
+type Title = string;
+
+class Chat extends Widget<Properties & { title: Title }> {
+  _chatHeader?: ChatHeader;
 
   _messageBox!: MessageBox;
 
@@ -25,7 +27,7 @@ class Chat extends Widget<Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): Properties & { title: Title } {
     return {
       ...super._getDefaultOptions(),
       activeStateEnabled: true,
@@ -49,15 +51,20 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._renderHeader();
+    const { title } = this.option();
+
+    if (title) {
+      this._renderHeader(title);
+    }
+
     this._renderMessageList();
     this._renderMessageBox();
   }
 
-  _renderHeader(): void {
-    const { title = '' } = this.option();
+  _renderHeader(title: string): void {
+    const $header = $('<div>');
 
-    const $header = $('<div>').appendTo(this.element());
+    this.element().prepend($header.get(0));
 
     this._chatHeader = this._createComponent($header, ChatHeader, {
       title,
@@ -133,9 +140,19 @@ class Chat extends Widget<Properties> {
       case 'hoverStateEnabled':
         this._messageBox.option({ [name]: value });
         break;
-      case 'title':
-        this._chatHeader.option('title', (value as Properties['title']) ?? '');
+      case 'title': {
+        if (value) {
+          if (this._chatHeader) {
+            this._chatHeader.option('title', (value as Title));
+          } else {
+            this._renderHeader((value as Title));
+          }
+        } else if (this._chatHeader) {
+          this._chatHeader.dispose();
+          this._chatHeader.$element().remove();
+        }
         break;
+      }
       case 'user':
         this._messageList.option('currentUserId', (value as Properties['user'])?.id);
         break;

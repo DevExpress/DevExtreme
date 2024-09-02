@@ -11,6 +11,7 @@ export {
   PageLoadingEvent,
   PullRefreshEvent,
   ScrollEvent,
+  SelectionChangingEvent,
   SelectionChangedEvent,
   TitleRenderedEvent,
   ValueChangedEvent,

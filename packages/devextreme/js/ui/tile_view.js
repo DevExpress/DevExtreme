@@ -30,6 +30,12 @@ export default TagBox;
  */
 
 /**
+ * @name dxTileViewOptions.onSelectionChanging
+ * @action
+ * @hidden
+ */
+
+/**
  * @name dxTileViewOptions.onSelectionChanged
  * @action
  * @hidden

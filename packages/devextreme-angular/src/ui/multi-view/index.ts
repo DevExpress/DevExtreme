@@ -224,10 +224,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string }> {
+    get items(): Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string }>) {
+    set items(value: Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -522,7 +522,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>>;
 
     /**
     

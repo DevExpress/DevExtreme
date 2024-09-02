@@ -20,7 +20,8 @@ export default MultiView;
  */
 
 /**
- * @name dxMultiViewItem.visible
+ * @name dxMultiViewOptions.onSelectionChanging
+ * @action
  * @hidden
  */
 
