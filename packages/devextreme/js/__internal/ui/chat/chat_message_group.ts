@@ -14,9 +14,7 @@ const CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS = 'dx-chat-message-group-alignment-
 const CHAT_MESSAGE_GROUP_INFORMATION_CLASS = 'dx-chat-message-group-information';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_AUTHOR_NAME_CLASS = 'dx-chat-message-author-name';
-const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
-const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
-const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
+const CHAT_MESSAGE_BUBBLE_CONTAINER_CLASS = 'dx-chat-message-bubble-container';
 
 export type MessageGroupAlignment = 'start' | 'end';
 
@@ -27,6 +25,8 @@ export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
 
 class MessageGroup extends Widget<MessageGroupOptions> {
   _avatar?: Avatar;
+
+  _$messageBubbleContainer!: dxElementWrapper;
 
   _getDefaultOptions(): MessageGroupOptions {
     return {
@@ -84,31 +84,24 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     });
   }
 
-  _renderMessageBubble(message: Message, index: number, length: number): void {
+  _renderMessageBubble(message: Message): void {
     const $bubble = $('<div>');
-
-    const isFirst = index === 0;
-    const isLast = index === length - 1;
-
-    if (isFirst) {
-      $bubble.addClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS);
-    }
-
-    if (isLast) {
-      $bubble.addClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
-    }
-
-    $bubble.appendTo(this.element());
 
     this._createComponent($bubble, MessageBubble, {
       text: message.text,
     });
+
+    this._$messageBubbleContainer.append($bubble);
   }
 
   _renderMessageBubbles(items: Message[]): void {
-    items.forEach((message, index) => {
-      this._renderMessageBubble(message, index, items.length);
+    this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGE_BUBBLE_CONTAINER_CLASS);
+
+    items.forEach((message) => {
+      this._renderMessageBubble(message);
     });
+
+    this._$messageBubbleContainer.appendTo(this.element());
   }
 
   _renderName(name: string, $element: dxElementWrapper): void {
@@ -147,13 +140,6 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     $information.appendTo(this.element());
   }
 
-  _updateLastBubbleClasses(): void {
-    const $bubbles = $(this.element()).find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-    const $lastBubble = $bubbles.eq($bubbles.length - 1);
-
-    $lastBubble.removeClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS);
-  }
-
   _optionChanged(args: Record<string, unknown>): void {
     const { name } = args;
 
@@ -174,8 +160,7 @@ class MessageGroup extends Widget<MessageGroupOptions> {
 
     this._setOptionWithoutOptionChange('items', newItems);
 
-    this._updateLastBubbleClasses();
-    this._renderMessageBubble(message, newItems.length - 1, newItems.length);
+    this._renderMessageBubble(message);
   }
 }
 
