@@ -201,4 +201,20 @@ QUnit.module('MessageBox', moduleConfig, () => {
             });
         });
     });
+
+    QUnit.module('TextArea integration', () => {
+        QUnit.test('TextArea should have correct options', function(assert) {
+            const expectedOptions = {
+                stylingMode: 'outlined',
+                placeholder: 'Type a message',
+                autoResizeEnabled: true,
+            };
+
+            const textArea = TextArea.getInstance(this.$textArea);
+
+            Object.entries(expectedOptions).forEach(([key, value]) => {
+                assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
+            });
+        });
+    });
 });
