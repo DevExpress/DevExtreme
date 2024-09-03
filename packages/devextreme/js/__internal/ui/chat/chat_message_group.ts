@@ -118,9 +118,9 @@ class MessageGroup extends Widget<MessageGroupOptions> {
       .appendTo($element);
   }
 
-  _getTimeValue(timestamp: string): string {
+  _getTimeValue(timestamp: Date | string | number): string {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
-    const dateTime = new Date(Number(timestamp));
+    const dateTime = new Date(timestamp);
 
     return dateTime.toLocaleTimeString(undefined, options);
   }
