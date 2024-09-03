@@ -417,6 +417,7 @@
         "dxHtmlEditor-delete": "Delete",
         "dxHtmlEditor-border": "边框",
         "dxHtmlEditor-style": "样式",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-width": "宽度",
         "dxHtmlEditor-height": "高度",
         "dxHtmlEditor-borderColor": "颜色",

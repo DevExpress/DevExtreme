@@ -417,6 +417,7 @@
         "dxHtmlEditor-delete": "Delete",
         "dxHtmlEditor-border": "Border",
         "dxHtmlEditor-style": "Style",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-width": "Width",
         "dxHtmlEditor-height": "Height",
         "dxHtmlEditor-borderColor": "Color",

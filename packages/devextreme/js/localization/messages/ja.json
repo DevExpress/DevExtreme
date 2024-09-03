@@ -417,6 +417,7 @@
         "dxHtmlEditor-delete": "削除",
         "dxHtmlEditor-border": "罫線",
         "dxHtmlEditor-style": "スタイル",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-width": "幅",
         "dxHtmlEditor-height": "高さ",
         "dxHtmlEditor-borderColor": "色",
