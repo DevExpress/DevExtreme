@@ -41,74 +41,20 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <style>
-        .main {
-            height: 600px;
-        }
-
-        body.dx-surface {
-            background-color: #000;
-        }
-    </style>
 </head>
 <body class="dx-surface">
-    <div class="main">
+    <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-
         <div id="button"></div>
-    
         <script>
             $(function() {
-                const NOW = '1721747399083';
-                const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
-                const userFirst = {
-                    id: MOCK_COMPANION_USER_ID,
-                    name: 'First',
-                };
-                const userSecond = {
-                    id: 'erhgoerhg',
-                    name: 'Second',
-                };
-
-                $("#button").dxChat({
-                    user: userSecond,
-                    items: [
-                        {
-                            timestamp: NOW,
-                            author: userFirst,
-                            text: 'custom',
-                        },
-                        {
-                            timestamp: NOW,
-                            author: userFirst,
-                            text: 'custom 2',
-                        },
-                        {
-                            timestamp: NOW,
-                            author: userFirst,
-                            text: 'custom 3',
-                        },
-                        {
-                            timestamp: NOW,
-                            author: userSecond,
-                            text: 'custom',
-                        },
-                        {
-                            timestamp: NOW,
-                            author: userSecond,
-                            text: 'custom 2',
-                        },
-                        {
-                            timestamp: NOW,
-                            author: userSecond,
-                            text: 'custom 3',
-                        }
-                    ],
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
