@@ -11,8 +11,6 @@ const CHAT_MESSAGE_GROUP_INFORMATION_CLASS = 'dx-chat-message-group-information'
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_AUTHOR_NAME_CLASS = 'dx-chat-message-author-name';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
-const CHAT_MESSAGE_BUBBLE_FIRST_CLASS = 'dx-chat-message-bubble-first';
-const CHAT_MESSAGE_BUBBLE_LAST_CLASS = 'dx-chat-message-bubble-last';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -218,77 +216,6 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             const $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 4);
-        });
-
-        QUnit.test('single message should have additional classes', function(assert) {
-            this.reinit({
-                items: [{}],
-            });
-
-            const $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-
-            assert.strictEqual($messageBubble.length, 1);
-            assert.strictEqual($messageBubble.hasClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS), true);
-            assert.strictEqual($messageBubble.hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), true);
-        });
-
-        QUnit.test('first message bubble should have additional class', function(assert) {
-            this.reinit({
-                items: [{}, {}],
-            });
-
-            const $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-
-            assert.strictEqual($messageBubble.eq(0).hasClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS), true);
-            assert.strictEqual($messageBubble.eq(0).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), false);
-        });
-
-        QUnit.test('last message bubble should have additional class', function(assert) {
-            this.reinit({
-                items: [{}, {}],
-            });
-
-            const $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-
-            assert.strictEqual($messageBubble.eq(1).hasClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS), false);
-            assert.strictEqual($messageBubble.eq(1).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), true);
-        });
-
-        QUnit.test('middle message bubbles should not have additional classes', function(assert) {
-            this.reinit({
-                items: [{}, {}, {}, {}],
-            });
-
-            const $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-
-            assert.strictEqual($messageBubble.eq(1).hasClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS), false);
-            assert.strictEqual($messageBubble.eq(1).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), false);
-
-            assert.strictEqual($messageBubble.eq(2).hasClass(CHAT_MESSAGE_BUBBLE_FIRST_CLASS), false);
-            assert.strictEqual($messageBubble.eq(2).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), false);
-        });
-
-        QUnit.test('last class should be deleted from last bubble after renderMessage', function(assert) {
-            this.reinit({
-                items: [{}, {}, {}],
-            });
-
-            let $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-
-            assert.strictEqual($messageBubble.eq(2).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), true);
-
-            const newMessage = {
-                author: { id: 'MikeID' },
-                timestamp: Date.now(),
-                text: 'NEW MESSAGE',
-            };
-
-            this.instance.renderMessage(newMessage);
-
-            $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
-
-            assert.strictEqual($messageBubble.eq(2).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), false);
-            assert.strictEqual($messageBubble.eq(3).hasClass(CHAT_MESSAGE_BUBBLE_LAST_CLASS), true);
         });
     });
 });
