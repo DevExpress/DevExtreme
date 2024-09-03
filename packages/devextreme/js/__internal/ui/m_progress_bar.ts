@@ -52,6 +52,7 @@ const ProgressBar = TrackBar.inherit({
     this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
     this._$bar.addClass(PROGRESSBAR_CONTAINER_CLASS);
 
+    this.setAria('readonly', undefined);
     this.setAria('role', 'progressbar');
 
     $('<div>').addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);

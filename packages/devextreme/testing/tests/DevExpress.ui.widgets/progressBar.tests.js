@@ -201,6 +201,14 @@ QUnit.module('states', {
 });
 
 QUnit.module('aria accessibility', () => {
+    QUnit.test('aria-readonly is removed in initialization', function(assert) {
+        const $element = $('#progressbar').dxProgressBar({
+            readOnly: true,
+        });
+
+        assert.equal($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
+    });
+
     QUnit.test('aria properties after options changed', function(assert) {
         const $element = $('#progressbar').dxProgressBar({
             min: 32,
