@@ -4,42 +4,43 @@
 
 $chat-bubble-border-radius: null !default;
 $chat-bubble-padding: null !default;
-$chat-message-box-padding: null !default;
-$chat-message-box-border-radius: null !default;
-$chat-message-box-button-height: null !default;
-$chat-message-box-button-width: null !default;
-$chat-message-box-before-offset: null !default;
-$chat-message-list-padding: null !default;
-$chat-message-group-gap: 4px !default;
-$chat-message-group-padding-top: null !default;
-$chat-message-author-name-gap: 8px !default;
-$chat-message-box-gap: 8px !default;
+$chat-messagebox-padding: null !default;
+$chat-messagebox-border-radius: null !default;
+$chat-messagebox-button-height: null !default;
+$chat-messagebox-button-width: null !default;
+$chat-messagebox-before-offset: null !default;
+$chat-messagebox-gap: 8px !default;
+$chat-messagelist-padding: null !default;
+$chat-messagegroup-gap: 4px !default;
+$chat-messagegroup-padding-top: null !default;
+$chat-messagegroup-author-name-gap: 8px !default;
 $chat-avatar-size: 32px !default;
 $chat-avatar-gap: 12px !default;
-$chat-message-group-alignment-start-template: $chat-avatar-size + $chat-avatar-gap 1fr !default;
+$chat-messagegroup-alignment-start-template:
+  $chat-avatar-size + $chat-avatar-gap 1fr !default;
 $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
 
 @if $size == "default" {
   $chat-bubble-border-radius: 12px !default;
   $chat-bubble-padding: 8px 12px !default;
-  $chat-message-box-padding: 20px !default;
-  $chat-message-box-border-radius: 8px !default;
-  $chat-message-box-button-height: 40px !default;
-  $chat-message-box-button-width: 32px !default;
-  $chat-message-box-before-offset: 4px !default;
-  $chat-message-list-padding: 20px !default;
-  $chat-message-group-padding-top: 24px !default;
+  $chat-messagebox-padding: 20px !default;
+  $chat-messagebox-border-radius: 8px !default;
+  $chat-messagebox-button-height: 40px !default;
+  $chat-messagebox-button-width: 32px !default;
+  $chat-messagebox-before-offset: 4px !default;
+  $chat-messagelist-padding: 20px !default;
+  $chat-messagegroup-padding-top: 24px !default;
 }
 
 @else if $size == "compact" {
   $chat-bubble-border-radius: 8px !default;
   $chat-bubble-padding: 6px 8px !default;
-  $chat-message-box-padding: 16px !default;
-  $chat-message-box-border-radius: 4px !default;
-  $chat-message-box-button-height: 32px !default;
-  $chat-message-box-button-width: 24px !default;
-  $chat-message-box-before-offset: 1px !default;
-  $chat-message-list-padding: 16px !default;
-  $chat-message-group-padding-top: 12px !default;
+  $chat-messagebox-padding: 16px !default;
+  $chat-messagebox-border-radius: 4px !default;
+  $chat-messagebox-button-height: 32px !default;
+  $chat-messagebox-button-width: 24px !default;
+  $chat-messagebox-before-offset: 1px !default;
+  $chat-messagelist-padding: 16px !default;
+  $chat-messagegroup-padding-top: 12px !default;
 }

@@ -9,13 +9,14 @@
 @include chat-avatar($chat-avatar-size, $chat-avatar-background-color);
 @include chat-header($chat-header-padding);
 @include chat-messagebox(
-  $chat-message-box-padding,
+  $chat-messagebox-padding,
   $chat-messagebox-border-color,
-  $chat-message-box-gap,
-  $chat-message-box-border-radius,
-  $chat-message-box-button-height,
-  $chat-message-box-button-width,
-  $chat-message-box-before-offset
+  $chat-messagebox-gap,
+  $chat-messagebox-border-radius,
+  $chat-messagebox-button-height,
+  $chat-messagebox-button-width,
+  $chat-messagebox-button-color,
+  $chat-messagebox-before-offset
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
@@ -24,11 +25,11 @@
   $chat-bubble-background-color-primary
 );
 @include chat-messagegroup(
-  $chat-message-group-gap,
-  $chat-message-group-padding-top,
-  $chat-message-group-alignment-start-template,
+  $chat-messagegroup-gap,
+  $chat-messagegroup-padding-top,
+  $chat-messagegroup-alignment-start-template,
   $chat-information-font-size,
   $chat-information-color,
-  $chat-message-author-name-gap
+  $chat-messagegroup-author-name-gap
 );
-@include chat-messagelist($chat-message-list-padding);
+@include chat-messagelist($chat-messagelist-padding);

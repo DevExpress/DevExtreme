@@ -7,15 +7,21 @@
 $chat-background-color: $base-bg !default;
 $chat-messagebox-border-color: $base-border-color !default;
 $chat-avatar-background-color: #878787 !default;
-$chat-bubble-background-color-primary: #EBF3FC !default;
-$chat-bubble-background-color-secondary: #F5F5F5 !default;
+$chat-bubble-background-color-primary: null !default;
+$chat-bubble-background-color-secondary: null !default;
 $chat-information-color: null !default;
+$chat-messagebox-button-color: null !default;
 
 @if $mode == "light" {
+  $chat-bubble-background-color-primary: #EBF3FC !default;
+  $chat-bubble-background-color-secondary: #EBF3FC !default;
   $chat-information-color: #707070 !default;
+  $chat-messagebox-button-color: #0F6CBD !default;
 }
 
-// TODO: ADD DARK THEME
 @else if $mode == "dark" {
+  $chat-bubble-background-color-primary: #082338 !default;
+  $chat-bubble-background-color-secondary: #3D3D3D !default;
   $chat-information-color: #999999 !default;
+  $chat-messagebox-button-color: #62ABF5 !default;
 }
