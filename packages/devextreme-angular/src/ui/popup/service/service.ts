@@ -6,8 +6,10 @@ import {
   EmbeddedViewRef,
   ComponentRef, Type,
 } from '@angular/core';
-import { DxPopupTypes } from '../component';
+import { DxPopupComponent, DxPopupTypes } from '../component';
 import { DxServicePopupComponent } from './service.component';
+
+export type DxPopupServiceComponent<T = any> = DxPopupComponent & { contentRef: ComponentRef<T> }
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +49,6 @@ export class DxPopupService {
 
     this.applicationRef.tick();
 
-    return componentRef.instance as (typeof componentRef.instance & { contentRef: ComponentRef<T> });
+    return componentRef.instance as DxPopupServiceComponent<T>;
   }
 }
