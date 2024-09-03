@@ -13,6 +13,8 @@
   $chat-messagebox-border-color,
   $chat-message-box-gap,
   $chat-message-box-border-radius,
+  $chat-message-box-button-height,
+  $chat-message-box-button-width,
   $chat-message-box-before-offset
 );
 @include chat-messagebubble(

@@ -3,6 +3,8 @@
   $border-color,
   $gap,
   $border-radius,
+  $button-height,
+  $button-width,
   $offset
 ) {
   .dx-chat-message-box {
@@ -26,6 +28,10 @@
   }
   
   .dx-chat-message-box-button {
-    margin-left: $gap;
+    &.dx-button {
+      height: $button-height;
+      width: $button-width;
+      margin-left: $gap;
+    }
   }
 }

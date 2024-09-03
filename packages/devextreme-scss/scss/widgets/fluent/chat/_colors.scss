@@ -15,6 +15,7 @@ $chat-information-color: null !default;
   $chat-information-color: #707070 !default;
 }
 
+// TODO: ADD DARK THEME
 @else if $mode == "dark" {
   $chat-information-color: #999999 !default;
 }
