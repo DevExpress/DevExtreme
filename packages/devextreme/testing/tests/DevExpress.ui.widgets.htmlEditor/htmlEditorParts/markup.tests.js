@@ -109,6 +109,32 @@ export default function() {
     });
 
     QUnit.module('Accessibility', () => {
+        test('aria-readonly should be set on initialization', function(assert) {
+            const $element = $('#htmlEditor');
+
+            $element.dxHtmlEditor({
+                readOnly: true
+            });
+
+            const $editorContent = $element.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            assert.strictEqual($editorContent.attr('aria-readonly'), 'true', 'aria-readonly is set on initialization');
+        });
+
+        test('aria-readonly should be set during option change in runtime', function(assert) {
+            const $element = $('#htmlEditor');
+
+            $element.dxHtmlEditor({
+                readOnly: false
+            });
+            const instance = $element.dxHtmlEditor('instance');
+
+            const $editorContent = $element.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            assert.strictEqual($editorContent.attr('aria-readonly'), undefined, 'aria-readonly is properly set on initialization');
+
+            instance.option('readOnly', true);
+            assert.strictEqual($editorContent.attr('aria-readonly'), 'true', 'aria-readonly is properly set on runtime');
+        });
+
         test('accessibility roles', function(assert) {
             const $element = $('#htmlEditor');
 
