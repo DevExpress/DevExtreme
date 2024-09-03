@@ -1,4 +1,4 @@
-@mixin chat-messagebubble (
+@mixin chat-messagebubble(
   $padding,
   $border-radius,
   $background-color-secondary,
@@ -31,6 +31,8 @@
   
   .dx-chat-message-group-alignment-end {
     .dx-chat-message-bubble {
+      background-color: $background-color-primary;
+
       &:first-child {
         border-top-right-radius: $border-radius;
       }
@@ -38,12 +40,6 @@
       &:last-child {
         border-bottom-right-radius: $border-radius;
       }
-    }
-  }
-
-  .dx-chat-message-group-alignment-end {
-    .dx-chat-message-bubble {
-      background-color: $background-color-primary;
     }
   }
 }

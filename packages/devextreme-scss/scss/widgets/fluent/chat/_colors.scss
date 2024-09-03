@@ -22,6 +22,6 @@ $chat-messagebox-button-color: null !default;
 @else if $mode == "dark" {
   $chat-bubble-background-color-primary: #082338 !default;
   $chat-bubble-background-color-secondary: #3D3D3D !default;
-  $chat-information-color: #999999 !default;
+  $chat-information-color: #999 !default;
   $chat-messagebox-button-color: #62ABF5 !default;
 }

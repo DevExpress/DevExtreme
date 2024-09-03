@@ -15,13 +15,13 @@ $chat-messagebox-button-color: null !default;
 @if $mode == "light" {
   $chat-bubble-background-color-primary: #03A9F414 !default;
   $chat-bubble-background-color-secondary: #00000014 !default;
-  $chat-information-color: #00000099 !default;
+  $chat-information-color: #0009 !default;
   $chat-messagebox-button-color: #03A9F4 !default;
 }
 
 @else if $mode == "dark" {
   $chat-bubble-background-color-primary: #5CCBFD14 !default;
   $chat-bubble-background-color-secondary: #FFFFFF14 !default;
-  $chat-information-color: #FFFFFF99 !default;
+  $chat-information-color: #FFF9 !default;
   $chat-messagebox-button-color: #5CCBFD !default;
 }
