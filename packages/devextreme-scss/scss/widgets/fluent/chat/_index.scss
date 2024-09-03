@@ -22,7 +22,8 @@
   $chat-bubble-border-radius,
   $chat-bubble-background-color-secondary,
   $chat-bubble-background-color-primary,
-  $chat-bubble-line-height
+  $chat-bubble-line-height,
+  $chat-bubble-container-gap
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,

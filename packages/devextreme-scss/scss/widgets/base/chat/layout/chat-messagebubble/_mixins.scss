@@ -3,10 +3,16 @@
   $border-radius,
   $background-color-secondary,
   $background-color-primary,
-  $line-height
+  $line-height,
+  $bubble-container-gap
 ) {
+  .dx-chat-message-bubble-container {
+    row-gap: $bubble-container-gap;
+  }
+
   .dx-chat-message-bubble {
     padding: $padding;
+    border-radius: $border-radius;
     background-color: $background-color-secondary;
     line-height: $line-height;
   }
