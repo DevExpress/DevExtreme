@@ -942,17 +942,24 @@ export const strictParseNumber = function (text, format): any {
   }
 };
 
-export const isFirstOrLastColumn = function (
+const isFirstOrLastBandColumn = function (
   that: ColumnsController,
-  targetColumn: any,
+  bandColumns: any[],
+  onlyWithinBandColumn = false,
+  isLast = false,
+): boolean {
+  return bandColumns.every((column, index) => onlyWithinBandColumn && index === 0
+        || isFirstOrLastColumnCore(that, column.index, index, onlyWithinBandColumn, isLast));
+};
+
+const isFirstOrLastColumnCore = function (
+  that: ColumnsController,
+  columnIndex: number,
   rowIndex: number,
   onlyWithinBandColumn = false,
   isLast = false,
   fixedPosition?: StickyPosition,
 ): boolean {
-  const targetColumnIndex = targetColumn.index;
-  const bandColumnsCache = that.getBandColumnsCache();
-  const bandColumns = getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
   const getColumns = (index: number, column?): any => that.getVisibleColumns(index)
     .filter((col) => {
       let res = true;
@@ -965,32 +972,29 @@ export const isFirstOrLastColumn = function (
 
       return res;
     });
-
-  if (bandColumns?.length) {
-    return bandColumns
-      .concat([targetColumn])
-      .every((column, index) => {
-        if (onlyWithinBandColumn && index === 0) {
-          return true;
-        }
-
-        const visibleColumnIndex = that.getVisibleIndex(column.index, index);
-        const columns = getColumns(index, column);
-
-        return isLast
-          ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1]?.index, index)
-          : visibleColumnIndex === that.getVisibleIndex(columns[0]?.index, index);
-      });
-  }
-
-  if (onlyWithinBandColumn) {
-    return true;
-  }
-
   const columns = getColumns(rowIndex);
-  const visibleColumnIndex = that.getVisibleIndex(targetColumnIndex, rowIndex);
+  const visibleColumnIndex = that.getVisibleIndex(columnIndex, rowIndex);
 
   return isLast
     ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1]?.index, rowIndex)
     : visibleColumnIndex === that.getVisibleIndex(columns[0]?.index, rowIndex);
+};
+
+export const isFirstOrLastColumn = function (
+  that: ColumnsController,
+  targetColumn: any,
+  rowIndex: number,
+  onlyWithinBandColumn = false,
+  isLast = false,
+  fixedPosition?: StickyPosition,
+): boolean {
+  const targetColumnIndex = targetColumn.index;
+  const bandColumnsCache = that.getBandColumnsCache();
+  const parentBandColumns = getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
+
+  if (parentBandColumns?.length) {
+    return isFirstOrLastBandColumn(that, parentBandColumns.concat([targetColumn]), onlyWithinBandColumn, isLast);
+  }
+
+  return onlyWithinBandColumn || isFirstOrLastColumnCore(that, targetColumnIndex, rowIndex, onlyWithinBandColumn, isLast, fixedPosition);
 };
