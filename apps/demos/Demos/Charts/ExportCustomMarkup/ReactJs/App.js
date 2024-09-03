@@ -9,7 +9,7 @@ import {
 } from 'devextreme-react/chart';
 import { Button } from 'devextreme-react/button';
 import { exportFromMarkup } from 'devextreme/viz/export';
-// import toCanvas from 'canvg';
+import toCanvas from 'canvg';
 import { dataSource } from './data.js';
 import Form from './Form.js';
 
@@ -41,11 +41,11 @@ function App() {
       svgToCanvas(svg, canvas) {
         // eslint-disable-next-line no-unused-vars
         return new Promise((resolve) => {
-          // toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
-          //   ignoreDimensions: true,
-          //   ignoreClear: true,
-          //   renderCallback: resolve,
-          // });
+          toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
+            ignoreDimensions: true,
+            ignoreClear: true,
+            renderCallback: resolve,
+          });
         });
       },
     });
