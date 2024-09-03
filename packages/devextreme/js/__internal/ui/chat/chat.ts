@@ -1,3 +1,4 @@
+import type { ComponentFactory } from '@js/core/component_registrator';
 import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -35,6 +36,7 @@ class Chat extends Widget<Properties & { title: Title }> {
       hoverStateEnabled: true,
       title: '',
       items: [],
+      dataSource: null,
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };
@@ -138,7 +140,7 @@ class Chat extends Widget<Properties & { title: Title }> {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-        this._messageBox.option({ [name]: value });
+        this._messageBox.option(name, value as Properties[typeof name]);
         break;
       case 'title': {
         if (value) {
@@ -154,10 +156,11 @@ class Chat extends Widget<Properties & { title: Title }> {
         break;
       }
       case 'user':
-        this._messageList.option('currentUserId', (value as Properties['user'])?.id);
+        this._messageList.option('currentUserId', (value as Properties[typeof name])?.id);
         break;
       case 'items':
-        this._messageList.option('items', (value as Properties['items']) ?? []);
+      case 'dataSource':
+        this._messageList.option(name, value as Properties[typeof name]);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -176,7 +179,6 @@ class Chat extends Widget<Properties & { title: Title }> {
   }
 }
 
-// @ts-expect-error ts-error
-registerComponent('dxChat', Chat);
+registerComponent('dxChat', Chat as unknown as ComponentFactory<Chat>);
 
 export default Chat;

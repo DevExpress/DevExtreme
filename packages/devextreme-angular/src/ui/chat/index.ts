@@ -22,6 +22,8 @@ import {
 } from '@angular/core';
 
 
+import { Store } from 'devextreme/data';
+import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent, User } from 'devextreme/ui/chat';
 
 import DxChat from 'devextreme/ui/chat';
@@ -85,6 +87,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.dataSource]
+    
+     */
+    @Input()
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<Message> {
+        return this._getOption('dataSource');
+    }
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<Message>) {
+        this._setOption('dataSource', value);
     }
 
 
@@ -281,6 +296,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<Message>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
@@ -383,6 +405,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
@@ -412,6 +435,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     ngOnChanges(changes: SimpleChanges) {
         super.ngOnChanges(changes);
+        this.setupChanges('dataSource', changes);
         this.setupChanges('items', changes);
     }
 
@@ -422,6 +446,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
     ngDoCheck() {
+        this._idh.doCheck('dataSource');
         this._idh.doCheck('items');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
