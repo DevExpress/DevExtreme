@@ -4837,7 +4837,7 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type ComponentFactory<TComponent> = {
+  export type ComponentFactory<TComponent> = {
     new (
       element: UserDefinedElement,
       options?: Record<string, unknown>
@@ -9462,6 +9462,8 @@ declare module DevExpress.ui {
      * [descr:dxChat.renderMessage(message)]
      */
     renderMessage(message: DevExpress.ui.dxChat.Message): void;
+
+    getDataSource(): DevExpress.data.DataSource<DevExpress.ui.dxChat.Message>;
   }
   module dxChat {
     /**
@@ -9523,6 +9525,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.items]
      */
     items?: Array<DevExpress.ui.dxChat.Message>;
+    /**
+     * [descr:dxChatOptions.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
      * [descr:dxChatOptions.onMessageSend]
      */

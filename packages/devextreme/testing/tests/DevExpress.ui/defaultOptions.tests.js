@@ -1347,6 +1347,7 @@ testComponentDefaults(Chat,
         hoverStateEnabled: true,
         title: '',
         onMessageSend: undefined,
+        dataSource: undefined,
     }
 );
 
