@@ -15,14 +15,14 @@
   $chat-messagebox-border-radius,
   $chat-messagebox-button-height,
   $chat-messagebox-button-width,
-  $chat-messagebox-button-color,
-  $chat-messagebox-before-offset
+  $chat-messagebox-button-color
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
   $chat-bubble-border-radius,
   $chat-bubble-background-color-secondary,
-  $chat-bubble-background-color-primary
+  $chat-bubble-background-color-primary,
+  $chat-bubble-line-height
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,

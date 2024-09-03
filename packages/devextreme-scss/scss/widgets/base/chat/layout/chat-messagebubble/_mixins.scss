@@ -2,12 +2,14 @@
   $padding,
   $border-radius,
   $background-color-secondary,
-  $background-color-primary
+  $background-color-primary,
+  $line-height
 ) {
   .dx-chat-message-bubble {
     padding: $padding;
     border-radius: $border-radius;
     background-color: $background-color-secondary;
+    line-height: $line-height;
   }
   
   .dx-chat-message-group-alignment-start {

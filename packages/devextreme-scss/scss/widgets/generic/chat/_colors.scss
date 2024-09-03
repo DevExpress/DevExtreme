@@ -1,0 +1,27 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$chat-background-color: $base-bg !default;
+$chat-messagebox-border-color: $base-border-color !default;
+$chat-avatar-background-color: #878787 !default;
+$chat-bubble-background-color-primary: null !default;
+$chat-bubble-background-color-secondary: null !default;
+$chat-information-color: null !default;
+$chat-messagebox-button-color: null !default;
+
+@if $color == "light" {
+  $chat-bubble-background-color-primary: #2D6DA31A !default;
+  $chat-bubble-background-color-secondary: #F5F5F5 !default;
+  $chat-information-color: #959595 !default;
+  $chat-messagebox-button-color: #337AB7 !default;
+}
+
+@else if $color == "dark" {
+  $chat-bubble-background-color-primary: #1997C61A !default;
+  $chat-bubble-background-color-secondary: #343434 !default;
+  $chat-information-color: #7D7D7D !default;
+  $chat-messagebox-button-color: #1CA8DD !default;
+}
