@@ -206,7 +206,7 @@ QUnit.module('aria accessibility', () => {
             readOnly: true,
         });
 
-        assert.equal($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
+        assert.strictEqual($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
     });
 
     QUnit.test('aria-readonly should not exist after value change', function(assert) {
@@ -221,7 +221,7 @@ QUnit.module('aria accessibility', () => {
             value: 59
         });
 
-        assert.equal($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
+        assert.strictEqual($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
     });
 
     QUnit.test('aria-readonly should not exist after readOnly option change', function(assert) {
@@ -235,7 +235,7 @@ QUnit.module('aria accessibility', () => {
             readOnly: true,
         });
 
-        assert.equal($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
+        assert.strictEqual($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
     });
 
     QUnit.test('aria properties after options changed', function(assert) {

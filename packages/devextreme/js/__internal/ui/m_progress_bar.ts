@@ -42,6 +42,10 @@ const ProgressBar = TrackBar.inherit({
     ]);
   },
 
+  _toggleReadOnlyState() {
+    this.setAria('readonly', undefined);
+  },
+
   _initMarkup() {
     this._renderStatus();
     this._createCompleteAction();
@@ -52,7 +56,6 @@ const ProgressBar = TrackBar.inherit({
     this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
     this._$bar.addClass(PROGRESSBAR_CONTAINER_CLASS);
 
-    this.setAria('readonly', undefined);
     this.setAria('role', 'progressbar');
 
     $('<div>').addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
@@ -184,10 +187,6 @@ const ProgressBar = TrackBar.inherit({
         break;
       case 'statusPosition':
         this._toggleStatus(this.option('showStatus'));
-        break;
-      case 'readOnly':
-        this.callBase(args);
-        this.setAria('readonly', undefined);
         break;
       case 'onComplete':
         this._createCompleteAction();
