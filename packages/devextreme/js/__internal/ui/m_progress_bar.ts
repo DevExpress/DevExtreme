@@ -185,6 +185,10 @@ const ProgressBar = TrackBar.inherit({
       case 'statusPosition':
         this._toggleStatus(this.option('showStatus'));
         break;
+      case 'readOnly':
+        this.callBase(args);
+        this.setAria('readonly', undefined);
+        break;
       case 'onComplete':
         this._createCompleteAction();
         break;
