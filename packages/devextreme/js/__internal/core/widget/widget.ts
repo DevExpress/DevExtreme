@@ -1,22 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/no-invalid-this */
-/* eslint-disable no-void */
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import '@js/events/click';
 import '@js/events/core/emitter.feedback';
 import '@js/events/hover';
 
 import Action from '@js/core/action';
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
@@ -25,29 +17,50 @@ import {
   active, focus, hover, keyboard,
 } from '@js/events/short';
 import { focusable as focusableSelector } from '@js/ui/widget/selectors';
+import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import DOMComponent from './dom_component';
+import type { OptionChanged } from './types';
 
-function setAttribute(name, value, target) {
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+
+function setAttribute(name, value, target): void {
+  // eslint-disable-next-line no-param-reassign
   name = name === 'role' || name === 'id' ? name : `aria-${name}`;
+  // eslint-disable-next-line no-param-reassign
   value = isDefined(value) ? value.toString() : null;
 
   target.attr(name, value);
 }
 
-class Widget extends DOMComponent {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface Properties<TComponent = any> extends WidgetOptions<TComponent> {
+  useResizeObserver?: boolean;
+  onKeyboardHandled?: (event: KeyboardEvent) => void;
+  isActive?: boolean;
+  ignoreParentReadOnly?: boolean;
+  hoveredElement?: dxElementWrapper;
+}
+
+class Widget<
+  TProperties extends Properties = Properties,
+> extends DOMComponent<Widget<TProperties>, TProperties> {
   private readonly _feedbackHideTimeout = 400;
 
   private readonly _feedbackShowTimeout = 30;
 
-  private _contentReadyAction: any;
+  private _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
-  private readonly _activeStateUnit: any;
+  private readonly _activeStateUnit: string = '';
 
-  private _keyboardListenerId: any;
+  private _keyboardListenerId?: string | null;
 
-  private _isReady: any;
+  private _isReady?: boolean;
 
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type
   static getOptionsFromContainer({ name, fullName, value }) {
     let options = {};
 
@@ -62,12 +75,14 @@ class Widget extends DOMComponent {
     return options;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _supportedKeys(event?) {
+  _supportedKeys():
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void | boolean> {
     return {};
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): TProperties {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       hoveredElement: null,
       isActive: false,
@@ -99,49 +114,58 @@ class Widget extends DOMComponent {
     });
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return super._defaultOptionsRules().concat([{
-      device() {
+      device(): boolean {
         const device = devices.real();
         const { platform } = device;
         const { version } = device;
         return platform === 'ios' && compareVersions(version, '13.3') <= 0;
       },
+      // @ts-expect-error
       options: {
         useResizeObserver: false,
       },
     }]);
   }
 
-  _init() {
+  _init(): void {
     super._init();
     this._initContentReadyAction();
   }
 
-  _innerWidgetOptionChanged(innerWidget, args) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _innerWidgetOptionChanged(innerWidget, args): void {
     const options = Widget.getOptionsFromContainer(args);
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
     innerWidget && innerWidget.option(options);
     this._options.cache(args.name, options);
   }
 
-  _bindInnerWidgetOptions(innerWidget, optionsContainer) {
-    const syncOptions = () => this._options.silent(optionsContainer, extend({}, innerWidget.option()));
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    const syncOptions = (): void => this._options.silent(
+      optionsContainer,
+      extend({}, innerWidget.option()),
+    );
 
     syncOptions();
     innerWidget.on('optionChanged', syncOptions);
   }
 
-  _getAriaTarget() {
+  _getAriaTarget(): dxElementWrapper {
     return this._focusTarget();
   }
 
-  _initContentReadyAction() {
+  _initContentReadyAction(): void {
     this._contentReadyAction = this._createActionByOption('onContentReady', {
       excludeValidators: ['disabled', 'readOnly'],
     });
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     const { disabled, visible } = this.option();
 
     this.$element().addClass('dx-widget');
@@ -149,12 +173,13 @@ class Widget extends DOMComponent {
     this._toggleDisabledState(disabled);
     this._toggleVisibility(visible);
     this._renderHint();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this._isFocusable() && this._renderFocusTarget();
 
     super._initMarkup();
   }
 
-  _render() {
+  _render(): void {
     super._render();
 
     this._renderContent();
@@ -164,47 +189,51 @@ class Widget extends DOMComponent {
     this._toggleIndependentState();
   }
 
-  _renderHint() {
+  _renderHint(): void {
     const { hint } = this.option();
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this.$element().attr('title', hint || null);
   }
 
-  _renderContent() {
+  _renderContent(): void {
+    // eslint-disable-next-line no-void
     deferRender(() => (!this._disposed ? this._renderContentImpl() : void 0))
       // @ts-expect-error
+      // eslint-disable-next-line no-void, @typescript-eslint/no-unsafe-return
       .done(() => (!this._disposed ? this._fireContentReadyAction() : void 0));
   }
 
-  _renderContentImpl() {}
+  _renderContentImpl(): void {}
 
-  _fireContentReadyAction() {
-    return deferRender(() => this._contentReadyAction());
+  _fireContentReadyAction(): Promise<void> | DeferredObj<void> | void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return deferRender(() => this._contentReadyAction?.());
   }
 
-  _dispose() {
+  _dispose(): void {
     this._contentReadyAction = null;
     this._detachKeyboardEvents();
 
     super._dispose();
   }
 
-  _resetActiveState() {
+  _resetActiveState(): void {
     this._toggleActiveState(this._eventBindingTarget(), false);
   }
 
-  _clean() {
+  _clean(): void {
     this._cleanFocusState();
     this._resetActiveState();
     super._clean();
     this.$element().empty();
   }
 
-  _toggleVisibility(visible) {
-    this.$element().toggleClass('dx-state-invisible', !visible);
+  _toggleVisibility(visible: boolean | undefined): void {
+    this.$element().toggleClass(INVISIBLE_STATE_CLASS, !visible);
   }
 
-  _renderFocusState() {
+  _renderFocusState(): void {
     this._attachKeyboardEvents();
 
     if (this._isFocusable()) {
@@ -214,37 +243,39 @@ class Widget extends DOMComponent {
     }
   }
 
-  _renderAccessKey() {
+  _renderAccessKey(): void {
     const $el = this._focusTarget();
     const { accessKey } = this.option();
 
+    // @ts-expect-error
     $el.attr('accesskey', accessKey);
   }
 
-  _isFocusable() {
+  _isFocusable(): boolean | undefined {
     const { focusStateEnabled, disabled } = this.option();
 
     return focusStateEnabled && !disabled;
   }
 
-  _eventBindingTarget() {
+  _eventBindingTarget(): dxElementWrapper {
     return this.$element();
   }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._getActiveElement();
   }
 
-  _isFocusTarget(element) {
+  _isFocusTarget(element: Element): boolean {
     const focusTargets = $(this._focusTarget()).toArray();
     return focusTargets.includes(element);
   }
 
-  _findActiveTarget($element) {
-    return $element.find(this._activeStateUnit).not('.dx-state-disabled');
+  _findActiveTarget($element: dxElementWrapper): dxElementWrapper {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return $element.find(this._activeStateUnit).not(`.${DISABLED_STATE_CLASS}`);
   }
 
-  _getActiveElement() {
+  _getActiveElement(): dxElementWrapper {
     const activeElement = this._eventBindingTarget();
 
     if (this._activeStateUnit) {
@@ -254,26 +285,28 @@ class Widget extends DOMComponent {
     return activeElement;
   }
 
-  _renderFocusTarget() {
+  _renderFocusTarget(): void {
     const { tabIndex } = this.option();
 
+    // @ts-expect-error
     this._focusTarget().attr('tabIndex', tabIndex);
   }
 
-  _keyboardEventBindingTarget() {
+  _keyboardEventBindingTarget(): dxElementWrapper {
     return this._eventBindingTarget();
   }
 
-  _refreshFocusEvent() {
+  _refreshFocusEvent(): void {
     this._detachFocusEvents();
     this._attachFocusEvents();
   }
 
-  _focusEventTarget() {
+  _focusEventTarget(): dxElementWrapper {
     return this._focusTarget();
   }
 
-  _focusInHandler(event) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _focusInHandler(event): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusIn', {
         beforeExecute: () => this._updateFocusState(event, true),
@@ -282,7 +315,8 @@ class Widget extends DOMComponent {
     }
   }
 
-  _focusOutHandler(event) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _focusOutHandler(event): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusOut', {
         beforeExecute: () => this._updateFocusState(event, false),
@@ -291,38 +325,43 @@ class Widget extends DOMComponent {
     }
   }
 
-  _updateFocusState({ target }, isFocused) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _updateFocusState({ target }, isFocused: boolean): void {
     if (this._isFocusTarget(target)) {
       this._toggleFocusClass(isFocused, $(target));
     }
   }
 
-  _toggleFocusClass(isFocused, $element?) {
+  _toggleFocusClass(isFocused: boolean, $element?: dxElementWrapper): void {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const $focusTarget = $element && $element.length ? $element : this._focusTarget();
 
-    $focusTarget.toggleClass('dx-state-focused', isFocused);
+    $focusTarget.toggleClass(FOCUSED_STATE_CLASS, isFocused);
   }
 
-  _hasFocusClass(element?) {
-    const $focusTarget = $(element || this._focusTarget());
+  _hasFocusClass(element?: dxElementWrapper): boolean {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const $focusTarget = $(element ?? this._focusTarget());
 
-    return $focusTarget.hasClass('dx-state-focused');
+    return $focusTarget.hasClass(FOCUSED_STATE_CLASS);
   }
 
-  _isFocused() {
+  _isFocused(): boolean {
     return this._hasFocusClass();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _getKeyboardListeners(): any[] {
     return [];
   }
 
-  _attachKeyboardEvents() {
+  _attachKeyboardEvents(): void {
     this._detachKeyboardEvents();
 
     const { focusStateEnabled, onKeyboardHandled } = this.option();
     const hasChildListeners = this._getKeyboardListeners().length;
     const hasKeyboardEventHandler = !!onKeyboardHandled;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const shouldAttach = focusStateEnabled || hasChildListeners || hasKeyboardEventHandler;
 
     if (shouldAttach) {
@@ -334,9 +373,11 @@ class Widget extends DOMComponent {
     }
   }
 
-  _keyboardHandler(options, onlyChildProcessing?) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _keyboardHandler(options, onlyChildProcessing?: boolean): boolean {
     if (!onlyChildProcessing) {
       const { originalEvent, keyName, which } = options;
+      // @ts-expect-error
       const keys = this._supportedKeys(originalEvent);
       const func = keys[keyName] || keys[which];
 
@@ -353,19 +394,23 @@ class Widget extends DOMComponent {
     const keyboardListeners = this._getKeyboardListeners();
     const { onKeyboardHandled } = this.option();
 
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-optional-chain
     keyboardListeners.forEach((listener) => listener && listener._keyboardHandler(options));
 
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
     onKeyboardHandled && onKeyboardHandled(options);
 
     return true;
   }
 
-  _refreshFocusState() {
+  _refreshFocusState(): void {
     this._cleanFocusState();
     this._renderFocusState();
   }
 
-  _cleanFocusState() {
+  _cleanFocusState(): void {
     const $element = this._focusTarget();
 
     $element.removeAttr('tabIndex');
@@ -374,12 +419,12 @@ class Widget extends DOMComponent {
     this._detachKeyboardEvents();
   }
 
-  _detachKeyboardEvents() {
+  _detachKeyboardEvents(): void {
     keyboard.off(this._keyboardListenerId);
     this._keyboardListenerId = null;
   }
 
-  _attachHoverEvents() {
+  _attachHoverEvents(): void {
     const { hoverStateEnabled } = this.option();
     const selector = this._activeStateUnit;
     const namespace = 'UIFeedback';
@@ -398,7 +443,7 @@ class Widget extends DOMComponent {
     }
   }
 
-  _attachFeedbackEvents() {
+  _attachFeedbackEvents(): void {
     const { activeStateEnabled } = this.option();
     const selector = this._activeStateUnit;
     const namespace = 'UIFeedback';
@@ -424,13 +469,13 @@ class Widget extends DOMComponent {
     }
   }
 
-  _detachFocusEvents() {
+  _detachFocusEvents(): void {
     const $el = this._focusEventTarget();
 
     focus.off($el, { namespace: `${this.NAME}Focus` });
   }
 
-  _attachFocusEvents() {
+  _attachFocusEvents(): void {
     const $el = this._focusEventTarget();
 
     focus.on(
@@ -446,55 +491,70 @@ class Widget extends DOMComponent {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _hoverStartHandler(event) {}
+  _hoverStartHandler(event: unknown): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _hoverEndHandler(event) {}
+  _hoverEndHandler(event: unknown): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _toggleActiveState($element, value, event?) {
+  _toggleActiveState(
+    $element: dxElementWrapper,
+    value: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    event?: Record<string, unknown>,
+  ): void {
     this.option('isActive', value);
     $element.toggleClass('dx-state-active', value);
   }
 
-  _updatedHover() {
+  _updatedHover(): void {
     const hoveredElement = this._options.silent('hoveredElement');
 
     this._hover(hoveredElement, hoveredElement);
   }
 
-  _findHoverTarget($el) {
+  _findHoverTarget($el?: dxElementWrapper): dxElementWrapper | undefined {
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/prefer-optional-chain
     return $el && $el.closest(this._activeStateUnit || this._eventBindingTarget());
   }
 
-  _hover($el, $previous) {
+  _hover($el: dxElementWrapper | undefined, $previous: dxElementWrapper | undefined): void {
     const { hoverStateEnabled, disabled, isActive } = this.option();
 
+    // eslint-disable-next-line no-param-reassign
     $previous = this._findHoverTarget($previous);
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
     $previous && $previous.toggleClass('dx-state-hover', false);
 
     if ($el && hoverStateEnabled && !disabled && !isActive) {
       const newHoveredElement = this._findHoverTarget($el);
 
+      // eslint-disable-next-line max-len
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
       newHoveredElement && newHoveredElement.toggleClass('dx-state-hover', true);
     }
   }
 
-  _toggleDisabledState(value) {
-    this.$element().toggleClass('dx-state-disabled', Boolean(value));
+  _toggleDisabledState(value: boolean | undefined): void {
+    this.$element().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this.setAria('disabled', value || undefined);
   }
 
-  _toggleIndependentState() {
-    this.$element().toggleClass('dx-state-independent', this.option('ignoreParentReadOnly'));
+  _toggleIndependentState(): void {
+    const { ignoreParentReadOnly } = this.option('ignoreParentReadOnly');
+
+    this.$element().toggleClass('dx-state-independent', ignoreParentReadOnly);
   }
 
-  _setWidgetOption(widgetName, args) {
+  _setWidgetOption(widgetName: 'string', args: Record<string, unknown>): void {
     if (!this[widgetName]) {
       return;
     }
 
     if (isPlainObject(args[0])) {
+      // @ts-expect-error
       each(args[0], (option, value) => this._setWidgetOption(widgetName, [option, value]));
 
       return;
@@ -512,12 +572,12 @@ class Widget extends DOMComponent {
     this[widgetName].option(widgetOptionMap ? widgetOptionMap(optionName) : optionName, value);
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties> | Record<string, unknown>): void {
     const { name, value, previousValue } = args;
 
     switch (name) {
       case 'disabled':
-        this._toggleDisabledState(value);
+        this._toggleDisabledState(value as Properties[typeof name]);
         this._updatedHover();
         this._refreshFocusState();
         break;
@@ -546,13 +606,13 @@ class Widget extends DOMComponent {
         this._renderAccessKey();
         break;
       case 'hoveredElement':
-        this._hover(value, previousValue);
+        this._hover(value as Properties[typeof name], previousValue as Properties[typeof name]);
         break;
       case 'isActive':
         this._updatedHover();
         break;
       case 'visible':
-        this._toggleVisibility(value);
+        this._toggleVisibility(value as Properties[typeof name]);
         if (this._isVisibilityChangeSupported()) {
           // TODO hiding works wrong
           this._checkVisibilityChanged(value ? 'shown' : 'hiding');
@@ -569,18 +629,19 @@ class Widget extends DOMComponent {
     }
   }
 
-  _isVisible() {
+  _isVisible(): boolean {
     const { visible } = this.option();
 
+    // @ts-expect-error
     return super._isVisible() && visible;
   }
 
-  beginUpdate() {
+  beginUpdate(): void {
     this._ready(false);
     super.beginUpdate();
   }
 
-  endUpdate() {
+  endUpdate(): void {
     super.endUpdate();
 
     if (this._initialized) {
@@ -588,15 +649,18 @@ class Widget extends DOMComponent {
     }
   }
 
-  _ready(value?) {
+  _ready(value?: boolean): boolean {
     if (arguments.length === 0) {
-      return this._isReady;
+      return !!this._isReady;
     }
 
-    this._isReady = value;
+    this._isReady = !!value;
+
+    return this._isReady;
   }
 
-  setAria(...args) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  setAria(...args): void {
     if (!isPlainObject(args[0])) {
       setAttribute(args[0], args[1], args[2] || this._getAriaTarget());
     } else {
@@ -606,22 +670,24 @@ class Widget extends DOMComponent {
     }
   }
 
-  isReady() {
+  isReady(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._ready();
   }
 
-  repaint() {
+  repaint(): void {
     this._refresh();
   }
 
-  focus() {
+  focus(): void {
     focus.trigger(this._focusTarget());
   }
 
-  registerKeyHandler(key, handler) {
+  registerKeyHandler(key: string, handler: () => void): void {
     const currentKeys = this._supportedKeys();
 
-    this._supportedKeys = () => extend(currentKeys, { [key]: handler });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, max-len
+    this._supportedKeys = (): Record<string, (e) => boolean> => extend(currentKeys, { [key]: handler });
   }
 }
 

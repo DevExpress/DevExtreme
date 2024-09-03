@@ -1,113 +1,131 @@
-/* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable consistent-return */
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/init-declarations */
-/* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable default-case */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import Action from '@js/core/action';
 import Class from '@js/core/class';
+import type {
+  ComponentOptions,
+} from '@js/core/component';
 import Config from '@js/core/config';
+import type { OptionChangedEventInfo } from '@js/core/dom_component';
 import errors from '@js/core/errors';
 import { EventsStrategy } from '@js/core/events_strategy';
 import { Options } from '@js/core/options/index';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { convertRulesToOptions } from '@js/core/options/utils';
 import { PostponedOperations } from '@js/core/postponed_operations';
+import type { dxElementWrapper } from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
 import { getPathParts } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
 import { name as publicComponentName } from '@js/core/utils/public_component';
 import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
+import type { EventInfo, InitializedEventInfo } from '@js/events';
 
-const getEventName = (actionName) => actionName.charAt(2).toLowerCase() + actionName.substr(3);
+import type { OptionChanged } from './types';
 
-const isInnerOption = (optionName) => optionName.indexOf('_', 0) === 0;
+// eslint-disable-next-line max-len
+// eslint-disable-next-line @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-return, max-len
+const getEventName = (actionName): string => actionName.charAt(2).toLowerCase() + actionName.substr(3);
 
-export class Component extends Class.inherit({}) {
-  _deprecatedOptions: any;
+const isInnerOption = (optionName): boolean => optionName.indexOf('_', 0) === 0;
 
-  _options: any;
+export interface Properties<TComponent> extends ComponentOptions<
+EventInfo<TComponent>,
+InitializedEventInfo<TComponent>,
+OptionChangedEventInfo<TComponent>
+> {
+  onInitializing?: ((e: Record<string, unknown>) => void) | undefined;
 
-  _optionsByReference: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  defaultOptionsRules?: DefaultOptionsRule<any>[];
+}
 
-  NAME: any;
+// eslint-disable-next-line max-len
+export class Component<
+  TComponent extends Component<TComponent, TProperties>,
+  TProperties extends Properties<TComponent>,
+// eslint-disable-next-line @typescript-eslint/ban-types
+> extends (Class.inherit({}) as new() => {}) {
+  _deprecatedOptions: Partial<TProperties> = {};
 
+  _options!: Options;
+
+  _optionsByReference: Partial<TProperties> = {};
+
+  NAME?: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _eventsStrategy: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _optionChangedCallbacks: any;
 
-  _updateLockCount: any;
+  _updateLockCount!: number;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _disposingCallbacks: any;
 
-  postponedOperations: any;
+  postponedOperations!: PostponedOperations;
 
-  _initialized: any;
+  _initialized!: boolean;
 
-  _optionChangedAction: any;
+  _optionChangedAction?: (event?: Record<string, unknown>) => void;
 
-  _disposingAction: any;
+  _disposingAction?: (event?: Record<string, unknown>) => void;
 
-  _disposed: any;
+  _disposed?: boolean;
 
-  _initializing: any;
+  _initializing?: boolean;
 
-  _cancelOptionChange: any;
+  _cancelOptionChange?: string | boolean;
 
-  _setDeprecatedOptions() {
+  _setDeprecatedOptions(): void {
     this._deprecatedOptions = {};
   }
 
-  _getDeprecatedOptions() {
+  _getDeprecatedOptions(): Partial<TProperties> {
     return this._deprecatedOptions;
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): TProperties {
     return {
       onInitialized: null,
       onOptionChanged: null,
       onDisposing: null,
 
       defaultOptionsRules: null,
-    };
+    } as unknown as TProperties;
   }
 
-  _defaultOptionsRules(): any[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return [];
   }
 
-  _setOptionsByDevice(rules) {
+  _setOptionsByDevice(rules: DefaultOptionsRule<TProperties>[] | undefined): void {
     this._options.applyRules(rules);
   }
 
-  _convertRulesToOptions(rules) {
+  _convertRulesToOptions(rules: DefaultOptionsRule<TProperties>[]): TProperties {
     return convertRulesToOptions(rules);
   }
 
-  _isInitialOptionValue(name) {
+  _isInitialOptionValue(name: string): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.isInitial(name);
   }
 
-  _setOptionsByReference() {
+  _setOptionsByReference(): void {
     this._optionsByReference = {};
   }
 
-  _getOptionsByReference() {
+  _getOptionsByReference(): Partial<TProperties> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._optionsByReference;
   }
 
-  ctor(options: any = {}) {
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-unused-vars
+  ctor(options: any = {}, extra?: unknown): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _optionChangedCallbacks, _disposingCallbacks } = options;
 
     this.NAME = publicComponentName(this.constructor);
@@ -122,7 +140,7 @@ export class Component extends Class.inherit({}) {
     this._createOptions(options);
   }
 
-  _createOptions(options) {
+  _createOptions(options: TProperties): void {
     this.beginUpdate();
 
     try {
@@ -136,7 +154,9 @@ export class Component extends Class.inherit({}) {
       );
 
       this._options.onChanging(
-        (name, previousValue, value) => this._initialized && this._optionChanging(name, previousValue, value),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        (name, previousValue, value) => this._initialized
+          && this._optionChanging(name, previousValue, value),
       );
       this._options.onDeprecated(
         (option, info) => this._logDeprecatedOptionWarning(option, info),
@@ -148,7 +168,9 @@ export class Component extends Class.inherit({}) {
       this._options.onEndChange(() => this.endUpdate());
       this._options.addRules(this._defaultOptionsRules());
 
+      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (options && options.onInitializing) {
+        // @ts-expect-error
         options.onInitializing.apply(this, [options]);
       }
 
@@ -159,11 +181,11 @@ export class Component extends Class.inherit({}) {
     }
   }
 
-  _initOptions(options) {
+  _initOptions(options: TProperties): void {
     this.option(options);
   }
 
-  _init() {
+  _init(): void {
     this._createOptionChangedAction();
 
     this.on('disposing', (args) => {
@@ -171,25 +193,30 @@ export class Component extends Class.inherit({}) {
     });
   }
 
-  _logDeprecatedOptionWarning(option, info) {
+  _logDeprecatedOptionWarning(
+    option: string,
+    info: { since: string; message: string; alias: string },
+  ): void {
     const message = info.message || `Use the '${info.alias}' option instead`;
     errors.log('W0001', this.NAME, option, info.since, message);
   }
 
-  _logDeprecatedComponentWarning(since, alias) {
+  _logDeprecatedComponentWarning(since: 'string', alias: 'string'): void {
     errors.log('W0000', this.NAME, since, `Use the '${alias}' widget instead`);
   }
 
-  _createOptionChangedAction() {
+  _createOptionChangedAction(): void {
     this._optionChangedAction = this._createActionByOption('onOptionChanged', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
-  _createDisposingAction() {
+  _createDisposingAction(): void {
     this._disposingAction = this._createActionByOption('onDisposing', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
-  _optionChanged(args) {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<TProperties> | Record<string, unknown>): void {
+    const { name } = args;
+
+    switch (name) {
       case 'onDisposing':
       case 'onInitialized':
         break;
@@ -198,46 +225,51 @@ export class Component extends Class.inherit({}) {
         break;
       case 'defaultOptionsRules':
         break;
+      default:
+        break;
     }
   }
 
-  _dispose() {
+  _dispose(): void {
     this._optionChangedCallbacks.empty();
     this._createDisposingAction();
-    this._disposingAction();
+    this._disposingAction?.();
     this._eventsStrategy.dispose();
     this._options.dispose();
     this._disposed = true;
   }
 
-  _lockUpdate() {
+  _lockUpdate(): void {
+    // eslint-disable-next-line no-plusplus
     this._updateLockCount++;
   }
 
-  _unlockUpdate() {
+  _unlockUpdate(): void {
     this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
   }
 
   // TODO: remake as getter after ES6 refactor
-  _isUpdateAllowed() {
+  _isUpdateAllowed(): boolean {
     return this._updateLockCount === 0;
   }
 
   // TODO: remake as getter after ES6 refactor
-  _isInitializingRequired() {
+  _isInitializingRequired(): boolean {
     return !this._initializing && !this._initialized;
   }
 
-  isInitialized() {
+  isInitialized(): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._initialized;
   }
 
-  _commitUpdate() {
+  _commitUpdate(): void {
     this.postponedOperations.callPostponedOperations();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this._isInitializingRequired() && this._initializeComponent();
   }
 
-  _initializeComponent() {
+  _initializeComponent(): void {
     this._initializing = true;
 
     try {
@@ -251,27 +283,30 @@ export class Component extends Class.inherit({}) {
     }
   }
 
-  instance() {
-    return this;
+  instance(): TComponent {
+    return this as unknown as TComponent;
   }
 
-  beginUpdate() {
+  beginUpdate(): void {
     this._lockUpdate();
   }
 
-  endUpdate() {
+  endUpdate(): void {
     this._unlockUpdate();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this._isUpdateAllowed() && this._commitUpdate();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   _optionChanging(...args: any[]) {
 
   }
 
-  _notifyOptionChanged(option, value, previousValue) {
+  _notifyOptionChanged(option: string, value: unknown, previousValue: unknown): void {
     if (this._initialized) {
       const optionNames = [option].concat(this._options.getAliasesByName(option));
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus
       for (let i = 0; i < optionNames.length; i++) {
         const name = optionNames[i];
         const args = {
@@ -283,7 +318,7 @@ export class Component extends Class.inherit({}) {
 
         if (!isInnerOption(name)) {
           this._optionChangedCallbacks.fireWith(this, [extend(this._defaultActionArgs(), args)]);
-          this._optionChangedAction(extend({}, args));
+          this._optionChangedAction?.(extend({}, args));
         }
 
         if (!this._disposed && this._cancelOptionChange !== name) {
@@ -293,49 +328,64 @@ export class Component extends Class.inherit({}) {
     }
   }
 
-  initialOption(name) {
+  initialOption(name: string): TProperties {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.initial(name);
   }
 
-  _defaultActionConfig() {
+  _defaultActionConfig(): { context: TComponent; component: TComponent } {
     return {
-      context: this,
-      component: this,
+      context: this as unknown as TComponent,
+      component: this as unknown as TComponent,
     };
   }
 
-  _defaultActionArgs() {
+  _defaultActionArgs(): { component: TComponent; element?: dxElementWrapper; model?: unknown } {
     return {
-      component: this,
+      component: this as unknown as TComponent,
     };
   }
 
-  _createAction(actionSource, config) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _createAction(actionSource, config): (e) => void {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let action;
 
     return (e) => {
       if (!isDefined(e)) {
+        // eslint-disable-next-line no-param-reassign
         e = {};
       }
 
       if (!isPlainObject(e)) {
+        // eslint-disable-next-line no-param-reassign
         e = { actionValue: e };
       }
       action = action || new Action(actionSource, extend({}, config, this._defaultActionConfig()));
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return action.execute.call(action, extend(e, this._defaultActionArgs()));
     };
   }
 
-  _createActionByOption(optionName, config) {
+  _createActionByOption(
+    optionName: string,
+    config: Record<string, unknown>,
+  ): (event?: Record<string, unknown>) => void {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let action;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let eventName;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let actionFunc;
 
+    // eslint-disable-next-line no-param-reassign
     config = extend({}, config);
 
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const result = (...args) => {
       if (!eventName) {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
         config = config || {};
 
         if (typeof optionName !== 'string') {
@@ -354,13 +404,17 @@ export class Component extends Class.inherit({}) {
         actionFunc = this.option(optionName);
       }
 
-      if (!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
+      if (!action && !actionFunc && !config.beforeExecute
+        && !config.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {
         return;
       }
 
       if (!action) {
         const { beforeExecute } = config;
-        config.beforeExecute = (...props) => {
+        config.beforeExecute = (...props): void => {
+          // @ts-expect-error
+          // eslint-disable-next-line max-len
+          // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unused-expressions
           beforeExecute && beforeExecute.apply(this, props);
           this._eventsStrategy.fireEvent(eventName, props[0].args);
         };
@@ -370,10 +424,13 @@ export class Component extends Class.inherit({}) {
       // @ts-expect-error
       if (Config().wrapActionsBeforeExecute) {
         const beforeActionExecute = this.option('beforeActionExecute') || noop;
+        // @ts-expect-error
         const wrappedAction = beforeActionExecute(this, action, config) || action;
+        // eslint-disable-next-line consistent-return, @typescript-eslint/no-unsafe-return
         return wrappedAction.apply(this, args);
       }
 
+      // eslint-disable-next-line consistent-return, @typescript-eslint/no-unsafe-return
       return action.apply(this, args);
     };
 
@@ -381,52 +438,63 @@ export class Component extends Class.inherit({}) {
     if (Config().wrapActionsBeforeExecute) {
       return result;
     }
-
     const onActionCreated = this.option('onActionCreated') || noop;
 
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return onActionCreated(this, result, config) || result;
   }
 
-  on(eventName, eventHandler) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  on(eventName: string, eventHandler): TComponent {
     this._eventsStrategy.on(eventName, eventHandler);
-    return this;
+    return this as unknown as TComponent;
   }
 
-  off(eventName, eventHandler) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  off(eventName: string, eventHandler): TComponent {
     this._eventsStrategy.off(eventName, eventHandler);
-    return this;
+    return this as unknown as TComponent;
   }
 
-  hasActionSubscription(actionName) {
+  hasActionSubscription(actionName: string): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return !!this._options.silent(actionName)
             || this._eventsStrategy.hasEvent(getEventName(actionName));
   }
 
-  isOptionDeprecated(name) {
+  isOptionDeprecated(name: string): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.isDeprecated(name);
   }
 
-  _setOptionWithoutOptionChange(name, value) {
+  _setOptionWithoutOptionChange(name: string, value: unknown): void {
     this._cancelOptionChange = name;
     this.option(name, value);
     this._cancelOptionChange = false;
   }
 
-  _getOptionValue(name, context) {
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  _getOptionValue(name: string, context: any): any {
     const value = this.option(name);
 
     if (isFunction(value)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return value.bind(context)();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return value;
   }
 
-  option(...args) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  option(...args): TProperties {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.option(...args);
   }
 
-  resetOption(name) {
+  resetOption(name: string): void {
     this.beginUpdate();
     this._options.reset(name);
     this.endUpdate();

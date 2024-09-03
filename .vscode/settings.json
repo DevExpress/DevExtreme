@@ -4,5 +4,6 @@
     },
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
-    }
+    },
+    "typescript.tsdk": "packages/devextreme/node_modules/typescript/lib"
 }

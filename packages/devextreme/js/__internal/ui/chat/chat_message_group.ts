@@ -3,8 +3,9 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
-import Widget from '../widget';
 import Avatar from './chat_avatar';
 import MessageBubble from './chat_message_bubble';
 
@@ -18,17 +19,17 @@ const CHAT_MESSAGE_BUBBLE_CONTAINER_CLASS = 'dx-chat-message-bubble-container';
 
 export type MessageGroupAlignment = 'start' | 'end';
 
-export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
+export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
 }
 
-class MessageGroup extends Widget<MessageGroupOptions> {
+class MessageGroup extends Widget<Properties> {
   _avatar?: Avatar;
 
   _$messageBubbleContainer!: dxElementWrapper;
 
-  _getDefaultOptions(): MessageGroupOptions {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       items: [],
@@ -140,7 +141,7 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     $information.appendTo(this.element());
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name } = args;
 
     switch (name) {

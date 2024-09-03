@@ -1,21 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-plusplus */
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable new-cap */
-/* eslint-disable no-void */
-/* eslint-disable no-return-assign */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-multi-assign */
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import config from '@js/core/config';
+import type { DOMComponentOptions } from '@js/core/dom_component';
 import { getPublicElement } from '@js/core/element';
 import { cleanDataRecursive } from '@js/core/element_data';
 import errors from '@js/core/errors';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { TemplateManager } from '@js/core/template_manager';
 // @ts-expect-error
@@ -31,32 +19,56 @@ import { resize as resizeEvent, visibility as visibilityEvents } from '@js/event
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 
 import { Component } from './component';
+import type { OptionChanged } from './types';
 
-class DOMComponent extends Component {
-  static _classCustomRules: any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface Properties<TComponent = any> extends DOMComponentOptions<TComponent> {
+  _ignoreFunctionValueDeprecation?: boolean;
 
+  integrationOptions?: Record<string, unknown>;
+
+  nestedComponentOptions?: (context: TComponent) => void;
+
+  modelByElement?: ($element: dxElementWrapper) => unknown;
+}
+
+class DOMComponent<
+  TComponent extends Component<TComponent, TProperties>,
+  TProperties extends Properties = Properties,
+> extends Component<TComponent, TProperties> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static _classCustomRules: any[];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _customClass: any;
 
-  private _$element: any;
+  private _$element!: dxElementWrapper;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _windowResizeCallBack: any;
 
-  private _isHidden: any;
+  private _isHidden?: boolean;
 
-  private _requireRefresh: any;
+  private _requireRefresh?: boolean;
 
-  private _templateManager: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _templateManager?: any;
 
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   static getInstance(element) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getInstanceByElement($(element), this);
   }
 
-  static defaultOptions(rule) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  static defaultOptions(rule): void {
     this._classCustomRules = Object.hasOwnProperty.bind(this)('_classCustomRules') && this._classCustomRules ? this._classCustomRules : [];
     this._classCustomRules.push(rule);
   }
 
-  _getDefaultOptions() {
+  _getDefaultOptions(): TProperties {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
 
       width: undefined,
@@ -74,8 +86,7 @@ class DOMComponent extends Component {
     }, this._useTemplates() ? TemplateManager.createDefaultOptions() : {});
   }
 
-  // @ts-expect-error
-  ctor(element, options) {
+  ctor(element: Element, options: TProperties): void {
     this._customClass = null;
 
     this._createElement(element);
@@ -90,15 +101,17 @@ class DOMComponent extends Component {
     }
   }
 
-  _createElement(element) {
+  _createElement(element: Element): void {
     this._$element = $(element);
   }
 
-  _getSynchronizableOptionsForCreateComponent() {
+  _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
+    // @ts-expect-error
     return ['rtlEnabled', 'disabled', 'templatesRenderAsynchronously'];
   }
 
-  _checkFunctionValueDeprecation(optionNames) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _checkFunctionValueDeprecation(optionNames): void {
     if (!this.option('_ignoreFunctionValueDeprecation')) {
       optionNames.forEach((optionName) => {
         if (isFunction(this.option(optionName))) {
@@ -109,11 +122,11 @@ class DOMComponent extends Component {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _visibilityChanged(value: boolean) {}
+  _visibilityChanged(value: boolean): void {}
 
-  _dimensionChanged() {}
+  _dimensionChanged(): void {}
 
-  _init() {
+  _init(): void {
     super._init();
     this._checkFunctionValueDeprecation([
       'width', 'height',
@@ -125,41 +138,46 @@ class DOMComponent extends Component {
     this._initTemplateManager();
   }
 
-  _setOptionsByDevice(instanceCustomRules) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _setOptionsByDevice(instanceCustomRules): void {
     // @ts-expect-error
+    // eslint-disable-next-line max-len
     super._setOptionsByDevice([].concat(this.constructor._classCustomRules || [], instanceCustomRules || []));
   }
 
-  _isInitialOptionValue(name) {
+  _isInitialOptionValue(name: string): boolean {
     // @ts-expect-error
     const isCustomOption = this.constructor._classCustomRules
             // @ts-expect-error
+            // eslint-disable-next-line max-len
             && Object.prototype.hasOwnProperty.call(this._convertRulesToOptions(this.constructor._classCustomRules), name);
 
     return !isCustomOption && super._isInitialOptionValue(name);
   }
 
-  _attachWindowResizeCallback() {
+  _attachWindowResizeCallback(): void {
     if (this._isDimensionChangeSupported()) {
+      // eslint-disable-next-line no-multi-assign
       const windowResizeCallBack = this._windowResizeCallBack = this._dimensionChanged.bind(this);
 
       windowResizeCallbacks.add(windowResizeCallBack);
     }
   }
 
-  _isDimensionChangeSupported() {
+  _isDimensionChangeSupported(): boolean {
     return this._dimensionChanged !== DOMComponent.prototype._dimensionChanged;
   }
 
-  _renderComponent() {
+  _renderComponent(): void {
     addShadowDomStyles(this.$element());
 
     this._initMarkup();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     hasWindow() && this._render();
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     const { rtlEnabled } = this.option() || {};
 
     this._renderElementAttributes();
@@ -168,26 +186,27 @@ class DOMComponent extends Component {
     this._renderDimensions();
   }
 
-  _render() {
+  _render(): void {
     this._attachVisibilityChangeHandlers();
   }
 
-  _renderElementAttributes() {
+  _renderElementAttributes(): void {
     const { elementAttr } = this.option() || {};
     const attributes = extend({}, elementAttr);
     const classNames = attributes.class;
 
     delete attributes.class;
-
+    // @ts-expect-error
     this.$element()
       .attr(attributes)
+      // @ts-expect-error
       .removeClass(this._customClass)
       .addClass(classNames);
 
     this._customClass = classNames;
   }
 
-  _renderVisibilityChange() {
+  _renderVisibilityChange(): void {
     if (this._isDimensionChangeSupported()) {
       this._attachDimensionChangeHandlers();
     }
@@ -199,13 +218,14 @@ class DOMComponent extends Component {
     }
   }
 
-  _renderDimensions() {
+  _renderDimensions(): void {
     const $element = this.$element();
     const element = $element.get(0);
     const width = this._getOptionValue('width', element);
     const height = this._getOptionValue('height', element);
 
     if (this._isCssUpdateRequired(element, height, width)) {
+      // @ts-expect-error
       $element.css({
         width: width === null ? '' : width,
         height: height === null ? '' : height,
@@ -213,11 +233,12 @@ class DOMComponent extends Component {
     }
   }
 
-  _isCssUpdateRequired(element, height, width) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _isCssUpdateRequired(element, height, width): boolean {
     return !!(isDefined(width) || isDefined(height) || element.style.width || element.style.height);
   }
 
-  _attachDimensionChangeHandlers() {
+  _attachDimensionChangeHandlers(): void {
     const $el = this.$element();
     const namespace = `${this.NAME}VisibilityChange`;
 
@@ -225,7 +246,7 @@ class DOMComponent extends Component {
     resizeEvent.on($el, () => this._dimensionChanged(), { namespace });
   }
 
-  _attachVisibilityChangeHandlers() {
+  _attachVisibilityChangeHandlers(): void {
     if (this._isVisibilityChangeSupported()) {
       const $el = this.$element();
       const namespace = `${this.NAME}VisibilityChange`;
@@ -241,13 +262,13 @@ class DOMComponent extends Component {
     }
   }
 
-  _isVisible() {
+  _isVisible(): boolean {
     const $element = this.$element();
 
     return $element.is(':visible');
   }
 
-  _checkVisibilityChanged(action) {
+  _checkVisibilityChanged(action: 'shown' | 'hiding'): void {
     const isVisible = this._isVisible();
 
     if (isVisible) {
@@ -261,21 +282,21 @@ class DOMComponent extends Component {
     }
   }
 
-  _isVisibilityChangeSupported() {
+  _isVisibilityChangeSupported(): boolean {
     return this._visibilityChanged !== DOMComponent.prototype._visibilityChanged && hasWindow();
   }
 
-  _clean() {}
+  _clean(): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _modelByElement(element) {
+  _modelByElement(element: dxElementWrapper): unknown | undefined {
     const { modelByElement } = this.option();
     const $element = this.$element();
 
     return modelByElement ? modelByElement($element) : undefined;
   }
 
-  _invalidate() {
+  _invalidate(): void {
     if (this._isUpdateAllowed()) {
       throw errors.Error('E0007');
     }
@@ -283,69 +304,87 @@ class DOMComponent extends Component {
     this._requireRefresh = true;
   }
 
-  _refresh() {
+  _refresh(): void {
     this._clean();
     this._renderComponent();
   }
 
-  _dispose() {
+  _dispose(): void {
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unused-expressions
     this._templateManager && this._templateManager.dispose();
     super._dispose();
     this._clean();
     this._detachWindowResizeCallback();
   }
 
-  _detachWindowResizeCallback() {
+  _detachWindowResizeCallback(): void {
     if (this._isDimensionChangeSupported()) {
       windowResizeCallbacks.remove(this._windowResizeCallBack);
     }
   }
 
-  _toggleRTLDirection(rtl) {
+  _toggleRTLDirection(rtl: boolean | undefined): void {
     const $element = this.$element();
 
     $element.toggleClass('dx-rtl', rtl);
   }
 
-  _createComponent(element, component, config = {}) {
+  _createComponent<TTComponent>(
+    element: string | HTMLElement | dxElementWrapper,
+    component: string | (new (...args) => TTComponent),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
+      ? TTProperties
+      : Record<string, unknown>,
+  ): TTComponent {
+    const configuration = componentConfiguration ?? {};
+
     const synchronizableOptions = grep(
       this._getSynchronizableOptionsForCreateComponent(),
-      (value) => !(value in config),
+      (value) => !(value in configuration),
     );
 
     const { integrationOptions } = this.option();
     let { nestedComponentOptions } = this.option();
 
-    nestedComponentOptions = nestedComponentOptions || noop;
+    nestedComponentOptions = nestedComponentOptions ?? noop;
 
     const nestedComponentConfig = extend(
       { integrationOptions },
       nestedComponentOptions(this),
     );
 
-    synchronizableOptions.forEach((optionName) => nestedComponentConfig[optionName] = this.option(optionName));
+    synchronizableOptions.forEach(
+      // eslint-disable-next-line no-return-assign
+      (optionName) => nestedComponentConfig[optionName] = this.option(optionName),
+    );
 
-    this._extendConfig(config, nestedComponentConfig);
+    this._extendConfig(configuration, nestedComponentConfig);
 
+    // eslint-disable-next-line no-void
     let instance = void 0;
 
     if (isString(component)) {
-      const $element = $(element)[component](config);
+      const $element = $(element)[component](configuration);
 
       instance = $element[component]('instance');
     } else if (element) {
+      // @ts-expect-error
       instance = component.getInstance(element);
 
       if (instance) {
         // @ts-expect-error
-        instance.option(config);
+        instance.option(configuration);
       } else {
-        instance = new component(element, config);
+        // @ts-expect-error
+        // eslint-disable-next-line new-cap
+        instance = new component(element, configuration);
       }
     }
 
     if (instance) {
-      const optionChangedHandler = ({ name, value }) => {
+      const optionChangedHandler = ({ name, value }): void => {
         if (synchronizableOptions.includes(name)) {
           // @ts-expect-error
           instance.option(name, value);
@@ -357,32 +396,39 @@ class DOMComponent extends Component {
       instance.on('disposing', () => this.off('optionChanged', optionChangedHandler));
     }
 
+    // @ts-expect-error
     return instance;
   }
 
-  _extendConfig(config, extendConfig) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _extendConfig(configuration, extendConfig): void {
     each(extendConfig, (key, value) => {
-      !Object.prototype.hasOwnProperty.call(config, key) && (config[key] = value);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      !Object.prototype.hasOwnProperty.call(configuration, key) && (configuration[key] = value);
     });
   }
 
-  _defaultActionConfig() {
+  _defaultActionConfig(): { context: TComponent; component: TComponent } {
     const $element = this.$element();
     const context = this._modelByElement($element);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._defaultActionConfig(), { context });
   }
 
-  _defaultActionArgs() {
+  _defaultActionArgs(): { component: TComponent; element?: dxElementWrapper; model?: unknown } {
     const $element = this.$element();
     const model = this._modelByElement($element);
     const element = this.element();
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._defaultActionArgs(), { element, model });
   }
 
-  _optionChanged(args) {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<TProperties> | Record<string, unknown>): void {
+    const { name } = args;
+
+    switch (name) {
       case 'width':
       case 'height':
         this._renderDimensions();
@@ -402,15 +448,17 @@ class DOMComponent extends Component {
     }
   }
 
-  _removeAttributes(element) {
+  _removeAttributes(element: Element): void {
     const attrs = element.attributes;
 
+    // eslint-disable-next-line no-plusplus
     for (let i = attrs.length - 1; i >= 0; i--) {
       const attr = attrs[i];
 
       if (attr) {
         const { name } = attr;
 
+        // eslint-disable-next-line @typescript-eslint/prefer-includes
         if (!name.indexOf('aria-') || name.indexOf('dx-') !== -1
                     || name === 'role' || name === 'style' || name === 'tabindex') {
           element.removeAttribute(name);
@@ -419,14 +467,14 @@ class DOMComponent extends Component {
     }
   }
 
-  _removeClasses(element) {
+  _removeClasses(element: Element): void {
     element.className = element.className
       .split(' ')
       .filter((cssClass) => cssClass.lastIndexOf('dx-', 0) !== 0)
       .join(' ');
   }
 
-  _updateDOMComponent(renderRequired) {
+  _updateDOMComponent(renderRequired: boolean): void {
     if (renderRequired) {
       this._renderComponent();
     } else if (this._requireRefresh) {
@@ -435,24 +483,25 @@ class DOMComponent extends Component {
     }
   }
 
-  endUpdate() {
+  endUpdate(): void {
     const renderRequired = this._isInitializingRequired();
 
     super.endUpdate();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this._isUpdateAllowed() && this._updateDOMComponent(renderRequired);
   }
 
-  $element() {
+  $element(): dxElementWrapper {
     return this._$element;
   }
 
-  element() {
+  element(): Element {
     const $element = this.$element();
 
     return getPublicElement($element);
   }
 
-  dispose() {
+  dispose(): void {
     const element = this.$element().get(0);
 
     cleanDataRecursive(element, true);
@@ -461,21 +510,24 @@ class DOMComponent extends Component {
     this._removeClasses(element);
   }
 
-  resetOption(optionName) {
+  resetOption(optionName: string): void {
     super.resetOption(optionName);
 
     if (optionName === 'width' || optionName === 'height') {
       const initialOption = this.initialOption(optionName);
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       !isDefined(initialOption) && this.$element().css(optionName, '');
     }
   }
 
-  _getAnonymousTemplateName() {
+  _getAnonymousTemplateName(): void {
+    // eslint-disable-next-line no-void
     return void 0;
   }
 
-  _initTemplateManager() {
+  _initTemplateManager(): undefined {
+    // eslint-disable-next-line no-void
     if (this._templateManager || !this._useTemplates()) return void 0;
 
     const { integrationOptions = {} } = this.option();
@@ -491,8 +543,11 @@ class DOMComponent extends Component {
     return undefined;
   }
 
-  _initTemplates() {
-    const { templates, anonymousTemplateMeta } = this._templateManager.extractTemplates(this.$element());
+  _initTemplates(): void {
+    const {
+      templates,
+      anonymousTemplateMeta,
+    } = this._templateManager.extractTemplates(this.$element());
     const anonymousTemplate = this.option(`integrationOptions.templates.${anonymousTemplateMeta.name}`);
 
     templates.forEach(({ name, template }) => {
@@ -505,15 +560,21 @@ class DOMComponent extends Component {
     }
   }
 
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _getTemplateByOption(optionName) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._getTemplate(this.option(optionName));
   }
 
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _getTemplate(templateSource) {
     const templates = this.option('integrationOptions.templates');
     const isAsyncTemplate = this.option('templatesRenderAsynchronously');
     const skipTemplates = this.option('integrationOptions.skipTemplates');
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._templateManager.getTemplate(
       templateSource,
       templates,
@@ -525,14 +586,15 @@ class DOMComponent extends Component {
     );
   }
 
-  _saveTemplate(name, template) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _saveTemplate(name, template): void {
     this._setOptionWithoutOptionChange(
       `integrationOptions.templates.${name}`,
       this._templateManager._createTemplate(template),
     );
   }
 
-  _useTemplates() {
+  _useTemplates(): boolean {
     return true;
   }
 }
