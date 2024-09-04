@@ -189,28 +189,28 @@ export const compileSetter = function(expr) {
     };
 };
 
-export const toComparable = function(value, caseSensitive, langParams = {}) {
+export const toComparable = function(value, caseSensitive, options = {}) {
     if(value instanceof Date) {
         return value.getTime();
     }
 
-    const collatorSensitivity = langParams?.collatorOptions?.sensitivity;
+    const collatorSensitivity = options?.collatorOptions?.sensitivity;
 
     if(value && value instanceof Class && value.valueOf) {
         value = value.valueOf();
     } else if(typeof value === 'string' && collatorSensitivity === 'base') {
         const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
-        value = toLowerCase(value, langParams).normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+        value = toLowerCase(value, options).normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
     }
 
     const isCaseSensitive = caseSensitive || collatorSensitivity === 'case';
 
     if(typeof value === 'string' && !isCaseSensitive) {
-        const locale = langParams?.locale?.toLowerCase();
+        const locale = options?.locale?.toLowerCase();
         const useUpperCase = locale && !!['hy', 'el'].find((code) => locale === code || locale.startsWith(`${code}-`));
 
-        return (useUpperCase ? toUpperCase : toLowerCase)(value, langParams);
+        return (useUpperCase ? toUpperCase : toLowerCase)(value, options);
     }
 
     return value;
