@@ -609,8 +609,8 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Fixed and Sticky Columns",
-            "Name": "FixedAndStickyColumns",
+            "Title": "Sticky Columns",
+            "Name": "StickyColumns",
             "Widget": "DataGrid",
             "DemoType": "Web",
             "Badge": "Roadmap",
