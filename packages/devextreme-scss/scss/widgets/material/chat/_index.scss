@@ -27,11 +27,9 @@
   $chat-messagegroup-gap,
   $chat-messagegroup-alignment-start-template,
   $chat-messagegroup-alignment-start-gap,
+  $chat-messagegroup-padding-top,
   $chat-information-font-size,
   $chat-information-color,
   $chat-information-gap
 );
-@include chat-messagelist(
-  $chat-messagelist-padding,
-  $chat-messagelist-gap
-);
+@include chat-messagelist($chat-messagelist-padding);

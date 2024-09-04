@@ -53,14 +53,14 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
+    this._renderMessageBox();
+    this._renderMessageList();
+
     const { title } = this.option();
 
     if (title) {
       this._renderHeader(title);
     }
-
-    this._renderMessageList();
-    this._renderMessageBox();
   }
 
   _renderHeader(title: string): void {
@@ -76,7 +76,9 @@ class Chat extends Widget<Properties> {
     const { items = [], user } = this.option();
 
     const currentUserId = user?.id;
-    const $messageList = $('<div>').appendTo(this.element());
+    const $messageList = $('<div>');
+
+    this.element().prepend($messageList.get(0));
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
