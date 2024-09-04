@@ -13,8 +13,9 @@ import type {
   ItemCollapsedEvent, ItemExpandedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
-import Widget from '../widget';
 import {
   COLLAPSE_EVENT,
   getActionNameByEventName,
@@ -74,7 +75,8 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
 
   private DOUBLE_CLICK_EVENT_NAME?: string;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => void | boolean> {
     return {
       ...super._supportedKeys(),
       ...{
@@ -247,7 +249,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    // @ts-expect-error ts-error
     this.option(inverseDimension, null);
     this.option(dimension, this.getSize());
   }
@@ -483,7 +484,9 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   }
 
   _isHorizontalDirection(): boolean {
-    return this.option('direction') === RESIZE_DIRECTION.horizontal;
+    const { direction } = this.option();
+
+    return direction === RESIZE_DIRECTION.horizontal;
   }
 
   _clean(): void {
@@ -493,7 +496,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     super._clean();
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<ResizeHandleOptions>): void {
     const { name, value } = args;
 
     switch (name) {

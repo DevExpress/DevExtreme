@@ -2,11 +2,12 @@ import $ from '@js/core/renderer';
 import type { NativeEventInfo } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
+import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
-import Widget from '../widget';
 
 const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
@@ -16,21 +17,30 @@ export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
   { text?: string };
 
-export interface MessageBoxProperties extends WidgetOptions<MessageBox> {
+export interface Properties extends DOMComponentProperties<MessageBox> {
   onMessageSend?: (e: MessageSendEvent) => void;
+
+  activeStateEnabled?: boolean;
+
+  focusStateEnabled?: boolean;
+
+  hoverStateEnabled?: boolean;
 }
 
-class MessageBox extends Widget<MessageBoxProperties> {
+class MessageBox extends DOMComponent<MessageBox, Properties> {
   _textArea!: dxTextArea;
 
   _button!: Button;
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  _getDefaultOptions(): MessageBoxProperties {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       onMessageSend: undefined,
+      activeStateEnabled: true,
+      focusStateEnabled: true,
+      hoverStateEnabled: true,
     };
   }
 
@@ -108,17 +118,15 @@ class MessageBox extends Widget<MessageBoxProperties> {
     this._textArea?.reset();
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
     switch (name) {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled': {
-        const options = { [name]: value };
-
-        this._button.option(options);
-        this._textArea.option(options);
+        this._button.option(name, value);
+        this._textArea.option(name, value);
 
         break;
       }
