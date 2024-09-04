@@ -53,7 +53,7 @@ class Widget<
 
   private _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
-  private readonly _activeStateUnit: string = '';
+  private readonly _activeStateUnit!: string;
 
   private _keyboardListenerId?: string | null;
 
@@ -543,7 +543,7 @@ class Widget<
   }
 
   _toggleIndependentState(): void {
-    const { ignoreParentReadOnly } = this.option('ignoreParentReadOnly');
+    const { ignoreParentReadOnly } = this.option();
 
     this.$element().toggleClass('dx-state-independent', ignoreParentReadOnly);
   }

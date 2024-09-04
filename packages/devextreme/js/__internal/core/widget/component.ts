@@ -45,11 +45,11 @@ export class Component<
   TProperties extends Properties<TComponent>,
 // eslint-disable-next-line @typescript-eslint/ban-types
 > extends (Class.inherit({}) as new() => {}) {
-  _deprecatedOptions: Partial<TProperties> = {};
+  _deprecatedOptions!: Partial<TProperties>;
 
   _options!: Options;
 
-  _optionsByReference: Partial<TProperties> = {};
+  _optionsByReference!: Partial<TProperties>;
 
   NAME?: string;
 
