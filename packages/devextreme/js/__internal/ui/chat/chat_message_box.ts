@@ -7,6 +7,7 @@ import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 import type dxTextArea from '../../../ui/text_area';
+import type { Properties as TextAreaProperties } from '../../../ui/text_area';
 import TextArea from '../m_text_area';
 
 const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
@@ -70,11 +71,16 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
       .appendTo(this.element());
 
-    this._textArea = this._createComponent($textArea, TextArea, {
+    const configuration: TextAreaProperties = {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-    });
+      stylingMode: 'outlined',
+      placeholder: 'Type a message',
+      autoResizeEnabled: true,
+    };
+
+    this._textArea = this._createComponent($textArea, TextArea, configuration);
   }
 
   _renderButton(): void {
@@ -93,6 +99,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled,
       hoverStateEnabled,
       icon: 'send',
+      type: 'default',
       stylingMode: 'text',
       onClick: (e): void => {
         this._sendHandler(e);
