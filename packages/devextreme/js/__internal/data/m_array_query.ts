@@ -248,10 +248,9 @@ const SortIterator = Iterator.inherit({
 
 const compileCriteria = (function () {
   let langParams: Record<string, any> = {};
-  let useUpperCase = false;
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const _toComparable = (value) => toComparable(value, false, langParams, { useUpperCase });
+  const _toComparable = (value) => toComparable(value, false, langParams);
 
   const compileUniformEqualsCriteria = (crit) => {
     const getter = compileGetter(crit[0][0]);
@@ -391,9 +390,6 @@ const compileCriteria = (function () {
 
   return function (crit, options) {
     langParams = options || {};
-    const locale = langParams?.locale?.toLowerCase();
-
-    useUpperCase = locale && !!['hy', 'el'].find((code) => locale === code || locale.startsWith(`${code}-`));
 
     if (isFunction(crit)) {
       return crit;

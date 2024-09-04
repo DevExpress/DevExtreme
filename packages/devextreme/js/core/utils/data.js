@@ -189,7 +189,7 @@ export const compileSetter = function(expr) {
     };
 };
 
-export const toComparable = function(value, caseSensitive, langParams = {}, options = { useUpperCase: false }) {
+export const toComparable = function(value, caseSensitive, langParams = {}) {
     if(value instanceof Date) {
         return value.getTime();
     }
@@ -207,7 +207,10 @@ export const toComparable = function(value, caseSensitive, langParams = {}, opti
     const isCaseSensitive = caseSensitive || collatorSensitivity === 'case';
 
     if(typeof value === 'string' && !isCaseSensitive) {
-        return (options?.useUpperCase ? toUpperCase : toLowerCase)(value, langParams);
+        const locale = langParams?.locale?.toLowerCase();
+        const useUpperCase = locale && !!['hy', 'el'].find((code) => locale === code || locale.startsWith(`${code}-`));
+
+        return (useUpperCase ? toUpperCase : toLowerCase)(value, langParams);
     }
 
     return value;
