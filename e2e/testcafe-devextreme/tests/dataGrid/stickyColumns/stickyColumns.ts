@@ -7,7 +7,7 @@ import url from '../../../helpers/getPageUrl';
 
 const DATA_GRID_SELECTOR = '#container';
 
-fixture`FixedColumns`
+fixture.disablePageReloads`FixedColumns`
   .page(url(__dirname, '../../container.html'));
 
 const borderConfigs = [
