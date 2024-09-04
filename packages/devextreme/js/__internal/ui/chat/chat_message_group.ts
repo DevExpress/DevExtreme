@@ -79,10 +79,13 @@ class MessageGroup extends Widget<Properties> {
     const $avatar = $('<div>').appendTo(this.element());
 
     const { items } = this.option();
-    const authorName = items[0].author?.name;
+    const { author } = items[0];
+    const authorName = author?.name;
+    const authorAvatarUrl = author?.avatarUrl;
 
     this._avatar = this._createComponent($avatar, Avatar, {
       name: authorName,
+      url: authorAvatarUrl,
     });
   }
 

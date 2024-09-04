@@ -115,6 +115,27 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 assert.deepEqual(avatar.option('name'), passedNameValue);
             });
         });
+
+        QUnit.test('avatar component should be initialized with correct url property', function(assert) {
+            [
+                { items: [{}], passedUrlValue: undefined },
+                { items: [{ author: {} }], passedUrlValue: undefined },
+                { items: [{ author: undefined }], passedUrlValue: undefined },
+                { items: [{ author: { avatarUrl: undefined } }], passedUrlValue: undefined },
+                { items: [{ author: { avatarUrl: null } }], passedUrlValue: null },
+                { items: [{ author: { avatarUrl: '' } }], passedUrlValue: '' },
+                { items: [{ author: { avatarUrl: 888 } }], passedUrlValue: 888 },
+                { items: [{ author: { avatarUrl: NaN } }], passedUrlValue: NaN },
+            ].forEach(({ items, passedUrlValue }) => {
+                this.reinit({
+                    items,
+                });
+
+                const avatar = ChatAvatar.getInstance(this.$element.find(`.${CHAT_MESSAGE_AVATAR_CLASS}`));
+
+                assert.deepEqual(avatar.option('url'), passedUrlValue);
+            });
+        });
     });
 });
 
