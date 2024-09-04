@@ -15,23 +15,24 @@
   $chat-messagebox-textarea-min-height,
   $chat-messagebox-textarea-border-radius,
   $chat-messagebox-button-height,
-  $chat-messagebox-button-width,
-  $chat-messagebox-button-color
+  $chat-messagebox-button-width
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
   $chat-bubble-border-radius,
   $chat-bubble-background-color-secondary,
   $chat-bubble-background-color-primary,
-  $chat-bubble-line-height,
   $chat-bubble-container-gap
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,
-  $chat-messagegroup-padding-top,
   $chat-messagegroup-alignment-start-template,
+  $chat-messagegroup-alignment-start-gap,
   $chat-information-font-size,
   $chat-information-color,
-  $chat-messagegroup-author-name-gap
+  $chat-information-gap
 );
-@include chat-messagelist($chat-messagelist-padding);
+@include chat-messagelist(
+  $chat-messagelist-padding,
+  $chat-messagelist-gap
+);

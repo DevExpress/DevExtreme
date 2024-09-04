@@ -4,7 +4,15 @@
   max-width: 70%;
 }
 
+.dx-chat-message-bubble {
+  width: max-content;
+}
+
 .dx-chat-message-group-alignment-start {
+  .dx-chat-message-bubble-container {
+    align-items: flex-start;
+  }
+
   .dx-chat-message-bubble {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
@@ -12,6 +20,10 @@
 }
 
 .dx-chat-message-group-alignment-end {
+  .dx-chat-message-bubble-container {
+    align-items: flex-end;
+  }
+
   .dx-chat-message-bubble {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;

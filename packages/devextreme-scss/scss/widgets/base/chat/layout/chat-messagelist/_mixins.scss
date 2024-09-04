@@ -1,5 +1,11 @@
-@mixin chat-messagelist($padding) {
+@mixin chat-messagelist(
+  $padding,
+  $gap
+) {
   .dx-chat-message-list {
-    padding: $padding;
+    .dx-scrollable-content {
+      padding: $padding;
+      row-gap: $gap;
+    }
   }
 }

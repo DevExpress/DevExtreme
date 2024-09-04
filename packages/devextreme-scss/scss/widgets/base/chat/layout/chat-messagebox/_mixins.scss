@@ -5,12 +5,12 @@
   $textarea-min-height,
   $textarea-border-radius,
   $button-height,
-  $button-width,
-  $button-color
+  $button-width
 ) {
   .dx-chat-message-box {
     padding: $padding;
     border-top: 1px solid $border-color;
+    gap: $gap;
   }
 
   .dx-chat-message-box-text-area {
@@ -24,11 +24,6 @@
     &.dx-button.dx-button-default {
       height: $button-height;
       width: $button-width;
-      margin-left: $gap;
-
-      &:not(.dx-state-disabled) {
-        color: $button-color;
-      }
     }
   }
 }
