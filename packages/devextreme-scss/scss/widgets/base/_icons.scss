@@ -128,7 +128,9 @@
 .dx-icon-triangleup,
 .dx-icon-triangledown,
 .dx-icon-triangleright,
-.dx-icon-triangleleft {
+.dx-icon-triangleleft,
+.dx-icon-sendfilled,
+.dx-icon-chat {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -216,6 +218,7 @@ $icons: (
     "add": "\f00b",
     "airplane": "\f000",
     "bookmark": "\f017",
+    "chat": "\f17e",
     "box": "\f018",
     "car": "\f01b",
     "card": "\f019",
@@ -377,6 +380,7 @@ $icons: (
     "variable": "\f091",
     "clearformat": "\f092",
     "accountbox": '\f094',
+    "sendfilled": '\f09a',
     "fullscreen": "\f11a",
     "hierarchy": "\f124",
     "docfile": "\f111",
