@@ -883,6 +883,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       column: options.column,
       columnIndex: options.columnIndex,
       rowType: options.row.rowType,
+      rowIndex: options.row.rowIndex,
       isAltRow: this._isAltRow(options.row),
     };
 
@@ -1159,7 +1160,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing
    */
-  public getColumnWidths($tableElement?: dxElementWrapper): number[] {
+  public getColumnWidths($tableElement?: dxElementWrapper, rowIndex?: number): number[] {
     (this.option('forceApplyBindings') || noop)();
 
     $tableElement = $tableElement ?? this.getTableElement();
@@ -1194,7 +1195,19 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIndex;
   }
 
-  protected setCellProperties(styleProps: CSSStyleDeclaration, columnIndex: number) {
+  private setCellPropertiesCore(styleProps: CSSStyleDeclaration, $row, visibleCellIndex) {
+    const $cell = $row.hasClass(GROUP_ROW_CLASS)
+      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+      : $row.find('td').eq(visibleCellIndex);
+
+    if ($cell.length) {
+      const cell = $cell.get(0) as HTMLElement;
+
+      Object.assign(cell.style, styleProps);
+    }
+  }
+
+  protected setCellProperties(styleProps: CSSStyleDeclaration, columnIndex: number, rowIndex?: number) {
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length) {
@@ -1203,19 +1216,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
 
-    for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
-      const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
+    if (isDefined(rowIndex)) {
+      this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex);
+    } else {
+      for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
+        const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
 
-      if (visibleIndex >= 0) {
-        const $row = $rows.eq(rowIndex);
-        const $cell = $row.hasClass(GROUP_ROW_CLASS)
-          ? $row.find(`td[aria-colindex='${visibleIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
-          : $row.find('td').eq(visibleIndex);
-
-        if ($cell.length) {
-          const cell = $cell.get(0) as HTMLElement;
-
-          Object.assign(cell.style, styleProps);
+        if (visibleIndex >= 0) {
+          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex);
         }
       }
     }

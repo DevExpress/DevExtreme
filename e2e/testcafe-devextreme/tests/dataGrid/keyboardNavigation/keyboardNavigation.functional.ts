@@ -4751,6 +4751,10 @@ test('DataGrid input cell should not put tabindex to incorrect element while on 
       mode: 'form',
       allowAdding: true,
     },
+    columnFixing: {
+      // @ts-expect-error private option
+      legacyMode: true,
+    },
     columns: [
       'Calculation',
       'CalculationType',
@@ -4795,6 +4799,8 @@ test('Cancel button in the last column cannot be focused via the Tab key (T12489
   },
   columnFixing: {
     enabled: true,
+    // @ts-expect-error private option
+    legacyMode: true,
   },
   columns: [
     'FirstName',

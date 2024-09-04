@@ -195,7 +195,7 @@
       padding: 0;
     }
 
-    .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-left-sticky-column, .dx-#{$widget-name}-right-sticky-column {
+    .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
       position: sticky;
     }
   }

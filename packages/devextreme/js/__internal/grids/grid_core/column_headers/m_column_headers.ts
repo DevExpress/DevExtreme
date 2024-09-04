@@ -306,9 +306,7 @@ export class ColumnHeadersView extends ColumnsView {
 
     const deferred = that._updateContent(that._renderTable({ change }), change);
 
-    if (that.getRowCount() > 1) {
-      $container.addClass(MULTI_ROW_HEADER_CLASS);
-    }
+    $container.toggleClass(MULTI_ROW_HEADER_CLASS, that.getRowCount() > 1);
 
     // @ts-expect-error
     super._renderCore.apply(that, arguments);
@@ -503,8 +501,8 @@ export class ColumnHeadersView extends ColumnsView {
   /**
    * @extended: column_fixing
    */
-  public getColumnWidths() {
-    const $columnElements = this.getColumnElements();
+  public getColumnWidths($tableElement?, rowIndex?: number) {
+    const $columnElements = this.getColumnElements(rowIndex);
 
     if ($columnElements && $columnElements.length) {
       return this._getWidths($columnElements);
@@ -607,7 +605,7 @@ export class ColumnHeadersView extends ColumnsView {
     return undefined;
   }
 
-  private getRowCount() {
+  protected getRowCount() {
     return this._columnsController && this._columnsController.getRowCount();
   }
 
