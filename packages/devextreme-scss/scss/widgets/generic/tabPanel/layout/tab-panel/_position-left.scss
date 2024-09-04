@@ -17,12 +17,12 @@
     border-inline-start: $generic-tabs-border;
     border-inline-end: $generic-tabs-border;
   
-    @include dx-tabs-border-mixin(
-      $generic-tabs-border,
-      none,
-      $generic-tabs-border,
-      none,
-    );
+    // @include dx-tabs-border-mixin(
+    //   $generic-tabs-border,
+    //   none,
+    //   $generic-tabs-border,
+    //   none,
+    // );
   }
 
   .dx-tabs .dx-tabs-scrollable {
@@ -39,25 +39,25 @@
     }
   }
 
-  &.dx-state-focused {
-    &.dx-disabled-focused-tab {
-      .dx-tabs-wrapper {
-        border-inline-end: $generic-tabs-border;
-      }
+  // &.dx-state-focused {
+  //   &.dx-disabled-focused-tab {
+  //     .dx-tabs-wrapper {
+  //       border-inline-end: $generic-tabs-border;
+  //     }
 
-      .dx-tabs-nav-button {
-        border-inline-end: $generic-tabs-border;
-      }
-    }
+  //     .dx-tabs-nav-button {
+  //       border-inline-end: $generic-tabs-border;
+  //     }
+  //   }
 
-    .dx-tabs-wrapper {
-      border-inline-end: $generic-tabs-border-focus;
-    }
+  //   .dx-tabs-wrapper {
+  //     border-inline-end: $generic-tabs-border-focus;
+  //   }
 
-    .dx-tabs-nav-button {
-      border-inline-end: $generic-tabs-border-focus;
-    }
-  }
+  //   .dx-tabs-nav-button {
+  //     border-inline-end: $generic-tabs-border-focus;
+  //   }
+  // }
 
   &:not(.dx-empty-collection) {
     .dx-multiview-wrapper {

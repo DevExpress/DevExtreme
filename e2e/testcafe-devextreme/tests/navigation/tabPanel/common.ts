@@ -480,7 +480,6 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t.dispatchEvent(firstItem.element, 'mousedown');
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-
     // TODO: this test is unstable
     // await t
     //   .dispatchEvent(thirdItem.element, 'mouseup')
@@ -527,6 +526,67 @@ test('TabPanel borders without scrolling', async (t) => {
       height: 250,
       width: 450,
       tabsPosition,
+      // prevent firing dxinactive event for to avoid failing test
+      itemHoldTimeout: 5000,
+    };
+
+    return createWidget('dxTabPanel', tabPanelOptions);
+  });
+
+  test(`TabPanel tabs selected item focus with tabsPosition=${tabsPosition}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const tabPanel = new TabPanel('#container');
+
+    await t.click(tabPanel.multiView.element);
+    await testScreenshot(t, takeScreenshot, `TabPanel item focus when clicking on multiview,tabsPosition=${tabsPosition}.png`, { element: '#container' });
+
+    await t.pressKey('right');
+    await testScreenshot(t, takeScreenshot, `TabPanel disabled item focused,tabsPosition=${tabsPosition}.png`, { element: '#container' });
+
+    await t.click(tabPanel.multiView.element);
+
+    await t.pressKey('left');
+    await testScreenshot(t, takeScreenshot, `TabPanel focus not selected item,tabsPosition=${tabsPosition}.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await ClientFunction(() => {
+      (window as any).DevExpress.ui.dxTabs.defaultOptions({
+        options: {
+          useInkRipple: false,
+        },
+      });
+    })();
+
+    const dataSource = [
+      {
+        title: 'John Heart',
+        text: 'John Heart',
+      }, {
+        title: 'Olivia Peyton',
+        text: 'Olivia Peyton',
+      }, {
+        title: 'Robert Reagan',
+        text: 'Robert Reagan',
+        disabled: true,
+      }, {
+        title: 'Greta Sims',
+        text: 'Greta Sims',
+      }, {
+        title: 'Olivia Peyton',
+        text: 'Olivia Peyton',
+      },
+    ] as Item[];
+
+    const tabPanelOptions = {
+      dataSource,
+      height: 250,
+      width: 450,
+      tabsPosition,
+      selectedIndex: 1,
       // prevent firing dxinactive event for to avoid failing test
       itemHoldTimeout: 5000,
     };

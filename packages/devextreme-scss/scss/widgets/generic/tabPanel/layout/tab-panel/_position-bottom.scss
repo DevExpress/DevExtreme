@@ -39,25 +39,25 @@
     }
   }
 
-  &.dx-state-focused {
-    &.dx-disabled-focused-tab {
-      .dx-tabs-wrapper {
-        border-block-start: $generic-tabs-border;
-      }
+  // &.dx-state-focused {
+  //   &.dx-disabled-focused-tab {
+  //     .dx-tabs-wrapper {
+  //       border-block-start: $generic-tabs-border;
+  //     }
 
-      .dx-tabs-nav-button {
-        border-block-start: $generic-tabs-border;
-      }
-    }
+  //     .dx-tabs-nav-button {
+  //       border-block-start: $generic-tabs-border;
+  //     }
+  //   }
 
-    .dx-tabs-wrapper {
-      border-block-start: $generic-tabs-border-focus;
-    }
+  //   .dx-tabs-wrapper {
+  //     border-block-start: $generic-tabs-border-focus;
+  //   }
 
-    .dx-tabs-nav-button {
-      border-block-start: $generic-tabs-border-focus;
-    }
-  }
+  //   .dx-tabs-nav-button {
+  //     border-block-start: $generic-tabs-border-focus;
+  //   }
+  // }
 
   &:not(.dx-empty-collection) {
     .dx-multiview-wrapper {
