@@ -35,6 +35,23 @@ QUnit.module('MessageGroup', moduleConfig, () => {
     });
 
     QUnit.module('Time', () => {
+        [
+            { timestamp: new Date(2021, 9, 17, 21, 34) },
+            { timestamp: '2021-10-17T21:34:00' },
+            { timestamp: new Date(2021, 9, 17, 21, 34).getTime() },
+        ].forEach(({ timestamp }) => {
+            QUnit.test('time element should display the time value correctly if the timestamp is presented in different formats', function(assert) {
+                this.reinit({
+                    items: [{ timestamp }],
+                });
+
+                const $time = this.$element.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
+
+                assert.strictEqual($time.length, 1);
+                assert.strictEqual($time.text(), '21:34', 'time text is correct');
+            });
+        });
+
         QUnit.test('value should be presented in the correct format and taken from the first message in the group', function(assert) {
             const messageTimeFirst = new Date(2021, 9, 17, 21, 34);
             const messageTimeSecond = new Date(2021, 9, 17, 14, 43);

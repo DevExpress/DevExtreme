@@ -78,10 +78,10 @@ export type User = {
 export type Message = {
     /**
      * @docid
-     * @default ''
+     * @default undefined
      * @public
      */
-    timestamp?: string;
+    timestamp?: Date | number | string;
     /**
      * @docid
      * @default undefined

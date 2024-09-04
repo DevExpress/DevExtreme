@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import dateSerialization from '@js/core/utils/date_serialization';
 import { isDefined } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -111,11 +112,12 @@ class MessageGroup extends Widget<MessageGroupOptions> {
       .appendTo($element);
   }
 
-  _getTimeValue(timestamp: string): string {
+  _getTimeValue(timestamp: Date | string | number): string {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
-    const dateTime = new Date(Number(timestamp));
+    const date = dateSerialization.deserializeDate(timestamp);
 
-    return dateTime.toLocaleTimeString(undefined, options);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return date.toLocaleTimeString(undefined, options);
   }
 
   _renderMessageGroupInformation(message: Message): void {

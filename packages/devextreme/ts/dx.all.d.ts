@@ -30633,7 +30633,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:Message.timestamp]
      */
-    timestamp?: string;
+    timestamp?: Date | number | string;
     /**
      * [descr:Message.author]
      */

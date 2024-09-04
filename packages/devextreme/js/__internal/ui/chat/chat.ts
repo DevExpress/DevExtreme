@@ -118,7 +118,7 @@ class Chat extends Widget<Properties & { title: Title }> {
     const { user } = this.option();
 
     const message: Message = {
-      timestamp: String(Date.now()),
+      timestamp: new Date(),
       author: user,
       text,
     };

@@ -111,7 +111,7 @@ const DxItem = createConfigurationComponent({
   props: {
     author: Object,
     text: String,
-    timestamp: String,
+    timestamp: [Date, Number, String],
     typing: Boolean
   }
 });
