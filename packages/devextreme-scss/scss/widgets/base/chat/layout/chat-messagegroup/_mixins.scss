@@ -2,14 +2,18 @@
   $messagegroup-gap,
   $messagegroup-start-template,
   $messagegroup-start-gap,
-  $messagegroup-padding-bottom,
+  $messagegroup-padding,
   $information-font-size,
   $information-color,
   $information-gap
 ) {
   .dx-chat-message-group {
     row-gap: $messagegroup-gap;
-    padding-bottom: $messagegroup-padding-bottom;
+    padding-bottom: $messagegroup-padding;
+
+    &:first-child {
+      padding-top: $messagegroup-padding;
+    }
   }
 
   .dx-chat-message-group-information {
