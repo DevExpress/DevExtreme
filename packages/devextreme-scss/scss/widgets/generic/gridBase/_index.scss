@@ -1005,6 +1005,10 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
     }
   }
 
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row:not(.dx-row-lines) > td {
+    padding-top: $generic-grid-base-cell-padding + 1px;
+  }
+
   .dx-rtl {
     .dx-toolbar-menu-section {
       .dx-checkbox-text {

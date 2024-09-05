@@ -92,7 +92,7 @@ const Author: typeof _componentAuthor & IElementDescriptor = Object.assign(_comp
 type IItemProps = React.PropsWithChildren<{
   author?: ChatUser;
   text?: string;
-  timestamp?: string;
+  timestamp?: Date | number | string;
   typing?: boolean;
 }>
 const _componentItem = memo(

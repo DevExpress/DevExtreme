@@ -154,10 +154,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('author', value);
     }
 
-    get timestamp(): string {
+    get timestamp(): Date | number | string | undefined {
         return this._getOption('timestamp');
     }
-    set timestamp(value: string) {
+    set timestamp(value: Date | number | string | undefined) {
         this._setOption('timestamp', value);
     }
 

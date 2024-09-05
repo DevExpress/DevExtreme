@@ -247,7 +247,8 @@ const SortIterator = Iterator.inherit({
 });
 
 const compileCriteria = (function () {
-  let langParams = {};
+  let langParams: Record<string, any> = {};
+
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const _toComparable = (value) => toComparable(value, false, langParams);
 
@@ -310,7 +311,6 @@ const compileCriteria = (function () {
 
   const toString = function (value) {
     return isDefined(value)
-      // @ts-expect-error
       ? langParams?.locale ? value.toLocaleString(langParams.locale) : value.toString()
       : '';
   };
@@ -345,26 +345,16 @@ const compileCriteria = (function () {
         return (obj) => compare(obj, (a, b) => a <= b);
       case 'startswith':
         // @ts-expect-error
-        return function (obj) { return _toComparable(toString(getter(obj))).indexOf(value) === 0; };
+        return (obj) => _toComparable(toString(getter(obj))).startsWith(value);
       case 'endswith':
-        return function (obj) {
-          // @ts-expect-error
-          const getterValue = _toComparable(toString(getter(obj)));
-          const searchValue = toString(value);
-
-          if (getterValue.length < searchValue.length) {
-            return false;
-          }
-
-          const index = getterValue.lastIndexOf(value);
-          return index !== -1 && index === getterValue.length - value.length;
-        };
+        // @ts-expect-error
+        return (obj) => _toComparable(toString(getter(obj))).endsWith(value);
       case 'contains':
         // @ts-expect-error
-        return function (obj) { return _toComparable(toString(getter(obj))).indexOf(value) > -1; };
+        return (obj) => _toComparable(toString(getter(obj))).includes(value);
       case 'notcontains':
         // @ts-expect-error
-        return function (obj) { return _toComparable(toString(getter(obj))).indexOf(value) === -1; };
+        return (obj) => !_toComparable(toString(getter(obj))).includes(value);
     }
 
     throw errors.Error('E4003', op);

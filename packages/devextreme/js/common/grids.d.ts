@@ -4,7 +4,6 @@ import {
   Draggable,
   DragHighlight,
   HorizontalAlignment,
-  HorizontalEdge,
   Mode,
   Scrollable,
   ScrollbarMode,
@@ -95,6 +94,12 @@ export type ApplyFilterMode = 'auto' | 'onClick';
  * @namespace DevExpress.common.grids
  */
 export type ApplyChangesMode = 'instantly' | 'onDemand';
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type FixedPosition = 'left' | 'right' | 'sticky';
 
 /**
  * @hidden
@@ -286,7 +291,7 @@ export interface ColumnBase<TRowData = any> {
    * @default undefined
    * @public
    */
-  fixedPosition?: HorizontalEdge;
+  fixedPosition?: FixedPosition;
   /**
    * @docid GridBaseColumn.formItem
    * @type dxFormSimpleItem

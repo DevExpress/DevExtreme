@@ -142,6 +142,10 @@ function toLowerCase(value, options) {
     return options?.locale ? value.toLocaleLowerCase(options.locale) : value.toLowerCase();
 }
 
+function toUpperCase(value, options) {
+    return options?.locale ? value.toLocaleUpperCase(options.locale) : value.toUpperCase();
+}
+
 const ensurePropValueDefined = function(obj, propName, value, options) {
     if(isDefined(value)) {
         return value;
@@ -190,22 +194,23 @@ export const toComparable = function(value, caseSensitive, options = {}) {
         return value.getTime();
     }
 
+    const collatorSensitivity = options?.collatorOptions?.sensitivity;
+
     if(value && value instanceof Class && value.valueOf) {
-        return value.valueOf();
+        value = value.valueOf();
+    } else if(typeof value === 'string' && collatorSensitivity === 'base') {
+        const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
+
+        value = toLowerCase(value, options).normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
     }
 
-    const isCaseSensitive = options?.collatorOptions?.sensitivity === 'case' || caseSensitive;
+    const isCaseSensitive = caseSensitive || collatorSensitivity === 'case';
 
-    if(!isCaseSensitive && typeof value === 'string') {
-        if(options?.collatorOptions?.sensitivity === 'base') {
-            const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
+    if(typeof value === 'string' && !isCaseSensitive) {
+        const locale = options?.locale?.toLowerCase();
+        const useUpperCase = locale && !!['hy', 'el'].find((code) => locale === code || locale.startsWith(`${code}-`));
 
-            value = toLowerCase(value, options).normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
-
-            return value;
-        }
-
-        return toLowerCase(value, options);
+        return (useUpperCase ? toUpperCase : toLowerCase)(value, options);
     }
 
     return value;

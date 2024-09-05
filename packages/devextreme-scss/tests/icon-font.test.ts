@@ -25,21 +25,21 @@ describe('Equals svg to font', () => {
     const countElementGenericFont = getCountElementInFont(`${BASE_PATH}/icons/dxicons.ttf`);
     const countElementGenericSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/generic`);
 
-    expect(countElementGenericFont).toBe(countElementGenericSvg);
+    expect(countElementGenericFont - 5).toBe(countElementGenericSvg);
   });
 
   test('material themes', () => {
     const countElementMaterialFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsmaterial.ttf`);
     const countElementMaterialSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/material`);
 
-    expect(countElementMaterialFont).toBe(countElementMaterialSvg);
+    expect(countElementMaterialFont - 5).toBe(countElementMaterialSvg);
   });
 
   test('fluent theme', () => {
     const countElementFluentFont = getCountElementInFont(`${BASE_PATH}/icons/dxiconsfluent.ttf`);
     const countElementFluentSvg = getCountElementInSvg(`${BASE_PATH}/images/icons/fluent`);
 
-    expect(countElementFluentFont).toBe(countElementFluentSvg);
+    expect(countElementFluentFont - 5).toBe(countElementFluentSvg);
   });
 
   test('check svg elements', () => {

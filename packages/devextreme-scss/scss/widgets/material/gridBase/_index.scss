@@ -670,6 +670,19 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
                 padding-top: 12px;
                 padding-bottom: 12px;
                 vertical-align: bottom;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) {
+      .dx-#{$widget-name}-content {
+        .dx-#{$widget-name}-table {
+          .dx-row {
+            &.dx-header-row {
+              > td {
                 border-right: 1px solid $material-grid-base-border-color;
                 border-left: 1px solid $material-grid-base-border-color;
 
@@ -1053,6 +1066,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           }
         }
       }
+    }
+
+    &.dx-#{$widget-name}-sticky-columns .dx-row:not(.dx-row-lines) > td {
+      padding-top: $material-grid-base-cell-vertical-padding + 1;
     }
   }
 
