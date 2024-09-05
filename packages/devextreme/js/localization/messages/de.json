@@ -406,6 +406,7 @@
         "dxHtmlEditor-width": "Breite",
         "dxHtmlEditor-height": "Höhe",
         "dxHtmlEditor-borderColor": "Farbe",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "Hintergrund",
         "dxHtmlEditor-dimensions": "Abmessungen",
         "dxHtmlEditor-alignment": "Ausrichtung",

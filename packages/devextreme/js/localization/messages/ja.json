@@ -406,6 +406,7 @@
         "dxHtmlEditor-width": "幅",
         "dxHtmlEditor-height": "高さ",
         "dxHtmlEditor-borderColor": "色",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "背景",
         "dxHtmlEditor-dimensions": "寸法",
         "dxHtmlEditor-alignment": "配置",
