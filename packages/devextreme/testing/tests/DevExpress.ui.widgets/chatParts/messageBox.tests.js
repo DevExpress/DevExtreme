@@ -44,7 +44,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
         QUnit.test('send button should be initialized with the corresponding configuration', function(assert) {
             const expectedOptions = {
-                icon: 'send',
+                icon: 'sendfilled',
                 type: 'default',
                 stylingMode: 'text',
             };

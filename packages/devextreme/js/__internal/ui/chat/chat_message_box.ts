@@ -95,7 +95,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      icon: 'send',
+      icon: 'sendfilled',
       type: 'default',
       stylingMode: 'text',
       onClick: (e): void => {
