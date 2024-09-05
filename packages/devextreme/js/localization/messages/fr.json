@@ -420,6 +420,7 @@
         "dxHtmlEditor-width": "Largeur",
         "dxHtmlEditor-height": "Hauteur",
         "dxHtmlEditor-borderColor": "Couleur",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "Arrière plan",
         "dxHtmlEditor-dimensions": "Dimensions",
         "dxHtmlEditor-alignment": "Alignement",

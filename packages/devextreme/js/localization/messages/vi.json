@@ -195,8 +195,8 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
-        "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
+        "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Thêm",
 
@@ -420,6 +420,7 @@
         "dxHtmlEditor-width": "Width",
         "dxHtmlEditor-height": "Height",
         "dxHtmlEditor-borderColor": "Color",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "Background",
         "dxHtmlEditor-dimensions": "Dimensions",
         "dxHtmlEditor-alignment": "Alignment",
