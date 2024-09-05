@@ -12,6 +12,7 @@ import { ViewDataGenerator } from './m_view_data_generator';
 const toMs = dateUtils.dateToMilliseconds;
 
 const DAYS_IN_WEEK = 7;
+const HOUR_MS = toMs('hour');
 
 export class ViewDataGeneratorMonth extends ViewDataGenerator {
   _minVisibleDate: any;
@@ -35,7 +36,9 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
     data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
     data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
-    data.text = monthUtils.getCellText(startDate, intervalCount);
+
+    const midday = new Date(startDate.getTime() + 12 * HOUR_MS);
+    data.text = monthUtils.getCellText(midday, intervalCount);
 
     return data;
   }
