@@ -109,7 +109,7 @@ export default function() {
     });
 
     QUnit.module('Accessibility', () => {
-        test('aria-readonly should be set on initialization', function(assert) {
+        test('aria-readonly should be set on initialization if readOnly=true (T1248155)', function(assert) {
             const $element = $('#htmlEditor');
 
             $element.dxHtmlEditor({
@@ -126,7 +126,7 @@ export default function() {
             }
         });
 
-        test('aria-readonly should be set during option change in runtime', function(assert) {
+        test('aria-readonly should be set if readOnly property is set to true on runtime (T1248155) (T1248155)', function(assert) {
             const $element = $('#htmlEditor');
 
             $element.dxHtmlEditor({
