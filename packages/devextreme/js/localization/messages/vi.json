@@ -195,7 +195,6 @@
         "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
-        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Thêm",
@@ -230,8 +229,6 @@
         "dxPivotGrid-dataFieldArea": "Thả các trường dữ liệu vào đây",
         "dxPivotGrid-rowFieldArea": "Thả các trường của hàng vào đây",
         "dxPivotGrid-filterFieldArea": "Thả bộ lọc các trường vào đây",
-
-        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
 
         "dxScheduler-editorLabelTitle": "Chủ đề",
         "dxScheduler-editorLabelStartDate": "Ngày bắt đầu",
@@ -312,7 +309,6 @@
         "dxCalendar-captionCenturyLabel": "Century selection",
         "dxCalendar-selectedDate": "The selected date is {0}",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
-        "dxCalendar-readOnlyLabel": "Read-only calendar",
 
         "dxColorView-ariaRed": "Đỏ",
         "dxColorView-ariaGreen": "Xanh lá",
@@ -420,7 +416,6 @@
         "dxHtmlEditor-width": "Width",
         "dxHtmlEditor-height": "Height",
         "dxHtmlEditor-borderColor": "Color",
-        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "Background",
         "dxHtmlEditor-dimensions": "Dimensions",
         "dxHtmlEditor-alignment": "Alignment",
