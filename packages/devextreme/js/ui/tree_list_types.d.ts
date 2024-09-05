@@ -22,6 +22,7 @@ export {
   FilterRow,
   FilterRowOperationDescriptions,
   FilterType,
+  FixedPosition,
   GridsEditMode,
   GridsEditRefreshMode,
   GroupExpandMode,

@@ -155,6 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "Atlaisvinti",
         "dxDataGrid-columnFixingLeftPosition": "Į kairę",
         "dxDataGrid-columnFixingRightPosition": "Į dešinę",
+        "dxDataGrid-columnFixingStickyPosition": "Stick in place",
         "dxDataGrid-exportTo": "Eksportuoti",
         "dxDataGrid-exportToExcel": "Eksportuoti į Excel",
         "dxDataGrid-exporting": "Eksportuojama...",

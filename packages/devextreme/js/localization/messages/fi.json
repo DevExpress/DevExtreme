@@ -155,6 +155,7 @@
         "dxDataGrid-columnFixingUnfix": "Poista kiinteät sarakkeet",
         "dxDataGrid-columnFixingLeftPosition": "Vasemmalle",
         "dxDataGrid-columnFixingRightPosition": "Oikealle",
+        "dxDataGrid-columnFixingStickyPosition": "Stick in place",
         "dxDataGrid-exportTo": "Vie",
         "dxDataGrid-exportToExcel": "Vie Exceliin",
         "dxDataGrid-exporting": "Vienti...",
