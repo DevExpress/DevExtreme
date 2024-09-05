@@ -16,6 +16,10 @@
   @include dx-overflow();
 }
 
+.dx-chat-message-time {
+  white-space: nowrap;
+}
+
 .dx-chat-message-group-alignment-start {
   justify-items: start;
 

@@ -5,7 +5,8 @@
 }
 
 .dx-chat-message-bubble {
-  width: max-content;
+  width: auto;
+  word-break: break-word;
 }
 
 .dx-chat-message-group-alignment-start {

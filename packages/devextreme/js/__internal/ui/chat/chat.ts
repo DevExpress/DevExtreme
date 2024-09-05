@@ -78,7 +78,7 @@ class Chat extends Widget<Properties> {
     const currentUserId = user?.id;
     const $messageList = $('<div>');
 
-    this.element().prepend($messageList.get(0));
+    this.$element().prepend($messageList);
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,

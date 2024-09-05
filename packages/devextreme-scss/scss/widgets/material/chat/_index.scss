@@ -5,7 +5,11 @@
 
 // adduse
 
-@include chat($chat-background-color);
+@include chat(
+  $chat-background-color,
+  $chat-border-color,
+  $chat-border-radius
+);
 @include chat-avatar($chat-avatar-size, $chat-avatar-background-color);
 @include chat-header($chat-header-padding);
 @include chat-messagebox(
@@ -27,7 +31,7 @@
   $chat-messagegroup-gap,
   $chat-messagegroup-alignment-start-template,
   $chat-messagegroup-alignment-start-gap,
-  $chat-messagegroup-padding-top,
+  $chat-messagegroup-padding-bottom,
   $chat-information-font-size,
   $chat-information-color,
   $chat-information-gap
