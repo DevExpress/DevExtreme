@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import { computed, state } from '@js/__internal/core/reactive';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import { ContentStatusView } from '@ts/grids/new/grid_core/content_view/content_status_view';
 import { View } from '@ts/grids/new/grid_core/core/view';
@@ -14,18 +15,19 @@ export const CLASSES = {
 export class ContentView extends View {
   public readonly scrollableRef = createRef<dxScrollable>();
 
-  private readonly ContentStatus = this.contentStatus.asInferno();
+  private readonly _stub = state(undefined);
 
-  private readonly Content = this.content.asInferno();
+  public vdom = computed(() => {
+    const ContentStatus = this.contentStatus.asInferno();
+    const Content = this.content.asInferno();
 
-  public vdom = (
-    <Scrollable componentRef={this.scrollableRef}>
-      <div className={CLASSES.content} tabIndex={0}>
-        <this.ContentStatus/>
-        <this.Content/>
-      </div>
-    </Scrollable>
-  );
+    return <Scrollable componentRef={this.scrollableRef}>
+        <div className={CLASSES.content} tabIndex={0}>
+          <ContentStatus/>
+          <Content/>
+        </div>
+      </Scrollable>;
+  }, [this._stub]);
 
   public static dependencies = [
     ContentStatusView, ContentViewContent,

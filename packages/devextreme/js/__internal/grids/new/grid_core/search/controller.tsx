@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import $ from '@js/core/renderer';
 import { render } from 'inferno';
 
 import { HeaderPanelController } from '../header_panel/controller';
@@ -24,7 +25,7 @@ export class Search {
           <SearchField
             onChange={this.searchText.update.bind(this.searchText)}
           />,
-          element.get(0),
+          $(element).get(0),
         );
       },
     });

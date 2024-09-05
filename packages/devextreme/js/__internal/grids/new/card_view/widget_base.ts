@@ -10,7 +10,7 @@ import { HeadersView } from './headers/view';
 import { OptionsController } from './options_controller';
 import type { Properties } from './types';
 
-class CardView extends GridCoreNew<Properties> {
+export class CardView extends GridCoreNew<Properties> {
   protected _registerDIContext(): void {
     super._registerDIContext();
     this.diContext.register(HeadersView);
