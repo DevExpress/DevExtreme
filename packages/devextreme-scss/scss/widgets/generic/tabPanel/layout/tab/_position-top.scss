@@ -19,7 +19,7 @@
         // @include dx-tabs-border-mixin(
         //   null,
         //   null,
-        //   $generic-tabpanel-tab-border-hover-bottom,
+        //   $generic-tabpanel-tab-border-transparent,
         //   $generic-tabs-border-transparent,
         // );
     //   }
@@ -30,7 +30,7 @@
       //   @include dx-tabs-border-mixin(
       //     null,
       //     $generic-tabs-border-transparent,
-      //     $generic-tabpanel-tab-border-hover-bottom,
+      //     $generic-tabpanel-tab-border-transparent,
       //     null,
       //   );
       // }
@@ -40,7 +40,7 @@
     //   @include dx-tabs-border-mixin(
     //     null,
     //     null,
-    //     $generic-tabpanel-tab-border-hover-bottom,
+    //     $generic-tabpanel-tab-border-transparent,
     //     null,
     //   );
     // }
@@ -49,7 +49,7 @@
       @include dx-tabs-border-mixin(
         null,
         null,
-        $generic-tabpanel-tab-border-hover-bottom,
+        $generic-tabpanel-tab-border-transparent,
         null,
       );
 

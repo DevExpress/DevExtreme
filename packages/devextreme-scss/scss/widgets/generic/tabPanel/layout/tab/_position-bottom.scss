@@ -17,7 +17,7 @@
     // &:first-child:not(.dx-state-focused, .dx-tab-selected) {
     //   &.dx-state-hover {
     //     @include dx-tabs-border-mixin(
-    //       $generic-tabpanel-tab-border-hover-bottom,
+    //       $generic-tabpanel-tab-border-transparent,
     //       null,
     //       null,
     //       $generic-tabs-border-transparent,
@@ -28,7 +28,7 @@
     // &:last-child:not(.dx-state-focused, .dx-tab-selected) {
     //   &.dx-state-hover {
     //     @include dx-tabs-border-mixin(
-    //       $generic-tabpanel-tab-border-hover-bottom,
+    //       $generic-tabpanel-tab-border-transparent,
     //       $generic-tabs-border-transparent,
     //       null,
     //       null,
@@ -38,7 +38,7 @@
 
     // &.dx-state-hover {
     //   @include dx-tabs-border-mixin(
-    //     $generic-tabpanel-tab-border-hover-bottom,
+    //     $generic-tabpanel-tab-border-transparent,
     //     null,
     //     null,
     //     null,
@@ -47,7 +47,7 @@
 
     &.dx-tab-selected {
       @include dx-tabs-border-mixin(
-        none,
+        $generic-tabpanel-tab-border-transparent,
         null,
         null,
         null,

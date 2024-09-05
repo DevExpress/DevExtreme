@@ -20,7 +20,7 @@
     //       null,
     //       null,
     //       $generic-tabs-border-transparent,
-    //       $generic-tabpanel-tab-border-hover-bottom,
+    //       $generic-tabpanel-tab-border-transparent,
     //     );
     //   }
     // }
@@ -31,7 +31,7 @@
     //       $generic-tabs-border-transparent,
     //       null,
     //       null,
-    //       $generic-tabpanel-tab-border-hover-bottom,
+    //       $generic-tabpanel-tab-border-transparent,
     //     );
     //   }
     // }
@@ -41,7 +41,7 @@
     //     null,
     //     null,
     //     null,
-    //     $generic-tabpanel-tab-border-hover-bottom,
+    //     $generic-tabpanel-tab-border-transparent,
     //   );
     // }
 
@@ -50,7 +50,7 @@
         null,
         null,
         null,
-        none,
+        $generic-tabpanel-tab-border-transparent,
       );
 
       border-inline-start: $generic-tabpanel-tab-border-selected-bottom;

@@ -397,6 +397,7 @@ const TabPanel = MultiView.inherit({
     }
 
     if (isMultiViewTarget) {
+      this._toggleFocusClass(isFocused, this._tabs.$element());
       this._toggleFocusClass(isFocused, this._tabs.option('focusedElement'));
     }
   },
