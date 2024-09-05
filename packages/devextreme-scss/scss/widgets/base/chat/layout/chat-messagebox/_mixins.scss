@@ -2,7 +2,6 @@
   $padding,
   $border-color,
   $gap,
-  $textarea-min-height,
   $textarea-border-radius,
   $button-size
 ) {
@@ -14,7 +13,6 @@
 
   .dx-chat-message-box-text-area {
     &.dx-textarea.dx-texteditor {
-      min-height: $textarea-min-height;
       border-radius: $textarea-border-radius;
     }
   }
