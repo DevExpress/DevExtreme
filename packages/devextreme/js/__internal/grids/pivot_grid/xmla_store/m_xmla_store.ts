@@ -673,7 +673,7 @@ const XmlaStore = Class.inherit((function () {
       const shouldSkipWrappingPathValue = isString(pathValue) && (
         pathValue.includes('&') || pathValue.startsWith(`${dataField}.`)
       );
-      pathValue = shouldSkipWrapingPathValue ? pathValue : `[${pathValue}]`;
+      pathValue = shouldSkipWrappingPathValue ? pathValue : `[${pathValue}]`;
 
       if (dataField && pathValue.indexOf(`${dataField}.`) === 0) {
         pathValue = pathValue.slice(dataField.length + 1, pathValue.length);
