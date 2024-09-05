@@ -416,6 +416,7 @@
         "dxHtmlEditor-width": "Szerokość",
         "dxHtmlEditor-height": "wysokość",
         "dxHtmlEditor-borderColor": "kolor",
+        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "tło",
         "dxHtmlEditor-dimensions": "wymiary",
         "dxHtmlEditor-alignment": "Orientacja",
