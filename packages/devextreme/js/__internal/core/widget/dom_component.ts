@@ -84,7 +84,7 @@ class DOMComponent extends Component {
     super.ctor(options);
     const validationAlreadyPerformed = peekValidationPerformed();
     // @ts-expect-error
-    license.validateLicense(config().licenseKey);
+    // license.validateLicense(config().licenseKey);
     if (!validationAlreadyPerformed && peekValidationPerformed()) {
       config({ licenseKey: '' });
     }
