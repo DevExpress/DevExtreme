@@ -14,6 +14,8 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 import numberLocalization from '@js/localization/number';
 
 import gridCoreUtils from '../m_utils';
+import type { StickyPosition } from '../sticky_columns/const';
+import { getColumnFixedPosition } from '../sticky_columns/utils';
 import {
   COLUMN_CHOOSER_LOCATION,
   COLUMN_INDEX_OPTIONS,
@@ -938,4 +940,63 @@ export const strictParseNumber = function (text, format): any {
       return parsedValue;
     }
   }
+};
+
+const isFirstOrLastBandColumn = function (
+  that: ColumnsController,
+  bandColumns: any[],
+  onlyWithinBandColumn = false,
+  isLast = false,
+  fixedPosition?: StickyPosition,
+): boolean {
+  return bandColumns.every((column, index) => onlyWithinBandColumn && index === 0
+        || isFirstOrLastColumnCore(that, column, index, onlyWithinBandColumn, isLast, fixedPosition));
+};
+
+const isFirstOrLastColumnCore = function (
+  that: ColumnsController,
+  column: any,
+  rowIndex: number,
+  onlyWithinBandColumn = false,
+  isLast = false,
+  fixedPosition?: StickyPosition,
+): boolean {
+  const getColumns = (index: number): any => that.getVisibleColumns(index)
+    .filter((col) => {
+      let res = true;
+
+      if (onlyWithinBandColumn && column) {
+        res &&= col.ownerBand === column.ownerBand;
+      } else if (fixedPosition) {
+        res &&= col.fixed && getColumnFixedPosition(col) === fixedPosition;
+      }
+
+      return res;
+    });
+  const columnIndex = column.index;
+  const columns = getColumns(rowIndex);
+  const visibleColumnIndex = that.getVisibleIndex(columnIndex, rowIndex);
+
+  return isLast
+    ? visibleColumnIndex === that.getVisibleIndex(columns[columns.length - 1]?.index, rowIndex)
+    : visibleColumnIndex === that.getVisibleIndex(columns[0]?.index, rowIndex);
+};
+
+export const isFirstOrLastColumn = function (
+  that: ColumnsController,
+  targetColumn: any,
+  rowIndex: number,
+  onlyWithinBandColumn = false,
+  isLast = false,
+  fixedPosition?: StickyPosition,
+): boolean {
+  const targetColumnIndex = targetColumn.index;
+  const bandColumnsCache = that.getBandColumnsCache();
+  const parentBandColumns = getParentBandColumns(targetColumnIndex, bandColumnsCache.columnParentByIndex);
+
+  if (parentBandColumns?.length) {
+    return isFirstOrLastBandColumn(that, parentBandColumns.concat([targetColumn]), onlyWithinBandColumn, isLast, fixedPosition);
+  }
+
+  return onlyWithinBandColumn || isFirstOrLastColumnCore(that, targetColumn, rowIndex, onlyWithinBandColumn, isLast, fixedPosition);
 };

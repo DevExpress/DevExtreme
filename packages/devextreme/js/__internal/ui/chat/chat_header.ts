@@ -1,35 +1,33 @@
-import type { Properties } from '@js/core/dom_component';
-import DOMComponent from '@js/core/dom_component';
+import type { Properties as DOMComponentProperties } from '@js/core/dom_component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 
-export interface ChatHeaderProperties extends Properties {
+export interface Properties extends DOMComponentProperties {
   title: string;
 }
 
-class ChatHeader extends DOMComponent<ChatHeaderProperties> {
+class ChatHeader extends DOMComponent<ChatHeader, Properties> {
   private _$text!: dxElementWrapper;
 
-  _getDefaultOptions(): ChatHeaderProperties {
+  _getDefaultOptions(): Properties {
     return {
-      // @ts-expect-error
       ...super._getDefaultOptions(),
       title: '',
-    } as ChatHeaderProperties;
+    } as Properties;
   }
 
   _init(): void {
-    // @ts-expect-error
     super._init();
 
     $(this.element()).addClass(CHAT_HEADER_CLASS);
   }
 
   _initMarkup(): void {
-    // @ts-expect-error
     super._initMarkup();
 
     this._renderTextElement();
@@ -48,7 +46,7 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
     this._$text.text(title);
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name } = args;
 
     switch (name) {
@@ -56,7 +54,6 @@ class ChatHeader extends DOMComponent<ChatHeaderProperties> {
         this._updateText();
         break;
       default:
-        // @ts-expect-error
         super._optionChanged(args);
     }
   }

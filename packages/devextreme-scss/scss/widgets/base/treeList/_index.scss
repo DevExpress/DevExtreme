@@ -76,6 +76,33 @@ $treelist-row-error-color: $datagrid-row-error-color;
   .dx-command-drag .dx-treelist-drag-icon {
     @include dx-icon(dragvertical);
   }
+
+  .dx-treelist-sticky-columns {
+    .dx-column-lines > td {
+      border-right: none;
+    }
+  
+    &:not(.dx-header-multi-row) .dx-treelist-table .dx-row {
+      .dx-treelist-sticky-column-border-right + td {
+        border-left: none;
+      }
+    }
+  }
+
+  .dx-header-multi-row.dx-treelist-sticky-columns .dx-treelist-table .dx-row {
+    &.dx-column-lines > td.dx-treelist-first-header,
+    .dx-treelist-column-no-border {
+      border-left: none;
+    }
+  }
+
+  .dx-treelist-sticky-column, .dx-treelist-sticky-column-left, .dx-treelist-sticky-column-right {
+    background-color: $treelist-base-background-color;
+  }
+}
+
+.dx-header-multi-row.dx-treelist-sticky-columns .dx-column-lines > td:first-child {
+  border-left: $treelist-border;
 }
 
 .dx-treelist-container {
@@ -283,8 +310,46 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
       &:last-child {
         border-left: none;
-        border-right: $treelist-border;
       }
+    }
+
+    .dx-treelist-sticky-columns {
+      .dx-column-lines > td {
+        border-left: none;
+        border-right: $treelist-border;
+
+        &:first-child {
+          border-right: none;
+        }
+      }
+
+      &:not(.dx-header-multi-row) .dx-row {
+        .dx-treelist-sticky-column-border-left + td {
+          border-right: none;
+
+          &.dx-treelist-sticky-column-border-left {
+            border-left: 2px solid $treelist-border-color;
+          }
+        }
+      }
+    }
+
+    .dx-header-multi-row.dx-treelist-sticky-columns .dx-treelist-table .dx-row {
+      &.dx-column-lines > td.dx-treelist-first-header,
+      .dx-treelist-column-no-border {
+        border-right: none;
+
+        &.dx-treelist-sticky-column-border-left {
+          border-left: 2px solid $treelist-border-color;
+        }
+      }
+    }
+  }
+
+  .dx-header-multi-row.dx-treelist-sticky-columns {
+    .dx-column-lines > td:first-child {
+      border-left: none;
+      border-right: $treelist-border;
     }
   }
 
@@ -328,6 +393,16 @@ $treelist-row-error-color: $datagrid-row-error-color;
       margin-left: 0;
       margin-right: 10px;
     }
+  }
+}
+
+.dx-treelist .dx-treelist-sticky-columns .dx-treelist-table .dx-row {
+  td.dx-treelist-sticky-column-border-right {
+    border-right: 2px solid $treelist-border-color;
+  }
+
+  td.dx-treelist-sticky-column-border-left {
+    border-left: 2px solid $treelist-border-color;
   }
 }
 

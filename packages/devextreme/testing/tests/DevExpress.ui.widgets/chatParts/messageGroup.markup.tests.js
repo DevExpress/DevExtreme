@@ -159,7 +159,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             assert.strictEqual($name.text(), '', 'name text is empty');
         });
 
-        QUnit.test('time element should be rendered if timestamp property is not passed', function(assert) {
+        QUnit.test('time element should be rendered with empty text if timestamp property is not passed', function(assert) {
             this.reinit({
                 items: [{ }],
             });
@@ -167,7 +167,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             const $time = this.$element.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
 
             assert.strictEqual($time.length, 1);
-            assert.strictEqual($time.text(), '', 'name text is empty');
+            assert.strictEqual($time.text(), '', 'time text is empty');
         });
 
         QUnit.test('name element should be rendered if autor.name property is passed', function(assert) {

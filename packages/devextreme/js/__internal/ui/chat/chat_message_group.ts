@@ -1,10 +1,12 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import dateSerialization from '@js/core/utils/date_serialization';
 import { isDefined } from '@js/core/utils/type';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
-import Widget from '../widget';
 import Avatar from './chat_avatar';
 import MessageBubble from './chat_message_bubble';
 
@@ -18,17 +20,17 @@ const CHAT_MESSAGE_BUBBLE_CONTAINER_CLASS = 'dx-chat-message-bubble-container';
 
 export type MessageGroupAlignment = 'start' | 'end';
 
-export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
+export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
 }
 
-class MessageGroup extends Widget<MessageGroupOptions> {
+class MessageGroup extends Widget<Properties> {
   _avatar?: Avatar;
 
   _$messageBubbleContainer!: dxElementWrapper;
 
-  _getDefaultOptions(): MessageGroupOptions {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       items: [],
@@ -111,11 +113,12 @@ class MessageGroup extends Widget<MessageGroupOptions> {
       .appendTo($element);
   }
 
-  _getTimeValue(timestamp: string): string {
+  _getTimeValue(timestamp: Date | string | number): string {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
-    const dateTime = new Date(Number(timestamp));
+    const date = dateSerialization.deserializeDate(timestamp);
 
-    return dateTime.toLocaleTimeString(undefined, options);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return date.toLocaleTimeString(undefined, options);
   }
 
   _renderMessageGroupInformation(message: Message): void {
@@ -140,7 +143,7 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     $information.appendTo(this.element());
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name } = args;
 
     switch (name) {

@@ -61,7 +61,7 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   _getTemplateByOption(optionName: string): unknown;
   _getSynchronizableOptionsForCreateComponent(): string[];
   _defaultOptionsRules(): Record<string, unknown>[];
-  _optionChanged(args: Record<string, unknown>): void;
+
   _setOptionWithoutOptionChange(optionName: string, value: unknown): void;
   _setOptionsByReference(): void;
 
@@ -80,7 +80,7 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   _createActionByOption(optionName: string, config?: Record<string, unknown>);
   _isInitialOptionValue(name: string): boolean;
   _setDeprecatedOptions(): void;
-
+  _optionChanged(args: Record<string, unknown>): void;
   _dispose(): void;
 }
 

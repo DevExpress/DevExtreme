@@ -18,7 +18,7 @@ import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { DefaultOptionsRule } from './options';
 
-type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
+export type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
 
 /* eslint-disable no-underscore-dangle */
 

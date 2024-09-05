@@ -1369,6 +1369,9 @@ testComponentDefaults(ChatMessageBox,
     {},
     {
         onMessageSend: undefined,
+        activeStateEnabled: true,
+        focusStateEnabled: true,
+        hoverStateEnabled: true,
     }
 );
 

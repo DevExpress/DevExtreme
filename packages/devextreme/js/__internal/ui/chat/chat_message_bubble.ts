@@ -1,16 +1,16 @@
 import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-
-import Widget from '../widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
 
-export interface MessageBubbleOptions extends WidgetOptions<MessageBubble> {
+export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
 }
 
-class MessageBubble extends Widget<MessageBubbleOptions> {
-  _getDefaultOptions(): MessageBubbleOptions {
+class MessageBubble extends Widget<Properties> {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       text: '',
@@ -32,7 +32,7 @@ class MessageBubble extends Widget<MessageBubbleOptions> {
     $(this.element()).text(text);
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name } = args;
 
     switch (name) {
