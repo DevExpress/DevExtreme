@@ -25,3 +25,45 @@ $chat-information-color: null !default;
   $chat-bubble-background-color-secondary: lighten($base-bg, 3.92) !default; // #343434
   $chat-information-color: lighten($base-bg, 32.55) !default; // #7D7D7D
 }
+
+@else if $color == "carmine" {
+  $chat-avatar-background-color: darken($base-bg, 13.33) !default;
+  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default;
+  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default;
+  $chat-information-color: darken($base-bg, 41.57) !default;
+}
+
+@else if $color == "contrast" {
+  $chat-avatar-background-color: darken($base-bg, 13.33) !default;
+  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default;
+  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default;
+  $chat-information-color: darken($base-bg, 41.57) !default;
+}
+
+@else if $color == "darkmoon" {
+  $chat-avatar-background-color: darken($base-bg, 13.33) !default;
+  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default;
+  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default;
+  $chat-information-color: darken($base-bg, 41.57) !default;
+}
+
+@else if $color == "darkviolet" {
+  $chat-avatar-background-color: darken($base-bg, 13.33) !default;
+  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default;
+  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default;
+  $chat-information-color: darken($base-bg, 41.57) !default;
+}
+
+@else if $color == "greenmist" {
+  $chat-avatar-background-color: darken($base-bg, 13.33) !default;
+  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default;
+  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default;
+  $chat-information-color: darken($base-bg, 41.57) !default;
+}
+
+@else if $color == "softblue" {
+  $chat-avatar-background-color: darken($base-bg, 13.33) !default;
+  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default;
+  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default;
+  $chat-information-color: darken($base-bg, 41.57) !default;
+}
