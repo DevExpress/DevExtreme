@@ -44,8 +44,6 @@
         "dxList-pageLoadingText": "Đang tải...",
         "dxList-nextButtonText": "Thêm",
         "dxList-selectAll": "Chọn Tất cả",
-        "dxList-listAriaLabel": "Items",
-        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Xóa",
         "dxListEditDecorator-more": "Thêm",
 
@@ -192,10 +190,8 @@
         "dxDataGrid-filterPanelCreateFilter": "Tạo Bộ lọc",
         "dxDataGrid-filterPanelClearFilter": "Loại bỏ",
         "dxDataGrid-filterPanelFilterEnabledHint": "Kích hoạt Bộ lọc",
-        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
-        "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
         "dxTreeList-ariaToolbar": "Tree list toolbar",
         "dxTreeList-editingAddRowToNode": "Thêm",
@@ -230,8 +226,6 @@
         "dxPivotGrid-dataFieldArea": "Thả các trường dữ liệu vào đây",
         "dxPivotGrid-rowFieldArea": "Thả các trường của hàng vào đây",
         "dxPivotGrid-filterFieldArea": "Thả bộ lọc các trường vào đây",
-
-        "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
 
         "dxScheduler-editorLabelTitle": "Chủ đề",
         "dxScheduler-editorLabelStartDate": "Ngày bắt đầu",
@@ -292,10 +286,6 @@
         "dxScheduler-noTimezoneTitle": "Không có múi giờ",
         "dxScheduler-moreAppointments": "{0} thêm",
 
-        "dxCalendar-currentDay": "Today",
-        "dxCalendar-currentMonth": "Current month",
-        "dxCalendar-currentYear": "Current year",
-        "dxCalendar-currentYearRange": "Current year range",
         "dxCalendar-todayButtonText": "Hôm nay",
         "dxCalendar-ariaWidgetName": "Lịch",
         "dxCalendar-previousMonthButtonLabel": "Previous month",
@@ -310,9 +300,6 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
-        "dxCalendar-selectedDate": "The selected date is {0}",
-        "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
-        "dxCalendar-readOnlyLabel": "Read-only calendar",
 
         "dxColorView-ariaRed": "Đỏ",
         "dxColorView-ariaGreen": "Xanh lá",
@@ -323,7 +310,6 @@
         "dxTagBox-selected": "{0} đã được chọn",
         "dxTagBox-allSelected": "Tất cả đã được chọn ({0})",
         "dxTagBox-moreSelected": "{0} thêm",
-        "dxTagBox-tagRoleDescription": "Tag. Press the delete button to remove this tag",
 
         "vizExport-printingButtonText": "In",
         "vizExport-titleMenuText": "Xuất ra/In",
@@ -420,7 +406,6 @@
         "dxHtmlEditor-width": "Width",
         "dxHtmlEditor-height": "Height",
         "dxHtmlEditor-borderColor": "Color",
-        "dxHtmlEditor-borderWidth": "Border Width",
         "dxHtmlEditor-tableBackground": "Background",
         "dxHtmlEditor-dimensions": "Dimensions",
         "dxHtmlEditor-alignment": "Alignment",
@@ -734,8 +719,6 @@
         "dxMultiView-elementAriaRoleDescription": "MultiView",
         "dxMultiView-elementAriaLabel": "Use the arrow keys or swipe to navigate between views",
         "dxMultiView-itemAriaRoleDescription": "View",
-        "dxMultiView-itemAriaLabel": "{0} of {1}",
-
-        "dxSplitter-resizeHandleAriaLabel": "Split bar"
+        "dxMultiView-itemAriaLabel": "{0} of {1}"
     }
 }
