@@ -360,6 +360,7 @@ type IItemProps = React.PropsWithChildren<{
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   title?: string;
+  visible?: boolean;
   colSpan?: number;
   cssClass?: string;
   dataField?: string;
@@ -378,7 +379,6 @@ type IItemProps = React.PropsWithChildren<{
   };
   name?: string;
   validationRules?: Array<CommonTypes.ValidationRule>;
-  visible?: boolean;
   visibleIndex?: number;
   alignItemLabels?: boolean;
   caption?: string;
@@ -831,6 +831,7 @@ type ITabPanelOptionsItemProps = React.PropsWithChildren<{
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   title?: string;
+  visible?: boolean;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;

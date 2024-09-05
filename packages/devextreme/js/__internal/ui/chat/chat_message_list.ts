@@ -1,30 +1,30 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { hasWindow } from '@js/core/utils/window';
 import type { Message } from '@js/ui/chat';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
-import Widget from '../widget';
 import type { MessageGroupAlignment } from './chat_message_group';
 import MessageGroup from './chat_message_group';
 
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
 
-export interface MessageListOptions extends WidgetOptions<MessageList> {
+export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
 }
 
-class MessageList extends Widget<MessageListOptions> {
+class MessageList extends Widget<Properties> {
   _messageGroups?: MessageGroup[];
 
   private _$content!: dxElementWrapper;
 
   private _scrollable?: Scrollable<unknown>;
 
-  _getDefaultOptions(): MessageListOptions {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       items: [],
@@ -185,7 +185,7 @@ class MessageList extends Widget<MessageListOptions> {
     }
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value, previousValue } = args;
 
     switch (name) {
@@ -193,7 +193,7 @@ class MessageList extends Widget<MessageListOptions> {
         this._invalidate();
         break;
       case 'items':
-        this._processItemsUpdating(value as MessageListOptions['items'], previousValue as MessageListOptions['items']);
+        this._processItemsUpdating(value ?? [], previousValue ?? []);
         break;
       default:
         super._optionChanged(args);

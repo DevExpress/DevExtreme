@@ -697,6 +697,19 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
                 padding-top: 12px;
                 padding-bottom: 12px;
                 vertical-align: bottom;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) {
+      .dx-#{$widget-name}-content {
+        .dx-#{$widget-name}-table {
+          .dx-row {
+            &.dx-header-row {
+              > td {
                 border-right: 1px solid $fluent-grid-base-border-color;
                 border-left: 1px solid $fluent-grid-base-border-color;
 
@@ -1082,6 +1095,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           }
         }
       }
+    }
+
+    &.dx-#{$widget-name}-sticky-columns .dx-row:not(.dx-row-lines) > td {
+      padding-top: $fluent-grid-base-cell-vertical-padding + 1;
     }
   }
 

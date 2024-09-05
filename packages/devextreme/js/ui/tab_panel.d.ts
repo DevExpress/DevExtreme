@@ -302,7 +302,7 @@ export type Item = dxTabPanelItem;
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTabPanelItem extends Omit<dxMultiViewItem, 'visible'> {
+export interface dxTabPanelItem extends dxMultiViewItem {
     /**
      * @docid
      * @public

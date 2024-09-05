@@ -32,11 +32,11 @@
     //"useUnknownInCatchVariables": true,
     //"noImplicitOverride": true,
     "paths": {
-      "@js/*": [
-        "./*"
-      ],
       "@ts/*": [
         "./__internal/*"
+      ],
+      "@js/*": [
+        "./*"
       ],
     },
     "types": ["jest"]

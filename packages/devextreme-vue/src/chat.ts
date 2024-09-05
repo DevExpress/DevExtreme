@@ -5,6 +5,7 @@ import { createConfigurationComponent } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "dataSource" |
   "disabled" |
   "elementAttr" |
   "focusStateEnabled" |
@@ -29,6 +30,7 @@ const DxChat = createComponent({
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -50,6 +52,7 @@ const DxChat = createComponent({
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -108,7 +111,7 @@ const DxItem = createConfigurationComponent({
   props: {
     author: Object,
     text: String,
-    timestamp: String,
+    timestamp: [Date, Number, String],
     typing: Boolean
   }
 });

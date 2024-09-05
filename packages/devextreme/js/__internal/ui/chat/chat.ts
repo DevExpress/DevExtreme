@@ -2,13 +2,14 @@ import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { Message, MessageSendEvent, Properties } from '@js/ui/chat';
+import type { Message, MessageSendEvent, Properties as ChatProperties } from '@js/ui/chat';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
-import Widget from '../widget';
 import ChatHeader from './chat_header';
 import type {
-  MessageBoxProperties,
   MessageSendEvent as MessageBoxMessageSendEvent,
+  Properties as MessageBoxProperties,
 } from './chat_message_box';
 import MessageBox from './chat_message_box';
 import MessageList from './chat_message_list';
@@ -16,9 +17,9 @@ import MessageList from './chat_message_list';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type Title = string;
+type Properties = ChatProperties & { title: string };
 
-class Chat extends Widget<Properties & { title: Title }> {
+class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
 
   _messageBox!: MessageBox;
@@ -27,7 +28,7 @@ class Chat extends Widget<Properties & { title: Title }> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  _getDefaultOptions(): Properties & { title: Title } {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       activeStateEnabled: true,
@@ -35,6 +36,7 @@ class Chat extends Widget<Properties & { title: Title }> {
       hoverStateEnabled: true,
       title: '',
       items: [],
+      dataSource: null,
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
     };
@@ -65,7 +67,6 @@ class Chat extends Widget<Properties & { title: Title }> {
     const $header = $('<div>');
 
     this.element().prepend($header.get(0));
-
     this._chatHeader = this._createComponent($header, ChatHeader, {
       title,
     });
@@ -116,7 +117,7 @@ class Chat extends Widget<Properties & { title: Title }> {
     const { user } = this.option();
 
     const message: Message = {
-      timestamp: String(Date.now()),
+      timestamp: new Date(),
       author: user,
       text,
     };
@@ -131,21 +132,21 @@ class Chat extends Widget<Properties & { title: Title }> {
     return $input;
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
     switch (name) {
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
-        this._messageBox.option({ [name]: value });
+        this._messageBox.option(name, value);
         break;
       case 'title': {
         if (value) {
           if (this._chatHeader) {
-            this._chatHeader.option('title', (value as Title));
+            this._chatHeader.option('title', value);
           } else {
-            this._renderHeader((value as Title));
+            this._renderHeader(value);
           }
         } else if (this._chatHeader) {
           this._chatHeader.dispose();
@@ -153,11 +154,15 @@ class Chat extends Widget<Properties & { title: Title }> {
         }
         break;
       }
-      case 'user':
-        this._messageList.option('currentUserId', (value as Properties['user'])?.id);
+      case 'user': {
+        const author = value as Properties[typeof name];
+
+        this._messageList.option('currentUserId', author?.id);
         break;
+      }
       case 'items':
-        this._messageList.option('items', (value as Properties['items']) ?? []);
+      case 'dataSource':
+        this._messageList.option(name, value);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -176,7 +181,6 @@ class Chat extends Widget<Properties & { title: Title }> {
   }
 }
 
-// @ts-expect-error ts-error
 registerComponent('dxChat', Chat);
 
 export default Chat;

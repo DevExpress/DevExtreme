@@ -2,20 +2,20 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-
-import Widget from '../widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import Widget from '@ts/core/widget/widget';
 
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
-export interface AvatarOptions extends WidgetOptions<Avatar> {
+export interface Properties extends WidgetOptions<Avatar> {
   name?: string;
 }
 
-class Avatar extends Widget<AvatarOptions> {
+class Avatar extends Widget<Properties> {
   _$initials!: dxElementWrapper;
 
-  _getDefaultOptions(): AvatarOptions {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       name: '',
@@ -51,7 +51,7 @@ class Avatar extends Widget<AvatarOptions> {
     return '';
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<Properties>): void {
     const { name } = args;
 
     switch (name) {

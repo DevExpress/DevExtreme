@@ -201,6 +201,43 @@ QUnit.module('states', {
 });
 
 QUnit.module('aria accessibility', () => {
+    QUnit.test('aria-readonly is removed in initialization', function(assert) {
+        const $element = $('#progressbar').dxProgressBar({
+            readOnly: true,
+        });
+
+        assert.strictEqual($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
+    });
+
+    QUnit.test('aria-readonly should not exist after value change', function(assert) {
+        const $element = $('#progressbar').dxProgressBar({
+            readOnly: true,
+            value: 58
+        });
+
+        const instance = $element.dxProgressBar('instance');
+
+        instance.option({
+            value: 59
+        });
+
+        assert.strictEqual($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
+    });
+
+    QUnit.test('aria-readonly should not exist after readOnly option change', function(assert) {
+        const $element = $('#progressbar').dxProgressBar({
+            readOnly: false,
+        });
+
+        const instance = $element.dxProgressBar('instance');
+
+        instance.option({
+            readOnly: true,
+        });
+
+        assert.strictEqual($element.attr('aria-readonly'), undefined, 'aria-readonly is removed');
+    });
+
     QUnit.test('aria properties after options changed', function(assert) {
         const $element = $('#progressbar').dxProgressBar({
             min: 32,

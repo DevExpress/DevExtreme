@@ -1347,6 +1347,7 @@ testComponentDefaults(Chat,
         hoverStateEnabled: true,
         title: '',
         onMessageSend: undefined,
+        dataSource: undefined,
     }
 );
 
@@ -1368,6 +1369,9 @@ testComponentDefaults(ChatMessageBox,
     {},
     {
         onMessageSend: undefined,
+        activeStateEnabled: true,
+        focusStateEnabled: true,
+        hoverStateEnabled: true,
     }
 );
 
