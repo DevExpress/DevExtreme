@@ -47,6 +47,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 icon: 'sendfilled',
                 type: 'default',
                 stylingMode: 'text',
+                disabled: true,
             };
             const sendButton = this.$sendButton.dxButton('instance');
 
