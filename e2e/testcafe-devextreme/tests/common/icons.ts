@@ -269,6 +269,8 @@ const iconSet = {
   triangledown: '\f16c',
   triangleright: '\f16d',
   triangleleft: '\f16e',
+  sendfilled: '\f09a',
+  chat: '\f17e',
 };
 
 fixture.disablePageReloads`Icons`
