@@ -6,9 +6,24 @@ import { Headers } from './headers';
 
 export class HeadersView extends View {
   public vdom = computed(
-    (columns) => <Headers columns={columns} />,
+    (columns) => (
+      <Headers
+        columns={columns}
+        onReorder={this.onReorder.bind(this)}
+      />
+    ),
     [this.columnsController.columns],
   );
+
+  public onReorder(fromIndex: number, toIndex: number): void {
+    this.columnsController.columns.update((columns) => {
+      const column = columns[fromIndex];
+      const newColumns = columns.slice();
+      newColumns.splice(fromIndex, 1);
+      newColumns.splice(toIndex, 0, column);
+      return newColumns;
+    });
+  }
 
   public static dependencies = [ColumnsController] as const;
 

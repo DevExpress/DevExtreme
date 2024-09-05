@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import type { Subscribable, Updatable } from '@ts/core/reactive';
 import { computed, iif } from '@ts/core/reactive';
 
 import { DataController } from '../data_controller/data_controller';
@@ -29,7 +30,7 @@ export class ColumnsController {
         this.columnsFromDataSource,
       ),
     ],
-  );
+  ) as unknown as Subscribable<Column[]> & Updatable<Column[]>;
 
   public static dependencies = [OptionsController, DataController] as const;
 
