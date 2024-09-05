@@ -60,6 +60,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 stylingMode: 'outlined',
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
+                maxHeight: '20em',
             };
 
             const textArea = TextArea.getInstance(this.$textArea);

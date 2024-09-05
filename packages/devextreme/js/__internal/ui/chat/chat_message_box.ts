@@ -77,6 +77,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       stylingMode: 'outlined',
       placeholder: 'Type a message',
       autoResizeEnabled: true,
+      maxHeight: '20em',
     });
   }
 
