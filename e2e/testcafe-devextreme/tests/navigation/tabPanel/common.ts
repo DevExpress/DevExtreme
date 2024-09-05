@@ -542,7 +542,7 @@ test('TabPanel borders without scrolling', async (t) => {
     await testScreenshot(t, takeScreenshot, `TabPanel item focus when clicking on multiview,tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
     await t.pressKey('right');
-    await testScreenshot(t, takeScreenshot, `TabPanel disabled item focused,tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await testScreenshot(t, takeScreenshot, `TabPanel disabled item is focused,tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
     await t.click(tabPanel.multiView.element);
 
