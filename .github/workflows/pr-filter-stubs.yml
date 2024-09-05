@@ -1,0 +1,508 @@
+name: PR Filter Stubs
+
+on:
+  pull_request:
+    paths:
+      - 'apps/**/*.md'
+
+jobs:
+
+  changesSegregation:
+    name: Changes Segregation Check
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.MONOREPO_ALERTS_FGPAT }}
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: .md files filter
+        id: mdFilesFilter
+        uses: DevExpress/github-actions/pr-filter@main
+        with:
+          paths: '**;!apps/**/*.md'
+
+      - name: Show warning for .md files
+        if: steps.mdFilesFilter.outputs.result == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: core.setFailed('Changes in apps/**/*.md shouldn\'t be mixed with changes in other files')
+
+  # build_all.yml, demos_visual_tests.yml, packages_publishing.yml, playgrounds_tests.yml, qunit_tests-additional-renovation.yml, qunit_tests-renovation.yml, testcafe_tests.yml
+  build1:
+    name: 'build'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # lint.yml
+  lint1:
+    name: 'Renovation'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  lint2:
+    name: 'TS'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  lint3:
+    name: 'JS'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  lint4:
+    name: 'CSS'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # styles.yml
+  styles1:
+    name: 'Tests'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # renovation.yml
+  renovation1:
+    name: 'jest-tests'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # qunit_tests-additional-renovation.yml - qunit-tests-mobile-and-shadow-dom
+  qunit_tests-additional-renovation1:
+    name: 'ui.htmlEditor-android6'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests-additional-renovation2:
+    name: 'ui.htmlEditor-firefox'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # qunit_tests
+  qunit_tests1:
+    name: 'Constel export'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests2:
+    name: 'Constel misc'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests3:
+    name: 'Constel ui'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests4:
+    name: 'Constel ui.widgets(1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests5:
+    name: 'Constel ui.widgets(2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests6:
+    name: 'Constel ui.editors'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests7:
+    name: 'Constel ui.htmlEditor'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests8:
+    name: 'Constel ui.grid'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests9:
+    name: 'Constel ui.scheduler(1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests10:
+    name: 'Constel ui.scheduler(2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests11:
+    name: 'Constel viz'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  qunit_tests12:
+    name: 'Constel renovation'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  # testcafe_tests.yml
+  testcafe_tests1:
+    name: 'accessibility (1/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests2:
+    name: 'accessibility (2/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests3:
+    name: 'accessibility (3/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests4:
+    name: 'accessibility (4/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests5:
+    name: 'accessibility (5/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests6:
+    name: 'accessibility - material (1/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests7:
+    name: 'accessibility - material (2/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests8:
+    name: 'accessibility - material (3/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests9:
+    name: 'accessibility - material (4/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests10:
+    name: 'accessibility - material (5/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests11:
+    name: 'accessibility - material (6/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests12:
+    name: 'accessibility - material (7/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests13:
+    name: 'accessibility - fluent (1/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests14:
+    name: 'accessibility - fluent (2/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests15:
+    name: 'accessibility - fluent (3/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests16:
+    name: 'accessibility - fluent (4/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests17:
+    name: 'accessibility - fluent (5/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests18:
+    name: 'accessibility - fluent (6/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests19:
+    name: 'accessibility - fluent (7/7)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests20:
+    name: 'common'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests21:
+    name: 'common - material'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests22:
+    name: 'common - fluent'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests23:
+    name: 'treeList'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests24:
+    name: 'dataGrid (1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests25:
+    name: 'dataGrid (2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests26:
+    name: 'pivotGrid'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests27:
+    name: 'pivotGrid - material'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests28:
+    name: 'pivotGrid - fluent'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests29:
+    name: 'scheduler (1/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests30:
+    name: 'scheduler (2/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests31:
+    name: 'scheduler (3/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests32:
+    name: 'scheduler (4/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests33:
+    name: 'scheduler (5/5)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests34:
+    name: 'form (1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests35:
+    name: 'form (2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests36:
+    name: 'form - material (1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests37:
+    name: 'form - material (2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests38:
+    name: 'form - fluent (1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests39:
+    name: 'form - fluent (2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests40:
+    name: 'editors (1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests41:
+    name: 'editors (2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests42:
+    name: 'editors - material (1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests43:
+    name: 'editors - material (2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests44:
+    name: 'editors - fluent (1/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests45:
+    name: 'editors - fluent (2/2)'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests46:
+    name: 'htmlEditor'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests47:
+    name: 'htmlEditor - material'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests48:
+    name: 'htmlEditor - fluent'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests49:
+    name: 'navigation'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests50:
+    name: 'navigation - material'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests51:
+    name: 'navigation - fluent'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests52:
+    name: 'fileManager'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests53:
+    name: 'fileManager - material'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests54:
+    name: 'fileManager - fluent'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests55:
+    name: 'filterBuilder'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests56:
+    name: 'filterBuilder - material'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests57:
+    name: 'filterBuilder - fluent'
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1

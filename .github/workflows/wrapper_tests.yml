@@ -2,6 +2,9 @@ name: DevExtreme Wrappers Tests
 
 on:
   pull_request:
+    paths:
+      - '**'
+      - '!apps/**/*.md'
   push:
     branches: [24_2]
 
