@@ -97,6 +97,30 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             assert.strictEqual(this.$input.val(), emptyValue);
         });
+
+        QUnit.test('send button should not be disabled after entering any character into the textarea', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i');
+
+            const button = Button.getInstance(this.$sendButton);
+            const { disabled } = button.option();
+
+            assert.strictEqual(disabled, false);
+        });
+
+        QUnit.test('send button should be disabled after entering any character into the textarea and click on the button', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i');
+
+            this.$sendButton.trigger('dxclick');
+
+            const button = Button.getInstance(this.$sendButton);
+            const { disabled } = button.option();
+
+            assert.strictEqual(disabled, true);
+        });
     });
 
     QUnit.module('onMessageSend event', () => {
