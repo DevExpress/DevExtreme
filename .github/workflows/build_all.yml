@@ -2,9 +2,8 @@ name: Build and pack DevExtreme npm packages
 
 on:
   pull_request:
-    paths:
-      - '**'
-      - '!apps/**/*.md'
+    paths-ignore:
+      - 'apps/**/*.md'
   push:
     branches: [24_2]
 

@@ -6,9 +6,8 @@ concurrency:
 
 on:
   pull_request:
-    paths:
-      - '**'
-      - '!apps/**/*.md'
+    paths-ignore:
+      - 'apps/**/*.md'
   push:
     branches: [24_2]
 
