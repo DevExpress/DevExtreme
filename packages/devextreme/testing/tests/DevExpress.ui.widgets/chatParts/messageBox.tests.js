@@ -89,15 +89,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(this.$input.val(), '   ');
         });
 
-        QUnit.test('textarea should ', function(assert) {
-            keyboardMock(this.$input)
-                .focus()
-                .keyUp('enter')
-                .type('dsfs');
-
-            assert.strictEqual(this.$input.val(), '');
-        });
-
         QUnit.test('textarea should not be cleared on enter key when some text is entered', function(assert) {
             keyboardMock(this.$input)
                 .focus()
