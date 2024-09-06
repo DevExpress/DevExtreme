@@ -79,9 +79,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       autoResizeEnabled: true,
       maxHeight: '20em',
       onInput: (): void => {
-        const isButtonDisabled = !this._isValuableTextEntered();
+        const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
-        this._toggleButtonDisableState(isButtonDisabled);
+        this._toggleButtonDisableState(shouldButtonBeDisabled);
       },
     });
   }
