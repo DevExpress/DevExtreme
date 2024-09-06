@@ -7,7 +7,7 @@
 
 // adduse
 
-$generic-tabpanel-tab-border-hover-bottom: null !default;
+$generic-tabpanel-tab-border-transparent: null !default;
 $generic-tabpanel-tab-border-selected-bottom: null !default;
 $generic-tabpanel-tab-border-active-bottom: null !default;
 
@@ -17,7 +17,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 
 
 @if $color == "carmine" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
@@ -27,7 +27,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 }
 
 @if $color == "contrast" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
@@ -37,7 +37,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 }
 
 @if $color == "dark" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
@@ -47,7 +47,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 }
 
 @if $color == "darkmoon" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
@@ -57,7 +57,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 }
 
 @if $color == "darkviolet" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
@@ -67,7 +67,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 }
 
 @if $color == "greenmist" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
@@ -77,7 +77,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 }
 
 @if $color == "light" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
@@ -87,7 +87,7 @@ $generic-tabpanel-tab-border-focused-right: null !default;
 }
 
 @if $color == "softblue" {
-  $generic-tabpanel-tab-border-hover-bottom: $generic-tabs-border-width solid transparent !default;
+  $generic-tabpanel-tab-border-transparent: $generic-tabs-border-width solid transparent !default;
   $generic-tabpanel-tab-border-selected-bottom: $generic-tabs-border-width solid $tabs-tab-selected-bg !default;
   $generic-tabpanel-tab-border-active-bottom: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
