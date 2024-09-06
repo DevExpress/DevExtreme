@@ -146,7 +146,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(disabled, true);
         });
 
-        QUnit.test('send button should not be disabled after entering any character and then removing it', function(assert) {
+        QUnit.test('send button should be disabled after entering any character and then removing it', function(assert) {
             keyboardMock(this.$input)
                 .focus()
                 .type('i')
