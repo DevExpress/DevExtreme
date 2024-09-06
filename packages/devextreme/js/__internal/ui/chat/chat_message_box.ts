@@ -78,9 +78,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       placeholder: 'Type a message',
       autoResizeEnabled: true,
       maxHeight: '20em',
-      onInput: ({ component }): void => {
-        const { text } = component.option();
-        const isButtonDisabled = !text;
+      onInput: (): void => {
+        const isButtonDisabled = !this._isValuableTextEntered();
 
         this._toggleButtonDisableState(isButtonDisabled);
       },
@@ -120,26 +119,25 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _sendHandler(e: ClickEvent): void {
-    const { text } = this._textArea.option();
-
-    if (this._isValueEmpty(text)) {
+    if (!this._isValuableTextEntered()) {
       return;
     }
+
+    const { text } = this._textArea.option();
 
     this._messageSendAction?.({ text, event: e.event });
     this._textArea.reset();
     this._toggleButtonDisableState(true);
   }
 
-  _toggleButtonDisableState(isButtonDisabled: boolean): void {
-    this._button.option('disabled', isButtonDisabled);
+  _toggleButtonDisableState(state: boolean): void {
+    this._button.option('disabled', state);
   }
 
-  _isValueEmpty(value: string | undefined): boolean {
-    const trimmedValue = value?.trim();
-    const isValueEmpty = !trimmedValue;
+  _isValuableTextEntered(): boolean {
+    const { text } = this._textArea.option();
 
-    return isValueEmpty;
+    return !!text?.trim();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
