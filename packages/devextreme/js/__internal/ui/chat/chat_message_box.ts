@@ -122,7 +122,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _sendHandler(e: ClickEvent): void {
     const { text } = this._textArea.option();
 
-    if (!text?.trim()) {
+    if (this._isValueEmpty(text)) {
       return;
     }
 
@@ -133,6 +133,13 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _toggleButtonDisableState(isButtonDisabled: boolean): void {
     this._button.option('disabled', isButtonDisabled);
+  }
+
+  _isValueEmpty(value: string | undefined): boolean {
+    const trimmedValue = value?.trim();
+    const isValueEmpty = !trimmedValue;
+
+    return isValueEmpty;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
