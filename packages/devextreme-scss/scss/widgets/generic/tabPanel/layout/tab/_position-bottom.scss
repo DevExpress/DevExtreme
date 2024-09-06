@@ -22,11 +22,8 @@
         null,
       );
 
-      border-block-start: $generic-tabpanel-tab-border-selected-bottom;
-    }
-
-    &.dx-tab-selected {
       margin-block-start: -$generic-tabs-border-width;
+      border-block-start: $generic-tabpanel-tab-border-selected-bottom;
     }
   }
 }

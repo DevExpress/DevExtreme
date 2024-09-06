@@ -22,11 +22,8 @@
         $generic-tabpanel-tab-border-transparent,
       );
 
-      border-inline-start: $generic-tabpanel-tab-border-selected-bottom;
-    }
-
-    &.dx-tab-selected {
       margin-inline-start: -$generic-tabs-border-width;
+      border-inline-start: $generic-tabpanel-tab-border-selected-bottom;
     }
   }
 }

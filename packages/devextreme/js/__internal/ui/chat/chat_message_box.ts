@@ -74,6 +74,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      stylingMode: 'outlined',
+      placeholder: 'Type a message',
+      autoResizeEnabled: true,
+      maxHeight: '20em',
     });
   }
 
@@ -92,7 +96,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      icon: 'send',
+      icon: 'sendfilled',
+      type: 'default',
       stylingMode: 'text',
       onClick: (e): void => {
         this._sendHandler(e);

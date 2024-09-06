@@ -22,11 +22,8 @@
         null,
       );
 
-      border-inline-end: $generic-tabpanel-tab-border-selected-bottom;
-    }
-
-    &.dx-tab-selected {
       margin-inline-end: -$generic-tabs-border-width;
+      border-inline-end: $generic-tabpanel-tab-border-selected-bottom;
     }
   }
 }

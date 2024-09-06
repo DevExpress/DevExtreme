@@ -44,13 +44,29 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
         QUnit.test('send button should be initialized with the corresponding configuration', function(assert) {
             const expectedOptions = {
-                icon: 'send',
+                icon: 'sendfilled',
+                type: 'default',
                 stylingMode: 'text',
             };
             const sendButton = this.$sendButton.dxButton('instance');
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
                 assert.deepEqual(value, sendButton.option(key), `${key} value is correct`);
+            });
+        });
+
+        QUnit.test('TextArea should be initialized with the corresponding configuration', function(assert) {
+            const expectedOptions = {
+                stylingMode: 'outlined',
+                placeholder: 'Type a message',
+                autoResizeEnabled: true,
+                maxHeight: '20em',
+            };
+
+            const textArea = TextArea.getInstance(this.$textArea);
+
+            Object.entries(expectedOptions).forEach(([key, value]) => {
+                assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
             });
         });
     });
