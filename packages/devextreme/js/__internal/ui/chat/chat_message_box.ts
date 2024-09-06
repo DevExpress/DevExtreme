@@ -71,10 +71,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .appendTo(this.element());
 
     const onEnterKey = (e): void => {
-      const { event } = e;
-
-      if (event?.shiftKey !== true) {
-        event.preventDefault();
+      if (e.event.shiftKey !== true) {
         this._sendHandler(e);
       }
     };
