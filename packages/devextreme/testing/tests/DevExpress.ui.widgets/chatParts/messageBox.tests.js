@@ -80,7 +80,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(this.$input.val(), emptyValue);
         });
 
-        QUnit.test('textarea should not be cleared on enter key when no text is entered', function(assert) {
+        QUnit.test('textarea should not be cleared on enter key if the input contains a value consisting only of spaces', function(assert) {
             keyboardMock(this.$input)
                 .focus()
                 .type('   ')
@@ -89,7 +89,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(this.$input.val(), '   ');
         });
 
-        QUnit.test('textarea should not be cleared on enter key when some text is entered', function(assert) {
+        QUnit.test('textarea should be cleared on enter key when some text is entered', function(assert) {
             keyboardMock(this.$input)
                 .focus()
                 .type('some text')
