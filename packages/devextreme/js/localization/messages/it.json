@@ -183,7 +183,6 @@
         "dxDataGrid-ariaExpand": "Espandi",
         "dxDataGrid-ariaCollapsedRow": "Collapsed row",
         "dxDataGrid-ariaExpandedRow": "Expanded row",
-
         "dxDataGrid-ariaDataGrid": "Griglia dati",
         "dxDataGrid-ariaSearchInGrid": "Cerca nella griglia",
         "dxDataGrid-ariaSelectAll": "Seleziona tutti",
@@ -195,6 +194,7 @@
         "dxDataGrid-filterPanelClearFilter": "Cancella",
         "dxDataGrid-filterPanelFilterEnabledHint": "Attiva il filtro",
         "dxDataGrid-masterDetail": "Cell with details",
+
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaExpandableInstruction": "Press Ctrl + right arrow to expand the focused node and Ctrl + left arrow to collapse it",
         "dxTreeList-ariaSearchInGrid": "Ricerca nell'albero",
@@ -314,6 +314,9 @@
         "dxCalendar-selectedDate": "The selected date is {0}",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
+
+        "dxChat-emptyListMessage": "There are no messages in this chat",
+        "dxChat-emptyListPropmt": "Write your first message",
 
         "dxColorView-ariaRed": "Rosso",
         "dxColorView-ariaGreen": "Verde",
