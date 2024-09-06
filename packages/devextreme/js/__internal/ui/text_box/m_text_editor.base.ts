@@ -179,8 +179,9 @@ const TextEditorBase = Editor.inherit({
     this.$element()
       .addClass(TEXTEDITOR_CLASS);
 
-    this._renderInput();
     this._renderButtonContainers();
+
+    this._renderInput();
     this._renderStylingMode();
     this._renderInputType();
     this._renderPlaceholder();
