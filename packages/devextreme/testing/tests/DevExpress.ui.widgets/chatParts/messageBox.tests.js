@@ -192,6 +192,31 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
         });
+
+        QUnit.test('should be fired with correct arguments when enter is pressed', function(assert) {
+            assert.expect(6);
+
+            const text = '  new text message ';
+
+            this.reinit({
+                onMessageSend: (e) => {
+                    const { component, element, event, text } = e;
+
+                    assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                    assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                    assert.strictEqual(event.type, 'keyup', 'e.event.type is correct');
+                    assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+                    assert.strictEqual(text, text, 'message field is correct');
+                },
+            });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type(text)
+                .keyDown('enter')
+                .keyUp('enter');
+        });
     });
 
     QUnit.module('Proxy state options', () => {
