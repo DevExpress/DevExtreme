@@ -7,7 +7,7 @@
 ) {
   .dx-chat-message-box {
     padding: $padding;
-    border-top: 1px solid $border-color;
+    border-top-color: $border-color;
     gap: $gap;
   }
 

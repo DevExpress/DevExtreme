@@ -1,14 +1,15 @@
+@use "../textEditor/colors" as *;
 @use "../sizes" as *;
 @use "../colors" as *;
 
 // adduse
 
-$chat-border-radius: $base-border-radius !default; // 4px
-$chat-bubble-border-radius: null !default;
+$chat-border-radius: $base-border-radius !default;
+$chat-bubble-border-radius: $base-border-radius !default;
 $chat-bubble-padding: null !default;
 $chat-bubble-container-gap: 4px !default;
 $chat-messagebox-padding: null !default;
-$chat-messagebox-textarea-border-radius: null !default;
+$chat-messagebox-textarea-border-radius: $texteditor-input-border-radius !default;
 $chat-messagebox-gap: 8px !default;
 $chat-messagebox-buton-gap: 0 !default;
 $chat-messagelist-padding: null !default;
@@ -22,19 +23,15 @@ $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
 
 @if $size == "default" {
-  $chat-bubble-border-radius: 4px !default;
   $chat-bubble-padding: 8px 12px !default;
   $chat-messagebox-padding: 20px !default;
-  $chat-messagebox-textarea-border-radius: 4px !default;
   $chat-messagelist-padding: 0 20px !default;
   $chat-messagegroup-padding: 24px !default;
 }
 
 @else if $size == "compact" {
-  $chat-bubble-border-radius: 4px !default;
   $chat-bubble-padding: 6px 8px !default;
   $chat-messagebox-padding: 16px !default;
-  $chat-messagebox-textarea-border-radius: 4px !default;
   $chat-messagelist-padding: 0 16px !default;
   $chat-messagegroup-padding: 12px !default;
 }

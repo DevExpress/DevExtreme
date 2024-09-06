@@ -3,7 +3,7 @@
 
 // adduse
 
-$chat-border-radius: $base-border-radius * 3 !default; // 12px
+$chat-border-radius: $base-border-radius * 3 !default;
 $chat-bubble-border-radius: null !default;
 $chat-bubble-padding: null !default;
 $chat-bubble-container-gap: 4px !default;
@@ -22,7 +22,7 @@ $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
 
 @if $size == "default" {
-  $chat-bubble-border-radius: 12px !default;
+  $chat-bubble-border-radius: $fluent-base-border-radius * 3 !default;
   $chat-bubble-padding: 8px 12px !default;
   $chat-messagebox-padding: 20px !default;
   $chat-messagelist-padding: 0 20px !default;
@@ -30,7 +30,7 @@ $chat-information-font-size: 12px !default;
 }
 
 @else if $size == "compact" {
-  $chat-bubble-border-radius: 8px !default;
+  $chat-bubble-border-radius: $fluent-base-border-radius * 2 !default;
   $chat-bubble-padding: 6px 8px !default;
   $chat-messagebox-padding: 16px !default;
   $chat-messagelist-padding: 0 16px !default;
