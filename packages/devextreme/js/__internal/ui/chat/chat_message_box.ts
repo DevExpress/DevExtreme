@@ -60,6 +60,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._renderButton();
   }
 
+  _isValuableTextEntered(): boolean {
+    const text = this._textArea.option('text') ?? '';
+    return !!text.trim();
+  }
+
   _renderTextArea(): void {
     const {
       activeStateEnabled,
@@ -80,6 +85,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
           this._sendHandler(e);
         }
       },
+    });
+
+    this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
+      if (!event.shiftKey && this._isValuableTextEntered()) {
+        event.preventDefault();
+      }
     });
   }
 
@@ -116,7 +127,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _sendHandler(e: ClickEvent | EnterKeyEvent): void {
     const { text } = this._textArea.option();
 
-    if (!text?.trim()) {
+    if (!this._isValuableTextEntered()) {
       return;
     }
 

@@ -79,24 +79,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             assert.strictEqual(this.$input.val(), emptyValue);
         });
-
-        QUnit.test('textarea should not be cleared on enter key if the input contains a value consisting only of spaces', function(assert) {
-            keyboardMock(this.$input)
-                .focus()
-                .type('   ')
-                .keyUp('enter');
-
-            assert.strictEqual(this.$input.val(), '   ');
-        });
-
-        QUnit.test('textarea should be cleared on enter key when some text is entered', function(assert) {
-            keyboardMock(this.$input)
-                .focus()
-                .type('some text')
-                .keyUp('enter');
-
-            assert.strictEqual(this.$input.val(), '');
-        });
     });
 
     QUnit.module('onMessageSend event', () => {
@@ -249,6 +231,58 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
                 });
             });
+        });
+    });
+
+    QUnit.module('Keyboard navigation', () => {
+        QUnit.test('textarea should not be cleared on enter key if the input contains a value consisting only of spaces', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('   ')
+                .keyDown('enter')
+                .keyUp('enter');
+
+            assert.strictEqual(this.$input.val(), '   ');
+        });
+
+        QUnit.test('textarea should be cleared on enter key when some text is entered', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .keyDown('enter')
+                .keyUp('enter');
+
+            assert.strictEqual(this.$input.val(), '');
+        });
+
+        QUnit.test('enter keydown event should be prevented if input text has non-space characters', function(assert) {
+            const enterKeyDownEvent = $.Event('keydown', { key: 'enter' });
+
+            keyboardMock(this.$input).type('1');
+
+            this.$input.trigger(enterKeyDownEvent);
+
+            assert.ok(enterKeyDownEvent.isDefaultPrevented(), 'empty line is not added before sending');
+        });
+
+        QUnit.test('enter keydown event with Shift modificator should not be prevented', function(assert) {
+            const enterKeyDownEvent = $.Event('keydown', { key: 'enter', shiftKey: true });
+
+            keyboardMock(this.$input).focus().type('1');
+
+            this.$input.trigger(enterKeyDownEvent);
+
+            assert.notOk(enterKeyDownEvent.isDefaultPrevented(), 'empty line is added when shift is used');
+        });
+
+        QUnit.test('enter keydown event should not be prevented if input text consists only from space characters', function(assert) {
+            const enterKeyDownEvent = $.Event('keydown', { key: 'enter' });
+
+            keyboardMock(this.$input).type('  \n  \n');
+
+            this.$input.trigger(enterKeyDownEvent);
+
+            assert.notOk(enterKeyDownEvent.isDefaultPrevented(), 'empty line is added');
         });
     });
 });
