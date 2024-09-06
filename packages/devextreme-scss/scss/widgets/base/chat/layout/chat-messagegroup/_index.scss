@@ -1,0 +1,33 @@
+@use "../../../mixins" as *;
+
+.dx-chat-message-group {
+  display: grid;
+  align-items: start;
+}
+
+.dx-chat-message-group-information {
+  display: flex;
+  grid-row: 1;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.dx-chat-message-author-name {
+  @include dx-overflow();
+}
+
+.dx-chat-message-time {
+  white-space: nowrap;
+}
+
+.dx-chat-message-group-alignment-start {
+  justify-items: start;
+
+  .dx-chat-message-group-information {
+    grid-column: 2;
+  }
+}
+
+.dx-chat-message-group-alignment-end {
+  justify-items: end;
+}

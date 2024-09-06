@@ -17,10 +17,6 @@
 .dx-tabpanel-tab {
   padding: $generic-tabpanel-tabs-item-padding;
 
-  &.dx-state-focused::after {
-    border-color: $tabs-border-color;
-  }
-
   &.dx-state-disabled {
     &::after {
       z-index: 3;

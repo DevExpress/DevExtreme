@@ -315,6 +315,9 @@
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
 
+        "dxChat-emptyListMessage": "There are no messages in this chat",
+        "dxChat-emptyListPrompt": "Write your first message",
+
         "dxColorView-ariaRed": "Красный",
         "dxColorView-ariaGreen": "Зеленый",
         "dxColorView-ariaBlue": "Синий",
