@@ -3,7 +3,7 @@ import $ from 'jquery';
 import ChatAvatar from '__internal/ui/chat/chat_avatar';
 
 const CHAT_MESSAGE_AVATAR_IMAGE_CLASS = 'dx-chat-message-avatar-image';
-const HIDDEN_CLASS = 'dx-hidden';
+const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -36,7 +36,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
         });
     });
 
-    QUnit.module('Options', () => {
+    QUnit.module('Name option', () => {
         QUnit.test('should be rendered with correct initials according passed name option value', function(assert) {
             this.reinit({ name: 'User name' });
 
@@ -67,8 +67,68 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             });
         });
 
+        QUnit.test('initials element should not be rendered if url is not empty', function(assert) {
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+            });
+
+            const $initials = this.$element.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
+
+            assert.strictEqual($initials.length, 0);
+        });
+
+        QUnit.test('initials element should be rendered if url became empty in runtime', function(assert) {
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+            });
+
+            this.instance.option({ url: '' });
+
+            const $initials = this.$element.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
+
+            assert.strictEqual($initials.length, 1);
+        });
+
+        QUnit.test('initials element should not be rendered if url became not empty in runtime', function(assert) {
+            this.reinit({
+                name: 'User name',
+            });
+
+            this.instance.option({ url: 'url' });
+
+            const $initials = this.$element.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
+
+            assert.strictEqual($initials.length, 0);
+        });
+    });
+
+    QUnit.module('Image rendering', () => {
+        QUnit.test('img element should not be rendered if url is empty', function(assert) {
+            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+
+            assert.strictEqual($img.length, 0);
+        });
+
+        QUnit.test('img element should not be rendered if url became empty in runtime', function(assert) {
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+            });
+
+            this.instance.option({ url: '' });
+
+            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+
+            assert.strictEqual($img.length, 0);
+        });
+
         QUnit.test('img element should have correct alt attribute', function(assert) {
-            this.reinit({ name: 'User name' });
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+            });
 
             const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
 
@@ -76,7 +136,10 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
         });
 
         QUnit.test('img element should have correct alt attribute if name was changed in runtime', function(assert) {
-            this.reinit({ name: 'User name' });
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+            });
             this.instance.option({ name: 'New name' });
 
             const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
@@ -85,11 +148,14 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
         });
 
         QUnit.test('img element should have correct alt attribute if name is empty', function(assert) {
-            this.reinit({ name: '' });
+            this.reinit({
+                name: '',
+                url: 'url',
+            });
 
             const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
 
-            assert.strictEqual($img.attr('alt'), 'avatar');
+            assert.strictEqual($img.attr('alt'), 'Avatar');
         });
 
         QUnit.test('img element should have correct src attribute', function(assert) {
@@ -107,23 +173,6 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.attr('src'), 'New url');
-        });
-
-        QUnit.test('img element should have dx-hidden class if url is empty', function(assert) {
-            this.reinit({ url: '' });
-
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.hasClass(HIDDEN_CLASS), true);
-        });
-
-        QUnit.test('img element should get dx-hidden class if url was empty in runtime', function(assert) {
-            this.reinit({ url: 'url' });
-            this.instance.option({ url: '' });
-
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.hasClass(HIDDEN_CLASS), true);
         });
     });
 });
