@@ -9,17 +9,15 @@ const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 const CHAT_MESSAGE_AVATAR_IMAGE_CLASS = 'dx-chat-message-avatar-image';
 
-const HIDDEN_CLASS = 'dx-hidden';
-
 export interface Properties extends WidgetOptions<Avatar> {
   name?: string;
   url?: string;
 }
 
 class Avatar extends Widget<Properties> {
-  _$initials!: dxElementWrapper;
+  _$initials?: dxElementWrapper;
 
-  _$image!: dxElementWrapper;
+  _$image?: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
     return {
@@ -38,12 +36,31 @@ class Avatar extends Widget<Properties> {
   }
 
   _renderAvatarContent(): void {
-    this._renderImageElement();
-    this._updateImageVisibility();
-    this._updateUrl();
+    this._renderImage();
+    this._renderInitials();
+  }
 
-    this._renderInitialsElement();
-    this._updateName();
+  _renderImage(): void {
+    this._$image?.remove();
+
+    const { url } = this.option();
+
+    if (url) {
+      this._renderImageElement();
+      this._updateUrl();
+      this._updateAlt();
+    }
+  }
+
+  _renderInitials(): void {
+    this._$initials?.remove();
+
+    const { name, url } = this.option();
+
+    if (!url && name) {
+      this._renderInitialsElement();
+      this._updateInitials();
+    }
   }
 
   _renderImageElement(): void {
@@ -58,25 +75,23 @@ class Avatar extends Widget<Properties> {
       .appendTo(this.element());
   }
 
-  _updateName(): void {
+  _updateInitials(): void {
     const { name } = this.option();
 
-    this._$initials.text(this._getInitials(name));
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._$image.attr('alt', name || 'avatar');
+    this._$initials?.text(this._getInitials(name));
   }
 
   _updateUrl(): void {
     const { url } = this.option();
 
-    this._$image.attr('src', url ?? '');
+    this._$image?.attr('src', url ?? '');
   }
 
-  _updateImageVisibility(): void {
-    const { url } = this.option();
+  _updateAlt(): void {
+    const { name } = this.option();
 
-    const isImageHidden = Boolean(!url);
-    this._$image.toggleClass(HIDDEN_CLASS, isImageHidden);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    this._$image?.attr('alt', name || 'Avatar');
   }
 
   _getInitials(name: string | undefined): string {
@@ -92,11 +107,8 @@ class Avatar extends Widget<Properties> {
 
     switch (name) {
       case 'name':
-        this._updateName();
-        break;
       case 'url':
-        this._updateUrl();
-        this._updateImageVisibility();
+        this._renderAvatarContent();
         break;
       default:
         super._optionChanged(args);
