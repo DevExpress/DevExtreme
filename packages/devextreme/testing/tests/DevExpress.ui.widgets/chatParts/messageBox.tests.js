@@ -66,7 +66,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
             this.$sendButton.trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), '');
-            assert.strictEqual(this.$input.val(), '');
         });
 
         QUnit.test('textarea should be cleared when the send button is clicked if the input contains a value consisting only of spaces', function(assert) {
@@ -79,6 +78,33 @@ QUnit.module('MessageBox', moduleConfig, () => {
             this.$sendButton.trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), emptyValue);
+        });
+
+        QUnit.test('textarea should not be cleared on enter key when no text is entered', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('   ')
+                .keyUp('enter');
+
+            assert.strictEqual(this.$input.val(), '   ');
+        });
+
+        QUnit.test('textarea should ', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .keyUp('enter')
+                .type('dsfs');
+
+            assert.strictEqual(this.$input.val(), '');
+        });
+
+        QUnit.test('textarea should not be cleared on enter key when some text is entered', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .keyUp('enter');
+
+            assert.strictEqual(this.$input.val(), '');
         });
     });
 
@@ -97,12 +123,45 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onMessageSendStub.callCount, 1);
         });
 
+        QUnit.test('should be fired on enter key if the textarea input contains a value', function(assert) {
+            const onMessageSendStub = sinon.stub();
+
+            this.reinit({ onMessageSend: onMessageSendStub });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('new text message')
+                .keyUp('enter');
+
+
+            assert.strictEqual(onMessageSendStub.callCount, 1);
+        });
+
         QUnit.test('should not be fired when the send button is clicked if the textarea input does not contain a value', function(assert) {
             const onMessageSendStub = sinon.stub();
 
             this.reinit({ onMessageSend: onMessageSendStub });
 
             this.$sendButton.trigger('dxclick');
+
+            assert.strictEqual(onMessageSendStub.callCount, 0);
+        });
+
+        QUnit.test('should not be fired on enter key if the textarea input does not contain a value (excluding spaces)', function(assert) {
+            const onMessageSendStub = sinon.stub();
+
+            this.reinit({ onMessageSend: onMessageSendStub });
+
+            keyboardMock(this.$input)
+                .focus()
+                .keyUp('enter');
+
+            assert.strictEqual(onMessageSendStub.callCount, 0);
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('   ')
+                .keyUp('enter');
 
             assert.strictEqual(onMessageSendStub.callCount, 0);
         });

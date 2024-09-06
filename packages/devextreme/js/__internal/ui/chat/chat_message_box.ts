@@ -70,10 +70,20 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
       .appendTo(this.element());
 
+    const onEnterKey = (e): void => {
+      const { event } = e;
+
+      if (event?.shiftKey !== true) {
+        event.preventDefault();
+        this._sendHandler(e);
+      }
+    };
+
     this._textArea = this._createComponent($textArea, TextArea, {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      onEnterKey,
     });
   }
 
