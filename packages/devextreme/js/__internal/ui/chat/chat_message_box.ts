@@ -6,6 +6,7 @@ import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_c
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
+import type { EnterKeyEvent } from '../../../ui/text_area';
 import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
 
@@ -70,17 +71,15 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
       .appendTo(this.element());
 
-    const onEnterKey = (e): void => {
-      if (e.event.shiftKey !== true) {
-        this._sendHandler(e);
-      }
-    };
-
     this._textArea = this._createComponent($textArea, TextArea, {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      onEnterKey,
+      onEnterKey: (e: EnterKeyEvent): void => {
+        if (!e.event?.shiftKey) {
+          this._sendHandler(e);
+        }
+      },
     });
   }
 
@@ -114,7 +113,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     );
   }
 
-  _sendHandler(e: ClickEvent): void {
+  _sendHandler(e: ClickEvent | EnterKeyEvent): void {
     const { text } = this._textArea.option();
 
     if (!text?.trim()) {
