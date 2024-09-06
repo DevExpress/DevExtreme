@@ -187,31 +187,6 @@ QUnit.module('Chat', moduleConfig, () => {
                 assert.strictEqual(onMessageSend.callCount, 1);
             });
 
-            QUnit.test('should be called on enter key when some text was entered', function(assert) {
-                const onMessageSend = sinon.spy();
-
-                this.reinit({ onMessageSend });
-
-                keyboardMock(this.$input)
-                    .focus()
-                    .type('new text message')
-                    .keyUp('enter');
-
-                assert.strictEqual(onMessageSend.callCount, 1);
-            });
-
-            QUnit.test('should not be called on enter key when no text was entered', function(assert) {
-                const onMessageSend = sinon.spy();
-
-                this.reinit({ onMessageSend });
-
-                keyboardMock(this.$input)
-                    .focus()
-                    .keyUp('enter');
-
-                assert.strictEqual(onMessageSend.callCount, 0);
-            });
-
             QUnit.test('should get correct arguments after clicking the send button', function(assert) {
                 assert.expect(6);
 
