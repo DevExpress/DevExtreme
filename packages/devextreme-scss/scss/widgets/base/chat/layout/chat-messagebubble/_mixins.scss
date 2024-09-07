@@ -1,0 +1,44 @@
+@mixin chat-messagebubble(
+  $padding,
+  $border-radius,
+  $background-color-secondary,
+  $background-color-primary,
+  $bubble-container-gap
+) {
+  .dx-chat-message-bubble-container {
+    row-gap: $bubble-container-gap;
+  }
+
+  .dx-chat-message-bubble {
+    padding: $padding;
+    border-radius: $border-radius;
+  }
+
+  .dx-chat-message-group-alignment-start {
+    .dx-chat-message-bubble {
+      background-color: $background-color-secondary;
+
+      &:first-child {
+        border-top-left-radius: $border-radius;
+      }
+  
+      &:last-child {
+        border-bottom-left-radius: $border-radius;
+      }
+    }
+  }
+  
+  .dx-chat-message-group-alignment-end {
+    .dx-chat-message-bubble {
+      background-color: $background-color-primary;
+
+      &:first-child {
+        border-top-right-radius: $border-radius;
+      }
+
+      &:last-child {
+        border-bottom-right-radius: $border-radius;
+      }
+    }
+  }
+}

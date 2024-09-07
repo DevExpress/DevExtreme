@@ -14,120 +14,16 @@
 
 .dx-tabpanel-tabs-position-top {
   .dx-tabpanel-tab {
-    &:first-child:not(.dx-state-focused, .dx-tab-selected) {
-      &.dx-state-hover {
-        @include dx-tabs-border-mixin(
-          null,
-          null,
-          $generic-tabpanel-tab-border-hover-bottom,
-          $generic-tabs-border-transparent,
-        );
-      }
-    }
-
-    &:last-child:not(.dx-state-focused, .dx-tab-selected) {
-      &.dx-state-hover {
-        @include dx-tabs-border-mixin(
-          null,
-          $generic-tabs-border-transparent,
-          $generic-tabpanel-tab-border-hover-bottom,
-          null,
-        );
-      }
-    }
-
-    &.dx-state-hover {
-      @include dx-tabs-border-mixin(
-        null,
-        null,
-        $generic-tabpanel-tab-border-hover-bottom,
-        null,
-      );
-    }
-
     &.dx-tab-selected {
       @include dx-tabs-border-mixin(
         null,
         null,
-        none,
+        $generic-tabpanel-tab-border-transparent,
         null,
       );
 
-      border-block-end: $generic-tabpanel-tab-border-selected-bottom;
-    }
-
-    &.dx-state-active {
-      @include dx-tabs-border-mixin(
-        null,
-        null,
-        $generic-tabpanel-tab-border-active-bottom,
-        null,
-      );
-    }
-  
-    &.dx-state-focused:not(.dx-state-disabled) {
-      @include dx-tabs-border-mixin(
-        null,
-        null,
-        none,
-        null,
-      );
-  
-      border-block-end: $generic-tabpanel-tab-border-focused-bottom;
-    }
-  
-    &.dx-state-disabled:not(.dx-state-focused) {
-      @include dx-tabs-border-mixin(
-        null,
-        none,
-        null,
-        null,
-      );
-  
-      border-block-end: $generic-tabs-border;
-    }
-
-    &.dx-state-disabled.dx-state-focused {
-      @include dx-tabs-border-mixin(
-        null,
-        null,
-        none,
-        null,
-      );
-  
-      border-block-end: $generic-tabs-border-focused-disabled-bottom;
-    }
-  
-    &.dx-tab-selected,
-    &.dx-state-focused,
-    &.dx-state-disabled {
       margin-bottom: -$generic-tabs-border-width;
-    }
-  }
-
-  &.dx-state-focused {
-    &.dx-disabled-focused-tab {
-      .dx-tabpanel-tab.dx-state-disabled:not(.dx-state-focused) {
-        @include dx-tabs-border-mixin(
-          null,
-          null,
-          none,
-          null,
-        );
-  
-        border-block-end: $generic-tabs-border;
-      }
-    }
-
-    .dx-tabpanel-tab.dx-state-disabled:not(.dx-state-focused) {
-      @include dx-tabs-border-mixin(
-        null,
-        none,
-        null,
-        null,
-      );
-  
-      border-block-end: $generic-tabs-border-focus;
+      border-block-end: $generic-tabpanel-tab-border-selected-bottom;
     }
   }
 }

@@ -1,0 +1,11 @@
+@mixin chat(
+  $background-color,
+  $border-color,
+  $border-radius
+) {
+  .dx-chat {
+    background-color: $background-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+  }
+}

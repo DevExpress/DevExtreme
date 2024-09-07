@@ -1,0 +1,23 @@
+@mixin chat-messagebox(
+  $padding,
+  $border-color,
+  $gap,
+  $textarea-border-radius,
+  $button-gap
+) {
+  .dx-chat-message-box {
+    padding: $padding;
+    border-top-color: $border-color;
+    gap: $gap;
+  }
+
+  .dx-chat-message-box-text-area {
+    &.dx-textarea.dx-texteditor {
+      border-radius: $textarea-border-radius;
+    }
+  }
+
+  .dx-chat-message-box-button {
+    margin-bottom: $button-gap;
+  }
+}

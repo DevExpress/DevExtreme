@@ -1,0 +1,33 @@
+@mixin chat-messagegroup(
+  $messagegroup-gap,
+  $messagegroup-start-template,
+  $messagegroup-start-gap,
+  $messagegroup-padding,
+  $information-font-size,
+  $information-color,
+  $information-gap
+) {
+  .dx-chat-message-group {
+    row-gap: $messagegroup-gap;
+    padding-bottom: $messagegroup-padding;
+
+    &:first-child {
+      padding-top: $messagegroup-padding;
+    }
+  }
+
+  .dx-chat-message-group-information {
+    column-gap: $information-gap;
+  }
+  
+  .dx-chat-message-group-alignment-start {
+    grid-template-columns: $messagegroup-start-template;
+    column-gap: $messagegroup-start-gap;
+  }
+  
+  .dx-chat-message-time,
+  .dx-chat-message-author-name {
+    font-size: $information-font-size;
+    color: $information-color;
+  }
+}
