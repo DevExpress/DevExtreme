@@ -28,12 +28,12 @@ import { DxServicePopupInsertionDirective } from './insertion.directive';
   ],
   template: '<ng-template popup-content-insertion></ng-template>',
 })
-export class DxServicePopupComponent extends DxPopupComponent implements AfterViewInit {
+export class DxPopupServiceComponent<T> extends DxPopupComponent implements AfterViewInit {
   @ViewChild(DxServicePopupInsertionDirective) contentInsertion: DxServicePopupInsertionDirective;
 
   @Output() afterViewInit$: EventEmitter<void> = new EventEmitter<void>();
 
-  contentRef: ComponentRef<unknown>;
+  contentRef: ComponentRef<T>;
 
   constructor(
     elementRef: ElementRef,

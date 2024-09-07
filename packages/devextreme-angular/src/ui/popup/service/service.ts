@@ -7,7 +7,7 @@ import {
   ComponentRef, Type,
 } from '@angular/core';
 import { DxPopupComponent, DxPopupTypes } from '../component';
-import { DxServicePopupComponent } from './service.component';
+import { DxPopupServiceComponent as  DxPopupServiceCmp } from './service.component';
 
 export type DxPopupServiceComponent<T = any> = DxPopupComponent & { contentRef: ComponentRef<T> }
 
@@ -22,8 +22,8 @@ export class DxPopupService {
   ) {}
 
   open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DxServicePopupComponent);
-    const componentRef: ComponentRef<DxServicePopupComponent> = componentFactory.create(this.injector);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DxPopupServiceCmp<T>);
+    const componentRef = componentFactory.create(this.injector);
     const cmpInstance = componentRef.instance;
 
     cmpInstance.onHidden.subscribe(() => {
