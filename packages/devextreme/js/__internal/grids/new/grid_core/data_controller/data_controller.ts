@@ -11,7 +11,6 @@ import {
 import { EditingController } from '../editing/controller';
 import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
-import { Search } from '../search/controller';
 
 export function normalizeDataSource(
   dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined,
@@ -52,27 +51,25 @@ export class DataController {
 
   public readonly filter = state<any>(undefined);
 
-  public itemsWithChanges = computed(
-    (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
-      (change) => change.key === this.getDataKey(item),
-    ).reduce((p, v) => ({
-      // @ts-expect-error
-      ...item, ...v.data,
-    }), item)),
-    [this.items, this.editing.changes],
-  );
+  // public itemsWithChanges = computed(
+  //   (items, changes: Change[] | undefined) => items.map((item) => (changes ?? []).filter(
+  //     (change) => change.key === this.getDataKey(item),
+  //   ).reduce((p, v) => ({
+  //     // @ts-expect-error
+  //     ...item, ...v.data,
+  //   }), item)),
+  //   [this.items, this.editing.changes],
+  // );
 
   public readonly pageCount = computed(
     (totalCount, pageSize) => Math.ceil(totalCount / pageSize!),
     [this.totalCount, this.pageSize],
   );
 
-  public static dependencies = [OptionsController, Search, EditingController] as const;
+  public static dependencies = [OptionsController] as const;
 
   constructor(
     private readonly options: OptionsController,
-    private readonly search: Search,
-    private readonly editing: EditingController,
   ) {
     effect(
       (dataSource) => {

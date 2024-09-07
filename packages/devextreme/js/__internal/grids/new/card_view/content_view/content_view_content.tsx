@@ -21,7 +21,7 @@ export class ContentViewContent extends View implements BaseContentViewContent {
         columns,
       ),
     ),
-    [this.dataController.itemsWithChanges, this.columnsController.columns],
+    [this.dataController.items, this.columnsController.columns],
   );
 
   public vdom = computed(
