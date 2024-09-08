@@ -74,25 +74,43 @@ const E2E_ATTRIBUTES = {
   summaryCellStatusContainer: 'e2e-a11y-summary-cell-status-container',
 };
 
-const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
+const triggerPointerDown = ($element: JQuery<any>, x: number, y: number) => {
+  $element
+    .trigger($.Event('dxpointerdown', {
+      pageX: x,
+      pageY: y,
+      pointers: [{ pointerId: 1 }],
+    }));
+}
+
+const triggerPointerMove = ($element: JQuery<any>, x: number, y: number) => {
+  $element
+    .trigger($.Event('dxpointermove', {
+      pageX: x,
+      pageY: y,
+      pointers: [{ pointerId: 1 }],
+    }));
+}
+
+const triggerPointerUp = ($element: JQuery<any>, x: number, y: number) => {
+  $element
+    .trigger($.Event('dxpointerup', {
+      pageX: x,
+      pageY: y,
+      pointers: [{ pointerId: 1 }],
+    }));
+}
+
+const moveElement = ($element: JQuery, x: number, y: number, isStart = false): void => {
   if ($element?.length) {
     const offset = $element.offset();
 
     if (offset) {
       if (isStart) {
-        $element
-          .trigger($.Event('dxpointerdown', {
-            pageX: offset.left,
-            pageY: offset.top,
-            pointers: [{ pointerId: 1 }],
-          }));
+        triggerPointerDown($element, offset.left, offset.top);
       }
 
-      $element.trigger($.Event('dxpointermove', {
-        pageX: offset.left + x,
-        pageY: offset.top + y,
-        pointers: [{ pointerId: 1 }],
-      }));
+      triggerPointerMove($element, offset.left + x, offset.top + y);
     }
   }
 };
@@ -644,6 +662,35 @@ export default class DataGrid extends Widget {
       {
         dependencies: {
           getInstance, rowIndex, x, y, isStart, moveElement,
+        },
+      },
+    )();
+  }
+
+  resizeHeader(columnIndex: number, offset: number): Promise<void>  {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const gridInstance = getInstance() as any;
+        const $gridElement = $(gridInstance.element());
+        const columnHeadersView = gridInstance.getView('columnHeadersView');
+        const $header = $(columnHeadersView.getHeaderElement(columnIndex));
+        const headerOffset = $header.get(0).getBoundingClientRect();
+
+        triggerPointerMove($(document), headerOffset.right, headerOffset.top + 1);
+        triggerPointerDown($gridElement, headerOffset.right, headerOffset.top + 1);
+        triggerPointerMove($(document), headerOffset.right + offset, headerOffset.top + 1);
+        triggerPointerUp($(document), headerOffset.right + offset, headerOffset.top + 1);
+      },
+      {
+        dependencies: {
+          getInstance,
+          triggerPointerDown,
+          triggerPointerMove,
+          triggerPointerUp,
+          columnIndex,
+          offset,
         },
       },
     )();

@@ -1,7 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type {
+  ColumnsResizerViewController,
+} from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
@@ -151,6 +155,18 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     });
   }
 
+  protected setColumnWidths(options): void {
+    const isStickyColumns = this._isStickyColumns();
+    const columnsResizerController = this.getController('columnsResizer');
+    const isColumnResizing = columnsResizerController?.isResizing();
+
+    super.setColumnWidths(options);
+
+    if (isStickyColumns && isColumnResizing) {
+      this.setStickyOffsets();
+    }
+  }
+
   protected _resizeCore() {
     const isStickyColumns = this._isStickyColumns();
 
@@ -270,12 +286,51 @@ const footerView = (
   Base: ModuleType<any>,
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
+const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
+  protected _generatePointsByColumns(): void {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+
+    super._generatePointsByColumns(isStickyColumns);
+  }
+
+  protected _pointCreated(point, cellsLength, columns) {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+    const columnHeaders = this._columnHeadersView;
+    const result = super._pointCreated(point, cellsLength, columns);
+
+    if (isStickyColumns && !result) {
+      const column = columns[point.columnIndex];
+      const nextColumnIndex = this._getNextColumnIndex(point.columnIndex);
+      const nextColumn = columns[nextColumnIndex];
+      const rtlEnabled = this.option('rtlEnabled') as boolean;
+
+      if (column?.fixed && nextColumn?.fixed) {
+        return false;
+      }
+
+      return GridCoreStickyColumnsDom.noNeedToCreatePoint(
+        point,
+        $(columnHeaders.getContent())[0],
+        rtlEnabled,
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return result;
+  }
+};
+
 export const stickyColumnsModule = {
   extenders: {
     views: {
       columnHeadersView,
       rowsView,
       footerView,
+    },
+    controllers: {
+      columnsResizer,
     },
   },
 };

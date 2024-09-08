@@ -900,14 +900,20 @@ export class ColumnsResizerViewController extends modules.ViewController {
    * @extended: column_fixing
    * @protected
    */
-  protected _generatePointsByColumns() {
+  protected _generatePointsByColumns(needToCheckPrevPoint = false) {
     const that = this;
     const columns = that._columnsController ? that._columnsController.getVisibleColumns() : [];
     const cells = that._columnHeadersView.getColumnElements();
     let pointsByColumns: any = [];
 
     if (cells && cells.length > 0) {
-      pointsByColumns = gridCoreUtils.getPointsByColumns(cells, (point) => that._pointCreated(point, cells.length, columns));
+      pointsByColumns = gridCoreUtils.getPointsByColumns(
+        cells,
+        (point) => that._pointCreated(point, cells.length, columns),
+        false,
+        0,
+        needToCheckPrevPoint,
+      );
     }
 
     that._pointsByColumns = pointsByColumns;
