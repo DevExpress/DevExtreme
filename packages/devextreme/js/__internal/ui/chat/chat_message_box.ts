@@ -61,8 +61,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _isValuableTextEntered(): boolean {
-    const text = this._textArea.option('text') ?? '';
-    return !!text.trim();
+    const { text } = this._textArea.option();
+
+    return !!text?.trim();
   }
 
   _renderTextArea(): void {
