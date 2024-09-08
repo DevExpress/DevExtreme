@@ -61,6 +61,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
                 maxHeight: '20em',
+                valueChangeEvent: 'input'
             };
 
             const textArea = TextArea.getInstance(this.$textArea);
@@ -324,6 +325,17 @@ QUnit.module('MessageBox', moduleConfig, () => {
             this.$input.trigger(enterKeyDownEvent);
 
             assert.notOk(enterKeyDownEvent.isDefaultPrevented(), 'empty line is added');
+        });
+
+        QUnit.test('textarea should restore its height after enter press when multiline text was entered', function(assert) {
+            const initialTextAreaHeight = this.$textArea.height();
+
+            keyboardMock(this.$input)
+                .type('1\n2\n3')
+                .keyDown('enter')
+                .keyUp('enter');
+
+            assert.roughEqual(this.$textArea.height(), initialTextAreaHeight, 0.1, 'textarea height is restored');
         });
     });
 });

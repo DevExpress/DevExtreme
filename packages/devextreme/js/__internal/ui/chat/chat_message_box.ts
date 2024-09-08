@@ -83,6 +83,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       stylingMode: 'outlined',
       placeholder: 'Type a message',
       autoResizeEnabled: true,
+      valueChangeEvent: 'input',
       maxHeight: '20em',
       onEnterKey: (e: EnterKeyEvent): void => {
         if (!e.event?.shiftKey) {
