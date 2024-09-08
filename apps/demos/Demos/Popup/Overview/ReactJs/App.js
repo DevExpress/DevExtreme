@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Popup, Position, ToolbarItem } from 'devextreme-react/popup';
 import notify from 'devextreme/ui/notify';
 import { EmployeeItem } from './EmployeeItem.js';
@@ -49,14 +49,14 @@ export default function App() {
       3000,
     );
   }, [currentEmployee]);
-  const getInfoButtonOptions = useCallback(
+  const getInfoButtonOptions = useMemo(
     () => ({
       text: 'More info',
       onClick: showMoreInfo,
     }),
     [showMoreInfo],
   );
-  const getEmailButtonOptions = useCallback(
+  const getEmailButtonOptions = useMemo(
     () => ({
       icon: 'email',
       stylingMode: 'contained',
@@ -65,7 +65,7 @@ export default function App() {
     }),
     [sendEmail],
   );
-  const getCloseButtonOptions = useCallback(
+  const getCloseButtonOptions = useMemo(
     () => ({
       text: 'Close',
       stylingMode: 'outlined',
@@ -112,19 +112,19 @@ export default function App() {
           widget="dxButton"
           toolbar="top"
           locateInMenu="always"
-          options={getInfoButtonOptions()}
+          options={getInfoButtonOptions}
         />
         <ToolbarItem
           widget="dxButton"
           toolbar="bottom"
           location="before"
-          options={getEmailButtonOptions()}
+          options={getEmailButtonOptions}
         />
         <ToolbarItem
           widget="dxButton"
           toolbar="bottom"
           location="after"
-          options={getCloseButtonOptions()}
+          options={getCloseButtonOptions}
         />
         <p>
           Full Name:&nbsp;
