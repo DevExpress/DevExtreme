@@ -49,8 +49,11 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiRadioGroupItemModule } from 'devextreme-angular/ui/radio-group/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiRadioGroupItemComponent } from 'devextreme-angular/ui/radio-group/nested';
 
 
 
@@ -689,12 +692,24 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiRadioGroupItemComponent)
+    get itemsChildren(): QueryList<DxiRadioGroupItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiRadioGroupItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -815,6 +830,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiRadioGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -824,6 +840,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
   exports: [
     DxRadioGroupComponent,
     DxiItemModule,
+    DxiRadioGroupItemModule,
     DxTemplateModule
   ]
 })

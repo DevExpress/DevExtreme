@@ -50,9 +50,18 @@ import { DxoLookupModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxiFilterBuilderCustomOperationModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxiFilterBuilderFieldModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterBuilderFilterOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
+
 import { DxiCustomOperationComponent } from 'devextreme-angular/ui/nested';
 import { DxiFieldComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiFilterBuilderCustomOperationComponent } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxiFilterBuilderFieldComponent } from 'devextreme-angular/ui/filter-builder/nested';
 
 
 
@@ -547,20 +556,43 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiCustomOperationComponent)
-    get customOperationsChildren(): QueryList<DxiCustomOperationComponent> {
+    @ContentChildren(DxiFilterBuilderCustomOperationComponent)
+    get customOperationsChildren(): QueryList<DxiFilterBuilderCustomOperationComponent> {
         return this._getOption('customOperations');
     }
     set customOperationsChildren(value) {
+        this.setContentChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
         this.setChildren('customOperations', value);
     }
 
-    @ContentChildren(DxiFieldComponent)
-    get fieldsChildren(): QueryList<DxiFieldComponent> {
+    @ContentChildren(DxiFilterBuilderFieldComponent)
+    get fieldsChildren(): QueryList<DxiFilterBuilderFieldComponent> {
         return this._getOption('fields');
     }
     set fieldsChildren(value) {
+        this.setContentChildren('fields', value, 'DxiFilterBuilderFieldComponent');
         this.setChildren('fields', value);
+    }
+
+
+    @ContentChildren(DxiCustomOperationComponent)
+    get customOperationsLegacyChildren(): QueryList<DxiCustomOperationComponent> {
+        return this._getOption('customOperations');
+    }
+    set customOperationsLegacyChildren(value) {
+        if (this.checkContentChildren('customOperations', value, 'DxiCustomOperationComponent')) {
+           this.setChildren('items', value);
+        }
+    }
+
+    @ContentChildren(DxiFieldComponent)
+    get fieldsLegacyChildren(): QueryList<DxiFieldComponent> {
+        return this._getOption('fields');
+    }
+    set fieldsLegacyChildren(value) {
+        if (this.checkContentChildren('fields', value, 'DxiFieldComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -680,6 +712,12 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoLookupModule,
     DxoFilterOperationDescriptionsModule,
     DxoGroupOperationDescriptionsModule,
+    DxiFilterBuilderCustomOperationModule,
+    DxiFilterBuilderFieldModule,
+    DxoFilterBuilderFormatModule,
+    DxoFilterBuilderLookupModule,
+    DxoFilterBuilderFilterOperationDescriptionsModule,
+    DxoFilterBuilderGroupOperationDescriptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -694,6 +732,12 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoLookupModule,
     DxoFilterOperationDescriptionsModule,
     DxoGroupOperationDescriptionsModule,
+    DxiFilterBuilderCustomOperationModule,
+    DxiFilterBuilderFieldModule,
+    DxoFilterBuilderFormatModule,
+    DxoFilterBuilderLookupModule,
+    DxoFilterBuilderFilterOperationDescriptionsModule,
+    DxoFilterBuilderGroupOperationDescriptionsModule,
     DxTemplateModule
   ]
 })

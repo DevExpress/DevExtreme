@@ -47,6 +47,17 @@ import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxiFileSelectionItemModule } from 'devextreme-angular/ui/nested';
 import { DxoUploadModule } from 'devextreme-angular/ui/nested';
 
+import { DxoFileManagerContextMenuModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerItemViewModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerDetailsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerColumnModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerNotificationsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerPermissionsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerToolbarModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerFileSelectionItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
+
 
 
 
@@ -832,6 +843,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
 
 
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -955,6 +967,16 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     DxoToolbarModule,
     DxiFileSelectionItemModule,
     DxoUploadModule,
+    DxoFileManagerContextMenuModule,
+    DxiFileManagerItemModule,
+    DxoFileManagerItemViewModule,
+    DxoFileManagerDetailsModule,
+    DxiFileManagerColumnModule,
+    DxoFileManagerNotificationsModule,
+    DxoFileManagerPermissionsModule,
+    DxoFileManagerToolbarModule,
+    DxiFileManagerFileSelectionItemModule,
+    DxoFileManagerUploadModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -973,6 +995,16 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     DxoToolbarModule,
     DxiFileSelectionItemModule,
     DxoUploadModule,
+    DxoFileManagerContextMenuModule,
+    DxiFileManagerItemModule,
+    DxoFileManagerItemViewModule,
+    DxoFileManagerDetailsModule,
+    DxiFileManagerColumnModule,
+    DxoFileManagerNotificationsModule,
+    DxoFileManagerPermissionsModule,
+    DxoFileManagerToolbarModule,
+    DxiFileManagerFileSelectionItemModule,
+    DxoFileManagerUploadModule,
     DxTemplateModule
   ]
 })

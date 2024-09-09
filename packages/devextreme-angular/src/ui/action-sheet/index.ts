@@ -44,8 +44,11 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiActionSheetItemComponent } from 'devextreme-angular/ui/action-sheet/nested';
 
 
 /**
@@ -499,12 +502,24 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiActionSheetItemComponent)
+    get itemsChildren(): QueryList<DxiActionSheetItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiActionSheetItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -596,6 +611,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiActionSheetItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -605,6 +621,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
   exports: [
     DxActionSheetComponent,
     DxiItemModule,
+    DxiActionSheetItemModule,
     DxTemplateModule
   ]
 })

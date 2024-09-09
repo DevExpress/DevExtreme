@@ -48,6 +48,14 @@ import { DxoFontModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
+import { DxoSparklineMarginModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineSizeModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineBorderModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineFontModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineFormatModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSparklineShadowModule } from 'devextreme-angular/ui/sparkline/nested';
+
 
 
 
@@ -754,6 +762,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -857,6 +866,13 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
+    DxoSparklineMarginModule,
+    DxoSparklineSizeModule,
+    DxoSparklineTooltipModule,
+    DxoSparklineBorderModule,
+    DxoSparklineFontModule,
+    DxoSparklineFormatModule,
+    DxoSparklineShadowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -872,6 +888,13 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     DxoFontModule,
     DxoFormatModule,
     DxoShadowModule,
+    DxoSparklineMarginModule,
+    DxoSparklineSizeModule,
+    DxoSparklineTooltipModule,
+    DxoSparklineBorderModule,
+    DxoSparklineFontModule,
+    DxoSparklineFormatModule,
+    DxoSparklineShadowModule,
     DxTemplateModule
   ]
 })
