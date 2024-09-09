@@ -49,7 +49,7 @@ export class HeaderPanelController {
     item: MaybeSubscribable<PredefinedToolbarItem>,
   ): void {
     toSubscribable(item).subscribe((item) => {
-      this.defaultItems.update((oldDefaultItems) => ({
+      this.defaultItems.updateFunc((oldDefaultItems) => ({
         ...oldDefaultItems,
         [item.name]: item,
       }));
@@ -57,7 +57,7 @@ export class HeaderPanelController {
   }
 
   public removeDefaultItem(name: typeof DEFAULT_TOOLBAR_ITEMS[number]): void {
-    this.defaultItems.update((oldDefaultItems) => {
+    this.defaultItems.updateFunc((oldDefaultItems) => {
       const defaultItems = { ...oldDefaultItems };
       delete defaultItems[name];
       return defaultItems;

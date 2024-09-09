@@ -16,7 +16,7 @@ export class HeadersView extends View {
   );
 
   public onReorder(fromIndex: number, toIndex: number): void {
-    this.columnsController.columns.update((columns) => {
+    this.columnsController.columns.updateFunc((columns) => {
       const column = columns[fromIndex];
       const newColumns = columns.slice();
       newColumns.splice(fromIndex, 1);

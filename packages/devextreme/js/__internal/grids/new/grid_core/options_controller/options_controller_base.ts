@@ -80,7 +80,7 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
     component.on('optionChanged', (e: ChangedOptionInfo) => {
       const pathParts = getPathParts(e.fullName);
       // @ts-expect-error
-      this.props.update((oldValue) => updateImmutable(
+      this.props.updateFunc((oldValue) => updateImmutable(
         // @ts-expect-error
         oldValue,
         component.option(),

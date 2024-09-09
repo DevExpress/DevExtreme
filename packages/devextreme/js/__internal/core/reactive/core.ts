@@ -14,16 +14,19 @@ export class Observable<T> implements Subscribable<T>, Updatable<T>, Gettable<T>
 
   constructor(private value: T) {}
 
-  update(value: T | ((oldValue: T) => T)): void {
-    const newValue = isFunction(value) ? value(this.value) : value;
-    if (this.value === newValue) {
+  update(value: T): void {
+    if (this.value === value) {
       return;
     }
-    this.value = newValue;
+    this.value = value;
 
     this.callbacks.forEach((c) => {
-      c(newValue);
+      c(value);
     });
+  }
+
+  updateFunc(func: (oldValue: T) => T): void {
+    this.update(func(this.value));
   }
 
   subscribe(callback: Callback<T>): Subscription {

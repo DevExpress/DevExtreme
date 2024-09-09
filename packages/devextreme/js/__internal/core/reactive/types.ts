@@ -16,7 +16,8 @@ export function isSubscribable<T>(value: unknown): value is Subscribable<T> {
 export type Callback<T> = (value: T) => void;
 
 export interface Updatable<T> {
-  update: ((value: T | ((oldValue: T) => T)) => void);
+  update: (value: T) => void;
+  updateFunc: (func: (oldValue: T) => T) => void;
 }
 
 export interface Gettable<T> {
