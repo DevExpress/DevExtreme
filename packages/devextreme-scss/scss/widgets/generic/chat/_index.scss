@@ -35,4 +35,16 @@
   $chat-information-color,
   $chat-information-gap
 );
+@include chat-messagelist-empty(
+  $chat-messagelist-empty-icon-box-size,
+  $chat-messagelist-empty-icon-size,
+  $chat-messagelist-empty-icon-margin-bottom,
+  $chat-messagelist-empty-row-gap,
+  $chat-messagelist-empty-icon-color,
+  $chat-messagelist-empty-icon-background-color,
+  $chat-messagelist-empty-empty-message-font-size,
+  $chat-messagelist-empty-empty-message-color,
+  $chat-messagelist-empty-empty-prompt-font-size,
+  $chat-messagelist-empty-empty-prompt-color,
+);
 @include chat-messagelist($chat-messagelist-padding);

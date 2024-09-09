@@ -1,7 +1,49 @@
+@use "sass:math";
+
 @mixin chat-messagelist($padding) {
   .dx-chat-message-list {
     .dx-scrollable-content {
       padding: $padding;
+    }
+  }
+}
+
+@mixin chat-messagelist-empty(
+  $messagelist-empty-icon-box-size,
+  $messagelist-empty-icon-size,
+  $messagelist-empty-icon-margin-bottom,
+  $messagelist-empty-row-gap,
+  $messagelist-empty-icon-color,
+  $messagelist-empty-icon-background-color,
+  $messagelist-empty-empty-message-font-size,
+  $messagelist-empty-empty-message-color,
+  $messagelist-empty-empty-prompt-font-size,
+  $messagelist-empty-empty-prompt-color,
+) {
+  .dx-chat-message-list-empty {
+    .dx-chat-empty-view {
+      row-gap: $messagelist-empty-row-gap;
+    }
+
+    .dx-chat-empty-image {
+      color: $messagelist-empty-icon-color;
+      background-color: $messagelist-empty-icon-background-color;
+      padding: math.div($messagelist-empty-icon-box-size - $messagelist-empty-icon-size, 2);
+      margin-bottom: $messagelist-empty-icon-margin-bottom;
+
+      &::before {
+        font-size: $messagelist-empty-icon-size;
+      }
+    }
+
+    .dx-chat-empty-message {
+      font-size: $messagelist-empty-empty-message-font-size;
+      color: $messagelist-empty-empty-message-color;
+    }
+
+    .dx-chat-empty-prompt {
+      font-size: $messagelist-empty-empty-prompt-font-size;
+      color: $messagelist-empty-empty-prompt-color;
     }
   }
 }
