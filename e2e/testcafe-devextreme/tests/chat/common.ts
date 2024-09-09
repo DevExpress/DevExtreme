@@ -4,7 +4,7 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo } from '../../helpers/domUtils';
 
-fixture.disablePageReloads`Chat_messagebubble`
+fixture.disablePageReloads`Chat`
   .page(url(__dirname, '../container.html'));
 
 test('Chat: line breaks', async (t) => {
@@ -18,6 +18,8 @@ test('Chat: line breaks', async (t) => {
   await appendElementTo('#container', 'div', 'chat');
 
   return createWidget('dxChat', {
+    height: 500,
+    width: 300,
     items: [
       {
         text: 'line\nbreak',
