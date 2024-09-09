@@ -71,7 +71,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
     });
 
     QUnit.module('Author name', () => {
-        QUnit.test('value of name element should be equal author name if alignment is start', function(assert) {
+        QUnit.test('text of a name element should be equal to author name if alignment is start', function(assert) {
             const name = 'custom';
 
             this.reinit({
@@ -87,7 +87,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             assert.strictEqual($name.text(), name);
         });
 
-        QUnit.test('value of name element should be equal author name if alignment is end', function(assert) {
+        QUnit.test('text of a name element should be empty if alignment is end', function(assert) {
             this.reinit({
                 alignment: 'end',
                 items: [
