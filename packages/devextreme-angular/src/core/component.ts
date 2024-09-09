@@ -295,7 +295,9 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     if (this.contentChildren[propertyName]) {
       if (items.length > 0) {
         if (console && console.warn) {
-          console.warn(`In ${this.constructor.name}, the nested ${className} and ${this.contentChildren[propertyName]} components are incompatible. Ensure that all nested components in the content area match.`);
+          console.warn(`In ${this.constructor.name}, 
+          the nested ${className} and ${this.contentChildren[propertyName]} components are incompatible. 
+          Ensure that all nested components in the content area match.`);
         }
       }
       return false;
