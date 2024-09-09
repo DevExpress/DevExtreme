@@ -94,7 +94,9 @@ class Avatar extends Widget<Properties> {
   _isValuableUrl(): boolean {
     const { url } = this.option();
 
-    return !!url?.trim();
+    const result = !!url?.trim?.();
+
+    return result;
   }
 
   _getInitials(name: string | undefined): string {
