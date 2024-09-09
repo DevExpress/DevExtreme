@@ -1,18 +1,14 @@
 .dx-chat-message-avatar {
-  position: relative;
   grid-row: span 3;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 999em;
+  overflow: clip;
 }
 
 .dx-chat-message-avatar-image {
-  position: absolute;
-  top: 0;
-  left: 0;
   height: 100%;
   width: 100%;
-  border-radius: 999em;
   object-fit: cover;
 }

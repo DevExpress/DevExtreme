@@ -15,9 +15,7 @@ export interface Properties extends WidgetOptions<Avatar> {
 }
 
 class Avatar extends Widget<Properties> {
-  _$initials?: dxElementWrapper;
-
-  _$image?: dxElementWrapper;
+  _$content?: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
     return {
@@ -36,41 +34,40 @@ class Avatar extends Widget<Properties> {
   }
 
   _renderAvatarContent(): void {
-    this._renderImage();
+    this._$content?.remove();
+
+    if (this._isValuableUrl()) {
+      this._renderImage();
+
+      return;
+    }
+
     this._renderInitials();
   }
 
   _renderImage(): void {
-    this._$image?.remove();
-
-    const { url } = this.option();
-
-    if (url) {
-      this._renderImageElement();
-      this._updateUrl();
-      this._updateAlt();
-    }
+    this._renderImageElement();
+    this._updateUrl();
+    this._updateAlt();
   }
 
   _renderInitials(): void {
-    this._$initials?.remove();
+    const { name } = this.option();
 
-    const { name, url } = this.option();
-
-    if (!url && name) {
+    if (name) {
       this._renderInitialsElement();
       this._updateInitials();
     }
   }
 
   _renderImageElement(): void {
-    this._$image = $('<img>')
+    this._$content = $('<img>')
       .addClass(CHAT_MESSAGE_AVATAR_IMAGE_CLASS)
       .appendTo(this.element());
   }
 
   _renderInitialsElement(): void {
-    this._$initials = $('<div>')
+    this._$content = $('<div>')
       .addClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS)
       .appendTo(this.element());
   }
@@ -78,20 +75,26 @@ class Avatar extends Widget<Properties> {
   _updateInitials(): void {
     const { name } = this.option();
 
-    this._$initials?.text(this._getInitials(name));
+    this._$content?.text(this._getInitials(name));
   }
 
   _updateUrl(): void {
     const { url } = this.option();
 
-    this._$image?.attr('src', url ?? '');
+    this._$content?.attr('src', url ?? '');
   }
 
   _updateAlt(): void {
     const { name } = this.option();
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._$image?.attr('alt', name || 'Avatar');
+    this._$content?.attr('alt', name || 'Avatar');
+  }
+
+  _isValuableUrl(): boolean {
+    const { url } = this.option();
+
+    return !!url?.trim();
   }
 
   _getInitials(name: string | undefined): string {
