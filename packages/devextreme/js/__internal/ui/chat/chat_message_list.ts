@@ -12,7 +12,6 @@ import type { MessageGroupAlignment } from './chat_message_group';
 import MessageGroup from './chat_message_group';
 
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
-const CHAT_MESSAGE_LIST_EMPTY = 'dx-chat-message-list-empty';
 
 const CHAT_MESSAGE_LIST_EMPTY_CLASS = 'dx-chat-message-list-empty';
 const CHAT_MESSAGE_LIST_EMPTY_VIEW_CLASS = 'dx-chat-empty-view';
@@ -28,11 +27,7 @@ export interface Properties extends WidgetOptions<MessageList> {
 class MessageList extends Widget<Properties> {
   _messageGroups?: MessageGroup[];
 
-  private _$content!: dxElementWrapper;
-
-  private _$emptyView?: dxElementWrapper;
-
-  private _scrollable?: Scrollable<unknown>;
+  private _scrollable!: Scrollable<unknown>;
 
   _getDefaultOptions(): Properties {
     return {
@@ -58,38 +53,40 @@ class MessageList extends Widget<Properties> {
     this._renderMessageListContent();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this._scrollable?.update();
+    this._scrollable.update();
 
     this._scrollContentToLastMessageGroup();
   }
 
   _renderEmptyViewContent(): void {
-    this.$element().addClass(CHAT_MESSAGE_LIST_EMPTY_CLASS);
-
-    this._$emptyView = $('<div>')
+    const $emptyView = $('<div>')
       .addClass(CHAT_MESSAGE_LIST_EMPTY_VIEW_CLASS);
 
     $('<div>')
-      .appendTo(this._$emptyView)
+      .appendTo($emptyView)
       .addClass(CHAT_MESSAGE_LIST_EMPTY_IMAGE_CLASS);
 
     const messageText = messageLocalization.format('dxChat-emptyListMessage');
     $('<div>')
-      .appendTo(this._$emptyView)
+      .appendTo($emptyView)
       .addClass(CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS)
       .text(messageText);
 
     const promptText = messageLocalization.format('dxChat-emptyListPrompt');
     $('<div>')
-      .appendTo(this._$emptyView)
+      .appendTo($emptyView)
       .addClass(CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS)
       .text(promptText);
 
-    this._$emptyView.appendTo(this._$content);
+    $emptyView.appendTo(this._scrollable.content());
   }
 
-  _removeEmptyViewElement(): void {
-    this._$emptyView?.remove();
+  _removeEmptyView(): void {
+    $(this._scrollable.content()).empty();
+  }
+
+  _toggleEmptyStateClass(state: boolean): void {
+    this.$element().toggleClass(CHAT_MESSAGE_LIST_EMPTY_CLASS, state);
   }
 
   _isEmpty(): boolean {
@@ -109,8 +106,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    // const $messageGroupContainer = this._scrollable ? this._scrollable.content() : this._$content;
-    const $messageGroup = $('<div>').appendTo(this._$content);
+    const $messageGroup = $('<div>').appendTo(this._scrollable.content());
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
@@ -127,12 +123,11 @@ class MessageList extends Widget<Properties> {
     this._scrollable = this._createComponent($scrollable, Scrollable, {
       useNative: true,
     });
-
-    this._$content = $(this._scrollable.content());
   }
 
   _renderMessageListContent(): void {
     if (this._isEmpty()) {
+      this._toggleEmptyStateClass(this._isEmpty());
       this._renderEmptyViewContent();
 
       return;
@@ -164,14 +159,8 @@ class MessageList extends Widget<Properties> {
     });
   }
 
-  _renderMessage(message: Message, newItems: Message[]): void {
+  _renderMessage(message: Message): void {
     const sender = message.author;
-
-    if (this.$element().find('.dx-chat-empty-view').length > 0) {
-      this._removeEmptyViewElement();
-    }
-
-    this._setOptionWithoutOptionChange('items', newItems);
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
 
@@ -204,7 +193,6 @@ class MessageList extends Widget<Properties> {
 
   _clean(): void {
     this._messageGroups = [];
-    this._scrollable = undefined;
 
     super._clean();
   }
@@ -236,11 +224,15 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
-      this._removeEmptyViewElement();
+      this._toggleEmptyStateClass(this._isEmpty());
+
+      if (!previousValue.length) {
+        this._removeEmptyView();
+      }
 
       const newMessage = value[value.length - 1];
 
-      this._renderMessage(newMessage ?? {}, value);
+      this._renderMessage(newMessage ?? {});
     }
   }
 
