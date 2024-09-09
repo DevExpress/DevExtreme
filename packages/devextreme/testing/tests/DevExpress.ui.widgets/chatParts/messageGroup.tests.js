@@ -6,6 +6,7 @@ import ChatAvatar from '__internal/ui/chat/chat_avatar';
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+const CHAT_MESSAGE_AUTHOR_NAME_CLASS = 'dx-chat-message-author-name';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -57,16 +58,48 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             const messageTimeSecond = new Date(2021, 9, 17, 14, 43);
 
             this.reinit({
-                items: [{
-                    timestamp: messageTimeFirst,
-                }, {
-                    timestamp: messageTimeSecond
-                }]
+                items: [
+                    { timestamp: messageTimeFirst },
+                    { timestamp: messageTimeSecond },
+                ],
             });
 
             const $time = this.$element.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
 
             assert.strictEqual($time.text(), '21:34');
+        });
+    });
+
+    QUnit.module('Author name', () => {
+        QUnit.test('text of a name element should be equal to author name if alignment is start', function(assert) {
+            const name = 'custom';
+
+            this.reinit({
+                items: [
+                    {
+                        author: { name: 'custom' },
+                    },
+                ],
+            });
+
+            const $name = this.$element.find(`.${CHAT_MESSAGE_AUTHOR_NAME_CLASS}`);
+
+            assert.strictEqual($name.text(), name);
+        });
+
+        QUnit.test('text of a name element should be empty if alignment is end', function(assert) {
+            this.reinit({
+                alignment: 'end',
+                items: [
+                    {
+                        author: { name: 'custom' },
+                    },
+                ],
+            });
+
+            const $name = this.$element.find(`.${CHAT_MESSAGE_AUTHOR_NAME_CLASS}`);
+
+            assert.strictEqual($name.text(), '');
         });
     });
 

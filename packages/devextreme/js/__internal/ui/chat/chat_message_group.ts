@@ -109,30 +109,19 @@ class MessageGroup extends Widget<Properties> {
     this._$messageBubbleContainer.appendTo(this.element());
   }
 
-  _renderName(name: string, $element: dxElementWrapper): void {
-    $('<div>')
-      .addClass(CHAT_MESSAGE_AUTHOR_NAME_CLASS)
-      .text(name)
-      .appendTo($element);
-  }
-
-  _getTimeValue(timestamp: Date | string | number): string {
-    const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
-    const date = dateSerialization.deserializeDate(timestamp);
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return date.toLocaleTimeString(undefined, options);
-  }
-
   _renderMessageGroupInformation(message: Message): void {
+    const { alignment } = this.option();
     const { timestamp, author } = message;
 
     const $information = $('<div>')
       .addClass(CHAT_MESSAGE_GROUP_INFORMATION_CLASS);
 
+    const authorName = author?.name ?? '';
+    const authorNameText = alignment === 'start' ? authorName : '';
+
     $('<div>')
       .addClass(CHAT_MESSAGE_AUTHOR_NAME_CLASS)
-      .text(author?.name ?? '')
+      .text(authorNameText)
       .appendTo($information);
 
     const $time = $('<div>')
@@ -144,6 +133,14 @@ class MessageGroup extends Widget<Properties> {
     }
 
     $information.appendTo(this.element());
+  }
+
+  _getTimeValue(timestamp: Date | string | number): string {
+    const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
+    const date = dateSerialization.deserializeDate(timestamp);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return date.toLocaleTimeString(undefined, options);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
