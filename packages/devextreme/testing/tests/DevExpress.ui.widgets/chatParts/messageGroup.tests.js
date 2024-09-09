@@ -124,7 +124,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 { items: [{ author: { avatarUrl: undefined } }], passedUrlValue: undefined },
                 { items: [{ author: { avatarUrl: null } }], passedUrlValue: null },
                 { items: [{ author: { avatarUrl: '' } }], passedUrlValue: '' },
-                { items: [{ author: { avatarUrl: ' ' } }], passedUrlValue: '' },
+                { items: [{ author: { avatarUrl: ' ' } }], passedUrlValue: ' ' },
                 { items: [{ author: { avatarUrl: 888 } }], passedUrlValue: 888 },
                 { items: [{ author: { avatarUrl: NaN } }], passedUrlValue: NaN },
             ].forEach(({ items, passedUrlValue }) => {
