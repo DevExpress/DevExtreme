@@ -1,4 +1,3 @@
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
