@@ -18,3 +18,5 @@ The [animationDuration](/Documentation/ApiReference/UI_Components/dxAccordion/Co
 ## Customize Item Appearance
 
 Use the [itemTemplate](/Documentation/ApiReference/UI_Components/dxAccordion/Configuration/#itemTemplate) and [itemTitleTemplate](/Documentation/ApiReference/UI_Components/dxAccordion/Configuration/#itemTitleTemplate) properties to customize the panel appearance. If you use the **items** array, you can also specify the [icon](/Documentation/ApiReference/UI_Components/dxAccordion/Configuration/items/#icon) property.
+
+Test change
