@@ -1,0 +1,7 @@
+@mixin chat-avatar($size, $background-color) {
+  .dx-chat-message-avatar {
+    width: $size;
+    height: $size;
+    background-color: $background-color;
+  }
+}

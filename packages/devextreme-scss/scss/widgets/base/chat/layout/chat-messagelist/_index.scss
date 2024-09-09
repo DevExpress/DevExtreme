@@ -1,0 +1,9 @@
+.dx-chat-message-list {
+  flex-grow: 1;
+  overflow: hidden;
+
+  .dx-scrollable-content {
+    display: flex;
+    flex-direction: column;
+  }
+}
