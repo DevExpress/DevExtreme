@@ -15,10 +15,10 @@
   $messagelist-empty-row-gap,
   $messagelist-empty-icon-color,
   $messagelist-empty-icon-background-color,
-  $messagelist-empty-empty-message-font-size,
-  $messagelist-empty-empty-message-color,
-  $messagelist-empty-empty-prompt-font-size,
-  $messagelist-empty-empty-prompt-color,
+  $messagelist-empty-message-font-size,
+  $messagelist-empty-message-color,
+  $messagelist-empty-prompt-font-size,
+  $messagelist-empty-prompt-color,
 ) {
   .dx-chat-message-list-empty {
     .dx-chat-empty-view {
@@ -37,13 +37,13 @@
     }
 
     .dx-chat-empty-message {
-      font-size: $messagelist-empty-empty-message-font-size;
-      color: $messagelist-empty-empty-message-color;
+      font-size: $messagelist-empty-message-font-size;
+      color: $messagelist-empty-message-color;
     }
 
     .dx-chat-empty-prompt {
-      font-size: $messagelist-empty-empty-prompt-font-size;
-      color: $messagelist-empty-empty-prompt-color;
+      font-size: $messagelist-empty-prompt-font-size;
+      color: $messagelist-empty-prompt-color;
     }
   }
 }

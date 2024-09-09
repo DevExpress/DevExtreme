@@ -25,7 +25,7 @@ $chat-messagelist-empty-icon-size: null !default;
 $chat-messagelist-empty-icon-margin-bottom: null !default;
 $chat-messagelist-empty-row-gap: null !default;
 $chat-messagelist-empty-message-font-size: null !default;
-$chat-messagelist-empty-empty-prompt-font-size: null !default;
+$chat-messagelist-empty-prompt-font-size: null !default;
 
 @if $size == "default" {
   $chat-messagebox-buton-gap: 10px !default;
@@ -40,7 +40,7 @@ $chat-messagelist-empty-empty-prompt-font-size: null !default;
   $chat-messagelist-empty-icon-margin-bottom: 12px !default;
   $chat-messagelist-empty-row-gap: 4px !default;
   $chat-messagelist-empty-message-font-size: 18px !default;
-  $chat-messagelist-empty-empty-prompt-font-size: 14px !default;
+  $chat-messagelist-empty-prompt-font-size: 14px !default;
 }
 
 @else if $size == "compact" {
@@ -56,5 +56,5 @@ $chat-messagelist-empty-empty-prompt-font-size: null !default;
   $chat-messagelist-empty-icon-margin-bottom: 14px !default;
   $chat-messagelist-empty-row-gap: 2px !default;
   $chat-messagelist-empty-message-font-size: 14px !default;
-  $chat-messagelist-empty-empty-prompt-font-size: 12px !default;
+  $chat-messagelist-empty-prompt-font-size: 12px !default;
 }

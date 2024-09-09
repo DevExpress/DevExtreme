@@ -43,8 +43,8 @@
   $chat-messagelist-empty-icon-color,
   $chat-messagelist-empty-icon-background-color,
   $chat-messagelist-empty-message-font-size,
-  $chat-messagelist-empty-empty-message-color,
-  $chat-messagelist-empty-empty-prompt-font-size,
-  $chat-messagelist-empty-empty-prompt-color,
+  $chat-messagelist-empty-message-color,
+  $chat-messagelist-empty-prompt-font-size,
+  $chat-messagelist-empty-prompt-color,
 );
 @include chat-messagelist($chat-messagelist-padding);
