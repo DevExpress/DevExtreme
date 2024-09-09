@@ -86,6 +86,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '20em',
+      onInput: (): void => {
+        const shouldButtonBeDisabled = !this._isValuableTextEntered();
+
+        this._toggleButtonDisableState(shouldButtonBeDisabled);
+      },
       onEnterKey: (e: EnterKeyEvent): void => {
         if (!e.event?.shiftKey) {
           this._sendHandler(e);
@@ -118,6 +123,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       icon: 'sendfilled',
       type: 'default',
       stylingMode: 'text',
+      disabled: true,
       onClick: (e): void => {
         this._sendHandler(e);
       },
@@ -132,14 +138,19 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _sendHandler(e: ClickEvent | EnterKeyEvent): void {
-    const { text } = this._textArea.option();
-
     if (!this._isValuableTextEntered()) {
       return;
     }
 
+    const { text } = this._textArea.option();
+
     this._messageSendAction?.({ text, event: e.event });
-    this._textArea?.reset();
+    this._textArea.reset();
+    this._toggleButtonDisableState(true);
+  }
+
+  _toggleButtonDisableState(state: boolean): void {
+    this._button.option('disabled', state);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
