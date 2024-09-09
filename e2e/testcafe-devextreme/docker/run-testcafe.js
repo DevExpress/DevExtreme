@@ -3,7 +3,6 @@ const parseArgs = require('minimist');
 
 const matrix = [
     { componentFolder: 'treeList', name: 'treeList', concurrency: 1 },
-    { componentFolder: 'chat', name: 'chat' },
     { componentFolder: 'dataGrid', name: 'dataGrid (1/5)', indices: '1/5' },
     { componentFolder: 'dataGrid', name: 'dataGrid (2/5)', indices: '2/5' },
     { componentFolder: 'dataGrid', name: 'dataGrid (3/5)', indices: '3/5' },
