@@ -85,6 +85,7 @@ const DropDownList = DropDownEditor.inherit({
       selectedItem: null,
       noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
       encodeNoDataText: false,
+      onSelectionChanging: null,
       onSelectionChanged: null,
       onItemClick: noop,
       showDataBeforeSearch: false,
@@ -152,12 +153,19 @@ const DropDownList = DropDownEditor.inherit({
 
   _initActions() {
     this._initContentReadyAction();
+    this._initSelectionChangingAction();
     this._initSelectionChangedAction();
     this._initItemClickAction();
   },
 
   _initContentReadyAction() {
     this._contentReadyAction = this._createActionByOption('onContentReady', {
+      excludeValidators: ['disabled', 'readOnly'],
+    });
+  },
+
+  _initSelectionChangingAction() {
+    this._selectionChangingAction = this._createActionByOption('onSelectionChanging', {
       excludeValidators: ['disabled', 'readOnly'],
     });
   },
@@ -454,6 +462,8 @@ const DropDownList = DropDownEditor.inherit({
 
     this._renderPreventBlurOnListClick();
     this._setListFocusedElementOptionChange();
+
+    this._$list.get(0).addEventListener('dxclick', (e) => { this._saveValueChangeEvent(e); }, true);
   },
 
   _renderPreventBlurOnListClick() {
@@ -510,6 +520,9 @@ const DropDownList = DropDownEditor.inherit({
       keyExpr: this._getCollectionKeyExpr(),
       displayExpr: this._displayGetterExpr(),
       groupTemplate: this.option('groupTemplate'),
+      onSelectionChanging: (e): void => {
+        this._selectionChangingAction?.(e);
+      },
       onItemClick: this._listItemClickAction.bind(this),
       dataSource: this._getDataSource(),
       _dataController: this._dataController,
@@ -873,6 +886,9 @@ const DropDownList = DropDownEditor.inherit({
         break;
       case 'onContentReady':
         this._initContentReadyAction();
+        break;
+      case 'onSelectionChanging':
+        this._initSelectionChangingAction();
         break;
       case 'onSelectionChanged':
         this._initSelectionChangedAction();

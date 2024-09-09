@@ -324,7 +324,7 @@ const SelectBox = (DropDownList as any).inherit({
       const isLastPage = this._dataController.isLastPage();
       const isLastItem = selectedIndex === this._items().length - 1;
 
-      this._saveValueChangeEvent(e);
+      // this._saveValueChangeEvent(e);
       const step = normalizeKeyName(e) === 'downArrow' ? 1 : -1;
 
       if (hasPages && !isLastPage && isLastItem && step > 0) {
@@ -405,7 +405,7 @@ const SelectBox = (DropDownList as any).inherit({
   },
 
   _getSelectionChangeHandler() {
-    return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
+    return this._selectionChangeHandler.bind(this);
   },
 
   _selectionChangeHandler(e) {
@@ -673,9 +673,9 @@ const SelectBox = (DropDownList as any).inherit({
     const previousValue = this._getCurrentValue();
     this._focusListElement($(e.itemElement));
 
-    this._saveValueChangeEvent(e.event);
+    // this._saveValueChangeEvent(e.event);
 
-    this._completeSelection(this._valueGetter(e.itemData));
+    // this._completeSelection(this._valueGetter(e.itemData));
 
     if (this._shouldCloseOnItemClick()) {
       this.option('opened', false);
