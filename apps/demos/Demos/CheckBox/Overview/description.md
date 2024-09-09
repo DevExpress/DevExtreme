@@ -12,3 +12,5 @@ The component supports the three state mode. In this demo, the [enableThreeState
 Specify the [onValueChanged](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#onValueChanged) property to handle value changes. In this demo, the [value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) of the "Handle value change" CheckBox is passed to the "Disabled" CheckBox. Click the first CheckBox to see how it affects the second one.
 
 You can use the [iconSize](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#iconSize) property to specify custom dimensions for the CheckBox. To add a label to the CheckBox, specify the [text](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#text) property.
+
+Change 2
