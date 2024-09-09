@@ -350,19 +350,54 @@ QUnit.test('filter with functional getter', function(assert) {
     });
 });
 
-QUnit.test('filter with undefined "langParams"', function(assert) {
-    const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
-    const filterLength = QUERY(input).filter(['ID', '=', 'aaa']).toArray().length;
-    assert.equal(filterLength, 2);
+QUnit.test('filter with undefined "langParams" (behaviour like collatorOptions.sensitivity set to "accent")', function(assert) {
+    const input = [{ ID: 'AAA' }, { ID: 'aaa' }, { ID: 'ááá' }, { ID: 'bbb' }];
+    const array = QUERY(input).filter(['ID', '=', 'aaa']).toArray();
+
+    assert.equal(array.length, 2);
+    assert.equal(array[0].ID, 'AAA');
+    assert.equal(array[1].ID, 'aaa');
+});
+
+QUnit.test('filter with collatorOptions.sensitivity set to "accent"', function(assert) {
+    const input = [{ ID: 'AAA' }, { ID: 'aaa' }, { ID: 'ááá' }, { ID: 'bbb' }];
+
+    const array = QUERY(input, {
+        langParams: {
+            collatorOptions: {
+                sensitivity: 'accent'
+            }
+        }
+    }).filter(['ID', '=', 'aaa']).toArray();
+
+    assert.equal(array.length, 2);
+    assert.equal(array[0].ID, 'AAA');
+    assert.equal(array[1].ID, 'aaa');
 });
 
 QUnit.test('filter with collatorOptions.sensitivity set to "case"', function(assert) {
-    const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+    const input = [{ ID: 'AAA' }, { ID: 'aaa' }, { ID: 'ááá' }, { ID: 'bbb' }];
 
     const array = QUERY(input, {
         langParams: {
             collatorOptions: {
                 sensitivity: 'case'
+            }
+        }
+    }).filter(['ID', '=', 'aaa']).toArray();
+
+    assert.equal(array.length, 2);
+    assert.equal(array[0].ID, 'aaa');
+    assert.equal(array[1].ID, 'ááá');
+});
+
+QUnit.test('filter with collatorOptions.sensitivity set to "variant"', function(assert) {
+    const input = [{ ID: 'AAA' }, { ID: 'aaa' }, { ID: 'ááá' }, { ID: 'bbb' }];
+
+    const array = QUERY(input, {
+        langParams: {
+            collatorOptions: {
+                sensitivity: 'variant'
             }
         }
     }).filter(['ID', '=', 'aaa']).toArray();
