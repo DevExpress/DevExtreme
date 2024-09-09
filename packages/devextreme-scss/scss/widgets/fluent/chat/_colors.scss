@@ -14,8 +14,8 @@ $chat-information-color: null !default;
 
 $chat-messagelist-empty-icon-color: null !default;
 $chat-messagelist-empty-icon-background-color: null !default;
-$chat-messagelist-empty-empty-message-color: null !default;
-$chat-messagelist-empty-empty-prompt-color: null !default;
+$chat-messagelist-empty-empty-message-color: $base-text-color !default;
+$chat-messagelist-empty-empty-prompt-color: $base-label-color !default;
 
 @if $mode == "light" {
   $chat-avatar-background-color: darken($base-bg, 12.16) !default; // #E0E0E0
@@ -23,10 +23,9 @@ $chat-messagelist-empty-empty-prompt-color: null !default;
   $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default; // #F5F5F5
   $chat-information-color: darken($base-bg, 56.08) !default; // #707070
 
-  $chat-messagelist-empty-icon-color: #B3B3B3 !default;
-  $chat-messagelist-empty-icon-background-color: #F5F5F5 !default;
-  $chat-messagelist-empty-empty-message-color: #242424 !default;
-  $chat-messagelist-empty-empty-prompt-color: #616161 !default;
+  $chat-messagelist-empty-icon-color: lighten($base-icon-color, 56.08) !default; // #B3B3B3
+  $chat-messagelist-empty-icon-background-color: darken($base-bg, 3.92) !default; // #F5F5F5
+  $chat-messagelist-empty-empty-prompt-color: $base-label-color !default; // #616161
 }
 
 @else if $mode == "dark" {
@@ -35,8 +34,7 @@ $chat-messagelist-empty-empty-prompt-color: null !default;
   $chat-bubble-background-color-secondary: lighten($base-bg, 7.84) !default; // #3D3D3D
   $chat-information-color: lighten($base-bg, 43.92) !default; // #999
 
-  $chat-messagelist-empty-icon-color: #6B6B6B !default;
-  $chat-messagelist-empty-icon-background-color: #3D3D3D !default;
-  $chat-messagelist-empty-empty-message-color: #FFFFFF !default;
-  $chat-messagelist-empty-empty-prompt-color: #ADADAD !default;
+  $chat-messagelist-empty-icon-color: darken($base-icon-color, 25.88) !default; // #6B6B6B
+  $chat-messagelist-empty-icon-background-color: lighten($base-bg, 7.84) !default; // #3D3D3D
+  $chat-messagelist-empty-empty-prompt-color: lighten($base-label-color, 7.84) !default; // #ADADAD
 }

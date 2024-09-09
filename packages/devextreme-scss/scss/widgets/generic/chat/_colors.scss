@@ -23,10 +23,10 @@ $chat-messagelist-empty-empty-prompt-color: null !default;
   $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default; // #F5F5F5
   $chat-information-color: darken($base-bg, 41.57) !default; // #959595
 
-  $chat-messagelist-empty-icon-color: #AAAAAA !default;
-  $chat-messagelist-empty-icon-background-color: #EBEBEB !default;
-  $chat-messagelist-empty-empty-message-color: #222222 !default;
-  $chat-messagelist-empty-empty-prompt-color: #959595 !default;
+  $chat-messagelist-empty-icon-color: lighten($base-icon-color, 46.67) !default; // #AAAAAA
+  $chat-messagelist-empty-icon-background-color: darken($base-bg, 7.84) !default; // #EBEBEB 
+  $chat-messagelist-empty-empty-message-color: darken($base-text-color, 6.67) !default; // #222222
+  $chat-messagelist-empty-empty-prompt-color: lighten($base-label-color, 38.43) !default; // #959595
 }
 
 @else if $color == "dark" {
@@ -35,8 +35,8 @@ $chat-messagelist-empty-empty-prompt-color: null !default;
   $chat-bubble-background-color-secondary: lighten($base-bg, 3.92) !default; // #343434
   $chat-information-color: lighten($base-bg, 32.55) !default; // #7D7D7D
 
-  $chat-messagelist-empty-icon-color: #7F7F7F !default;
-  $chat-messagelist-empty-icon-background-color: #3E3E3E !default;
-  $chat-messagelist-empty-empty-message-color: #FFFFFF !default;
-  $chat-messagelist-empty-empty-prompt-color: #7D7D7D !default;
+  $chat-messagelist-empty-icon-color: darken(#dedede, 37.25) !default; // #7F7F7F
+  $chat-messagelist-empty-icon-background-color: lighten($base-bg, 7.84) !default; // #3E3E3E
+  $chat-messagelist-empty-empty-message-color: lighten($base-text-color, 12.94) !default; // #FFFFFF
+  $chat-messagelist-empty-empty-prompt-color: darken($base-label-color, 38.04) !default; // #7D7D7D
 }
