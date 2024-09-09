@@ -113,9 +113,9 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
   if (framework === 'Vue') {
     hasCustomCss = copyVueCustomCss(demo);
   }
-  
+  const css_bundle_path = getBundlePath(demoPath, 'bundle', '.css')
   const options = {
-    css_bundle_path: getBundlePath(demoPath, 'bundle', '.css'),
+    css_bundle: css_bundle_path ? `<link href="${css_bundle_path}" rel="stylesheet" />` : '',
     demo_title: `${framework} ${demo.Widget} - ${demo.Title} - DevExtreme ${framework} Demo`,
     dx_version: DX_Version,
     js_bundle_path: getBundlePath(demoPath, 'bundle', '.js'),
