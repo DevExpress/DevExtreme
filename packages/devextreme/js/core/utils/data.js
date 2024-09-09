@@ -198,13 +198,17 @@ export const toComparable = function(value, caseSensitive, options = {}) {
 
     if(value && value instanceof Class && value.valueOf) {
         value = value.valueOf();
-    } else if(typeof value === 'string' && collatorSensitivity === 'base') {
+    } else if(typeof value === 'string' && (collatorSensitivity === 'base' || collatorSensitivity === 'case')) {
         const REMOVE_DIACRITICAL_MARKS_REGEXP = /[\u0300-\u036f]/g;
 
-        value = toLowerCase(value, options).normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
+        if(collatorSensitivity === 'base') {
+            value = toLowerCase(value, options);
+        }
+
+        value = value.normalize('NFD').replace(REMOVE_DIACRITICAL_MARKS_REGEXP, '');
     }
 
-    const isCaseSensitive = caseSensitive || collatorSensitivity === 'case';
+    const isCaseSensitive = caseSensitive || collatorSensitivity === 'case' || collatorSensitivity === 'variant';
 
     if(typeof value === 'string' && !isCaseSensitive) {
         const locale = options?.locale?.toLowerCase();
