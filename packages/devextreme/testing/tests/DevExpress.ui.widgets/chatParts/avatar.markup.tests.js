@@ -32,14 +32,14 @@ QUnit.module('Avatar classes', moduleConfig, () => {
     });
 
     QUnit.test('image element should have correct class', function(assert) {
-        const $image = this.$element.children().eq(0);
+        this.reinit({ url: 'url' });
 
-        assert.strictEqual($image.hasClass(CHAT_MESSAGE_AVATAR_IMAGE_CLASS), true);
+        assert.strictEqual(this.$element.children().first().hasClass(CHAT_MESSAGE_AVATAR_IMAGE_CLASS), true);
     });
 
     QUnit.test('text element should have correct class', function(assert) {
-        const $text = this.$element.children().eq(1);
+        this.reinit({ name: 'name' });
 
-        assert.strictEqual($text.hasClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS), true);
+        assert.strictEqual(this.$element.children().first().hasClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS), true);
     });
 });
