@@ -294,5 +294,3 @@ exports[`common initial render should be successfull 1`] = `
   </div>
 </div>
 `;
-
-exports[`options disabled should add dx-state-disabled class to container div 1`] = `[Function]`;

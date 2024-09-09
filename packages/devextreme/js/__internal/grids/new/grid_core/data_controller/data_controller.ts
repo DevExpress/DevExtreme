@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataSourceLike } from '@js/data/data_source';
@@ -14,9 +15,20 @@ import { OptionsController } from '../options_controller/options_controller';
 
 export function normalizeDataSource(
   dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined,
+  keyExpr: string | string[] | undefined,
 ): DataSource<unknown, unknown> {
   if (dataSourceLike instanceof DataSource) {
     return dataSourceLike;
+  }
+
+  if (Array.isArray(dataSourceLike)) {
+    dataSourceLike = {
+      store: {
+        type: 'array',
+        data: dataSourceLike,
+        key: keyExpr,
+      },
+    };
   }
 
   // TODO: research making second param not required
@@ -29,8 +41,8 @@ export class DataController {
   private readonly keyExpr = this.options.oneWay('keyExpr');
 
   private readonly dataSource = computed(
-    normalizeDataSource,
-    [this.dataSourceConfiguration],
+    (dataSourceLike, keyExpr) => normalizeDataSource(dataSourceLike, keyExpr),
+    [this.dataSourceConfiguration, this.keyExpr],
   );
 
   public readonly pageIndex = this.options.twoWay('paging.pageIndex');

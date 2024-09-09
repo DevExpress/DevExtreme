@@ -10,4 +10,6 @@ export interface DataControllerProperties {
   paging?: Paging;
 
   dataSource?: DataSourceLike<unknown>;
+
+  keyExpr?: string | string[];
 }
