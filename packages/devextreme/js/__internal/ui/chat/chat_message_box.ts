@@ -153,12 +153,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._button.option('disabled', state);
   }
 
-  _isValuableTextEntered(): boolean {
-    const { text } = this._textArea.option();
-
-    return !!text?.trim();
-  }
-
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
