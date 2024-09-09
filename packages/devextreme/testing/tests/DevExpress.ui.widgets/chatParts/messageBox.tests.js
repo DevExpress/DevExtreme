@@ -61,6 +61,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
                 maxHeight: '20em',
+                valueChangeEvent: 'input'
             };
 
             const textArea = TextArea.getInstance(this.$textArea);
@@ -81,7 +82,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
 
-            assert.strictEqual(this.$input.val(), '');
             assert.strictEqual(this.$input.val(), '');
         });
 
@@ -113,12 +113,45 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onMessageSendStub.callCount, 1);
         });
 
+        QUnit.test('should be fired on enter key if the textarea input contains a value', function(assert) {
+            const onMessageSendStub = sinon.stub();
+
+            this.reinit({ onMessageSend: onMessageSendStub });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('new text message')
+                .keyUp('enter');
+
+
+            assert.strictEqual(onMessageSendStub.callCount, 1);
+        });
+
         QUnit.test('should not be fired when the send button is clicked if the textarea input does not contain a value', function(assert) {
             const onMessageSendStub = sinon.stub();
 
             this.reinit({ onMessageSend: onMessageSendStub });
 
             this.$sendButton.trigger('dxclick');
+
+            assert.strictEqual(onMessageSendStub.callCount, 0);
+        });
+
+        QUnit.test('should not be fired on enter key if the textarea input does not contain a value (excluding spaces)', function(assert) {
+            const onMessageSendStub = sinon.stub();
+
+            this.reinit({ onMessageSend: onMessageSendStub });
+
+            keyboardMock(this.$input)
+                .focus()
+                .keyUp('enter');
+
+            assert.strictEqual(onMessageSendStub.callCount, 0);
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('   ')
+                .keyUp('enter');
 
             assert.strictEqual(onMessageSendStub.callCount, 0);
         });
@@ -176,6 +209,31 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
         });
+
+        QUnit.test('should be fired with correct arguments when enter is pressed', function(assert) {
+            assert.expect(6);
+
+            const text = '  new text message ';
+
+            this.reinit({
+                onMessageSend: (e) => {
+                    const { component, element, event, text } = e;
+
+                    assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                    assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                    assert.strictEqual(event.type, 'keyup', 'e.event.type is correct');
+                    assert.strictEqual(event.target, this.$input.get(0), 'event target is correct');
+                    assert.strictEqual(text, text, 'message field is correct');
+                },
+            });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type(text)
+                .keyDown('enter')
+                .keyUp('enter');
+        });
     });
 
     QUnit.module('Proxy state options', () => {
@@ -215,6 +273,69 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
                 });
             });
+        });
+    });
+
+    QUnit.module('Keyboard navigation', () => {
+        QUnit.test('textarea should not be cleared on enter key if the input contains a value consisting only of spaces', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('   ')
+                .keyDown('enter')
+                .keyUp('enter');
+
+            assert.strictEqual(this.$input.val(), '   ');
+        });
+
+        QUnit.test('textarea should be cleared on enter key when some text is entered', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .keyDown('enter')
+                .keyUp('enter');
+
+            assert.strictEqual(this.$input.val(), '');
+        });
+
+        QUnit.test('enter keydown event should be prevented if input text has non-space characters', function(assert) {
+            const enterKeyDownEvent = $.Event('keydown', { key: 'enter' });
+
+            keyboardMock(this.$input).type('1');
+
+            this.$input.trigger(enterKeyDownEvent);
+
+            assert.ok(enterKeyDownEvent.isDefaultPrevented(), 'empty line is not added before sending');
+        });
+
+        QUnit.test('enter keydown event with Shift modificator should not be prevented', function(assert) {
+            const enterKeyDownEvent = $.Event('keydown', { key: 'enter', shiftKey: true });
+
+            keyboardMock(this.$input).focus().type('1');
+
+            this.$input.trigger(enterKeyDownEvent);
+
+            assert.notOk(enterKeyDownEvent.isDefaultPrevented(), 'empty line is added when shift is used');
+        });
+
+        QUnit.test('enter keydown event should not be prevented if input text consists only from space characters', function(assert) {
+            const enterKeyDownEvent = $.Event('keydown', { key: 'enter' });
+
+            keyboardMock(this.$input).type('  \n  \n');
+
+            this.$input.trigger(enterKeyDownEvent);
+
+            assert.notOk(enterKeyDownEvent.isDefaultPrevented(), 'empty line is added');
+        });
+
+        QUnit.test('textarea should restore its height after enter press when multiline text was entered', function(assert) {
+            const initialTextAreaHeight = this.$textArea.height();
+
+            keyboardMock(this.$input)
+                .type('1\n2\n3')
+                .keyDown('enter')
+                .keyUp('enter');
+
+            assert.roughEqual(this.$textArea.height(), initialTextAreaHeight, 0.1, 'textarea height is restored');
         });
     });
 });
