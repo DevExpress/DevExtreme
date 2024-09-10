@@ -41,13 +41,6 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <style>
-        .dx-chat-message-avatar {
-            /* width: 64px;
-            height: 64px; */
-        }
-    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -59,144 +52,9 @@
         <div id="button"></div>
         <script>
             $(function() {
-                const user1 = {
-                    id: 1,
-                    name: 'User 1',
-                };
-
-                const user2 = {
-                    id: 2,
-                    name: 'User 2',
-                };
-
-                // const author = {
-                //     id: 1,
-                //     name: 'First User Name',
-                // };
-                // const timestamp = new Date(1721747399083);
-                // const text = '0.392722124265449';
-
-                const getRandomValue = (length = 10) => {
-                    const crypto = window.crypto;
-
-                    const mathRandow = Math.random();
-                    const array = new Uint32Array(length);
-                    const cryptoRandom = crypto.getRandomValues(array).reduce((acc, i) => `${acc}${i}`, mathRandow);
-                    const randomUUID = crypto.randomUUID();
-
-                    const randomString = `${randomUUID}:\n\n${cryptoRandom}`;
-
-                    return randomString;
-                };
-
-                const randomUint32 = '0.392722124265449';
-
-                $("#button").dxChat({
-                    width: 400,
-                    height: 600,
-                    // user: user1,
-                    items: [
-                        {
-                            text: randomUint32,
-                            // author: user2,
-                            // timestamp: new Date(),
-                        },
-                        {
-                            text: randomUint32,
-                            // author: user1,
-                            // timestamp: new Date(),
-                        },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                        // {
-                        //     text: getRandomValue(),
-                        //     author: user1,
-                        //     timestamp: new Date(),
-                        // },
-                    ],
-
-    // height: 500,
-    // width: 400,
-    // items: [
-    //   {
-    //     timestamp,
-    //     text,
-    //     author,
-    //   },
-    //   {
-    //     timestamp,
-    //     text,
-    //     author,
-    //   },
-    // ],
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
