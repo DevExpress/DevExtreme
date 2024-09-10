@@ -51,7 +51,9 @@ export class PopupServiceComponent<T> extends DxPopupComponent implements AfterV
   ngAfterViewInit() {
     super.ngAfterViewInit();
 
-    this.instance.option(this.popupOptions)
+    if(this.popupOptions) {
+      this.instance.option(this.popupOptions)
+    }
 
     this.contentRef = this.contentInsertion?.viewContainerRef.createComponent(this.contentComponent);
   }
