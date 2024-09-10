@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/accordion";
 import Accordion, { Properties } from "devextreme/ui/accordion";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -47,7 +47,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxAccordion extends AccessibleOptions {
   readonly instance?: Accordion;
 }
-const DxAccordion = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -142,9 +143,14 @@ const DxAccordion = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxAccordion = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -167,9 +173,15 @@ const DxItem = createConfigurationComponent({
     titleTemplate: {},
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+
 
 export default DxAccordion;
 export {

@@ -1,6 +1,6 @@
 import Bullet, { Properties } from "devextreme/viz/bullet";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "color" |
@@ -35,7 +35,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxBullet extends AccessibleOptions {
   readonly instance?: Bullet;
 }
-const DxBullet = createComponent({
+
+const componentConfig = {
   props: {
     color: String,
     disabled: Boolean,
@@ -110,9 +111,14 @@ const DxBullet = createComponent({
       tooltip: { isCollectionItem: false, optionName: "tooltip" }
     };
   }
-});
+};
 
-const DxBorder = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxBullet = defineComponent(componentConfig);
+
+
+const DxBorderConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -129,9 +135,15 @@ const DxBorder = createConfigurationComponent({
     visible: Boolean,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxBorderConfig);
+
+const DxBorder = defineComponent(DxBorderConfig);
+
 (DxBorder as any).$_optionName = "border";
-const DxFont = createConfigurationComponent({
+
+const DxFontConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -148,9 +160,15 @@ const DxFont = createConfigurationComponent({
     size: [Number, String],
     weight: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFontConfig);
+
+const DxFont = defineComponent(DxFontConfig);
+
 (DxFont as any).$_optionName = "font";
-const DxFormat = createConfigurationComponent({
+
+const DxFormatConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -169,9 +187,15 @@ const DxFormat = createConfigurationComponent({
     type: String,
     useCurrencyAccountingStyle: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormatConfig);
+
+const DxFormat = defineComponent(DxFormatConfig);
+
 (DxFormat as any).$_optionName = "format";
-const DxMargin = createConfigurationComponent({
+
+const DxMarginConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -186,9 +210,15 @@ const DxMargin = createConfigurationComponent({
     right: Number,
     top: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMarginConfig);
+
+const DxMargin = defineComponent(DxMarginConfig);
+
 (DxMargin as any).$_optionName = "margin";
-const DxShadow = createConfigurationComponent({
+
+const DxShadowConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -205,9 +235,15 @@ const DxShadow = createConfigurationComponent({
     offsetY: Number,
     opacity: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxShadowConfig);
+
+const DxShadow = defineComponent(DxShadowConfig);
+
 (DxShadow as any).$_optionName = "shadow";
-const DxSize = createConfigurationComponent({
+
+const DxSizeConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -218,9 +254,15 @@ const DxSize = createConfigurationComponent({
     height: Number,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSizeConfig);
+
+const DxSize = defineComponent(DxSizeConfig);
+
 (DxSize as any).$_optionName = "size";
-const DxTooltip = createConfigurationComponent({
+
+const DxTooltipConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -259,7 +301,12 @@ const DxTooltip = createConfigurationComponent({
     shadow: Object,
     zIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTooltipConfig);
+
+const DxTooltip = defineComponent(DxTooltipConfig);
+
 (DxTooltip as any).$_optionName = "tooltip";
 (DxTooltip as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
@@ -267,6 +314,7 @@ const DxTooltip = createConfigurationComponent({
   format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };
+
 
 export default DxBullet;
 export {

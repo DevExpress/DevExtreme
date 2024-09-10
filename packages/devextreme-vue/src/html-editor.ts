@@ -1,6 +1,6 @@
 import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -49,7 +49,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxHtmlEditor extends AccessibleOptions {
   readonly instance?: HtmlEditor;
 }
-const DxHtmlEditor = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -157,9 +158,14 @@ const DxHtmlEditor = createComponent({
       variables: { isCollectionItem: false, optionName: "variables" }
     };
   }
-});
+};
 
-const DxFileUploaderOptions = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxHtmlEditor = defineComponent(componentConfig);
+
+
+const DxFileUploaderOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -296,9 +302,15 @@ const DxFileUploaderOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFileUploaderOptionsConfig);
+
+const DxFileUploaderOptions = defineComponent(DxFileUploaderOptionsConfig);
+
 (DxFileUploaderOptions as any).$_optionName = "fileUploaderOptions";
-const DxImageUpload = createConfigurationComponent({
+
+const DxImageUploadConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -315,13 +327,19 @@ const DxImageUpload = createConfigurationComponent({
     uploadDirectory: String,
     uploadUrl: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxImageUploadConfig);
+
+const DxImageUpload = defineComponent(DxImageUploadConfig);
+
 (DxImageUpload as any).$_optionName = "imageUpload";
 (DxImageUpload as any).$_expectedChildren = {
   fileUploaderOptions: { isCollectionItem: false, optionName: "fileUploaderOptions" },
   tab: { isCollectionItem: true, optionName: "tabs" }
 };
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -372,10 +390,16 @@ const DxItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxMediaResizing = createConfigurationComponent({
+
+const DxMediaResizingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -386,9 +410,15 @@ const DxMediaResizing = createConfigurationComponent({
     allowedTargets: Array,
     enabled: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMediaResizingConfig);
+
+const DxMediaResizing = defineComponent(DxMediaResizingConfig);
+
 (DxMediaResizing as any).$_optionName = "mediaResizing";
-const DxMention = createConfigurationComponent({
+
+const DxMentionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -413,10 +443,16 @@ const DxMention = createConfigurationComponent({
     template: {},
     valueExpr: [Function, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMentionConfig);
+
+const DxMention = defineComponent(DxMentionConfig);
+
 (DxMention as any).$_optionName = "mentions";
 (DxMention as any).$_isCollectionItem = true;
-const DxTab = createConfigurationComponent({
+
+const DxTabConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -425,10 +461,16 @@ const DxTab = createConfigurationComponent({
   props: {
     name: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTabConfig);
+
+const DxTab = defineComponent(DxTabConfig);
+
 (DxTab as any).$_optionName = "tabs";
 (DxTab as any).$_isCollectionItem = true;
-const DxTableContextMenu = createConfigurationComponent({
+
+const DxTableContextMenuConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -439,13 +481,19 @@ const DxTableContextMenu = createConfigurationComponent({
     enabled: Boolean,
     items: Array
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTableContextMenuConfig);
+
+const DxTableContextMenu = defineComponent(DxTableContextMenuConfig);
+
 (DxTableContextMenu as any).$_optionName = "tableContextMenu";
 (DxTableContextMenu as any).$_expectedChildren = {
   item: { isCollectionItem: true, optionName: "items" },
   tableContextMenuItem: { isCollectionItem: true, optionName: "items" }
 };
-const DxTableContextMenuItem = createConfigurationComponent({
+
+const DxTableContextMenuItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -474,10 +522,16 @@ const DxTableContextMenuItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTableContextMenuItemConfig);
+
+const DxTableContextMenuItem = defineComponent(DxTableContextMenuItemConfig);
+
 (DxTableContextMenuItem as any).$_optionName = "items";
 (DxTableContextMenuItem as any).$_isCollectionItem = true;
-const DxTableResizing = createConfigurationComponent({
+
+const DxTableResizingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -490,9 +544,15 @@ const DxTableResizing = createConfigurationComponent({
     minColumnWidth: Number,
     minRowHeight: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTableResizingConfig);
+
+const DxTableResizing = defineComponent(DxTableResizingConfig);
+
 (DxTableResizing as any).$_optionName = "tableResizing";
-const DxToolbar = createConfigurationComponent({
+
+const DxToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -505,13 +565,19 @@ const DxToolbar = createConfigurationComponent({
     items: Array,
     multiline: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolbarConfig);
+
+const DxToolbar = defineComponent(DxToolbarConfig);
+
 (DxToolbar as any).$_optionName = "toolbar";
 (DxToolbar as any).$_expectedChildren = {
   item: { isCollectionItem: true, optionName: "items" },
   toolbarItem: { isCollectionItem: true, optionName: "items" }
 };
-const DxToolbarItem = createConfigurationComponent({
+
+const DxToolbarItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -550,10 +616,16 @@ const DxToolbarItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolbarItemConfig);
+
+const DxToolbarItem = defineComponent(DxToolbarItemConfig);
+
 (DxToolbarItem as any).$_optionName = "items";
 (DxToolbarItem as any).$_isCollectionItem = true;
-const DxVariables = createConfigurationComponent({
+
+const DxVariablesConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -564,8 +636,14 @@ const DxVariables = createConfigurationComponent({
     dataSource: {},
     escapeChar: [Array, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxVariablesConfig);
+
+const DxVariables = defineComponent(DxVariablesConfig);
+
 (DxVariables as any).$_optionName = "variables";
+
 
 export default DxHtmlEditor;
 export {

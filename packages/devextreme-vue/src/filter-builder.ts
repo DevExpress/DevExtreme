@@ -1,6 +1,6 @@
 import FilterBuilder, { Properties } from "devextreme/ui/filter_builder";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -35,7 +35,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxFilterBuilder extends AccessibleOptions {
   readonly instance?: FilterBuilder;
 }
-const DxFilterBuilder = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -111,9 +112,14 @@ const DxFilterBuilder = createComponent({
       groupOperationDescriptions: { isCollectionItem: false, optionName: "groupOperationDescriptions" }
     };
   }
-});
+};
 
-const DxCustomOperation = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxFilterBuilder = defineComponent(componentConfig);
+
+
+const DxCustomOperationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -136,10 +142,16 @@ const DxCustomOperation = createConfigurationComponent({
     icon: String,
     name: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCustomOperationConfig);
+
+const DxCustomOperation = defineComponent(DxCustomOperationConfig);
+
 (DxCustomOperation as any).$_optionName = "customOperations";
 (DxCustomOperation as any).$_isCollectionItem = true;
-const DxField = createConfigurationComponent({
+
+const DxFieldConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -172,14 +184,20 @@ const DxField = createConfigurationComponent({
     name: String,
     trueText: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFieldConfig);
+
+const DxField = defineComponent(DxFieldConfig);
+
 (DxField as any).$_optionName = "fields";
 (DxField as any).$_isCollectionItem = true;
 (DxField as any).$_expectedChildren = {
   format: { isCollectionItem: false, optionName: "format" },
   lookup: { isCollectionItem: false, optionName: "lookup" }
 };
-const DxFilterOperationDescriptions = createConfigurationComponent({
+
+const DxFilterOperationDescriptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -212,9 +230,15 @@ const DxFilterOperationDescriptions = createConfigurationComponent({
     notEqual: String,
     startsWith: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFilterOperationDescriptionsConfig);
+
+const DxFilterOperationDescriptions = defineComponent(DxFilterOperationDescriptionsConfig);
+
 (DxFilterOperationDescriptions as any).$_optionName = "filterOperationDescriptions";
-const DxFormat = createConfigurationComponent({
+
+const DxFormatConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -233,9 +257,15 @@ const DxFormat = createConfigurationComponent({
     type: String,
     useCurrencyAccountingStyle: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormatConfig);
+
+const DxFormat = defineComponent(DxFormatConfig);
+
 (DxFormat as any).$_optionName = "format";
-const DxGroupOperationDescriptions = createConfigurationComponent({
+
+const DxGroupOperationDescriptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -250,9 +280,15 @@ const DxGroupOperationDescriptions = createConfigurationComponent({
     notOr: String,
     or: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxGroupOperationDescriptionsConfig);
+
+const DxGroupOperationDescriptions = defineComponent(DxGroupOperationDescriptionsConfig);
+
 (DxGroupOperationDescriptions as any).$_optionName = "groupOperationDescriptions";
-const DxLookup = createConfigurationComponent({
+
+const DxLookupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -267,8 +303,14 @@ const DxLookup = createConfigurationComponent({
     displayExpr: [Function, String],
     valueExpr: [Function, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLookupConfig);
+
+const DxLookup = defineComponent(DxLookupConfig);
+
 (DxLookup as any).$_optionName = "lookup";
+
 
 export default DxFilterBuilder;
 export {

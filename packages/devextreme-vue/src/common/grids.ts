@@ -30,7 +30,6 @@ export {
     FilterRow,
     FilterRowOperationDescriptions,
     FilterType,
-    FixedPosition,
     GridBase,
     GridBaseOptions,
     GridsEditMode,

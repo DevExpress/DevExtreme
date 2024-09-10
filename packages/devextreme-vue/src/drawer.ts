@@ -1,5 +1,6 @@
 import Drawer, { Properties } from "devextreme/ui/drawer";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "activeStateEnabled" |
@@ -30,7 +31,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxDrawer extends AccessibleOptions {
   readonly instance?: Drawer;
 }
-const DxDrawer = createComponent({
+
+const componentConfig = {
   props: {
     activeStateEnabled: Boolean,
     animationDuration: Number,
@@ -92,7 +94,11 @@ const DxDrawer = createComponent({
     (this as any).$_WidgetClass = Drawer;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxDrawer = defineComponent(componentConfig);
 
 export default DxDrawer;
 export {

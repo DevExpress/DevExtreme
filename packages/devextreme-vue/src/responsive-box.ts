@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
 import ResponsiveBox, { Properties } from "devextreme/ui/responsive_box";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "cols" |
@@ -32,7 +32,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxResponsiveBox extends AccessibleOptions {
   readonly instance?: ResponsiveBox;
 }
-const DxResponsiveBox = createComponent({
+
+const componentConfig = {
   props: {
     cols: Array,
     dataSource: {},
@@ -99,9 +100,14 @@ const DxResponsiveBox = createComponent({
       row: { isCollectionItem: true, optionName: "rows" }
     };
   }
-});
+};
 
-const DxCol = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxResponsiveBox = defineComponent(componentConfig);
+
+
+const DxColConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -116,10 +122,16 @@ const DxCol = createConfigurationComponent({
     screen: String,
     shrink: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColConfig);
+
+const DxCol = defineComponent(DxColConfig);
+
 (DxCol as any).$_optionName = "cols";
 (DxCol as any).$_isCollectionItem = true;
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -138,13 +150,19 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
   location: { isCollectionItem: true, optionName: "location" }
 };
-const DxLocation = createConfigurationComponent({
+
+const DxLocationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -161,10 +179,16 @@ const DxLocation = createConfigurationComponent({
     rowspan: Number,
     screen: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLocationConfig);
+
+const DxLocation = defineComponent(DxLocationConfig);
+
 (DxLocation as any).$_optionName = "location";
 (DxLocation as any).$_isCollectionItem = true;
-const DxRow = createConfigurationComponent({
+
+const DxRowConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -179,9 +203,15 @@ const DxRow = createConfigurationComponent({
     screen: String,
     shrink: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRowConfig);
+
+const DxRow = defineComponent(DxRowConfig);
+
 (DxRow as any).$_optionName = "rows";
 (DxRow as any).$_isCollectionItem = true;
+
 
 export default DxResponsiveBox;
 export {

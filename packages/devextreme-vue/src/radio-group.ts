@@ -1,6 +1,6 @@
 import RadioGroup, { Properties } from "devextreme/ui/radio_group";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -41,7 +41,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxRadioGroup extends AccessibleOptions {
   readonly instance?: RadioGroup;
 }
-const DxRadioGroup = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -127,9 +128,14 @@ const DxRadioGroup = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxRadioGroup = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -146,9 +152,15 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+
 
 export default DxRadioGroup;
 export {

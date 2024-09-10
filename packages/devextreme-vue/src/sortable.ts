@@ -1,6 +1,6 @@
 import Sortable, { Properties } from "devextreme/ui/sortable";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "allowDropInsideItem" |
@@ -39,7 +39,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxSortable extends AccessibleOptions {
   readonly instance?: Sortable;
 }
-const DxSortable = createComponent({
+
+const componentConfig = {
   props: {
     allowDropInsideItem: Boolean,
     allowReordering: Boolean,
@@ -120,9 +121,14 @@ const DxSortable = createComponent({
       cursorOffset: { isCollectionItem: false, optionName: "cursorOffset" }
     };
   }
-});
+};
 
-const DxCursorOffset = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxSortable = defineComponent(componentConfig);
+
+
+const DxCursorOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -133,8 +139,14 @@ const DxCursorOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCursorOffsetConfig);
+
+const DxCursorOffset = defineComponent(DxCursorOffsetConfig);
+
 (DxCursorOffset as any).$_optionName = "cursorOffset";
+
 
 export default DxSortable;
 export {

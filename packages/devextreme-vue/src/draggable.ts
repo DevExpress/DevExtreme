@@ -1,6 +1,6 @@
 import Draggable, { Properties } from "devextreme/ui/draggable";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "autoScroll" |
@@ -30,7 +30,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxDraggable extends AccessibleOptions {
   readonly instance?: Draggable;
 }
-const DxDraggable = createComponent({
+
+const componentConfig = {
   props: {
     autoScroll: Boolean,
     boundary: {},
@@ -93,9 +94,14 @@ const DxDraggable = createComponent({
       cursorOffset: { isCollectionItem: false, optionName: "cursorOffset" }
     };
   }
-});
+};
 
-const DxCursorOffset = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxDraggable = defineComponent(componentConfig);
+
+
+const DxCursorOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -106,8 +112,14 @@ const DxCursorOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCursorOffsetConfig);
+
+const DxCursorOffset = defineComponent(DxCursorOffsetConfig);
+
 (DxCursorOffset as any).$_optionName = "cursorOffset";
+
 
 export default DxDraggable;
 export {

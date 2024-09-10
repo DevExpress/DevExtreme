@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
 import TileView, { Properties } from "devextreme/ui/tile_view";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -39,7 +39,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxTileView extends AccessibleOptions {
   readonly instance?: TileView;
 }
-const DxTileView = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -118,9 +119,14 @@ const DxTileView = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxTileView = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -141,9 +147,15 @@ const DxItem = createConfigurationComponent({
     visible: Boolean,
     widthRatio: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+
 
 export default DxTileView;
 export {

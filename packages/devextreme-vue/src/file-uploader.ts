@@ -1,5 +1,6 @@
 import FileUploader, { Properties } from "devextreme/ui/file_uploader";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "abortUpload" |
@@ -71,7 +72,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxFileUploader extends AccessibleOptions {
   readonly instance?: FileUploader;
 }
-const DxFileUploader = createComponent({
+
+const componentConfig = {
   props: {
     abortUpload: Function,
     accept: String,
@@ -215,7 +217,11 @@ const DxFileUploader = createComponent({
     (this as any).$_WidgetClass = FileUploader;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxFileUploader = defineComponent(componentConfig);
 
 export default DxFileUploader;
 export {

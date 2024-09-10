@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/tree_list";
 import TreeList, { Properties } from "devextreme/ui/tree_list";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -125,7 +125,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxTreeList extends AccessibleOptions {
   readonly instance?: TreeList;
 }
-const DxTreeList = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -398,9 +399,14 @@ const DxTreeList = createComponent({
       treeListSelection: { isCollectionItem: false, optionName: "selection" }
     };
   }
-});
+};
 
-const DxAnimation = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxTreeList = defineComponent(componentConfig);
+
+
+const DxAnimationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -411,13 +417,19 @@ const DxAnimation = createConfigurationComponent({
     hide: [Object, Number, String],
     show: [Object, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAnimationConfig);
+
+const DxAnimation = defineComponent(DxAnimationConfig);
+
 (DxAnimation as any).$_optionName = "animation";
 (DxAnimation as any).$_expectedChildren = {
   hide: { isCollectionItem: false, optionName: "hide" },
   show: { isCollectionItem: false, optionName: "show" }
 };
-const DxAsyncRule = createConfigurationComponent({
+
+const DxAsyncRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -434,13 +446,19 @@ const DxAsyncRule = createConfigurationComponent({
     type: String,
     validationCallback: Function
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAsyncRuleConfig);
+
+const DxAsyncRule = defineComponent(DxAsyncRuleConfig);
+
 (DxAsyncRule as any).$_optionName = "validationRules";
 (DxAsyncRule as any).$_isCollectionItem = true;
 (DxAsyncRule as any).$_predefinedProps = {
   type: "async"
 };
-const DxAt = createConfigurationComponent({
+
+const DxAtConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -451,9 +469,15 @@ const DxAt = createConfigurationComponent({
     x: String,
     y: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAtConfig);
+
+const DxAt = defineComponent(DxAtConfig);
+
 (DxAt as any).$_optionName = "at";
-const DxBoundaryOffset = createConfigurationComponent({
+
+const DxBoundaryOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -464,9 +488,15 @@ const DxBoundaryOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxBoundaryOffsetConfig);
+
+const DxBoundaryOffset = defineComponent(DxBoundaryOffsetConfig);
+
 (DxBoundaryOffset as any).$_optionName = "boundaryOffset";
-const DxButton = createConfigurationComponent({
+
+const DxButtonConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -491,10 +521,16 @@ const DxButton = createConfigurationComponent({
     text: String,
     visible: [Boolean, Function]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxButtonConfig);
+
+const DxButton = defineComponent(DxButtonConfig);
+
 (DxButton as any).$_optionName = "buttons";
 (DxButton as any).$_isCollectionItem = true;
-const DxChange = createConfigurationComponent({
+
+const DxChangeConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -509,10 +545,16 @@ const DxChange = createConfigurationComponent({
     insertBeforeKey: {},
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxChangeConfig);
+
+const DxChange = defineComponent(DxChangeConfig);
+
 (DxChange as any).$_optionName = "changes";
 (DxChange as any).$_isCollectionItem = true;
-const DxColCountByScreen = createConfigurationComponent({
+
+const DxColCountByScreenConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -527,9 +569,15 @@ const DxColCountByScreen = createConfigurationComponent({
     sm: Number,
     xs: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColCountByScreenConfig);
+
+const DxColCountByScreen = defineComponent(DxColCountByScreenConfig);
+
 (DxColCountByScreen as any).$_optionName = "colCountByScreen";
-const DxCollision = createConfigurationComponent({
+
+const DxCollisionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -540,9 +588,15 @@ const DxCollision = createConfigurationComponent({
     x: String,
     y: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCollisionConfig);
+
+const DxCollision = defineComponent(DxCollisionConfig);
+
 (DxCollision as any).$_optionName = "collision";
-const DxColumn = createConfigurationComponent({
+
+const DxColumnConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -661,7 +715,12 @@ const DxColumn = createConfigurationComponent({
     visibleIndex: Number,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnConfig);
+
+const DxColumn = defineComponent(DxColumnConfig);
+
 (DxColumn as any).$_optionName = "columns";
 (DxColumn as any).$_isCollectionItem = true;
 (DxColumn as any).$_expectedChildren = {
@@ -683,7 +742,8 @@ const DxColumn = createConfigurationComponent({
   StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
   validationRule: { isCollectionItem: true, optionName: "validationRules" }
 };
-const DxColumnChooser = createConfigurationComponent({
+
+const DxColumnChooserConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -716,7 +776,12 @@ const DxColumnChooser = createConfigurationComponent({
     title: String,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnChooserConfig);
+
+const DxColumnChooser = defineComponent(DxColumnChooserConfig);
+
 (DxColumnChooser as any).$_optionName = "columnChooser";
 (DxColumnChooser as any).$_expectedChildren = {
   columnChooserSearch: { isCollectionItem: false, optionName: "search" },
@@ -725,7 +790,8 @@ const DxColumnChooser = createConfigurationComponent({
   search: { isCollectionItem: false, optionName: "search" },
   selection: { isCollectionItem: false, optionName: "selection" }
 };
-const DxColumnChooserSearch = createConfigurationComponent({
+
+const DxColumnChooserSearchConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -738,9 +804,15 @@ const DxColumnChooserSearch = createConfigurationComponent({
     enabled: Boolean,
     timeout: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnChooserSearchConfig);
+
+const DxColumnChooserSearch = defineComponent(DxColumnChooserSearchConfig);
+
 (DxColumnChooserSearch as any).$_optionName = "search";
-const DxColumnChooserSelection = createConfigurationComponent({
+
+const DxColumnChooserSelectionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -753,9 +825,15 @@ const DxColumnChooserSelection = createConfigurationComponent({
     recursive: Boolean,
     selectByClick: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnChooserSelectionConfig);
+
+const DxColumnChooserSelection = defineComponent(DxColumnChooserSelectionConfig);
+
 (DxColumnChooserSelection as any).$_optionName = "selection";
-const DxColumnFixing = createConfigurationComponent({
+
+const DxColumnFixingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -766,13 +844,19 @@ const DxColumnFixing = createConfigurationComponent({
     enabled: Boolean,
     texts: Object
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnFixingConfig);
+
+const DxColumnFixing = defineComponent(DxColumnFixingConfig);
+
 (DxColumnFixing as any).$_optionName = "columnFixing";
 (DxColumnFixing as any).$_expectedChildren = {
   columnFixingTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-const DxColumnFixingTexts = createConfigurationComponent({
+
+const DxColumnFixingTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -787,9 +871,15 @@ const DxColumnFixingTexts = createConfigurationComponent({
     rightPosition: String,
     unfix: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnFixingTextsConfig);
+
+const DxColumnFixingTexts = defineComponent(DxColumnFixingTextsConfig);
+
 (DxColumnFixingTexts as any).$_optionName = "texts";
-const DxColumnHeaderFilter = createConfigurationComponent({
+
+const DxColumnHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -812,13 +902,19 @@ const DxColumnHeaderFilter = createConfigurationComponent({
     searchMode: String,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnHeaderFilterConfig);
+
+const DxColumnHeaderFilter = defineComponent(DxColumnHeaderFilterConfig);
+
 (DxColumnHeaderFilter as any).$_optionName = "headerFilter";
 (DxColumnHeaderFilter as any).$_expectedChildren = {
   columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
   search: { isCollectionItem: false, optionName: "search" }
 };
-const DxColumnHeaderFilterSearch = createConfigurationComponent({
+
+const DxColumnHeaderFilterSearchConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -835,9 +931,15 @@ const DxColumnHeaderFilterSearch = createConfigurationComponent({
     searchExpr: [Array, Function, String],
     timeout: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnHeaderFilterSearchConfig);
+
+const DxColumnHeaderFilterSearch = defineComponent(DxColumnHeaderFilterSearchConfig);
+
 (DxColumnHeaderFilterSearch as any).$_optionName = "search";
-const DxColumnLookup = createConfigurationComponent({
+
+const DxColumnLookupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -854,9 +956,15 @@ const DxColumnLookup = createConfigurationComponent({
     displayExpr: [Function, String],
     valueExpr: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnLookupConfig);
+
+const DxColumnLookup = defineComponent(DxColumnLookupConfig);
+
 (DxColumnLookup as any).$_optionName = "lookup";
-const DxCompareRule = createConfigurationComponent({
+
+const DxCompareRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -873,13 +981,19 @@ const DxCompareRule = createConfigurationComponent({
     message: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCompareRuleConfig);
+
+const DxCompareRule = defineComponent(DxCompareRuleConfig);
+
 (DxCompareRule as any).$_optionName = "validationRules";
 (DxCompareRule as any).$_isCollectionItem = true;
 (DxCompareRule as any).$_predefinedProps = {
   type: "compare"
 };
-const DxCursorOffset = createConfigurationComponent({
+
+const DxCursorOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -890,9 +1004,15 @@ const DxCursorOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCursorOffsetConfig);
+
+const DxCursorOffset = defineComponent(DxCursorOffsetConfig);
+
 (DxCursorOffset as any).$_optionName = "cursorOffset";
-const DxCustomOperation = createConfigurationComponent({
+
+const DxCustomOperationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -915,10 +1035,16 @@ const DxCustomOperation = createConfigurationComponent({
     icon: String,
     name: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCustomOperationConfig);
+
+const DxCustomOperation = defineComponent(DxCustomOperationConfig);
+
 (DxCustomOperation as any).$_optionName = "customOperations";
 (DxCustomOperation as any).$_isCollectionItem = true;
-const DxCustomRule = createConfigurationComponent({
+
+const DxCustomRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -935,13 +1061,19 @@ const DxCustomRule = createConfigurationComponent({
     type: String,
     validationCallback: Function
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCustomRuleConfig);
+
+const DxCustomRule = defineComponent(DxCustomRuleConfig);
+
 (DxCustomRule as any).$_optionName = "validationRules";
 (DxCustomRule as any).$_isCollectionItem = true;
 (DxCustomRule as any).$_predefinedProps = {
   type: "custom"
 };
-const DxEditing = createConfigurationComponent({
+
+const DxEditingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -978,7 +1110,12 @@ const DxEditing = createConfigurationComponent({
     texts: Object,
     useIcons: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEditingConfig);
+
+const DxEditing = defineComponent(DxEditingConfig);
+
 (DxEditing as any).$_optionName = "editing";
 (DxEditing as any).$_expectedChildren = {
   change: { isCollectionItem: true, optionName: "changes" },
@@ -987,7 +1124,8 @@ const DxEditing = createConfigurationComponent({
   popup: { isCollectionItem: false, optionName: "popup" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-const DxEditingTexts = createConfigurationComponent({
+
+const DxEditingTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1018,9 +1156,15 @@ const DxEditingTexts = createConfigurationComponent({
     undeleteRow: String,
     validationCancelChanges: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEditingTextsConfig);
+
+const DxEditingTexts = defineComponent(DxEditingTextsConfig);
+
 (DxEditingTexts as any).$_optionName = "texts";
-const DxEmailRule = createConfigurationComponent({
+
+const DxEmailRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1033,13 +1177,19 @@ const DxEmailRule = createConfigurationComponent({
     message: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEmailRuleConfig);
+
+const DxEmailRule = defineComponent(DxEmailRuleConfig);
+
 (DxEmailRule as any).$_optionName = "validationRules";
 (DxEmailRule as any).$_isCollectionItem = true;
 (DxEmailRule as any).$_predefinedProps = {
   type: "email"
 };
-const DxField = createConfigurationComponent({
+
+const DxFieldConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1072,7 +1222,12 @@ const DxField = createConfigurationComponent({
     name: String,
     trueText: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFieldConfig);
+
+const DxField = defineComponent(DxFieldConfig);
+
 (DxField as any).$_optionName = "fields";
 (DxField as any).$_isCollectionItem = true;
 (DxField as any).$_expectedChildren = {
@@ -1080,7 +1235,8 @@ const DxField = createConfigurationComponent({
   format: { isCollectionItem: false, optionName: "format" },
   lookup: { isCollectionItem: false, optionName: "lookup" }
 };
-const DxFieldLookup = createConfigurationComponent({
+
+const DxFieldLookupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1095,9 +1251,15 @@ const DxFieldLookup = createConfigurationComponent({
     displayExpr: [Function, String],
     valueExpr: [Function, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFieldLookupConfig);
+
+const DxFieldLookup = defineComponent(DxFieldLookupConfig);
+
 (DxFieldLookup as any).$_optionName = "lookup";
-const DxFilterBuilder = createConfigurationComponent({
+
+const DxFilterBuilderConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1160,7 +1322,12 @@ const DxFilterBuilder = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFilterBuilderConfig);
+
+const DxFilterBuilder = defineComponent(DxFilterBuilderConfig);
+
 (DxFilterBuilder as any).$_optionName = "filterBuilder";
 (DxFilterBuilder as any).$_expectedChildren = {
   customOperation: { isCollectionItem: true, optionName: "customOperations" },
@@ -1168,7 +1335,8 @@ const DxFilterBuilder = createConfigurationComponent({
   filterOperationDescriptions: { isCollectionItem: false, optionName: "filterOperationDescriptions" },
   groupOperationDescriptions: { isCollectionItem: false, optionName: "groupOperationDescriptions" }
 };
-const DxFilterBuilderPopup = createConfigurationComponent({
+
+const DxFilterBuilderPopupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1275,9 +1443,15 @@ const DxFilterBuilderPopup = createConfigurationComponent({
     width: [Function, Number, String],
     wrapperAttr: {}
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFilterBuilderPopupConfig);
+
+const DxFilterBuilderPopup = defineComponent(DxFilterBuilderPopupConfig);
+
 (DxFilterBuilderPopup as any).$_optionName = "filterBuilderPopup";
-const DxFilterOperationDescriptions = createConfigurationComponent({
+
+const DxFilterOperationDescriptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1310,9 +1484,15 @@ const DxFilterOperationDescriptions = createConfigurationComponent({
     notEqual: String,
     startsWith: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFilterOperationDescriptionsConfig);
+
+const DxFilterOperationDescriptions = defineComponent(DxFilterOperationDescriptionsConfig);
+
 (DxFilterOperationDescriptions as any).$_optionName = "filterOperationDescriptions";
-const DxFilterPanel = createConfigurationComponent({
+
+const DxFilterPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1327,13 +1507,19 @@ const DxFilterPanel = createConfigurationComponent({
     texts: Object,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFilterPanelConfig);
+
+const DxFilterPanel = defineComponent(DxFilterPanelConfig);
+
 (DxFilterPanel as any).$_optionName = "filterPanel";
 (DxFilterPanel as any).$_expectedChildren = {
   filterPanelTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-const DxFilterPanelTexts = createConfigurationComponent({
+
+const DxFilterPanelTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1346,9 +1532,15 @@ const DxFilterPanelTexts = createConfigurationComponent({
     createFilter: String,
     filterEnabledHint: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFilterPanelTextsConfig);
+
+const DxFilterPanelTexts = defineComponent(DxFilterPanelTextsConfig);
+
 (DxFilterPanelTexts as any).$_optionName = "texts";
-const DxFilterRow = createConfigurationComponent({
+
+const DxFilterRowConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1373,12 +1565,18 @@ const DxFilterRow = createConfigurationComponent({
     showOperationChooser: Boolean,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFilterRowConfig);
+
+const DxFilterRow = defineComponent(DxFilterRowConfig);
+
 (DxFilterRow as any).$_optionName = "filterRow";
 (DxFilterRow as any).$_expectedChildren = {
   operationDescriptions: { isCollectionItem: false, optionName: "operationDescriptions" }
 };
-const DxForm = createConfigurationComponent({
+
+const DxFormConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1467,12 +1665,18 @@ const DxForm = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormConfig);
+
+const DxForm = defineComponent(DxFormConfig);
+
 (DxForm as any).$_optionName = "form";
 (DxForm as any).$_expectedChildren = {
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
 };
-const DxFormat = createConfigurationComponent({
+
+const DxFormatConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1491,9 +1695,15 @@ const DxFormat = createConfigurationComponent({
     type: String,
     useCurrencyAccountingStyle: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormatConfig);
+
+const DxFormat = defineComponent(DxFormatConfig);
+
 (DxFormat as any).$_optionName = "format";
-const DxFormItem = createConfigurationComponent({
+
+const DxFormItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1528,7 +1738,12 @@ const DxFormItem = createConfigurationComponent({
     visible: Boolean,
     visibleIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormItemConfig);
+
+const DxFormItem = defineComponent(DxFormItemConfig);
+
 (DxFormItem as any).$_optionName = "formItem";
 (DxFormItem as any).$_expectedChildren = {
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -1543,7 +1758,8 @@ const DxFormItem = createConfigurationComponent({
   StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
   validationRule: { isCollectionItem: true, optionName: "validationRules" }
 };
-const DxFrom = createConfigurationComponent({
+
+const DxFromConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1560,12 +1776,18 @@ const DxFrom = createConfigurationComponent({
     scale: Number,
     top: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFromConfig);
+
+const DxFrom = defineComponent(DxFromConfig);
+
 (DxFrom as any).$_optionName = "from";
 (DxFrom as any).$_expectedChildren = {
   position: { isCollectionItem: false, optionName: "position" }
 };
-const DxGroupOperationDescriptions = createConfigurationComponent({
+
+const DxGroupOperationDescriptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1580,9 +1802,15 @@ const DxGroupOperationDescriptions = createConfigurationComponent({
     notOr: String,
     or: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxGroupOperationDescriptionsConfig);
+
+const DxGroupOperationDescriptions = defineComponent(DxGroupOperationDescriptionsConfig);
+
 (DxGroupOperationDescriptions as any).$_optionName = "groupOperationDescriptions";
-const DxHeaderFilter = createConfigurationComponent({
+
+const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1611,9 +1839,15 @@ const DxHeaderFilter = createConfigurationComponent({
     visible: Boolean,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHeaderFilterConfig);
+
+const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
+
 (DxHeaderFilter as any).$_optionName = "headerFilter";
-const DxHide = createConfigurationComponent({
+
+const DxHideConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1640,13 +1874,19 @@ const DxHide = createConfigurationComponent({
     to: Object,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHideConfig);
+
+const DxHide = defineComponent(DxHideConfig);
+
 (DxHide as any).$_optionName = "hide";
 (DxHide as any).$_expectedChildren = {
   from: { isCollectionItem: false, optionName: "from" },
   to: { isCollectionItem: false, optionName: "to" }
 };
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1679,10 +1919,16 @@ const DxItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxKeyboardNavigation = createConfigurationComponent({
+
+const DxKeyboardNavigationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1697,9 +1943,15 @@ const DxKeyboardNavigation = createConfigurationComponent({
     enterKeyAction: String,
     enterKeyDirection: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxKeyboardNavigationConfig);
+
+const DxKeyboardNavigation = defineComponent(DxKeyboardNavigationConfig);
+
 (DxKeyboardNavigation as any).$_optionName = "keyboardNavigation";
-const DxLabel = createConfigurationComponent({
+
+const DxLabelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1718,9 +1970,15 @@ const DxLabel = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLabelConfig);
+
+const DxLabel = defineComponent(DxLabelConfig);
+
 (DxLabel as any).$_optionName = "label";
-const DxLoadPanel = createConfigurationComponent({
+
+const DxLoadPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1745,9 +2003,15 @@ const DxLoadPanel = createConfigurationComponent({
     text: String,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLoadPanelConfig);
+
+const DxLoadPanel = defineComponent(DxLoadPanelConfig);
+
 (DxLoadPanel as any).$_optionName = "loadPanel";
-const DxLookup = createConfigurationComponent({
+
+const DxLookupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1764,9 +2028,15 @@ const DxLookup = createConfigurationComponent({
     displayExpr: [Function, String],
     valueExpr: [String, Function]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLookupConfig);
+
+const DxLookup = defineComponent(DxLookupConfig);
+
 (DxLookup as any).$_optionName = "lookup";
-const DxMy = createConfigurationComponent({
+
+const DxMyConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1777,9 +2047,15 @@ const DxMy = createConfigurationComponent({
     x: String,
     y: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMyConfig);
+
+const DxMy = defineComponent(DxMyConfig);
+
 (DxMy as any).$_optionName = "my";
-const DxNumericRule = createConfigurationComponent({
+
+const DxNumericRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1792,13 +2068,19 @@ const DxNumericRule = createConfigurationComponent({
     message: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxNumericRuleConfig);
+
+const DxNumericRule = defineComponent(DxNumericRuleConfig);
+
 (DxNumericRule as any).$_optionName = "validationRules";
 (DxNumericRule as any).$_isCollectionItem = true;
 (DxNumericRule as any).$_predefinedProps = {
   type: "numeric"
 };
-const DxOffset = createConfigurationComponent({
+
+const DxOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1809,9 +2091,15 @@ const DxOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxOffsetConfig);
+
+const DxOffset = defineComponent(DxOffsetConfig);
+
 (DxOffset as any).$_optionName = "offset";
-const DxOperationDescriptions = createConfigurationComponent({
+
+const DxOperationDescriptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1840,9 +2128,15 @@ const DxOperationDescriptions = createConfigurationComponent({
     notEqual: String,
     startsWith: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxOperationDescriptionsConfig);
+
+const DxOperationDescriptions = defineComponent(DxOperationDescriptionsConfig);
+
 (DxOperationDescriptions as any).$_optionName = "operationDescriptions";
-const DxPager = createConfigurationComponent({
+
+const DxPagerConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1865,9 +2159,15 @@ const DxPager = createConfigurationComponent({
     showPageSizeSelector: Boolean,
     visible: [Boolean, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPagerConfig);
+
+const DxPager = defineComponent(DxPagerConfig);
+
 (DxPager as any).$_optionName = "pager";
-const DxPaging = createConfigurationComponent({
+
+const DxPagingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1880,9 +2180,15 @@ const DxPaging = createConfigurationComponent({
     pageIndex: Number,
     pageSize: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPagingConfig);
+
+const DxPaging = defineComponent(DxPagingConfig);
+
 (DxPaging as any).$_optionName = "paging";
-const DxPatternRule = createConfigurationComponent({
+
+const DxPatternRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1897,13 +2203,19 @@ const DxPatternRule = createConfigurationComponent({
     pattern: [RegExp, String],
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPatternRuleConfig);
+
+const DxPatternRule = defineComponent(DxPatternRuleConfig);
+
 (DxPatternRule as any).$_optionName = "validationRules";
 (DxPatternRule as any).$_isCollectionItem = true;
 (DxPatternRule as any).$_predefinedProps = {
   type: "pattern"
 };
-const DxPopup = createConfigurationComponent({
+
+const DxPopupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2010,14 +2322,20 @@ const DxPopup = createConfigurationComponent({
     width: [Function, Number, String],
     wrapperAttr: {}
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPopupConfig);
+
+const DxPopup = defineComponent(DxPopupConfig);
+
 (DxPopup as any).$_optionName = "popup";
 (DxPopup as any).$_expectedChildren = {
   animation: { isCollectionItem: false, optionName: "animation" },
   position: { isCollectionItem: false, optionName: "position" },
   toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
 };
-const DxPosition = createConfigurationComponent({
+
+const DxPositionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2038,9 +2356,15 @@ const DxPosition = createConfigurationComponent({
     of: {},
     offset: [Object, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPositionConfig);
+
+const DxPosition = defineComponent(DxPositionConfig);
+
 (DxPosition as any).$_optionName = "position";
-const DxRangeRule = createConfigurationComponent({
+
+const DxRangeRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2059,13 +2383,19 @@ const DxRangeRule = createConfigurationComponent({
     reevaluate: Boolean,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRangeRuleConfig);
+
+const DxRangeRule = defineComponent(DxRangeRuleConfig);
+
 (DxRangeRule as any).$_optionName = "validationRules";
 (DxRangeRule as any).$_isCollectionItem = true;
 (DxRangeRule as any).$_predefinedProps = {
   type: "range"
 };
-const DxRemoteOperations = createConfigurationComponent({
+
+const DxRemoteOperationsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2078,9 +2408,15 @@ const DxRemoteOperations = createConfigurationComponent({
     grouping: Boolean,
     sorting: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRemoteOperationsConfig);
+
+const DxRemoteOperations = defineComponent(DxRemoteOperationsConfig);
+
 (DxRemoteOperations as any).$_optionName = "remoteOperations";
-const DxRequiredRule = createConfigurationComponent({
+
+const DxRequiredRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2093,13 +2429,19 @@ const DxRequiredRule = createConfigurationComponent({
     trim: Boolean,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRequiredRuleConfig);
+
+const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
+
 (DxRequiredRule as any).$_optionName = "validationRules";
 (DxRequiredRule as any).$_isCollectionItem = true;
 (DxRequiredRule as any).$_predefinedProps = {
   type: "required"
 };
-const DxRowDragging = createConfigurationComponent({
+
+const DxRowDraggingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2152,12 +2494,18 @@ const DxRowDragging = createConfigurationComponent({
     scrollSpeed: Number,
     showDragIcons: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRowDraggingConfig);
+
+const DxRowDragging = defineComponent(DxRowDraggingConfig);
+
 (DxRowDragging as any).$_optionName = "rowDragging";
 (DxRowDragging as any).$_expectedChildren = {
   cursorOffset: { isCollectionItem: false, optionName: "cursorOffset" }
 };
-const DxScrolling = createConfigurationComponent({
+
+const DxScrollingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2182,9 +2530,15 @@ const DxScrolling = createConfigurationComponent({
     showScrollbar: String,
     useNative: [Boolean, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxScrollingConfig);
+
+const DxScrolling = defineComponent(DxScrollingConfig);
+
 (DxScrolling as any).$_optionName = "scrolling";
-const DxSearch = createConfigurationComponent({
+
+const DxSearchConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2201,9 +2555,15 @@ const DxSearch = createConfigurationComponent({
     searchExpr: [Array, Function, String],
     timeout: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSearchConfig);
+
+const DxSearch = defineComponent(DxSearchConfig);
+
 (DxSearch as any).$_optionName = "search";
-const DxSearchPanel = createConfigurationComponent({
+
+const DxSearchPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2224,9 +2584,15 @@ const DxSearchPanel = createConfigurationComponent({
     visible: Boolean,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSearchPanelConfig);
+
+const DxSearchPanel = defineComponent(DxSearchPanelConfig);
+
 (DxSearchPanel as any).$_optionName = "searchPanel";
-const DxSelection = createConfigurationComponent({
+
+const DxSelectionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2241,9 +2607,15 @@ const DxSelection = createConfigurationComponent({
     recursive: Boolean,
     selectByClick: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSelectionConfig);
+
+const DxSelection = defineComponent(DxSelectionConfig);
+
 (DxSelection as any).$_optionName = "selection";
-const DxShow = createConfigurationComponent({
+
+const DxShowConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2270,9 +2642,15 @@ const DxShow = createConfigurationComponent({
     to: Object,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxShowConfig);
+
+const DxShow = defineComponent(DxShowConfig);
+
 (DxShow as any).$_optionName = "show";
-const DxSorting = createConfigurationComponent({
+
+const DxSortingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2289,9 +2667,15 @@ const DxSorting = createConfigurationComponent({
     mode: String,
     showSortIndexes: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSortingConfig);
+
+const DxSorting = defineComponent(DxSortingConfig);
+
 (DxSorting as any).$_optionName = "sorting";
-const DxStateStoring = createConfigurationComponent({
+
+const DxStateStoringConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2310,9 +2694,15 @@ const DxStateStoring = createConfigurationComponent({
     storageKey: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxStateStoringConfig);
+
+const DxStateStoring = defineComponent(DxStateStoringConfig);
+
 (DxStateStoring as any).$_optionName = "stateStoring";
-const DxStringLengthRule = createConfigurationComponent({
+
+const DxStringLengthRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2331,13 +2721,19 @@ const DxStringLengthRule = createConfigurationComponent({
     trim: Boolean,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxStringLengthRuleConfig);
+
+const DxStringLengthRule = defineComponent(DxStringLengthRuleConfig);
+
 (DxStringLengthRule as any).$_optionName = "validationRules";
 (DxStringLengthRule as any).$_isCollectionItem = true;
 (DxStringLengthRule as any).$_predefinedProps = {
   type: "stringLength"
 };
-const DxTexts = createConfigurationComponent({
+
+const DxTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2388,9 +2784,15 @@ const DxTexts = createConfigurationComponent({
     unfix: String,
     validationCancelChanges: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTextsConfig);
+
+const DxTexts = defineComponent(DxTextsConfig);
+
 (DxTexts as any).$_optionName = "texts";
-const DxTo = createConfigurationComponent({
+
+const DxToConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2407,9 +2809,15 @@ const DxTo = createConfigurationComponent({
     scale: Number,
     top: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToConfig);
+
+const DxTo = defineComponent(DxToConfig);
+
 (DxTo as any).$_optionName = "to";
-const DxToolbar = createConfigurationComponent({
+
+const DxToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2422,12 +2830,18 @@ const DxToolbar = createConfigurationComponent({
     items: Array,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolbarConfig);
+
+const DxToolbar = defineComponent(DxToolbarConfig);
+
 (DxToolbar as any).$_optionName = "toolbar";
 (DxToolbar as any).$_expectedChildren = {
   item: { isCollectionItem: true, optionName: "items" }
 };
-const DxToolbarItem = createConfigurationComponent({
+
+const DxToolbarItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2460,10 +2874,16 @@ const DxToolbarItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolbarItemConfig);
+
+const DxToolbarItem = defineComponent(DxToolbarItemConfig);
+
 (DxToolbarItem as any).$_optionName = "toolbarItems";
 (DxToolbarItem as any).$_isCollectionItem = true;
-const DxTreeListHeaderFilter = createConfigurationComponent({
+
+const DxTreeListHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2486,7 +2906,12 @@ const DxTreeListHeaderFilter = createConfigurationComponent({
     visible: Boolean,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTreeListHeaderFilterConfig);
+
+const DxTreeListHeaderFilter = defineComponent(DxTreeListHeaderFilterConfig);
+
 (DxTreeListHeaderFilter as any).$_optionName = "headerFilter";
 (DxTreeListHeaderFilter as any).$_expectedChildren = {
   search: { isCollectionItem: false, optionName: "search" },
@@ -2494,7 +2919,8 @@ const DxTreeListHeaderFilter = createConfigurationComponent({
   treeListHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
   treeListHeaderFilterTexts: { isCollectionItem: false, optionName: "texts" }
 };
-const DxTreeListHeaderFilterSearch = createConfigurationComponent({
+
+const DxTreeListHeaderFilterSearchConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2509,9 +2935,15 @@ const DxTreeListHeaderFilterSearch = createConfigurationComponent({
     mode: String,
     timeout: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTreeListHeaderFilterSearchConfig);
+
+const DxTreeListHeaderFilterSearch = defineComponent(DxTreeListHeaderFilterSearchConfig);
+
 (DxTreeListHeaderFilterSearch as any).$_optionName = "search";
-const DxTreeListHeaderFilterTexts = createConfigurationComponent({
+
+const DxTreeListHeaderFilterTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2524,9 +2956,15 @@ const DxTreeListHeaderFilterTexts = createConfigurationComponent({
     emptyValue: String,
     ok: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTreeListHeaderFilterTextsConfig);
+
+const DxTreeListHeaderFilterTexts = defineComponent(DxTreeListHeaderFilterTextsConfig);
+
 (DxTreeListHeaderFilterTexts as any).$_optionName = "texts";
-const DxTreeListSelection = createConfigurationComponent({
+
+const DxTreeListSelectionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2539,9 +2977,15 @@ const DxTreeListSelection = createConfigurationComponent({
     mode: String,
     recursive: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTreeListSelectionConfig);
+
+const DxTreeListSelection = defineComponent(DxTreeListSelectionConfig);
+
 (DxTreeListSelection as any).$_optionName = "selection";
-const DxValidationRule = createConfigurationComponent({
+
+const DxValidationRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2570,12 +3014,18 @@ const DxValidationRule = createConfigurationComponent({
     type: String,
     validationCallback: Function
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxValidationRuleConfig);
+
+const DxValidationRule = defineComponent(DxValidationRuleConfig);
+
 (DxValidationRule as any).$_optionName = "validationRules";
 (DxValidationRule as any).$_isCollectionItem = true;
 (DxValidationRule as any).$_predefinedProps = {
   type: "required"
 };
+
 
 export default DxTreeList;
 export {

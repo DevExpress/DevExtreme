@@ -1,11 +1,10 @@
 import Chat, { Properties } from "devextreme/ui/chat";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
-  "dataSource" |
   "disabled" |
   "elementAttr" |
   "focusStateEnabled" |
@@ -26,11 +25,11 @@ type AccessibleOptions = Pick<Properties,
 interface DxChat extends AccessibleOptions {
   readonly instance?: Chat;
 }
-const DxChat = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -52,7 +51,6 @@ const DxChat = createComponent({
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -82,9 +80,14 @@ const DxChat = createComponent({
       user: { isCollectionItem: false, optionName: "user" }
     };
   }
-});
+};
 
-const DxAuthor = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxChat = defineComponent(componentConfig);
+
+
+const DxAuthorConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -97,9 +100,15 @@ const DxAuthor = createConfigurationComponent({
     id: [Number, String],
     name: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAuthorConfig);
+
+const DxAuthor = defineComponent(DxAuthorConfig);
+
 (DxAuthor as any).$_optionName = "author";
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -111,16 +120,22 @@ const DxItem = createConfigurationComponent({
   props: {
     author: Object,
     text: String,
-    timestamp: [Date, Number, String],
+    timestamp: String,
     typing: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
   author: { isCollectionItem: false, optionName: "author" }
 };
-const DxUser = createConfigurationComponent({
+
+const DxUserConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -133,8 +148,14 @@ const DxUser = createConfigurationComponent({
     id: [Number, String],
     name: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxUserConfig);
+
+const DxUser = defineComponent(DxUserConfig);
+
 (DxUser as any).$_optionName = "user";
+
 
 export default DxChat;
 export {

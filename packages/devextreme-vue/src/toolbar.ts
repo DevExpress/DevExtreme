@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/toolbar";
 import Toolbar, { Properties } from "devextreme/ui/toolbar";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "dataSource" |
@@ -31,7 +31,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxToolbar extends AccessibleOptions {
   readonly instance?: Toolbar;
 }
-const DxToolbar = createComponent({
+
+const componentConfig = {
   props: {
     dataSource: {},
     disabled: Boolean,
@@ -94,9 +95,14 @@ const DxToolbar = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxToolbar = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -127,9 +133,15 @@ const DxItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+
 
 export default DxToolbar;
 export {

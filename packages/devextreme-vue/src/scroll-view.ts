@@ -1,5 +1,6 @@
 import ScrollView, { Properties } from "devextreme/ui/scroll_view";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "bounceEnabled" |
@@ -29,7 +30,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxScrollView extends AccessibleOptions {
   readonly instance?: ScrollView;
 }
-const DxScrollView = createComponent({
+
+const componentConfig = {
   props: {
     bounceEnabled: Boolean,
     direction: String,
@@ -89,7 +91,11 @@ const DxScrollView = createComponent({
     (this as any).$_WidgetClass = ScrollView;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxScrollView = defineComponent(componentConfig);
 
 export default DxScrollView;
 export {

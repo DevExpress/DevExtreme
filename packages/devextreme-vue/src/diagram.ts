@@ -1,6 +1,6 @@
 import Diagram, { Properties } from "devextreme/ui/diagram";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "autoZoomMode" |
@@ -54,7 +54,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxDiagram extends AccessibleOptions {
   readonly instance?: Diagram;
 }
-const DxDiagram = createComponent({
+
+const componentConfig = {
   props: {
     autoZoomMode: String,
     contextMenu: Object,
@@ -180,9 +181,14 @@ const DxDiagram = createComponent({
       zoomLevel: { isCollectionItem: false, optionName: "zoomLevel" }
     };
   }
-});
+};
 
-const DxAutoLayout = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxDiagram = defineComponent(componentConfig);
+
+
+const DxAutoLayoutConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -193,9 +199,15 @@ const DxAutoLayout = createConfigurationComponent({
     orientation: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAutoLayoutConfig);
+
+const DxAutoLayout = defineComponent(DxAutoLayoutConfig);
+
 (DxAutoLayout as any).$_optionName = "autoLayout";
-const DxCommand = createConfigurationComponent({
+
+const DxCommandConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -212,10 +224,16 @@ const DxCommand = createConfigurationComponent({
     name: String,
     text: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCommandConfig);
+
+const DxCommand = defineComponent(DxCommandConfig);
+
 (DxCommand as any).$_optionName = "commands";
 (DxCommand as any).$_isCollectionItem = true;
-const DxCommandItem = createConfigurationComponent({
+
+const DxCommandItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -232,10 +250,16 @@ const DxCommandItem = createConfigurationComponent({
     name: String,
     text: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCommandItemConfig);
+
+const DxCommandItem = defineComponent(DxCommandItemConfig);
+
 (DxCommandItem as any).$_optionName = "items";
 (DxCommandItem as any).$_isCollectionItem = true;
-const DxConnectionPoint = createConfigurationComponent({
+
+const DxConnectionPointConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -246,10 +270,16 @@ const DxConnectionPoint = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxConnectionPointConfig);
+
+const DxConnectionPoint = defineComponent(DxConnectionPointConfig);
+
 (DxConnectionPoint as any).$_optionName = "connectionPoints";
 (DxConnectionPoint as any).$_isCollectionItem = true;
-const DxContextMenu = createConfigurationComponent({
+
+const DxContextMenuConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -260,12 +290,18 @@ const DxContextMenu = createConfigurationComponent({
     commands: Array,
     enabled: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxContextMenuConfig);
+
+const DxContextMenu = defineComponent(DxContextMenuConfig);
+
 (DxContextMenu as any).$_optionName = "contextMenu";
 (DxContextMenu as any).$_expectedChildren = {
   command: { isCollectionItem: true, optionName: "commands" }
 };
-const DxContextToolbox = createConfigurationComponent({
+
+const DxContextToolboxConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -284,9 +320,15 @@ const DxContextToolbox = createConfigurationComponent({
     shapes: Array,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxContextToolboxConfig);
+
+const DxContextToolbox = defineComponent(DxContextToolboxConfig);
+
 (DxContextToolbox as any).$_optionName = "contextToolbox";
-const DxCustomShape = createConfigurationComponent({
+
+const DxCustomShapeConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -369,13 +411,19 @@ const DxCustomShape = createConfigurationComponent({
     toolboxWidthToHeightRatio: Number,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCustomShapeConfig);
+
+const DxCustomShape = defineComponent(DxCustomShapeConfig);
+
 (DxCustomShape as any).$_optionName = "customShapes";
 (DxCustomShape as any).$_isCollectionItem = true;
 (DxCustomShape as any).$_expectedChildren = {
   connectionPoint: { isCollectionItem: true, optionName: "connectionPoints" }
 };
-const DxDefaultItemProperties = createConfigurationComponent({
+
+const DxDefaultItemPropertiesConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -400,9 +448,15 @@ const DxDefaultItemProperties = createConfigurationComponent({
     style: Object,
     textStyle: Object
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxDefaultItemPropertiesConfig);
+
+const DxDefaultItemProperties = defineComponent(DxDefaultItemPropertiesConfig);
+
 (DxDefaultItemProperties as any).$_optionName = "defaultItemProperties";
-const DxEdges = createConfigurationComponent({
+
+const DxEdgesConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -441,9 +495,15 @@ const DxEdges = createConfigurationComponent({
     toPointIndexExpr: [Function, String],
     zIndexExpr: [Function, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEdgesConfig);
+
+const DxEdges = defineComponent(DxEdgesConfig);
+
 (DxEdges as any).$_optionName = "edges";
-const DxEditing = createConfigurationComponent({
+
+const DxEditingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -468,9 +528,15 @@ const DxEditing = createConfigurationComponent({
     allowMoveShape: Boolean,
     allowResizeShape: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEditingConfig);
+
+const DxEditing = defineComponent(DxEditingConfig);
+
 (DxEditing as any).$_optionName = "editing";
-const DxExport = createConfigurationComponent({
+
+const DxExportConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -479,9 +545,15 @@ const DxExport = createConfigurationComponent({
   props: {
     fileName: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxExportConfig);
+
+const DxExport = defineComponent(DxExportConfig);
+
 (DxExport as any).$_optionName = "export";
-const DxGridSize = createConfigurationComponent({
+
+const DxGridSizeConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -492,9 +564,15 @@ const DxGridSize = createConfigurationComponent({
     items: Array,
     value: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxGridSizeConfig);
+
+const DxGridSize = defineComponent(DxGridSizeConfig);
+
 (DxGridSize as any).$_optionName = "gridSize";
-const DxGroup = createConfigurationComponent({
+
+const DxGroupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -513,10 +591,16 @@ const DxGroup = createConfigurationComponent({
     shapes: Array,
     title: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxGroupConfig);
+
+const DxGroup = defineComponent(DxGroupConfig);
+
 (DxGroup as any).$_optionName = "groups";
 (DxGroup as any).$_isCollectionItem = true;
-const DxHistoryToolbar = createConfigurationComponent({
+
+const DxHistoryToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -527,12 +611,18 @@ const DxHistoryToolbar = createConfigurationComponent({
     commands: Array,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHistoryToolbarConfig);
+
+const DxHistoryToolbar = defineComponent(DxHistoryToolbarConfig);
+
 (DxHistoryToolbar as any).$_optionName = "historyToolbar";
 (DxHistoryToolbar as any).$_expectedChildren = {
   command: { isCollectionItem: true, optionName: "commands" }
 };
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -553,10 +643,16 @@ const DxItem = createConfigurationComponent({
     text: String,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxMainToolbar = createConfigurationComponent({
+
+const DxMainToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -567,12 +663,18 @@ const DxMainToolbar = createConfigurationComponent({
     commands: Array,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMainToolbarConfig);
+
+const DxMainToolbar = defineComponent(DxMainToolbarConfig);
+
 (DxMainToolbar as any).$_optionName = "mainToolbar";
 (DxMainToolbar as any).$_expectedChildren = {
   command: { isCollectionItem: true, optionName: "commands" }
 };
-const DxNodes = createConfigurationComponent({
+
+const DxNodesConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -619,12 +721,18 @@ const DxNodes = createConfigurationComponent({
     widthExpr: [Function, String],
     zIndexExpr: [Function, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxNodesConfig);
+
+const DxNodes = defineComponent(DxNodesConfig);
+
 (DxNodes as any).$_optionName = "nodes";
 (DxNodes as any).$_expectedChildren = {
   autoLayout: { isCollectionItem: false, optionName: "autoLayout" }
 };
-const DxPageSize = createConfigurationComponent({
+
+const DxPageSizeConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -637,13 +745,19 @@ const DxPageSize = createConfigurationComponent({
     items: Array,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPageSizeConfig);
+
+const DxPageSize = defineComponent(DxPageSizeConfig);
+
 (DxPageSize as any).$_optionName = "pageSize";
 (DxPageSize as any).$_expectedChildren = {
   item: { isCollectionItem: true, optionName: "items" },
   pageSizeItem: { isCollectionItem: true, optionName: "items" }
 };
-const DxPageSizeItem = createConfigurationComponent({
+
+const DxPageSizeItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -656,10 +770,16 @@ const DxPageSizeItem = createConfigurationComponent({
     text: String,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPageSizeItemConfig);
+
+const DxPageSizeItem = defineComponent(DxPageSizeItemConfig);
+
 (DxPageSizeItem as any).$_optionName = "items";
 (DxPageSizeItem as any).$_isCollectionItem = true;
-const DxPropertiesPanel = createConfigurationComponent({
+
+const DxPropertiesPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -670,12 +790,18 @@ const DxPropertiesPanel = createConfigurationComponent({
     tabs: Array,
     visibility: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPropertiesPanelConfig);
+
+const DxPropertiesPanel = defineComponent(DxPropertiesPanelConfig);
+
 (DxPropertiesPanel as any).$_optionName = "propertiesPanel";
 (DxPropertiesPanel as any).$_expectedChildren = {
   tab: { isCollectionItem: true, optionName: "tabs" }
 };
-const DxTab = createConfigurationComponent({
+
+const DxTabConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -688,7 +814,12 @@ const DxTab = createConfigurationComponent({
     groups: Array,
     title: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTabConfig);
+
+const DxTab = defineComponent(DxTabConfig);
+
 (DxTab as any).$_optionName = "tabs";
 (DxTab as any).$_isCollectionItem = true;
 (DxTab as any).$_expectedChildren = {
@@ -696,7 +827,8 @@ const DxTab = createConfigurationComponent({
   group: { isCollectionItem: true, optionName: "groups" },
   tabGroup: { isCollectionItem: true, optionName: "groups" }
 };
-const DxTabGroup = createConfigurationComponent({
+
+const DxTabGroupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -707,13 +839,19 @@ const DxTabGroup = createConfigurationComponent({
     commands: Array,
     title: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTabGroupConfig);
+
+const DxTabGroup = defineComponent(DxTabGroupConfig);
+
 (DxTabGroup as any).$_optionName = "groups";
 (DxTabGroup as any).$_isCollectionItem = true;
 (DxTabGroup as any).$_expectedChildren = {
   command: { isCollectionItem: true, optionName: "commands" }
 };
-const DxToolbox = createConfigurationComponent({
+
+const DxToolboxConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -730,13 +868,19 @@ const DxToolbox = createConfigurationComponent({
     visibility: String,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolboxConfig);
+
+const DxToolbox = defineComponent(DxToolboxConfig);
+
 (DxToolbox as any).$_optionName = "toolbox";
 (DxToolbox as any).$_expectedChildren = {
   group: { isCollectionItem: true, optionName: "groups" },
   toolboxGroup: { isCollectionItem: true, optionName: "groups" }
 };
-const DxToolboxGroup = createConfigurationComponent({
+
+const DxToolboxGroupConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -753,10 +897,16 @@ const DxToolboxGroup = createConfigurationComponent({
     shapes: Array,
     title: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolboxGroupConfig);
+
+const DxToolboxGroup = defineComponent(DxToolboxGroupConfig);
+
 (DxToolboxGroup as any).$_optionName = "groups";
 (DxToolboxGroup as any).$_isCollectionItem = true;
-const DxViewToolbar = createConfigurationComponent({
+
+const DxViewToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -767,12 +917,18 @@ const DxViewToolbar = createConfigurationComponent({
     commands: Array,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxViewToolbarConfig);
+
+const DxViewToolbar = defineComponent(DxViewToolbarConfig);
+
 (DxViewToolbar as any).$_optionName = "viewToolbar";
 (DxViewToolbar as any).$_expectedChildren = {
   command: { isCollectionItem: true, optionName: "commands" }
 };
-const DxZoomLevel = createConfigurationComponent({
+
+const DxZoomLevelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -783,8 +939,14 @@ const DxZoomLevel = createConfigurationComponent({
     items: Array,
     value: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxZoomLevelConfig);
+
+const DxZoomLevel = defineComponent(DxZoomLevelConfig);
+
 (DxZoomLevel as any).$_optionName = "zoomLevel";
+
 
 export default DxDiagram;
 export {

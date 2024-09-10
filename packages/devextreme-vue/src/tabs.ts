@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/tabs";
 import Tabs, { Properties } from "devextreme/ui/tabs";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -48,7 +48,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxTabs extends AccessibleOptions {
   readonly instance?: Tabs;
 }
-const DxTabs = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     dataSource: {},
@@ -145,9 +146,14 @@ const DxTabs = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxTabs = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -168,9 +174,15 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+
 
 export default DxTabs;
 export {

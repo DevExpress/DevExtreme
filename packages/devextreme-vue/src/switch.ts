@@ -1,5 +1,6 @@
 import Switch, { Properties } from "devextreme/ui/switch";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -36,7 +37,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxSwitch extends AccessibleOptions {
   readonly instance?: Switch;
 }
-const DxSwitch = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -111,7 +113,11 @@ const DxSwitch = createComponent({
     (this as any).$_WidgetClass = Switch;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxSwitch = defineComponent(componentConfig);
 
 export default DxSwitch;
 export {

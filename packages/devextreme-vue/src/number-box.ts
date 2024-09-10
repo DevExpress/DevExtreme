@@ -1,6 +1,6 @@
 import NumberBox, { Properties } from "devextreme/ui/number_box";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -62,7 +62,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxNumberBox extends AccessibleOptions {
   readonly instance?: NumberBox;
 }
-const DxNumberBox = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -191,9 +192,14 @@ const DxNumberBox = createComponent({
       format: { isCollectionItem: false, optionName: "format" }
     };
   }
-});
+};
 
-const DxButton = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxNumberBox = defineComponent(componentConfig);
+
+
+const DxButtonConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -206,13 +212,19 @@ const DxButton = createConfigurationComponent({
     name: String,
     options: Object
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxButtonConfig);
+
+const DxButton = defineComponent(DxButtonConfig);
+
 (DxButton as any).$_optionName = "buttons";
 (DxButton as any).$_isCollectionItem = true;
 (DxButton as any).$_expectedChildren = {
   options: { isCollectionItem: false, optionName: "options" }
 };
-const DxFormat = createConfigurationComponent({
+
+const DxFormatConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -231,9 +243,15 @@ const DxFormat = createConfigurationComponent({
     type: String,
     useCurrencyAccountingStyle: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormatConfig);
+
+const DxFormat = defineComponent(DxFormatConfig);
+
 (DxFormat as any).$_optionName = "format";
-const DxOptions = createConfigurationComponent({
+
+const DxOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -290,8 +308,14 @@ const DxOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxOptionsConfig);
+
+const DxOptions = defineComponent(DxOptionsConfig);
+
 (DxOptions as any).$_optionName = "options";
+
 
 export default DxNumberBox;
 export {

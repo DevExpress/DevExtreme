@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/box";
 import Box, { Properties } from "devextreme/ui/box";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "align" |
@@ -31,7 +31,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxBox extends AccessibleOptions {
   readonly instance?: Box;
 }
-const DxBox = createComponent({
+
+const componentConfig = {
   props: {
     align: String,
     crossAlign: String,
@@ -94,9 +95,14 @@ const DxBox = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxBox = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -121,9 +127,15 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+
 
 export default DxBox;
 export {

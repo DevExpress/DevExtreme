@@ -1,5 +1,6 @@
 import CheckBox, { Properties } from "devextreme/ui/check_box";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -37,7 +38,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxCheckBox extends AccessibleOptions {
   readonly instance?: CheckBox;
 }
-const DxCheckBox = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -114,7 +116,11 @@ const DxCheckBox = createComponent({
     (this as any).$_WidgetClass = CheckBox;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxCheckBox = defineComponent(componentConfig);
 
 export default DxCheckBox;
 export {

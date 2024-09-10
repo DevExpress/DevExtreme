@@ -1,5 +1,6 @@
 import LoadIndicator, { Properties } from "devextreme/ui/load_indicator";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "elementAttr" |
@@ -18,7 +19,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxLoadIndicator extends AccessibleOptions {
   readonly instance?: LoadIndicator;
 }
-const DxLoadIndicator = createComponent({
+
+const componentConfig = {
   props: {
     elementAttr: Object,
     height: [Function, Number, String],
@@ -56,7 +58,11 @@ const DxLoadIndicator = createComponent({
     (this as any).$_WidgetClass = LoadIndicator;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxLoadIndicator = defineComponent(componentConfig);
 
 export default DxLoadIndicator;
 export {

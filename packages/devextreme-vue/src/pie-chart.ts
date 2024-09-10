@@ -1,6 +1,6 @@
 import PieChart, { Properties } from "devextreme/viz/pie_chart";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "adaptiveLayout" |
@@ -59,7 +59,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxPieChart extends AccessibleOptions {
   readonly instance?: PieChart;
 }
-const DxPieChart = createComponent({
+
+const componentConfig = {
   props: {
     adaptiveLayout: Object,
     animation: [Boolean, Object],
@@ -194,9 +195,14 @@ const DxPieChart = createComponent({
       tooltip: { isCollectionItem: false, optionName: "tooltip" }
     };
   }
-});
+};
 
-const DxAdaptiveLayout = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxPieChart = defineComponent(componentConfig);
+
+
+const DxAdaptiveLayoutConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -209,9 +215,15 @@ const DxAdaptiveLayout = createConfigurationComponent({
     keepLabels: Boolean,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAdaptiveLayoutConfig);
+
+const DxAdaptiveLayout = defineComponent(DxAdaptiveLayoutConfig);
+
 (DxAdaptiveLayout as any).$_optionName = "adaptiveLayout";
-const DxAnimation = createConfigurationComponent({
+
+const DxAnimationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -226,9 +238,15 @@ const DxAnimation = createConfigurationComponent({
     enabled: Boolean,
     maxPointCountSupported: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAnimationConfig);
+
+const DxAnimation = defineComponent(DxAnimationConfig);
+
 (DxAnimation as any).$_optionName = "animation";
-const DxAnnotation = createConfigurationComponent({
+
+const DxAnnotationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -297,7 +315,12 @@ const DxAnnotation = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAnnotationConfig);
+
+const DxAnnotation = defineComponent(DxAnnotationConfig);
+
 (DxAnnotation as any).$_optionName = "annotations";
 (DxAnnotation as any).$_isCollectionItem = true;
 (DxAnnotation as any).$_expectedChildren = {
@@ -307,7 +330,8 @@ const DxAnnotation = createConfigurationComponent({
   image: { isCollectionItem: false, optionName: "image" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };
-const DxAnnotationBorder = createConfigurationComponent({
+
+const DxAnnotationBorderConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -326,9 +350,15 @@ const DxAnnotationBorder = createConfigurationComponent({
     visible: Boolean,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAnnotationBorderConfig);
+
+const DxAnnotationBorder = defineComponent(DxAnnotationBorderConfig);
+
 (DxAnnotationBorder as any).$_optionName = "border";
-const DxArgumentFormat = createConfigurationComponent({
+
+const DxArgumentFormatConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -347,9 +377,15 @@ const DxArgumentFormat = createConfigurationComponent({
     type: String,
     useCurrencyAccountingStyle: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxArgumentFormatConfig);
+
+const DxArgumentFormat = defineComponent(DxArgumentFormatConfig);
+
 (DxArgumentFormat as any).$_optionName = "argumentFormat";
-const DxBorder = createConfigurationComponent({
+
+const DxBorderConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -368,9 +404,15 @@ const DxBorder = createConfigurationComponent({
     visible: Boolean,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxBorderConfig);
+
+const DxBorder = defineComponent(DxBorderConfig);
+
 (DxBorder as any).$_optionName = "border";
-const DxColor = createConfigurationComponent({
+
+const DxColorConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -381,9 +423,15 @@ const DxColor = createConfigurationComponent({
     base: String,
     fillId: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColorConfig);
+
+const DxColor = defineComponent(DxColorConfig);
+
 (DxColor as any).$_optionName = "color";
-const DxCommonAnnotationSettings = createConfigurationComponent({
+
+const DxCommonAnnotationSettingsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -450,9 +498,15 @@ const DxCommonAnnotationSettings = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCommonAnnotationSettingsConfig);
+
+const DxCommonAnnotationSettings = defineComponent(DxCommonAnnotationSettingsConfig);
+
 (DxCommonAnnotationSettings as any).$_optionName = "commonAnnotationSettings";
-const DxCommonSeriesSettings = createConfigurationComponent({
+
+const DxCommonSeriesSettingsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -487,7 +541,12 @@ const DxCommonSeriesSettings = createConfigurationComponent({
     tagField: String,
     valueField: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCommonSeriesSettingsConfig);
+
+const DxCommonSeriesSettings = defineComponent(DxCommonSeriesSettingsConfig);
+
 (DxCommonSeriesSettings as any).$_optionName = "commonSeriesSettings";
 (DxCommonSeriesSettings as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
@@ -498,7 +557,8 @@ const DxCommonSeriesSettings = createConfigurationComponent({
   seriesBorder: { isCollectionItem: false, optionName: "border" },
   smallValuesGrouping: { isCollectionItem: false, optionName: "smallValuesGrouping" }
 };
-const DxConnector = createConfigurationComponent({
+
+const DxConnectorConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -511,9 +571,15 @@ const DxConnector = createConfigurationComponent({
     visible: Boolean,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxConnectorConfig);
+
+const DxConnector = defineComponent(DxConnectorConfig);
+
 (DxConnector as any).$_optionName = "connector";
-const DxExport = createConfigurationComponent({
+
+const DxExportConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -534,9 +600,15 @@ const DxExport = createConfigurationComponent({
     printingEnabled: Boolean,
     svgToCanvas: Function
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxExportConfig);
+
+const DxExport = defineComponent(DxExportConfig);
+
 (DxExport as any).$_optionName = "export";
-const DxFont = createConfigurationComponent({
+
+const DxFontConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -553,9 +625,15 @@ const DxFont = createConfigurationComponent({
     size: [Number, String],
     weight: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFontConfig);
+
+const DxFont = defineComponent(DxFontConfig);
+
 (DxFont as any).$_optionName = "font";
-const DxFormat = createConfigurationComponent({
+
+const DxFormatConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -574,9 +652,15 @@ const DxFormat = createConfigurationComponent({
     type: String,
     useCurrencyAccountingStyle: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormatConfig);
+
+const DxFormat = defineComponent(DxFormatConfig);
+
 (DxFormat as any).$_optionName = "format";
-const DxHatching = createConfigurationComponent({
+
+const DxHatchingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -591,9 +675,15 @@ const DxHatching = createConfigurationComponent({
     step: Number,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHatchingConfig);
+
+const DxHatching = defineComponent(DxHatchingConfig);
+
 (DxHatching as any).$_optionName = "hatching";
-const DxHoverStyle = createConfigurationComponent({
+
+const DxHoverStyleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -608,7 +698,12 @@ const DxHoverStyle = createConfigurationComponent({
     hatching: Object,
     highlight: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHoverStyleConfig);
+
+const DxHoverStyle = defineComponent(DxHoverStyleConfig);
+
 (DxHoverStyle as any).$_optionName = "hoverStyle";
 (DxHoverStyle as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
@@ -616,7 +711,8 @@ const DxHoverStyle = createConfigurationComponent({
   hatching: { isCollectionItem: false, optionName: "hatching" },
   seriesBorder: { isCollectionItem: false, optionName: "border" }
 };
-const DxImage = createConfigurationComponent({
+
+const DxImageConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -629,9 +725,15 @@ const DxImage = createConfigurationComponent({
     url: String,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxImageConfig);
+
+const DxImage = defineComponent(DxImageConfig);
+
 (DxImage as any).$_optionName = "image";
-const DxLabel = createConfigurationComponent({
+
+const DxLabelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -666,7 +768,12 @@ const DxLabel = createConfigurationComponent({
     visible: Boolean,
     wordWrap: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLabelConfig);
+
+const DxLabel = defineComponent(DxLabelConfig);
+
 (DxLabel as any).$_optionName = "label";
 (DxLabel as any).$_expectedChildren = {
   argumentFormat: { isCollectionItem: false, optionName: "argumentFormat" },
@@ -676,7 +783,8 @@ const DxLabel = createConfigurationComponent({
   format: { isCollectionItem: false, optionName: "format" },
   seriesBorder: { isCollectionItem: false, optionName: "border" }
 };
-const DxLegend = createConfigurationComponent({
+
+const DxLegendConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -729,7 +837,12 @@ const DxLegend = createConfigurationComponent({
     verticalAlignment: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLegendConfig);
+
+const DxLegend = defineComponent(DxLegendConfig);
+
 (DxLegend as any).$_optionName = "legend";
 (DxLegend as any).$_expectedChildren = {
   annotationBorder: { isCollectionItem: false, optionName: "border" },
@@ -739,7 +852,8 @@ const DxLegend = createConfigurationComponent({
   margin: { isCollectionItem: false, optionName: "margin" },
   title: { isCollectionItem: false, optionName: "title" }
 };
-const DxLegendTitle = createConfigurationComponent({
+
+const DxLegendTitleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -760,7 +874,12 @@ const DxLegendTitle = createConfigurationComponent({
     text: String,
     verticalAlignment: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLegendTitleConfig);
+
+const DxLegendTitle = defineComponent(DxLegendTitleConfig);
+
 (DxLegendTitle as any).$_optionName = "title";
 (DxLegendTitle as any).$_expectedChildren = {
   font: { isCollectionItem: false, optionName: "font" },
@@ -768,7 +887,8 @@ const DxLegendTitle = createConfigurationComponent({
   margin: { isCollectionItem: false, optionName: "margin" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" }
 };
-const DxLegendTitleSubtitle = createConfigurationComponent({
+
+const DxLegendTitleSubtitleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -781,12 +901,18 @@ const DxLegendTitleSubtitle = createConfigurationComponent({
     offset: Number,
     text: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLegendTitleSubtitleConfig);
+
+const DxLegendTitleSubtitle = defineComponent(DxLegendTitleSubtitleConfig);
+
 (DxLegendTitleSubtitle as any).$_optionName = "subtitle";
 (DxLegendTitleSubtitle as any).$_expectedChildren = {
   font: { isCollectionItem: false, optionName: "font" }
 };
-const DxLoadingIndicator = createConfigurationComponent({
+
+const DxLoadingIndicatorConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -803,12 +929,18 @@ const DxLoadingIndicator = createConfigurationComponent({
     show: Boolean,
     text: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLoadingIndicatorConfig);
+
+const DxLoadingIndicator = defineComponent(DxLoadingIndicatorConfig);
+
 (DxLoadingIndicator as any).$_optionName = "loadingIndicator";
 (DxLoadingIndicator as any).$_expectedChildren = {
   font: { isCollectionItem: false, optionName: "font" }
 };
-const DxMargin = createConfigurationComponent({
+
+const DxMarginConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -823,9 +955,15 @@ const DxMargin = createConfigurationComponent({
     right: Number,
     top: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMarginConfig);
+
+const DxMargin = defineComponent(DxMarginConfig);
+
 (DxMargin as any).$_optionName = "margin";
-const DxPieChartTitle = createConfigurationComponent({
+
+const DxPieChartTitleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -850,7 +988,12 @@ const DxPieChartTitle = createConfigurationComponent({
     verticalAlignment: String,
     wordWrap: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPieChartTitleConfig);
+
+const DxPieChartTitle = defineComponent(DxPieChartTitleConfig);
+
 (DxPieChartTitle as any).$_optionName = "title";
 (DxPieChartTitle as any).$_expectedChildren = {
   font: { isCollectionItem: false, optionName: "font" },
@@ -858,7 +1001,8 @@ const DxPieChartTitle = createConfigurationComponent({
   pieChartTitleSubtitle: { isCollectionItem: false, optionName: "subtitle" },
   subtitle: { isCollectionItem: false, optionName: "subtitle" }
 };
-const DxPieChartTitleSubtitle = createConfigurationComponent({
+
+const DxPieChartTitleSubtitleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -875,12 +1019,18 @@ const DxPieChartTitleSubtitle = createConfigurationComponent({
     textOverflow: String,
     wordWrap: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPieChartTitleSubtitleConfig);
+
+const DxPieChartTitleSubtitle = defineComponent(DxPieChartTitleSubtitleConfig);
+
 (DxPieChartTitleSubtitle as any).$_optionName = "subtitle";
 (DxPieChartTitleSubtitle as any).$_expectedChildren = {
   font: { isCollectionItem: false, optionName: "font" }
 };
-const DxSelectionStyle = createConfigurationComponent({
+
+const DxSelectionStyleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -895,7 +1045,12 @@ const DxSelectionStyle = createConfigurationComponent({
     hatching: Object,
     highlight: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSelectionStyleConfig);
+
+const DxSelectionStyle = defineComponent(DxSelectionStyleConfig);
+
 (DxSelectionStyle as any).$_optionName = "selectionStyle";
 (DxSelectionStyle as any).$_expectedChildren = {
   border: { isCollectionItem: false, optionName: "border" },
@@ -903,7 +1058,8 @@ const DxSelectionStyle = createConfigurationComponent({
   hatching: { isCollectionItem: false, optionName: "hatching" },
   seriesBorder: { isCollectionItem: false, optionName: "border" }
 };
-const DxSeries = createConfigurationComponent({
+
+const DxSeriesConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -942,10 +1098,16 @@ const DxSeries = createConfigurationComponent({
     tagField: String,
     valueField: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSeriesConfig);
+
+const DxSeries = defineComponent(DxSeriesConfig);
+
 (DxSeries as any).$_optionName = "series";
 (DxSeries as any).$_isCollectionItem = true;
-const DxSeriesBorder = createConfigurationComponent({
+
+const DxSeriesBorderConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -960,9 +1122,15 @@ const DxSeriesBorder = createConfigurationComponent({
     visible: Boolean,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSeriesBorderConfig);
+
+const DxSeriesBorder = defineComponent(DxSeriesBorderConfig);
+
 (DxSeriesBorder as any).$_optionName = "border";
-const DxSeriesTemplate = createConfigurationComponent({
+
+const DxSeriesTemplateConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -973,9 +1141,15 @@ const DxSeriesTemplate = createConfigurationComponent({
     customizeSeries: Function,
     nameField: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSeriesTemplateConfig);
+
+const DxSeriesTemplate = defineComponent(DxSeriesTemplateConfig);
+
 (DxSeriesTemplate as any).$_optionName = "seriesTemplate";
-const DxShadow = createConfigurationComponent({
+
+const DxShadowConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -992,9 +1166,15 @@ const DxShadow = createConfigurationComponent({
     offsetY: Number,
     opacity: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxShadowConfig);
+
+const DxShadow = defineComponent(DxShadowConfig);
+
 (DxShadow as any).$_optionName = "shadow";
-const DxSize = createConfigurationComponent({
+
+const DxSizeConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1005,9 +1185,15 @@ const DxSize = createConfigurationComponent({
     height: Number,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSizeConfig);
+
+const DxSize = defineComponent(DxSizeConfig);
+
 (DxSize as any).$_optionName = "size";
-const DxSmallValuesGrouping = createConfigurationComponent({
+
+const DxSmallValuesGroupingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1022,9 +1208,15 @@ const DxSmallValuesGrouping = createConfigurationComponent({
     threshold: Number,
     topCount: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSmallValuesGroupingConfig);
+
+const DxSmallValuesGrouping = defineComponent(DxSmallValuesGroupingConfig);
+
 (DxSmallValuesGrouping as any).$_optionName = "smallValuesGrouping";
-const DxSubtitle = createConfigurationComponent({
+
+const DxSubtitleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1041,9 +1233,15 @@ const DxSubtitle = createConfigurationComponent({
     textOverflow: String,
     wordWrap: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSubtitleConfig);
+
+const DxSubtitle = defineComponent(DxSubtitleConfig);
+
 (DxSubtitle as any).$_optionName = "subtitle";
-const DxTitle = createConfigurationComponent({
+
+const DxTitleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1068,9 +1266,15 @@ const DxTitle = createConfigurationComponent({
     verticalAlignment: String,
     wordWrap: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTitleConfig);
+
+const DxTitle = defineComponent(DxTitleConfig);
+
 (DxTitle as any).$_optionName = "title";
-const DxTooltip = createConfigurationComponent({
+
+const DxTooltipConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1113,7 +1317,12 @@ const DxTooltip = createConfigurationComponent({
     shared: Boolean,
     zIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTooltipConfig);
+
+const DxTooltip = defineComponent(DxTooltipConfig);
+
 (DxTooltip as any).$_optionName = "tooltip";
 (DxTooltip as any).$_expectedChildren = {
   argumentFormat: { isCollectionItem: false, optionName: "argumentFormat" },
@@ -1123,7 +1332,8 @@ const DxTooltip = createConfigurationComponent({
   shadow: { isCollectionItem: false, optionName: "shadow" },
   tooltipBorder: { isCollectionItem: false, optionName: "border" }
 };
-const DxTooltipBorder = createConfigurationComponent({
+
+const DxTooltipBorderConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -1140,8 +1350,14 @@ const DxTooltipBorder = createConfigurationComponent({
     visible: Boolean,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTooltipBorderConfig);
+
+const DxTooltipBorder = defineComponent(DxTooltipBorderConfig);
+
 (DxTooltipBorder as any).$_optionName = "border";
+
 
 export default DxPieChart;
 export {

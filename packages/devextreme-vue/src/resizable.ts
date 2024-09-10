@@ -1,5 +1,6 @@
 import Resizable, { Properties } from "devextreme/ui/resizable";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "area" |
@@ -24,7 +25,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxResizable extends AccessibleOptions {
   readonly instance?: Resizable;
 }
-const DxResizable = createComponent({
+
+const componentConfig = {
   props: {
     area: {},
     elementAttr: Object,
@@ -74,7 +76,11 @@ const DxResizable = createComponent({
     (this as any).$_WidgetClass = Resizable;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxResizable = defineComponent(componentConfig);
 
 export default DxResizable;
 export {

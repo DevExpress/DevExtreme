@@ -1,5 +1,6 @@
 import RecurrenceEditor, { Properties } from "devextreme/ui/recurrence_editor";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -33,7 +34,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxRecurrenceEditor extends AccessibleOptions {
   readonly instance?: RecurrenceEditor;
 }
-const DxRecurrenceEditor = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -102,7 +104,11 @@ const DxRecurrenceEditor = createComponent({
     (this as any).$_WidgetClass = RecurrenceEditor;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxRecurrenceEditor = defineComponent(componentConfig);
 
 export default DxRecurrenceEditor;
 export {

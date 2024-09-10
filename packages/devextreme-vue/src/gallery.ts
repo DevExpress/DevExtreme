@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/gallery";
 import Gallery, { Properties } from "devextreme/ui/gallery";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -47,7 +47,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxGallery extends AccessibleOptions {
   readonly instance?: Gallery;
 }
-const DxGallery = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     animationDuration: Number,
@@ -142,9 +143,14 @@ const DxGallery = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxGallery = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -163,9 +169,15 @@ const DxItem = createConfigurationComponent({
     template: {},
     text: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
+
 
 export default DxGallery;
 export {

@@ -1,5 +1,6 @@
 import TextArea, { Properties } from "devextreme/ui/text_area";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -56,7 +57,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxTextArea extends AccessibleOptions {
   readonly instance?: TextArea;
 }
-const DxTextArea = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -171,7 +173,11 @@ const DxTextArea = createComponent({
     (this as any).$_WidgetClass = TextArea;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxTextArea = defineComponent(componentConfig);
 
 export default DxTextArea;
 export {

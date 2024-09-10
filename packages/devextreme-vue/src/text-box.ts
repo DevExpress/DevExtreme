@@ -1,6 +1,6 @@
 import TextBox, { Properties } from "devextreme/ui/text_box";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -63,7 +63,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxTextBox extends AccessibleOptions {
   readonly instance?: TextBox;
 }
-const DxTextBox = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -193,9 +194,14 @@ const DxTextBox = createComponent({
       button: { isCollectionItem: true, optionName: "buttons" }
     };
   }
-});
+};
 
-const DxButton = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxTextBox = defineComponent(componentConfig);
+
+
+const DxButtonConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -208,13 +214,19 @@ const DxButton = createConfigurationComponent({
     name: String,
     options: Object
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxButtonConfig);
+
+const DxButton = defineComponent(DxButtonConfig);
+
 (DxButton as any).$_optionName = "buttons";
 (DxButton as any).$_isCollectionItem = true;
 (DxButton as any).$_expectedChildren = {
   options: { isCollectionItem: false, optionName: "options" }
 };
-const DxOptions = createConfigurationComponent({
+
+const DxOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -271,8 +283,14 @@ const DxOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxOptionsConfig);
+
+const DxOptions = defineComponent(DxOptionsConfig);
+
 (DxOptions as any).$_optionName = "options";
+
 
 export default DxTextBox;
 export {
