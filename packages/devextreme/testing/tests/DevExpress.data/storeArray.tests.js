@@ -809,6 +809,28 @@ QUnit.test('update with explicit undefined', function(assert) {
     });
 });
 
+QUnit.test('update doesn\'t merge nested values', function(assert) {
+    const done = assert.async();
+
+    const store = new ArrayStore({
+        key: 'id',
+        data: [{ id: 0, nested: { a: 1, b: 2, c: 3 } }],
+    });
+
+    store.update(0, { nested: { a: 10, b: 20 } }).done(function(data, key) {
+        assert.equal(key, 0);
+
+        const expectedData = {
+            nested: { a: 10, b: 20 },
+            id: key
+        };
+
+        assert.deepEqual(data, expectedData);
+        assert.ok(Object.prototype.hasOwnProperty.call(data.nested, 'a'));
+        done();
+    });
+});
+
 QUnit.test('insert duplicate key (simple)', function(assert) {
     const done = assert.async();
 

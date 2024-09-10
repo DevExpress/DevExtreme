@@ -93,7 +93,7 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             continue;
         }
 
-        if(isPlainObject(newValue)) {
+        if(isPlainObject(newValue) && !assignByReference) {
             const goDeeper = extendComplexObject ? isObject(prevValue) : isPlainObject(prevValue);
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
