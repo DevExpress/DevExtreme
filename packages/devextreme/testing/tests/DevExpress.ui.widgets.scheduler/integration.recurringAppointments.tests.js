@@ -707,6 +707,52 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
+        test('Recurrent Task editing, single mode, should not reference copy recurrent data (T1228488)', function(assert) {
+            const updatedItem = {
+                text: 'Task 2',
+                customData: { texts: ['123', '456'] },
+                startDate: new Date(2015, 1, 11, 3),
+                endDate: new Date(2015, 1, 11, 4),
+            };
+
+            const scheduler = this.createInstance({
+                currentDate: new Date(2015, 1, 9),
+                dataSource: [{
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0),
+                    customData: { texts: ['123'] },
+                    recurrenceRule: 'FREQ=DAILY'
+                }],
+                currentView: 'week',
+                onAppointmentAdding: (e) => {
+                    e.appointmentData.customData.texts.push('456');
+                },
+                firstDayOfWeek: 1
+            });
+
+            scheduler.appointments.click(2);
+            this.clock.tick(300);
+            scheduler.tooltip.clickOnItem();
+            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
+
+            const $title = $('.dx-textbox').eq(0);
+            const title = $title.dxTextBox('instance');
+            const $startDate = $('.dx-datebox').eq(0);
+            const startDate = $startDate.dxDateBox('instance');
+
+            title.option('value', 'Task 2');
+            startDate.option('value', new Date(2015, 1, 11, 3, 0));
+            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
+            this.clock.tick(300);
+
+            const updatedSingleItem = scheduler.instance.option('dataSource')[1];
+            const updatedRecurringItem = scheduler.instance.option('dataSource')[0];
+
+            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
+            assert.deepEqual(updatedRecurringItem.customData.texts, ['123'], 'Recurrence data is correct');
+        });
+
         test('Recurrent Task edition canceling, single mode', function(assert) {
             const data = new DataSource({
                 store: [

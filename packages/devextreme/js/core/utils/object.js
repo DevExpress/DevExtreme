@@ -55,6 +55,7 @@ const legacyAssign = function(target, property, value, extendComplexObject, assi
 };
 
 const newAssign = function(target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
+    const goDeeper = extendComplexObject ? isObject(target) : isPlainObject(target);
     if(!assignByReference && variableWrapper.isWrapped(target[property])) {
         variableWrapper.assign(target[property], value);
     } else if(!assignByReference && Array.isArray(value)) {
@@ -65,6 +66,15 @@ const newAssign = function(target, property, value, extendComplexObject, assignB
             assignByReference,
             shouldCopyUndefined
         ));
+    } else if(!assignByReference && goDeeper) {
+        target[property] = deepExtendArraySafe(
+            getDeepCopyTarget(value),
+            value,
+            extendComplexObject,
+            assignByReference,
+            shouldCopyUndefined,
+            newAssign
+        );
     } else {
         target[property] = value;
     }
