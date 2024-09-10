@@ -73,7 +73,7 @@ QUnit.module('MessageList', moduleConfig, () => {
     });
 
     QUnit.module('Empty view', () => {
-        QUnit.test('element should be places inside scrollable content', function(assert) {
+        QUnit.test('element should be placed inside of a scrollable content', function(assert) {
             assert.strictEqual(this.$element.find(`.${SCROLLABLE_CONTENT_CLASS}`).children().first().hasClass(CHAT_MESSAGE_LIST_EMPTY_VIEW_CLASS), true);
         });
 

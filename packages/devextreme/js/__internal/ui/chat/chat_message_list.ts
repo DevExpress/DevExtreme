@@ -126,7 +126,7 @@ class MessageList extends Widget<Properties> {
 
   _renderMessageListContent(): void {
     if (this._isEmpty()) {
-      this._toggleEmptyStateClass(this._isEmpty());
+      this._toggleEmptyStateClass(true);
       this._renderEmptyViewContent();
 
       return;
@@ -187,7 +187,7 @@ class MessageList extends Widget<Properties> {
     const lastMessageGroup = this._messageGroups[this._messageGroups.length - 1];
     const element = lastMessageGroup.$element()[0];
 
-    this._scrollable?.scrollToElement(element);
+    this._scrollable.scrollToElement(element);
   }
 
   _clean(): void {
@@ -223,7 +223,7 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
-      this._toggleEmptyStateClass(this._isEmpty());
+      this._toggleEmptyStateClass(false);
 
       if (!previousValue.length) {
         this._removeEmptyView();
