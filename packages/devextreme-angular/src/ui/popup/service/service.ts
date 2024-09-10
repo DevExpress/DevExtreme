@@ -6,8 +6,10 @@ import {
   EmbeddedViewRef,
   ComponentRef, Type,
 } from '@angular/core';
-import { DxPopupTypes } from '../component';
-import { DxServicePopupComponent } from './service.component';
+import { DxPopupComponent, DxPopupTypes } from '../component';
+import { PopupServiceComponent } from './service.component';
+
+export type DxPopupServiceComponent<T = any> = DxPopupComponent & { contentRef: ComponentRef<T> }
 
 @Injectable({
   providedIn: 'root',
@@ -19,22 +21,22 @@ export class DxPopupService {
     private readonly componentFactoryResolver: ComponentFactoryResolver,
   ) {}
 
-  open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DxServicePopupComponent);
-    const componentRef: ComponentRef<DxServicePopupComponent> = componentFactory.create(this.injector);
+  open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties): DxPopupServiceComponent<T> {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PopupServiceComponent<T>);
+    const serviceInjector = Injector.create({
+      providers: [
+        { provide: 'popupServiceContentComponent', useValue: contentComponent },
+        { provide: 'popupServiceOptions', useValue: popupOptions },
+      ],
+      parent: this.injector
+    });
+    const componentRef = componentFactory.create(serviceInjector);
     const cmpInstance = componentRef.instance;
 
     cmpInstance.onHidden.subscribe(() => {
       this.applicationRef.detachView(componentRef.hostView);
+
       componentRef.destroy();
-    });
-
-    cmpInstance.afterViewInit$.subscribe(() => {
-      if (popupOptions) {
-        cmpInstance.instance.option(popupOptions);
-      }
-
-      componentRef.instance.contentRef = cmpInstance.contentInsertion?.viewContainerRef.createComponent(contentComponent);
     });
 
     this.applicationRef.attachView(componentRef.hostView);
@@ -47,6 +49,6 @@ export class DxPopupService {
 
     this.applicationRef.tick();
 
-    return componentRef.instance as (typeof componentRef.instance & { contentRef: ComponentRef<T> });
+    return componentRef.instance;
   }
 }
