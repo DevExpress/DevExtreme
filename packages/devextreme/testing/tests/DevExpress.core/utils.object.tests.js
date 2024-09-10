@@ -1,5 +1,4 @@
 const objectUtils = require('core/utils/object');
-const { newAssign } = require('../../../js/core/utils/object');
 
 QUnit.test('orderEach', function(assert) {
     const checkOrderEach = function(mapKeys, keys) {
@@ -205,7 +204,7 @@ QUnit.test('deepExtendArraySafe copies array into object property deeply', funct
     const objWithValue = { time: undefined };
     const complexTime = { complexTime: 2 };
     const timeArray = [1, complexTime, 3];
-    objectUtils.deepExtendArraySafe(objWithValue, { time: timeArray }, true, false, false, newAssign);
+    objectUtils.deepExtendArraySafe(objWithValue, { time: timeArray }, true, false, false, objectUtils.newAssign);
 
     assert.deepEqual(objWithValue.time, timeArray);
     assert.notStrictEqual(objWithValue.time, timeArray);
