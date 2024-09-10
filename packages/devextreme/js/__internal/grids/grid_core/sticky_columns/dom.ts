@@ -126,7 +126,6 @@ const isPointUnderFixedColumn = (
 const noNeedToCreatePoint = (
   point,
   container: HTMLElement,
-  rtlEnabled: boolean,
   addWidgetPrefix,
 ): boolean => {
   const { item, isLeftBoundary, isRightBoundary }: {
@@ -134,20 +133,23 @@ const noNeedToCreatePoint = (
     isLeftBoundary: boolean | undefined;
     isRightBoundary: boolean | undefined;
   } = point;
+  const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
 
-  if (!isDefined(isLeftBoundary) && !isDefined(isRightBoundary)
+  if (!isSplitPoint
     && isFixedCell(item, addWidgetPrefix) !== isFixedCell($(item).prev()[0], addWidgetPrefix)) {
     return false;
   }
 
-  if (isLastLeftFixedCell(item, addWidgetPrefix)
-    || isStickyCellPinnedToLeft(item, container, addWidgetPrefix)) {
-    return rtlEnabled ? isLeftBoundary as boolean : !isRightBoundary;
-  }
+  if (isSplitPoint) {
+    if (isLastLeftFixedCell(item, addWidgetPrefix)
+      || isStickyCellPinnedToLeft(item, container, addWidgetPrefix)) {
+      return isLeftBoundary as boolean;
+    }
 
-  if (isFirstRightFixedCell(item, addWidgetPrefix)
-    || isStickyCellPinnedToRight(item, container, addWidgetPrefix)) {
-    return rtlEnabled ? !isLeftBoundary : isRightBoundary as boolean;
+    if (isFirstRightFixedCell(item, addWidgetPrefix)
+      || isStickyCellPinnedToRight(item, container, addWidgetPrefix)) {
+      return isRightBoundary as boolean;
+    }
   }
 
   return isPointUnderFixedColumn(point, container, addWidgetPrefix);
