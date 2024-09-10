@@ -256,7 +256,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       independentEvents,
       getConfig,
     ]);
-    
+
     const onTemplatesRendered = useCallback(() => {
       if (shouldRestoreFocus.current && instance.current?.focus) {
         instance.current.focus();
