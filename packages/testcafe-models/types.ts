@@ -10,6 +10,7 @@ export type WidgetName =
   | 'dxCalendar'
   | 'dxCalendarView'
   | 'dxChart'
+  | 'dxChat'
   | 'dxCheckBox'
   | 'dxColorBox'
   | 'dxContextMenu'
