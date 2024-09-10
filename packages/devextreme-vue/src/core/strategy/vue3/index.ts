@@ -1,26 +1,20 @@
-import { defineComponent, DefineComponent } from 'vue';
 import { initDxComponent } from '../../component';
 import { initDxConfiguration } from '../../configuration-component';
 import { initDxExtensionComponent } from '../../extension-component';
-import { setCompatOptions, setVModel } from '../../vue-helper';
+import { setVModel } from '../../vue-helper';
 
-export function createComponent(config: any): DefineComponent {
+export function prepareComponentConfig(config) {
   config.extends = initDxComponent();
-  setCompatOptions(config);
+
   if (config.model) {
     setVModel(config);
   }
-  return defineComponent(config);
 }
 
-export function createConfigurationComponent(config: any): DefineComponent {
+export function prepareConfigurationComponentConfig(config: any): void {
   config.extends = initDxConfiguration();
-  setCompatOptions(config);
-  return defineComponent(config);
 }
 
-export function createExtensionComponent(config: any): DefineComponent {
+export function prepareExtensionComponentConfig(config: any): void {
   config.extends = initDxExtensionComponent();
-  setCompatOptions(config);
-  return defineComponent(config);
 }

@@ -12,7 +12,6 @@ module.exports = {
   generatedComponentsDir: './src',
   coreComponentsDir: './src/core',
   indexFileName: './src/index.ts',
-  baseComponent: './core/index',
   configComponent: './core/index',
   widgetsPackage: 'devextreme'
 };
