@@ -1476,7 +1476,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set annotationsLegacyChildren(value) {
         if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('annotations', value);
         }
     }
 
@@ -1486,7 +1486,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set panesLegacyChildren(value) {
         if (this.checkContentChildren('panes', value, 'DxiPaneComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('panes', value);
         }
     }
 
@@ -1496,7 +1496,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set seriesLegacyChildren(value) {
         if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('series', value);
         }
     }
 
@@ -1506,7 +1506,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     }
     set valueAxisLegacyChildren(value) {
         if (this.checkContentChildren('valueAxis', value, 'DxiValueAxisComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('valueAxis', value);
         }
     }
 

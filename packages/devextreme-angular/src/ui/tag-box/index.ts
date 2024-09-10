@@ -1672,7 +1672,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     }
     set buttonsLegacyChildren(value) {
         if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('buttons', value);
         }
     }
 

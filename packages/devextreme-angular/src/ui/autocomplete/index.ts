@@ -1390,7 +1390,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     }
     set buttonsLegacyChildren(value) {
         if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('buttons', value);
         }
     }
 

@@ -1123,7 +1123,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     }
     set annotationsLegacyChildren(value) {
         if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('annotations', value);
         }
     }
 
@@ -1133,7 +1133,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     }
     set seriesLegacyChildren(value) {
         if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('series', value);
         }
     }
 

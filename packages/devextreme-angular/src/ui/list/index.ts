@@ -1372,7 +1372,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     }
     set menuItemsLegacyChildren(value) {
         if (this.checkContentChildren('menuItems', value, 'DxiMenuItemComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('menuItems', value);
         }
     }
 

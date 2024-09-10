@@ -1027,7 +1027,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     }
     set buttonsLegacyChildren(value) {
         if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('buttons', value);
         }
     }
 

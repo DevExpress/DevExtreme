@@ -1449,7 +1449,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     }
     set resourcesLegacyChildren(value) {
         if (this.checkContentChildren('resources', value, 'DxiResourceComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('resources', value);
         }
     }
 
@@ -1459,7 +1459,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     }
     set viewsLegacyChildren(value) {
         if (this.checkContentChildren('views', value, 'DxiViewComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('views', value);
         }
     }
 

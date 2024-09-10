@@ -859,7 +859,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     }
     set mentionsLegacyChildren(value) {
         if (this.checkContentChildren('mentions', value, 'DxiMentionComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('mentions', value);
         }
     }
 

@@ -926,7 +926,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     }
     set customShapesLegacyChildren(value) {
         if (this.checkContentChildren('customShapes', value, 'DxiCustomShapeComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('customShapes', value);
         }
     }
 

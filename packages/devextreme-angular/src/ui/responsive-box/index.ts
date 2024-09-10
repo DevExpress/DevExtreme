@@ -476,7 +476,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     }
     set colsLegacyChildren(value) {
         if (this.checkContentChildren('cols', value, 'DxiColComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('cols', value);
         }
     }
 
@@ -496,7 +496,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     }
     set rowsLegacyChildren(value) {
         if (this.checkContentChildren('rows', value, 'DxiRowComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('rows', value);
         }
     }
 

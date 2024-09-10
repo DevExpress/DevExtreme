@@ -800,7 +800,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     }
     set annotationsLegacyChildren(value) {
         if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('annotations', value);
         }
     }
 
@@ -810,7 +810,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     }
     set layersLegacyChildren(value) {
         if (this.checkContentChildren('layers', value, 'DxiLayerComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('layers', value);
         }
     }
 
@@ -820,7 +820,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     }
     set legendsLegacyChildren(value) {
         if (this.checkContentChildren('legends', value, 'DxiLegendComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('legends', value);
         }
     }
 

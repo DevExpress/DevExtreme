@@ -2026,7 +2026,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     }
     set columnsLegacyChildren(value) {
         if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('columns', value);
         }
     }
 

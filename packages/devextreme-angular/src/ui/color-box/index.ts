@@ -1122,7 +1122,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     }
     set buttonsLegacyChildren(value) {
         if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('buttons', value);
         }
     }
 

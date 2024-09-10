@@ -258,7 +258,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     }
     set validationRulesLegacyChildren(value) {
         if (this.checkContentChildren('validationRules', value, 'DxiValidationRuleComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('validationRules', value);
         }
     }
 

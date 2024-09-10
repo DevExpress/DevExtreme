@@ -1199,7 +1199,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     }
     set columnsLegacyChildren(value) {
         if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('columns', value);
         }
     }
 
@@ -1209,7 +1209,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     }
     set stripLinesLegacyChildren(value) {
         if (this.checkContentChildren('stripLines', value, 'DxiStripLineComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('stripLines', value);
         }
     }
 

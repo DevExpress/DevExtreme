@@ -625,7 +625,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set centerLegacyChildren(value) {
         if (this.checkContentChildren('center', value, 'DxiCenterComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('center', value);
         }
     }
 
@@ -635,7 +635,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set markersLegacyChildren(value) {
         if (this.checkContentChildren('markers', value, 'DxiMarkerComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('markers', value);
         }
     }
 
@@ -645,7 +645,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set routesLegacyChildren(value) {
         if (this.checkContentChildren('routes', value, 'DxiRouteComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('routes', value);
         }
     }
 

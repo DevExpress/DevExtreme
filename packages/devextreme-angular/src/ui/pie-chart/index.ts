@@ -993,7 +993,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     }
     set annotationsLegacyChildren(value) {
         if (this.checkContentChildren('annotations', value, 'DxiAnnotationComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('annotations', value);
         }
     }
 
@@ -1003,7 +1003,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     }
     set seriesLegacyChildren(value) {
         if (this.checkContentChildren('series', value, 'DxiSeriesComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('series', value);
         }
     }
 

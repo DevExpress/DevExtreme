@@ -581,7 +581,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     }
     set customOperationsLegacyChildren(value) {
         if (this.checkContentChildren('customOperations', value, 'DxiCustomOperationComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('customOperations', value);
         }
     }
 
@@ -591,7 +591,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     }
     set fieldsLegacyChildren(value) {
         if (this.checkContentChildren('fields', value, 'DxiFieldComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('fields', value);
         }
     }
 

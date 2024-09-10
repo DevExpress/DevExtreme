@@ -1197,7 +1197,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     }
     set buttonsLegacyChildren(value) {
         if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
-           this.setChildren('items', value);
+           this.setChildren('buttons', value);
         }
     }
 
