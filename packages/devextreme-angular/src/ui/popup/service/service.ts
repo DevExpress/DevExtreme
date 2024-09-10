@@ -7,7 +7,7 @@ import {
   ComponentRef, Type,
 } from '@angular/core';
 import { DxPopupComponent, DxPopupTypes } from '../component';
-import { DxPopupServiceComponent as  DxPopupServiceCmp } from './service.component';
+import { DxPopupServiceComponent as DxPopupServiceCmp } from './service.component';
 
 export type DxPopupServiceComponent<T = any> = DxPopupComponent & { contentRef: ComponentRef<T> }
 
