@@ -34,7 +34,7 @@ export class DxPopupService {
 
     cmpInstance.afterViewInit$.subscribe(() => {
       if (popupOptions) {
-        cmpInstance.setOptions(popupOptions);
+        cmpInstance.setPopupOptions(popupOptions);
       }
 
       cmpInstance.setContentComponent(contentComponent);

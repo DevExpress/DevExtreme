@@ -54,7 +54,7 @@ export class PopupServiceComponent<T> extends DxPopupComponent implements AfterV
     this.afterViewInit$.emit();
   }
 
-  setOptions(popupOptions: DxPopupTypes.Properties) {
+  setPopupOptions(popupOptions: DxPopupTypes.Properties) {
     this.instance.option(popupOptions)
   }
 
