@@ -2,9 +2,9 @@ import {
   AfterViewInit,
   Component, ComponentRef,
   ElementRef,
-  EventEmitter, Inject,
+  Inject,
   NgZone,
-  Output, PLATFORM_ID,
+  PLATFORM_ID,
   TransferState, Type,
   ViewChild,
 } from '@angular/core';
@@ -31,19 +31,19 @@ import { DxServicePopupInsertionDirective } from './insertion.directive';
 export class PopupServiceComponent<T> extends DxPopupComponent implements AfterViewInit {
   @ViewChild(DxServicePopupInsertionDirective) contentInsertion: DxServicePopupInsertionDirective;
 
-  @Output() afterViewInit$: EventEmitter<void> = new EventEmitter<void>();
-
   contentRef: ComponentRef<T>;
 
   constructor(
-    elementRef: ElementRef,
-    ngZone: NgZone,
-    templateHost: DxTemplateHost,
-    _watcherHelper: WatcherHelper,
-    _idh: IterableDifferHelper,
-    optionHost: NestedOptionHost,
-    transferState: TransferState,
-    @Inject(PLATFORM_ID) platformId: any,
+      @Inject('popupServiceContentComponent') private contentComponent: Type<T>,
+      @Inject('popupServiceOptions') private popupOptions: DxPopupTypes.Properties,
+      elementRef: ElementRef,
+      ngZone: NgZone,
+      templateHost: DxTemplateHost,
+      _watcherHelper: WatcherHelper,
+      _idh: IterableDifferHelper,
+      optionHost: NestedOptionHost,
+      transferState: TransferState,
+      @Inject(PLATFORM_ID) platformId: any,
   ) {
     super(elementRef, ngZone, templateHost, _watcherHelper, _idh, optionHost, transferState, platformId);
   }
@@ -51,14 +51,8 @@ export class PopupServiceComponent<T> extends DxPopupComponent implements AfterV
   ngAfterViewInit() {
     super.ngAfterViewInit();
 
-    this.afterViewInit$.emit();
-  }
+    this.instance.option(this.popupOptions)
 
-  setPopupOptions(popupOptions: DxPopupTypes.Properties) {
-    this.instance.option(popupOptions)
-  }
-
-  setContentComponent(contentComponent: Type<T>) {
-    this.contentRef = this.contentInsertion?.viewContainerRef.createComponent(contentComponent);
+    this.contentRef = this.contentInsertion?.viewContainerRef.createComponent(this.contentComponent);
   }
 }

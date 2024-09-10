@@ -23,21 +23,20 @@ export class DxPopupService {
 
   open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties): DxPopupServiceComponent<T> {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PopupServiceComponent<T>);
-    const componentRef = componentFactory.create(this.injector);
+    const serviceInjector = Injector.create({
+      providers: [
+        { provide: 'popupServiceContentComponent', useValue: contentComponent },
+        { provide: 'popupServiceOptions', useValue: popupOptions },
+      ],
+      parent: this.injector
+    });
+    const componentRef = componentFactory.create(serviceInjector);
     const cmpInstance = componentRef.instance;
 
     cmpInstance.onHidden.subscribe(() => {
       this.applicationRef.detachView(componentRef.hostView);
 
       componentRef.destroy();
-    });
-
-    cmpInstance.afterViewInit$.subscribe(() => {
-      if (popupOptions) {
-        cmpInstance.setPopupOptions(popupOptions);
-      }
-
-      cmpInstance.setContentComponent(contentComponent);
     });
 
     this.applicationRef.attachView(componentRef.hostView);
