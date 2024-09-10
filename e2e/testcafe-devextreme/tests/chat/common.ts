@@ -46,17 +46,26 @@ test('Chat: avatar rendering', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'chat');
 
-  const randomUint32 = '0.392722124265449';
+  const author = {
+    id: 1,
+    name: 'First User Name',
+  };
+  const timestamp = new Date(1721747399083);
+  const text = '0.392722124265449';
 
   return createWidget('dxChat', {
     height: 500,
     width: 400,
     items: [
       {
-        text: randomUint32,
+        timestamp,
+        text,
+        author,
       },
       {
-        text: randomUint32,
+        timestamp,
+        text,
+        author,
       },
     ],
   }, '#chat');
