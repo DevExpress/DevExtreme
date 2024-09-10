@@ -5,7 +5,7 @@ import {
   EventEmitter, Inject,
   NgZone,
   Output, PLATFORM_ID,
-  TransferState,
+  TransferState, Type,
   ViewChild,
 } from '@angular/core';
 import {
@@ -14,7 +14,7 @@ import {
   NestedOptionHost,
   WatcherHelper,
 } from 'devextreme-angular/core';
-import { DxPopupComponent } from '../component';
+import { DxPopupComponent, DxPopupTypes } from '../component';
 import { DxServicePopupInsertionDirective } from './insertion.directive';
 
 @Component({
@@ -28,7 +28,7 @@ import { DxServicePopupInsertionDirective } from './insertion.directive';
   ],
   template: '<ng-template popup-content-insertion></ng-template>',
 })
-export class DxPopupServiceComponent<T> extends DxPopupComponent implements AfterViewInit {
+export class PopupServiceComponent<T> extends DxPopupComponent implements AfterViewInit {
   @ViewChild(DxServicePopupInsertionDirective) contentInsertion: DxServicePopupInsertionDirective;
 
   @Output() afterViewInit$: EventEmitter<void> = new EventEmitter<void>();
@@ -50,6 +50,15 @@ export class DxPopupServiceComponent<T> extends DxPopupComponent implements Afte
 
   ngAfterViewInit() {
     super.ngAfterViewInit();
+
     this.afterViewInit$.emit();
+  }
+
+  setOptions(popupOptions: DxPopupTypes.Properties) {
+    this.instance.option(popupOptions)
+  }
+
+  setContentComponent(contentComponent: Type<T>) {
+    this.contentRef = this.contentInsertion?.viewContainerRef.createComponent(contentComponent);
   }
 }

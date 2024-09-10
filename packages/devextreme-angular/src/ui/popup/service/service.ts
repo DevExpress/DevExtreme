@@ -7,7 +7,7 @@ import {
   ComponentRef, Type,
 } from '@angular/core';
 import { DxPopupComponent, DxPopupTypes } from '../component';
-import { DxPopupServiceComponent as DxPopupServiceCmp } from './service.component';
+import { PopupServiceComponent } from './service.component';
 
 export type DxPopupServiceComponent<T = any> = DxPopupComponent & { contentRef: ComponentRef<T> }
 
@@ -21,22 +21,23 @@ export class DxPopupService {
     private readonly componentFactoryResolver: ComponentFactoryResolver,
   ) {}
 
-  open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties) {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DxPopupServiceCmp<T>);
+  open<T>(contentComponent: Type<T>, popupOptions?: DxPopupTypes.Properties): DxPopupServiceComponent<T> {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PopupServiceComponent<T>);
     const componentRef = componentFactory.create(this.injector);
     const cmpInstance = componentRef.instance;
 
     cmpInstance.onHidden.subscribe(() => {
       this.applicationRef.detachView(componentRef.hostView);
+
       componentRef.destroy();
     });
 
     cmpInstance.afterViewInit$.subscribe(() => {
       if (popupOptions) {
-        cmpInstance.instance.option(popupOptions);
+        cmpInstance.setOptions(popupOptions);
       }
 
-      componentRef.instance.contentRef = cmpInstance.contentInsertion?.viewContainerRef.createComponent(contentComponent);
+      cmpInstance.setContentComponent(contentComponent);
     });
 
     this.applicationRef.attachView(componentRef.hostView);
@@ -49,6 +50,6 @@ export class DxPopupService {
 
     this.applicationRef.tick();
 
-    return componentRef.instance as DxPopupServiceComponent<T>;
+    return componentRef.instance;
   }
 }
