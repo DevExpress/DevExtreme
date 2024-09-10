@@ -43,8 +43,11 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiToolbarItemComponent } from 'devextreme-angular/ui/toolbar/nested';
 
 
 /**
@@ -410,12 +413,24 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiToolbarItemComponent)
+    get itemsChildren(): QueryList<DxiToolbarItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiToolbarItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -502,6 +517,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -511,6 +527,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
   exports: [
     DxToolbarComponent,
     DxiItemModule,
+    DxiToolbarItemModule,
     DxTemplateModule
   ]
 })

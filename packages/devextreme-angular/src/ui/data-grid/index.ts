@@ -81,7 +81,6 @@ import { DxoHideModule } from 'devextreme-angular/ui/nested';
 import { DxoFromModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
 import { DxoFilterBuilderModule } from 'devextreme-angular/ui/nested';
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
@@ -113,9 +112,76 @@ import { DxoValueFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiTotalItemModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
+import { DxoDataGridColumnChooserModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridPositionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridAtModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridBoundaryOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridCollisionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridMyModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSearchModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColumnFixingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridColumnModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridButtonModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridLookupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFormatModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFormItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridLabelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridEditingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridChangeModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFormModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridColCountByScreenModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridTabPanelOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTabModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridButtonOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridPopupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridAnimationModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridHideModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFromModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridToModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridShowModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridToolbarItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridExportModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterBuilderModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridCustomOperationModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridFieldModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridGroupOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterBuilderPopupModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridFilterRowModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridGroupingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridGroupPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridKeyboardNavigationModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridLoadPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridMasterDetailModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridPagerModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridPagingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridRemoteOperationsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridRowDraggingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridCursorOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridScrollingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSearchPanelModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridSortByGroupSummaryInfoModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSortingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridStateStoringModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridSummaryModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridGroupItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridToolbarModule } from 'devextreme-angular/ui/data-grid/nested';
+
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiDataGridColumnComponent } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/data-grid/nested';
 
 
 /**
@@ -1967,20 +2033,43 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiColumnComponent)
-    get columnsChildren(): QueryList<DxiColumnComponent> {
+    @ContentChildren(DxiDataGridColumnComponent)
+    get columnsChildren(): QueryList<DxiDataGridColumnComponent> {
         return this._getOption('columns');
     }
     set columnsChildren(value) {
+        this.setContentChildren('columns', value, 'DxiDataGridColumnComponent');
         this.setChildren('columns', value);
     }
 
-    @ContentChildren(DxiSortByGroupSummaryInfoComponent)
-    get sortByGroupSummaryInfoChildren(): QueryList<DxiSortByGroupSummaryInfoComponent> {
+    @ContentChildren(DxiDataGridSortByGroupSummaryInfoComponent)
+    get sortByGroupSummaryInfoChildren(): QueryList<DxiDataGridSortByGroupSummaryInfoComponent> {
         return this._getOption('sortByGroupSummaryInfo');
     }
     set sortByGroupSummaryInfoChildren(value) {
+        this.setContentChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
         this.setChildren('sortByGroupSummaryInfo', value);
+    }
+
+
+    @ContentChildren(DxiColumnComponent)
+    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsLegacyChildren(value) {
+        if (this.checkContentChildren('columns', value, 'DxiColumnComponent')) {
+           this.setChildren('columns', value);
+        }
+    }
+
+    @ContentChildren(DxiSortByGroupSummaryInfoComponent)
+    get sortByGroupSummaryInfoLegacyChildren(): QueryList<DxiSortByGroupSummaryInfoComponent> {
+        return this._getOption('sortByGroupSummaryInfo');
+    }
+    set sortByGroupSummaryInfoLegacyChildren(value) {
+        if (this.checkContentChildren('sortByGroupSummaryInfo', value, 'DxiSortByGroupSummaryInfoComponent')) {
+           this.setChildren('sortByGroupSummaryInfo', value);
+        }
     }
 
 
@@ -2199,7 +2288,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoFromModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxoExportModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
@@ -2230,6 +2318,70 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
+    DxoDataGridColumnChooserModule,
+    DxoDataGridPositionModule,
+    DxoDataGridAtModule,
+    DxoDataGridBoundaryOffsetModule,
+    DxoDataGridCollisionModule,
+    DxoDataGridMyModule,
+    DxoDataGridOffsetModule,
+    DxoDataGridSearchModule,
+    DxoDataGridSelectionModule,
+    DxoDataGridColumnFixingModule,
+    DxoDataGridTextsModule,
+    DxiDataGridColumnModule,
+    DxiDataGridButtonModule,
+    DxoDataGridHeaderFilterModule,
+    DxoDataGridLookupModule,
+    DxoDataGridFormatModule,
+    DxoDataGridFormItemModule,
+    DxoDataGridLabelModule,
+    DxiDataGridValidationRuleModule,
+    DxoDataGridEditingModule,
+    DxiDataGridChangeModule,
+    DxoDataGridFormModule,
+    DxoDataGridColCountByScreenModule,
+    DxiDataGridItemModule,
+    DxoDataGridTabPanelOptionsModule,
+    DxiDataGridTabModule,
+    DxoDataGridButtonOptionsModule,
+    DxoDataGridPopupModule,
+    DxoDataGridAnimationModule,
+    DxoDataGridHideModule,
+    DxoDataGridFromModule,
+    DxoDataGridToModule,
+    DxoDataGridShowModule,
+    DxiDataGridToolbarItemModule,
+    DxoDataGridExportModule,
+    DxoDataGridFilterBuilderModule,
+    DxiDataGridCustomOperationModule,
+    DxiDataGridFieldModule,
+    DxoDataGridFilterOperationDescriptionsModule,
+    DxoDataGridGroupOperationDescriptionsModule,
+    DxoDataGridFilterBuilderPopupModule,
+    DxoDataGridFilterPanelModule,
+    DxoDataGridFilterRowModule,
+    DxoDataGridOperationDescriptionsModule,
+    DxoDataGridGroupingModule,
+    DxoDataGridGroupPanelModule,
+    DxoDataGridKeyboardNavigationModule,
+    DxoDataGridLoadPanelModule,
+    DxoDataGridMasterDetailModule,
+    DxoDataGridPagerModule,
+    DxoDataGridPagingModule,
+    DxoDataGridRemoteOperationsModule,
+    DxoDataGridRowDraggingModule,
+    DxoDataGridCursorOffsetModule,
+    DxoDataGridScrollingModule,
+    DxoDataGridSearchPanelModule,
+    DxiDataGridSortByGroupSummaryInfoModule,
+    DxoDataGridSortingModule,
+    DxoDataGridStateStoringModule,
+    DxoDataGridSummaryModule,
+    DxiDataGridGroupItemModule,
+    DxoDataGridValueFormatModule,
+    DxiDataGridTotalItemModule,
+    DxoDataGridToolbarModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -2271,7 +2423,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoFromModule,
     DxoToModule,
     DxoShowModule,
-    DxiToolbarItemModule,
     DxoExportModule,
     DxoFilterBuilderModule,
     DxiCustomOperationModule,
@@ -2302,6 +2453,70 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoValueFormatModule,
     DxiTotalItemModule,
     DxoToolbarModule,
+    DxoDataGridColumnChooserModule,
+    DxoDataGridPositionModule,
+    DxoDataGridAtModule,
+    DxoDataGridBoundaryOffsetModule,
+    DxoDataGridCollisionModule,
+    DxoDataGridMyModule,
+    DxoDataGridOffsetModule,
+    DxoDataGridSearchModule,
+    DxoDataGridSelectionModule,
+    DxoDataGridColumnFixingModule,
+    DxoDataGridTextsModule,
+    DxiDataGridColumnModule,
+    DxiDataGridButtonModule,
+    DxoDataGridHeaderFilterModule,
+    DxoDataGridLookupModule,
+    DxoDataGridFormatModule,
+    DxoDataGridFormItemModule,
+    DxoDataGridLabelModule,
+    DxiDataGridValidationRuleModule,
+    DxoDataGridEditingModule,
+    DxiDataGridChangeModule,
+    DxoDataGridFormModule,
+    DxoDataGridColCountByScreenModule,
+    DxiDataGridItemModule,
+    DxoDataGridTabPanelOptionsModule,
+    DxiDataGridTabModule,
+    DxoDataGridButtonOptionsModule,
+    DxoDataGridPopupModule,
+    DxoDataGridAnimationModule,
+    DxoDataGridHideModule,
+    DxoDataGridFromModule,
+    DxoDataGridToModule,
+    DxoDataGridShowModule,
+    DxiDataGridToolbarItemModule,
+    DxoDataGridExportModule,
+    DxoDataGridFilterBuilderModule,
+    DxiDataGridCustomOperationModule,
+    DxiDataGridFieldModule,
+    DxoDataGridFilterOperationDescriptionsModule,
+    DxoDataGridGroupOperationDescriptionsModule,
+    DxoDataGridFilterBuilderPopupModule,
+    DxoDataGridFilterPanelModule,
+    DxoDataGridFilterRowModule,
+    DxoDataGridOperationDescriptionsModule,
+    DxoDataGridGroupingModule,
+    DxoDataGridGroupPanelModule,
+    DxoDataGridKeyboardNavigationModule,
+    DxoDataGridLoadPanelModule,
+    DxoDataGridMasterDetailModule,
+    DxoDataGridPagerModule,
+    DxoDataGridPagingModule,
+    DxoDataGridRemoteOperationsModule,
+    DxoDataGridRowDraggingModule,
+    DxoDataGridCursorOffsetModule,
+    DxoDataGridScrollingModule,
+    DxoDataGridSearchPanelModule,
+    DxiDataGridSortByGroupSummaryInfoModule,
+    DxoDataGridSortingModule,
+    DxoDataGridStateStoringModule,
+    DxoDataGridSummaryModule,
+    DxiDataGridGroupItemModule,
+    DxoDataGridValueFormatModule,
+    DxiDataGridTotalItemModule,
+    DxoDataGridToolbarModule,
     DxTemplateModule
   ]
 })

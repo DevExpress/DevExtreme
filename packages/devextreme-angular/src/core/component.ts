@@ -289,6 +289,28 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templateUpdateRequired = true;
   }
 
+  contentChildren = {};
+
+  checkContentChildren<T>(propertyName: string, items: QueryList<T>, className: string) {
+    if (this.contentChildren[propertyName]) {
+      if (items.length > 0) {
+        if (console && console.warn) {
+          console.warn(`In ${this.constructor.name}, 
+          the nested ${className} and ${this.contentChildren[propertyName]} components are incompatible. 
+          Ensure that all nested components in the content area match.`);
+        }
+      }
+      return false;
+    }
+    return true;
+  }
+
+  setContentChildren<T>(propertyName: string, items: QueryList<T>, className: string) {
+    if (items.length > 0) {
+      this.contentChildren[propertyName] = className;
+    }
+  }
+
   setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
     this.resetOptions(propertyName);
     return this._collectionContainerImpl.setChildren(propertyName, items);

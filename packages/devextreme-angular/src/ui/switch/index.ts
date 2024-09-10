@@ -47,6 +47,7 @@ import {
 
 
 
+
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxSwitchComponent),
@@ -600,6 +601,7 @@ export class DxSwitchComponent extends DxComponent implements OnDestroy, Control
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
+
 
 
 

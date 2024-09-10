@@ -43,6 +43,16 @@ import { DxoMyModule } from 'devextreme-angular/ui/nested';
 import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 
+import { DxoDeferRenderingAnimationModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingFromModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingPositionModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingAtModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingBoundaryOffsetModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingCollisionModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingMyModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingOffsetModule } from 'devextreme-angular/ui/defer-rendering/nested';
+import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering/nested';
+
 
 
 
@@ -435,6 +445,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
 
 
 
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -493,6 +504,15 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoMyModule,
     DxoOffsetModule,
     DxoToModule,
+    DxoDeferRenderingAnimationModule,
+    DxoDeferRenderingFromModule,
+    DxoDeferRenderingPositionModule,
+    DxoDeferRenderingAtModule,
+    DxoDeferRenderingBoundaryOffsetModule,
+    DxoDeferRenderingCollisionModule,
+    DxoDeferRenderingMyModule,
+    DxoDeferRenderingOffsetModule,
+    DxoDeferRenderingToModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -510,6 +530,15 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoMyModule,
     DxoOffsetModule,
     DxoToModule,
+    DxoDeferRenderingAnimationModule,
+    DxoDeferRenderingFromModule,
+    DxoDeferRenderingPositionModule,
+    DxoDeferRenderingAtModule,
+    DxoDeferRenderingBoundaryOffsetModule,
+    DxoDeferRenderingCollisionModule,
+    DxoDeferRenderingMyModule,
+    DxoDeferRenderingOffsetModule,
+    DxoDeferRenderingToModule,
     DxTemplateModule
   ]
 })

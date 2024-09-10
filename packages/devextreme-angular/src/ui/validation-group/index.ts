@@ -35,6 +35,7 @@ import {
 
 
 
+
 /**
  * [descr:dxValidationGroup]
 
@@ -133,6 +134,7 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
     
      */
     @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+
 
 
 
