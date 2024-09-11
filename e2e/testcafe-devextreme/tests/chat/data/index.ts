@@ -16,10 +16,10 @@ export const createUser = (id: number, name: string, url = ''): User => ({
 export const timestamp = new Date(1721747399083);
 
 export const getLongText = (useLineBreaks = false): string => {
-  const uUID = '9138cf2e-ced3-426a-bb53-4478536f690b';
-  const longString = '182640341522285876574035911571908109718245218990724216376363976558845201472715827073837942336095076';
+  const UUID = '9138cf2e-ced3-426a-bb53-4478536f690b';
+  const longString = '1826403415222858765740359115719081097182452189907242163763639765588452014727158270738379423360950761826403415222858765740359115719081097182452189907';
 
-  const result = `${uUID}:${useLineBreaks ? lineBreaks : ''}${longString}`;
+  const result = `${UUID}:${useLineBreaks ? lineBreaks : ''}${longString}`;
 
   return result;
 };

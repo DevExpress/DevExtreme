@@ -145,7 +145,7 @@
                     useAvatarUrl ? avatarUrl : '',
                 );
 
-                const items = generateSpecifiedNumberOfMessagesInRow(4, userFirst, userSecond);
+                const items = generateMessages(2, userFirst, true, true, userSecond, 2)
 
                 const instance = $("#button").dxChat({
                     width: 400,
