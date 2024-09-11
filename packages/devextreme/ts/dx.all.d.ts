@@ -20720,6 +20720,20 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
+     * [descr:dxMapOptions.googleMapConfig]
+     */
+    googleMapConfig?: {
+      /**
+       * [descr:dxMapOptions.googleMapConfig.mapId]
+       */
+      mapId?: string;
+      /**
+       * [descr:dxMapOptions.googleMapConfig.useAdvancedMarkers]
+       * @deprecated [depNote:dxMapOptions.googleMapConfig.useAdvancedMarkers]
+       */
+      useAdvancedMarkers?: boolean;
+    };
+    /**
      * [descr:dxMapOptions.height]
      */
     height?: number | string | (() => number | string);

@@ -207,6 +207,24 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     focusStateEnabled?: boolean;
     /**
      * @docid
+     * @default { mapId: '', useAdvancedMarkers: true }
+     * @public
+     */
+    googleMapConfig?: {
+      /**
+       * @docid
+       * @default ""
+       */
+      mapId?: string;
+      /**
+       * @docid
+       * @default true
+       * @deprecated
+       */
+      useAdvancedMarkers?: boolean;
+    };
+    /**
+     * @docid
      * @default 300
      * @public
      */
