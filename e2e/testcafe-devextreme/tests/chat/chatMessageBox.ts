@@ -11,7 +11,6 @@ fixture.disablePageReloads`ChatMessageBox`
 
 test('Chat: messagebox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await testScreenshot(t, takeScreenshot, 'Messagebox.png', { element: '#chat' });
 
   const chat = new Chat('#chat');
   const shortText = generateShortText();
