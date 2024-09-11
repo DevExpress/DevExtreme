@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
-import { generateShortText, generateLongText } from './data';
+import { getShortText, getLongText } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
@@ -13,8 +13,8 @@ test('Chat: messagebox', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
-  const shortText = generateShortText();
-  const longText = generateLongText(false, 50);
+  const shortText = getShortText();
+  const longText = getLongText();
 
   await chat.focus();
   await testScreenshot(t, takeScreenshot, 'Messagebox when chat has focus.png', { element: '#chat' });
@@ -36,6 +36,6 @@ test('Chat: messagebox', async (t) => {
 
   return createWidget('dxChat', {
     width: 400,
-    height: 500,
+    height: 600,
   }, '#chat');
 });

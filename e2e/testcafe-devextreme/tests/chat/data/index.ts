@@ -15,17 +15,16 @@ export const createUser = (id: number, name: string, url = ''): User => ({
 
 export const timestamp = new Date(1721747399083);
 
-export const generateLongText = (useLineBreaks = false, length = 10): string => {
-  const randomUUID = crypto.randomUUID();
-  const randomArray = crypto.getRandomValues(new Uint32Array(length));
-  const randomString = randomArray.reduce((acc, i) => `${acc}${i}`, '');
+export const getLongText = (useLineBreaks = false): string => {
+  const uUID = '9138cf2e-ced3-426a-bb53-4478536f690b';
+  const longString = '182640341522285876574035911571908109718245218990724216376363976558845201472715827073837942336095076';
 
-  const result = `${randomUUID}:${useLineBreaks ? lineBreaks : ''}${randomString}`;
+  const result = `${uUID}:${useLineBreaks ? lineBreaks : ''}${longString}`;
 
   return result;
 };
 
-export const generateShortText = (useLineBreaks = false): string => {
+export const getShortText = (useLineBreaks = false): string => {
   const value = `Short${useLineBreaks ? lineBreaks : ' '}text`;
 
   return value;
@@ -41,13 +40,31 @@ export const generateMessages = (
 ): any => {
   const messages = Array.from({ length }, (_, i) => {
     const text = useLongText
-      ? generateLongText(useLineBreaks)
-      : generateShortText(useLineBreaks);
+      ? getLongText(useLineBreaks)
+      : getShortText(useLineBreaks);
 
     const item = {
       timestamp,
       author: i % coefficient === 0 ? userFirst : userSecond ?? userFirst,
       text,
+    };
+
+    return item;
+  });
+
+  return messages;
+};
+
+export const generateSpecifiedNumberOfMessagesInRow = (
+  n: number,
+  userFirst: User,
+  userSecond: User,
+): any => {
+  const messages = Array.from({ length: n * 2 }, (_, i) => {
+    const item = {
+      timestamp,
+      author: i >= n ? userSecond : userFirst,
+      text: getShortText(),
     };
 
     return item;

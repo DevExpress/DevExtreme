@@ -37,7 +37,7 @@ test('Chat: avatar', async (t) => {
 
   return createWidget('dxChat', {
     width: 400,
-    height: 500,
+    height: 600,
     user: userSecond,
     items,
   }, '#chat');
