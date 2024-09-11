@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -49,6 +50,7 @@
         }
     </style>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -58,153 +60,76 @@
         <br />
         <div id="button"></div>
         <script>
-            $(function() {
-                const user1 = {
-                    id: 1,
-                    name: 'User 1',
-                };
+            $(function () {
+                const crypto = window.crypto;
+                const avatarUrl = 'data:image/png;base64,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';
+                const lineBreaks = '\n\n';
 
-                const user2 = {
-                    id: 2,
-                    name: 'User 2',
-                };
+                const createUser = (id, name, url = '') => ({
+                    id,
+                    name,
+                    avatarUrl: url,
+                });
 
-                // const author = {
-                //     id: 1,
-                //     name: 'First User Name',
-                // };
-                // const timestamp = new Date(1721747399083);
-                // const text = '0.392722124265449';
+                const timestamp = new Date(1721747399083);
 
-                const getRandomValue = (length = 10) => {
-                    const crypto = window.crypto;
-
-                    const mathRandow = Math.random();
-                    const array = new Uint32Array(length);
-                    const cryptoRandom = crypto.getRandomValues(array).reduce((acc, i) => `${acc}${i}`, mathRandow);
+                const generateLongText = (useLineBreaks, length = 10) => {
                     const randomUUID = crypto.randomUUID();
+                    const randomArray = crypto.getRandomValues(new Uint32Array(length));
+                    const randomString = randomArray.reduce((acc, i) => `${acc}${i}`, '');
 
-                    const randomString = `${randomUUID}:\n\n${cryptoRandom}`;
+                    const result = `${randomUUID}:${useLineBreaks ? lineBreaks : ''}${randomString}`;
 
-                    return randomString;
+                    return result;
                 };
 
-                const randomUint32 = '0.392722124265449';
+                const generateShortText = (useLineBreaks) => {
+                    const value = `Short${useLineBreaks ? lineBreaks : ' '}text`;
+
+                    return value;
+                };
+
+                const generateMessages = (
+                    length,
+                    userFirst,
+                    useLongText = false,
+                    useLineBreaks = false,
+                    userSecond = null,
+                    coefficient = 1,
+                ) => {
+                    const messages = Array.from({ length }, (_, i) => {
+                        const text = useLongText
+                            ? generateLongText(useLineBreaks)
+                            : generateShortText(useLineBreaks);
+
+                        const item = {
+                            timestamp,
+                            author: i % coefficient === 0 ? userFirst : userSecond ?? userFirst,
+                            text,
+                        };
+
+                        return item;
+                    });
+
+                    return messages;
+                };
+
+                const useAvatarUrl = true;
+
+                const userFirst = createUser(1, 'First', useAvatarUrl ? avatarUrl : '');
+                const userSecond = createUser(2, 'Second', useAvatarUrl ? avatarUrl : '');
+
+                const items = generateMessages(2, userFirst, false, false, userSecond, 2);
 
                 $("#button").dxChat({
                     width: 400,
-                    height: 600,
-                    user: user1,
-                    items: [
-                        {
-                            text: randomUint32,
-                            author: user2,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: randomUint32,
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user1,
-                            timestamp: new Date(),
-                        },
-                        {
-                            text: getRandomValue(),
-                            author: user2,
-                            timestamp: new Date(),
-                        },
-                    ],
-
-    // height: 500,
-    // width: 400,
-    // items: [
-    //   {
-    //     timestamp,
-    //     text,
-    //     author,
-    //   },
-    //   {
-    //     timestamp,
-    //     text,
-    //     author,
-    //   },
-    // ],
+                    height: 300,
+                    user: userSecond,
+                    items,
                 });
             });
         </script>
     </div>
 </body>
+
 </html>
