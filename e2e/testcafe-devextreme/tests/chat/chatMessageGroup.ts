@@ -52,7 +52,7 @@ test('Chat: messagegroup, information', async (t) => {
   const userFirst = createUser(1, getLongText());
   const userSecond = createUser(2, getLongText());
 
-  const items = generateMessages(2, userFirst, false, false, userSecond, 2);
+  const items = generateMessages(2, userFirst, userSecond, false, false, 2);
 
   return createWidget('dxChat', {
     width: 400,

@@ -16,7 +16,7 @@ test('Chat: messagebox', async (t) => {
 
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
-  const items = generateMessages(17, userFirst, true, false, userSecond, 2);
+  const items = generateMessages(17, userFirst, userSecond, true, false, 2);
 
   await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', { element: '#chat' });
 

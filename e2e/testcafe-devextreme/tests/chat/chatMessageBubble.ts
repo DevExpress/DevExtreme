@@ -17,12 +17,12 @@ test('Chat: messagebubble', async (t) => {
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
 
-  let items = generateMessages(2, userFirst, true, false, userSecond, 2);
+  let items = generateMessages(2, userFirst, userSecond, true, false, 2);
 
   await chat.option({ items });
   await testScreenshot(t, takeScreenshot, 'Bubbles with long text.png', { element: '#chat' });
 
-  items = generateMessages(2, userFirst, true, true, userSecond, 2);
+  items = generateMessages(2, userFirst, userSecond, true, true, 2);
 
   await chat.option({ items });
   await testScreenshot(t, takeScreenshot, 'Bubbles with long text with line breaks.png', { element: '#chat' });

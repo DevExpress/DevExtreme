@@ -33,9 +33,9 @@ export const getShortText = (useLineBreaks = false): string => {
 export const generateMessages = (
   length: number,
   userFirst: User,
+  userSecond: User | null = null,
   useLongText = false,
   useLineBreaks = false,
-  userSecond: User | null = null,
   coefficient = 4,
 ): any => {
   const messages = Array.from({ length }, (_, i) => {

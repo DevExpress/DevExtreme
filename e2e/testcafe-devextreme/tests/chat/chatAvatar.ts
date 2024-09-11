@@ -18,7 +18,7 @@ test('Chat: avatar', async (t) => {
   const userFirst = createUser(1, 'First', avatarUrl);
   const userSecond = createUser(2, 'Second', avatarUrl);
 
-  const items = generateMessages(2, userFirst, false, false, userSecond, 2);
+  const items = generateMessages(2, userFirst, userSecond, false, false, 2);
 
   await chat.option('items', items);
 
@@ -33,7 +33,7 @@ test('Chat: avatar', async (t) => {
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
 
-  const items = generateMessages(2, userFirst, false, false, userSecond, 2);
+  const items = generateMessages(2, userFirst, userSecond, false, false, 2);
 
   return createWidget('dxChat', {
     width: 400,
