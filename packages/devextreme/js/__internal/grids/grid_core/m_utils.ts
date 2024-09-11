@@ -444,22 +444,23 @@ export default {
   getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex = 0, needToCheckPrevPoint = false) {
     const result: any[] = [];
     const cellsLength: number = items.length;
-    let $item;
+    let item;
     let offset;
     let columnIndex = startColumnIndex;
     let rtlEnabled;
 
     for (let i = 0; i <= cellsLength; i++) {
       if (i < cellsLength) {
-        $item = items.eq(i);
-        offset = getBoundingRect($item[0]);
-        rtlEnabled = $item.css('direction') === 'rtl';
+        item = items[i];
+        offset = getBoundingRect(item);
+        // @ts-expect-error
+        rtlEnabled = $(item).css('direction') === 'rtl';
       }
 
       const pointProps: any = {
         index: columnIndex,
         columnIndex,
-        item: $item[0],
+        item,
         x: !isVertical && rtlEnabled !== (i === cellsLength) ? offset.right : offset.left,
         y: isVertical && i === cellsLength ? offset.bottom : offset.top,
       };
@@ -472,7 +473,6 @@ export default {
           pointProps.y = prevItemOffset.top;
         }
 
-        // TODO: We will need to remove the flag after we remove the old implementation of fixed columns
         if (needToCheckPrevPoint && Math.round(prevItemOffsetX) !== Math.round(pointProps.x)) {
           const prevPointProps: any = {
             ...pointProps,
