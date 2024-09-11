@@ -3,6 +3,7 @@ import $ from 'jquery';
 import ChatAvatar from '__internal/ui/chat/chat_avatar';
 
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
+const CHAT_MESSAGE_AVATAR_IMAGE_CLASS = 'dx-chat-message-avatar-image';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
 
 const moduleConfig = {
@@ -30,7 +31,15 @@ QUnit.module('Avatar classes', moduleConfig, () => {
         assert.strictEqual(this.$element.hasClass(CHAT_MESSAGE_AVATAR_CLASS), true);
     });
 
+    QUnit.test('image element should have correct class', function(assert) {
+        this.reinit({ url: 'url' });
+
+        assert.strictEqual(this.$element.children().first().hasClass(CHAT_MESSAGE_AVATAR_IMAGE_CLASS), true);
+    });
+
     QUnit.test('text element should have correct class', function(assert) {
+        this.reinit({ name: 'name' });
+
         assert.strictEqual(this.$element.children().first().hasClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS), true);
     });
 });

@@ -46,8 +46,17 @@ import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
 import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxoFormColCountByScreenModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormLabelModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
+import { DxiFormTabModule } from 'devextreme-angular/ui/form/nested';
+import { DxoFormButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiFormItemComponent } from 'devextreme-angular/ui/form/nested';
 
 
 /**
@@ -797,12 +806,24 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiFormItemComponent)
+    get itemsChildren(): QueryList<DxiFormItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiFormItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -911,6 +932,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoFormColCountByScreenModule,
+    DxiFormItemModule,
+    DxoFormLabelModule,
+    DxiFormValidationRuleModule,
+    DxoFormTabPanelOptionsModule,
+    DxiFormTabModule,
+    DxoFormButtonOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -926,6 +954,13 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     DxoTabPanelOptionsModule,
     DxiTabModule,
     DxoButtonOptionsModule,
+    DxoFormColCountByScreenModule,
+    DxiFormItemModule,
+    DxoFormLabelModule,
+    DxiFormValidationRuleModule,
+    DxoFormTabPanelOptionsModule,
+    DxiFormTabModule,
+    DxoFormButtonOptionsModule,
     DxTemplateModule
   ]
 })

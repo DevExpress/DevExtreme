@@ -49,8 +49,13 @@ import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 
+import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
+
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiNumberBoxButtonComponent } from 'devextreme-angular/ui/number-box/nested';
 
 
 
@@ -989,12 +994,24 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(DxiNumberBoxButtonComponent)
+    get buttonsChildren(): QueryList<DxiNumberBoxButtonComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
+        this.setContentChildren('buttons', value, 'DxiNumberBoxButtonComponent');
         this.setChildren('buttons', value);
+    }
+
+
+    @ContentChildren(DxiButtonComponent)
+    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsLegacyChildren(value) {
+        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
+           this.setChildren('buttons', value);
+        }
     }
 
 
@@ -1136,6 +1153,9 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
+    DxiNumberBoxButtonModule,
+    DxoNumberBoxOptionsModule,
+    DxoNumberBoxFormatModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1147,6 +1167,9 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
+    DxiNumberBoxButtonModule,
+    DxoNumberBoxOptionsModule,
+    DxoNumberBoxFormatModule,
     DxTemplateModule
   ]
 })

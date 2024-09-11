@@ -321,7 +321,28 @@ QUnit.module('Misc', stubsEnvironment, () => {
         assert.deepEqual(filterExpr, ['(SELECT {[Product].[Category].[Product].[Category]&}on 0']);
     });
 
+    QUnit.test('T1236954. Build a correct filter query when a member has unknown member', function(assert) {
+        this.store.load({
+            values: [{
+                dataField: '[Measures].[Calculated Cost]',
+            }],
+            columns: [{
+                dataField: '[Activities - Activities].[Activities]',
+                filterValues: ['[Activities - Activities].[Activities].[All].UNKNOWNMEMBER',
+                    '[Activities - Activities].[Activities].&[24]',
+                    '[Activities - Activities].[Activities].&[21]'],
+            }],
+            rows: [{
+                dataField: '[Departments - Activities].[Departments]',
+            }],
+        });
 
+        const filterExpr = this.getQuery().match(/\(select(.+?)on 0/gi);
+
+        assert.deepEqual(filterExpr, [
+            '(SELECT {[Activities - Activities].[Activities].[All].UNKNOWNMEMBER,[Activities - Activities].[Activities].&[24],[Activities - Activities].[Activities].&[21]}on 0',
+        ]);
+    });
 });
 
 QUnit.module('getDrillDownItems', stubsEnvironment, () => {

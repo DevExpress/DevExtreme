@@ -47,8 +47,12 @@ import {
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxiTextBoxButtonModule } from 'devextreme-angular/ui/text-box/nested';
+import { DxoTextBoxOptionsModule } from 'devextreme-angular/ui/text-box/nested';
+
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiTextBoxButtonComponent } from 'devextreme-angular/ui/text-box/nested';
 
 
 
@@ -1007,12 +1011,24 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiButtonComponent)
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
+    @ContentChildren(DxiTextBoxButtonComponent)
+    get buttonsChildren(): QueryList<DxiTextBoxButtonComponent> {
         return this._getOption('buttons');
     }
     set buttonsChildren(value) {
+        this.setContentChildren('buttons', value, 'DxiTextBoxButtonComponent');
         this.setChildren('buttons', value);
+    }
+
+
+    @ContentChildren(DxiButtonComponent)
+    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsLegacyChildren(value) {
+        if (this.checkContentChildren('buttons', value, 'DxiButtonComponent')) {
+           this.setChildren('buttons', value);
+        }
     }
 
 
@@ -1154,6 +1170,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
   imports: [
     DxiButtonModule,
     DxoOptionsModule,
+    DxiTextBoxButtonModule,
+    DxoTextBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1164,6 +1182,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     DxTextBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
+    DxiTextBoxButtonModule,
+    DxoTextBoxOptionsModule,
     DxTemplateModule
   ]
 })

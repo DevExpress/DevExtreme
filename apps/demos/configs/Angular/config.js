@@ -177,6 +177,7 @@ window.config = {
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
     ...componentNames.reduce((acc, name) => {
       acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
+      acc[`devextreme-angular/ui/${name}/nested`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}-nested.umd.js`;
       return acc;
     }, {}),
 

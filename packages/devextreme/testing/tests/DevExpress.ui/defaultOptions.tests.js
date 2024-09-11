@@ -1355,6 +1355,7 @@ testComponentDefaults(ChatAvatar,
     {},
     {
         name: '',
+        url: '',
     }
 );
 

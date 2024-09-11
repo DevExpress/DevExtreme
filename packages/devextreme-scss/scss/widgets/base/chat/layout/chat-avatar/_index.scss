@@ -4,4 +4,11 @@
   align-items: center;
   justify-content: center;
   border-radius: 999em;
+  overflow: clip;
+}
+
+.dx-chat-message-avatar-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }

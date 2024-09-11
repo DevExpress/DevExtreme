@@ -47,8 +47,14 @@ import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
 import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
+import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiTreeViewButtonModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiTreeViewItemComponent } from 'devextreme-angular/ui/tree-view/nested';
 
 
 /**
@@ -1134,12 +1140,24 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiTreeViewItemComponent)
+    get itemsChildren(): QueryList<DxiTreeViewItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiTreeViewItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -1270,6 +1288,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
+    DxiTreeViewItemModule,
+    DxoTreeViewSearchEditorOptionsModule,
+    DxiTreeViewButtonModule,
+    DxoTreeViewOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1282,6 +1304,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     DxoSearchEditorOptionsModule,
     DxiButtonModule,
     DxoOptionsModule,
+    DxiTreeViewItemModule,
+    DxoTreeViewSearchEditorOptionsModule,
+    DxiTreeViewButtonModule,
+    DxoTreeViewOptionsModule,
     DxTemplateModule
   ]
 })

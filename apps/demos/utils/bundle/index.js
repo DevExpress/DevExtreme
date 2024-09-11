@@ -143,7 +143,7 @@ const prepareConfigs = (framework)=> {
         'devextreme-angular/core': `${bundlesRoot}/devextreme-angular-core.umd.js`,
         ...componentNames.reduce((items, item) => {
           // eslint-disable-next-line no-param-reassign
-          items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
+          items[`devextreme-angular/ui/${item.replace('-nested', '/nested')}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
           return items;
         }, {}),
       };
@@ -151,7 +151,7 @@ const prepareConfigs = (framework)=> {
       modulesMap = {
         ...componentNames.reduce((items, item) => {
           // eslint-disable-next-line no-param-reassign
-          items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
+          items[`devextreme-angular/ui/${item.replace('-nested', '/nested')}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
           return items;
         }, {}),
       };

@@ -6,6 +6,7 @@ import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_c
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
+import type { EnterKeyEvent } from '../../../ui/text_area';
 import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
 
@@ -59,6 +60,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._renderButton();
   }
 
+  _isValuableTextEntered(): boolean {
+    const { text } = this._textArea.option();
+
+    return !!text?.trim();
+  }
+
   _renderTextArea(): void {
     const {
       activeStateEnabled,
@@ -77,7 +84,24 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       stylingMode: 'outlined',
       placeholder: 'Type a message',
       autoResizeEnabled: true,
+      valueChangeEvent: 'input',
       maxHeight: '20em',
+      onInput: (): void => {
+        const shouldButtonBeDisabled = !this._isValuableTextEntered();
+
+        this._toggleButtonDisableState(shouldButtonBeDisabled);
+      },
+      onEnterKey: (e: EnterKeyEvent): void => {
+        if (!e.event?.shiftKey) {
+          this._sendHandler(e);
+        }
+      },
+    });
+
+    this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
+      if (!event.shiftKey && this._isValuableTextEntered()) {
+        event.preventDefault();
+      }
     });
   }
 
@@ -99,6 +123,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       icon: 'sendfilled',
       type: 'default',
       stylingMode: 'text',
+      disabled: true,
       onClick: (e): void => {
         this._sendHandler(e);
       },
@@ -112,15 +137,20 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     );
   }
 
-  _sendHandler(e: ClickEvent): void {
-    const { text } = this._textArea.option();
-
-    if (!text?.trim()) {
+  _sendHandler(e: ClickEvent | EnterKeyEvent): void {
+    if (!this._isValuableTextEntered()) {
       return;
     }
 
+    const { text } = this._textArea.option();
+
     this._messageSendAction?.({ text, event: e.event });
-    this._textArea?.reset();
+    this._textArea.reset();
+    this._toggleButtonDisableState(true);
+  }
+
+  _toggleButtonDisableState(state: boolean): void {
+    this._button.option('disabled', state);
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
