@@ -45,8 +45,8 @@ importers:
         specifier: 6.0.2
         version: 6.0.2(@angular/compiler@17.3.12(@angular/core@17.3.12(rxjs@7.8.1)(zone.js@0.14.10)))(@angular/core@17.3.12(rxjs@7.8.1)(zone.js@0.14.10))(tslint@6.1.3(typescript@5.4.5))
       devextreme-internal-tools:
-        specifier: ./devextreme-internal-tools-16.0.0-beta.7.tgz
-        version: file:devextreme-internal-tools-16.0.0-beta.7.tgz
+        specifier: ./devextreme-internal-tools-16.0.0-beta.8.tgz
+        version: file:devextreme-internal-tools-16.0.0-beta.8.tgz
       http-server:
         specifier: 14.1.1
         version: 14.1.1
@@ -7951,9 +7951,9 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-internal-tools@file:devextreme-internal-tools-16.0.0-beta.7.tgz:
-    resolution: {integrity: sha512-CjFRLZ0vQ2xC4SoAR7Qr+AVLJjHcLS8QYXVDxckz1c52mUO1O+4sbWqBXtJdKXYhRlxYrQsUxPObSZZy6dK48g==, tarball: file:devextreme-internal-tools-16.0.0-beta.7.tgz}
-    version: 16.0.0-beta.7
+  devextreme-internal-tools@file:devextreme-internal-tools-16.0.0-beta.8.tgz:
+    resolution: {integrity: sha512-e/P/4OZ+F39EPuhS9ZX+k0bW7OZ0QUEs0mOYNToQFqCpRtr4W9o0ETfSFxPhVuVBdumCI037AGUTV4aSLBUbwg==, tarball: file:devextreme-internal-tools-16.0.0-beta.8.tgz}
+    version: 16.0.0-beta.8
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -26064,7 +26064,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-internal-tools@file:devextreme-internal-tools-16.0.0-beta.7.tgz:
+  devextreme-internal-tools@file:devextreme-internal-tools-16.0.0-beta.8.tgz:
     dependencies:
       dasherize: 2.0.0
       deepmerge: 4.3.1
