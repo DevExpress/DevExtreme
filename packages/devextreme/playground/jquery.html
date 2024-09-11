@@ -95,7 +95,7 @@
                     useLongText = false,
                     useLineBreaks = false,
                     userSecond = null,
-                    coefficient = 1,
+                    coefficient = 4,
                 ) => {
                     const messages = Array.from({ length }, (_, i) => {
                         const text = useLongText
@@ -114,23 +114,24 @@
                     return messages;
                 };
 
-                const useAvatarUrl = true;
+                const useAvatarUrl = false;
 
                 const userFirst = createUser(1, 'First', useAvatarUrl ? avatarUrl : '');
                 const userSecond = createUser(2, 'Second', useAvatarUrl ? avatarUrl : '');
 
-                const items = generateMessages(2, userFirst, false, false, userSecond, 2);
+                // const items = generateMessages(2, userFirst, false, false, userSecond, 2);
+                const items = generateMessages(17, userFirst, true, false, userSecond, 2);
 
                 // const longText = generateLongText(false, 50);
 
                 const instance = $("#button").dxChat({
                     width: 400,
                     height: 500,
-                    // user: userSecond,
-                    // items,
+                    user: userSecond,
+                    items,
                 }).dxChat('instance');
 
-                instance.focus();
+                // instance.focus();
             });
         </script>
     </div>
