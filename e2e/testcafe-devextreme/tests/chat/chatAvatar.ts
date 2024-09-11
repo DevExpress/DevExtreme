@@ -36,8 +36,8 @@ test('Chat: avatar', async (t) => {
   const items = generateMessages(2, userFirst, false, false, userSecond, 2);
 
   return createWidget('dxChat', {
-    height: 200,
-    width: 200,
+    width: 400,
+    height: 500,
     user: userSecond,
     items,
   }, '#chat');

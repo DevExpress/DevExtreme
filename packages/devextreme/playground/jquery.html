@@ -44,10 +44,10 @@
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 
     <style>
-        .dx-chat-message-avatar {
-            /* width: 64px;
-            height: 64px; */
-        }
+        /* .dx-chat-message-avatar {
+            width: 64px;
+            height: 64px;
+        } */
     </style>
 </head>
 
@@ -121,12 +121,16 @@
 
                 const items = generateMessages(2, userFirst, false, false, userSecond, 2);
 
-                $("#button").dxChat({
+                // const longText = generateLongText(false, 50);
+
+                const instance = $("#button").dxChat({
                     width: 400,
-                    height: 300,
-                    user: userSecond,
-                    items,
-                });
+                    height: 500,
+                    // user: userSecond,
+                    // items,
+                }).dxChat('instance');
+
+                instance.focus();
             });
         </script>
     </div>

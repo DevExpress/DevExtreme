@@ -15,7 +15,7 @@ export const createUser = (id: number, name: string, url = ''): User => ({
 
 export const timestamp = new Date(1721747399083);
 
-export const generateLongText = (useLineBreaks: boolean, length = 10): string => {
+export const generateLongText = (useLineBreaks = false, length = 10): string => {
   const randomUUID = crypto.randomUUID();
   const randomArray = crypto.getRandomValues(new Uint32Array(length));
   const randomString = randomArray.reduce((acc, i) => `${acc}${i}`, '');
@@ -25,7 +25,7 @@ export const generateLongText = (useLineBreaks: boolean, length = 10): string =>
   return result;
 };
 
-export const generateShortText = (useLineBreaks: boolean): string => {
+export const generateShortText = (useLineBreaks = false): string => {
   const value = `Short${useLineBreaks ? lineBreaks : ' '}text`;
 
   return value;
