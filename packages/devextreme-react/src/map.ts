@@ -66,6 +66,7 @@ const Map = memo(
       const expectedChildren = useMemo(() => ({
         apiKey: { optionName: "apiKey", isCollectionItem: false },
         center: { optionName: "center", isCollectionItem: false },
+        googleMapConfig: { optionName: "googleMapConfig", isCollectionItem: false },
         marker: { optionName: "markers", isCollectionItem: true },
         route: { optionName: "routes", isCollectionItem: true }
       }), []);
@@ -117,6 +118,22 @@ const _componentCenter = memo(
 
 const Center: typeof _componentCenter & IElementDescriptor = Object.assign(_componentCenter, {
   OptionName: "center",
+})
+
+// owners:
+// Map
+type IGoogleMapConfigProps = React.PropsWithChildren<{
+  mapId?: string;
+  useAdvancedMarkers?: boolean;
+}>
+const _componentGoogleMapConfig = memo(
+  (props: IGoogleMapConfigProps) => {
+    return React.createElement(NestedOption<IGoogleMapConfigProps>, { ...props });
+  }
+);
+
+const GoogleMapConfig: typeof _componentGoogleMapConfig & IElementDescriptor = Object.assign(_componentGoogleMapConfig, {
+  OptionName: "googleMapConfig",
 })
 
 // owners:
@@ -216,6 +233,8 @@ export {
   IApiKeyProps,
   Center,
   ICenterProps,
+  GoogleMapConfig,
+  IGoogleMapConfigProps,
   Location,
   ILocationProps,
   Marker,
