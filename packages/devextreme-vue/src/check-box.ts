@@ -1,6 +1,6 @@
 import CheckBox, { Properties } from "devextreme/ui/check_box";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/strategy/vue3";
+import { prepareComponentConfig, } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

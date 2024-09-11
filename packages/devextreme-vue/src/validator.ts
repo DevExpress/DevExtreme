@@ -1,6 +1,6 @@
 import Validator, { Properties } from "devextreme/ui/validator";
 import { defineComponent } from "vue";
-import { prepareExtensionComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareExtensionComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "adapter" |

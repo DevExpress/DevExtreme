@@ -1,6 +1,6 @@
 import DropDownBox, { Properties } from "devextreme/ui/drop_down_box";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "acceptCustomValue" |

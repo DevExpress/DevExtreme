@@ -1,6 +1,6 @@
 import RadioGroup, { Properties } from "devextreme/ui/radio_group";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

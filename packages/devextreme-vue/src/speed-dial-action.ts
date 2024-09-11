@@ -1,6 +1,6 @@
 import SpeedDialAction, { Properties } from "devextreme/ui/speed_dial_action";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/strategy/vue3";
+import { prepareComponentConfig, } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

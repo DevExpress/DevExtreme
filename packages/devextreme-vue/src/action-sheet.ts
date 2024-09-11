@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/action_sheet";
 import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "cancelText" |

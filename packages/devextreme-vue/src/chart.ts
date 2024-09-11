@@ -1,6 +1,6 @@
 import Chart, { Properties } from "devextreme/viz/chart";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "adaptiveLayout" |

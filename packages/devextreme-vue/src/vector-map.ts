@@ -1,6 +1,6 @@
 import VectorMap, { Properties } from "devextreme/viz/vector_map";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "annotations" |

@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/multi_view";
 import MultiView, { Properties } from "devextreme/ui/multi_view";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

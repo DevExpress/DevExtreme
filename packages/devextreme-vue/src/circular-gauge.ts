@@ -1,6 +1,6 @@
 import CircularGauge, { Properties } from "devextreme/viz/circular_gauge";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |

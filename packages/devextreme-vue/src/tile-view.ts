@@ -1,7 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
 import TileView, { Properties } from "devextreme/ui/tile_view";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

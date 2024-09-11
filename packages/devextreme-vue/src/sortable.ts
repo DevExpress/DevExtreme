@@ -1,6 +1,6 @@
 import Sortable, { Properties } from "devextreme/ui/sortable";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/strategy/vue3";
+import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "allowDropInsideItem" |
