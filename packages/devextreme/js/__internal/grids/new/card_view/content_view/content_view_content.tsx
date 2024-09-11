@@ -7,6 +7,7 @@ import { View } from '@ts/grids/new/grid_core/core/view';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 
 import { EditingController } from '../../grid_core/editing/controller';
+import { OptionsController } from '../options_controller';
 import { Card } from './card';
 
 export const CLASSES = {
@@ -25,7 +26,7 @@ export class ContentViewContent extends View implements BaseContentViewContent {
   );
 
   public vdom = computed(
-    (items, isEditing) => (
+    (items, isEditing, fieldTemplate) => (
       <>
         {items.map((item) => (
           <Card
@@ -34,6 +35,7 @@ export class ContentViewContent extends View implements BaseContentViewContent {
             onChange={
               (columnName, value): void => this.editing.onChanged(item.key, columnName, value)
             }
+            fieldTemplate={fieldTemplate}
           />
         ))}
       </>
@@ -41,17 +43,19 @@ export class ContentViewContent extends View implements BaseContentViewContent {
     [
       this.items,
       this.editing.isEditing,
+      this.options.template('fieldTemplate'),
     ],
   );
 
   public static dependencies = [
-    DataController, ColumnsController, EditingController,
+    DataController, ColumnsController, EditingController, OptionsController,
   ] as const;
 
   constructor(
     private readonly dataController: DataController,
     private readonly columnsController: ColumnsController,
     private readonly editing: EditingController,
+    private readonly options: OptionsController,
   ) {
     super();
   }

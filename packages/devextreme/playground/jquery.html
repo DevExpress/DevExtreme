@@ -95,10 +95,19 @@
 
             $(function () {
                 $("#cardview").dxCardView({
+                    accessKey: 'q',
                     dataSource: store,
                     width: "70%",
                     height: 300,
                     keyExpr: 'OrderNumber',
+                    fieldTemplate({ defaultTemplate, ...props}, index) {
+                        const el = $('<div>')
+                        if (index % 2) {
+                            el.css({color: 'red'});
+                        }
+                        defaultTemplate.render(props, index, el);
+                        return el;
+                    },
                     columns: [
                         {
                             dataField: 'OrderNumber',

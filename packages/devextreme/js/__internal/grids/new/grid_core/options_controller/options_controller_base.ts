@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable spellcheck/spell-checker */
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
@@ -6,6 +8,8 @@ import type {
   Gettable, Observable, Subscribable, Updatable,
 } from '@ts/core/reactive';
 import { computed, state } from '@ts/core/reactive';
+
+import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';
 
 type SubsGets<T> = Subscribable<T> & Gettable<T>;
 type SubsUpts<T> = Subscribable<T> & Updatable<T>;
@@ -87,6 +91,16 @@ export class OptionsController<TProps, TDefaultProps extends TProps = TProps> {
         pathParts,
       ));
     });
+  }
+
+  public template<TProp extends string>(
+    name: TProp,
+  ): SubsGets<any> {
+    return computed(
+      // @ts-expect-error
+      (template) => template && TemplateWrapper(this.component._getTemplate(template)),
+      [this.oneWay(name)],
+    );
   }
 
   public oneWay<TProp extends string>(
