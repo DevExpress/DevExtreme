@@ -107,10 +107,20 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart = false): v
 
     if (offset) {
       if (isStart) {
-        triggerPointerDown($element, offset.left, offset.top);
+        $element
+          .trigger($.Event('dxpointerdown', {
+            pageX: offset.left,
+            pageY: offset.top,
+            pointers: [{ pointerId: 1 }],
+          }));
       }
 
-      triggerPointerMove($element, offset.left + x, offset.top + y);
+      $element
+        .trigger($.Event('dxpointermove', {
+          pageX: offset.left + x,
+          pageY: offset.top + y,
+          pointers: [{ pointerId: 1 }],
+        }));
     }
   }
 };
