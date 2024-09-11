@@ -5,5 +5,5 @@ const strategy = vue3Stategy;
 export const {
   prepareComponentConfig,
   prepareConfigurationComponentConfig,
-  prepareExtensionComponentConfig
+  prepareExtensionComponentConfig,
 } = strategy;
