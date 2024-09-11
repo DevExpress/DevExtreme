@@ -39,6 +39,7 @@ import {
 
 import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
 import { DxiCenterModule } from 'devextreme-angular/ui/nested';
+import { DxoGoogleMapConfigModule } from 'devextreme-angular/ui/nested';
 import { DxiMarkerModule } from 'devextreme-angular/ui/nested';
 import { DxiLocationModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
@@ -46,6 +47,7 @@ import { DxiRouteModule } from 'devextreme-angular/ui/nested';
 
 import { DxoMapApiKeyModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapCenterModule } from 'devextreme-angular/ui/map/nested';
+import { DxoMapGoogleMapConfigModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapMarkerModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
@@ -191,6 +193,19 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set focusStateEnabled(value: boolean) {
         this._setOption('focusStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxMapOptions.googleMapConfig]
+    
+     */
+    @Input()
+    get googleMapConfig(): { mapId?: string, useAdvancedMarkers?: boolean } {
+        return this._getOption('googleMapConfig');
+    }
+    set googleMapConfig(value: { mapId?: string, useAdvancedMarkers?: boolean }) {
+        this._setOption('googleMapConfig', value);
     }
 
 
@@ -502,6 +517,13 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() googleMapConfigChange: EventEmitter<{ mapId?: string, useAdvancedMarkers?: boolean }>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() heightChange: EventEmitter<number | Function | string>;
 
     /**
@@ -680,6 +702,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
+            { emit: 'googleMapConfigChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
@@ -745,12 +768,14 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
   imports: [
     DxoApiKeyModule,
     DxiCenterModule,
+    DxoGoogleMapConfigModule,
     DxiMarkerModule,
     DxiLocationModule,
     DxoTooltipModule,
     DxiRouteModule,
     DxoMapApiKeyModule,
     DxiMapCenterModule,
+    DxoMapGoogleMapConfigModule,
     DxiMapMarkerModule,
     DxiMapLocationModule,
     DxoMapTooltipModule,
@@ -765,12 +790,14 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxMapComponent,
     DxoApiKeyModule,
     DxiCenterModule,
+    DxoGoogleMapConfigModule,
     DxiMarkerModule,
     DxiLocationModule,
     DxoTooltipModule,
     DxiRouteModule,
     DxoMapApiKeyModule,
     DxiMapCenterModule,
+    DxoMapGoogleMapConfigModule,
     DxiMapMarkerModule,
     DxiMapLocationModule,
     DxoMapTooltipModule,

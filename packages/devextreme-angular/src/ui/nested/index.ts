@@ -86,6 +86,7 @@ export * from './fullstackedline';
 export * from './fullstackedspline';
 export * from './fullstackedsplinearea';
 export * from './geometry';
+export * from './google-map-config';
 export * from './grid-size';
 export * from './grid';
 export * from './group-dxi';
