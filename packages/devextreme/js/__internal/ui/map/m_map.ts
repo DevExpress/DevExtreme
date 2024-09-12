@@ -61,6 +61,10 @@ const Map = Widget.inherit({
         google: '',
         googleStatic: '',
       },
+      googleMapConfig: {
+        mapId: '',
+        useAdvancedMarkers: true,
+      },
       controls: false,
       onReady: null,
       // for internal use only
@@ -80,6 +84,13 @@ const Map = Widget.inherit({
         },
       },
     ]);
+  },
+
+  _setDeprecatedOptions() {
+    this.callBase();
+    extend(this._deprecatedOptions, {
+      'googleMapConfig.useAdvancedMarkers': { since: '24.2', message: 'Google deprecated the original map markers. Transition to advanced markers for future compatibility.' },
+    });
   },
 
   _renderFocusTarget: noop,

@@ -3,6 +3,7 @@
 import $ from 'jquery';
 import { LOCATIONS, MARKERS, ROUTES } from './utils.js';
 import devices from 'core/devices';
+import errorsLogger from 'core/errors';
 import errors from 'ui/widget/ui.errors';
 import GoogleProvider from '__internal/ui/map/m_provider.dynamic.google';
 import ajaxMock from '../../../helpers/ajaxMock.js';
@@ -608,543 +609,638 @@ QUnit.test('controls', function(assert) {
     });
 });
 
-QUnit.test('markers', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
+QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation warning', function(assert) {
+    sinon.spy(errorsLogger, 'log');
 
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        onReady: function() {
-            assert.equal(window.google.markerOptionsSpecified, true, 'marker options specified');
-            assert.equal(window.google.markerOptions.mapSpecified, true, 'map specified correctly');
-            assert.deepEqual(window.google.markerOptions.position, new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'location specified correctly');
-            assert.equal(window.google.infoWindowOpened, 1, 'tooltip is opened');
-
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.markerInstance, 3, 'markers changed');
-            assert.equal(window.google.markerRemoved, true, 'previous marker removed');
-            assert.equal(window.google.clickHandlerRemoved, true, 'previous marker handler removed');
-
-            done();
+    try {
+        $('#map').dxMap({
+            provider: 'google',
+            googleMapConfig: {
+                useAdvancedMarkers: false,
+            },
         });
-
-        map.option('markers', [MARKERS[1], MARKERS[2]]);
-    });
+        assert.deepEqual(errorsLogger.log.firstCall.args, [
+            'W0001',
+            'dxMap',
+            'googleMapConfig.useAdvancedMarkers',
+            '24.2',
+            'Google deprecated the original map markers. Transition to advanced markers for future compatibility.'
+        ], 'warning is raised with correct parameters');
+    } finally {
+        errorsLogger.log.restore();
+    }
 });
 
-QUnit.test('marker`s tooltip options', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
+[
+    {
+        name: 'old marker',
+        useAdvancedMarkers: false,
+    },
+    {
+        name: 'advanced marker',
+        useAdvancedMarkers: true,
+    }
+].forEach(({ name, useAdvancedMarkers }) => {
+    QUnit.test(`${name}s`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
 
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        onReady: function() {
-            assert.equal(window.google.infoWindowOptionsSpecified, true, 'tooltip options specified');
-            assert.equal(window.google.infoWindowOptions.content, 'A', 'tooltip content specified');
-            assert.equal(window.google.openInfoWindowOptions.mapSpecified, true, 'tooltip opened with specified map');
-            assert.equal(window.google.openInfoWindowOptions.markerSpecified, true, 'tooltip opened with specified marker');
-            assert.equal(window.google.infoWindowOpened, 1, 'tooltip opened');
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                assert.strictEqual(window.google.markerType, useAdvancedMarkers ? 'advanced' : 'old', 'marker has correct type');
+                assert.strictEqual(window.google.markerOptionsSpecified, true, 'marker options specified');
+                assert.strictEqual(window.google.markerOptions.mapSpecified, true, 'map specified correctly');
+                assert.deepEqual(window.google.markerOptions.position, new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'location specified correctly');
+                assert.strictEqual(window.google.infoWindowOpened, 1, 'tooltip is opened');
 
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.infoWindowOptions.content, 'B', 'tooltip content specified');
-            assert.equal(window.google.infoWindowOpened, 1, 'tooltip is not opened');
-
-            done();
+                d.resolve();
+            }
         });
+        const map = $map.dxMap('instance');
 
-        map.option('markers', [MARKERS[1]]);
-    });
-});
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.markerInstance, 3, 'markers changed');
+                assert.equal(window.google.markerRemoved, true, 'previous marker removed');
+                assert.equal(window.google.markerInstance, 3, 'markers changed');
+                assert.equal(window.google.markerRemoved, true, 'previous marker removed');
+                assert.equal(window.google.clickHandlerRemoved, true, 'previous marker handler removed');
 
-QUnit.test('marker integration', function(assert) {
-    const done = assert.async();
-
-    let clickFired = 0;
-    const marker = {
-        tooltip: 'A',
-        location: [40.537102, -73.990318],
-        onClick: function(e) {
-            assert.deepEqual(e.location, { lat: 40.537102, lng: -73.990318 }, 'markers location set');
-            clickFired++;
-        }
-    };
-
-    $('#map').dxMap({
-        provider: 'google',
-        markers: [marker],
-        onReady: function() {
-            assert.equal(window.google.infoWindowOptionsSpecified, true, 'tooltip options specified');
-            assert.equal(window.google.infoWindowOptions.content, 'A', 'tooltip content specified');
-            window.google.clickActionCallback();
-            assert.equal(clickFired, 1, 'click action fired');
-            assert.equal(window.google.infoWindowOpened, 1, 'tooltip opened');
-            assert.equal(window.google.openInfoWindowOptions.mapSpecified, true, 'tooltip opened with specified map');
-            assert.equal(window.google.openInfoWindowOptions.markerSpecified, true, 'tooltip opened with specified marker');
-
-            done();
-        }
-    });
-});
-
-QUnit.test('marker icon', function(assert) {
-    const done = assert.async();
-    const d1 = $.Deferred();
-    const d2 = $.Deferred();
-
-    const markerUrl1 = 'http://example.com/1.png';
-    const markerUrl2 = 'http://example.com/2.png';
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        markerIconSrc: markerUrl1,
-        onReady: function() {
-            assert.equal(window.google.markerOptions.icon, markerUrl1, 'marker options contains custom icon url');
-            d1.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d1.done(function() {
-        map.addMarker([$.extend({ iconSrc: markerUrl2 }, MARKERS[1]), MARKERS[2]]).done(function(instances) {
-            assert.equal(instances[0].getIcon(), markerUrl2, 'marker instance contains custom icon url');
-            assert.equal(instances[1].getIcon(), markerUrl1, 'marker instance contains custom icon url');
-
-            d2.resolve();
-        });
-    });
-
-    d2.done(function() {
-        map.option('markerIconSrc', markerUrl2);
-
-        map.addMarker(MARKERS[3]).done(function(instance) {
-            assert.equal(instance.getIcon(), markerUrl2, 'marker instance contains custom icon url');
-
-            done();
-        });
-    });
-});
-
-QUnit.test('marker html', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[5]],
-        onReady: function() {
-            assert.equal(window.google.markerInstance, 0, 'markers not present');
-
-            assert.equal(window.google.overlayInstance, 1, 'overlay created');
-            const overlay = $(window.google.overlayMouseTarget).children();
-            assert.equal(overlay.length, 1, 'overlay created');
-            assert.deepEqual(window.google.overlayProjectedLocation, new google.maps.LatLng(MARKERS[5].location.lat, MARKERS[5].location.lng), 'correct location projected');
-            assert.equal(overlay.css('top'), '200px', 'overlay created');
-            assert.equal(overlay.css('left'), '100px', 'overlay created');
-
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.removeMarker(MARKERS[5]).done(function() {
-            assert.equal(window.google.overlayRemoved, true, 'marker removed');
-
-            done();
-        });
-    });
-});
-
-QUnit.test('marker html offset', function(assert) {
-    const done = assert.async();
-    $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[6]],
-        onReady: function() {
-            const overlay = $(window.google.overlayMouseTarget).children();
-            assert.equal(overlay.css('top'), '215px', 'offset applied');
-            assert.equal(overlay.css('left'), '125px', 'offset applied');
-            done();
-        }
-    });
-
-
-});
-
-QUnit.test('marker html interaction', function(assert) {
-    assert.expect(3);
-
-    const done = assert.async();
-    const d = $.Deferred();
-
-    const marker = $.extend({
-        onClick: function() {
-            assert.ok(true, 'click handled');
-        }
-    }, MARKERS[5]);
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [marker],
-        onReady: function() {
-            window.google.domClickActionCallback({
-                preventDefault: function() {
-                    assert.ok(true, 'default prevented');
-                }
+                done();
             });
 
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.removeMarker(marker).done(function() {
-            assert.equal(window.google.domClickHandlerRemoved, true, 'click listener removed');
-
-            done();
+            map.option('markers', [MARKERS[1], MARKERS[2]]);
         });
     });
-});
 
-QUnit.test('add marker', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
+    QUnit.test(`${name}'s tooltip options`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
 
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        onReady: function() {
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                assert.strictEqual(window.google.markerType, useAdvancedMarkers ? 'advanced' : 'old', 'marker has correct type');
+                assert.equal(window.google.infoWindowOptionsSpecified, true, 'tooltip options specified');
+                assert.equal(window.google.infoWindowOptions.content, 'A', 'tooltip content specified');
+                assert.equal(window.google.openInfoWindowOptions.mapSpecified, true, 'tooltip opened with specified map');
+                assert.equal(window.google.infoWindowOpened, 1, 'tooltip opened');
 
-    d.done(function() {
-        map.addMarker(MARKERS[1]).done(function(instance) {
-            assert.ok(!window.google.markerRemoved, 'previous marker does not removed');
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
 
-            assert.deepEqual(window.google.markerOptions.position, new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'marker created with correct location');
-            assert.ok(instance instanceof google.maps.Marker, 'marker instance returned');
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.infoWindowOptions.content, 'B', 'tooltip content specified');
+                assert.equal(window.google.infoWindowOpened, 1, 'tooltip is not opened');
 
-            done();
+                done();
+            });
+
+            map.option('markers', [MARKERS[1]]);
         });
     });
-});
 
-QUnit.test('add marker should extend bounds', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
+    QUnit.test(`${name} integration`, function(assert) {
+        const done = assert.async();
 
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        onReady: function() {
-            assert.equal(window.google.LatLngBoundsPoints.length, 1, 'extended by 1 location');
-            assert.deepEqual(window.google.LatLngBoundsPoints[0], new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'bound extended correctly');
-            assert.deepEqual(window.google.LatLngBoundsPoints, google.fittedBounds._points, 'map fitted correctly');
+        let clickFired = 0;
+        const marker = {
+            tooltip: 'A',
+            location: [40.537102, -73.990318],
+            onClick: function(e) {
+                assert.deepEqual(e.location, { lat: 40.537102, lng: -73.990318 }, 'markers location set');
+                clickFired++;
+            }
+        };
 
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
+        $('#map').dxMap({
+            provider: 'google',
+            markers: [marker],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                assert.strictEqual(window.google.markerType, useAdvancedMarkers ? 'advanced' : 'old', 'marker has correct type');
+                assert.equal(window.google.infoWindowOptionsSpecified, true, 'tooltip options specified');
+                assert.equal(window.google.infoWindowOptions.content, 'A', 'tooltip content specified');
+                window.google.clickActionCallback();
+                assert.equal(clickFired, 1, 'click action fired');
+                assert.equal(window.google.infoWindowOpened, 1, 'tooltip opened');
+                assert.equal(window.google.openInfoWindowOptions.mapSpecified, true, 'tooltip opened with specified map');
+                assert.equal(window.google.openInfoWindowOptions.markerSpecified, true, 'tooltip opened with specified marker');
 
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.LatLngBoundsPoints.length, 2, 'extended by 2 locations after changing markers');
-
-            done();
-        });
-
-        map.addMarker(MARKERS[1]);
-    });
-});
-
-QUnit.test('add marker should extend visible bounds if autoAdjust = true', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        autoAdjust: true,
-        onReady: function() {
-            assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
-
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.boundsFittedCount, 2, 'bounds fitted again');
-
-            done();
-        });
-
-        map.addMarker(MARKERS[1]);
-    });
-});
-
-QUnit.test('add marker should not extend visible bounds if autoAdjust = false', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        autoAdjust: false,
-        onReady: function() {
-            assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
-
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted again');
-
-            done();
-        });
-
-        map.addMarker(MARKERS[1]);
-    });
-});
-
-QUnit.test('add markers', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        onReady: function() {
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.addMarker([MARKERS[0], MARKERS[1]]).done(function(instances) {
-            assert.ok(instances[0] instanceof google.maps.Marker, 'marker instance returned');
-            assert.ok(instances[1] instanceof google.maps.Marker, 'marker instance returned');
-
-            done();
+                done();
+            }
         });
     });
-});
 
-QUnit.test('remove marker', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
+    QUnit.test(`${name} icon`, function(assert) {
+        const done = assert.async();
+        const d1 = $.Deferred();
+        const d2 = $.Deferred();
 
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        onReady: function() {
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
+        const markerUrl1 = 'http://example.com/1.png';
+        const markerUrl2 = 'http://example.com/2.png';
 
-    d.done(function() {
-        map.removeMarker(0).done(function() {
-            assert.equal(window.google.markerRemoved, true, 'marker removed');
-            assert.equal(window.google.clickHandlerRemoved, true, 'previous marker handler removed');
-
-            done();
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            markerIconSrc: markerUrl1,
+            onReady: function() {
+                assert.equal(window.google.markerOptions.icon, markerUrl1, `${name} options contains custom icon url`);
+                d1.resolve();
+            }
         });
-    });
-});
+        const map = $map.dxMap('instance');
 
-QUnit.test('markerAdded', function(assert) {
-    const done = assert.async();
-    let markerAddedFired = 0;
+        d1.done(function() {
+            map.addMarker([$.extend({ iconSrc: markerUrl1, }, MARKERS[1]), MARKERS[2]]).done(function(instances) {
+                assert.equal(instances[0].getIcon(), markerUrl1, `${name} instance contains custom icon url`);
+                assert.equal(instances[1].getIcon(), markerUrl1, `${name} instance contains custom icon url`);
 
-    $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        onMarkerAdded: function(args) {
-            assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
-            assert.ok(args.originalMarker instanceof google.maps.Marker, 'marker instance returned');
-            markerAddedFired++;
-        },
-        onReady: function() {
-            assert.equal(markerAddedFired, 1, 'markerAdded fired');
-
-            done();
-        }
-    });
-});
-
-QUnit.test('markerRemoved', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-
-    let markerRemovedFired = 0;
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        onMarkerRemoved: function(args) {
-            assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
-            markerRemovedFired++;
-        },
-        onReady: function() {
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(markerRemovedFired, 1, 'markerRemoved fired');
-
-            done();
+                d2.resolve();
+            });
         });
 
-        map.option('markers', []);
-    });
-});
+        d2.done(function() {
+            map.option('markerIconSrc', markerUrl2);
 
-QUnit.test('autoAdjust', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
+            map.addMarker(MARKERS[3]).done(function(instance) {
+                assert.equal(instance.getIcon(), markerUrl2, `${name} instance contains custom icon url`);
 
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        autoAdjust: false,
-        onReady: function() {
-            assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
-
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
-
-            done();
+                done();
+            });
         });
-
-        map.option('autoAdjust', true);
     });
-});
 
-QUnit.test('autoAdjust should not change zoom if marker is fitted', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
+    QUnit.test(`marker html (useAdvancedMarkers=${useAdvancedMarkers})`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
 
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        autoAdjust: false,
-        zoom: 5,
-        onReady: function() {
-            window.google.zoomValue = 5;
-            window.google.fitBoundsCallback = function() {
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[5]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                assert.equal(window.google.markerInstance, 0, `${name}s not present`);
+
+                assert.equal(window.google.overlayInstance, 1, 'overlay created');
+                const overlay = $(window.google.overlayMouseTarget).children();
+                assert.equal(overlay.length, 1, 'overlay created');
+                assert.deepEqual(window.google.overlayProjectedLocation, new google.maps.LatLng(MARKERS[5].location.lat, MARKERS[5].location.lng), 'correct location projected');
+                assert.equal(overlay.css('top'), '200px', 'overlay created');
+                assert.equal(overlay.css('left'), '100px', 'overlay created');
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.removeMarker(MARKERS[5]).done(function() {
+                assert.equal(window.google.overlayRemoved, true, `${name} removed`);
+
+                done();
+            });
+        });
+    });
+
+    QUnit.test(`marker html offset (useAdvancedMarkers=${useAdvancedMarkers})`, function(assert) {
+        const done = assert.async();
+        $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[6]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                const overlay = $(window.google.overlayMouseTarget).children();
+                assert.equal(overlay.css('top'), '215px', 'offset applied');
+                assert.equal(overlay.css('left'), '125px', 'offset applied');
+                done();
+            }
+        });
+    });
+
+    QUnit.test(`marker html interaction (useAdvancedMarkers=${useAdvancedMarkers})`, function(assert) {
+        assert.expect(3);
+
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const marker = $.extend({
+            onClick: function() {
+                assert.ok(true, 'click handled');
+            }
+        }, MARKERS[5]);
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [marker],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                window.google.domClickActionCallback({
+                    preventDefault: function() {
+                        assert.ok(true, 'default prevented');
+                    }
+                });
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.removeMarker(marker).done(function() {
+                assert.equal(window.google.domClickHandlerRemoved, true, 'click listener removed');
+
+                done();
+            });
+        });
+    });
+
+    QUnit.test(`add ${name}`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.addMarker(MARKERS[1]).done(function(instance) {
+                assert.ok(!window.google.markerRemoved, `previous ${name} does not removed`);
+
+                assert.deepEqual(window.google.markerOptions.position, new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), `${name} created with correct location`);
+                const expectedInstance = useAdvancedMarkers ? google.maps.marker.AdvancedMarkerElement : google.maps.Marker;
+                assert.ok(instance instanceof expectedInstance, `${name} instance returned`);
+
+                done();
+            });
+        });
+    });
+
+    QUnit.test(`add ${name} should extend bounds`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers: false,
+            },
+            onReady: function() {
+                assert.equal(window.google.LatLngBoundsPoints.length, 1, 'extended by 1 location');
+                assert.deepEqual(window.google.LatLngBoundsPoints[0], new google.maps.LatLng(MARKERS[0].location.lat, MARKERS[0].location.lng), 'bound extended correctly');
+                assert.deepEqual(window.google.LatLngBoundsPoints, google.fittedBounds._points, 'map fitted correctly');
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.LatLngBoundsPoints.length, 2, 'extended by 2 locations after changing markers');
+
+                done();
+            });
+
+            map.addMarker(MARKERS[1]);
+        });
+    });
+
+    QUnit.test(`add ${name} should extend visible bounds if autoAdjust = true`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            autoAdjust: true,
+            onReady: function() {
+                assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.boundsFittedCount, 2, 'bounds fitted again');
+
+                done();
+            });
+
+            map.addMarker(MARKERS[1]);
+        });
+    });
+
+    QUnit.test(`add ${name} should not extend visible bounds if autoAdjust = false`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            autoAdjust: false,
+            onReady: function() {
+                assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted again');
+
+                done();
+            });
+
+            map.addMarker(MARKERS[1]);
+        });
+    });
+
+    QUnit.test(`add ${name}s`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.addMarker([MARKERS[0], MARKERS[1]]).done(function(instances) {
+                const expectedInstance = useAdvancedMarkers ? google.maps.marker.AdvancedMarkerElement : google.maps.Marker;
+                assert.ok(instances[0] instanceof expectedInstance, 'marker instance returned');
+                assert.ok(instances[1] instanceof expectedInstance, 'marker instance returned');
+
+                done();
+            });
+        });
+    });
+
+    QUnit.test(`remove ${name}`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onReady: function() {
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.removeMarker(0).done(function() {
+                assert.equal(window.google.markerRemoved, true, 'marker removed');
+                assert.equal(window.google.clickHandlerRemoved, true, 'previous marker handler removed');
+
+                done();
+            });
+        });
+    });
+
+    QUnit.test(`markerAdded (${name})`, function(assert) {
+        const done = assert.async();
+        let markerAddedFired = 0;
+
+        $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onMarkerAdded: function(args) {
+                const expectedInstance = useAdvancedMarkers ? google.maps.marker.AdvancedMarkerElement : google.maps.Marker;
+                assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
+                assert.ok(args.originalMarker instanceof expectedInstance, 'marker instance returned');
+                markerAddedFired++;
+            },
+            onReady: function() {
+                assert.equal(markerAddedFired, 1, 'markerAdded fired');
+
+                done();
+            }
+        });
+    });
+
+    QUnit.test(`markerRemoved (${name})`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        let markerRemovedFired = 0;
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            onMarkerRemoved: function(args) {
+                assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
+                markerRemovedFired++;
+            },
+            onReady: function() {
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(markerRemovedFired, 1, 'markerRemoved fired');
+
+                done();
+            });
+
+            map.option('markers', []);
+        });
+    });
+
+    QUnit.test(`autoAdjust (${name})`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            autoAdjust: false,
+            onReady: function() {
+                assert.equal(window.google.boundsFittedCount, 0, 'bounds not fitted');
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
+
+                done();
+            });
+
+            map.option('autoAdjust', true);
+        });
+    });
+
+    QUnit.test(`autoAdjust should not change zoom if ${name} is fitted`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            autoAdjust: false,
+            zoom: 5,
+            onReady: function() {
+                window.google.zoomValue = 5;
+                window.google.fitBoundsCallback = function() {
+                    window.google.zoomValue = 10;
+                    window.google.maps.event.trigger(null, 'bounds_changed');
+                };
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
+                assert.equal(map.option('zoom'), 5, 'zoom not changed');
+                assert.equal(window.google.assignedZoom, 5, 'zoom returned back');
+
+                window.google.fitBoundsCallback = null;
+                done();
+            });
+
+            map.option('autoAdjust', true);
+        });
+    });
+
+    QUnit.test(`autoAdjust should change zoom if ${name} is not fitted`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            autoAdjust: false,
+            zoom: 10,
+            onReady: function() {
+                window.google.zoomValue = 10;
+                window.google.fitBoundsCallback = function() {
+                    window.google.zoomValue = 5;
+                    window.google.maps.event.trigger(null, 'bounds_changed');
+                };
+
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
+                assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
+                assert.equal(map.option('zoom'), 5, 'zoom changed');
+
+                window.google.fitBoundsCallback = null;
+                done();
+            });
+
+            map.option('autoAdjust', true);
+        });
+    });
+
+    QUnit.test(`autoAdjust should not prevent zoom changing (${name})`, function(assert) {
+        const done = assert.async();
+        const d = $.Deferred();
+
+        const $map = $('#map').dxMap({
+            provider: 'google',
+            markers: [MARKERS[0]],
+            googleMapConfig: {
+                useAdvancedMarkers,
+            },
+            autoAdjust: false,
+            zoom: 5,
+            onReady: function() {
+                d.resolve();
+            }
+        });
+        const map = $map.dxMap('instance');
+
+        d.done(function() {
+            map.option('onUpdated', function() {
                 window.google.zoomValue = 10;
                 window.google.maps.event.trigger(null, 'bounds_changed');
-            };
+                assert.equal(map.option('zoom'), 10, 'zoom change prevention is removed');
 
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
+                done();
+            });
 
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
-            assert.equal(map.option('zoom'), 5, 'zoom not changed');
-            assert.equal(window.google.assignedZoom, 5, 'zoom returned back');
-
-            window.google.fitBoundsCallback = null;
-            done();
+            map.option('autoAdjust', true);
         });
-
-        map.option('autoAdjust', true);
-    });
-});
-
-QUnit.test('autoAdjust should change zoom if marker is not fitted', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        autoAdjust: false,
-        zoom: 10,
-        onReady: function() {
-            window.google.zoomValue = 10;
-            window.google.fitBoundsCallback = function() {
-                window.google.zoomValue = 5;
-                window.google.maps.event.trigger(null, 'bounds_changed');
-            };
-
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            assert.equal(window.google.boundsFittedCount, 1, 'bounds fitted');
-            assert.equal(map.option('zoom'), 5, 'zoom changed');
-
-            window.google.fitBoundsCallback = null;
-            done();
-        });
-
-        map.option('autoAdjust', true);
-    });
-});
-
-QUnit.test('autoAdjust should not prevent zoom changing', function(assert) {
-    const done = assert.async();
-    const d = $.Deferred();
-
-    const $map = $('#map').dxMap({
-        provider: 'google',
-        markers: [MARKERS[0]],
-        autoAdjust: false,
-        zoom: 5,
-        onReady: function() {
-            d.resolve();
-        }
-    });
-    const map = $map.dxMap('instance');
-
-    d.done(function() {
-        map.option('onUpdated', function() {
-            window.google.zoomValue = 10;
-            window.google.maps.event.trigger(null, 'bounds_changed');
-            assert.equal(map.option('zoom'), 10, 'zoom change prevention is removed');
-
-            done();
-        });
-
-        map.option('autoAdjust', true);
     });
 });
 

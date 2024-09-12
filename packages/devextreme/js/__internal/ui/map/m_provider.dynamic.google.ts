@@ -18,8 +18,9 @@ declare let google: any;
 
 const window = getWindow();
 
+const MAP_MARKER_CLASS = 'dx-map-marker';
 const GOOGLE_MAP_READY = '_googleScriptReady';
-let GOOGLE_URL = `https://maps.googleapis.com/maps/api/js?callback=${GOOGLE_MAP_READY}`;
+let GOOGLE_URL = `https://maps.googleapis.com/maps/api/js?callback=${GOOGLE_MAP_READY}&libraries=marker&loading=async`;
 const INFO_WINDOW_CLASS = 'gm-style-iw';
 
 let CustomMarker;
@@ -192,12 +193,13 @@ const GoogleProvider = DynamicProvider.inherit({
   _init() {
     return new Promise((resolve) => {
       this._resolveLocation(this._option('center')).then((center) => {
-        const showDefaultUI = this._option('controls');
-
+        const disableDefaultUI = !this._option('controls');
+        const { mapId } = this._option('googleMapConfig');
         this._map = new google.maps.Map(this._$container[0], {
-          zoom: this._option('zoom'),
           center,
-          disableDefaultUI: !showDefaultUI,
+          disableDefaultUI,
+          mapId,
+          zoom: this._option('zoom'),
         });
 
         const listener = google.maps.event.addListener(this._map, 'idle', () => {
@@ -303,11 +305,20 @@ const GoogleProvider = DynamicProvider.inherit({
           }, options.htmlOffset),
         });
       } else {
-        marker = new google.maps.Marker({
-          position: location,
-          map: this._map,
-          icon: options.iconSrc || this._option('markerIconSrc'),
-        });
+        const { useAdvancedMarkers } = this._option('googleMapConfig');
+        if (useAdvancedMarkers) {
+          marker = new google.maps.marker.AdvancedMarkerElement({
+            position: location,
+            map: this._map,
+            content: this._createIconTemplate(this._option('markerIconSrc')),
+          });
+        } else {
+          marker = new google.maps.Marker({
+            position: location,
+            map: this._map,
+            icon: options.iconSrc || this._option('markerIconSrc'),
+          });
+        }
       }
 
       const infoWindow = this._renderTooltip(marker, options.tooltip);
@@ -333,6 +344,16 @@ const GoogleProvider = DynamicProvider.inherit({
         listener,
       };
     });
+  },
+
+  _createIconTemplate(iconSrc: string) {
+    const imgNode = document.createElement('img');
+
+    imgNode.src = iconSrc;
+    imgNode.alt = 'Marker icon';
+    imgNode.classList.add(MAP_MARKER_CLASS);
+
+    return imgNode;
   },
 
   _renderTooltip(marker, options) {
