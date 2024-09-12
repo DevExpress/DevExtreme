@@ -74,7 +74,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   private _childNodes: Node[] = [];
 
-  private shouldRestoreFocus: boolean = false;
+  private shouldRestoreFocus = false;
 
   private readonly _optionsManager: OptionsManager;
 
@@ -128,7 +128,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
       this.shouldRestoreFocus = !!this._element.contains(document.activeElement);
       this._childNodes?.forEach((child) => child.parentNode?.removeChild(child));
-      
+
       if (this._element) {
         const preventFocusOut = (e: FocusEvent) => e.stopPropagation();
 
