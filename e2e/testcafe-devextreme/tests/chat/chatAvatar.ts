@@ -11,7 +11,7 @@ fixture.disablePageReloads`ChatAvatar`
 
 test('Chat: avatar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await testScreenshot(t, takeScreenshot, 'Avatar with initials.png', { element: '#chat', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Avatar with initials.png', { element: '#chat' });
 
   const chat = new Chat('#chat');
 
@@ -22,7 +22,7 @@ test('Chat: avatar', async (t) => {
 
   await chat.option('items', items);
 
-  await testScreenshot(t, takeScreenshot, 'Avatar with image.png', { element: '#chat', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Avatar with image.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())

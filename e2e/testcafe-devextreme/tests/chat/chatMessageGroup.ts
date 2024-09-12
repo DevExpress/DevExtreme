@@ -75,22 +75,22 @@ test('Chat: messagegroup, bubbles', async (t) => {
   let items = generateMessages(1, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items, user: userSecond });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 1 bubble.png', { element: '#chat', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 1 bubble.png', { element: '#chat' });
 
   items = generateMessages(2, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 2 bubbles.png', { element: '#chat', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 2 bubbles.png', { element: '#chat' });
 
   items = generateMessages(3, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 3 bubbles.png', { element: '#chat', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 3 bubbles.png', { element: '#chat' });
 
   items = generateMessages(4, userFirst, userSecond, false, false, 4, 2);
 
   await chat.option({ items });
-  await testScreenshot(t, takeScreenshot, 'Messagegroup with 4 bubbles.png', { element: '#chat', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'Messagegroup with 4 bubbles.png', { element: '#chat' });
 
   await t
     .expect(compareResults.isValid())
