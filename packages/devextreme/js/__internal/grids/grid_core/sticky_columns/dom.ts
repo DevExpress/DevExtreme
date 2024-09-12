@@ -100,6 +100,22 @@ const isFirstRightFixedCell = (
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
     && $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
 
+const getLeftFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
+  // @ts-expect-error
+  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft)));
+
+const getRightFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
+  // @ts-expect-error
+  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnRight)));
+
+const getNonFixedAndStickyCells = (
+  $cells: dxElementWrapper,
+  addWidgetPrefix,
+): dxElementWrapper => $cells
+  // @ts-expect-error
+  .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumn))
+      || !isFixedCell($(cell), addWidgetPrefix));
+
 const getLastLeftFixedCell = (
   $cells: dxElementWrapper,
   $container: dxElementWrapper,
@@ -211,6 +227,32 @@ const noNeedToCreateResizingPoint = (
   return isOutsideVisibleArea || (!isLastOrFirstPoint && isPointBoundary);
 };
 
+const noNeedToCreateReorderingPoint = (
+  point,
+  $cells: dxElementWrapper,
+  $container: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => {
+  const { item, isLeftBoundary, isRightBoundary }: {
+    item: HTMLElement;
+    isLeftBoundary: boolean | undefined;
+    isRightBoundary: boolean | undefined;
+  } = point;
+  const $item = $(item);
+  const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
+  const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
+
+  if (isStickyCellPinnedToLeft($item, $container, addWidgetPrefix)) {
+    return isSplitPoint && !isLeftBoundary;
+  }
+
+  if (isStickyCellPinnedToRight($item, $container, addWidgetPrefix)) {
+    return isSplitPoint && !isRightBoundary;
+  }
+
+  return point.x < nonFixedAreaBoundingRect.left || point.x > nonFixedAreaBoundingRect.right;
+};
+
 export const GridCoreStickyColumnsDom = {
   addFirstHeaderClass,
   addColumnNoBorderClass,
@@ -218,6 +260,10 @@ export const GridCoreStickyColumnsDom = {
   addStickyColumnBorderLeftClass,
   addStickyColumnBorderRightClass,
   toggleStickyColumnsClass,
+  getLeftFixedCells,
+  getRightFixedCells,
+  getNonFixedAndStickyCells,
   noNeedToCreateResizingPoint,
   isFixedCellPinnedToRight,
+  noNeedToCreateReorderingPoint,
 };

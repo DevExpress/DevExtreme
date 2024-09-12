@@ -1266,8 +1266,6 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
   private _animationColumnIndex?: number;
 
-  private _columnHeadersView!: ColumnHeadersView;
-
   private _draggingHeaderView!: DraggingHeaderView;
 
   private _rowsView!: RowsView;
@@ -1277,6 +1275,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
   private _columnChooserView!: ColumnChooserView;
 
   private isCustomGroupColumnPosition?: boolean;
+
+  protected _columnHeadersView!: ColumnHeadersView;
 
   public init() {
     super.init();
@@ -1314,11 +1314,16 @@ export class DraggingHeaderViewController extends modules.ViewController {
   /**
    * @extended: column_fixing
    */
-  public _generatePointsByColumns(options) {
-    const that = this;
-
+  public _generatePointsByColumns(options, needToCheckPrevPoint = false) {
     this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
-    const points = gridCoreUtils.getPointsByColumns(options.columnElements, (point) => that._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn), options.isVerticalOrientation, options.startColumnIndex);
+    const points = gridCoreUtils.getPointsByColumns(
+      options.columnElements,
+      (point) => this._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn),
+      options.isVerticalOrientation,
+      options.startColumnIndex,
+      needToCheckPrevPoint,
+    );
+
     return points;
   }
 
