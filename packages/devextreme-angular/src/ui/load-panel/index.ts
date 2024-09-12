@@ -47,6 +47,18 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
+import { DxoLoadPanelAnimationModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelHideModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelFromModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelPositionModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelAtModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelBoundaryOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelCollisionModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelMyModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelShowModule } from 'devextreme-angular/ui/load-panel/nested';
+
 
 
 
@@ -657,6 +669,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
 
 
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -729,6 +742,17 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoLoadPanelAnimationModule,
+    DxoLoadPanelHideModule,
+    DxoLoadPanelFromModule,
+    DxoLoadPanelPositionModule,
+    DxoLoadPanelAtModule,
+    DxoLoadPanelBoundaryOffsetModule,
+    DxoLoadPanelCollisionModule,
+    DxoLoadPanelMyModule,
+    DxoLoadPanelOffsetModule,
+    DxoLoadPanelToModule,
+    DxoLoadPanelShowModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -748,6 +772,17 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
+    DxoLoadPanelAnimationModule,
+    DxoLoadPanelHideModule,
+    DxoLoadPanelFromModule,
+    DxoLoadPanelPositionModule,
+    DxoLoadPanelAtModule,
+    DxoLoadPanelBoundaryOffsetModule,
+    DxoLoadPanelCollisionModule,
+    DxoLoadPanelMyModule,
+    DxoLoadPanelOffsetModule,
+    DxoLoadPanelToModule,
+    DxoLoadPanelShowModule,
     DxTemplateModule
   ]
 })

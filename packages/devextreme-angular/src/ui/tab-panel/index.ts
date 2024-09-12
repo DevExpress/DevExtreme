@@ -43,8 +43,11 @@ import {
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
+import { DxiTabPanelItemModule } from 'devextreme-angular/ui/tab-panel/nested';
+
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
+import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested';
 
 
 /**
@@ -790,12 +793,24 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 
 
-    @ContentChildren(DxiItemComponent)
-    get itemsChildren(): QueryList<DxiItemComponent> {
+    @ContentChildren(DxiTabPanelItemComponent)
+    get itemsChildren(): QueryList<DxiTabPanelItemComponent> {
         return this._getOption('items');
     }
     set itemsChildren(value) {
+        this.setContentChildren('items', value, 'DxiTabPanelItemComponent');
         this.setChildren('items', value);
+    }
+
+
+    @ContentChildren(DxiItemComponent)
+    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsLegacyChildren(value) {
+        if (this.checkContentChildren('items', value, 'DxiItemComponent')) {
+           this.setChildren('items', value);
+        }
     }
 
 
@@ -904,6 +919,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 @NgModule({
   imports: [
     DxiItemModule,
+    DxiTabPanelItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -913,6 +929,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
   exports: [
     DxTabPanelComponent,
     DxiItemModule,
+    DxiTabPanelItemModule,
     DxTemplateModule
   ]
 })

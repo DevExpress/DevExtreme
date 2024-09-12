@@ -47,6 +47,7 @@ import {
 
 
 
+
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxCheckBoxComponent),
@@ -620,6 +621,7 @@ export class DxCheckBoxComponent extends DxComponent implements OnDestroy, Contr
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
+
 
 
 

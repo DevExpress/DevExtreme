@@ -36,6 +36,7 @@ import {
 
 
 
+
 /**
  * [descr:dxButton]
 
@@ -470,6 +471,7 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+
 
 
 

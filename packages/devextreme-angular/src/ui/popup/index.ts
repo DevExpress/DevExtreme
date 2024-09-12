@@ -1,2 +1,2 @@
 export * from './component';
-export { DxPopupService } from './service/service';
+export { DxPopupService, DxPopupServiceComponent } from './service/service';
