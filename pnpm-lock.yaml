@@ -1341,7 +1341,7 @@ importers:
         version: 2.0.1(karma@6.4.4)
       karma-webpack:
         specifier: 5.0.1
-        version: 5.0.1(webpack@5.93.0(@swc/core@1.4.17))
+        version: 5.0.1(webpack@5.94.0(@swc/core@1.4.17))
       ng-packagr:
         specifier: 17.3.0
         version: 17.3.0(@angular/compiler-cli@17.3.12(@angular/compiler@17.3.12(@angular/core@17.3.12(rxjs@7.8.1)(zone.js@0.14.10)))(typescript@5.4.5))(tslib@2.6.3)(typescript@5.4.5)
@@ -1364,8 +1364,8 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
       webpack:
-        specifier: 5.93.0
-        version: 5.93.0(@swc/core@1.4.17)
+        specifier: 5.94.0
+        version: 5.94.0(@swc/core@1.4.17)
       yargs:
         specifier: 17.7.2
         version: 17.7.2
@@ -15982,16 +15982,6 @@ packages:
 
   webpack@5.90.3:
     resolution: {integrity: sha512-h6uDYlWCctQRuXBs1oYpVe6sFcWedl0dpcVaTf/YF67J9bKvwJajFulMVSYKHrksMB3I/pIagRzDxwxkebuzKA==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    peerDependencies:
-      webpack-cli: '*'
-    peerDependenciesMeta:
-      webpack-cli:
-        optional: true
-
-  webpack@5.93.0:
-    resolution: {integrity: sha512-Y0m5oEY1LRuwly578VqluorkXbvXKh7U3rLoQCEO04M97ScRr44afGVkI0FQFsXzysk5OgFAxjZAb9rsGQVihA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     peerDependencies:
@@ -30790,11 +30780,11 @@ snapshots:
     dependencies:
       source-map-support: 0.5.21
 
-  karma-webpack@5.0.1(webpack@5.93.0(@swc/core@1.4.17)):
+  karma-webpack@5.0.1(webpack@5.94.0(@swc/core@1.4.17)):
     dependencies:
       glob: 7.2.3
       minimatch: 9.0.4
-      webpack: 5.93.0(@swc/core@1.4.17)
+      webpack: 5.94.0(@swc/core@1.4.17)
       webpack-merge: 4.2.2
 
   karma@6.4.4:
@@ -35162,17 +35152,6 @@ snapshots:
       '@swc/core': 1.4.17(@swc/helpers@0.5.11)
       esbuild: 0.20.1
 
-  terser-webpack-plugin@5.3.10(@swc/core@1.4.17)(webpack@5.93.0(@swc/core@1.4.17)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
-      jest-worker: 27.5.1
-      schema-utils: 3.3.0
-      serialize-javascript: 6.0.2
-      terser: 5.31.0
-      webpack: 5.93.0(@swc/core@1.4.17)
-    optionalDependencies:
-      '@swc/core': 1.4.17(@swc/helpers@0.5.11)
-
   terser-webpack-plugin@5.3.10(@swc/core@1.4.17)(webpack@5.94.0(@swc/core@1.4.17)(webpack-cli@4.10.0)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -37172,37 +37151,6 @@ snapshots:
       schema-utils: 3.3.0
       tapable: 2.2.1
       terser-webpack-plugin: 5.3.10(@swc/core@1.4.17)(esbuild@0.20.1)(webpack@5.90.3(@swc/core@1.4.17)(esbuild@0.20.1))
-      watchpack: 2.4.1
-      webpack-sources: 3.2.3
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
-
-  webpack@5.93.0(@swc/core@1.4.17):
-    dependencies:
-      '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.5
-      '@webassemblyjs/ast': 1.12.1
-      '@webassemblyjs/wasm-edit': 1.12.1
-      '@webassemblyjs/wasm-parser': 1.12.1
-      acorn: 8.11.3
-      acorn-import-attributes: 1.9.5(acorn@8.11.3)
-      browserslist: 4.23.0
-      chrome-trace-event: 1.0.3
-      enhanced-resolve: 5.17.1
-      es-module-lexer: 1.5.2
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.4.17)(webpack@5.93.0(@swc/core@1.4.17))
       watchpack: 2.4.1
       webpack-sources: 3.2.3
     transitivePeerDependencies:
