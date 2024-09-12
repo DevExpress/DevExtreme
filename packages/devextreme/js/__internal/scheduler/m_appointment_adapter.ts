@@ -1,5 +1,5 @@
 import { extend } from '@js/core/utils/extend';
-import { deepExtendArraySafe, newAssign } from '@js/core/utils/object';
+import { deepExtendArraySafe } from '@js/core/utils/object';
 import errors from '@js/ui/widget/ui.errors';
 
 import { ExpressionUtils } from './m_expression_utils';
@@ -147,7 +147,7 @@ class AppointmentAdapter {
 
   clone(options: any = undefined) {
     const result = new AppointmentAdapter(
-      deepExtendArraySafe({}, this.rawAppointment, false, false, false, newAssign),
+      deepExtendArraySafe({}, this.rawAppointment, false, false, false, true),
       this.dataAccessors,
       this.timeZoneCalculator,
       options,

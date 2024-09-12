@@ -2,7 +2,7 @@ import config from '@js/core/config';
 import Guid from '@js/core/guid';
 import { compileGetter } from '@js/core/utils/data';
 import { extend } from '@js/core/utils/extend';
-import { deepExtendArraySafe, newAssign } from '@js/core/utils/object';
+import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
   isDefined, isEmptyObject, isObject, isPlainObject,
 } from '@js/core/utils/type';
@@ -195,7 +195,7 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
     target = key;
   }
 
-  deepExtendArraySafe(target, data, extendComplexObject, false, true, newAssign);
+  deepExtendArraySafe(target, data, extendComplexObject, false, true, true);
   if (!isBatch) {
     if (config().useLegacyStoreResult) {
       return trivialPromise(key, data);
