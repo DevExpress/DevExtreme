@@ -517,11 +517,21 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
 
     const accessKey = focusStateEnabled && !disabled && this.props.accessKey;
 
-    return {
+    const props = {
       ...extend({}, accessKey && { accessKey }) as Record<string, string>,
       ...getAria({ ...aria, disabled, hidden: !visible }),
       ...extend({}, this.props) as Record<string, string>,
     };
+    return this.getAttributesCore(props);
+  }
+
+  getAttributesCore(props: Record<string, string>): Record<string, string> {
+    const {
+      height,
+      width,
+      ...result
+    } = props;
+    return result;
   }
 
   getStyles(): Record<string, string | number> {

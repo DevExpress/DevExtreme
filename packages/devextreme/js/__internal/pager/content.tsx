@@ -195,6 +195,10 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
       pagesCountText,
       showNavigationButtons,
       style,
+
+      width,
+      height,
+      elementAttr,
     } = this.props;
 
     return (
@@ -204,7 +208,11 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
         classes={this.getClasses()}
         visible={visible}
         aria={this.getAria()}
-        {...style as []}
+        style={style as Record<string, string | number> | undefined}
+        width={width as string | number | undefined}
+        height={height as string | number | undefined}
+
+        { ...elementAttr as object }
       >
         {showPageSizes && (
           <PageSizeSelector

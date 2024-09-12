@@ -12,6 +12,7 @@
 
 .dx-chat-message-group-alignment-start {
   .dx-chat-message-bubble-container {
+    grid-column: 2;
     align-items: flex-start;
   }
 

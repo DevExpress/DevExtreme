@@ -46,6 +46,10 @@ export default class Pager extends GridPagerWrapper {
         'onKeyDown',
         'pageSize',
         'pageIndex',
+
+        'width',
+        'height',
+        'elementAttr',
       ],
     };
   }
