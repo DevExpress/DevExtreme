@@ -1,6 +1,5 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import SelectBox from 'devextreme-testcafe-models/selectBox';
 import TextBox from 'devextreme-testcafe-models/textBox';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import url from '../../helpers/getPageUrl';
@@ -69,7 +68,7 @@ safeSizeTest('Full size pager', async (t) => {
 safeSizeTest('Compact pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
-  const pageSizeWidget = new SelectBox(pager.getPageSizeSelect() as any);
+  const pageSizeWidget = pager.getPageSizeSelector();
   const pageIndexWidget = new TextBox(pager.getPageIndexWidget() as any);
   await t
     .typeText(pageIndexWidget.input, '7', { replace: true })
@@ -181,7 +180,7 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
 
   await dataGrid.scrollBy({ y: 100 });
 
-  await t.click(pager.getPageSizeSelect());
+  await t.click(pager.getPageSizeSelector().element);
   await t.click(pager.getPopupPageSizes().withText('All'));
 
   await t

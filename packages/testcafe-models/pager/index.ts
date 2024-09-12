@@ -5,6 +5,7 @@ import FocusableElement from '../internal/focusable';
 import { SelectableElement } from './selectableElement';
 import Widget from '../internal/widget';
 import { WidgetName } from '../types';
+import SelectBox from '../selectBox';
 
 const CLASS = {
   pagerPageSize: 'dx-page-size',
@@ -43,8 +44,8 @@ export default class Pager extends Widget {
     return new NavPage(this.element, pageIndexText);
   }
 
-  getPageSizeSelect(): Selector {
-    return this.element.find(`.${CLASS.pagerPageSizes} .${CLASS.select}`);
+  getPageSizeSelector() : SelectBox {
+    return new SelectBox(this.element.find(`.${CLASS.pagerPageSizes} .${CLASS.select}`));
   }
 
   getPopupPageSizes(): Selector {

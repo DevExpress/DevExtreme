@@ -3,7 +3,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture.disablePageReloads`Pager Base Properties`
+fixture`Pager Base Properties`
   .page(url(__dirname, '../container.html'));
 
 test('Pager width and height property', async (t) => {
@@ -23,19 +23,16 @@ test('Pager width and height property', async (t) => {
 }));
 
 test('Pager elementAttr property', async (t) => {
-  const pager = new Pager('#bestPager');
+  const pager = new Pager('#container');
   await t
     .expect(pager.element.getAttribute('aria-label'))
     .eql('some description')
     .expect(pager.element.getAttribute('data-test'))
-    .eql('custom data')
-    .expect(pager.element.getAttribute('id'))
-    .eql('bestPager');
+    .eql('custom data');
 }).before(async () => createWidget('dxPager', {
   elementAttr: {
     'aria-label': 'some description',
     'data-test': 'custom data',
-    id: 'bestPager',
   },
 }));
 
@@ -82,8 +79,44 @@ test('Pager tabindex and state properties', async (t) => {
     .expect(pager.element.hasClass('dx-state-active'))
     .ok();
 }).before(async () => createWidget('dxPager', {
-  tabIndex: 7,
+  disabled: false,
+  width: '100%',
   focusStateEnabled: true,
   hoverStateEnabled: true,
   activeStateEnabled: true,
+  tabIndex: 7,
+}));
+
+test('Pager focus method without focusStateEnabled', async (t) => {
+  const pager = new Pager('#container');
+  await t
+    .expect(pager.getPageSize(0).element.focused)
+    .notOk();
+
+  await ClientFunction((_pager) => {
+    _pager.getInstance().focus();
+  })(pager);
+
+  await t
+    .expect(pager.getPageSize(0).element.focused)
+    .ok();
+}).before(async () => createWidget('dxPager', {
+  focusStateEnabled: false,
+}));
+
+test('Pager focus method with focusStateEnabled', async (t) => {
+  const pager = new Pager('#container');
+  await t
+    .expect(pager.element.focused)
+    .notOk();
+
+  await ClientFunction((_pager) => {
+    _pager.getInstance().focus();
+  })(pager);
+
+  await t
+    .expect(pager.element.focused)
+    .ok();
+}).before(async () => createWidget('dxPager', {
+  focusStateEnabled: true,
 }));
