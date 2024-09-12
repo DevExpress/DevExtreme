@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import '../../../events/click';
@@ -273,7 +275,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
         return subscribeToDxActiveEvent(
           this.widgetElementRef?.current,
           (event: Event) => {
-            this.state.active = true;
+            this.setState({
+              active: true,
+            });
             onActive?.(event);
           },
           { timeout: _feedbackShowTimeout, selector },
@@ -299,7 +303,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
         this.widgetElementRef?.current,
         (event: Event) => {
           if (this.state.active) {
-            this.state.active = false;
+            this.setState({
+              active: false,
+            });
             onInactive?.(event);
           }
         },
@@ -335,7 +341,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
           this.widgetElementRef?.current,
           (event: Event & { isDefaultPrevented: () => boolean }) => {
             if (!event.isDefaultPrevented()) {
-              this.state.focused = true;
+              this.setState({
+                focused: true,
+              });
               onFocusIn?.(event);
             }
           },
@@ -359,7 +367,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
         this.widgetElementRef?.current,
         (event: Event & { isDefaultPrevented: () => boolean }) => {
           if (!event.isDefaultPrevented() && this.state.focused) {
-            this.state.focused = false;
+            this.setState({
+              focused: false,
+            });
             onFocusOut?.(event);
           }
         },
@@ -384,7 +394,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
           this.widgetElementRef?.current,
           (event: Event) => {
             if (!this.state.active) {
-              this.state.hovered = true;
+              this.setState({
+                hovered: true,
+              });
             }
             onHoverStart?.(event);
           },
@@ -409,7 +421,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
         this.widgetElementRef?.current,
         (event: Event) => {
           if (this.state.hovered) {
-            this.state.hovered = false;
+            this.setState({
+              hovered: false,
+            });
             onHoverEnd?.(event);
           }
         },
@@ -529,6 +543,18 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
     const {
       height,
       width,
+      activeStateEnabled,
+      hoverStateEnabled,
+      focusStateEnabled,
+      _feedbackHideTimeout,
+      _feedbackShowTimeout,
+      addWidgetClass,
+      rootElementRef,
+      rtlEnabled,
+      aria,
+      hint,
+      cssText,
+      name,
       ...result
     } = props;
     return result;

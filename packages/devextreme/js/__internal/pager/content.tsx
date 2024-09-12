@@ -199,6 +199,14 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
       width,
       height,
       elementAttr,
+
+      hint,
+      disabled,
+      tabIndex,
+      accessKey,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
     } = this.props;
 
     return (
@@ -211,6 +219,14 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
         style={style as Record<string, string | number> | undefined}
         width={width as string | number | undefined}
         height={height as string | number | undefined}
+
+        hint={hint}
+        disabled={disabled}
+        tabIndex={tabIndex}
+        accessKey={accessKey}
+        activeStateEnabled={activeStateEnabled}
+        focusStateEnabled={focusStateEnabled}
+        hoverStateEnabled={hoverStateEnabled}
 
         { ...elementAttr as object }
       >
