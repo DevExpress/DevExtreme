@@ -1,6 +1,6 @@
 import ValidationGroup, { Properties } from "devextreme/ui/validation_group";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "elementAttr" |

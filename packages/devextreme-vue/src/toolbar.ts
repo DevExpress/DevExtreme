@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/toolbar";
 import Toolbar, { Properties } from "devextreme/ui/toolbar";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "dataSource" |
@@ -141,7 +142,6 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-
 
 export default DxToolbar;
 export {

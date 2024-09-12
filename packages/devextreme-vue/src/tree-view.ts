@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tree_view";
 import TreeView, { Properties } from "devextreme/ui/tree_view";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -479,7 +480,6 @@ const DxSearchEditorOptions = defineComponent(DxSearchEditorOptionsConfig);
 (DxSearchEditorOptions as any).$_expectedChildren = {
   button: { isCollectionItem: true, optionName: "buttons" }
 };
-
 
 export default DxTreeView;
 export {

@@ -1,6 +1,7 @@
 import NumberBox, { Properties } from "devextreme/ui/number_box";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -315,7 +316,6 @@ prepareConfigurationComponentConfig(DxOptionsConfig);
 const DxOptions = defineComponent(DxOptionsConfig);
 
 (DxOptions as any).$_optionName = "options";
-
 
 export default DxNumberBox;
 export {

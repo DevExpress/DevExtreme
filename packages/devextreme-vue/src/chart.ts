@@ -1,6 +1,7 @@
 import Chart, { Properties } from "devextreme/viz/chart";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "adaptiveLayout" |
@@ -3433,7 +3434,6 @@ const DxZoomAndPan = defineComponent(DxZoomAndPanConfig);
 (DxZoomAndPan as any).$_expectedChildren = {
   dragBoxStyle: { isCollectionItem: false, optionName: "dragBoxStyle" }
 };
-
 
 export default DxChart;
 export {

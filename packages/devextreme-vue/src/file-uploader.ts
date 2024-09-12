@@ -1,6 +1,6 @@
 import FileUploader, { Properties } from "devextreme/ui/file_uploader";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "abortUpload" |

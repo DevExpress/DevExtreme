@@ -1,6 +1,7 @@
 import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -257,7 +258,6 @@ prepareConfigurationComponentConfig(DxTextsConfig);
 const DxTexts = defineComponent(DxTextsConfig);
 
 (DxTexts as any).$_optionName = "texts";
-
 
 export default DxPivotGridFieldChooser;
 export {

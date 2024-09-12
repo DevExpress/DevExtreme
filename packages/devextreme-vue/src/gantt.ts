@@ -1,6 +1,7 @@
 import Gantt, { Properties } from "devextreme/ui/gantt";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -1062,7 +1063,6 @@ prepareConfigurationComponentConfig(DxValidationConfig);
 const DxValidation = defineComponent(DxValidationConfig);
 
 (DxValidation as any).$_optionName = "validation";
-
 
 export default DxGantt;
 export {

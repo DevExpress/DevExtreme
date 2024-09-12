@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/list";
 import List, { Properties } from "devextreme/ui/list";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -633,7 +634,6 @@ const DxSearchEditorOptions = defineComponent(DxSearchEditorOptionsConfig);
 (DxSearchEditorOptions as any).$_expectedChildren = {
   button: { isCollectionItem: true, optionName: "buttons" }
 };
-
 
 export default DxList;
 export {

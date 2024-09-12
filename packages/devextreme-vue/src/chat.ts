@@ -1,6 +1,7 @@
 import Chat, { Properties } from "devextreme/ui/chat";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -158,7 +159,6 @@ prepareConfigurationComponentConfig(DxUserConfig);
 const DxUser = defineComponent(DxUserConfig);
 
 (DxUser as any).$_optionName = "user";
-
 
 export default DxChat;
 export {

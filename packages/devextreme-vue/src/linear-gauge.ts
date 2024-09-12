@@ -1,6 +1,7 @@
 import LinearGauge, { Properties } from "devextreme/viz/linear_gauge";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |
@@ -878,7 +879,6 @@ prepareConfigurationComponentConfig(DxWidthConfig);
 const DxWidth = defineComponent(DxWidthConfig);
 
 (DxWidth as any).$_optionName = "width";
-
 
 export default DxLinearGauge;
 export {

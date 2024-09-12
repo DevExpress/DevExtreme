@@ -1,6 +1,7 @@
 import Map, { Properties } from "devextreme/ui/map";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -265,7 +266,6 @@ prepareConfigurationComponentConfig(DxTooltipConfig);
 const DxTooltip = defineComponent(DxTooltipConfig);
 
 (DxTooltip as any).$_optionName = "tooltip";
-
 
 export default DxMap;
 export {

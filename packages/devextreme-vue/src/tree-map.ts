@@ -1,6 +1,7 @@
 import TreeMap, { Properties } from "devextreme/viz/tree_map";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "childrenField" |
@@ -737,7 +738,6 @@ prepareConfigurationComponentConfig(DxTreeMapborderConfig);
 const DxTreeMapborder = defineComponent(DxTreeMapborderConfig);
 
 (DxTreeMapborder as any).$_optionName = "border";
-
 
 export default DxTreeMap;
 export {

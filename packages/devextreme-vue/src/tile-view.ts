@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
 import TileView, { Properties } from "devextreme/ui/tile_view";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -155,7 +156,6 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-
 
 export default DxTileView;
 export {

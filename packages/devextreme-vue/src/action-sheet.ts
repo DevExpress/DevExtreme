@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/action_sheet";
 import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "cancelText" |
@@ -146,7 +147,6 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-
 
 export default DxActionSheet;
 export {

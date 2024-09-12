@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/box";
 import Box, { Properties } from "devextreme/ui/box";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "align" |
@@ -135,7 +136,6 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-
 
 export default DxBox;
 export {

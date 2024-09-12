@@ -1,6 +1,7 @@
 import Draggable, { Properties } from "devextreme/ui/draggable";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "autoScroll" |
@@ -119,7 +120,6 @@ prepareConfigurationComponentConfig(DxCursorOffsetConfig);
 const DxCursorOffset = defineComponent(DxCursorOffsetConfig);
 
 (DxCursorOffset as any).$_optionName = "cursorOffset";
-
 
 export default DxDraggable;
 export {

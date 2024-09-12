@@ -1,6 +1,7 @@
 import RangeSlider, { Properties } from "devextreme/ui/range_slider";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -227,7 +228,6 @@ const DxTooltip = defineComponent(DxTooltipConfig);
 (DxTooltip as any).$_expectedChildren = {
   format: { isCollectionItem: false, optionName: "format" }
 };
-
 
 export default DxRangeSlider;
 export {

@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
 import ResponsiveBox, { Properties } from "devextreme/ui/responsive_box";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "cols" |
@@ -211,7 +212,6 @@ const DxRow = defineComponent(DxRowConfig);
 
 (DxRow as any).$_optionName = "rows";
 (DxRow as any).$_isCollectionItem = true;
-
 
 export default DxResponsiveBox;
 export {

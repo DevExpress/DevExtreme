@@ -1,6 +1,7 @@
 import CircularGauge, { Properties } from "devextreme/viz/circular_gauge";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |
@@ -861,7 +862,6 @@ prepareConfigurationComponentConfig(DxValueIndicatorConfig);
 const DxValueIndicator = defineComponent(DxValueIndicatorConfig);
 
 (DxValueIndicator as any).$_optionName = "valueIndicator";
-
 
 export default DxCircularGauge;
 export {

@@ -1,6 +1,7 @@
 import Lookup, { Properties } from "devextreme/ui/lookup";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -769,7 +770,6 @@ const DxToolbarItem = defineComponent(DxToolbarItemConfig);
 
 (DxToolbarItem as any).$_optionName = "toolbarItems";
 (DxToolbarItem as any).$_isCollectionItem = true;
-
 
 export default DxLookup;
 export {

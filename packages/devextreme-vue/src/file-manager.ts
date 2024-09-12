@@ -1,6 +1,7 @@
 import FileManager, { Properties } from "devextreme/ui/file_manager";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -554,7 +555,6 @@ prepareConfigurationComponentConfig(DxUploadConfig);
 const DxUpload = defineComponent(DxUploadConfig);
 
 (DxUpload as any).$_optionName = "upload";
-
 
 export default DxFileManager;
 export {

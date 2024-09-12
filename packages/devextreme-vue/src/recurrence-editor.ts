@@ -1,6 +1,6 @@
 import RecurrenceEditor, { Properties } from "devextreme/ui/recurrence_editor";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tree_list";
 import TreeList, { Properties } from "devextreme/ui/tree_list";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -3025,7 +3026,6 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 (DxValidationRule as any).$_predefinedProps = {
   type: "required"
 };
-
 
 export default DxTreeList;
 export {

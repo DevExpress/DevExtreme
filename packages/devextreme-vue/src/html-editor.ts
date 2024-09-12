@@ -1,6 +1,7 @@
 import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -643,7 +644,6 @@ prepareConfigurationComponentConfig(DxVariablesConfig);
 const DxVariables = defineComponent(DxVariablesConfig);
 
 (DxVariables as any).$_optionName = "variables";
-
 
 export default DxHtmlEditor;
 export {

@@ -1,6 +1,7 @@
 import VectorMap, { Properties } from "devextreme/viz/vector_map";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "annotations" |
@@ -1071,7 +1072,6 @@ const DxVectorMapTitleSubtitle = defineComponent(DxVectorMapTitleSubtitleConfig)
 (DxVectorMapTitleSubtitle as any).$_expectedChildren = {
   font: { isCollectionItem: false, optionName: "font" }
 };
-
 
 export default DxVectorMap;
 export {

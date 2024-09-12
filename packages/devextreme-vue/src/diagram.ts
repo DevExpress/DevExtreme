@@ -1,6 +1,7 @@
 import Diagram, { Properties } from "devextreme/ui/diagram";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "autoZoomMode" |
@@ -946,7 +947,6 @@ prepareConfigurationComponentConfig(DxZoomLevelConfig);
 const DxZoomLevel = defineComponent(DxZoomLevelConfig);
 
 (DxZoomLevel as any).$_optionName = "zoomLevel";
-
 
 export default DxDiagram;
 export {

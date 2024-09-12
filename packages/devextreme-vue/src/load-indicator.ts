@@ -1,6 +1,6 @@
 import LoadIndicator, { Properties } from "devextreme/ui/load_indicator";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "elementAttr" |

@@ -1,6 +1,7 @@
 import Sparkline, { Properties } from "devextreme/viz/sparkline";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "argumentField" |
@@ -353,7 +354,6 @@ const DxTooltip = defineComponent(DxTooltipConfig);
   format: { isCollectionItem: false, optionName: "format" },
   shadow: { isCollectionItem: false, optionName: "shadow" }
 };
-
 
 export default DxSparkline;
 export {

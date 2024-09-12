@@ -1,6 +1,7 @@
 import PolarChart, { Properties } from "devextreme/viz/polar_chart";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "adaptiveLayout" |
@@ -2562,7 +2563,6 @@ prepareConfigurationComponentConfig(DxWholeRangeConfig);
 const DxWholeRange = defineComponent(DxWholeRangeConfig);
 
 (DxWholeRange as any).$_optionName = "wholeRange";
-
 
 export default DxPolarChart;
 export {

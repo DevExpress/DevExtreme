@@ -1,6 +1,7 @@
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -472,7 +473,6 @@ const DxView = defineComponent(DxViewConfig);
 (DxView as any).$_expectedChildren = {
   scrolling: { isCollectionItem: false, optionName: "scrolling" }
 };
-
 
 export default DxScheduler;
 export {

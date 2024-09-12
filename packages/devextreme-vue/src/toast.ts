@@ -1,6 +1,7 @@
 import Toast, { Properties } from "devextreme/ui/toast";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -417,7 +418,6 @@ prepareConfigurationComponentConfig(DxToConfig);
 const DxTo = defineComponent(DxToConfig);
 
 (DxTo as any).$_optionName = "to";
-
 
 export default DxToast;
 export {

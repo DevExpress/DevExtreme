@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/validation_summary";
 import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "elementAttr" |
@@ -91,7 +92,6 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-
 
 export default DxValidationSummary;
 export {

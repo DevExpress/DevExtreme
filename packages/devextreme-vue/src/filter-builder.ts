@@ -1,6 +1,7 @@
 import FilterBuilder, { Properties } from "devextreme/ui/filter_builder";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -310,7 +311,6 @@ prepareConfigurationComponentConfig(DxLookupConfig);
 const DxLookup = defineComponent(DxLookupConfig);
 
 (DxLookup as any).$_optionName = "lookup";
-
 
 export default DxFilterBuilder;
 export {

@@ -1,6 +1,7 @@
 import Popover, { Properties } from "devextreme/ui/popover";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |
@@ -512,7 +513,6 @@ const DxToolbarItem = defineComponent(DxToolbarItemConfig);
 
 (DxToolbarItem as any).$_optionName = "toolbarItems";
 (DxToolbarItem as any).$_isCollectionItem = true;
-
 
 export default DxPopover;
 export {

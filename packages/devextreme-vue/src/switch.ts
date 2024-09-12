@@ -1,6 +1,6 @@
 import Switch, { Properties } from "devextreme/ui/switch";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

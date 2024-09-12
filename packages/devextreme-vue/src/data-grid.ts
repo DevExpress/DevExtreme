@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/data_grid";
 import DataGrid, { Properties } from "devextreme/ui/data_grid";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -3434,7 +3435,6 @@ prepareConfigurationComponentConfig(DxValueFormatConfig);
 const DxValueFormat = defineComponent(DxValueFormatConfig);
 
 (DxValueFormat as any).$_optionName = "valueFormat";
-
 
 export default DxDataGrid;
 export {

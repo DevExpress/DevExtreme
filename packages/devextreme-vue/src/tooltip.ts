@@ -1,6 +1,7 @@
 import Tooltip, { Properties } from "devextreme/ui/tooltip";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |
@@ -448,7 +449,6 @@ prepareConfigurationComponentConfig(DxToConfig);
 const DxTo = defineComponent(DxToConfig);
 
 (DxTo as any).$_optionName = "to";
-
 
 export default DxTooltip;
 export {

@@ -1,6 +1,6 @@
 import Calendar, { Properties } from "devextreme/ui/calendar";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

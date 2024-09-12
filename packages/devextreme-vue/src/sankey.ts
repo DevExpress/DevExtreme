@@ -1,6 +1,7 @@
 import Sankey, { Properties } from "devextreme/viz/sankey";
 import { defineComponent } from "vue";
-import { prepareComponentConfig, prepareConfigurationComponentConfig } from "./core/index";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "adaptiveLayout" |
@@ -691,7 +692,6 @@ prepareConfigurationComponentConfig(DxTooltipBorderConfig);
 const DxTooltipBorder = defineComponent(DxTooltipBorderConfig);
 
 (DxTooltipBorder as any).$_optionName = "border";
-
 
 export default DxSankey;
 export {
