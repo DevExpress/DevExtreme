@@ -301,10 +301,12 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     const rtlEnabled = this.option('rtlEnabled') as boolean;
     const result = super._pointCreated(point, cellsLength, columns);
     const isWidgetColumnResizingMode = this.option('columnResizingMode') === 'widget';
-    const needToCheckPoint = isStickyColumns && (!isWidgetColumnResizingMode
+    const needToCheckPoint = isStickyColumns && cellsLength > 0 && (!isWidgetColumnResizingMode
       || (rtlEnabled ? point.index !== 0 : point.index < cellsLength));
 
     if (needToCheckPoint && !result) {
+      const $cells = columnHeaders.getColumnElements() ?? $('');
+
       const column = columns[point.index - 1];
       const nextColumnIndex = this._getNextColumnIndex(point.index - 1);
       const nextColumn = columns[nextColumnIndex];
@@ -313,9 +315,10 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
         return false;
       }
 
-      return GridCoreStickyColumnsDom.noNeedToCreatePoint(
+      return GridCoreStickyColumnsDom.noNeedToCreateResizingPoint(
         point,
-        $(columnHeaders.getContent())[0],
+        $cells,
+        $(columnHeaders.getContent()),
         this.addWidgetPrefix.bind(this),
       );
     }

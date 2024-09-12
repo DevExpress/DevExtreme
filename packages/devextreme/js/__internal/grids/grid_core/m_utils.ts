@@ -461,8 +461,10 @@ export default {
         index: columnIndex,
         columnIndex,
         item,
-        x: !isVertical && rtlEnabled !== (i === cellsLength) ? offset.right : offset.left,
-        y: isVertical && i === cellsLength ? offset.bottom : offset.top,
+        x: !isVertical && rtlEnabled !== (i === cellsLength)
+          ? offset?.right ?? 0
+          : offset?.left ?? 0,
+        y: isVertical && i === cellsLength ? offset?.bottom ?? 0 : offset?.top ?? 0,
       };
 
       if (!isVertical && i > 0) {

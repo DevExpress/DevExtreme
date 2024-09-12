@@ -20,7 +20,6 @@ export interface DomAdapter {
   inject(obj: Record<string, unknown>): void;
   setStyle(element: HTMLElement, name: string, value: string): void;
   insertElement(parentElement: HTMLElement, newElement: HTMLElement, nextSiblingElement?: HTMLElement): void;
-  elementsFromPoint(x: number, y: number, element: HTMLElement): HTMLElement[];
 }
 
 declare const domAdapter: DomAdapter;

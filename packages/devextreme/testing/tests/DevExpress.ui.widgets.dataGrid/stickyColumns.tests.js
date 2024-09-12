@@ -26,7 +26,7 @@ QUnit.testStart(function() {
     addShadowDomStyles($('#qunit-fixture'));
 });
 
-QUnit.module('Column resize points - columnResizingMode = "nextColumn"', {
+QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
     beforeEach: function() {
         $('#qunit-fixture').addClass('qunit-fixture-static');
         this.$element = () => $('#container');
@@ -639,7 +639,7 @@ QUnit.module('Column resize points - columnResizingMode = "nextColumn"', {
     });
 });
 
-QUnit.module('Column resize points - columnResizingMode = "nextColumn" (rtlEnabled = true)', {
+QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEnabled = true)', {
     beforeEach: function() {
         $('#qunit-fixture').addClass('qunit-fixture-static');
         const $container = $('#container')
@@ -1251,7 +1251,7 @@ QUnit.module('Column resize points - columnResizingMode = "nextColumn" (rtlEnabl
     });
 });
 
-QUnit.module('Column resize points - columnResizingMode = "widget"', {
+QUnit.module('Column resizing points - columnResizingMode = "widget"', {
     beforeEach: function() {
         $('#qunit-fixture').addClass('qunit-fixture-static');
         this.$element = () => $('#container');
@@ -1875,7 +1875,7 @@ QUnit.module('Column resize points - columnResizingMode = "widget"', {
     });
 });
 
-QUnit.module('Column resize points - columnResizingMode = "widget" (rtlEnabled = true)', {
+QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled = true)', {
     beforeEach: function() {
         $('#qunit-fixture').addClass('qunit-fixture-static');
         const $container = $('#container')
