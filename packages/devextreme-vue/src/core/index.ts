@@ -1,9 +1,7 @@
-import * as vue3Stategy from './strategy/vue3/index';
-
-const strategy = vue3Stategy;
+import * as vue3Strategy from './strategy/vue3/index';
 
 export const {
   prepareComponentConfig,
   prepareConfigurationComponentConfig,
   prepareExtensionComponentConfig,
-} = strategy;
+} = vue3Strategy;
