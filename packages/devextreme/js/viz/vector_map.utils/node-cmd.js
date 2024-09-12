@@ -6,6 +6,10 @@ function normalizeJsName(value) {
     return value.trim().replace('-', '_').replace(' ', '_');
 }
 
+function normalizePath(input) {
+    return path.normalize(input).replace(/[\. ]+$/, '');
+}
+
 function processFile(file, options, callback) {
     var name = path.basename(file, path.extname(file));
     options.info('%s: started', name);
@@ -20,8 +24,14 @@ function processFile(file, options, callback) {
             if(!options.isJSON) {
                 content = options.processFileContent(content, normalizeJsName(name));
             }
+
+            const baseDir = normalizePath(options.output) || path.dirname(file);
+            const fileName = normalizePath(options.processFileName(name + (options.isJSON ? '.json' : '.js')));
+
+            var outputPath = path.resolve(baseDir, fileName);
+
             fs.writeFile(
-                path.resolve(options.output || path.dirname(file), options.processFileName(name + (options.isJSON ? '.json' : '.js'))),
+                outputPath,
                 content, function(e) {
                     e && options.error('  ' + e.message);
                     callback();
@@ -33,7 +43,8 @@ function processFile(file, options, callback) {
 }
 
 function collectFiles(dir, done) {
-    var input = path.resolve(dir || '');
+    var input = normalizePath(path.resolve(dir || ''));
+
     fs.stat(input, function(e, stat) {
         if(e) {
             done(e, []);
