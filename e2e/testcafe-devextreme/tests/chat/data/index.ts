@@ -15,9 +15,11 @@ export const createUser = (id: number, name: string, url = ''): User => ({
 
 export const timestamp = new Date(1721747399083);
 
-export const getLongText = (useLineBreaks = false): string => {
+export const getLongText = (useLineBreaks = false, length = 1): string => {
   const UUID = '9138cf2e-ced3-426a-bb53-4478536f690b';
-  const longString = '1826403415222858765740359115719081097182452189907242163763639765588452014727158270738379423360950761826403415222858765740359115719081097182452189907';
+  const longItem = '1826403415222858765740359115719081097182452189907242163763639765588452014727158270738379423360950761826403415222858765740359115719081097182452189907';
+  const longItemArray = Array(length).fill(longItem);
+  const longString = longItemArray.join('');
 
   const result = `${UUID}:${useLineBreaks ? lineBreaks : ''}${longString}`;
 
@@ -33,38 +35,29 @@ export const getShortText = (useLineBreaks = false): string => {
 export const generateMessages = (
   length: number,
   userFirst: User,
-  userSecond: User | null = null,
+  userSecond = userFirst,
   useLongText = false,
   useLineBreaks = false,
   coefficient = 4,
+  n = 1,
 ): any => {
-  const messages = Array.from({ length }, (_, i) => {
+  const messages = Array.from({ length: length * n }, (_, i) => {
     const text = useLongText
       ? getLongText(useLineBreaks)
       : getShortText(useLineBreaks);
 
-    const item = {
-      timestamp,
-      author: i % coefficient === 0 ? userFirst : userSecond ?? userFirst,
-      text,
+    const getAuthor = () => {
+      if (n > 1) {
+        return i >= length ? userSecond : userFirst;
+      }
+
+      return i % coefficient === 0 ? userFirst : userSecond;
     };
 
-    return item;
-  });
-
-  return messages;
-};
-
-export const generateSpecifiedNumberOfMessagesInRow = (
-  n: number,
-  userFirst: User,
-  userSecond: User,
-): any => {
-  const messages = Array.from({ length: n * 2 }, (_, i) => {
     const item = {
       timestamp,
-      author: i >= n ? userSecond : userFirst,
-      text: getShortText(),
+      author: getAuthor(),
+      text,
     };
 
     return item;

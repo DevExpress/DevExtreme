@@ -14,7 +14,7 @@ test('Chat: messagebox', async (t) => {
 
   const chat = new Chat('#chat');
   const shortText = getShortText();
-  const longText = getLongText();
+  const longText = getLongText(false, 5);
 
   await chat.focus();
   await testScreenshot(t, takeScreenshot, 'Messagebox when chat has focus.png', { element: '#chat' });
