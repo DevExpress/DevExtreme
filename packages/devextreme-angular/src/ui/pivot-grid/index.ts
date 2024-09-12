@@ -52,6 +52,20 @@ import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
 import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 
+import { DxoPivotGridDataSourceModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxiPivotGridFieldModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridFormatModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridStoreModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridExportModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridFieldPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridSearchModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridLoadPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridScrollingModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoPivotGridStateStoringModule } from 'devextreme-angular/ui/pivot-grid/nested';
+
 
 
 
@@ -781,6 +795,7 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
+
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -890,6 +905,19 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoLoadPanelModule,
     DxoScrollingModule,
     DxoStateStoringModule,
+    DxoPivotGridDataSourceModule,
+    DxiPivotGridFieldModule,
+    DxoPivotGridFormatModule,
+    DxoPivotGridHeaderFilterModule,
+    DxoPivotGridStoreModule,
+    DxoPivotGridExportModule,
+    DxoPivotGridFieldChooserModule,
+    DxoPivotGridTextsModule,
+    DxoPivotGridFieldPanelModule,
+    DxoPivotGridSearchModule,
+    DxoPivotGridLoadPanelModule,
+    DxoPivotGridScrollingModule,
+    DxoPivotGridStateStoringModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -911,6 +939,19 @@ export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnCh
     DxoLoadPanelModule,
     DxoScrollingModule,
     DxoStateStoringModule,
+    DxoPivotGridDataSourceModule,
+    DxiPivotGridFieldModule,
+    DxoPivotGridFormatModule,
+    DxoPivotGridHeaderFilterModule,
+    DxoPivotGridStoreModule,
+    DxoPivotGridExportModule,
+    DxoPivotGridFieldChooserModule,
+    DxoPivotGridTextsModule,
+    DxoPivotGridFieldPanelModule,
+    DxoPivotGridSearchModule,
+    DxoPivotGridLoadPanelModule,
+    DxoPivotGridScrollingModule,
+    DxoPivotGridStateStoringModule,
     DxTemplateModule
   ]
 })

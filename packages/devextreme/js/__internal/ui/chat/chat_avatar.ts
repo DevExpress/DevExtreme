@@ -7,18 +7,21 @@ import Widget from '@ts/core/widget/widget';
 
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
+const CHAT_MESSAGE_AVATAR_IMAGE_CLASS = 'dx-chat-message-avatar-image';
 
 export interface Properties extends WidgetOptions<Avatar> {
   name?: string;
+  url?: string;
 }
 
 class Avatar extends Widget<Properties> {
-  _$initials!: dxElementWrapper;
+  _$content?: dxElementWrapper;
 
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       name: '',
+      url: '',
     };
   }
 
@@ -27,12 +30,44 @@ class Avatar extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._renderInitialsElement();
-    this._updateInitials();
+    this._renderAvatarContent();
+  }
+
+  _renderAvatarContent(): void {
+    this._$content?.remove();
+
+    if (this._isValuableUrl()) {
+      this._renderImage();
+
+      return;
+    }
+
+    this._renderInitials();
+  }
+
+  _renderImage(): void {
+    this._renderImageElement();
+    this._updateUrl();
+    this._updateAlt();
+  }
+
+  _renderInitials(): void {
+    const { name } = this.option();
+
+    if (name) {
+      this._renderInitialsElement();
+      this._updateInitials();
+    }
+  }
+
+  _renderImageElement(): void {
+    this._$content = $('<img>')
+      .addClass(CHAT_MESSAGE_AVATAR_IMAGE_CLASS)
+      .appendTo(this.element());
   }
 
   _renderInitialsElement(): void {
-    this._$initials = $('<div>')
+    this._$content = $('<div>')
       .addClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS)
       .appendTo(this.element());
   }
@@ -40,7 +75,28 @@ class Avatar extends Widget<Properties> {
   _updateInitials(): void {
     const { name } = this.option();
 
-    this._$initials.text(this._getInitials(name));
+    this._$content?.text(this._getInitials(name));
+  }
+
+  _updateUrl(): void {
+    const { url } = this.option();
+
+    this._$content?.attr('src', url ?? '');
+  }
+
+  _updateAlt(): void {
+    const { name } = this.option();
+
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    this._$content?.attr('alt', name || 'Avatar');
+  }
+
+  _isValuableUrl(): boolean {
+    const { url } = this.option();
+
+    const result = !!url?.trim?.();
+
+    return result;
   }
 
   _getInitials(name: string | undefined): string {
@@ -56,7 +112,8 @@ class Avatar extends Widget<Properties> {
 
     switch (name) {
       case 'name':
-        this._updateInitials();
+      case 'url':
+        this._renderAvatarContent();
         break;
       default:
         super._optionChanged(args);

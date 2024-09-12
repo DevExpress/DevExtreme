@@ -22,9 +22,12 @@ const moduleConfig = {
             this.$element = $(this.instance.$element());
 
             this.$textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+            this.textArea = TextArea.getInstance(this.$textArea);
+
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             this.$sendButton = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+            this.sendButton = Button.getInstance(this.$sendButton);
         };
 
         this.reinit = (options) => {
@@ -47,11 +50,11 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 icon: 'sendfilled',
                 type: 'default',
                 stylingMode: 'text',
+                disabled: true,
             };
-            const sendButton = this.$sendButton.dxButton('instance');
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
-                assert.deepEqual(value, sendButton.option(key), `${key} value is correct`);
+                assert.deepEqual(value, this.sendButton.option(key), `${key} value is correct`);
             });
         });
 
@@ -95,6 +98,63 @@ QUnit.module('MessageBox', moduleConfig, () => {
             this.$sendButton.trigger('dxclick');
 
             assert.strictEqual(this.$input.val(), emptyValue);
+        });
+
+        QUnit.test('send button should not be disabled after entering any character into input', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i');
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, false);
+        });
+
+        QUnit.test('send button should be disabled after entering any character into input and clicking the button', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i');
+
+            this.$sendButton.trigger('dxclick');
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be disabled after entering spacing into input', function(assert) {
+            const emptyValue = '    ';
+
+            keyboardMock(this.$input)
+                .focus()
+                .type(emptyValue);
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be disabled after adding a line break into input', function(assert) {
+            const lineBreakValue = '\n';
+
+            keyboardMock(this.$input)
+                .focus()
+                .type(lineBreakValue);
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
+        });
+
+        QUnit.test('send button should be disabled after entering any character and then removing it', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('i')
+                .press('backspace');
+
+            const { disabled } = this.sendButton.option();
+
+            assert.strictEqual(disabled, true);
         });
     });
 
@@ -247,12 +307,9 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
                 this.reinit(options);
 
-                const button = Button.getInstance(this.$sendButton);
-                const textArea = TextArea.getInstance(this.$textArea);
-
                 Object.entries(options).forEach(([key, value]) => {
-                    assert.deepEqual(value, button.option(key), `button ${key} value is correct`);
-                    assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
+                    assert.deepEqual(value, this.sendButton.option(key), `button ${key} value is correct`);
+                    assert.deepEqual(value, this.textArea.option(key), `textarea ${key} value is correct`);
                 });
             });
 
@@ -265,12 +322,9 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
                 this.instance.option(options);
 
-                const button = Button.getInstance(this.$sendButton);
-                const textArea = TextArea.getInstance(this.$textArea);
-
                 Object.entries(options).forEach(([key, value]) => {
-                    assert.deepEqual(value, button.option(key), `button ${key} value is correct`);
-                    assert.deepEqual(value, textArea.option(key), `textarea ${key} value is correct`);
+                    assert.deepEqual(value, this.sendButton.option(key), `button ${key} value is correct`);
+                    assert.deepEqual(value, this.textArea.option(key), `textarea ${key} value is correct`);
                 });
             });
         });

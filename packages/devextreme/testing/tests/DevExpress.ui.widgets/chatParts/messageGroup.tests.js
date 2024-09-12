@@ -6,6 +6,7 @@ import ChatAvatar from '__internal/ui/chat/chat_avatar';
 const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
 const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+const CHAT_MESSAGE_AUTHOR_NAME_CLASS = 'dx-chat-message-author-name';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -57,16 +58,48 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             const messageTimeSecond = new Date(2021, 9, 17, 14, 43);
 
             this.reinit({
-                items: [{
-                    timestamp: messageTimeFirst,
-                }, {
-                    timestamp: messageTimeSecond
-                }]
+                items: [
+                    { timestamp: messageTimeFirst },
+                    { timestamp: messageTimeSecond },
+                ],
             });
 
             const $time = this.$element.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
 
             assert.strictEqual($time.text(), '21:34');
+        });
+    });
+
+    QUnit.module('Author name', () => {
+        QUnit.test('text of a name element should be equal to author name if alignment is start', function(assert) {
+            const name = 'custom';
+
+            this.reinit({
+                items: [
+                    {
+                        author: { name: 'custom' },
+                    },
+                ],
+            });
+
+            const $name = this.$element.find(`.${CHAT_MESSAGE_AUTHOR_NAME_CLASS}`);
+
+            assert.strictEqual($name.text(), name);
+        });
+
+        QUnit.test('text of a name element should be empty if alignment is end', function(assert) {
+            this.reinit({
+                alignment: 'end',
+                items: [
+                    {
+                        author: { name: 'custom' },
+                    },
+                ],
+            });
+
+            const $name = this.$element.find(`.${CHAT_MESSAGE_AUTHOR_NAME_CLASS}`);
+
+            assert.strictEqual($name.text(), '');
         });
     });
 
@@ -113,6 +146,28 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 const avatar = ChatAvatar.getInstance(this.$element.find(`.${CHAT_MESSAGE_AVATAR_CLASS}`));
 
                 assert.deepEqual(avatar.option('name'), passedNameValue);
+            });
+        });
+
+        QUnit.test('avatar component should be initialized with correct url property', function(assert) {
+            [
+                { items: [{}], passedUrlValue: undefined },
+                { items: [{ author: {} }], passedUrlValue: undefined },
+                { items: [{ author: undefined }], passedUrlValue: undefined },
+                { items: [{ author: { avatarUrl: undefined } }], passedUrlValue: undefined },
+                { items: [{ author: { avatarUrl: null } }], passedUrlValue: null },
+                { items: [{ author: { avatarUrl: '' } }], passedUrlValue: '' },
+                { items: [{ author: { avatarUrl: ' ' } }], passedUrlValue: ' ' },
+                { items: [{ author: { avatarUrl: 888 } }], passedUrlValue: 888 },
+                { items: [{ author: { avatarUrl: NaN } }], passedUrlValue: NaN },
+            ].forEach(({ items, passedUrlValue }) => {
+                this.reinit({
+                    items,
+                });
+
+                const avatar = ChatAvatar.getInstance(this.$element.find(`.${CHAT_MESSAGE_AVATAR_CLASS}`));
+
+                assert.deepEqual(avatar.option('url'), passedUrlValue);
             });
         });
     });

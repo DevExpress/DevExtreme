@@ -10,9 +10,14 @@ import {
     MOCK_CURRENT_USER_ID,
 } from './chat.tests.js';
 import MessageGroup from '__internal/ui/chat/chat_message_group';
+import localization from 'localization';
 
 const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+
+const CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS = 'dx-chat-empty-message';
+const CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS = 'dx-chat-empty-prompt';
+
 const SCROLLABLE_CLASS = 'dx-scrollable';
 
 
@@ -425,6 +430,32 @@ QUnit.module('MessageList', moduleConfig, () => {
 
                 this.instance.option('items', [...items, newMessage]);
             });
+        });
+    });
+
+    QUnit.module('localization', moduleConfig, () => {
+        QUnit.test('message, prompt texts should be equal custom localized values from the dictionary', function(assert) {
+            const defaultLocale = localization.locale();
+
+            const localizedEmptyListMessageText = '空のテキスト';
+            const localizedEmptyListPromptText = '空のプロンプト';
+
+            try {
+                localization.loadMessages({
+                    'ja': {
+                        'dxChat-emptyListMessage': localizedEmptyListMessageText,
+                        'dxChat-emptyListPrompt': localizedEmptyListPromptText
+                    }
+                });
+                localization.locale('ja');
+
+                this.reinit();
+
+                assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS}`).text(), localizedEmptyListMessageText, 'emptyListMessage');
+                assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS}`).text(), localizedEmptyListPromptText, 'emptyListPrompt');
+            } finally {
+                localization.locale(defaultLocale);
+            }
         });
     });
 });

@@ -1,6 +1,6 @@
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { hasWindow } from '@js/core/utils/window';
+import messageLocalization from '@js/localization/message';
 import type { Message } from '@js/ui/chat';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -12,6 +12,12 @@ import MessageGroup from './chat_message_group';
 
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
 
+const CHAT_MESSAGE_LIST_EMPTY_CLASS = 'dx-chat-message-list-empty';
+const CHAT_MESSAGE_LIST_EMPTY_VIEW_CLASS = 'dx-chat-empty-view';
+const CHAT_MESSAGE_LIST_EMPTY_IMAGE_CLASS = 'dx-chat-empty-image';
+const CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS = 'dx-chat-empty-message';
+const CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS = 'dx-chat-empty-prompt';
+
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
@@ -20,9 +26,7 @@ export interface Properties extends WidgetOptions<MessageList> {
 class MessageList extends Widget<Properties> {
   _messageGroups?: MessageGroup[];
 
-  private _$content!: dxElementWrapper;
-
-  private _scrollable?: Scrollable<unknown>;
+  private _scrollable!: Scrollable<unknown>;
 
   _getDefaultOptions(): Properties {
     return {
@@ -43,10 +47,51 @@ class MessageList extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._renderMessageListContent();
     this._renderScrollable();
 
+    this._renderMessageListContent();
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._scrollable.update();
+
     this._scrollContentToLastMessageGroup();
+  }
+
+  _renderEmptyViewContent(): void {
+    const $emptyView = $('<div>')
+      .addClass(CHAT_MESSAGE_LIST_EMPTY_VIEW_CLASS);
+
+    $('<div>')
+      .appendTo($emptyView)
+      .addClass(CHAT_MESSAGE_LIST_EMPTY_IMAGE_CLASS);
+
+    const messageText = messageLocalization.format('dxChat-emptyListMessage');
+    $('<div>')
+      .appendTo($emptyView)
+      .addClass(CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS)
+      .text(messageText);
+
+    const promptText = messageLocalization.format('dxChat-emptyListPrompt');
+    $('<div>')
+      .appendTo($emptyView)
+      .addClass(CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS)
+      .text(promptText);
+
+    $emptyView.appendTo(this._scrollable.content());
+  }
+
+  _removeEmptyView(): void {
+    $(this._scrollable.content()).empty();
+  }
+
+  _toggleEmptyStateClass(state: boolean): void {
+    this.$element().toggleClass(CHAT_MESSAGE_LIST_EMPTY_CLASS, state);
+  }
+
+  _isEmpty(): boolean {
+    const { items } = this.option();
+
+    return items.length === 0;
   }
 
   _isCurrentUser(id: string | number | undefined): boolean {
@@ -60,8 +105,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    const $messageGroupContainer = this._scrollable ? this._scrollable.content() : this._$content;
-    const $messageGroup = $('<div>').appendTo($messageGroupContainer);
+    const $messageGroup = $('<div>').appendTo(this._scrollable.content());
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
@@ -72,20 +116,23 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderScrollable(): void {
-    this._scrollable = this._createComponent(this._$content, Scrollable, {
+    const $scrollable = $('<div>')
+      .appendTo(this.$element());
+
+    this._scrollable = this._createComponent($scrollable, Scrollable, {
       useNative: true,
     });
   }
 
   _renderMessageListContent(): void {
-    const { items } = this.option();
+    if (this._isEmpty()) {
+      this._toggleEmptyStateClass(true);
+      this._renderEmptyViewContent();
 
-    this._$content = $('<div>')
-      .appendTo(this.$element());
-
-    if (!items?.length) {
       return;
     }
+
+    const { items } = this.option();
 
     let currentMessageGroupUserId = items[0]?.author?.id;
     let currentMessageGroupItems: Message[] = [];
@@ -111,10 +158,8 @@ class MessageList extends Widget<Properties> {
     });
   }
 
-  _renderMessage(message: Message, newItems: Message[]): void {
+  _renderMessage(message: Message): void {
     const sender = message.author;
-
-    this._setOptionWithoutOptionChange('items', newItems);
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
 
@@ -142,12 +187,11 @@ class MessageList extends Widget<Properties> {
     const lastMessageGroup = this._messageGroups[this._messageGroups.length - 1];
     const element = lastMessageGroup.$element()[0];
 
-    this._scrollable?.scrollToElement(element);
+    this._scrollable.scrollToElement(element);
   }
 
   _clean(): void {
     this._messageGroups = [];
-    this._scrollable = undefined;
 
     super._clean();
   }
@@ -179,9 +223,15 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
+      this._toggleEmptyStateClass(false);
+
+      if (!previousValue.length) {
+        this._removeEmptyView();
+      }
+
       const newMessage = value[value.length - 1];
 
-      this._renderMessage(newMessage ?? {}, value);
+      this._renderMessage(newMessage ?? {});
     }
   }
 

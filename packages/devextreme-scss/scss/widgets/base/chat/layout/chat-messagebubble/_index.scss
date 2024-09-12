@@ -7,10 +7,12 @@
 .dx-chat-message-bubble {
   width: auto;
   word-break: break-word;
+  white-space: break-spaces;
 }
 
 .dx-chat-message-group-alignment-start {
   .dx-chat-message-bubble-container {
+    grid-column: 2;
     align-items: flex-start;
   }
 
