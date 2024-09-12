@@ -17,16 +17,16 @@ test('Chat: messagebox', async (t) => {
   const longText = getLongText(false, 5);
 
   await chat.focus();
-  await testScreenshot(t, takeScreenshot, 'Messagebox when chat has focus.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagebox when chat has focus.png', { element: '#chat', shouldTestInCompact: true });
 
   await t.typeText(chat.getInput(), shortText);
-  await testScreenshot(t, takeScreenshot, 'Messagebox when input contains short text.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagebox when input contains short text.png', { element: '#chat', shouldTestInCompact: true });
 
   await t.typeText(chat.getInput(), longText);
-  await testScreenshot(t, takeScreenshot, 'Messagebox when input contains long text.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagebox when input contains long text.png', { element: '#chat', shouldTestInCompact: true });
 
   await t.pressKey('tab');
-  await testScreenshot(t, takeScreenshot, 'Messagebox when send button has focus.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagebox when send button has focus.png', { element: '#chat', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())

@@ -16,16 +16,17 @@ test('Chat: messagebox', async (t) => {
 
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
+
   const items = generateMessages(17, userFirst, userSecond, true, false, 2);
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', { element: '#chat', shouldTestInCompact: true });
 
   await chat.option({
     user: userSecond,
     items,
   });
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist with a lot of messages.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist with a lot of messages.png', { element: '#chat', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())
