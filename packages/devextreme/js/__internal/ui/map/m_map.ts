@@ -250,6 +250,11 @@ const Map = Widget.inherit({
       case 'markerIconSrc':
         this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
         break;
+      case 'googleMapConfig':
+        this._suppressAsyncAction = true;
+        this._invalidate();
+
+        break;
       case 'onReady':
       case 'onUpdated':
       case 'onMarkerAdded':
