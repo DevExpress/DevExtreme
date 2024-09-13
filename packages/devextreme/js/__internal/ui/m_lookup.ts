@@ -602,6 +602,7 @@ const Lookup = DropDownList.inherit({
       const newFocusTarget = e.relatedTarget;
 
       if (!$overlayContent.get(0).contains(newFocusTarget)) {
+        this._isFocusOutTriggered = true;
         this.option('opened', false);
       }
     });
@@ -609,7 +610,13 @@ const Lookup = DropDownList.inherit({
 
   _popupHidingHandler() {
     this.callBase();
-    this.option('focusStateEnabled') && this.focus();
+
+    if (this._isFocusOutTriggered) {
+      this.$element().removeClass('dx-state-focus');
+      this._isFocusOutTriggered = false;
+    } else {
+      this.option('focusStateEnabled') && this.focus();
+    }
   },
 
   _popupHiddenHandler() {
@@ -792,6 +799,8 @@ const Lookup = DropDownList.inherit({
       $searchWrapper.insertBefore(this._$list);
 
       this._setSearchPlaceholder();
+    } else {
+      this._removeSearch();
     }
   },
 
@@ -836,6 +845,18 @@ const Lookup = DropDownList.inherit({
 
   _toggleSearchClass(isSearchEnabled) {
     if (this._popup) {
+      const activeElement = document.activeElement as HTMLElement;
+      if (isSearchEnabled) {
+        activeElement?.focus();
+      } else {
+        const focusableElements = ':input, a, button, [tabindex]:not([tabindex="-1"])';
+        const $allFocusable = $(focusableElements);
+        const currentIndex = $allFocusable.index(activeElement);
+
+        const nextFocusableElement = $allFocusable.get(currentIndex + 1) as HTMLElement | undefined;
+        nextFocusableElement?.focus();
+      }
+
       this._popup.$wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
     }
   },
@@ -991,7 +1012,6 @@ const Lookup = DropDownList.inherit({
         break;
       case 'searchEnabled':
         if (this._popup) {
-          this._removeSearch();
           this._renderSearch();
         }
         break;
