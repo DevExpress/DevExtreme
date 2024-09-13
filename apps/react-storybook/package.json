@@ -1,6 +1,6 @@
 {
   "name": "devextreme-react-storybook",
-  "version": "24.1.5",
+  "version": "24.1.6",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "devextreme": "~24.1.5",
-    "devextreme-react": "~24.1.5"
+    "devextreme": "~24.1.6",
+    "devextreme-react": "~24.1.6"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.6.9",

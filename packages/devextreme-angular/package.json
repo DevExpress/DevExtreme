@@ -1,6 +1,6 @@
 {
   "name": "devextreme-angular",
-  "version": "24.1.5",
+  "version": "24.1.6",
   "description": "Angular UI and visualization components based on DevExtreme widgets",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@angular/common": ">=16.0.0",
     "@angular/core": ">=16.0.0",
     "@angular/forms": ">=16.0.0",
-    "devextreme": "~24.1.5"
+    "devextreme": "~24.1.6"
   },
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.6.0",
