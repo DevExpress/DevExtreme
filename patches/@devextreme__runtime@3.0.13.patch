@@ -1,0 +1,64 @@
+diff --git a/cjs/inferno/base_component.js b/cjs/inferno/base_component.js
+index 7262779354b91feaa183a896c6ef90ae7576e8ba..6209d32994b18eee219b0c11ffe8d13c79dae3c5 100644
+--- a/cjs/inferno/base_component.js
++++ b/cjs/inferno/base_component.js
+@@ -120,7 +120,7 @@ var InfernoWrapperComponent = /** @class */ (function (_super) {
+         });
+     };
+     InfernoWrapperComponent.prototype.componentDidMount = function () {
+-        var el = inferno_1.findDOMfromVNode(this.$LI, true);
++        var el = inferno_1.findDOMFromVNode(this.$LI, true);
+         this.vDomElement = el;
+         _super.prototype.componentDidMount.call(this);
+         el.dxClasses = el.dxClasses || {
+diff --git a/cjs/inferno-hooks/base-hooks-component.js b/cjs/inferno-hooks/base-hooks-component.js
+index 63950828dc336fdbe70a3128477fe69a72e469be..3124074b612d2095dff1bbdde06e558c5d29895f 100644
+--- a/cjs/inferno-hooks/base-hooks-component.js
++++ b/cjs/inferno-hooks/base-hooks-component.js
+@@ -52,7 +52,7 @@ var InfernoWrapperComponent = /** @class */ (function (_super) {
+         });
+     };
+     InfernoWrapperComponent.prototype.componentDidMount = function () {
+-        var el = inferno_1.findDOMfromVNode(this.$LI, true);
++        var el = inferno_1.findDOMFromVNode(this.$LI, true);
+         this.vDomElement = el;
+         _super.prototype.componentDidMount.call(this);
+         el.dxClasses = el.dxClasses || {
+diff --git a/esm/inferno/base_component.js b/esm/inferno/base_component.js
+index 79b8b3f9dfe2dea62ffca302a9cf82731ab77e9c..9557127155d68c2122a842ec5c46f3a0820f54bf 100644
+--- a/esm/inferno/base_component.js
++++ b/esm/inferno/base_component.js
+@@ -1,4 +1,4 @@
+-import { Component, findDOMfromVNode } from 'inferno';
++import { Component, findDOMFromVNode } from 'inferno';
+ import { InfernoEffectHost } from './effect_host';
+ const areObjectsEqual = (firstObject, secondObject) => {
+     const bothAreObjects = firstObject instanceof Object && secondObject instanceof Object;
+@@ -90,7 +90,7 @@ export class InfernoWrapperComponent extends InfernoComponent {
+         });
+     }
+     componentDidMount() {
+-        const el = findDOMfromVNode(this.$LI, true);
++        const el = findDOMFromVNode(this.$LI, true);
+         this.vDomElement = el;
+         super.componentDidMount();
+         el.dxClasses = el.dxClasses || {
+diff --git a/esm/inferno-hooks/base-hooks-component.js b/esm/inferno-hooks/base-hooks-component.js
+index 7d6f7f319681327e72ccdb9e8b0b1ae8e7432962..1b281cc5c7a05f5c1cc3783f13376a8747792e0d 100644
+--- a/esm/inferno-hooks/base-hooks-component.js
++++ b/esm/inferno-hooks/base-hooks-component.js
+@@ -1,4 +1,4 @@
+-import { findDOMfromVNode } from 'inferno';
++import { findDOMFromVNode } from 'inferno';
+ import { HookContainer } from './container';
+ export class InfernoWrapperComponent extends HookContainer {
+     constructor() {
+@@ -32,7 +32,7 @@ export class InfernoWrapperComponent extends HookContainer {
+         });
+     }
+     componentDidMount() {
+-        const el = findDOMfromVNode(this.$LI, true);
++        const el = findDOMFromVNode(this.$LI, true);
+         this.vDomElement = el;
+         super.componentDidMount();
+         el.dxClasses = el.dxClasses || {

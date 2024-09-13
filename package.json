@@ -45,6 +45,7 @@
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "6.0.2",
     "devextreme-internal-tools": "16.0.0-beta.3",
+    "devextreme-nx-plugin": "workspace:*",
     "http-server": "14.1.1",
     "husky": "8.0.3",
     "jest": "29.7.0",
@@ -59,12 +60,23 @@
     "tar-fs": "3.0.6",
     "ts-node": "10.9.2",
     "vue": "3.4.27",
-    "yargs": "17.7.2",
-    "devextreme-nx-plugin": "workspace:*"
+    "yargs": "17.7.2"
   },
   "pre-commit": [
     "lint-staged",
     "pre-commit"
   ],
-  "packageManager": "pnpm@9.1.2"
+  "packageManager": "pnpm@9.1.2",
+  "pnpm": {
+    "patchedDependencies": {
+      "@devextreme/runtime@3.0.13": "patches/@devextreme__runtime@3.0.13.patch"
+    },
+    "overrides": {
+      "inferno": "^8.2.3",
+      "inferno-create-element": "8.2.3",
+      "inferno-hydrate": "^8.2.3",
+      "inferno-test-utils": "8.2.3",
+      "inferno-server": "8.2.3"
+    }
+  }
 }

@@ -94,7 +94,7 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
               <div>
                 {text}
               </div>
-            )
+            ) as any
         }
       </CellBase>
     );

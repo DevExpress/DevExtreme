@@ -65,6 +65,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
             isGroupedAllDayPanel,
             key: fragmentKey,
           }) => (
+            // @ts-expect-error
             <Fragment key={fragmentKey}>
               {
                 isGroupedAllDayPanel && (
@@ -116,6 +117,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
                       isFirstGroupCell={isFirstGroupCell}
                       isLastGroupCell={isLastGroupCell}
                       index={cellIndex}
+                      // @ts-expect-error
                       timeCellTemplate={TimeCellTemplateComponent}
                       highlighted={highlighted}
                     />

@@ -4,6 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  inferno: ^8.2.3
+  inferno-create-element: 8.2.3
+  inferno-hydrate: ^8.2.3
+  inferno-test-utils: 8.2.3
+  inferno-server: 8.2.3
+
+patchedDependencies:
+  '@devextreme/runtime@3.0.13':
+    hash: daiheimdp4kulfvktqz7ktcx2m
+    path: patches/@devextreme__runtime@3.0.13.patch
+
 importers:
 
   .:
@@ -289,11 +301,11 @@ importers:
         specifier: 1.4.14
         version: 1.4.14(react@17.0.2)
       inferno:
-        specifier: ^7.4.9
-        version: 7.4.11
+        specifier: ^8.2.3
+        version: 8.2.3
       inferno-create-element:
-        specifier: 7.4.11
-        version: 7.4.11
+        specifier: 8.2.3
+        version: 8.2.3
       jquery:
         specifier: 3.6.3
         version: 3.6.3
@@ -786,7 +798,7 @@ importers:
         version: 7.24.5
       '@devextreme/runtime':
         specifier: 3.0.13
-        version: 3.0.13
+        version: 3.0.13(patch_hash=daiheimdp4kulfvktqz7ktcx2m)
       devexpress-diagram:
         specifier: 2.2.10
         version: 2.2.10
@@ -797,11 +809,11 @@ importers:
         specifier: 1.7.1
         version: 1.7.1
       inferno:
-        specifier: ^7.4.9
-        version: 7.4.11
+        specifier: ^8.2.3
+        version: 8.2.3
       inferno-hydrate:
-        specifier: ^7.4.9
-        version: 7.4.11
+        specifier: ^8.2.3
+        version: 8.2.3
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -1092,11 +1104,11 @@ importers:
         specifier: 5.3.1
         version: 5.3.1
       inferno-create-element:
-        specifier: 7.4.11
-        version: 7.4.11
+        specifier: 8.2.3
+        version: 8.2.3
       inferno-test-utils:
-        specifier: 7.4.11
-        version: 7.4.11
+        specifier: 8.2.3
+        version: 8.2.3
       intl:
         specifier: 1.2.5
         version: 1.2.5
@@ -1261,8 +1273,8 @@ importers:
         specifier: '*'
         version: 1.6.7
       inferno-server:
-        specifier: 7.4.11
-        version: 7.4.11
+        specifier: 8.2.3
+        version: 8.2.3
     devDependencies:
       '@angular-devkit/architect':
         specifier: 0.1703.8
@@ -10151,27 +10163,24 @@ packages:
     resolution: {integrity: sha512-m6FAo/spmsW2Ab2fU35JTYwtOKa2yAwXSwgjSv1TJzh4Mh7mC3lzAOVLBprb72XsTrgkEIsl7YrFNAiDiRhIGg==}
     engines: {node: '>=12'}
 
-  inferno-create-element@7.4.11:
-    resolution: {integrity: sha512-kE6XIx2hPAd5qpDli2iGjNXgubvuyxdLvoiW71WnSzIIxA+Uxa/s8lY8m03VyHHVypFV3n329ZY5dFvKc7UQMg==}
+  inferno-create-element@8.2.3:
+    resolution: {integrity: sha512-YEwX4OiFlgeTutvE16uCGxkaSVwZ1DklpAPX8okjVsGaLIWQrM8QIQFxn3mTLWSu70Uea+afQfKL5wE4hxn39Q==}
 
-  inferno-hydrate@7.4.11:
-    resolution: {integrity: sha512-hF9Ke4GHAkj8GQrMXBZPfsUqhq6WjkoDCAfXhPBuF1Wiceqyy8KerOOXEnuocHky77fuEXq0AzVnQcC064Bkfw==}
+  inferno-hydrate@8.2.3:
+    resolution: {integrity: sha512-AyCiswnjYg7D9veJdjiQg06Npp0/iXKhwOm2hjoY3cjadT3fIdz2XtDElLB7imU4icuJ3xOmXA8FgIfnSJfHrQ==}
 
-  inferno-server@7.4.11:
-    resolution: {integrity: sha512-SUnkCqZNWOIrjRVoVk/E1/70O1f1ImkCX9H2gDPbS0uc3GDxuzIeCgn0rpcc0XV9KzZJ2LTGxuBtEoQQOjUn2Q==}
+  inferno-server@8.2.3:
+    resolution: {integrity: sha512-swaDCaTYPplKwcBDbveu7xKIAooLXOOdfRoETTCIZwKyfKBGR3JnqsrwcL6miFR8TG6CNibvYKG8eSYHzkoA4Q==}
     engines: {node: '>=8'}
 
-  inferno-shared@7.4.11:
-    resolution: {integrity: sha512-pN725bDSTxkQmRS3e/3H02/xAqgHl+xgddCMjPm8M0etRdRcVCisi3NGPhzSbDDmiftrxhY31exs7+dwsngcDA==}
+  inferno-test-utils@8.2.3:
+    resolution: {integrity: sha512-ctx+AWEOCrF7ZS80XaCvnglEankSDJbMuJmzd4ybxrD/3h0l7kYwjfLmV5ymyc+97sYquV6AaFMYbmaoFQ2XdA==}
 
-  inferno-test-utils@7.4.11:
-    resolution: {integrity: sha512-w8pKxu8Ur/8lOrpEVEgoH0I6YzUyDnYuRhL3RM6vaQb95hW9Hz1uEXLjdFhT+F9c+rMKDjq0DYQ/RUByaxGaNg==}
+  inferno-vnode-flags@8.2.3:
+    resolution: {integrity: sha512-dfC0MIwFv9PCbZCUsuk9ISejFS3fKJODC0rZ/LjxxzE+OrCk+PMwPLsUnGU6O9/jbBnPACVz1BkACDf5LWgU5Q==}
 
-  inferno-vnode-flags@7.4.11:
-    resolution: {integrity: sha512-L7lslEQCq3IfwgT/b9zhuMf8fv6KXCNXXHZevk/WYxnqJsOWGDcKpJn0zkzXfvmj0otbB149iLUQVBq3oe2sfA==}
-
-  inferno@7.4.11:
-    resolution: {integrity: sha512-N+cs33ESWI8fdToCd98yMRYl7jkLnCkJskxov3FKKlaKOvk3PRlAttbhmUaYdWXlRvt2WeXi+J4MbzNj3V6G0w==}
+  inferno@8.2.3:
+    resolution: {integrity: sha512-LMeRlCe+RlXw8kHCLyOWRk2PsZ3Fo4jkESyAR1g4FfPT48N78i11YhTVXW2ukCx5MFjv+qrfa73JzJWU9sg4CQ==}
 
   inflector-js@1.0.1:
     resolution: {integrity: sha512-GYvCqr8mGKPoYH+08e76PV8JoIygIVC9Jxw2jA5QjBm/mK+mJqGdzEcs3L5nugnvP03yHajXpBRMRgHx0e770A==}
@@ -19177,15 +19186,15 @@ snapshots:
 
   '@devextreme/runtime@3.0.12':
     dependencies:
-      inferno: 7.4.11
-      inferno-create-element: 7.4.11
-      inferno-hydrate: 7.4.11
+      inferno: 8.2.3
+      inferno-create-element: 8.2.3
+      inferno-hydrate: 8.2.3
 
-  '@devextreme/runtime@3.0.13':
+  '@devextreme/runtime@3.0.13(patch_hash=daiheimdp4kulfvktqz7ktcx2m)':
     dependencies:
-      inferno: 7.4.11
-      inferno-create-element: 7.4.11
-      inferno-hydrate: 7.4.11
+      inferno: 8.2.3
+      inferno-create-element: 8.2.3
+      inferno-hydrate: 8.2.3
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -22994,7 +23003,7 @@ snapshots:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.6.3
+      semver: 7.6.2
       tsutils: 3.21.0(typescript@4.9.5)
     optionalDependencies:
       typescript: 4.9.5
@@ -25645,7 +25654,7 @@ snapshots:
       postcss-modules-scope: 3.2.0(postcss@8.4.38)
       postcss-modules-values: 4.0.0(postcss@8.4.38)
       postcss-value-parser: 4.2.0
-      semver: 7.6.3
+      semver: 7.6.0
     optionalDependencies:
       webpack: 5.90.3(@swc/core@1.4.17)(esbuild@0.20.1)
 
@@ -25658,7 +25667,7 @@ snapshots:
       postcss-modules-scope: 3.2.0(postcss@8.4.38)
       postcss-modules-values: 4.0.0(postcss@8.4.38)
       postcss-value-parser: 4.2.0
-      semver: 7.6.3
+      semver: 7.6.0
     optionalDependencies:
       webpack: 5.94.0(@swc/core@1.4.17(@swc/helpers@0.5.11))(esbuild@0.18.20)
 
@@ -29172,30 +29181,28 @@ snapshots:
 
   indent-string@5.0.0: {}
 
-  inferno-create-element@7.4.11:
+  inferno-create-element@8.2.3:
     dependencies:
-      inferno: 7.4.11
+      inferno: 8.2.3
 
-  inferno-hydrate@7.4.11:
+  inferno-hydrate@8.2.3:
     dependencies:
-      inferno: 7.4.11
+      inferno: 8.2.3
 
-  inferno-server@7.4.11:
+  inferno-server@8.2.3:
     dependencies:
-      inferno: 7.4.11
+      inferno: 8.2.3
 
-  inferno-shared@7.4.11: {}
-
-  inferno-test-utils@7.4.11:
+  inferno-test-utils@8.2.3:
     dependencies:
-      inferno: 7.4.11
+      inferno: 8.2.3
 
-  inferno-vnode-flags@7.4.11: {}
+  inferno-vnode-flags@8.2.3: {}
 
-  inferno@7.4.11:
+  inferno@8.2.3:
     dependencies:
-      inferno-shared: 7.4.11
-      inferno-vnode-flags: 7.4.11
+      csstype: 3.1.3
+      inferno-vnode-flags: 8.2.3
       opencollective-postinstall: 2.0.3
 
   inflector-js@1.0.1: {}

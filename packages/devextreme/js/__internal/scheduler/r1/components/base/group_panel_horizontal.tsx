@@ -70,6 +70,7 @@ export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelBasePro
           groupPanelItems.map((group) => <GroupPanelHorizontalRow
               key={group[0].key}
               groupItems={group}
+              // @ts-expect-error
               cellTemplate={ResourceCellTemplateComponent}
             />)
         }
