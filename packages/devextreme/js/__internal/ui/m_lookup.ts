@@ -208,7 +208,6 @@ const Lookup = DropDownList.inherit({
 
   _init() {
     this.callBase();
-
     this._initActions();
   },
 
@@ -578,7 +577,8 @@ const Lookup = DropDownList.inherit({
       },
     ));
 
-    this._popup.$overlayContent().attr('role', 'dialog');
+    const $overlayContent = this._popup.$overlayContent();
+    $overlayContent.attr('role', 'dialog');
 
     this._popup.on({
       showing: this._popupShowingHandler.bind(this),
@@ -588,11 +588,23 @@ const Lookup = DropDownList.inherit({
       contentReady: this._contentReadyHandler.bind(this),
     });
 
+    this._popupFocusOutHandler($overlayContent);
+
     if (this.option('_scrollToSelectedItemEnabled')) this._popup._$arrow.remove();
 
     this._setPopupContentId(this._popup.$content());
 
     this._contentReadyHandler();
+  },
+
+  _popupFocusOutHandler($overlayContent) {
+    $overlayContent.get(0).addEventListener('focusout', (e) => {
+      const newFocusTarget = e.relatedTarget;
+
+      if (!$overlayContent.get(0).contains(newFocusTarget)) {
+        this.option('opened', false);
+      }
+    });
   },
 
   _popupHidingHandler() {

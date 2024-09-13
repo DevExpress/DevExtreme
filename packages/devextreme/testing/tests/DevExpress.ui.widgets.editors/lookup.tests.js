@@ -4553,3 +4553,38 @@ QUnit.module('searchStartEvent', {
         }
     });
 });
+
+QUnit.module('accessibility', {
+    beforeEach: function() {
+        this.$lookup = $('#lookup');
+        const defaultOptions = {
+            items: ['1', '11', '111'],
+            value: '1',
+            dropDownOptions: {
+                hideOnOutsideClick: false, // Ensures the dropdown does not close when clicking outside
+            },
+            opened: true
+        };
+
+        const init = (options = {}) => {
+            this.lookup = this.$lookup
+                .dxLookup($.extend({}, defaultOptions, options))
+                .dxLookup('instance');
+        };
+
+        this.reinit = (options) => {
+            this.lookup.dispose();
+            init(options);
+        };
+
+        init();
+    },
+}, () => {
+    QUnit.test('dropdown should close when focusout event happens outside component', function(assert) {
+        assert.ok(this.lookup.option('opened'), 'popup is shown');
+
+        $(this.lookup._$field).trigger('dxclick');
+
+        assert.notOk(this.lookup.option('opened'), 'popup is hidden');
+    });
+});
