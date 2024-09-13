@@ -849,8 +849,7 @@ const Lookup = DropDownList.inherit({
       if (isSearchEnabled) {
         activeElement?.focus();
       } else {
-        const focusableElements = ':input, a, button, [tabindex]:not([tabindex="-1"])';
-        const $allFocusable = $(focusableElements);
+        const $allFocusable = $('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
         const currentIndex = $allFocusable.index(activeElement);
 
         const nextFocusableElement = $allFocusable.get(currentIndex + 1) as HTMLElement | undefined;
