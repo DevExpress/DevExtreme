@@ -99,7 +99,7 @@
     "exceljs": "4.4.0",
     "fancy-log": "2.0.0",
     "file-saver": "2.0.5",
-    "glob": "10.3.10",
+    "glob": "10.4.5",
     "globalize": "1.7.0",
     "gulp": "4.0.2",
     "gulp-autoprefixer": "8.0.0",
