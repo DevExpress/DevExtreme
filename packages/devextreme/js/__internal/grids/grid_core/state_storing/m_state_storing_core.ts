@@ -80,7 +80,7 @@ export class StateStoringController extends modules.ViewController {
       }
     };
 
-    eventsEngine.on(getWindow(), 'unload', this._windowUnloadHandler);
+    eventsEngine.on(getWindow(), 'visibilitychange', this._windowUnloadHandler);
 
     return this; // needed by pivotGrid mocks
   }
@@ -103,7 +103,7 @@ export class StateStoringController extends modules.ViewController {
 
   public dispose() {
     clearTimeout(this._savingTimeoutID);
-    eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
+    eventsEngine.off(getWindow(), 'visibilitychange', this._windowUnloadHandler);
   }
 
   private _loadState() {
