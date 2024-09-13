@@ -77,7 +77,7 @@ QUnit.module('Local storage', {
         assert.ok(!localStorage.getItem('TestNameSpace'), 'state not saved');
 
         // act
-        $(window).trigger('unload');
+        $(window).trigger('visibilitychange');
 
         // assert
         assert.equal(parseInt(JSON.parse(localStorage.getItem('TestNameSpace')).testSetting), 107, 'state saved');
