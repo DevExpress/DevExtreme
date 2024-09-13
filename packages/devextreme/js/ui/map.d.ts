@@ -210,7 +210,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @default { mapId: '', useAdvancedMarkers: true }
      * @public
      */
-    googleMapConfig?: {
+    providerConfig?: {
       /**
        * @docid
        * @default ""

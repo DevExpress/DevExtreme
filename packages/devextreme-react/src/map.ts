@@ -66,8 +66,8 @@ const Map = memo(
       const expectedChildren = useMemo(() => ({
         apiKey: { optionName: "apiKey", isCollectionItem: false },
         center: { optionName: "center", isCollectionItem: false },
-        googleMapConfig: { optionName: "googleMapConfig", isCollectionItem: false },
         marker: { optionName: "markers", isCollectionItem: true },
+        providerConfig: { optionName: "providerConfig", isCollectionItem: false },
         route: { optionName: "routes", isCollectionItem: true }
       }), []);
 
@@ -121,22 +121,6 @@ const Center: typeof _componentCenter & IElementDescriptor = Object.assign(_comp
 })
 
 // owners:
-// Map
-type IGoogleMapConfigProps = React.PropsWithChildren<{
-  mapId?: string;
-  useAdvancedMarkers?: boolean;
-}>
-const _componentGoogleMapConfig = memo(
-  (props: IGoogleMapConfigProps) => {
-    return React.createElement(NestedOption<IGoogleMapConfigProps>, { ...props });
-  }
-);
-
-const GoogleMapConfig: typeof _componentGoogleMapConfig & IElementDescriptor = Object.assign(_componentGoogleMapConfig, {
-  OptionName: "googleMapConfig",
-})
-
-// owners:
 // Marker
 // Route
 type ILocationProps = React.PropsWithChildren<{
@@ -180,6 +164,22 @@ const Marker: typeof _componentMarker & IElementDescriptor = Object.assign(_comp
     location: { optionName: "location", isCollectionItem: false },
     tooltip: { optionName: "tooltip", isCollectionItem: false }
   },
+})
+
+// owners:
+// Map
+type IProviderConfigProps = React.PropsWithChildren<{
+  mapId?: string;
+  useAdvancedMarkers?: boolean;
+}>
+const _componentProviderConfig = memo(
+  (props: IProviderConfigProps) => {
+    return React.createElement(NestedOption<IProviderConfigProps>, { ...props });
+  }
+);
+
+const ProviderConfig: typeof _componentProviderConfig & IElementDescriptor = Object.assign(_componentProviderConfig, {
+  OptionName: "providerConfig",
 })
 
 // owners:
@@ -233,12 +233,12 @@ export {
   IApiKeyProps,
   Center,
   ICenterProps,
-  GoogleMapConfig,
-  IGoogleMapConfigProps,
   Location,
   ILocationProps,
   Marker,
   IMarkerProps,
+  ProviderConfig,
+  IProviderConfigProps,
   Route,
   IRouteProps,
   Tooltip,

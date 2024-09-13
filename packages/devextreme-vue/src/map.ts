@@ -12,7 +12,6 @@ type AccessibleOptions = Pick<Properties,
   "disabled" |
   "elementAttr" |
   "focusStateEnabled" |
-  "googleMapConfig" |
   "height" |
   "hint" |
   "hoverStateEnabled" |
@@ -28,6 +27,7 @@ type AccessibleOptions = Pick<Properties,
   "onRouteAdded" |
   "onRouteRemoved" |
   "provider" |
+  "providerConfig" |
   "routes" |
   "rtlEnabled" |
   "tabIndex" |
@@ -51,7 +51,6 @@ const DxMap = createComponent({
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    googleMapConfig: Object,
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
@@ -67,6 +66,7 @@ const DxMap = createComponent({
     onRouteAdded: Function,
     onRouteRemoved: Function,
     provider: String,
+    providerConfig: Object,
     routes: Array,
     rtlEnabled: Boolean,
     tabIndex: Number,
@@ -87,7 +87,6 @@ const DxMap = createComponent({
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
-    "update:googleMapConfig": null,
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
@@ -103,6 +102,7 @@ const DxMap = createComponent({
     "update:onRouteAdded": null,
     "update:onRouteRemoved": null,
     "update:provider": null,
+    "update:providerConfig": null,
     "update:routes": null,
     "update:rtlEnabled": null,
     "update:tabIndex": null,
@@ -122,8 +122,8 @@ const DxMap = createComponent({
     (this as any).$_expectedChildren = {
       apiKey: { isCollectionItem: false, optionName: "apiKey" },
       center: { isCollectionItem: false, optionName: "center" },
-      googleMapConfig: { isCollectionItem: false, optionName: "googleMapConfig" },
       marker: { isCollectionItem: true, optionName: "markers" },
+      providerConfig: { isCollectionItem: false, optionName: "providerConfig" },
       route: { isCollectionItem: true, optionName: "routes" }
     };
   }
@@ -157,19 +157,6 @@ const DxCenter = createConfigurationComponent({
   }
 });
 (DxCenter as any).$_optionName = "center";
-const DxGoogleMapConfig = createConfigurationComponent({
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:mapId": null,
-    "update:useAdvancedMarkers": null,
-  },
-  props: {
-    mapId: String,
-    useAdvancedMarkers: Boolean
-  }
-});
-(DxGoogleMapConfig as any).$_optionName = "googleMapConfig";
 const DxLocation = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -205,6 +192,19 @@ const DxMarker = createConfigurationComponent({
   location: { isCollectionItem: false, optionName: "location" },
   tooltip: { isCollectionItem: false, optionName: "tooltip" }
 };
+const DxProviderConfig = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:mapId": null,
+    "update:useAdvancedMarkers": null,
+  },
+  props: {
+    mapId: String,
+    useAdvancedMarkers: Boolean
+  }
+});
+(DxProviderConfig as any).$_optionName = "providerConfig";
 const DxRoute = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -247,9 +247,9 @@ export {
   DxMap,
   DxApiKey,
   DxCenter,
-  DxGoogleMapConfig,
   DxLocation,
   DxMarker,
+  DxProviderConfig,
   DxRoute,
   DxTooltip
 };

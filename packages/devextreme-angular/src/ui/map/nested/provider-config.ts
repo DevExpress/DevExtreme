@@ -22,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-google-map-config',
+    selector: 'dxo-map-provider-config',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoGoogleMapConfigComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMapProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get mapId(): string {
         return this._getOption('mapId');
@@ -46,7 +46,7 @@ export class DxoGoogleMapConfigComponent extends NestedOption implements OnDestr
 
 
     protected get _optionPath() {
-        return 'googleMapConfig';
+        return 'providerConfig';
     }
 
 
@@ -71,10 +71,10 @@ export class DxoGoogleMapConfigComponent extends NestedOption implements OnDestr
 
 @NgModule({
   declarations: [
-    DxoGoogleMapConfigComponent
+    DxoMapProviderConfigComponent
   ],
   exports: [
-    DxoGoogleMapConfigComponent
+    DxoMapProviderConfigComponent
   ],
 })
-export class DxoGoogleMapConfigModule { }
+export class DxoMapProviderConfigModule { }
