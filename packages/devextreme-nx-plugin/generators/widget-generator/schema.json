@@ -1,0 +1,16 @@
+{
+  "cli": "nx",
+  "id": "test",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Widget name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["name"]
+}

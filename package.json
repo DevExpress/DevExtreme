@@ -59,7 +59,8 @@
     "tar-fs": "3.0.6",
     "ts-node": "10.9.2",
     "vue": "3.4.27",
-    "yargs": "17.7.2"
+    "yargs": "17.7.2",
+    "devextreme-nx-plugin": "workspace:*"
   },
   "pre-commit": [
     "lint-staged",
