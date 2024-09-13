@@ -43,7 +43,6 @@
                 "@devextreme/runtime",
                 "devexpress-gantt",
                 "devexpress-diagram",
-                "eslint-config-devextreme",
                 "rrule",
                 "sass-embedded",
                 "systemjs"

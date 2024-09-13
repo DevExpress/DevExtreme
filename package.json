@@ -66,7 +66,7 @@
     "lint-staged",
     "pre-commit"
   ],
-  "packageManager": "pnpm@9.1.2",
+  "packageManager": "pnpm@9.9.0",
   "pnpm": {
     "patchedDependencies": {
       "@devextreme/runtime@3.0.13": "patches/@devextreme__runtime@3.0.13.patch"
