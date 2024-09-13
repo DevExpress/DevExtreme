@@ -554,6 +554,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
       aria,
       hint,
       cssText,
+      classes,
       name,
       ...result
     } = props;
