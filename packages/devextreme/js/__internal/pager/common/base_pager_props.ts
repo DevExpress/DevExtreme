@@ -1,4 +1,4 @@
-import type { PagerDisplayMode } from '@js/common/grids';
+import type { PagerDisplayMode } from '@js/ui/pager';
 
 import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
@@ -21,7 +21,7 @@ export interface BasePagerProps extends BaseWidgetProps {
   pageSizes: (number | 'all')[];
   rtlEnabled?: boolean;
   showNavigationButtons?: boolean;
-  totalCount?: number;
+  itemCount?: number;
   label?: string;
   onKeyDown?: EventCallback<Event>;
 }
@@ -39,6 +39,6 @@ export const BasePagerDefaultProps: BasePagerProps = {
   showPageSizes: true,
   pageSizes: [5, 10],
   showNavigationButtons: false,
-  totalCount: 0,
+  itemCount: 0,
   label: messageLocalization.format('dxPager-ariaLabel'),
 };

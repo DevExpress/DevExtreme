@@ -70,6 +70,10 @@ import {
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from '../animation/position';
 
+import {
+  BasePagerOptions,
+} from '../ui/pager';
+
 /**
  * @docid
  * @hidden
@@ -2453,60 +2457,13 @@ export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'view
  * @public
  * @namespace DevExpress.common.grids
  */
-export type Pager = {
-  /**
-   * @docid GridBaseOptions.pager.allowedPageSizes
+export type Pager = BasePagerOptions & {
+    /**
+   * @docid
    * @default "auto"
    */
-  allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
-  /**
-   * @docid GridBaseOptions.pager.displayMode
-   * @default "adaptive"
-   */
-  displayMode?: PagerDisplayMode;
-  /**
-   * @docid GridBaseOptions.pager.infoText
-   * @default "Page {0} of {1} ({2} items)"
-   */
-  infoText?: string;
-  /**
-   * @docid GridBaseOptions.pager.showInfo
-   * @default false
-   */
-  showInfo?: boolean;
-  /**
-   * @docid GridBaseOptions.pager.showNavigationButtons
-   * @default false
-   */
-  showNavigationButtons?: boolean;
-  /**
-   * @docid GridBaseOptions.pager.showPageSizeSelector
-   * @default false
-   */
-  showPageSizeSelector?: boolean;
-  /**
-   * @docid GridBaseOptions.pager.visible
-   * @default "auto"
-   */
-  visible?: boolean | Mode;
-  /**
-   * @docid GridBaseOptions.pager.label
-   * @default "Page Navigation"
-   */
-  label?: string;
+    visible?: boolean | Mode;
 };
-
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
-export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
-
-/**
- * @public
- * @namespace DevExpress.common.grids
- */
-export type PagerPageSize = 'all' | 'auto';
 
 /**
  * @hidden

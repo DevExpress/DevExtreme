@@ -23,4 +23,14 @@ export class GridPagerWrapper extends ComponentWrapper {
     }
     super._optionChanged(args);
   }
+
+  protected getPageCount(): number {
+    const itemCount = this.option('itemCount') as number;
+    const pageSize = this.option('pageSize') as number;
+
+    if (pageSize && itemCount > 0) {
+      return Math.max(1, Math.ceil(itemCount / pageSize));
+    }
+    return 1;
+  }
 }

@@ -135,8 +135,6 @@ export {
     LoadPanel,
     NewRowPosition,
     Pager,
-    PagerDisplayMode,
-    PagerPageSize,
     RowDraggingTemplateData,
     SearchPanel,
     SelectedFilterOperation,
@@ -147,6 +145,11 @@ export {
     StateStoring,
     SummaryType,
 } from '../common/grids';
+
+export {
+  PagerDisplayMode,
+  PagerPageSize,
+} from './pager';
 
 export {
     AdaptiveDetailRowPreparingInfo,

@@ -155,7 +155,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       showInfo,
       showNavigationButtons,
       showPageSizes,
-      totalCount,
+      itemCount,
       visible,
       style,
 
@@ -185,7 +185,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       pageSizes,
       rtlEnabled,
       showNavigationButtons,
-      totalCount,
+      itemCount,
       onKeyDown,
       label,
       style,

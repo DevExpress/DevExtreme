@@ -41,7 +41,7 @@ export default class Pager extends GridPagerWrapper {
         'pageSizes',
         'rtlEnabled',
         'showNavigationButtons',
-        'totalCount',
+        'itemCount',
         'label',
         'onKeyDown',
         'pageSize',
