@@ -6,10 +6,10 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo } from '../../helpers/domUtils';
 
-fixture.disablePageReloads`ChatMessageBox`
+fixture.disablePageReloads`ChatMessageList`
   .page(url(__dirname, '../container.html'));
 
-test('Chat: messagebox', async (t) => {
+test('Chat: messagelist', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const chat = new Chat('#chat');
