@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "devextreme-compilation-cases",
-  "version": "24.1.5",
+  "version": "24.1.6",
   "author": "Developer Express Inc.",
   "scripts": {
     "test": "tsc --noEmit"
