@@ -17,6 +17,7 @@ export interface HeadersProps {
   columns: Column[];
 
   onReorder?: (fromIndex: number, toIndex: number) => void;
+  onAdd?: (fromIndex: number, toIndex: number) => void;
 }
 
 export class Headers extends Component<HeadersProps> {
@@ -27,6 +28,8 @@ export class Headers extends Component<HeadersProps> {
           itemOrientation='horizontal'
           dropFeedbackMode='indicate'
           onReorder={(e): void => this.props.onReorder?.(e.fromIndex, e.toIndex)}
+          onAdd={(e): void => this.props.onAdd?.(e.fromIndex, e.toIndex)}
+          group='cardview'
         >
           {this.props.columns.map((column) => (
             <HeaderItem

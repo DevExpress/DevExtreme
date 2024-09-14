@@ -1,6 +1,6 @@
 import type { ColumnBase } from '@js/common/grids';
 
-export interface Column extends Pick<Required<ColumnBase>, 'alignment' | 'dataType'> {
+export interface Column extends Pick<Required<ColumnBase>, 'alignment' | 'dataType' | 'visible'> {
   dataField?: string;
 
   name?: string;

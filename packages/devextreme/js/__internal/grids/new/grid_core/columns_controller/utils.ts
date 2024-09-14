@@ -9,6 +9,7 @@ const defaultColumnProperties: Column = {
     return data[this.dataField!];
   },
   alignment: 'left',
+  visible: true,
 };
 
 const defaultColumnPropertiesByDataType: Record<DataType, Exclude<ColumnProperties, string>> = {

@@ -4,6 +4,7 @@ import type { Subscribable } from '@ts/core/reactive';
 import { HeadersView } from '@ts/grids/new/card_view/headers/view';
 import type { InfernoNode } from 'inferno';
 
+import { ColumnsChooserView } from './columns_chooser/columns_chooser';
 import { ContentView } from './content_view/content_view';
 import { View } from './core/view';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
@@ -14,7 +15,7 @@ export class MainView extends View {
   public vdom: InfernoNode | Subscribable<InfernoNode>;
 
   public static dependencies = [
-    ContentView, PagerView, HeaderPanelView, HeadersView, FilterPanelView,
+    ContentView, PagerView, HeaderPanelView, HeadersView, FilterPanelView, ColumnsChooserView,
   ] as const;
 
   constructor(
@@ -23,6 +24,7 @@ export class MainView extends View {
     _headerPanel: HeaderPanelView,
     _headers: HeadersView,
     _filterPanel: FilterPanelView,
+    _columnsChooser: ColumnsChooserView,
   ) {
     super();
     const HeaderPanel = _headerPanel.asInferno();
@@ -30,6 +32,7 @@ export class MainView extends View {
     const Pager = _pager.asInferno();
     const Headers = _headers.asInferno();
     const FilterPanel = _filterPanel.asInferno();
+    const ColumnsChooser = _columnsChooser.asInferno();
 
     this.vdom = <>
       <HeaderPanel/>
@@ -37,6 +40,7 @@ export class MainView extends View {
       <Content/>
       <FilterPanel/>
       <Pager/>
+      <ColumnsChooser/>
     </>;
   }
 }

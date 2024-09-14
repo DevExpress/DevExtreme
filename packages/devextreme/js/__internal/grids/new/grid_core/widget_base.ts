@@ -6,7 +6,7 @@ import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive';
-import { ColumnsChooser } from '@ts/grids/new/grid_core/columns_chooser/columns_chooser';
+import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/columns_chooser';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { ColumnsDraggingController } from '@ts/grids/new/grid_core/columns_dragging/columns_dragging';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
@@ -35,7 +35,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
 
   private pagerView!: PagerView;
 
-  private columnsChooser!: ColumnsChooser;
+  private columnsChooser!: ColumnsChooserView;
 
   private headerPanelController!: HeaderPanelController;
 
@@ -52,7 +52,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(EditingController);
     this.diContext.register(PagerView);
     this.diContext.register(MainView);
-    this.diContext.register(ColumnsChooser);
+    this.diContext.register(ColumnsChooserView);
     this.diContext.register(ColumnsDraggingController);
     this.diContext.register(Search);
     this.diContext.register(ContentStatusView);
@@ -61,7 +61,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
   }
 
   protected _initDIContext(): void {
-    this.columnsChooser = this.diContext.get(ColumnsChooser);
+    this.columnsChooser = this.diContext.get(ColumnsChooserView);
     this.dataController = this.diContext.get(DataController);
     this.columnsController = this.diContext.get(ColumnsController);
     this.headerPanelController = this.diContext.get(HeaderPanelController);
