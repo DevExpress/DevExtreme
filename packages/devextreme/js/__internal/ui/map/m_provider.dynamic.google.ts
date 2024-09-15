@@ -351,8 +351,10 @@ const GoogleProvider = DynamicProvider.inherit({
   },
 
   _createIconTemplate(iconSrc: string) {
-    const $img = $(`<img src='${iconSrc}' alt='Marker icon' >`);
+    const $img = $('<img>');
 
+    $img.attr('src', iconSrc);
+    $img.attr('alt', 'Marker icon');
     $img.addClass(MAP_MARKER_CLASS);
 
     return $img[0];
