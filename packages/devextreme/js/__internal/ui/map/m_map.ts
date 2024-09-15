@@ -61,7 +61,7 @@ const Map = Widget.inherit({
         google: '',
         googleStatic: '',
       },
-      googleMapConfig: {
+      providerConfig: {
         mapId: '',
         useAdvancedMarkers: true,
       },
@@ -89,7 +89,7 @@ const Map = Widget.inherit({
   _setDeprecatedOptions() {
     this.callBase();
     extend(this._deprecatedOptions, {
-      'googleMapConfig.useAdvancedMarkers': { since: '24.2', message: 'Google deprecated the original map markers. Transition to advanced markers for future compatibility.' },
+      'providerConfig.useAdvancedMarkers': { since: '24.2', message: 'Google deprecated the original map markers. Transition to advanced markers for future compatibility.' },
     });
   },
 
@@ -250,10 +250,9 @@ const Map = Widget.inherit({
       case 'markerIconSrc':
         this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
         break;
-      case 'googleMapConfig':
+      case 'providerConfig':
         this._suppressAsyncAction = true;
         this._invalidate();
-
         break;
       case 'onReady':
       case 'onUpdated':

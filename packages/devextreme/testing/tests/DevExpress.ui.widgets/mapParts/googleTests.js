@@ -609,26 +609,106 @@ QUnit.test('controls', function(assert) {
     });
 });
 
-QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation warning', function(assert) {
+QUnit.test('providerConfig.useAdvancedMarkers using should raise a deprecation warning', function(assert) {
     sinon.spy(errorsLogger, 'log');
 
     try {
         $('#map').dxMap({
             provider: 'google',
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers: false,
             },
         });
         assert.deepEqual(errorsLogger.log.firstCall.args, [
             'W0001',
             'dxMap',
-            'googleMapConfig.useAdvancedMarkers',
+            'providerConfig.useAdvancedMarkers',
             '24.2',
             'Google deprecated the original map markers. Transition to advanced markers for future compatibility.'
         ], 'warning is raised with correct parameters');
     } finally {
         errorsLogger.log.restore();
     }
+});
+
+QUnit.test('should not throw an error if providerConfig is undefined', function(assert) {
+    const done = assert.async();
+
+    $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        providerConfig: undefined,
+        onReady: function() {
+            assert.ok(true, 'there was no exceptions');
+
+            done();
+        }
+    });
+});
+
+QUnit.test('marker icon can be defined using either markerIconSrc or marker.iconSrs options', function(assert) {
+    const done = assert.async();
+    const d = $.Deferred();
+
+    const markerUrl1 = 'http://example.com/1.png';
+    const markerUrl2 = 'http://example.com/2.png';
+
+    const markers = [
+        {
+            location: '40.537102, -73.990318',
+        },
+        {
+            location: '35.537102, -73.990318',
+            iconSrc: markerUrl2,
+        }
+    ];
+
+    const map = $('#map').dxMap({
+        provider: 'google',
+        markerIconSrc: markerUrl1,
+        onReady: function() {
+            d.resolve();
+        }
+    }).dxMap('instance');
+
+    d.done(function() {
+        map.addMarker(markers).done((markers) => {
+            assert.equal(markers[0].getIcon(), markerUrl1, 'first marker has icon from markerIconSrc option');
+            assert.equal(markers[1].getIcon(), markerUrl2, 'second marker has icon from marker.iconSrc option');
+
+            done();
+        });
+    });
+});
+
+QUnit.test('icon src should be passed to marker config if markerIconSrc was defined', function(assert) {
+    const done = assert.async();
+    const markerIconSrc = 'http://example.com/1.png';
+
+    $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        markerIconSrc,
+        onReady: function() {
+            assert.equal(window.google.markerOptions.icon, markerIconSrc, 'icon src was passed to marker config');
+
+            done();
+        }
+    }).dxMap('instance');
+});
+
+QUnit.test('icon should be undefined in marker config if markerIconSrc was not defined', function(assert) {
+    const done = assert.async();
+
+    $('#map').dxMap({
+        provider: 'google',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            assert.equal(window.google.markerOptions.icon, undefined, 'tooltip options specified');
+
+            done();
+        }
+    }).dxMap('instance');
 });
 
 [
@@ -648,7 +728,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -667,8 +747,6 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
             map.option('onUpdated', function() {
                 assert.equal(window.google.markerInstance, 3, 'markers changed');
                 assert.equal(window.google.markerRemoved, true, 'previous marker removed');
-                assert.equal(window.google.markerInstance, 3, 'markers changed');
-                assert.equal(window.google.markerRemoved, true, 'previous marker removed');
                 assert.equal(window.google.clickHandlerRemoved, true, 'previous marker handler removed');
 
                 done();
@@ -685,7 +763,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -693,6 +771,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
                 assert.equal(window.google.infoWindowOptionsSpecified, true, 'tooltip options specified');
                 assert.equal(window.google.infoWindowOptions.content, 'A', 'tooltip content specified');
                 assert.equal(window.google.openInfoWindowOptions.mapSpecified, true, 'tooltip opened with specified map');
+                assert.equal(window.google.openInfoWindowOptions.markerSpecified, true, 'tooltip opened with specified marker');
                 assert.equal(window.google.infoWindowOpened, 1, 'tooltip opened');
 
                 d.resolve();
@@ -728,7 +807,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         $('#map').dxMap({
             provider: 'google',
             markers: [marker],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -757,7 +836,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             markerIconSrc: markerUrl1,
@@ -769,8 +848,8 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const map = $map.dxMap('instance');
 
         d1.done(function() {
-            map.addMarker([$.extend({ iconSrc: markerUrl1, }, MARKERS[1]), MARKERS[2]]).done(function(instances) {
-                assert.equal(instances[0].getIcon(), markerUrl1, `${name} instance contains custom icon url`);
+            map.addMarker([$.extend({ iconSrc: markerUrl2, }, MARKERS[1]), MARKERS[2]]).done(function(instances) {
+                assert.equal(instances[0].getIcon(), markerUrl2, `${name} instance contains custom icon url`);
                 assert.equal(instances[1].getIcon(), markerUrl1, `${name} instance contains custom icon url`);
 
                 d2.resolve();
@@ -795,7 +874,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[5]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -827,7 +906,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[6]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -854,7 +933,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [marker],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -885,7 +964,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -914,7 +993,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers: false,
             },
             onReady: function() {
@@ -945,7 +1024,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             autoAdjust: true,
@@ -975,7 +1054,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             autoAdjust: false,
@@ -1004,7 +1083,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
 
         const $map = $('#map').dxMap({
             provider: 'google',
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -1031,7 +1110,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onReady: function() {
@@ -1057,7 +1136,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onMarkerAdded: function(args) {
@@ -1083,7 +1162,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             onMarkerRemoved: function(args) {
@@ -1114,7 +1193,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             autoAdjust: false,
@@ -1144,7 +1223,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             autoAdjust: false,
@@ -1182,7 +1261,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             autoAdjust: false,
@@ -1219,7 +1298,7 @@ QUnit.test('googleMapConfig.useAdvancedMarkers using should raise a deprecation 
         const $map = $('#map').dxMap({
             provider: 'google',
             markers: [MARKERS[0]],
-            googleMapConfig: {
+            providerConfig: {
                 useAdvancedMarkers,
             },
             autoAdjust: false,

@@ -194,7 +194,8 @@ const GoogleProvider = DynamicProvider.inherit({
     return new Promise((resolve) => {
       this._resolveLocation(this._option('center')).then((center) => {
         const disableDefaultUI = !this._option('controls');
-        const { mapId } = this._option('googleMapConfig');
+        const providerConfig = this._option('providerConfig');
+        const mapId = providerConfig?.mapId ?? '';
         this._map = new google.maps.Map(this._$container[0], {
           center,
           disableDefaultUI,
@@ -305,18 +306,21 @@ const GoogleProvider = DynamicProvider.inherit({
           }, options.htmlOffset),
         });
       } else {
-        const { useAdvancedMarkers } = this._option('googleMapConfig');
+        const providerConfig = this._option('providerConfig');
+        const useAdvancedMarkers = providerConfig?.useAdvancedMarkers ?? true;
+        const icon = options.iconSrc ?? this._option('markerIconSrc');
         if (useAdvancedMarkers) {
+          const content = icon ? this._createIconTemplate(icon) : undefined;
           marker = new google.maps.marker.AdvancedMarkerElement({
             position: location,
             map: this._map,
-            content: this._createIconTemplate(this._option('markerIconSrc')),
+            content,
           });
         } else {
           marker = new google.maps.Marker({
             position: location,
             map: this._map,
-            icon: options.iconSrc || this._option('markerIconSrc'),
+            icon,
           });
         }
       }
@@ -347,13 +351,11 @@ const GoogleProvider = DynamicProvider.inherit({
   },
 
   _createIconTemplate(iconSrc: string) {
-    const imgNode = document.createElement('img');
+    const $img = $(`<img src='${iconSrc}' alt='Marker icon' >`);
 
-    imgNode.src = iconSrc;
-    imgNode.alt = 'Marker icon';
-    imgNode.classList.add(MAP_MARKER_CLASS);
+    $img.addClass(MAP_MARKER_CLASS);
 
-    return imgNode;
+    return $img[0];
   },
 
   _renderTooltip(marker, options) {

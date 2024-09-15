@@ -277,7 +277,7 @@
                         google.markerOptions = {};
                         google.markerOptions.mapSpecified = options.map instanceof google.maps.Map;
                         google.markerOptions.position = options.position;
-                        google.markerOptions.icon = options.content.src;
+                        google.markerOptions.icon = options.content?.src;
                     }
 
                     this.getAnimation = function() {};
@@ -298,7 +298,7 @@
                     this.setDraggable = function() {};
                     this.setFlat = function() {};
                     this.getIcon = function() {
-                        return options.content.src;
+                        return options.content?.src;
                     };
                     this.setIcon = function() {};
                     this.setMap = function(map) {
