@@ -94,11 +94,11 @@ class TemplatesManager {
             mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
           );
         } else {
-/*          one(
+          /* one(
             element,
             DX_REMOVE_EVENT,
             mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
-          );*/
+          ); */
         }
         rendered();
         return element;
