@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageList from '__internal/ui/chat/chat_message_list';
+import MessageList from '__internal/ui/chat/chat_messagelist';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
     generateMessages,
@@ -9,14 +9,14 @@ import {
     MOCK_COMPANION_USER_ID,
     MOCK_CURRENT_USER_ID,
 } from './chat.tests.js';
-import MessageGroup from '__internal/ui/chat/chat_message_group';
+import MessageGroup from '__internal/ui/chat/chat_messagegroup';
 import localization from 'localization';
 
-const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
-const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
+const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
 
-const CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS = 'dx-chat-empty-message';
-const CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS = 'dx-chat-empty-prompt';
+const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
+const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 
 const SCROLLABLE_CLASS = 'dx-scrollable';
 
@@ -61,7 +61,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             } catch(e) {
                 assert.ok(false, `error: ${e.message}`);
             } finally {
-                const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+                const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
 
                 assert.strictEqual($bubbles.length, 3);
             }
@@ -80,7 +80,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.reinit({ items: [newMessage] });
 
-            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 1);
         });
@@ -94,7 +94,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [newMessage] });
 
-            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 1);
         });
@@ -112,7 +112,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [...items, newMessage] });
 
-            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = $(this.scrollable.content()).find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 27);
         });
@@ -121,7 +121,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             this.instance.option({ items: generateMessages(52) });
 
             const scrollableContent = this.getScrollable().content();
-            const $messageGroups = $(scrollableContent).find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = $(scrollableContent).find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 26);
         });
@@ -129,7 +129,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
     QUnit.module('MessageGroup integration', () => {
         QUnit.test('message group component should not be rendered if items is empty', function(assert) {
-            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 0);
         });
@@ -143,7 +143,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 ]
             });
 
-            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 3);
         });
@@ -157,7 +157,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 ]
             });
 
-            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 1);
         });
@@ -180,7 +180,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [...items, newMessage] });
 
-            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 4);
         });
@@ -203,7 +203,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [...items, newMessage] });
 
-            const $messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 3);
         });
@@ -219,7 +219,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [ newMessage ] });
 
-            const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+            const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
 
             assert.strictEqual($bubbles.length, 1);
         });
@@ -230,7 +230,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 currentUserId: 'MikeID',
             });
 
-            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`));
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
             assert.strictEqual(messageGroup.option('alignment'), 'start');
         });
@@ -241,7 +241,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 currentUserId: 'MikeID',
             });
 
-            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`));
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
             assert.strictEqual(messageGroup.option('alignment'), 'end');
         });
@@ -422,7 +422,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 };
 
                 this.scrollable.scrollToElement = ($item) => {
-                    const messageGroups = this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+                    const messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
                     const lastMessageGroup = messageGroups[messageGroups.length - 1];
 
                     assert.strictEqual($item, lastMessageGroup);
@@ -451,8 +451,8 @@ QUnit.module('MessageList', moduleConfig, () => {
 
                 this.reinit();
 
-                assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS}`).text(), localizedEmptyListMessageText, 'emptyListMessage');
-                assert.strictEqual(this.$element.find(`.${CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS}`).text(), localizedEmptyListPromptText, 'emptyListPrompt');
+                assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS}`).text(), localizedEmptyListMessageText, 'emptyListMessage');
+                assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS}`).text(), localizedEmptyListPromptText, 'emptyListPrompt');
             } finally {
                 localization.locale(defaultLocale);
             }

@@ -1,8 +1,8 @@
 import $ from 'jquery';
 
-import MessageBubble from '__internal/ui/chat/chat_message_bubble';
+import MessageBubble from '__internal/ui/chat/chat_bubble';
 
-const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
+const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -27,7 +27,7 @@ const moduleConfig = {
 QUnit.module('MessageBubble', moduleConfig, () => {
     QUnit.module('Classes', moduleConfig, () => {
         QUnit.test('root element should have correct class', function(assert) {
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGE_BUBBLE_CLASS), true);
+            assert.strictEqual(this.$element.hasClass(CHAT_BUBBLE_CLASS), true);
         });
     });
 });

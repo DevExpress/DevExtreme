@@ -1,33 +1,33 @@
-.dx-chat-message-bubble-container {
+.dx-chat-messagegroup-content {
   display: flex;
   flex-direction: column;
   max-width: 70%;
 }
 
-.dx-chat-message-bubble {
+.dx-chat-bubble {
   width: auto;
   word-break: break-word;
   white-space: break-spaces;
 }
 
-.dx-chat-message-group-alignment-start {
-  .dx-chat-message-bubble-container {
+.dx-chat-messagegroup-alignment-start {
+  .dx-chat-messagegroup-content {
     grid-column: 2;
     align-items: flex-start;
   }
 
-  .dx-chat-message-bubble {
+  .dx-chat-bubble {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
 }
 
-.dx-chat-message-group-alignment-end {
-  .dx-chat-message-bubble-container {
+.dx-chat-messagegroup-alignment-end {
+  .dx-chat-messagegroup-content {
     align-items: flex-end;
   }
 
-  .dx-chat-message-bubble {
+  .dx-chat-bubble {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }

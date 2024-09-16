@@ -11,7 +11,7 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../helpers/domUtils';
 
-const CHAT_AVATAR_SELECTOR = '.dx-chat-message-avatar';
+const AVATAR_SELECTOR = '.dx-avatar';
 
 fixture.disablePageReloads`ChatMessageGroup`
   .page(url(__dirname, '../container.html'));
@@ -21,7 +21,7 @@ test('Chat: messagegroup, avatar rendering', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Avatar has correct position.png', { element: '#chat' });
 
-  await setStyleAttribute(Selector(CHAT_AVATAR_SELECTOR), 'width: 64px; height: 64px');
+  await setStyleAttribute(Selector(AVATAR_SELECTOR), 'width: 64px; height: 64px');
   await testScreenshot(t, takeScreenshot, 'Avatar sizes do not affect indentation between bubbles.png', { element: '#chat' });
 
   await t

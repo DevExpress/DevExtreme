@@ -52,10 +52,21 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+                const chat = $("#button").dxChat({
+                    height: 600,
+                }).dxChat('instance');
+
+                chat.option({
+                    items: [
+                        {
+                            text: 'custom',
+                            author: {
+                                name: 'custom name',
+                                // avatarUrl: 'https://pyxis.nymag.com/v1/imgs/51b/28a/622789406b8850203e2637d657d5a0e0c3-avatar-rerelease.1x.rsquare.w1400.jpg',
+                            },
+                        }
+                    ],
+                })
             });
         </script>
     </div>

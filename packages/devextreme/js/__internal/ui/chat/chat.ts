@@ -10,9 +10,9 @@ import ChatHeader from './chat_header';
 import type {
   MessageSendEvent as MessageBoxMessageSendEvent,
   Properties as MessageBoxProperties,
-} from './chat_message_box';
-import MessageBox from './chat_message_box';
-import MessageList from './chat_message_list';
+} from './chat_messagebox';
+import MessageBox from './chat_messagebox';
+import MessageList from './chat_messagelist';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';

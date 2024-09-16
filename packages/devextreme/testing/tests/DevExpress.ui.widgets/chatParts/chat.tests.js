@@ -1,8 +1,8 @@
 import $ from 'jquery';
 
 import Chat from 'ui/chat';
-import MessageList from '__internal/ui/chat/chat_message_list';
-import MessageBox from '__internal/ui/chat/chat_message_box';
+import MessageList from '__internal/ui/chat/chat_messagelist';
+import MessageBox from '__internal/ui/chat/chat_messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
 import { isRenderer } from 'core/utils/type';
@@ -10,12 +10,12 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
-const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
-const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
-const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
-const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
-const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
-const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
+const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
+const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
+const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
+const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
+const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
+const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -58,10 +58,10 @@ const moduleConfig = {
             this.instance = new Chat($('#chat'), options);
             this.$element = $(this.instance.$element());
 
-            this.$textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+            this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-            this.$sendButton = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+            this.$sendButton = this.$element.find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
         };
 
         this.reinit = (options) => {
@@ -116,7 +116,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
     QUnit.module('MessageList integration', () => {
         QUnit.test('passed currentUserId should be equal generated chat.user.id', function(assert) {
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`));
+            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
 
             const expectedOptions = {
                 items: [],
@@ -138,7 +138,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 items: messages
             });
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`));
+            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
 
             const expectedOptions = {
                 items: messages,
@@ -155,7 +155,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
             this.instance.option({ user: { id: newUserID } });
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`));
+            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
 
             assert.deepEqual(messageList.option('currentUserId'), newUserID, 'currentUserId value is updated');
         });
@@ -165,7 +165,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
             this.instance.option('items', newItems);
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`));
+            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
 
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
         });
@@ -233,7 +233,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.$sendButton.trigger('dxclick');
 
-                const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+                const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
                 const bubble = $bubbles[$bubbles.length - 1];
 
                 assert.strictEqual($(bubble).text(), text);
@@ -312,7 +312,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 text: 'NEW MESSAGE',
             };
 
-            const getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGE_GROUP_CLASS}`);
+            const getMessageGroups = () => this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual(getMessageGroups().length, 0);
 
@@ -342,7 +342,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.instance.renderMessage(newMessage);
 
-                const $bubbles = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+                const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
 
                 assert.strictEqual($bubbles.length, 4, 'false');
                 assert.strictEqual($bubbles.last().text(), text ? text : '', 'text value is correct');
@@ -361,7 +361,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.reinit(options);
 
-                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGE_BOX_CLASS}`));
+                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
 
                 Object.entries(options).forEach(([key, value]) => {
                     assert.deepEqual(value, messageBox.option(key), `${key} value is correct`);
@@ -377,7 +377,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.instance.option(options);
 
-                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGE_BOX_CLASS}`));
+                const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
 
                 Object.entries(options).forEach(([key, value]) => {
                     assert.deepEqual(value, messageBox.option(key), `${key} value is correct`);
