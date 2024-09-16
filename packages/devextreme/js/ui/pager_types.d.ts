@@ -1,1 +1,6 @@
-export { PagerDisplayMode, PagerPageSize, BasePagerOptions } from './pager';
+export {
+  PagerDisplayMode,
+  PagerPageSize,
+  BasePagerOptions,
+  Properties,
+} from './pager';

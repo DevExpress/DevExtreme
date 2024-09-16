@@ -253,7 +253,7 @@ declare global {
 
     dxPager(): JQuery;
     dxPager(options: 'instance'): DevExpress.ui.dxPager;
-    dxPager(options: DevExpress.ui.dxPager.Properties): JQuery;
+    dxPager(options: DevExpress.ui.Properties): JQuery;
     dxPager(options: string): any;
     dxPager(options: string, ...params: any[]): any;
 
@@ -21734,34 +21734,11 @@ declare module DevExpress.ui {
   /**
    * [descr:dxPager]
    */
-  export class dxPager extends Widget<DevExpress.ui.dxPager.Properties> {
+  export class dxPager extends Widget<Properties> {
     /**
      * [descr:dxPager.getPageCount()]
      */
     getPageCount(): number;
-  }
-  module dxPager {
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface Properties
-      extends BasePagerOptions,
-        WidgetOptions<dxPager> {
-      /**
-       * [descr:Properties.pageIndex]
-       */
-      pageIndex?: number;
-
-      /**
-       * [descr:Properties.pageSize]
-       */
-      pageSize?: number;
-
-      /**
-       * [descr:Properties.itemCount]
-       */
-      itemCount?: number;
-    }
   }
   /**
    * [descr:dxPivotGrid]
@@ -30463,6 +30440,25 @@ declare module DevExpress.ui {
    * [descr:ui.notify(options,stack)]
    */
   export function notify(options: any, stack?: Stack): void;
+  /**
+   * [descr:Properties]
+   */
+  export interface Properties extends BasePagerOptions, WidgetOptions<dxPager> {
+    /**
+     * [descr:Properties.pageIndex]
+     */
+    pageIndex?: number;
+
+    /**
+     * [descr:Properties.pageSize]
+     */
+    pageSize?: number;
+
+    /**
+     * [descr:Properties.itemCount]
+     */
+    itemCount?: number;
+  }
   /**
    * [descr:ui.repaintFloatingActionButton()]
    */

@@ -72,6 +72,11 @@ export default class dxPager extends Widget<Properties> {
      getPageCount(): number;
 }
 
+/**
+ * @docid
+ * @namespace DevExpress.ui
+ * @public
+ */
 export interface Properties extends BasePagerOptions, WidgetOptions<dxPager> {
      /**
      * @docid
