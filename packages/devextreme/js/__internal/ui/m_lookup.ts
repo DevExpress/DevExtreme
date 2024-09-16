@@ -605,6 +605,7 @@ const Lookup = DropDownList.inherit({
 
       if (this.option('opened')) {
         if (!newTarget) {
+          this._isFocusOutTriggered = true;
           this.option('opened', false);
         }
       }
@@ -1022,7 +1023,6 @@ const Lookup = DropDownList.inherit({
         break;
       case 'searchEnabled':
         if (this._popup) {
-          this._removeSearch();
           this._renderSearch();
         }
         break;
