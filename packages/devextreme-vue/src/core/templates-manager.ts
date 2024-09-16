@@ -92,12 +92,13 @@ class TemplatesManager {
         if (hasOnlyText) {
           const removalListener = document.createElement(container.nodeName === 'TABLE' ? 'tbody' : 'span');
           removalListener.style.display = 'none';
-           container.appendChild(removalListener);
-           one(
-             removalListener,
-             DX_REMOVE_EVENT,
-             mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
-           );
+          container.appendChild(removalListener);
+
+          one(
+            removalListener,
+            DX_REMOVE_EVENT,
+            mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
+          );
         } else {
            one(
             element,

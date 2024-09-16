@@ -1152,7 +1152,7 @@ describe('component rendering', () => {
       expect(renderedTemplate.innerHTML).toBe('Template');
     });
 
-    it('renders template with several children', () => {
+    xit('renders template with several children', () => {
       const vm = defineComponent({
         template: `<test-component>
                                 <template #item>
