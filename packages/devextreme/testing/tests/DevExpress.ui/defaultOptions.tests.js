@@ -11,11 +11,11 @@ import { getNestedOptionValue } from 'core/options/utils';
 
 import ActionSheet from 'ui/action_sheet';
 import Accordion from 'ui/accordion';
+import Avatar from '__internal/ui/chat/chat_avatar';
 import Button from 'ui/button';
 import ColorBox from 'ui/color_box';
 import Chat from 'ui/chat';
 import ChatHeader from '__internal/ui/chat/chat_header';
-import ChatAvatar from '__internal/ui/chat/chat_avatar';
 import ChatMessageBox from '__internal/ui/chat/chat_messagebox';
 import ChatMessageBubble from '__internal/ui/chat/chat_messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/chat_messagegroup';
@@ -1351,7 +1351,7 @@ testComponentDefaults(Chat,
     }
 );
 
-testComponentDefaults(ChatAvatar,
+testComponentDefaults(Avatar,
     {},
     {
         name: '',

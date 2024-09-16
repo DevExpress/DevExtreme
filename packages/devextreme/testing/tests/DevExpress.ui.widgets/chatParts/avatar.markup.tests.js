@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import ChatAvatar from '__internal/ui/chat/chat_avatar';
+import Avatar from '__internal/ui/chat/chat_avatar';
 
 const AVATAR_CLASS = 'dx-avatar';
 const AVATAR_IMAGE_CLASS = 'dx-avatar-image';
@@ -12,7 +12,7 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         const init = (options = {}) => {
-            this.instance = new ChatAvatar($('#avatar'), options);
+            this.instance = new Avatar($('#avatar'), options);
             this.$element = $(this.instance.$element());
         };
 
