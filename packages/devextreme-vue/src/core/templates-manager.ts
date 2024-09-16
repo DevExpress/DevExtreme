@@ -79,20 +79,25 @@ class TemplatesManager {
 
         const element = mountedTemplate.$el as HTMLElement;
         container.removeChild(placeholder);
+
+        let hasOnlyText = true;
+
         while (placeholder.firstChild) {
+          hasOnlyText = hasOnlyText && placeholder.firstChild.nodeType !== 1;
           container.appendChild(placeholder.firstChild);
         }
+
         domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
 
-        if (element.nodeType === Node.TEXT_NODE) {
+        if (hasOnlyText) {
           const removalListener = document.createElement(container.nodeName === 'TABLE' ? 'tbody' : 'span');
           removalListener.style.display = 'none';
-          /* container.appendChild(removalListener);
+           container.appendChild(removalListener);
            one(
              removalListener,
              DX_REMOVE_EVENT,
              mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
-           );*/
+           );
         } else {
            one(
             element,
