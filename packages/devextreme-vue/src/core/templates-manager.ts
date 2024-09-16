@@ -94,13 +94,16 @@ class TemplatesManager {
           one(
             removalListener,
             DX_REMOVE_EVENT,
-            mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
+            () => {
+              mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate)();
+              removalListener.remove();
+            },
           );
         } else {
           one(
-              element,
-              DX_REMOVE_EVENT,
-              mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
+            element,
+            DX_REMOVE_EVENT,
+            mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
           );
         }
         rendered();
