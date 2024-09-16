@@ -52,8 +52,12 @@ class Avatar extends Widget<Properties> {
   }
 
   _renderInitials(): void {
-    this._renderInitialsElement();
-    this._updateInitials();
+    const { name } = this.option();
+
+    if (name) {
+      this._renderInitialsElement();
+      this._updateInitials();
+    }
   }
 
   _renderImageElement(): void {
