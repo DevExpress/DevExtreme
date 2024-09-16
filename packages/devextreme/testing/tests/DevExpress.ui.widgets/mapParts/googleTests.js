@@ -646,7 +646,7 @@ QUnit.test('should not throw an error if providerConfig is undefined', function(
     });
 });
 
-QUnit.test('marker icon can be defined using either markerIconSrc or marker.iconSrs options', function(assert) {
+QUnit.test('marker icon can be specified using either markerIconSrc or marker.iconSrc options', function(assert) {
     const done = assert.async();
     const d = $.Deferred();
 
@@ -681,7 +681,7 @@ QUnit.test('marker icon can be defined using either markerIconSrc or marker.icon
     });
 });
 
-QUnit.test('icon src should be passed to marker config if markerIconSrc was defined', function(assert) {
+QUnit.test('markerIconSrc src should be passed to marker config if markerIconSrc was defined', function(assert) {
     const done = assert.async();
     const markerIconSrc = 'http://example.com/1.png';
 
@@ -697,7 +697,7 @@ QUnit.test('icon src should be passed to marker config if markerIconSrc was defi
     }).dxMap('instance');
 });
 
-QUnit.test('icon should be undefined in marker config if markerIconSrc was not defined', function(assert) {
+QUnit.test('icon should be undefined in marker config if markerIconSrc and marker.iconSrc were both not specified', function(assert) {
     const done = assert.async();
 
     $('#map').dxMap({

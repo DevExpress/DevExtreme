@@ -308,7 +308,7 @@ const GoogleProvider = DynamicProvider.inherit({
       } else {
         const providerConfig = this._option('providerConfig');
         const useAdvancedMarkers = providerConfig?.useAdvancedMarkers ?? true;
-        const icon = options.iconSrc ?? this._option('markerIconSrc');
+        const icon = options.iconSrc || this._option('markerIconSrc');
         if (useAdvancedMarkers) {
           const content = icon ? this._createIconTemplate(icon) : undefined;
           marker = new google.maps.marker.AdvancedMarkerElement({
