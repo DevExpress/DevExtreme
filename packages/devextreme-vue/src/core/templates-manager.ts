@@ -88,17 +88,17 @@ class TemplatesManager {
           const removalListener = document.createElement(container.nodeName === 'TABLE' ? 'tbody' : 'span');
           removalListener.style.display = 'none';
           container.appendChild(removalListener);
-          one(
+         /* one(
             removalListener,
             DX_REMOVE_EVENT,
             mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
-          );
+          );*/
         } else {
-          /* one(
+           one(
             element,
             DX_REMOVE_EVENT,
             mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
-          ); */
+          );
         }
         rendered();
         return element;
