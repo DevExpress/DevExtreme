@@ -74,6 +74,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   private _childNodes: Node[] = [];
 
+  private shouldRestoreFocus = false;
+
   private readonly _optionsManager: OptionsManager;
 
   protected useRequestAnimationFrameFlag = false;
@@ -87,6 +89,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
     this._createWidget = this._createWidget.bind(this);
     this._setTemplateManagerHooks = this._setTemplateManagerHooks.bind(this);
+    this.onTemplatesRendered = this.onTemplatesRendered.bind(this);
 
     this._optionsManager = new OptionsManager();
   }
@@ -123,9 +126,19 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     if (this._instance) {
       const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
 
+      this.shouldRestoreFocus = !!this._element.contains(document.activeElement);
       this._childNodes?.forEach((child) => child.parentNode?.removeChild(child));
-      events.triggerHandler(this._element, DX_REMOVE_EVENT, dxRemoveArgs);
+
+      if (this._element) {
+        const preventFocusOut = (e: FocusEvent) => e.stopPropagation();
+
+        events.on(this._element, 'focusout', preventFocusOut);
+        events.triggerHandler(this._element, DX_REMOVE_EVENT, dxRemoveArgs);
+        events.off(this._element, 'focusout', preventFocusOut);
+      }
+
       this._instance.dispose();
+      this._instance = null;
     }
     this._optionsManager.dispose();
 
@@ -166,6 +179,13 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
     this._optionsManager.setInstance(this._instance, config, this.subscribableOptions, this.independentEvents);
     this._instance.on('optionChanged', this._optionsManager.onOptionChanged);
+  }
+
+  private onTemplatesRendered() {
+    if (this.shouldRestoreFocus && this._instance?.focus) {
+      this._instance.focus();
+      this.shouldRestoreFocus = false;
+    }
   }
 
   private _scheduleTemplatesUpdate() {
@@ -299,6 +319,7 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
         this.renderContent(),
         React.createElement(TemplateManager, {
           init: this._setTemplateManagerHooks,
+          onTemplatesRendered: this.onTemplatesRendered,
         }),
       ),
       this.isPortalComponent && this.renderPortal(),
