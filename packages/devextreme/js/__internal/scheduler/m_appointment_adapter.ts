@@ -147,7 +147,7 @@ class AppointmentAdapter {
 
   clone(options: any = undefined) {
     const result = new AppointmentAdapter(
-      deepExtendArraySafe({}, this.rawAppointment),
+      deepExtendArraySafe({}, this.rawAppointment, false, false, false, true),
       this.dataAccessors,
       this.timeZoneCalculator,
       options,
