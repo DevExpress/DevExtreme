@@ -604,7 +604,7 @@ const Lookup = DropDownList.inherit({
       const newTarget = event.relatedTarget;
 
       if (this.option('opened')) {
-        if (!newTarget) {
+        if (!newTarget && this.option('dropDownOptions.hideOnOutsideClick')) {
           this._isFocusOutTriggered = true;
           this.option('opened', false);
         }
