@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import Avatar from '__internal/ui/chat/chat_avatar';
+import Avatar from '__internal/ui/chat/avatar';
 
 const AVATAR_CLASS = 'dx-avatar';
 const AVATAR_IMAGE_CLASS = 'dx-avatar-image';

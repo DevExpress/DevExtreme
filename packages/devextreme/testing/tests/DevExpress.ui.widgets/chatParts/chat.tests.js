@@ -1,8 +1,8 @@
 import $ from 'jquery';
 
 import Chat from 'ui/chat';
-import MessageList from '__internal/ui/chat/chat_messagelist';
-import MessageBox from '__internal/ui/chat/chat_messagebox';
+import MessageList from '__internal/ui/chat/messagelist';
+import MessageBox from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
 import { isRenderer } from 'core/utils/type';

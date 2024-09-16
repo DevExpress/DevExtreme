@@ -7,8 +7,8 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import type { MessageGroupAlignment } from './chat_messagegroup';
-import MessageGroup from './chat_messagegroup';
+import type { MessageGroupAlignment } from './messagegroup';
+import MessageGroup from './messagegroup';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 

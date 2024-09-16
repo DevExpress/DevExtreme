@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageList from '__internal/ui/chat/chat_messagelist';
+import MessageList from '__internal/ui/chat/messagelist';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const SCROLLABLE_CLASS = 'dx-scrollable';

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageGroup from '__internal/ui/chat/chat_messagegroup';
+import MessageGroup from '__internal/ui/chat/messagegroup';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';

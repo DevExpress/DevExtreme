@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageBox from '__internal/ui/chat/chat_messagebox';
+import MessageBox from '__internal/ui/chat/messagebox';
 
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';

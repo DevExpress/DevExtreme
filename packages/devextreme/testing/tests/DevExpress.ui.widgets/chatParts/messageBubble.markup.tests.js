@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageBubble from '__internal/ui/chat/chat_messagebubble';
+import MessageBubble from '__internal/ui/chat/messagebubble';
 
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 

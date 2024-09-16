@@ -3,7 +3,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import MessageBox from '__internal/ui/chat/chat_messagebox';
+import MessageBox from '__internal/ui/chat/messagebox';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
 

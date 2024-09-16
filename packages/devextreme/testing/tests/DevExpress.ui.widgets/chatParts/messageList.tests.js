@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageList from '__internal/ui/chat/chat_messagelist';
+import MessageList from '__internal/ui/chat/messagelist';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
     generateMessages,
@@ -9,7 +9,7 @@ import {
     MOCK_COMPANION_USER_ID,
     MOCK_CURRENT_USER_ID,
 } from './chat.tests.js';
-import MessageGroup from '__internal/ui/chat/chat_messagegroup';
+import MessageGroup from '__internal/ui/chat/messagegroup';
 import localization from 'localization';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
