@@ -3,12 +3,12 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import MessageBox from '__internal/ui/chat/chat_message_box';
+import MessageBox from '__internal/ui/chat/messagebox';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
 
-const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
-const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -21,12 +21,12 @@ const moduleConfig = {
             this.instance = new MessageBox($('#messageBox'), options);
             this.$element = $(this.instance.$element());
 
-            this.$textArea = this.$element.find(`.${CHAT_MESSAGE_BOX_TEXTAREA_CLASS}`);
+            this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
             this.textArea = TextArea.getInstance(this.$textArea);
 
             this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-            this.$sendButton = this.$element.find(`.${CHAT_MESSAGE_BOX_BUTTON_CLASS}`);
+            this.$sendButton = this.$element.find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
             this.sendButton = Button.getInstance(this.$sendButton);
         };
 

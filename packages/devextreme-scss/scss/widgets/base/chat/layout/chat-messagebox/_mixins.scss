@@ -5,19 +5,19 @@
   $textarea-border-radius,
   $button-gap
 ) {
-  .dx-chat-message-box {
+  .dx-chat-messagebox {
     padding: $padding;
     border-top-color: $border-color;
     gap: $gap;
   }
 
-  .dx-chat-message-box-text-area {
+  .dx-chat-messagebox-textarea {
     &.dx-textarea.dx-texteditor {
       border-radius: $textarea-border-radius;
     }
   }
 
-  .dx-chat-message-box-button {
+  .dx-chat-messagebox-button {
     margin-bottom: $button-gap;
   }
 }

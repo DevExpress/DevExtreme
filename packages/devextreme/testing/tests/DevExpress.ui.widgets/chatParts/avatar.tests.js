@@ -1,9 +1,9 @@
 import $ from 'jquery';
 
-import ChatAvatar from '__internal/ui/chat/chat_avatar';
+import ChatAvatar from '__internal/ui/chat/avatar';
 
-const CHAT_MESSAGE_AVATAR_IMAGE_CLASS = 'dx-chat-message-avatar-image';
-const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
+const AVATAR_IMAGE_CLASS = 'dx-avatar-image';
+const AVATAR_INITIALS_CLASS = 'dx-avatar-initials';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -73,7 +73,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
                 url: 'url',
             });
 
-            const $initials = this.$element.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
+            const $initials = this.$element.find(`.${AVATAR_INITIALS_CLASS}`);
 
             assert.strictEqual($initials.length, 0);
         });
@@ -86,7 +86,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
 
             this.instance.option({ url: '' });
 
-            const $initials = this.$element.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
+            const $initials = this.$element.find(`.${AVATAR_INITIALS_CLASS}`);
 
             assert.strictEqual($initials.length, 1);
         });
@@ -98,7 +98,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
 
             this.instance.option({ url: 'url' });
 
-            const $initials = this.$element.find(`.${CHAT_MESSAGE_AVATAR_INITIALS_CLASS}`);
+            const $initials = this.$element.find(`.${AVATAR_INITIALS_CLASS}`);
 
             assert.strictEqual($initials.length, 0);
         });
@@ -106,7 +106,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
 
     QUnit.module('Image rendering', () => {
         QUnit.test('img element should not be rendered if url is empty', function(assert) {
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.length, 0);
         });
@@ -119,7 +119,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
 
             this.instance.option({ url: '' });
 
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.length, 0);
         });
@@ -130,7 +130,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
                 url: 'url',
             });
 
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.attr('alt'), 'User name');
         });
@@ -142,7 +142,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             });
             this.instance.option({ name: 'New name' });
 
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.attr('alt'), 'New name');
         });
@@ -153,7 +153,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
                 url: 'url',
             });
 
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.attr('alt'), 'Avatar');
         });
@@ -161,7 +161,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
         QUnit.test('img element should have correct src attribute', function(assert) {
             this.reinit({ url: 'url' });
 
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.attr('src'), 'url');
         });
@@ -170,7 +170,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             this.reinit({ url: 'url' });
             this.instance.option({ url: 'New url' });
 
-            const $img = this.$element.find(`.${CHAT_MESSAGE_AVATAR_IMAGE_CLASS}`);
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
 
             assert.strictEqual($img.attr('src'), 'New url');
         });

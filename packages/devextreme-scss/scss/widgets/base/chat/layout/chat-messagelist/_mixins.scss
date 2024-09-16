@@ -1,7 +1,7 @@
 @use "sass:math";
 
 @mixin chat-messagelist($padding) {
-  .dx-chat-message-list {
+  .dx-chat-messagelist {
     .dx-scrollable-content {
       padding: $padding;
     }
@@ -20,12 +20,12 @@
   $messagelist-empty-prompt-font-size,
   $messagelist-empty-prompt-color,
 ) {
-  .dx-chat-message-list-empty {
-    .dx-chat-empty-view {
+  .dx-chat-messagelist-empty {
+    .dx-chat-messagelist-empty-view {
       row-gap: $messagelist-empty-row-gap;
     }
 
-    .dx-chat-empty-image {
+    .dx-chat-messagelist-empty-image {
       color: $messagelist-empty-icon-color;
       background-color: $messagelist-empty-icon-background-color;
       padding: math.div($messagelist-empty-icon-box-size - $messagelist-empty-icon-size, 2);
@@ -36,12 +36,12 @@
       }
     }
 
-    .dx-chat-empty-message {
+    .dx-chat-messagelist-empty-message {
       font-size: $messagelist-empty-message-font-size;
       color: $messagelist-empty-message-color;
     }
 
-    .dx-chat-empty-prompt {
+    .dx-chat-messagelist-empty-prompt {
       font-size: $messagelist-empty-prompt-font-size;
       color: $messagelist-empty-prompt-color;
     }

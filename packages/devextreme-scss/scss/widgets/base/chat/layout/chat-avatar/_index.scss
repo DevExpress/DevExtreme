@@ -1,4 +1,4 @@
-.dx-chat-message-avatar {
+.dx-avatar {
   grid-row: 2 / auto;
   display: flex;
   align-items: center;
@@ -7,7 +7,7 @@
   overflow: clip;
 }
 
-.dx-chat-message-avatar-image {
+.dx-avatar-image {
   height: 100%;
   width: 100%;
   object-fit: cover;

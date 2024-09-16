@@ -11,15 +11,15 @@ import { getNestedOptionValue } from 'core/options/utils';
 
 import ActionSheet from 'ui/action_sheet';
 import Accordion from 'ui/accordion';
+import Avatar from '__internal/ui/chat/avatar';
 import Button from 'ui/button';
 import ColorBox from 'ui/color_box';
 import Chat from 'ui/chat';
-import ChatHeader from '__internal/ui/chat/chat_header';
-import ChatAvatar from '__internal/ui/chat/chat_avatar';
-import ChatMessageBox from '__internal/ui/chat/chat_message_box';
-import ChatMessageBubble from '__internal/ui/chat/chat_message_bubble';
-import ChatMessageGroup from '__internal/ui/chat/chat_message_group';
-import ChatMessageList from '__internal/ui/chat/chat_message_list';
+import ChatHeader from '__internal/ui/chat/header';
+import ChatMessageBox from '__internal/ui/chat/messagebox';
+import ChatMessageBubble from '__internal/ui/chat/messagebubble';
+import ChatMessageGroup from '__internal/ui/chat/messagegroup';
+import ChatMessageList from '__internal/ui/chat/messagelist';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -1351,7 +1351,7 @@ testComponentDefaults(Chat,
     }
 );
 
-testComponentDefaults(ChatAvatar,
+testComponentDefaults(Avatar,
     {},
     {
         name: '',

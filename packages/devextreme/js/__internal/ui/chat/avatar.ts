@@ -5,9 +5,9 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
-const CHAT_MESSAGE_AVATAR_INITIALS_CLASS = 'dx-chat-message-avatar-initials';
-const CHAT_MESSAGE_AVATAR_IMAGE_CLASS = 'dx-chat-message-avatar-image';
+const AVATAR_CLASS = 'dx-avatar';
+const AVATAR_INITIALS_CLASS = 'dx-avatar-initials';
+const AVATAR_IMAGE_CLASS = 'dx-avatar-image';
 
 export interface Properties extends WidgetOptions<Avatar> {
   name?: string;
@@ -26,7 +26,7 @@ class Avatar extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    $(this.element()).addClass(CHAT_MESSAGE_AVATAR_CLASS);
+    $(this.element()).addClass(AVATAR_CLASS);
 
     super._initMarkup();
 
@@ -62,13 +62,13 @@ class Avatar extends Widget<Properties> {
 
   _renderImageElement(): void {
     this._$content = $('<img>')
-      .addClass(CHAT_MESSAGE_AVATAR_IMAGE_CLASS)
+      .addClass(AVATAR_IMAGE_CLASS)
       .appendTo(this.element());
   }
 
   _renderInitialsElement(): void {
     this._$content = $('<div>')
-      .addClass(CHAT_MESSAGE_AVATAR_INITIALS_CLASS)
+      .addClass(AVATAR_INITIALS_CLASS)
       .appendTo(this.element());
   }
 
