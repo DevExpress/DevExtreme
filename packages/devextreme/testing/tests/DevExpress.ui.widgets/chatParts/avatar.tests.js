@@ -40,25 +40,26 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
         QUnit.test('should be rendered with correct initials according passed name option value', function(assert) {
             this.reinit({ name: 'User name' });
 
-            assert.strictEqual(this.$element.text(), 'U');
+            assert.strictEqual(this.$element.text(), 'UN');
         });
 
         QUnit.test('name option should be updatable at runtime', function(assert) {
             this.instance.option('name', 'New Value');
 
-            assert.strictEqual(this.$element.text(), 'N');
+            assert.strictEqual(this.$element.text(), 'NV');
         });
 
         [
+            { name: 'onewordname', expectedInitials: 'O' },
+            { name: 'Three word name', expectedInitials: 'TW' },
             { name: 888, expectedInitials: '8' },
             { name: undefined, expectedInitials: '' },
             { name: null, expectedInitials: '' },
-            // TODO: consider scenarios
-            // { name: ' New Name', expectedInitials: 'N' },
-            // { name: NaN, expectedInitials: '' },
-            // { name: Infinity, expectedInitials: '' },
-            // { name: -Infinity, expectedInitials: '' },
-            // { name: { firstName: 'name' }, expectedInitials: '' }
+            { name: ' New Value', expectedInitials: 'NV' },
+            { name: NaN, expectedInitials: '' },
+            { name: Infinity, expectedInitials: '' },
+            { name: -Infinity, expectedInitials: '' },
+            { name: { firstName: 'name' }, expectedInitials: '' }
         ].forEach(({ name, expectedInitials }) => {
             QUnit.test(`name option is ${name}`, function(assert) {
                 this.reinit({ name });
