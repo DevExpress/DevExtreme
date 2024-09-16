@@ -80,19 +80,16 @@ class TemplatesManager {
         const element = mountedTemplate.$el as HTMLElement;
         container.removeChild(placeholder);
 
-        let hasOnlyText = true;
-
         while (placeholder.firstChild) {
-          hasOnlyText = hasOnlyText && placeholder.firstChild.nodeType !== 1;
           container.appendChild(placeholder.firstChild);
         }
 
         domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
 
-        if (hasOnlyText) {
+        if (element.nodeType === Node.TEXT_NODE) {
           const removalListener = document.createElement(container.nodeName === 'TABLE' ? 'tbody' : 'span');
           removalListener.style.display = 'none';
-          container.appendChild(removalListener);
+          container.insertBefore(removalListener, container.firstChild);
 
           one(
             removalListener,
@@ -100,10 +97,10 @@ class TemplatesManager {
             mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
           );
         } else {
-           one(
-            element,
-            DX_REMOVE_EVENT,
-            mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
+          one(
+              element,
+              DX_REMOVE_EVENT,
+              mountedTemplate.$.appContext.app.unmount.bind(mountedTemplate),
           );
         }
         rendered();
