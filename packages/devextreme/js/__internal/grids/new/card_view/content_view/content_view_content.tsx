@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import { computed } from '@ts/core/reactive';
+import { computed } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { ContentViewContent as BaseContentViewContent } from '@ts/grids/new/grid_core/content_view/content_view_content';

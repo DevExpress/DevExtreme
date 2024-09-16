@@ -6,7 +6,7 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable max-classes-per-file */
 
-import { state, type Subscribable } from '@ts/core/reactive';
+import { state, type Subscribable } from '@ts/core/reactive/index';
 import { Component } from 'inferno';
 
 export abstract class View<TState> extends Component<{}, TState> {

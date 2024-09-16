@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable spellcheck/spell-checker */
-import type { Subscribable } from '@ts/core/reactive';
-import { computed, state } from '@ts/core/reactive';
+import type { Subscribable } from '@ts/core/reactive/index';
+import { computed, state } from '@ts/core/reactive/index';
 
 import { HeaderPanelController } from '../header_panel/controller';
 import type { PredefinedToolbarItem } from '../header_panel/types';

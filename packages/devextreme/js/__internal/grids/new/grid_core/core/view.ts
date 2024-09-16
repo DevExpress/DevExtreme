@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
-import type { Subscribable } from '@ts/core/reactive';
-import { toSubscribable } from '@ts/core/reactive';
+import type { Subscribable } from '@ts/core/reactive/index';
+import { toSubscribable } from '@ts/core/reactive/index';
 import type { Subscription } from '@ts/core/reactive/subscription';
 import type { InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';

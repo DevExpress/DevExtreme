@@ -8,7 +8,7 @@ import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
-import type { Subscription } from '@ts/core/reactive';
+import type { Subscription } from '@ts/core/reactive/index';
 import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/columns_chooser';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';

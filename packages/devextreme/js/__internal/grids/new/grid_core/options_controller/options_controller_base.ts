@@ -6,8 +6,8 @@ import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
 import type {
   Gettable, Observable, Subscribable, Updatable,
-} from '@ts/core/reactive';
-import { computed, state } from '@ts/core/reactive';
+} from '@ts/core/reactive/index';
+import { computed, state } from '@ts/core/reactive/index';
 
 import { TemplateWrapper } from '../inferno_wrappers/template_wrapper';
 

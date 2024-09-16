@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import { computed, state } from '@ts/core/reactive';
+import { computed, state } from '@ts/core/reactive/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { View } from '../core/view';

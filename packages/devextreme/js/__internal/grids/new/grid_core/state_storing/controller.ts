@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Gettable, Updatable } from '@ts/core/reactive';
+import type { Gettable, Updatable } from '@ts/core/reactive/index';
 
 type State = Record<string, unknown>;
 

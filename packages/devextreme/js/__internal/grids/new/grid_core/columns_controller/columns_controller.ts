@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { Gettable, Subscribable, Updatable } from '@ts/core/reactive';
-import { computed, iif } from '@ts/core/reactive';
+import type { Gettable, Subscribable, Updatable } from '@ts/core/reactive/index';
+import { computed, iif } from '@ts/core/reactive/index';
 
 import { DataController } from '../data_controller/data_controller';
 import { OptionsController } from '../options_controller/options_controller';

@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
-import { computed } from '@ts/core/reactive';
+import { computed } from '@ts/core/reactive/index';
 import { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter/m_filter_panel';
 import { Component, createRef } from 'inferno';
 

@@ -4,10 +4,10 @@
 import type { DataSourceLike } from '@js/data/data_source';
 import DataSource from '@js/data/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import type { Subscribable } from '@ts/core/reactive';
+import type { Subscribable } from '@ts/core/reactive/index';
 import {
   computed, effect, state,
-} from '@ts/core/reactive';
+} from '@ts/core/reactive/index';
 
 // import { EditingController } from '../editing/controller';
 // import type { Change } from '../editing/types';

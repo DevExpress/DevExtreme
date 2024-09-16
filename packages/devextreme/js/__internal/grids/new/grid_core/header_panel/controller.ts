@@ -4,8 +4,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable spellcheck/spell-checker */
 import { isDefined } from '@js/core/utils/type';
-import type { MaybeSubscribable } from '@ts/core/reactive';
-import { computed, state, toSubscribable } from '@ts/core/reactive';
+import type { MaybeSubscribable } from '@ts/core/reactive/index';
+import { computed, state, toSubscribable } from '@ts/core/reactive/index';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';

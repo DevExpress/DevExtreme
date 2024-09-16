@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
-import { computed, state } from '@ts/core/reactive';
+import { computed, state } from '@ts/core/reactive/index';
 import { ContentStatusView } from '@ts/grids/new/grid_core/content_view/content_status_view';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { createRef } from 'inferno';
