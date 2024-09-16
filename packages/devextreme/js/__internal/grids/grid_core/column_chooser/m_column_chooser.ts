@@ -7,6 +7,7 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
 // @ts-expect-error

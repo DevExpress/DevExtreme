@@ -60,6 +60,9 @@ jobs:
     - name: Jest tests
       run: pnpx nx test-jest devextreme
 
+    - name: Jest tests internal
+      run: pnpx nx jest-internal devextreme
+
   notify:
     runs-on: devextreme-shr2
     name: Send notifications

@@ -17,6 +17,14 @@ export class HeadersView extends View {
     [this.columnsController.visibleColumns],
   );
 
+  public static dependencies = [ColumnsController] as const;
+
+  constructor(
+    private readonly columnsController: ColumnsController,
+  ) {
+    super();
+  }
+
   public onReorder(visibleFromIndex: number, visibleToIndex: number): void {
     const cs = this.columnsController.columns.unreactive_get();
     const vcs = this.columnsController.visibleColumns.unreactive_get();
@@ -33,7 +41,6 @@ export class HeadersView extends View {
   }
 
   public onAdd(nonVisibleFromIndex: number, visibleToIndex: number): void {
-    debugger;
     const cs = this.columnsController.columns.unreactive_get();
     const vcs = this.columnsController.visibleColumns.unreactive_get();
     const nvcs = this.columnsController.nonVisibleColumns.unreactive_get();
@@ -47,13 +54,5 @@ export class HeadersView extends View {
       newColumns.splice(toIndex, 0, { ...column, visible: true });
       return newColumns;
     });
-  }
-
-  public static dependencies = [ColumnsController] as const;
-
-  constructor(
-    private readonly columnsController: ColumnsController,
-  ) {
-    super();
   }
 }

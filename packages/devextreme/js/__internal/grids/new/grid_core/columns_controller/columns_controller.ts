@@ -16,6 +16,7 @@ export class ColumnsController {
         return [];
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return Object.keys(items[0] as any);
     },
     [this.dataController.items],

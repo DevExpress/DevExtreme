@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import registerComponent from '@js/core/component_registrator';
 import { ContentViewContent as ContentViewContentBase } from '@ts/grids/new/grid_core/content_view/content_view_content';
 import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_core/options_controller/options_controller';

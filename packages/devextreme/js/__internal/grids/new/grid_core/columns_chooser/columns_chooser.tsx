@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { computed, state } from '@ts/core/reactive';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -18,7 +19,7 @@ export class ColumnsChooserView extends View {
   );
 
   public vdom = computed(
-    (visible, items) => (
+    (visible, items) => visible && (
       <Popup
         visible={visible}
         shading={false}

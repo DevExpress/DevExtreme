@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
 
-import { isFunction } from '@js/core/utils/type';
-
 import { type Subscription, SubscriptionBag } from './subscription';
 import type {
   Callback, Gettable, Subscribable, Updatable,

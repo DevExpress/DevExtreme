@@ -16,6 +16,7 @@ import { addShadowDomStyles } from '@js/core/utils/shadow_dom';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { resize as resizeEvent, visibility as visibilityEvents } from '@js/events/short';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 
 import { Component } from './component';

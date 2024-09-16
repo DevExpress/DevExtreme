@@ -110,8 +110,8 @@ export function iif<T>(
   return obs;
 }
 
-export function combine<T>(
-  obj: MapMaybeSubscribable<T>,
-): Subscribable<T> & Gettable<T> {
-  throw new Error('not implemented');
-}
+// export function combine<T>(
+//   obj: MapMaybeSubscribable<T>,
+// ): Subscribable<T> & Gettable<T> {
+//   throw new Error('not implemented');
+// }

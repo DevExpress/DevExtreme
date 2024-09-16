@@ -292,5 +292,6 @@ exports[`common initial render should be successfull 1`] = `
       </div>
     </div>
   </div>
+  
 </div>
 `;

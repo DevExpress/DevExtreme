@@ -1,8 +1,10 @@
 import $ from '@js/core/renderer';
 import type { DataRow } from '@ts/grids/new/grid_core/columns_controller/types';
 import { PureComponent } from '@ts/grids/new/grid_core/core/pure_component';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type ComponentType, type InfernoNode, render } from 'inferno';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { FieldProps } from './field';
 import { Field } from './field';
 
@@ -16,6 +18,7 @@ export interface CardProps {
 
   onChange?: (columnName: string, value: unknown) => void;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fieldTemplate?: any;
 }
 
@@ -27,7 +30,8 @@ export class Card extends PureComponent<CardProps> {
         {this.props.row.cells.map((cell, index) => (
           <FieldTemplate
             index={index}
-            defaultTemplate={{ render(model, index, container) { render(<Field {...model} />, $(container).get(0)); } }}
+            // eslint-disable-next-line max-len, @typescript-eslint/explicit-function-return-type
+            defaultTemplate={{ render(model, _index, container) { render(<Field {...model} />, $(container).get(0)); } }}
             alignment={cell.column.alignment}
             title={cell.column.name}
             value={cell.value}

@@ -3,6 +3,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
+
 import { callModuleItemsMethod } from './m_modules';
 
 const GRID_CORE_ROW_SELECTOR = '.dx-row';
