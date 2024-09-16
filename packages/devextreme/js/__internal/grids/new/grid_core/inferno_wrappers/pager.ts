@@ -17,6 +17,7 @@ interface PagerProps {
   pageCount?: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Pager extends InfernoWrapper<PagerProps, any> {
   // @ts-expect-error
   protected getComponentFabric(): typeof PagerWidget {

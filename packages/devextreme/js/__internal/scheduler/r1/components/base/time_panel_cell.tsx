@@ -94,6 +94,7 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
               <div>
                 {text}
               </div>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             ) as any
         }
       </CellBase>

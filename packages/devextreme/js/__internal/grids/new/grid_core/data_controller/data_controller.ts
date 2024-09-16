@@ -9,8 +9,8 @@ import {
   computed, effect, state,
 } from '@ts/core/reactive';
 
-import { EditingController } from '../editing/controller';
-import type { Change } from '../editing/types';
+// import { EditingController } from '../editing/controller';
+// import type { Change } from '../editing/types';
 import { OptionsController } from '../options_controller/options_controller';
 
 export function normalizeDataSource(
@@ -61,6 +61,7 @@ export class DataController {
 
   public readonly isLoading: Subscribable<boolean> = this._isLoading;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public readonly filter = state<any>(undefined);
 
   // public itemsWithChanges = computed(

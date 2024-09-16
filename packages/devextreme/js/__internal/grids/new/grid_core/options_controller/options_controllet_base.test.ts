@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { Component } from '@js/core/component';
 
 import { OptionsController } from './options_controller_base';

@@ -15,8 +15,8 @@ import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
-import treeListCore from './m_core';
 import { callModuleItemsMethod } from '../grid_core/m_modules';
+import treeListCore from './m_core';
 
 const TREELIST_CLASS = 'dx-treelist';
 

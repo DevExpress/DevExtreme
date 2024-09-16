@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Component } from 'inferno';
 
 import { OptionsController } from '../options_controller/options_controller';
@@ -23,7 +24,7 @@ export class MyView extends Component<{}, State> {
     });
   }
 
-  render() {
+  public render(): JSX.Element {
     return <div>{this.state?.count}</div>;
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable spellcheck/spell-checker */
 import $ from '@js/core/renderer';
 import { render } from 'inferno';

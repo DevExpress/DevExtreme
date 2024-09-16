@@ -115,6 +115,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                             firstDayOfMonth,
                             isSelected,
                             isFocused,
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
                           })) as any
                         }
                       </Row>

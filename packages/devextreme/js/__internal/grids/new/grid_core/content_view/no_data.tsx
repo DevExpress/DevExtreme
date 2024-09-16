@@ -9,7 +9,7 @@ export const CLASSES = {
 };
 
 export class NoData extends Component<NoDataProperties> {
-  render(): InfernoNode {
+  public render(): InfernoNode {
     return <span className={CLASSES.noData}>
       { this.props.text ?? 'No Data'}
     </span>;

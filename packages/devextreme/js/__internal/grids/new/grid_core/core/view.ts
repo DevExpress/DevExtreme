@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
 import type { Subscribable } from '@ts/core/reactive';
-import { state, toSubscribable } from '@ts/core/reactive';
+import { toSubscribable } from '@ts/core/reactive';
 import type { Subscription } from '@ts/core/reactive/subscription';
 import type { InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';
@@ -48,7 +52,7 @@ function asInferno(view: View) {
       });
     }
 
-    render(): InfernoNode | undefined {
+    public render(): InfernoNode | undefined {
       return this.state?.vdom;
     }
   };

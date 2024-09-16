@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { computed } from '@ts/core/reactive';
 
 import { View } from '../core/view';

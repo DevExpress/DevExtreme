@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { computed } from '@ts/core/reactive';
 import { FilterPanelView as OldFilterPanelView } from '@ts/grids/grid_core/filter/m_filter_panel';
@@ -83,7 +90,6 @@ class FilterPanelComponent extends Component {
   }
 
   componentDidMount(): void {
-    console.log('asd');
     this.oldFilterPanelView.render($(this.ref.current!));
   }
 }

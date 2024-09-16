@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataType } from '@js/common';
 
 import type { Column, ColumnProperties } from './types';
@@ -6,6 +7,7 @@ const defaultColumnProperties: Column = {
   dataType: 'string',
   calculateCellValue(data) {
     // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return data[this.dataField!];
   },
   alignment: 'left',

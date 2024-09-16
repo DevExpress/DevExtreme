@@ -1,3 +1,5 @@
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Gettable, Updatable } from '@ts/core/reactive';
 
 type State = Record<string, unknown>;

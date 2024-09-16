@@ -1,3 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable spellcheck/spell-checker */
+/* eslint-disable max-classes-per-file */
+
 import { state, type Subscribable } from '@ts/core/reactive';
 import { Component } from 'inferno';
 

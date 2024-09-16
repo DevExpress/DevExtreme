@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 import browser from '@js/core/utils/browser';
@@ -8,7 +11,6 @@ import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive';
 import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/columns_chooser';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
-import { ColumnsDraggingController } from '@ts/grids/new/grid_core/columns_dragging/columns_dragging';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 import { EditingController } from '@ts/grids/new/grid_core/editing/controller';
 import { HeaderPanelController } from '@ts/grids/new/grid_core/header_panel/controller';
@@ -53,7 +55,6 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(PagerView);
     this.diContext.register(MainView);
     this.diContext.register(ColumnsChooserView);
-    this.diContext.register(ColumnsDraggingController);
     this.diContext.register(Search);
     this.diContext.register(ContentStatusView);
     this.diContext.register(FilterPanelView);
