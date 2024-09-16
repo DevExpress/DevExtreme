@@ -13,7 +13,7 @@ import MessageGroup from '__internal/ui/chat/chat_messagegroup';
 import localization from 'localization';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
-const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
+const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
@@ -61,7 +61,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             } catch(e) {
                 assert.ok(false, `error: ${e.message}`);
             } finally {
-                const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+                const $bubbles = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
                 assert.strictEqual($bubbles.length, 3);
             }
@@ -219,7 +219,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             this.instance.option({ items: [ newMessage ] });
 
-            const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+            const $bubbles = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($bubbles.length, 1);
         });

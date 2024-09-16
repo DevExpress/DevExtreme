@@ -4,7 +4,7 @@
   max-width: 70%;
 }
 
-.dx-chat-bubble {
+.dx-chat-messagebubble {
   width: auto;
   word-break: break-word;
   white-space: break-spaces;
@@ -16,7 +16,7 @@
     align-items: flex-start;
   }
 
-  .dx-chat-bubble {
+  .dx-chat-messagebubble {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
   }
@@ -27,7 +27,7 @@
     align-items: flex-end;
   }
 
-  .dx-chat-bubble {
+  .dx-chat-messagebubble {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }

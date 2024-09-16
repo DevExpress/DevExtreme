@@ -9,13 +9,13 @@
     row-gap: $bubble-container-gap;
   }
 
-  .dx-chat-bubble {
+  .dx-chat-messagebubble {
     padding: $padding;
     border-radius: $border-radius;
   }
 
   .dx-chat-messagegroup-alignment-start {
-    .dx-chat-bubble {
+    .dx-chat-messagebubble {
       background-color: $background-color-secondary;
 
       &:first-child {
@@ -29,7 +29,7 @@
   }
   
   .dx-chat-messagegroup-alignment-end {
-    .dx-chat-bubble {
+    .dx-chat-messagebubble {
       background-color: $background-color-primary;
 
       &:first-child {

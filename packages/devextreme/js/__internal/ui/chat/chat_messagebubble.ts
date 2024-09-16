@@ -3,7 +3,7 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
+const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
@@ -19,7 +19,7 @@ class MessageBubble extends Widget<Properties> {
 
   _initMarkup(): void {
     $(this.element())
-      .addClass(CHAT_BUBBLE_CLASS);
+      .addClass(CHAT_MESSAGEBUBBLE_CLASS);
 
     super._initMarkup();
 

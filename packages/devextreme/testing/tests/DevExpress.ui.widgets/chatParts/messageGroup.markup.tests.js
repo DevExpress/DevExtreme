@@ -10,7 +10,7 @@ const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_INFORMATION_CLASS = 'dx-chat-messagegroup-information';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
-const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
+const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -193,7 +193,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
     QUnit.module('MessageBubble elements', moduleConfig, () => {
         QUnit.test('should not be rendered by default', function(assert) {
-            const $messageBubble = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+            const $messageBubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 0);
         });
@@ -203,7 +203,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 items: [{}],
             });
 
-            const $messageBubble = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+            const $messageBubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 1);
         });
@@ -213,7 +213,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 items: [{}, {}, {}, {}],
             });
 
-            const $messageBubble = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+            const $messageBubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 4);
         });

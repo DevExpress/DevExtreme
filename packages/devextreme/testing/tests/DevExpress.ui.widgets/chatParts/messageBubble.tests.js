@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageBubble from '__internal/ui/chat/chat_bubble';
+import MessageBubble from '__internal/ui/chat/chat_messagebubble';
 
 const moduleConfig = {
     beforeEach: function() {

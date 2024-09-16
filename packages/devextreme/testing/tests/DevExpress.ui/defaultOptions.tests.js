@@ -17,7 +17,7 @@ import Chat from 'ui/chat';
 import ChatHeader from '__internal/ui/chat/chat_header';
 import ChatAvatar from '__internal/ui/chat/chat_avatar';
 import ChatMessageBox from '__internal/ui/chat/chat_messagebox';
-import ChatMessageBubble from '__internal/ui/chat/chat_bubble';
+import ChatMessageBubble from '__internal/ui/chat/chat_messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/chat_messagegroup';
 import ChatMessageList from '__internal/ui/chat/chat_messagelist';
 import DataGrid from 'ui/data_grid';

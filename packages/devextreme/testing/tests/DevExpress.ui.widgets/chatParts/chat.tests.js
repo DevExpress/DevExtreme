@@ -12,7 +12,7 @@ import config from 'core/config';
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
-const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
+const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
@@ -233,7 +233,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.$sendButton.trigger('dxclick');
 
-                const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+                const $bubbles = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
                 const bubble = $bubbles[$bubbles.length - 1];
 
                 assert.strictEqual($(bubble).text(), text);
@@ -342,7 +342,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.instance.renderMessage(newMessage);
 
-                const $bubbles = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+                const $bubbles = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
                 assert.strictEqual($bubbles.length, 4, 'false');
                 assert.strictEqual($bubbles.last().text(), text ? text : '', 'text value is correct');

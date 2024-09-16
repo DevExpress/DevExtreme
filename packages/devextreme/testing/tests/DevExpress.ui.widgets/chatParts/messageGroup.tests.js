@@ -5,7 +5,7 @@ import ChatAvatar from '__internal/ui/chat/chat_avatar';
 
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
-const CHAT_BUBBLE_CLASS = 'dx-chat-bubble';
+const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
 
 const moduleConfig = {
@@ -109,7 +109,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 items: [{}, {}, {}],
             });
 
-            let $messageBubble = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+            let $messageBubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 3);
 
@@ -121,7 +121,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             this.instance.renderMessage(newMessage);
 
-            $messageBubble = this.$element.find(`.${CHAT_BUBBLE_CLASS}`);
+            $messageBubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 4);
         });
