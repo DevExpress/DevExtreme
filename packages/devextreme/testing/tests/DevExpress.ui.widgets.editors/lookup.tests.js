@@ -2970,7 +2970,7 @@ QUnit.module('keyboard navigation', {
         const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
-        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
     });
 
     QUnit.test('space key press on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
