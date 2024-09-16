@@ -68,7 +68,7 @@ safeSizeTest('Full size pager', async (t) => {
 safeSizeTest('Compact pager', async (t) => {
   const dataGrid = new DataGrid('#container');
   const pager = dataGrid.getPager();
-  const pageSizeWidget = pager.getPageSizeSelector();
+  const pageSizeWidget = pager.getPageSizeSelectBox();
   const pageIndexWidget = new TextBox(pager.getPageIndexWidget() as any);
   await t
     .typeText(pageIndexWidget.input, '7', { replace: true })
@@ -180,7 +180,7 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
 
   await dataGrid.scrollBy({ y: 100 });
 
-  await t.click(pager.getPageSizeSelector().element);
+  await t.click(pager.getPageSizeSelectBox().element);
   await t.click(pager.getPopupPageSizes().withText('All'));
 
   await t

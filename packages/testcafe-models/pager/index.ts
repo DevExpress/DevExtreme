@@ -44,7 +44,7 @@ export default class Pager extends Widget {
     return new NavPage(this.element, pageIndexText);
   }
 
-  getPageSizeSelector() : SelectBox {
+  getPageSizeSelectBox() : SelectBox {
     return new SelectBox(this.element.find(`.${CLASS.pagerPageSizes} .${CLASS.select}`));
   }
 
