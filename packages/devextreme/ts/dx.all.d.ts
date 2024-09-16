@@ -9490,7 +9490,7 @@ declare module DevExpress.ui {
       KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
     > & {
       /**
-       * [descr:MessageSendEvent.message]
+       * [descr:_ui_chat_MessageSendEvent.message]
        */
       readonly message?: Message;
     };
