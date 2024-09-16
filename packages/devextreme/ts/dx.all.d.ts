@@ -4262,6 +4262,14 @@ declare module DevExpress.common.grids {
     visible?: boolean | Mode;
   };
   /**
+   * [descr:PagerDisplayMode]
+   */
+  export type PagerDisplayMode = DevExpress.ui.dxPager.PagerDisplayMode;
+  /**
+   * [descr:PagerPageSize]
+   */
+  export type PagerPageSize = DevExpress.ui.dxPager.PagerPageSize;
+  /**
    * [descr:PagingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */

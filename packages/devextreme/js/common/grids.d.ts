@@ -72,7 +72,23 @@ import { PositionConfig } from '../animation/position';
 
 import {
   BasePagerOptions,
+  PagerDisplayMode as PagerDisplayModeType,
+  PagerPageSize as PagerPageSizeType,
 } from '../ui/pager';
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type PagerDisplayMode = PagerDisplayModeType;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type PagerPageSize = PagerPageSizeType;
 
 /**
  * @docid
