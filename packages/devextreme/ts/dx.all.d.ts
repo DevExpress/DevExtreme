@@ -251,6 +251,12 @@ declare global {
     dxNumberBox(options: string): any;
     dxNumberBox(options: string, ...params: any[]): any;
 
+    dxPager(): JQuery;
+    dxPager(options: 'instance'): DevExpress.ui.dxPager;
+    dxPager(options: DevExpress.ui.dxPager.Properties): JQuery;
+    dxPager(options: string): any;
+    dxPager(options: string, ...params: any[]): any;
+
     dxPieChart(): JQuery;
     dxPieChart(options: 'instance'): DevExpress.viz.dxPieChart;
     dxPieChart(options: DevExpress.viz.dxPieChart.Properties): JQuery;
@@ -4249,42 +4255,12 @@ declare module DevExpress.common.grids {
   /**
    * [descr:Pager]
    */
-  export type Pager = {
+  export type Pager = DevExpress.ui.BasePagerOptions & {
     /**
-     * [descr:GridBaseOptions.pager.allowedPageSizes]
-     */
-    allowedPageSizes?: Array<number | PagerPageSize> | Mode;
-    /**
-     * [descr:GridBaseOptions.pager.displayMode]
-     */
-    displayMode?: PagerDisplayMode;
-    /**
-     * [descr:GridBaseOptions.pager.infoText]
-     */
-    infoText?: string;
-    /**
-     * [descr:GridBaseOptions.pager.showInfo]
-     */
-    showInfo?: boolean;
-    /**
-     * [descr:GridBaseOptions.pager.showNavigationButtons]
-     */
-    showNavigationButtons?: boolean;
-    /**
-     * [descr:GridBaseOptions.pager.showPageSizeSelector]
-     */
-    showPageSizeSelector?: boolean;
-    /**
-     * [descr:GridBaseOptions.pager.visible]
+     * [descr:Pager.visible]
      */
     visible?: boolean | Mode;
-    /**
-     * [descr:GridBaseOptions.pager.label]
-     */
-    label?: string;
   };
-  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
-  export type PagerPageSize = 'all' | 'auto';
   /**
    * [descr:PagingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7918,6 +7894,41 @@ declare module DevExpress.ui {
    * [descr:dxSchedulerAppointment]
    */
   export type Appointment = dxSchedulerAppointment;
+  /**
+   * [descr:BasePagerOptions]
+   */
+  export type BasePagerOptions = {
+    /**
+     * [descr:BasePagerOptions.allowedPageSizes]
+     */
+    allowedPageSizes?:
+      | Array<number | DevExpress.ui.dxPager.PagerPageSize>
+      | DevExpress.common.Mode;
+    /**
+     * [descr:BasePagerOptions.displayMode]
+     */
+    displayMode?: DevExpress.ui.dxPager.PagerDisplayMode;
+    /**
+     * [descr:BasePagerOptions.infoText]
+     */
+    infoText?: string;
+    /**
+     * [descr:BasePagerOptions.showInfo]
+     */
+    showInfo?: boolean;
+    /**
+     * [descr:BasePagerOptions.showNavigationButtons]
+     */
+    showNavigationButtons?: boolean;
+    /**
+     * [descr:BasePagerOptions.showPageSizeSelector]
+     */
+    showPageSizeSelector?: boolean;
+    /**
+     * [descr:BasePagerOptions.label]
+     */
+    label?: string;
+  };
   /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -21713,6 +21724,38 @@ declare module DevExpress.ui {
     wrapperAttr?: any;
   }
   /**
+   * [descr:dxPager]
+   */
+  export class dxPager extends Widget<DevExpress.ui.dxPager.Properties> {
+    /**
+     * [descr:dxPager.getPageCount()]
+     */
+    getPageCount(): number;
+  }
+  module dxPager {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    export interface Properties
+      extends BasePagerOptions,
+        WidgetOptions<dxPager> {
+      /**
+       * [descr:Properties.pageIndex]
+       */
+      pageIndex?: number;
+
+      /**
+       * [descr:Properties.pageSize]
+       */
+      pageSize?: number;
+
+      /**
+       * [descr:Properties.itemCount]
+       */
+      itemCount?: number;
+    }
+  }
+  /**
    * [descr:dxPivotGrid]
    */
   export class dxPivotGrid extends Widget<dxPivotGridOptions> {
@@ -30912,6 +30955,10 @@ declare module DevExpress.ui.dxOverlay {
    * [descr:ui.dxOverlay.baseZIndex(zIndex)]
    */
   export function baseZIndex(zIndex: number): void;
+}
+declare module DevExpress.ui.dxPager {
+  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
+  export type PagerPageSize = 'all' | 'auto';
 }
 declare module DevExpress.ui.dxPivotGrid {
   export type Cell = dxPivotGridPivotGridCell;

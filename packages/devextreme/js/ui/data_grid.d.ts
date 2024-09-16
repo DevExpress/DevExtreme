@@ -147,11 +147,6 @@ export {
 } from '../common/grids';
 
 export {
-  PagerDisplayMode,
-  PagerPageSize,
-} from './pager';
-
-export {
     AdaptiveDetailRowPreparingInfo,
     DataChangeInfo,
     DataErrorOccurredInfo,
