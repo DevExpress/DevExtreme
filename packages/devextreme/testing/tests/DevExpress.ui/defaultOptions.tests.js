@@ -1354,7 +1354,7 @@ testComponentDefaults(Chat,
 testComponentDefaults(Avatar,
     {},
     {
-        name: '',
+        name: 'Unknown User',
         url: '',
     }
 );

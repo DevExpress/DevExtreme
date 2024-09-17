@@ -31,8 +31,8 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             assert.ok(this.instance instanceof ChatAvatar);
         });
 
-        QUnit.test('should be rendered with empty value by default', function(assert) {
-            assert.strictEqual(this.$element.text(), '');
+        QUnit.test('should be rendered with UU value by default', function(assert) {
+            assert.strictEqual(this.$element.text(), 'UU');
         });
     });
 
@@ -52,15 +52,16 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
         [
             { name: 'onewordname', expectedInitials: 'O' },
             { name: 'Three word name', expectedInitials: 'TW' },
+            { name: ' New Value', expectedInitials: 'NV' },
+            { name: '   New      Value.   ', expectedInitials: 'NV' },
+            { name: '', expectedInitials: '' },
             { name: 888, expectedInitials: '8' },
             { name: undefined, expectedInitials: '' },
             { name: null, expectedInitials: '' },
-            { name: ' New Value', expectedInitials: 'NV' },
-            { name: '   New      Value.   ', expectedInitials: 'NV' },
-            { name: NaN, expectedInitials: '' },
-            { name: Infinity, expectedInitials: '' },
-            { name: -Infinity, expectedInitials: '' },
-            { name: { firstName: 'name' }, expectedInitials: '' }
+            { name: NaN, expectedInitials: 'N' },
+            { name: Infinity, expectedInitials: 'I' },
+            { name: -Infinity, expectedInitials: '-' },
+            { name: { firstName: 'name' }, expectedInitials: '[O' }
         ].forEach(({ name, expectedInitials }) => {
             QUnit.test(`name option is ${name}`, function(assert) {
                 this.reinit({ name });

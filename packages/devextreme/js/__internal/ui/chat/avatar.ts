@@ -1,6 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { isNumeric, isString } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -20,7 +20,7 @@ class Avatar extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      name: '',
+      name: 'Unknown User',
       url: '',
     };
   }
@@ -52,12 +52,8 @@ class Avatar extends Widget<Properties> {
   }
 
   _renderInitials(): void {
-    const { name } = this.option();
-
-    if (name) {
-      this._renderInitialsElement();
-      this._updateInitials();
-    }
+    this._renderInitialsElement();
+    this._updateInitials();
   }
 
   _renderImageElement(): void {
@@ -99,8 +95,8 @@ class Avatar extends Widget<Properties> {
     return result;
   }
 
-  _getInitials(name: string | number | undefined): string {
-    if (isString(name) || isNumeric(name)) {
+  _getInitials(name: string | undefined): string {
+    if (isDefined(name)) {
       const splitValue = String(name).trim().split(/\s+/);
 
       const firstInitial = this._getFirstChar(splitValue[0]);

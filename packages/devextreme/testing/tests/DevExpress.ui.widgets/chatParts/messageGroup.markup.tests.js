@@ -148,7 +148,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             assert.strictEqual($information.length, 1);
         });
 
-        QUnit.test('name element should not be rendered if autor.name property is not passed', function(assert) {
+        QUnit.test('name element should be rendered with correct text if autor.name property is not passed', function(assert) {
             this.reinit({
                 items: [{ author: {} }],
             });
@@ -156,7 +156,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             const $name = this.$element.find(`.${CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS}`);
 
             assert.strictEqual($name.length, 1);
-            assert.strictEqual($name.text(), '', 'name text is empty');
+            assert.strictEqual($name.text(), 'Unknown User', 'name text is Unknown User');
         });
 
         QUnit.test('time element should be rendered with empty text if timestamp property is not passed', function(assert) {
