@@ -275,7 +275,15 @@ class Menu extends MenuBase {
     // @ts-expect-error
     this._addCustomCssClass(this.$element());
 
-    this.setAria('role', 'menubar');
+    this._setRoleAria();
+  }
+
+  _setRoleAria(): void {
+    if (!this._isAdaptivityEnabled()) {
+      this.setAria('role', 'menubar');
+    } else {
+      this.setAria('role', undefined);
+    }
   }
 
   _render(): void {
@@ -1000,7 +1008,13 @@ class Menu extends MenuBase {
         this._changeSubmenusOption(args.name, args.value);
         break;
       case 'adaptivityEnabled':
-        args.value ? this._initAdaptivity() : this._removeAdaptivity();
+        if (args.value) {
+          this._initAdaptivity();
+          this._setRoleAria();
+        } else {
+          this._removeAdaptivity();
+          this._setRoleAria();
+        }
         break;
       case 'width':
         if (this._isAdaptivityEnabled()) {

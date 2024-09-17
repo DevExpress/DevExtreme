@@ -3502,6 +3502,52 @@ QUnit.module('adaptivity: behavior', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('Root element should have remove role attribute if adaptivityEnabled option is true at init', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        assert.notOk(this.$element[0].hasAttribute('role'), 'role attribute is removed');
+    });
+
+    QUnit.test('Root element should have role attribute if adaptivityEnabled option is false at init', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: false
+        });
+
+        assert.ok(this.$element[0].hasAttribute('role'), 'element has role attribute');
+        assert.strictEqual(this.$element.attr('role'), 'menubar', 'element has coprrect role attribute value');
+    });
+
+    QUnit.test('Root element should have role attribute if adaptivityEnabled option is change to false at runtime', function(assert) {
+        const instance = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        assert.notOk(this.$element[0].hasAttribute('role'), 'role attribute is removed');
+
+        instance.option('adaptivityEnabled', false);
+
+        assert.ok(this.$element[0].hasAttribute('role'), 'element has role attribute');
+        assert.strictEqual(this.$element.attr('role'), 'menubar', 'element has correct role attribute value');
+    });
+
+    QUnit.test('Root element should remove role attribute if adaptivityEnabled option is change to true at runtime', function(assert) {
+        const instance = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: false
+        });
+        assert.ok(this.$element[0].hasAttribute('role'), 'element has role attribute');
+        assert.strictEqual(this.$element.attr('role'), 'menubar', 'element has coprrect role attribute value');
+
+        instance.option('adaptivityEnabled', true);
+
+        assert.notOk(this.$element[0].hasAttribute('role'), 'role attribute is removed');
+    });
+
     QUnit.test('link attributes should be set correctly (T1181342)', function(assert) {
         new Menu(this.$element, {
             items: this.items,
