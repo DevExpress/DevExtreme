@@ -10,19 +10,18 @@
   }
 }
 
-.dx-chat-messagelist-empty {
-  .dx-chat-messagelist-empty-view {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-  }
+.dx-chat-messagelist-empty-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  text-align: center;
+}
 
-  .dx-chat-messagelist-empty-image {
-    @include dx-icon(chat);
+.dx-chat-messagelist-empty-image {
+  @include dx-icon(chat);
 
-    border-radius: 999em;
-  }
+  border-radius: 999em;
 }
 

@@ -9,7 +9,8 @@ import {
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
-import { appendElementTo, setStyleAttribute } from '../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage, setStyleAttribute } from '../../helpers/domUtils';
+import asyncForEach from '../../helpers/asyncForEach';
 
 const AVATAR_SELECTOR = '.dx-avatar';
 
@@ -102,4 +103,33 @@ test('Chat: messagegroup, bubbles', async (t) => {
     width: 400,
     height: 600,
   }, '#chat');
+});
+
+test('Messagegroup scenarios in RTL mode', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+
+  await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }');
+
+  await asyncForEach([1, 2, 3, 4], async (bubbleCount, idx) => {
+    const chatId = `#chat_${idx}`;
+    await appendElementTo('#container', 'div', `chat_${idx}`);
+
+    const items = generateMessages(bubbleCount, userFirst, userSecond, false, false, 4, 2);
+
+    await createWidget('dxChat', {
+      items,
+      user: userSecond,
+      width: 250,
+      height: 400,
+    }, chatId);
+  });
+
+  await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in RTL mode.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 });
