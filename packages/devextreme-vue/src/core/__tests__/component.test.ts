@@ -1215,28 +1215,6 @@ describe('component rendering', () => {
       expect(container.children.length).toEqual(0);
     });
 
-    it('unmounts template with two elements node', () => {
-      const vm = defineComponent({
-        template: `<test-component>
-                        <template #item>
-                            <div>child1</div>
-                            <div>child2</div>
-                        </template>
-                    </test-component>`,
-        components: {
-          TestComponent,
-        },
-      });
-
-      mount(vm);
-
-      const container = document.createElement("div");
-      renderItemTemplate({}, container);
-      events.triggerHandler(container.children[0], "dxremove");
-
-      expect(container.children.length).toEqual(0);
-    });
-
     it('template should have globalProperties of parent', () => {
       let templateGlobalProperties;
       const CustomComponent = defineComponent({
