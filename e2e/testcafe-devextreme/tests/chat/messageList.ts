@@ -11,7 +11,7 @@ fixture.disablePageReloads`ChatMessageList`
 test('Messagelist empty view scenarios', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  const chat = new Chat('#chat');
+  const chat = new Chat('#container');
 
   await testScreenshot(t, takeScreenshot, 'Messagelist empty state.png', { element: '#container' });
 
