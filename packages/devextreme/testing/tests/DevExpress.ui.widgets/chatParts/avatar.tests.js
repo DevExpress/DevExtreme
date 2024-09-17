@@ -56,6 +56,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             { name: undefined, expectedInitials: '' },
             { name: null, expectedInitials: '' },
             { name: ' New Value', expectedInitials: 'NV' },
+            { name: '   New      Value.   ', expectedInitials: 'NV' },
             { name: NaN, expectedInitials: '' },
             { name: Infinity, expectedInitials: '' },
             { name: -Infinity, expectedInitials: '' },

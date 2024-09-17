@@ -101,7 +101,7 @@ class Avatar extends Widget<Properties> {
 
   _getInitials(name: string | number | undefined): string {
     if (isString(name) || isNumeric(name)) {
-      const splitValue = String(name).trim().split(' ');
+      const splitValue = String(name).trim().split(/\s+/);
 
       const firstInitial = this._getFirstChar(splitValue[0]);
       const secondInitial = this._getFirstChar(splitValue[1]);
