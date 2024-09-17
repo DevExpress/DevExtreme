@@ -21,14 +21,9 @@
   $messagelist-empty-prompt-font-size,
   $messagelist-empty-prompt-color,
 ) {
-  .dx-chat-messagelist-empty {
-    .dx-scrollable-content {
-      padding-block: $messagelist-empty-padding;
-    }
-  }
- 
   .dx-chat-messagelist-empty-view {
     row-gap: $messagelist-empty-row-gap;
+    padding-block: $messagelist-empty-padding;
   }
 
   .dx-chat-messagelist-empty-image {
