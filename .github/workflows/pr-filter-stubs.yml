@@ -21,7 +21,7 @@ jobs:
 
       - name: .md files filter
         id: mdFilesFilter
-        uses: DevExpress/github-actions/pr-filter@main
+        uses: DevExpress/github-actions/pr-filter@v1
         with:
           paths: '**;!apps/**/*.md'
 
