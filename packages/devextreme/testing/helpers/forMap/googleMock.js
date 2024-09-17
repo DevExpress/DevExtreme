@@ -225,6 +225,7 @@
             },
             Marker: function(options) {
                 if(options) {
+                    google.markerType = 'old';
                     google.markerOptionsSpecified = true;
                     google.markerInstance = (google.markerInstance || 0) + 1;
                     google.markerOptions = {};
@@ -266,6 +267,53 @@
                 this.setTitle = function() {};
                 this.setVisible = function() {};
                 this.setZIndex = function() {};
+            },
+            marker: {
+                AdvancedMarkerElement: function(options) {
+                    if(options) {
+                        google.markerType = 'advanced';
+                        google.markerOptionsSpecified = true;
+                        google.markerInstance = (google.markerInstance || 0) + 1;
+                        google.markerOptions = {};
+                        google.markerOptions.mapSpecified = options.map instanceof google.maps.Map;
+                        google.markerOptions.position = options.position;
+                        google.markerOptions.icon = options.content?.src;
+                    }
+
+                    this.getAnimation = function() {};
+                    this.getClickable = function() {};
+                    this.getCursor = function() {};
+                    this.getDraggable = function() {};
+                    this.getFlat = function() {};
+                    this.getMap = function() {};
+                    this.getPosition = function() {};
+                    this.getShadow = function() {};
+                    this.getShape = function() {};
+                    this.getTitle = function() {};
+                    this.getVisible = function() {};
+                    this.getZIndex = function() {};
+                    this.setAnimation = function() {};
+                    this.setClickable = function() {};
+                    this.setCursor = function() {};
+                    this.setDraggable = function() {};
+                    this.setFlat = function() {};
+                    this.getIcon = function() {
+                        return options.content?.src;
+                    };
+                    this.setIcon = function() {};
+                    this.setMap = function(map) {
+                        if(map === null) {
+                            google.markerRemoved = true;
+                        }
+                    };
+                    this.setOptions = function() {};
+                    this.setPosition = function() {};
+                    this.setShadow = function() {};
+                    this.setShape = function() {};
+                    this.setTitle = function() {};
+                    this.setVisible = function() {};
+                    this.setZIndex = function() {};
+                }
             },
             OverlayView: function() {
                 this.bindTo = function() {};
@@ -334,7 +382,7 @@
                     google.infoWindowOpened = (google.infoWindowOpened || 0) + 1;
                     google.openInfoWindowOptions = {};
                     google.openInfoWindowOptions.mapSpecified = map instanceof google.maps.Map;
-                    google.openInfoWindowOptions.markerSpecified = marker instanceof google.maps.Marker;
+                    google.openInfoWindowOptions.markerSpecified = marker instanceof google.maps.Marker || marker instanceof google.maps.marker.AdvancedMarkerElement;
                 };
                 this.close = function() {};
                 this.setMap = function() {};
