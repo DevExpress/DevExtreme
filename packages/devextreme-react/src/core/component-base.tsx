@@ -19,7 +19,13 @@ import config from 'devextreme/core/config';
 
 import { createPortal } from 'react-dom';
 
-import { RemovalLockerContext, RestoreTreeContext, NestedOptionContext, TemplateDiscoveryContext } from './helpers';
+import {
+  RemovalLockerContext,
+  RestoreTreeContext,
+  NestedOptionContext,
+  TemplateDiscoveryContext,
+} from './helpers';
+
 import { useOptionScanning } from './use-option-scanning';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';

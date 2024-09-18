@@ -37,7 +37,7 @@ const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IE
     parentExpectedChildren,
     onChildOptionsReady: triggerParentOptionsReady,
     getOptionComponentKey,
-    treeUpdateToken
+    treeUpdateToken,
   } = useContext(NestedOptionContext);
 
   const { discoveryRendering } = useContext(TemplateDiscoveryContext);
