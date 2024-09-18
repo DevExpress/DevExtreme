@@ -9,5 +9,13 @@ export interface ToolbarItem extends BaseToolbarItem {
 export type PredefinedToolbarItem = ToolbarItem & { name: typeof DEFAULT_TOOLBAR_ITEMS[number] };
 
 export interface HeaderPanelProperties {
-  toolbarItems?: ToolbarItem[];
+  toolbar?: {
+    items?: ToolbarItem[];
+
+    visible?: boolean;
+
+    disabled?: boolean;
+  };
+
+  onToolbarPreparing?: unknown;
 }

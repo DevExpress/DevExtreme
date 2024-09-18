@@ -14,7 +14,7 @@ import type { PredefinedToolbarItem, ToolbarItem } from './types';
 export class HeaderPanelController {
   private readonly defaultItems = state<Record<string, ToolbarItem>>({});
 
-  private readonly userItems = this.options.oneWay('toolbarItems');
+  private readonly userItems = this.options.oneWay('toolbar.items');
 
   public items = computed(
     (defaultItems, userItems) => {

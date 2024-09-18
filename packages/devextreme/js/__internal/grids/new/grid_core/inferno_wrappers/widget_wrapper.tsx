@@ -29,14 +29,22 @@ export abstract class InfernoWrapper<
     }
   }
 
+  protected updateComponentOptions(prevProps: TProperties, props: TProperties): void {
+    Object.keys(props as object).forEach((key) => {
+      if (props[key] !== prevProps[key]) {
+        this.component?.option(key, props[key]);
+      }
+    });
+  }
+
   public componentDidMount(): void {
     // eslint-disable-next-line no-new, @typescript-eslint/no-non-null-assertion
     this.component = new (this.getComponentFabric())(this.ref.current!, this.props);
     this.updateComponentRef();
   }
 
-  public componentDidUpdate(): void {
-    this.component?.option(this.props);
+  public componentDidUpdate(prevProps: TProperties): void {
+    this.updateComponentOptions(prevProps, this.props);
     this.updateComponentRef();
   }
 

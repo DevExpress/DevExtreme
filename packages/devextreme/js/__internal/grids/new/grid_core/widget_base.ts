@@ -91,6 +91,9 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
       },
       searchText: '',
       editingChanges: [],
+      toolbar: {
+        visible: true,
+      },
     };
   }
 
