@@ -70,8 +70,8 @@ it('creates widget on componentDidMount inside another component on same element
     </TestComponent>,
   );
 
-  expect(ExtensionWidgetClass).toHaveBeenCalledTimes(1);
-  expect(ExtensionWidgetClass.mock.calls[0][0]).toBe(WidgetClass.mock.calls[0][0]);
+  expect(ExtensionWidgetClass).toHaveBeenCalledTimes(2);
+  expect(ExtensionWidgetClass.mock.calls[1][0]).toBe(WidgetClass.mock.calls[0][0]);
 });
 
 it('unmounts without errors', () => {
@@ -91,7 +91,7 @@ it('pulls options from a single nested component', () => {
     </TestComponent>,
   );
 
-  const options = ExtensionWidgetClass.mock.calls[0][1];
+  const options = ExtensionWidgetClass.mock.calls[1][1];
 
   expect(options).toHaveProperty('option1');
   expect(options.option1).toMatchObject({

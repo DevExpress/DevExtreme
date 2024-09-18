@@ -12,8 +12,6 @@ import DataGrid, {
 import TabPanel, { Item } from "devextreme-react/tab-panel";
 import ODataStore from "devextreme/data/odata/store";
 
-import customConfigurationComponent from 'devextreme-react/core/custom-configuration-component';
-
 const meta: Meta<typeof DataGrid> = {
   title: 'Example/Common/Custom Configuration Components',
   component: DataGrid,
@@ -42,14 +40,14 @@ const dataSourceOptions = {
   }),
 };
 
-const CustomerDataColumns = () => (
+const CustomerData = () => (
   <>
     <Column dataField="Region" dataType="string" />
     <Column dataField="Customer" dataType="string" width={150} />
   </>
 );
 
-const GridCommonSettings = () => (
+const CommonSettings = () => (
   <>
     <GroupPanel visible={true} />
     <SearchPanel visible={true} highlightCaseSensitive={true} />
@@ -59,16 +57,12 @@ const GridCommonSettings = () => (
   </>
 );
 
-const GridCommonColumns = () => (
+const CommonColumns = () => (
   <>
     <Column dataField="SaleDate" dataType="date" />
     <Column dataField="Product" />
   </>
 );
-
-const CommonSettings = customConfigurationComponent(GridCommonSettings);
-const CustomerData = customConfigurationComponent(CustomerDataColumns);
-const CommonColumns = customConfigurationComponent(GridCommonColumns);
 
 const BriefGrid = () => (
   <DataGrid
@@ -105,7 +99,7 @@ const DetailGrid = () => (
       cssClass="bullet"
     />
     <Column caption='Customer Data'>
-      <CustomerDataColumns />
+      <CustomerData />
       <Column dataField="Sector" dataType="string" />
       <Column dataField="Channel" dataType="string" />
     </Column>

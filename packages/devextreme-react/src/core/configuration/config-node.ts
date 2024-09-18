@@ -1,11 +1,11 @@
 interface IConfigNode {
   parentNode?: IConfigNode | undefined;
   index?: number | undefined;
+  templates: ITemplate[];
   readonly name: string;
   readonly predefinedOptions: Record<string, any>;
   readonly initialOptions: Record<string, any>;
   readonly options: Record<string, any>;
-  readonly templates: ITemplate[];
   readonly configs: Record<string, IConfigNode>;
   readonly configCollections: Record<string, IConfigNode[]>;
 }

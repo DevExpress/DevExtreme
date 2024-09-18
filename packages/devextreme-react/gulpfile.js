@@ -95,7 +95,7 @@ gulp.task(
 gulp.task(NPM_PREPARE_MODULES, (done) => {
   const packParamsForFolders = [
     ['common'],
-    ['core', ['template', 'config', 'nested-option', 'component', 'extension-component', 'custom-configuration-component']],
+    ['core', ['template', 'config', 'nested-option', 'component', 'extension-component']],
     ['common/data'],
   ];
   const modulesImportsFromIndex = fs.readFileSync(
