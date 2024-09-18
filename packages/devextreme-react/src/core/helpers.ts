@@ -40,7 +40,7 @@ export interface TemplateDiscoveryContextContent {
 
 export const TemplateDiscoveryContext = createContext<TemplateDiscoveryContextContent>({
   discoveryRendering: false,
-})
+});
 
 export function generateID(): string {
   return Math.random().toString(36).substring(2);

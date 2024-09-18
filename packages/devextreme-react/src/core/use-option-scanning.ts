@@ -24,7 +24,7 @@ function wrapTemplate(template: ITemplate): ITemplate {
       {
         value: {
           discoveryRendering: true,
-        }
+        },
       },
       template.content,
     ),
@@ -37,9 +37,9 @@ export function useOptionScanning(
   templateContainer: HTMLDivElement,
   parentUpdateToken: number,
 ): [
-  IConfigNode,
-  NestedOptionContextContent,
-] {
+    IConfigNode,
+    NestedOptionContextContent,
+  ] {
   const parentContext = useContext(NestedOptionContext);
 
   const {
@@ -132,17 +132,17 @@ export function useOptionScanning(
   };
 
   useLayoutEffect(() => {
-    configNode.templates = configNode.templates.filter(template => !template.isAnonymous);
+    configNode.templates = configNode.templates.filter((template) => !template.isAnonymous);
     const hasTranscludedContent = templateContainer.childNodes.length > 0;
 
     const getHasTranscludedContent = () => {
       if (optionElement.descriptor.isCollection) {
         return hasTranscludedContent;
       }
-  
+
       return parentFullName.length > 0 ? hasTranscludedContent : false;
     };
-  
+
     optionElement.descriptor.templates.forEach((templateMeta) => {
       const template = getAnonymousTemplate(
         optionElement.props,
