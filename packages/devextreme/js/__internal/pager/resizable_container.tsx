@@ -162,6 +162,14 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       width,
       height,
       elementAttr,
+
+      hint,
+      disabled,
+      tabIndex,
+      accessKey,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
     } = this.props.pagerProps;
 
     return {
@@ -193,6 +201,14 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       width,
       height,
       elementAttr,
+
+      hint,
+      disabled,
+      tabIndex,
+      accessKey,
+      activeStateEnabled,
+      focusStateEnabled,
+      hoverStateEnabled,
     };
   }
 

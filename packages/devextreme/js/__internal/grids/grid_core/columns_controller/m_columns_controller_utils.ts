@@ -58,11 +58,11 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
       if (!columnOptions.type) {
         result = { headerId: `dx-col-${globalColumnId++}` };
       }
-      result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
-      deepExtendArraySafe(result, commonColumnOptions);
-      deepExtendArraySafe(result, calculatedColumnOptions);
-      deepExtendArraySafe(result, columnOptions);
-      deepExtendArraySafe(result, { selector: null });
+      result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS, false, true);
+      deepExtendArraySafe(result, commonColumnOptions, false, true);
+      deepExtendArraySafe(result, calculatedColumnOptions, false, true);
+      deepExtendArraySafe(result, columnOptions, false, true);
+      deepExtendArraySafe(result, { selector: null }, false, true);
     }
     if (columnOptions.filterOperations === columnOptions.defaultFilterOperations) {
       setFilterOperationsAsDefaultValues(result);

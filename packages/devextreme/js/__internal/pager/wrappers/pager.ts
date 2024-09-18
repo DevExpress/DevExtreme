@@ -50,6 +50,14 @@ export default class Pager extends GridPagerWrapper {
         'width',
         'height',
         'elementAttr',
+
+        'hint',
+        'disabled',
+        'tabIndex',
+        'accessKey',
+        'activeStateEnabled',
+        'focusStateEnabled',
+        'hoverStateEnabled',
       ],
     };
   }

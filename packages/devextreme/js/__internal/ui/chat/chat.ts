@@ -6,13 +6,13 @@ import type { Message, MessageSendEvent, Properties as ChatProperties } from '@j
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import ChatHeader from './chat_header';
+import ChatHeader from './header';
 import type {
   MessageSendEvent as MessageBoxMessageSendEvent,
   Properties as MessageBoxProperties,
-} from './chat_message_box';
-import MessageBox from './chat_message_box';
-import MessageList from './chat_message_list';
+} from './messagebox';
+import MessageBox from './messagebox';
+import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';

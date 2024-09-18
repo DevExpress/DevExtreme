@@ -1,12 +1,12 @@
 import $ from 'jquery';
 
-import MessageGroup from '__internal/ui/chat/chat_message_group';
-import ChatAvatar from '__internal/ui/chat/chat_avatar';
+import MessageGroup from '__internal/ui/chat/messagegroup';
+import ChatAvatar from '__internal/ui/chat/avatar';
 
-const CHAT_MESSAGE_AVATAR_CLASS = 'dx-chat-message-avatar';
-const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
-const CHAT_MESSAGE_BUBBLE_CLASS = 'dx-chat-message-bubble';
-const CHAT_MESSAGE_AUTHOR_NAME_CLASS = 'dx-chat-message-author-name';
+const AVATAR_CLASS = 'dx-avatar';
+const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
+const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -46,7 +46,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                     items: [{ timestamp }],
                 });
 
-                const $time = this.$element.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
+                const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
 
                 assert.strictEqual($time.length, 1);
                 assert.strictEqual($time.text(), '21:34', 'time text is correct');
@@ -64,7 +64,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 ],
             });
 
-            const $time = this.$element.find(`.${CHAT_MESSAGE_TIME_CLASS}`);
+            const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
 
             assert.strictEqual($time.text(), '21:34');
         });
@@ -82,7 +82,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 ],
             });
 
-            const $name = this.$element.find(`.${CHAT_MESSAGE_AUTHOR_NAME_CLASS}`);
+            const $name = this.$element.find(`.${CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS}`);
 
             assert.strictEqual($name.text(), name);
         });
@@ -97,7 +97,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 ],
             });
 
-            const $name = this.$element.find(`.${CHAT_MESSAGE_AUTHOR_NAME_CLASS}`);
+            const $name = this.$element.find(`.${CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS}`);
 
             assert.strictEqual($name.text(), '');
         });
@@ -109,7 +109,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 items: [{}, {}, {}],
             });
 
-            let $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+            let $messageBubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 3);
 
@@ -121,7 +121,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             this.instance.renderMessage(newMessage);
 
-            $messageBubble = this.$element.find(`.${CHAT_MESSAGE_BUBBLE_CLASS}`);
+            $messageBubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
 
             assert.strictEqual($messageBubble.length, 4);
         });
@@ -143,7 +143,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                     items,
                 });
 
-                const avatar = ChatAvatar.getInstance(this.$element.find(`.${CHAT_MESSAGE_AVATAR_CLASS}`));
+                const avatar = ChatAvatar.getInstance(this.$element.find(`.${AVATAR_CLASS}`));
 
                 assert.deepEqual(avatar.option('name'), passedNameValue);
             });
@@ -165,7 +165,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                     items,
                 });
 
-                const avatar = ChatAvatar.getInstance(this.$element.find(`.${CHAT_MESSAGE_AVATAR_CLASS}`));
+                const avatar = ChatAvatar.getInstance(this.$element.find(`.${AVATAR_CLASS}`));
 
                 assert.deepEqual(avatar.option('url'), passedUrlValue);
             });

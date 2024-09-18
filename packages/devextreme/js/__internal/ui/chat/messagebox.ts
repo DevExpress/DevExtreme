@@ -10,9 +10,9 @@ import type { EnterKeyEvent } from '../../../ui/text_area';
 import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
 
-const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
-const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
-const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
+const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
@@ -52,7 +52,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _initMarkup(): void {
-    $(this.element()).addClass(CHAT_MESSAGE_BOX_CLASS);
+    $(this.element()).addClass(CHAT_MESSAGEBOX_CLASS);
 
     super._initMarkup();
 
@@ -74,7 +74,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     } = this.option();
 
     const $textArea = $('<div>')
-      .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
+      .addClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS)
       .appendTo(this.element());
 
     this._textArea = this._createComponent($textArea, TextArea, {
@@ -113,7 +113,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     } = this.option();
 
     const $button = $('<div>')
-      .addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS)
+      .addClass(CHAT_MESSAGEBOX_BUTTON_CLASS)
       .appendTo(this.element());
 
     this._button = this._createComponent($button, Button, {

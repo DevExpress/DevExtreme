@@ -1,10 +1,10 @@
 import $ from 'jquery';
 
-import MessageBox from '__internal/ui/chat/chat_message_box';
+import MessageBox from '__internal/ui/chat/messagebox';
 
-const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
-const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
-const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
+const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
+const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const BUTTON_CLASS = 'dx-button';
@@ -32,19 +32,19 @@ const moduleConfig = {
 QUnit.module('MessageBox', moduleConfig, () => {
     QUnit.module('Classes', () => {
         QUnit.test('root element should have correct class', function(assert) {
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGE_BOX_CLASS), true);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBOX_CLASS), true);
         });
 
-        QUnit.test(`textarea field should have ${CHAT_MESSAGE_BOX_TEXTAREA_CLASS} class`, function(assert) {
+        QUnit.test(`textarea field should have ${CHAT_MESSAGEBOX_TEXTAREA_CLASS} class`, function(assert) {
             const $textArea = this.$element.find(`.${TEXTAREA_CLASS}`);
 
-            assert.strictEqual($textArea.hasClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS), true);
+            assert.strictEqual($textArea.hasClass(CHAT_MESSAGEBOX_TEXTAREA_CLASS), true);
         });
 
-        QUnit.test(`send button should have ${CHAT_MESSAGE_BOX_BUTTON_CLASS} class`, function(assert) {
+        QUnit.test(`send button should have ${CHAT_MESSAGEBOX_BUTTON_CLASS} class`, function(assert) {
             const $button = this.$element.find(`.${BUTTON_CLASS}`);
 
-            assert.strictEqual($button.hasClass(CHAT_MESSAGE_BOX_BUTTON_CLASS), true);
+            assert.strictEqual($button.hasClass(CHAT_MESSAGEBOX_BUTTON_CLASS), true);
         });
     });
 });

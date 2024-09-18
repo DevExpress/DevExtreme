@@ -4,8 +4,8 @@ import Chat from 'ui/chat';
 
 const CHAT_CLASS = 'dx-chat';
 const CHAT_HEADER_CLASS = 'dx-chat-header';
-const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
-const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
+const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
+const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -70,13 +70,13 @@ QUnit.module('Chat', moduleConfig, () => {
         });
 
         QUnit.test('Message list should be rendered', function(assert) {
-            const $messageList = this.$element.find(`.${CHAT_MESSAGE_LIST_CLASS}`);
+            const $messageList = this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`);
 
             assert.strictEqual($messageList.length, 1);
         });
 
         QUnit.test('Message box should be rendered', function(assert) {
-            const $messageBox = this.$element.find(`.${CHAT_MESSAGE_BOX_CLASS}`);
+            const $messageBox = this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`);
 
             assert.strictEqual($messageBox.length, 1);
         });
