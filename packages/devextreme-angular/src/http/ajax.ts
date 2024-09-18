@@ -29,6 +29,9 @@ interface XHRSurrogate {
   type?: string;
   aborted: boolean;
   abort: () => void;
+  response?: Record<string, any>,
+  status?: number,
+  statusText?: string,
 }
 
 const PARSER_ERROR = 'parsererror';
@@ -179,6 +182,10 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
         total += event.loaded;
         options.upload.onprogress?.({ ...event, total });
       } else if (event.type === HttpEventType.Response) {
+
+        xhrSurrogate.status = event.status;
+        xhrSurrogate.statusText = event.statusText;
+        xhrSurrogate.response = event;
 
         if (typeof event.body === 'object') {
           Object.assign(xhrSurrogate, event.body);
