@@ -179,6 +179,11 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
         total += event.loaded;
         options.upload.onprogress?.({ ...event, total });
       } else if (event.type === HttpEventType.Response) {
+
+        if (typeof event.body === 'object') {
+          Object.assign(xhrSurrogate, event.body);
+        }
+
         return deferred.resolve(xhrSurrogate, SUCCESS);
       }
       return null;
