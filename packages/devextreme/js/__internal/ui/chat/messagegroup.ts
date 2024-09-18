@@ -116,7 +116,7 @@ class MessageGroup extends Widget<Properties> {
     const $information = $('<div>')
       .addClass(CHAT_MESSAGEGROUP_INFORMATION_CLASS);
 
-    const authorName = author?.name ?? '';
+    const authorName = author?.name ?? 'Unknown User';
     const authorNameText = alignment === 'start' ? authorName : '';
 
     $('<div>')
