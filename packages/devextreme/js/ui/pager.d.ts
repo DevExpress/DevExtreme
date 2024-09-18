@@ -62,6 +62,8 @@ export type BasePagerOptions = {
  * @docid
  * @namespace DevExpress.ui
  * @public
+ * @inherits Widget
+ * @options BasePagerOptions
  */
 export default class dxPager extends Widget<Properties> {
     /**
