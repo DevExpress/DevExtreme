@@ -296,7 +296,7 @@ QUnit.module('Pager', {
         assert.equal(pagerView.getPager().option.callCount, 1, 'pager option call count after partial update');
         assert.deepEqual(pagerView.getPager().option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
-            totalCount: 143, // #7259
+            itemCount: 143, // #7259
             pageCount: 20,
             pageIndex: 2, // T886628
             pageSize: 7 // T886628

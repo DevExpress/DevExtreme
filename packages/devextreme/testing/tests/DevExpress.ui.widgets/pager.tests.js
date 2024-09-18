@@ -849,7 +849,7 @@ function() {
 
     QUnit.test('Pager Info', function(assert) {
         $('#container').dxPager({
-            maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
+            maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)'
         });
 
@@ -859,14 +859,14 @@ function() {
         assert.equal($info.text(), 'Page 1 of 10 (86 items)', 'info text');
     });
 
-    QUnit.test('Page info text is changed when totalCount is changed', function(assert) {
+    QUnit.test('Page info text is changed when itemCount is changed', function(assert) {
         const $pager = $('#container').dxPager({
-            maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
+            maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)'
         });
         const instance = $pager.dxPager('instance');
 
-        instance.option('totalCount', 89);
+        instance.option('itemCount', 89);
         assert.equal($('.dx-info').text(), 'Page 1 of 10 (89 items)');
     });
 
@@ -876,7 +876,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of'
         });
@@ -901,7 +901,7 @@ function() {
             pageSizes: [5, 10, 20],
             showInfo: false,
             showPageSizes: false,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of'
         });
         const $pageSizeChooser = $pager.find('.dx-page-sizes').children().first();
@@ -942,7 +942,7 @@ function() {
             pageSizes: [5, 10, 20],
             pageSize: 10,
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -969,7 +969,7 @@ function() {
                 pageCount: 10,
                 pageSizes: [5, 10, 20],
                 pageSize: 10,
-                totalCount: 86,
+                itemCount: 86,
                 pagesCountText: 'of'
             });
         const $pageSizeChooser = $pager.find('.dx-page-sizes').children().first();
@@ -989,7 +989,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             pageSize: 10,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of'
         });
         const pager = $pager.dxPager('instance');
@@ -1011,7 +1011,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             pageSize: 5,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of',
             pageSizeChanged: function(value) {
                 testValue = value;
@@ -1032,7 +1032,7 @@ function() {
             pageCount: 10,
             pageSizes: [7, 10, 13, 25],
             pageSize: 10,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of'
         });
 
@@ -1050,7 +1050,7 @@ function() {
             pageCount: 10,
             pageSizes: [7, 10, 13, 25],
             pageSize: 10,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of'
         });
 
@@ -1069,7 +1069,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            totalCount: 86,
+            itemCount: 86,
             pageIndex: 73,
             pagesCountText: 'of'
         });
@@ -1083,7 +1083,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            totalCount: 86,
+            itemCount: 86,
             pageIndex: 73,
             pagesCountText: 'of'
         });
@@ -1106,7 +1106,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             pageSize: 5,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of',
             pageIndexChanged: function(value) {
                 pageIndex = value;
@@ -1126,7 +1126,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             pageSize: 5,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of'
         });
         const $pageIndex = $pager.find('.dx-page-index');
@@ -1144,7 +1144,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             pageSize: 5,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of',
             showNavigationButtons: true,
             pageIndexChanged: function(value) {
@@ -1170,7 +1170,7 @@ function() {
             pageSizes: [5, 10, 20],
             pageIndex: 2,
             pageSize: 5,
-            totalCount: 86,
+            itemCount: 86,
             pagesCountText: 'of',
             pageIndexChanged: function(value) {
                 pageIndex = value;
@@ -1200,7 +1200,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -1221,7 +1221,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -1248,7 +1248,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 200,
+            itemCount: 200,
             infoText: 'Page {0} of {1} ({2} items)',
         });
 
@@ -1276,7 +1276,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -1293,7 +1293,7 @@ function() {
             pageSize: 8,
             pageSizes: [5, 8, 15, 30],
             showInfo: true,
-            totalCount: 40,
+            itemCount: 40,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -1312,7 +1312,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -1353,7 +1353,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -1374,7 +1374,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of',
             showNavigationButtons: true
@@ -1417,7 +1417,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of'
         });
@@ -1436,7 +1436,7 @@ function() {
             pageCount: 10,
             pageSizes: [5, 10, 20],
             showInfo: true,
-            totalCount: 86,
+            itemCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
             pagesCountText: 'of'
         });
