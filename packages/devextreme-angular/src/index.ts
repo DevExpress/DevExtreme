@@ -54,6 +54,7 @@ export { DxProgressBarComponent, DxProgressBarModule } from 'devextreme-angular/
 export { DxRadioGroupComponent, DxRadioGroupModule } from 'devextreme-angular/ui/radio-group';
 export { DxRangeSelectorComponent, DxRangeSelectorModule } from 'devextreme-angular/ui/range-selector';
 export { DxRangeSliderComponent, DxRangeSliderModule } from 'devextreme-angular/ui/range-slider';
+export { DxRatingComponent, DxRatingModule } from 'devextreme-angular/ui/rating';
 export { DxRecurrenceEditorComponent, DxRecurrenceEditorModule } from 'devextreme-angular/ui/recurrence-editor';
 export { DxResizableComponent, DxResizableModule } from 'devextreme-angular/ui/resizable';
 export { DxResponsiveBoxComponent, DxResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box';

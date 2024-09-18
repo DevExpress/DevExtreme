@@ -39,6 +39,7 @@ import dxPopover, { Properties as PopoverProperties } from '../ui/popover';
 import dxPopup, { Properties as PopupProperties } from '../ui/popup';
 import dxProgressBar, { Properties as ProgressBarProperties } from '../ui/progress_bar';
 import dxRadioGroup, { Properties as RadioGroupProperties } from '../ui/radio_group';
+import dxRating, { Properties as RatingProperties } from '../ui/rating';
 import dxRangeSlider, { Properties as RangeSliderProperties } from '../ui/range_slider';
 import dxRecurrenceEditor, { Properties as RecurrenceEditorProperties } from '../ui/recurrence_editor';
 import dxResizable, { Properties as ResizableProperties } from '../ui/resizable';
@@ -400,6 +401,12 @@ declare global {
         dxRadioGroup(options: RadioGroupProperties): JQuery;
         dxRadioGroup(options: string): any;
         dxRadioGroup(options: string, ...params: any[]): any;
+
+        dxRating(): JQuery;
+        dxRating(options: 'instance'): dxRating;
+        dxRating(options: RatingProperties): JQuery;
+        dxRating(options: string): any;
+        dxRating(options: string, ...params: any[]): any;
 
         dxRangeSelector(): JQuery;
         dxRangeSelector(options: 'instance'): dxRangeSelector;

@@ -50,6 +50,7 @@ import { DxProgressBarModule } from 'devextreme-angular/ui/progress-bar';
 import { DxRadioGroupModule } from 'devextreme-angular/ui/radio-group';
 import { DxRangeSelectorModule } from 'devextreme-angular/ui/range-selector';
 import { DxRangeSliderModule } from 'devextreme-angular/ui/range-slider';
+import { DxRatingModule } from 'devextreme-angular/ui/rating';
 import { DxRecurrenceEditorModule } from 'devextreme-angular/ui/recurrence-editor';
 import { DxResizableModule } from 'devextreme-angular/ui/resizable';
 import { DxResponsiveBoxModule } from 'devextreme-angular/ui/responsive-box';
@@ -134,6 +135,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxRadioGroupModule,
     DxRangeSelectorModule,
     DxRangeSliderModule,
+    DxRatingModule,
     DxRecurrenceEditorModule,
     DxResizableModule,
     DxResponsiveBoxModule,
@@ -217,6 +219,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxRadioGroupModule,
     DxRangeSelectorModule,
     DxRangeSliderModule,
+    DxRatingModule,
     DxRecurrenceEditorModule,
     DxResizableModule,
     DxResponsiveBoxModule,

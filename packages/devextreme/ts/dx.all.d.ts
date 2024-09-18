@@ -303,6 +303,12 @@ declare global {
     dxRadioGroup(options: string): any;
     dxRadioGroup(options: string, ...params: any[]): any;
 
+    dxRating(): JQuery;
+    dxRating(options: 'instance'): DevExpress.ui.dxRating;
+    dxRating(options: DevExpress.ui.dxRating.Properties): JQuery;
+    dxRating(options: string): any;
+    dxRating(options: string, ...params: any[]): any;
+
     dxRangeSelector(): JQuery;
     dxRangeSelector(options: 'instance'): DevExpress.viz.dxRangeSelector;
     dxRangeSelector(options: DevExpress.viz.dxRangeSelector.Properties): JQuery;
@@ -23160,6 +23166,96 @@ declare module DevExpress.ui {
      * [descr:dxRangeSliderOptions.value]
      */
     value?: Array<number>;
+  }
+  /**
+   * [descr:dxRating]
+   */
+  export class dxRating extends Editor<DevExpress.ui.dxRating.Properties> {
+    /**
+     * [descr:dxRating.blur()]
+     */
+    blur(): void;
+    /**
+     * [descr:dxRating.reset(value)]
+     */
+    reset(value?: number): void;
+  }
+  module dxRating {
+    /**
+     * [descr:_ui_rating_ContentReadyEvent]
+     */
+    export type ContentReadyEvent = DevExpress.events.EventInfo<dxRating>;
+    /**
+     * [descr:_ui_rating_DisposingEvent]
+     */
+    export type DisposingEvent = DevExpress.events.EventInfo<dxRating>;
+    /**
+     * [descr:_ui_rating_InitializedEvent]
+     */
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxRating>;
+    /**
+     * [descr:_ui_rating_OptionChangedEvent]
+     */
+    export type OptionChangedEvent = DevExpress.events.EventInfo<dxRating> &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties = dxRatingOptions;
+    export type RatingSelectionMode = 'continouus' | 'single';
+    /**
+     * [descr:_ui_rating_ValueChangedEvent]
+     */
+    export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
+      dxRating,
+      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
+    > &
+      DevExpress.ui.Editor.ValueChangedInfo;
+  }
+  /**
+   * [descr:dxRatingOptions]
+   * @deprecated [depNote:dxRatingOptions]
+   */
+  export interface dxRatingOptions extends EditorOptions<dxRating> {
+    /**
+     * [descr:dxRatingOptions.activeStateEnabled]
+     */
+    activeStateEnabled?: boolean;
+    /**
+     * [descr:dxRatingOptions.focusStateEnabled]
+     */
+    focusStateEnabled?: boolean;
+    /**
+     * [descr:dxRatingOptions.hoverStateEnabled]
+     */
+    hoverStateEnabled?: boolean;
+    /**
+     * [descr:dxRatingOptions.itemCount]
+     */
+    itemCount?: number;
+    /**
+     * [descr:dxRatingOptions.label]
+     */
+    label?: {
+      /**
+       * [descr:dxRatingOptions.label.enabled]
+       */
+      enabled?: boolean;
+      /**
+       * [descr:dxRatingOptions.label.format]
+       */
+      format?: string | ((value: number, itemCount: number) => string);
+    };
+    /**
+     * [descr:dxRatingOptions.precision]
+     */
+    precision?: number;
+    /**
+     * [descr:dxRatingOptions.selectionMode]
+     */
+    selectionMode?: DevExpress.ui.dxRating.RatingSelectionMode;
+    /**
+     * [descr:dxRatingOptions.value]
+     */
+    value?: number;
   }
   /**
    * [descr:dxRecurrenceEditor]
