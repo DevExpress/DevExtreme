@@ -78,7 +78,7 @@ function() {
         assert.equal(instance.option('pageIndex'), 1, 'pageIndex');
         assert.equal(instance.option('maxPagesCount'), 10, 'maxPagesCount');
         assert.equal(instance.option('pageCount'), 10, 'pageCount');
-        assert.deepEqual(instance.option('pageSizes'), [5, 10], 'pageSizes');
+        assert.deepEqual(instance.option('allowedPageSizes'), [5, 10], 'allowedPageSizes');
         assert.ok(instance.option('hasKnownLastPage'), 'hasKnownLastPage');
         assert.equal(instance.option('pageSize'), 5, 'pageSize');
         // assert.deepEqual(instance.option('pageIndexChanged'), commonUtils.noop, 'pageIndexChanged');
@@ -405,14 +405,14 @@ function() {
     });
 
     QUnit.test('Pager is not displayed when visible is false', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], visible: false });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], visible: false });
 
         assert.strictEqual($('.' + 'dx-pager').length, 1, 'pager is rendered');
         assert.equal($pager.css('display'), 'none', 'pager is hidden');
     });
 
     QUnit.test('Page sizes render', function(assert) {
-        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, pageSizes: [5, 10, 20] });
+        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, allowedPageSizes: [5, 10, 20] });
         const pageSizesElements = $('.dx-page-size');
 
         assert.equal(pageSizesElements.length, 3, 'page size elements count');
@@ -422,14 +422,14 @@ function() {
     });
     // if(!isRenovation) {
     QUnit.test('Page sizes render when pageSizes is empty', function(assert) {
-        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, pageSizes: [] });
+        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, allowedPageSizes: [] });
 
         const pageSizesElements = $('.dx-page-size');
 
         assert.equal(pageSizesElements.length, 0, 'page size elements count');
     });
     QUnit.test('Page sizes render when showPageSizes is false', function(assert) {
-        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, showPageSizes: false, pageSizes: [5, 10, 20] });
+        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, showPageSizes: false, allowedPageSizes: [5, 10, 20] });
 
         const pageSizesElements = $('.dx-page-size');
         const pageSizesContainer = $('.dx-page-sizes');
@@ -439,7 +439,7 @@ function() {
     });
 
     QUnit.test('Page size selection by click', function(assert) {
-        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, pageSizes: [5, 10, 20] });
+        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, allowedPageSizes: [5, 10, 20] });
 
         let pageSizesElements = $('.dx-page-size');
         let selectionPageSizesElements;
@@ -473,7 +473,7 @@ function() {
             maxPagesCount: 8,
             pagesCount: 10,
             pageIndex: 1,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSizeChanged: function() {
                 pageSizeChanged = true;
             }
@@ -497,7 +497,7 @@ function() {
             maxPagesCount: 8,
             pagesCount: 10,
             pageIndex: 1,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSizeChanged: function() {
                 pageSizeChanged = true;
             }
@@ -513,7 +513,7 @@ function() {
     });
 
     QUnit.test('Correct selected page when page index is not contains in the pages', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 25, pageIndex: 1, pageSizes: [5, 10, 20] });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 25, pageIndex: 1, allowedPageSizes: [5, 10, 20] });
         const instance = $pager.dxPager('instance');
         instance.option('pageIndex', 16);
 
@@ -540,7 +540,7 @@ function() {
     });
 
     QUnit.test('Refresh pages after page size is changed_B233925', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1, pageSizes: [5, 10, 20] });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1, allowedPageSizes: [5, 10, 20] });
         const instance = $pager.dxPager('instance');
 
         instance.option('pageIndex', 13);
@@ -587,7 +587,7 @@ function() {
     // T966318
     QUnit.test('Pager does not display duplicated page numbers', function(assert) {
         const $pager = $('#container').dxPager({
-            pageSizes: [10, 20, 50],
+            allowedPageSizes: [10, 20, 50],
             pageSize: 50,
             pageCount: 2000,
         });
@@ -649,7 +649,7 @@ function() {
 
     // B239176
     QUnit.test('Click page size parent container_B239176', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], pageSize: 10 }); const instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], pageSize: 10 }); const instance = $pager.dxPager('instance');
 
         $('.dx-page-sizes').first().trigger('dxclick');
 
@@ -658,7 +658,7 @@ function() {
     });
 
     QUnit.test('Show navigate buttons', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showNavigationButtons: true });
 
         assert.equal($pager.find('.dx-navigate-button').length, 2, 'navigate buttons count');
         assert.equal($pager.find('.dx-prev-button').length, 1, 'prev button');
@@ -666,7 +666,7 @@ function() {
     });
 
     QUnit.test('Next page index via navigate button', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showNavigationButtons: true });
         const instance = $pager.dxPager('instance');
 
         let $button = $('.dx-next-button');
@@ -685,7 +685,7 @@ function() {
     });
 
     QUnit.test('Focus selected page', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showNavigationButtons: true });
         const $pages = $pager.find('.dx-pages .dx-page');
 
         for(let i = 0; i < $pages.length; ++i) {
@@ -694,7 +694,7 @@ function() {
     });
 
     QUnit.test('Back page index via navigate button', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showNavigationButtons: true });
         const instance = $pager.dxPager('instance');
 
         instance.option('pageIndex', 8);
@@ -722,7 +722,7 @@ function() {
         const $pager = $('#container').dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showNavigationButtons: true,
         });
 
@@ -755,7 +755,7 @@ function() {
     });
 
     QUnit.test('Prev button is disabled when first page is chosen ', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showNavigationButtons: true });
         let isPageChanged;
         const $button = $('.dx-prev-button');
         const instance = $pager.dxPager('instance');
@@ -771,7 +771,7 @@ function() {
     });
 
     QUnit.test('Next button is disabled when first page is chosen ', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true });
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showNavigationButtons: true });
         let isPageChanged;
         const instance = $pager.dxPager('instance');
 
@@ -791,7 +791,7 @@ function() {
         $('#container').dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showNavigationButtons: true,
             rtlEnabled: true
         });
@@ -807,7 +807,7 @@ function() {
         const $pager = $('#container').dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showNavigationButtons: true,
             rtlEnabled: true
         });
@@ -828,7 +828,7 @@ function() {
             pageCount: 10,
             pageIndex: 1,
             pageSize: 5,
-            pageSizes: [5, 10, 20]
+            allowedPageSizes: [5, 10, 20]
         });
 
         const pager = $pager.dxPager('instance');
@@ -849,7 +849,7 @@ function() {
 
     QUnit.test('Pager Info', function(assert) {
         $('#container').dxPager({
-            maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
+            maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)'
         });
 
@@ -861,7 +861,7 @@ function() {
 
     QUnit.test('Page info text is changed when totalCount is changed', function(assert) {
         const $pager = $('#container').dxPager({
-            maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
+            maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)'
         });
         const instance = $pager.dxPager('instance');
@@ -874,7 +874,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -898,7 +898,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: false,
             showPageSizes: false,
             totalCount: 86,
@@ -922,7 +922,7 @@ function() {
         $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 110,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showPageSizes: false,
             pagesCountText: 'of'
         });
@@ -939,7 +939,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSize: 10,
             showInfo: true,
             totalCount: 86,
@@ -967,7 +967,7 @@ function() {
             .dxPager({
                 maxPagesCount: 8,
                 pageCount: 10,
-                pageSizes: [5, 10, 20],
+                allowedPageSizes: [5, 10, 20],
                 pageSize: 10,
                 totalCount: 86,
                 pagesCountText: 'of'
@@ -987,7 +987,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSize: 10,
             totalCount: 86,
             pagesCountText: 'of'
@@ -998,7 +998,7 @@ function() {
 
         assert.equal(selectBox.option('width'), Number($('.dx-page-sizes').css('min-width').replace('px', '')) + 20);
 
-        pager.option('pageSizes', [5, 10, 1010]);
+        pager.option('allowedPageSizes', [5, 10, 1010]);
 
         assert.equal(selectBox.option('width'), Number($('.dx-page-sizes').css('min-width').replace('px', '')) + 40);
     });
@@ -1009,7 +1009,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSize: 5,
             totalCount: 86,
             pagesCountText: 'of',
@@ -1030,7 +1030,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [7, 10, 13, 25],
+            allowedPageSizes: [7, 10, 13, 25],
             pageSize: 10,
             totalCount: 86,
             pagesCountText: 'of'
@@ -1048,13 +1048,13 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [7, 10, 13, 25],
+            allowedPageSizes: [7, 10, 13, 25],
             pageSize: 10,
             totalCount: 86,
             pagesCountText: 'of'
         });
 
-        $pager.dxPager('instance').option('pageSizes', [13, 45, 67]);
+        $pager.dxPager('instance').option('allowedPageSizes', [13, 45, 67]);
 
         const $pageSizeChooser = $pager.find('.dx-page-sizes').children().first();
         const selectBox = $pageSizeChooser.dxSelectBox('instance');
@@ -1104,7 +1104,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSize: 5,
             totalCount: 86,
             pagesCountText: 'of',
@@ -1124,7 +1124,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSize: 5,
             totalCount: 86,
             pagesCountText: 'of'
@@ -1142,7 +1142,7 @@ function() {
         $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageSize: 5,
             totalCount: 86,
             pagesCountText: 'of',
@@ -1167,7 +1167,7 @@ function() {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             pageIndex: 2,
             pageSize: 5,
             totalCount: 86,
@@ -1198,7 +1198,7 @@ function() {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1219,7 +1219,7 @@ function() {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1246,7 +1246,7 @@ function() {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 200,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1274,7 +1274,7 @@ function() {
         const $pager = $('#container').width(100).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1291,7 +1291,7 @@ function() {
             maxPagesCount: 10,
             pageCount: 5,
             pageSize: 8,
-            pageSizes: [5, 8, 15, 30],
+            allowedPageSizes: [5, 8, 15, 30],
             showInfo: true,
             totalCount: 40,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1310,7 +1310,7 @@ function() {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1351,7 +1351,7 @@ function() {
         const $pager = $('#container').width(100).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1372,7 +1372,7 @@ function() {
         const $pager = $('#container').width(100).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1415,7 +1415,7 @@ function() {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1434,7 +1434,7 @@ function() {
         const $pager = $('#container').width(1000).dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showInfo: true,
             totalCount: 86,
             infoText: 'Page {0} of {1} ({2} items)',
@@ -1463,7 +1463,7 @@ function() {
         const $pager = $('#container').dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showNavigationButtons: true,
             pagesCountText: 'of',
             lightModeEnabled: true
@@ -1487,7 +1487,7 @@ function() {
         const $pager = $('#container').dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showNavigationButtons: true,
             pageIndex: 10,
             pagesCountText: 'of',
@@ -1512,7 +1512,7 @@ function() {
         const $pager = $('#container').dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showNavigationButtons: true,
             rtlEnabled: true,
         });
@@ -1537,7 +1537,7 @@ function() {
         const pagerElement = $('#container').dxPager({
             maxPagesCount: 8,
             pageCount: 10,
-            pageSizes: [5, 10, 20],
+            allowedPageSizes: [5, 10, 20],
             showNavigationButtons: true,
             rtlEnabled: true
         });
@@ -1547,18 +1547,18 @@ function() {
         let ltrTestSample = {};
 
         rtlTestSample = {
-            pageSizes: pagerElement.find('.dx-page-size').text(),
+            allowedPageSizes: pagerElement.find('.dx-page-size').text(),
             pages: [...getPagesElement(pagerElement).map((i, j) => $(j).text())],
         };
 
         pagerInstance.option('rtlEnabled', false);
 
         ltrTestSample = {
-            pageSizes: pagerElement.find('.dx-page-size').text(),
+            allowedPageSizes: pagerElement.find('.dx-page-size').text(),
             pages: [...getPagesElement(pagerElement).map((i, j) => $(j).text())],
         };
 
-        assert.equal(rtlTestSample.pageSizes, ltrTestSample.pageSizes, 'check that page sizes in LTR are equal to page sizes in RTL');
+        assert.equal(rtlTestSample.allowedPageSizes, ltrTestSample.allowedPageSizes, 'check that page sizes in LTR are equal to page sizes in RTL');
         assert.deepEqual(rtlTestSample.pages, ltrTestSample.pages.reverse(), 'check that pages in LTR are equal to reversed pages in RTL');
     });
 
@@ -1584,7 +1584,7 @@ function() {
         localization.locale('en');
 
         const pagerElement = $('#container').dxPager({
-            pageSizes: ['all'],
+            allowedPageSizes: ['all'],
             showNavigationButtons: true,
             showInfo: true
         });

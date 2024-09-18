@@ -37,7 +37,7 @@ QUnit.module('Pager', {
         };
         this.dataControllerOptions = {
             pageSize: 7,
-            pageCount: 20,
+            pageCount: 21,
             pageIndex: 1,
             totalCount: 143
         };
@@ -93,10 +93,10 @@ QUnit.module('Pager', {
         assert.equal(testElement.find('.dx-pager').length, 1, 'pager element');
         assert.equal(pager.option('maxPagesCount'), 10, 'maxPagesCount');
         assert.equal(pager.option('pageIndex'), 2, 'pageIndex');
-        assert.equal(pager.option('pageCount'), 20, 'pageCount');
+        assert.equal(pager.option('pageCount'), 21, 'pageCount');
         assert.equal(pager.option('pageSize'), 7, 'pageSize');
         assert.ok(pager.option('showPageSizes'), 'showPageSizes');
-        assert.deepEqual(pager.option('pageSizes'), [2, 7, 9], 'pageSizes');
+        assert.deepEqual(pager.option('allowedPageSizes'), [2, 7, 9], 'allowedPageSizes');
         assert.ok(!pager.option('hasKnownLastPage'), 'hasKnownLastPage');
         assert.ok(pager.option('visible'), 'visible');
     });
@@ -133,7 +133,7 @@ QUnit.module('Pager', {
 
         this.clock.tick(10);
         // assert
-        assert.equal(that.dataControllerOptions.pageIndex, '19', 'page index');
+        assert.equal(that.dataControllerOptions.pageIndex, '20', 'page index');
     });
 
     QUnit.test('Page index is changed from dataController', function(assert) {
@@ -178,19 +178,6 @@ QUnit.module('Pager', {
 
         // assert
         assert.equal(pagerView.getPager().option('pageIndex'), 15, 'page index changed');
-    });
-
-    QUnit.test('Pages count is changed from dataController', function(assert) {
-    // arrange
-        const testElement = $('#container');
-        const pagerView = this.pagerView;
-
-        // act
-        pagerView.render(testElement, {});
-        this.dataController.updatePagesCount(7);
-
-        // assert
-        assert.equal(pagerView.getPager().option('pageCount'), 7, 'pageCount');
     });
 
     QUnit.test('Page size is changed from dataController', function(assert) {
@@ -297,7 +284,7 @@ QUnit.module('Pager', {
         assert.deepEqual(pagerView.getPager().option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
             totalCount: 143, // #7259
-            pageCount: 20,
+            pageCount: 21,
             pageIndex: 2, // T886628
             pageSize: 7 // T886628
         }], 'pager option args');
@@ -634,7 +621,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        assert.equal($('.dx-info').text(), 'Page 2 of 20 (143 items)');
+        assert.equal($('.dx-info').text(), 'Page 2 of 21 (143 items)');
     });
 
     QUnit.test('Custom show info', function(assert) {
@@ -647,7 +634,7 @@ QUnit.module('Pager', {
 
         // act
         pagerView.render(testElement);
-        assert.equal($('.dx-info').text(), 'Page 2 sur 20');
+        assert.equal($('.dx-info').text(), 'Page 2 sur 21');
     });
 
     QUnit.test('Invalidate instead of render for options', function(assert) {

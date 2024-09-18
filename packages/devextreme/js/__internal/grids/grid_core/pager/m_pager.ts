@@ -94,7 +94,7 @@ export class PagerView extends modules.View {
       pagesNavigatorVisible: pagerOptions.visible,
       showNavigationButtons: pagerOptions.showNavigationButtons,
       label: pagerOptions.label,
-      pageSizes: that.getPageSizes(),
+      allowedPageSizes: that.getPageSizes(),
       totalCount: dataController.totalCount(),
       hasKnownLastPage: dataController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
