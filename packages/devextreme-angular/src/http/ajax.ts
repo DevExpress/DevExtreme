@@ -29,7 +29,7 @@ interface XHRSurrogate {
   type?: string;
   aborted: boolean;
   abort: () => void;
-  response?: Record<string, any>,
+  response?: HttpResponse<object>,
   status?: number,
   statusText?: string,
 }
