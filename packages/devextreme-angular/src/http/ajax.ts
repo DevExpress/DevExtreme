@@ -29,9 +29,9 @@ interface XHRSurrogate {
   type?: string;
   aborted: boolean;
   abort: () => void;
-  response?: HttpResponse<object>,
-  status?: number,
-  statusText?: string,
+  response?: HttpResponse<object>;
+  status?: number;
+  statusText?: string;
 }
 
 const PARSER_ERROR = 'parsererror';
