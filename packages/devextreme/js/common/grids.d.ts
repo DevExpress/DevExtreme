@@ -2216,7 +2216,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   onToolbarPreparing?: ((e: EventInfo<TComponent> & ToolbarPreparingInfo) => void);
   /**
    * @docid
-   * @type object
    * @public
    */
   pager?: Pager;
@@ -2471,6 +2470,7 @@ export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'view
 /**
  * @docid
  * @public
+ * @inherits BasePagerOptions
  * @namespace DevExpress.common.grids
  */
 export type Pager = BasePagerOptions & {
