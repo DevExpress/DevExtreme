@@ -48,6 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Usuń",
         "dxListEditDecorator-more": "Więcej",
+        "dxList-halfChecked": "half checked",
+        "dxList-checked": "checked",
+        "dxList-notChecked": "not checked",
 
         "dxScrollView-pullingDownText": "Aby zaktualizować, przeciągnij w dół",
         "dxScrollView-pulledDownText": "Aby zaktualizować puść",

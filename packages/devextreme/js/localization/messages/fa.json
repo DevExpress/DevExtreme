@@ -48,6 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "حذف",
         "dxListEditDecorator-more": "بیشتر",
+        "dxList-halfChecked": "half checked",
+        "dxList-checked": "checked",
+        "dxList-notChecked": "not checked",
 
         "dxScrollView-pullingDownText": "برای تازه کردن به پایین بکشید ...",
         "dxScrollView-pulledDownText": "انتشار برای تازه کردن ...",

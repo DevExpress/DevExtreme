@@ -48,6 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "删除",
         "dxListEditDecorator-more": "更多",
+        "dxList-halfChecked": "half checked",
+        "dxList-checked": "checked",
+        "dxList-notChecked": "not checked",
 
         "dxScrollView-pullingDownText": "下拉以刷新...",
         "dxScrollView-pulledDownText": "放开以刷新...",

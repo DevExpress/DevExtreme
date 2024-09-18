@@ -48,6 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Ištrinti",
         "dxListEditDecorator-more": "Daugiau",
+        "dxList-halfChecked": "half checked",
+        "dxList-checked": "checked",
+        "dxList-notChecked": "not checked",
 
         "dxScrollView-pullingDownText": "Patraukite žemyn, kad atnaujintumėte...",
         "dxScrollView-pulledDownText": "Atleiskite, kad atnaujintumėte...",

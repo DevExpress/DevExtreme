@@ -185,8 +185,9 @@ registerDecorator(
 
       const indeterminate = value === undefined;
 
-      const checkedText = indeterminate ? 'half checked' : value ? 'checked' : 'not checked';
-      const label = `${messageLocalization.format('dxList-selectAll')}, ${checkedText}`;
+      const checkedText = indeterminate ? 'halfChecked' : value ? 'checked' : 'notChecked';
+
+      const label = `${messageLocalization.format('dxList-selectAll')}, ${messageLocalization.format(`dxList-${checkedText}`)}`;
 
       this._$selectAll.attr({ 'aria-label': label });
     },
