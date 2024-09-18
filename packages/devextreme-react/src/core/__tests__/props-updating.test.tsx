@@ -15,7 +15,6 @@ import {
   WidgetClass,
 } from './test-component';
 import { NestedComponentMeta } from '../types';
-import customConfigurationComponent from '../custom-configuration-component';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({
@@ -208,15 +207,13 @@ describe('option update', () => {
   });
 
   it('updates nested collection item inside a custom configuration component', () => {
-    const MySettingContent = (props: any) => {
+    const MySetting = (props: any) => {
       const { value } = props;
 
       return (
         <CollectionNestedComponent a={value} />
       );
     };
-
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     const TestContainer = (props: any) => {
       const { value } = props;
@@ -256,7 +253,7 @@ describe('option update', () => {
 });
 
 it('updates sub-nested collection item within a custom component', () => {
-  const MySettingContent = (props: any) => {
+  const MySetting = (props: any) => {
     const { value } = props;
 
     return (
@@ -265,8 +262,6 @@ it('updates sub-nested collection item within a custom component', () => {
       </CollectionNestedComponent>
     );
   };
-
-  const MySetting = customConfigurationComponent(MySettingContent);
 
   const TestContainer = (props: any) => {
     const { value } = props;
@@ -676,8 +671,7 @@ describe('cfg-component option control', () => {
   });
 
   it('rolls cfg-component option value back (option is inside a custom configuration component)', () => {
-    const MySettingContent = ({ a }) => <NestedComponent a={a} />;
-    const MySetting = customConfigurationComponent(MySettingContent);
+    const MySetting = ({ a }) => <NestedComponent a={a} />;
 
     render(
       <ControlledComponent>
@@ -706,11 +700,10 @@ describe('cfg-component option control', () => {
   });
 
   it('rolls nested collection value back (options is inside a custom configuration component)', () => {
-    const MySettingContent = ({ a1, a2 }) => <>
+    const MySetting = ({ a1, a2 }) => <>
       <CollectionNestedComponent a={a1} />
       <CollectionNestedComponent a={a2} />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponentWithExpectation>
@@ -752,8 +745,7 @@ describe('cfg-component option control', () => {
   });
 
   it('rolls cfg-component option complex value (options in custom configuration component)', () => {
-    const MySettingContent = ({ a, b }) => <NestedComponent complexValue={{ a, b }} />;
-    const MySetting = customConfigurationComponent(MySettingContent);
+    const MySetting = ({ a, b }) => <NestedComponent complexValue={{ a, b }} />;
 
     render(
       <ControlledComponent>
@@ -848,8 +840,7 @@ describe('cfg-component option control', () => {
   });
 
   it('invokes option change guard handlers in strict mode (options in custom configuration component)', () => {
-    const MySettingContent = ({ a }) => <NestedComponent a={a} />;
-    const MySetting = customConfigurationComponent(MySettingContent);
+    const MySetting = ({ a }) => <NestedComponent a={a} />;
 
     const TestContainer = ({ value }: { value: number }) => {
       return (
@@ -953,8 +944,7 @@ describe('cfg-component option control', () => {
   });
 
   it('apply cfg-component option change if value really change (option in custom configuration component)', () => {
-    const MySettingContent = ({ value }) => <NestedComponent a={value} b="const" />;
-    const MySetting = customConfigurationComponent(MySettingContent);
+    const MySetting = ({ value }) => <NestedComponent a={value} b="const" />;
 
     const TestContainer = (props: any) => {
       const { value } = props;
@@ -1029,8 +1019,7 @@ describe('cfg-component option defaults control', () => {
   });
 
   it('ignores cfg-component option with default prefix (option in custom configuration component)', () => {
-    const MySettingContent = () => <NestedComponent defaultC="default" />;
-    const MySetting = customConfigurationComponent(MySettingContent);
+    const MySetting = () => <NestedComponent defaultC="default" />;
 
     render(
       <ControlledComponent>
@@ -1061,8 +1050,7 @@ describe('cfg-component option defaults control', () => {
   });
 
   it('ignores 3rd-party changes in nested default props (option in custom configuration component)', () => {
-    const MySettingContent = ({ optionDefValue }) => <NestedComponent defaultC={optionDefValue} />;
-    const MySetting = customConfigurationComponent(MySettingContent);
+    const MySetting = ({ optionDefValue }) => <NestedComponent defaultC={optionDefValue} />;
 
     const TestContainer = (props: any) => {
       const { optionDefValue } = props;
@@ -1402,7 +1390,7 @@ describe('onXXXChange', () => {
       const onCollectionPropChange = jest.fn();
       const onSubCollectionPropChange = jest.fn();
 
-      const MySettingInnerContent = () => <>
+      const MySettingInner = () => <>
         <CollectionSubNestedComponent
           a={0}
           onAChange={onSubCollectionPropChange}
@@ -1412,9 +1400,8 @@ describe('onXXXChange', () => {
           onValueChange={onSubNestedPropChange}
         />
       </>;
-      const MySettingInner = customConfigurationComponent(MySettingInnerContent);
 
-      const MySettingOuterContent = () => <>
+      const MySettingOuter = () => <>
           <NestedComponent
             value={0}
             onValueChange={onNestedPropChange}
@@ -1429,7 +1416,6 @@ describe('onXXXChange', () => {
             <MySettingInner />
           </CollectionNestedComponent>
       </>;
-      const MySettingOuter = customConfigurationComponent(MySettingOuterContent);
 
       render(
         <TestComponent>

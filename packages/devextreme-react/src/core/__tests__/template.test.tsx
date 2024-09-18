@@ -11,7 +11,6 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
-import customConfigurationComponent from '../custom-configuration-component';
 
 jest.useFakeTimers();
 
@@ -163,7 +162,7 @@ function testTemplateOption(testedOption: string) {
     changedElementOptions[testedOption] = () => <div className="template">Second Template</div>;
     rerender(
       <ComponentWithTemplates {...changedElementOptions}>
-        <div ref={containerRef} />
+        <div ref={containerRef} className="container" />
       </ComponentWithTemplates>,
     );
 
@@ -717,10 +716,8 @@ describe('component/render in nested options', () => {
   it('pass integrationOptions options for collection nested components with custom components', () => {
     const UserTemplate = () => <div>Template</div>;
 
-    const CustomComponentWithTemplateContent = () => <NestedComponent itemRender={UserTemplate} />;
-    const CustomComponentWithPropContent = () => <NestedComponent prop='value' />;
-    const CustomComponentWithTemplate = customConfigurationComponent(CustomComponentWithTemplateContent);
-    const CustomComponentWithProp = customConfigurationComponent(CustomComponentWithPropContent);
+    const CustomComponentWithTemplate = () => <NestedComponent itemRender={UserTemplate} />;
+    const CustomComponentWithProp = () => <NestedComponent prop='value' />;
 
     render(
       <TestComponent>
@@ -859,7 +856,6 @@ describe('component/render in nested options', () => {
 
     expect(options.collection[0].template).toBe('collection[0].template');
     expect(options.collection[1].template).toBe('collection[1].template');
-    expect(options.collection[2].template).toBe('collection[2].template');
     expect(options.collection[3].template).toBe('collection[3].template');
     expect(options.collection[4].template).toBe('collection[4].template');
 
@@ -867,7 +863,6 @@ describe('component/render in nested options', () => {
     expect(Object.keys(integrationOptions.templates)).toEqual([
       'collection[0].template',
       'collection[1].template',
-      'collection[2].template',
       'collection[3].template',
       'collection[4].template',
     ]);

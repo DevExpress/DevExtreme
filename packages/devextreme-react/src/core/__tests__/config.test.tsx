@@ -36,18 +36,19 @@ describe('useLegacyTemplateEngine', () => {
 
   it('works for render-function template', () => {
     const ItemTemplate = (data: any) => (
-      <div className="template">
-        value:
-        {' '}
-        {data.value}
-        , key:
-        {' '}
-        {data.key}
-        , dxkey:
-        {' '}
-        {data.dxkey}
-      </div>
+        <div className="template">
+          value:
+          {' '}
+          {data.value}
+          , key:
+          {' '}
+          {data.key}
+          , dxkey:
+          {' '}
+          {data.dxkey}
+        </div>
     );
+
     const ref = React.createRef<HTMLDivElement>();
 
     const { container } = testingRender(

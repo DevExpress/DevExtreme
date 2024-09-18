@@ -5,7 +5,6 @@ import { memo } from 'react';
 import { Component, IHtmlOptions, NestedComponentMeta } from '../component';
 import ConfigurationComponent from '../nested-option';
 import { TestComponent, Widget, WidgetClass } from './test-component';
-import customConfigurationComponent from '../custom-configuration-component';
 
 jest.useFakeTimers();
 
@@ -158,8 +157,7 @@ describe('nested option', () => {
       },
     });
 
-    const MySettingContent = () => <NestedComponent a={345} />;
-    const MySetting = customConfigurationComponent(MySettingContent);
+    const MySetting = () => <NestedComponent a={345} />;
 
     render(
       <TestComponent>
@@ -190,11 +188,10 @@ describe('nested option', () => {
       },
     });
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={789} />
       {false && <NestedComponent a={987} />}
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -228,11 +225,10 @@ describe('nested option', () => {
       },
     });
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={456} />
       <AnotherNestedComponent b="def" />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -266,11 +262,10 @@ describe('nested option', () => {
       },
     });
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={789} />
       <NestedComponent a={987} />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -300,10 +295,9 @@ describe('nested option', () => {
       ],
     });
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <CollectionNestedComponent c={456} d="def" />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -337,12 +331,11 @@ describe('nested option', () => {
       ],
     });
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <CollectionNestedComponent c={456} d="def" />
       <CollectionNestedComponent c={789} />
       <CollectionNestedComponent d="ghi" />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -359,18 +352,15 @@ describe('nested option', () => {
       ],
     });
 
-    const MySettingContent1 = () => <>
+    const MySetting1 = () => <>
       <CollectionNestedComponent c={789} d="ghi" />
     </>;
-    const MySetting1 = customConfigurationComponent(MySettingContent1);
-    const MySettingContent2 = () => <>
+    const MySetting2 = () => <>
       <CollectionNestedComponent c={987} />
     </>;
-    const MySetting2 = customConfigurationComponent(MySettingContent2);
-    const MySettingContent3 = () => <>
+    const MySetting3 = () => <>
       <CollectionNestedComponent d="jkl" />
     </>;
-    const MySetting3 = customConfigurationComponent(MySettingContent3);
 
     render(
       <TestComponent>
@@ -425,11 +415,10 @@ describe('nested option', () => {
       expectedOption: { c: 456, d: 'abc' },
     });
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={456} />
       <CollectionNestedComponent c={789} d="def" />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponentWithExpectation>
@@ -457,10 +446,9 @@ describe('nested option', () => {
     expect(actualProps.option).toHaveProperty('predefinedProp');
     expect(actualProps.option.predefinedProp).toBe('predefined-value');
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponentWithPredfeinedProps a={456} />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -488,11 +476,10 @@ describe('nested option', () => {
       { predefinedProp: 'predefined-value-2', a: 456 },
     ]);
 
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <CollectionNestedWithPredfeinedProps1 a={789} />
       <CollectionNestedWithPredfeinedProps2 a={987} />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -528,12 +515,11 @@ describe('nested option', () => {
     expect(Widget.option.mock.calls.length).toBe(1);
     expect(Widget.option.mock.calls[0]).toEqual(['itemOptions[1].c', 999]);
 
-    const MySettingContent = ({ c1, c2, d1, d2 }) => <>
+    const MySetting = ({ c1, c2, d1, d2 }) => <>
         <CollectionNestedComponent key={1} c={c1} d={d1} />
         <CollectionNestedComponent key={2} c={c2} />
         <CollectionNestedComponent key={3} d={d2} />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     ({ rerender } = render(
       <TestComponent>
@@ -568,10 +554,9 @@ describe('nested option', () => {
     expect(Widget.option.mock.calls.length).toBe(1);
     expect(Widget.option.mock.calls[0]).toEqual(['option.a', 456]);
 
-    const MySettingContent = ({ value }) => <>
+    const MySetting = ({ value }) => <>
       <NestedComponent a={value} />
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     TestContainer = (props: any) => {
       const { value } = props;
@@ -610,8 +595,7 @@ describe('nested option', () => {
       const { children, wrapOptions } = props;
       const nesteds = children.map((child: any) => {
         if (wrapOptions) {
-          const MySettingContent = (props) => <CollectionNestedComponent {...props} />;
-          const MySetting = customConfigurationComponent(MySettingContent);
+          const MySetting = (props) => <CollectionNestedComponent {...props} />;
 
           return <MySetting {...child} />
         } else {
@@ -671,8 +655,7 @@ describe('nested option', () => {
       const { children, wrapOptions } = props;
       const nesteds = children.map((child: any) => {
         if (wrapOptions) {
-          const MySettingContent = (props) => <CollectionNestedComponent {...props} />;
-          const MySetting = customConfigurationComponent(MySettingContent);
+          const MySetting = (props) => <CollectionNestedComponent {...props} />;
 
           return <MySetting {...child} />
         } else {
@@ -747,16 +730,14 @@ describe('nested sub-option', () => {
       },
     });
 
-    const MySubSettingContent = () => <>
+    const MySubSetting = () => <>
       <SubNestedComponent d="def" />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={456}>
         <MySubSetting />
       </NestedComponent>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -798,17 +779,15 @@ describe('nested sub-option', () => {
       },
     });
 
-    const MySubSettingContent = () => <>
+    const MySubSetting = () => <>
       <SubNestedComponent d="def" />
       <AnotherSubNestedComponent e="ghi" />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={456}>
         <MySubSetting />
       </NestedComponent>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -850,17 +829,15 @@ describe('nested sub-option', () => {
       },
     });
 
-    const MySubSettingContent = () => <>
+    const MySubSetting = () => <>
       <SubNestedComponent d="def" />
       <SubNestedComponent d="ghi" />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={456}>
         <MySubSetting />
       </NestedComponent>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -898,16 +875,14 @@ describe('nested sub-option', () => {
       },
     });
 
-    const MySubSettingContent = () => <>
+    const MySubSetting = () => <>
       <CollectionSubNestedComponent c={456} d="def" />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={456}>
         <MySubSetting />
       </NestedComponent>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -949,18 +924,16 @@ describe('nested sub-option', () => {
       },
     });
 
-    const MySubSettingContent = () => <>
+    const MySubSetting = () => <>
       <CollectionSubNestedComponent c={456} d="def" />
       <CollectionSubNestedComponent c={789} />
       <CollectionSubNestedComponent d="ghi" />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponent a={456}>
         <MySubSetting />
       </NestedComponent>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -1005,18 +978,16 @@ describe('nested sub-option', () => {
     expect(Widget.option.mock.calls.length).toBe(1);
     expect(Widget.option.mock.calls[0]).toEqual(['option.subItemsOptions[1].c', 999]);
 
-    const MySubSettingContent = ({ c1, c2, d1, d2 }) => <>
+    const MySubSetting = ({ c1, c2, d1, d2 }) => <>
       <CollectionSubNestedComponent key={1} c={c1} d={d1} />
       <CollectionSubNestedComponent key={2} c={c2} />
       <CollectionSubNestedComponent key={3} d={d2} />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = ({ a, c1, c2, d1, d2 }) => <>
+    const MySetting = ({ a, c1, c2, d1, d2 }) => <>
       <NestedComponent a={a}>
         <MySubSetting c1={c1} c2={c2} d1={d1} d2={d2} />
       </NestedComponent>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     ({ rerender } = render(
       <TestComponent>
@@ -1053,16 +1024,14 @@ describe('nested sub-option', () => {
     expect(Widget.option.mock.calls.length).toBe(1);
     expect(Widget.option.mock.calls[0]).toEqual(['option.subOption.d', 'def']);
 
-    const MySubSettingContent = ({ value }) => <>
+    const MySubSetting = ({ value }) => <>
       <SubNestedComponent d={value} />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = ({ a, value }) => <>
+    const MySetting = ({ a, value }) => <>
       <NestedComponent a={a}>
         <MySubSetting value={value} />
       </NestedComponent>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     TestContainer = (props: any) => {
       const { value } = props;
@@ -1125,17 +1094,15 @@ describe('nested sub-option', () => {
       },
     });
 
-    const MySubSettingContent = () => <>
+    const MySubSetting = () => <>
       <SubNestedComponent d="def" />
       <CollectionSubNestedComponent c={789} d="ghi" />
     </>;
-    const MySubSetting = customConfigurationComponent(MySubSettingContent);
-    const MySettingContent = () => <>
+    const MySetting = () => <>
       <NestedComponentWithExpectations a={456}>
         <MySubSetting />
       </NestedComponentWithExpectations>
     </>;
-    const MySetting = customConfigurationComponent(MySettingContent);
 
     render(
       <TestComponent>
@@ -1170,10 +1137,9 @@ const ComponentWithConditionalOption = (props: { enableOption: boolean }) => {
 const ComponentWithConditionalCustomOption = (props: { enableOption: boolean }) => {
   const { enableOption } = props;
 
-  const MySettingContent = ({ enable }) => <>
+  const MySetting = ({ enable }) => <>
     {enable && <NestedComponent a={2} />}
   </>;
-  const MySetting = customConfigurationComponent(MySettingContent);
 
   return (
     <TestComponent>

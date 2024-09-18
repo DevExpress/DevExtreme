@@ -1,19 +1,21 @@
 import * as React from 'react';
+
 import {
   useContext,
   useLayoutEffect,
   useState,
+  useMemo,
 } from 'react';
 
+import { createPortal } from 'react-dom';
+
 import {
-  ElementType,
-  getElementType,
   getOptionInfo,
   IElementDescriptor,
 } from './configuration/react/element';
 
 import { useOptionScanning } from './use-option-scanning';
-import { NestedOptionContext } from './helpers';
+import { NestedOptionContext, TemplateDiscoveryContext } from './helpers';
 
 interface INestedOptionMeta {
   optionName: string;
@@ -24,7 +26,7 @@ interface INestedOptionMeta {
 
 const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IElementDescriptor }): React.ReactElement | null {
   // @ts-expect-error TS2339
-  const { children: stateChildren } = props;
+  const { children } = props;
   const { elementDescriptor, ...restProps } = props;
 
   if (!elementDescriptor) {
@@ -35,39 +37,50 @@ const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IE
     parentExpectedChildren,
     onChildOptionsReady: triggerParentOptionsReady,
     getOptionComponentKey,
+    treeUpdateToken
   } = useContext(NestedOptionContext);
 
+  const { discoveryRendering } = useContext(TemplateDiscoveryContext);
   const [optionComponentKey] = useState(getOptionComponentKey());
   const optionElement = getOptionInfo(elementDescriptor, restProps, parentExpectedChildren);
+  const templateContainer = useMemo(() => document.createElement('div'), []);
+  const mainContainer = useMemo(() => document.createElement('div'), []);
 
   const [
     config,
     context,
-    treeUpdateToken,
-  ] = useOptionScanning(optionElement, stateChildren);
+  ] = useOptionScanning(optionElement, children, templateContainer, treeUpdateToken);
 
   useLayoutEffect(() => {
-    triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
+    if (!discoveryRendering) {
+      triggerParentOptionsReady(config, optionElement.descriptor, treeUpdateToken, optionComponentKey);
+    }
   }, [treeUpdateToken]);
 
-  const children = React.Children.map(
-    stateChildren,
-    (child) => {
-      const elementType = getElementType(child);
-
-      return elementType === ElementType.Option ? child : null;
-    },
-  );
-
-  return React.createElement(
+  return discoveryRendering ? null : React.createElement(
     React.Fragment,
     {},
-    React.createElement(
-      NestedOptionContext.Provider,
-      {
-        value: context,
-      },
-      children,
+    createPortal(
+      React.createElement(
+        TemplateDiscoveryContext.Provider,
+        {
+          value: {
+            discoveryRendering: true,
+          },
+        },
+        children,
+      ),
+      templateContainer,
+    ),
+    createPortal(
+      React.createElement(
+        NestedOptionContext.Provider,
+        {
+          value: context,
+        },
+        children,
+      ),
+      mainContainer,
     ),
   );
 };

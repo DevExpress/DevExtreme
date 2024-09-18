@@ -9,6 +9,7 @@ import {
   useLayoutEffect,
   useCallback,
   useState,
+  useMemo,
   ReactElement,
 } from 'react';
 
@@ -18,7 +19,7 @@ import config from 'devextreme/core/config';
 
 import { createPortal } from 'react-dom';
 
-import { RemovalLockerContext, RestoreTreeContext, NestedOptionContext } from './helpers';
+import { RemovalLockerContext, RestoreTreeContext, NestedOptionContext, TemplateDiscoveryContext } from './helpers';
 import { useOptionScanning } from './use-option-scanning';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
@@ -331,18 +332,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       shouldRestoreFocus.current,
     ]);
 
-    useLayoutEffect(() => {
-      onComponentMounted();
-
-      return () => {
-        onComponentUnmounted();
-      };
-    }, []);
-
-    useLayoutEffect(() => {
-      onComponentUpdated();
-    });
-
     useImperativeHandle(ref, () => (
       {
         getInstance() {
@@ -394,6 +383,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       _renderChildren,
     ]);
 
+    const templateContainer = useMemo(() => document.createElement('div'), []);
+
     const options = useOptionScanning({
       type: ElementType.Option,
       descriptor: {
@@ -405,13 +396,33 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         expectedChildren,
       },
       props,
-    }, children);
+    }, children, templateContainer, Math.random());
 
     [widgetConfig] = options;
     const [, context] = options;
 
+    useLayoutEffect(() => {
+      onComponentMounted();
+
+      return () => {
+        onComponentUnmounted();
+      };
+    }, []);
+
+    useLayoutEffect(() => {
+      onComponentUpdated();
+    });
+
     return (
       <RestoreTreeContext.Provider value={restoreTree}>
+          {
+            createPortal(
+              <TemplateDiscoveryContext.Provider value={{ discoveryRendering: true }}>
+                {_renderChildren()}
+              </TemplateDiscoveryContext.Provider>,
+              templateContainer,
+            )
+          }
           <div {...getElementProps()}>
             <NestedOptionContext.Provider value={context}>
               {renderContent()}
