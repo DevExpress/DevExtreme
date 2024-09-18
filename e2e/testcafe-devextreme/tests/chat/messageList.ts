@@ -29,6 +29,7 @@ test('Messagelist empty view scenarios', async (t) => {
   await chat.option({
     width: 200,
     height: 200,
+    disabled: false,
   });
 
   await testScreenshot(t, takeScreenshot, 'Messagelist empty with limited dimensions.png', { element: '#container' });

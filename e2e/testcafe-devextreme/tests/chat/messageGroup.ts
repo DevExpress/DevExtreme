@@ -105,35 +105,62 @@ test('Chat: messagegroup, bubbles', async (t) => {
   }, '#chat');
 });
 
-[true, false].forEach((disabled) => {
-  test(`Messagegroup scenarios in RTL mode, disabled: ${disabled}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Messagegroup scenarios in disabled state', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    const userFirst = createUser(1, 'First');
-    const userSecond = createUser(2, 'Second');
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
 
-    await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }');
+  await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }');
 
-    await asyncForEach([1, 2, 3, 4], async (bubbleCount, idx) => {
-      const chatId = `#chat_${idx}`;
-      await appendElementTo('#container', 'div', `chat_${idx}`);
+  await asyncForEach([1, 2, 3, 4], async (bubbleCount, idx) => {
+    const chatId = `#chat_${idx}`;
+    await appendElementTo('#container', 'div', `chat_${idx}`);
 
-      const items = generateMessages(bubbleCount, userFirst, userSecond, false, false, 4, 2);
+    const items = generateMessages(bubbleCount, userFirst, userSecond, false, false, 4, 2);
 
-      await createWidget('dxChat', {
-        items,
-        rtlEnabled: true,
-        disabled,
-        user: userSecond,
-        width: 250,
-        height: 400,
-      }, chatId);
-    });
-
-    await testScreenshot(t, takeScreenshot, `Messagegroup appearance in RTL mode${disabled ? ', disabled is true' : ''}.png`, { element: '#container' });
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+    await createWidget('dxChat', {
+      items,
+      disabled: true,
+      user: userSecond,
+      width: 250,
+      height: 400,
+    }, chatId);
   });
+
+  await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in disabled state.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+});
+
+test('Messagegroup scenarios in RTL mode', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+
+  await insertStylesheetRulesToPage('#container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }');
+
+  await asyncForEach([1, 2, 3, 4], async (bubbleCount, idx) => {
+    const chatId = `#chat_${idx}`;
+    await appendElementTo('#container', 'div', `chat_${idx}`);
+
+    const items = generateMessages(bubbleCount, userFirst, userSecond, false, false, 4, 2);
+
+    await createWidget('dxChat', {
+      items,
+      rtlEnabled: true,
+      user: userSecond,
+      width: 250,
+      height: 400,
+    }, chatId);
+  });
+
+  await testScreenshot(t, takeScreenshot, 'Messagegroup appearance in RTL mode.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 });
