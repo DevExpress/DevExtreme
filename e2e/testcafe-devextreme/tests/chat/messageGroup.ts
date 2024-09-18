@@ -122,6 +122,7 @@ test('Chat: messagegroup, bubbles', async (t) => {
 
       await createWidget('dxChat', {
         items,
+        rtlEnabled: true,
         disabled,
         user: userSecond,
         width: 250,
