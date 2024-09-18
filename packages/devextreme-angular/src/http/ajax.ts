@@ -182,7 +182,6 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
         total += event.loaded;
         options.upload.onprogress?.({ ...event, total });
       } else if (event.type === HttpEventType.Response) {
-
         xhrSurrogate.status = event.status;
         xhrSurrogate.statusText = event.statusText;
         xhrSurrogate.response = event;
