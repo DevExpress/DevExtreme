@@ -40,6 +40,7 @@ export { Map } from "./map";
 export { Menu } from "./menu";
 export { MultiView } from "./multi-view";
 export { NumberBox } from "./number-box";
+export { Pager } from "./pager";
 export { PieChart } from "./pie-chart";
 export { PivotGrid } from "./pivot-grid";
 export { PivotGridFieldChooser } from "./pivot-grid-field-chooser";

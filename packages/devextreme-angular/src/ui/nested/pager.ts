@@ -1,5 +1,6 @@
 /* tslint:disable:max-line-length */
 
+/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -7,93 +8,51 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
-    Input
+    SkipSelf
 } from '@angular/core';
 
 
 
 
-import { Mode } from 'devextreme/common';
-import { PagerDisplayMode, PagerPageSize } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { NestedOption } from 'devextreme-angular/core';
+import { DxoPager } from './base/pager';
 
 
 @Component({
     selector: 'dxo-pager',
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    providers: [NestedOptionHost],
+    inputs: [
+        'accessKey',
+        'activeStateEnabled',
+        'allowedPageSizes',
+        'disabled',
+        'displayMode',
+        'elementAttr',
+        'focusStateEnabled',
+        'height',
+        'hint',
+        'hoverStateEnabled',
+        'infoText',
+        'label',
+        'onContentReady',
+        'onDisposing',
+        'onInitialized',
+        'onOptionChanged',
+        'rtlEnabled',
+        'showInfo',
+        'showNavigationButtons',
+        'showPageSizeSelector',
+        'tabIndex',
+        'visible',
+        'width'
+    ]
 })
-export class DxoPagerComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
-        return this._getOption('allowedPageSizes');
-    }
-    set allowedPageSizes(value: Mode | Array<PagerPageSize | number>) {
-        this._setOption('allowedPageSizes', value);
-    }
-
-    @Input()
-    get displayMode(): PagerDisplayMode {
-        return this._getOption('displayMode');
-    }
-    set displayMode(value: PagerDisplayMode) {
-        this._setOption('displayMode', value);
-    }
-
-    @Input()
-    get infoText(): string {
-        return this._getOption('infoText');
-    }
-    set infoText(value: string) {
-        this._setOption('infoText', value);
-    }
-
-    @Input()
-    get label(): string {
-        return this._getOption('label');
-    }
-    set label(value: string) {
-        this._setOption('label', value);
-    }
-
-    @Input()
-    get showInfo(): boolean {
-        return this._getOption('showInfo');
-    }
-    set showInfo(value: boolean) {
-        this._setOption('showInfo', value);
-    }
-
-    @Input()
-    get showNavigationButtons(): boolean {
-        return this._getOption('showNavigationButtons');
-    }
-    set showNavigationButtons(value: boolean) {
-        this._setOption('showNavigationButtons', value);
-    }
-
-    @Input()
-    get showPageSizeSelector(): boolean {
-        return this._getOption('showPageSizeSelector');
-    }
-    set showPageSizeSelector(value: boolean) {
-        this._setOption('showPageSizeSelector', value);
-    }
-
-    @Input()
-    get visible(): Mode | boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: Mode | boolean) {
-        this._setOption('visible', value);
-    }
-
+export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'pager';

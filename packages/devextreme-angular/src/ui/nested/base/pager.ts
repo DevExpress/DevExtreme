@@ -1,36 +1,17 @@
 /* tslint:disable:max-line-length */
 
-
+import { NestedOption } from 'devextreme-angular/core';
 import {
     Component,
-    OnInit,
-    OnDestroy,
-    NgModule,
-    Host,
-    SkipSelf,
-    Input
 } from '@angular/core';
-
-
-
 
 import { Mode } from 'devextreme/common';
 import { PagerDisplayMode, PagerPageSize } from 'devextreme/ui/pager';
 
-import {
-    NestedOptionHost,
-} from 'devextreme-angular/core';
-import { NestedOption } from 'devextreme-angular/core';
-
-
 @Component({
-    selector: 'dxo-data-grid-pager',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: ''
 })
-export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
+export abstract class DxoPager extends NestedOption {
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
     }
@@ -38,7 +19,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('accessKey', value);
     }
 
-    @Input()
     get activeStateEnabled(): boolean {
         return this._getOption('activeStateEnabled');
     }
@@ -46,7 +26,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('activeStateEnabled', value);
     }
 
-    @Input()
     get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
         return this._getOption('allowedPageSizes');
     }
@@ -54,7 +33,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('allowedPageSizes', value);
     }
 
-    @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
     }
@@ -62,7 +40,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('disabled', value);
     }
 
-    @Input()
     get displayMode(): PagerDisplayMode {
         return this._getOption('displayMode');
     }
@@ -70,7 +47,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('displayMode', value);
     }
 
-    @Input()
     get elementAttr(): any {
         return this._getOption('elementAttr');
     }
@@ -78,7 +54,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('elementAttr', value);
     }
 
-    @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
     }
@@ -86,7 +61,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('focusStateEnabled', value);
     }
 
-    @Input()
     get height(): number | Function | string | undefined {
         return this._getOption('height');
     }
@@ -94,7 +68,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('height', value);
     }
 
-    @Input()
     get hint(): string | undefined {
         return this._getOption('hint');
     }
@@ -102,7 +75,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('hint', value);
     }
 
-    @Input()
     get hoverStateEnabled(): boolean {
         return this._getOption('hoverStateEnabled');
     }
@@ -110,7 +82,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('hoverStateEnabled', value);
     }
 
-    @Input()
     get infoText(): string {
         return this._getOption('infoText');
     }
@@ -118,7 +89,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('infoText', value);
     }
 
-    @Input()
     get label(): string {
         return this._getOption('label');
     }
@@ -126,7 +96,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('label', value);
     }
 
-    @Input()
     get onContentReady(): Function {
         return this._getOption('onContentReady');
     }
@@ -134,7 +103,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('onContentReady', value);
     }
 
-    @Input()
     get onDisposing(): Function {
         return this._getOption('onDisposing');
     }
@@ -142,7 +110,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('onDisposing', value);
     }
 
-    @Input()
     get onInitialized(): Function {
         return this._getOption('onInitialized');
     }
@@ -150,7 +117,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('onInitialized', value);
     }
 
-    @Input()
     get onOptionChanged(): Function {
         return this._getOption('onOptionChanged');
     }
@@ -158,7 +124,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('onOptionChanged', value);
     }
 
-    @Input()
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
     }
@@ -166,7 +131,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('rtlEnabled', value);
     }
 
-    @Input()
     get showInfo(): boolean {
         return this._getOption('showInfo');
     }
@@ -174,7 +138,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('showInfo', value);
     }
 
-    @Input()
     get showNavigationButtons(): boolean {
         return this._getOption('showNavigationButtons');
     }
@@ -182,7 +145,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('showNavigationButtons', value);
     }
 
-    @Input()
     get showPageSizeSelector(): boolean {
         return this._getOption('showPageSizeSelector');
     }
@@ -190,7 +152,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('showPageSizeSelector', value);
     }
 
-    @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
     }
@@ -198,7 +159,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('tabIndex', value);
     }
 
-    @Input()
     get visible(): Mode | boolean {
         return this._getOption('visible');
     }
@@ -206,45 +166,10 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('visible', value);
     }
 
-    @Input()
     get width(): number | Function | string | undefined {
         return this._getOption('width');
     }
     set width(value: number | Function | string | undefined) {
         this._setOption('width', value);
     }
-
-
-    protected get _optionPath() {
-        return 'pager';
-    }
-
-
-    constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
-        super();
-        parentOptionHost.setNestedOption(this);
-        optionHost.setHost(this, this._fullOptionPath.bind(this));
-    }
-
-
-    ngOnInit() {
-        this._addRecreatedComponent();
-    }
-
-    ngOnDestroy() {
-        this._addRemovedOption(this._getOptionPath());
-    }
-
-
 }
-
-@NgModule({
-  declarations: [
-    DxoDataGridPagerComponent
-  ],
-  exports: [
-    DxoDataGridPagerComponent
-  ],
-})
-export class DxoDataGridPagerModule { }
