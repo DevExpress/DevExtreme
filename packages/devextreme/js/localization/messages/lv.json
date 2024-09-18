@@ -48,6 +48,7 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Dzēst",
         "dxListEditDecorator-more": "Vairāk",
+        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Vilkt lejā lai atjaunotu...",
         "dxScrollView-pulledDownText": "Atlaist lai atjaunotu...",

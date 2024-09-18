@@ -48,6 +48,7 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Izbriši",
         "dxListEditDecorator-more": "Več",
+        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Povlecite navzdol za osvežitev...",
         "dxScrollView-pulledDownText": "Spustite za osvežitev...",

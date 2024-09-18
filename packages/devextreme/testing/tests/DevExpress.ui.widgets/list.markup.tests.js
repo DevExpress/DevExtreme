@@ -557,6 +557,24 @@ QUnit.module('decorators markup', {}, () => {
         assert.strictEqual($multipleContainer.attr('aria-label'), `${localizedSelectAllText}, not checked`, 'unchecked checkbox aria-label should be equal to localized text');
     });
 
+    QUnit.test('item checkbox aria-label attribute should be equal to custom localized text (T1247518)', function(assert) {
+        const localizedCheckStateText = 'custom-select-all';
+        localization.loadMessages({ 'en': { 'dxList-checkState': localizedCheckStateText } });
+
+        const $list = $($('#list').dxList({
+            dataSource: [
+                { id: 1, text: 'Item 1' },
+                { id: 2, text: 'Item 2' },
+                { id: 3, text: 'Item 3' },
+            ],
+            showSelectionControls: true,
+            selectionMode: 'all',
+        }));
+        const $itemCheckBox = $list.find(`.${SELECT_CHECKBOX_CLASS}`).eq(0);
+
+        assert.strictEqual($itemCheckBox.attr('aria-label'), localizedCheckStateText, 'item checkbox aria-label is equal to localized text');
+    });
+
     QUnit.test('list item markup should be correct, reordering decorator', function(assert) {
         const $list = $($('#templated-list').dxList({
             items: ['0'],

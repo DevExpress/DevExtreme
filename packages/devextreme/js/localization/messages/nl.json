@@ -48,6 +48,7 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Verwijderen",
         "dxListEditDecorator-more": "Meer",
+        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Trek naar beneden om te vernieuwen...",
         "dxScrollView-pulledDownText": "Laat los om te vernieuwen...",

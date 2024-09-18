@@ -3,6 +3,7 @@ import TreeViewTestWrapper from '../../helpers/TreeViewTestHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import CustomStore from 'data/custom_store';
 import { DATA, data2 } from './treeViewParts/testData.js';
+import localization from 'localization';
 import 'ui/tree_view';
 
 import 'generic_light.css!';
@@ -316,6 +317,20 @@ QUnit.test('checkbox should have aria-label="Check State" attribute', function(a
     const $checkbox = $(`.${CHECKBOX_CLASS}`);
 
     assert.strictEqual($checkbox.attr('aria-label'), 'Check State');
+});
+
+QUnit.test('checkbox should have a correct aria-label value based on localiztion (T1247518)', function(assert) {
+    const localizedCheckStateText = 'custom-select-all';
+    localization.loadMessages({ 'en': { 'dxList-checkState': localizedCheckStateText } });
+
+    initTree({
+        items: [ { text: 'item' } ],
+        showCheckBoxesMode: 'normal'
+    });
+
+    const $checkbox = $(`.${CHECKBOX_CLASS}`);
+
+    assert.strictEqual($checkbox.attr('aria-label'), localizedCheckStateText, 'checkbox aria-label has correct localized value');
 });
 
 QUnit.test('SelectAll checkBox should select all values on enter key when no items selected', function(assert) {

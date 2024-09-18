@@ -57,7 +57,7 @@ registerDecorator(
       // eslint-disable-next-line no-new
       new this._controlWidget($control, extend(this._commonOptions(), {
         value: this._isSelected($itemElement),
-        elementAttr: { 'aria-label': 'Check State' },
+        elementAttr: { 'aria-label': messageLocalization.format('dxList-checkState') },
         focusStateEnabled: false,
         hoverStateEnabled: false,
         onValueChanged: ({ value, component, event }) => {

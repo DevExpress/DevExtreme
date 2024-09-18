@@ -48,6 +48,7 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Șterge",
         "dxListEditDecorator-more": "Mai mult",
+        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Trageți în jos pentru a actualiza...",
         "dxScrollView-pulledDownText": "Eliberați pentru a actualiza...",

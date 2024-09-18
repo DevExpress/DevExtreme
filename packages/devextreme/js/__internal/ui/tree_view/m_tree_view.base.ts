@@ -1260,7 +1260,7 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
       value: node.internalFields.selected,
       onValueChanged: this._changeCheckboxValue.bind(this),
       focusStateEnabled: false,
-      elementAttr: { 'aria-label': 'Check State' },
+      elementAttr: { 'aria-label': messageLocalization.format('dxList-checkState') },
       disabled: this._disabledGetter(node),
     });
   },
