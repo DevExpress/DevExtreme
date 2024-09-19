@@ -52,6 +52,7 @@ const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
+const GROUP_ROW_CONTAINER = 'group-row-container';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
 
@@ -1195,10 +1196,15 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIndex;
   }
 
-  private setCellPropertiesCore(styleProps: CSSStyleDeclaration, $row, visibleCellIndex) {
-    const $cell = $row.hasClass(GROUP_ROW_CLASS)
-      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+  private setCellPropertiesCore(styleProps: CSSStyleDeclaration, $row: dxElementWrapper, visibleCellIndex) {
+    let $cell = $row.hasClass(GROUP_ROW_CLASS)
+      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']`)
       : $row.find('td').eq(visibleCellIndex);
+
+    if ($cell.is(`.${GROUP_CELL_CLASS}`)) {
+      // @ts-expect-error
+      $cell = $cell.add($cell.find(`.${this.addWidgetPrefix(GROUP_ROW_CONTAINER)}`));
+    }
 
     if ($cell.length) {
       const cell = $cell.get(0) as HTMLElement;
@@ -1208,6 +1214,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected setCellProperties(styleProps: CSSStyleDeclaration, columnIndex: number, rowIndex?: number) {
+    debugger;
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length) {

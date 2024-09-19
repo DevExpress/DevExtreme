@@ -1,10 +1,12 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ModuleType } from '../m_types';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
+import { isGroupRow } from '../views/m_rows_view';
 import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
 import {
@@ -279,6 +281,26 @@ const rowsView = (
     }
 
     return $detailCell;
+  }
+
+  protected _renderCellContent($cell, options, renderOptions) {
+    if (!isGroupRow(options) || !this._isStickyColumns()) {
+      return super._renderCellContent($cell, options, renderOptions);
+    }
+
+    const $container = $('<div>')
+      .addClass(this.addWidgetPrefix(CLASSES.groupRowContainer))
+      .appendTo($cell);
+
+    return super._renderCellContent($container, options, renderOptions);
+  }
+
+  public _updateCell($cell, parameters) {
+    if (!isGroupRow(parameters) || !this._isStickyColumns()) {
+      return super._updateCell($cell, parameters);
+    }
+
+    return super._updateCell($cell.parent(), parameters);
   }
 };
 

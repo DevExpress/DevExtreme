@@ -52,7 +52,7 @@ const LOADPANEL_HIDE_TIMEOUT = 200;
 function getMaxHorizontalScrollOffset(scrollable) {
   return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
-function isGroupRow({ rowType, column }) {
+export function isGroupRow({ rowType, column }) {
   return rowType === 'group'
     && isDefined(column.groupIndex)
     && !column.showWhenGrouped && !column.command;

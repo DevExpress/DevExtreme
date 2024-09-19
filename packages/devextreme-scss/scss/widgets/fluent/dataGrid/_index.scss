@@ -123,3 +123,19 @@
     }
   }
 }
+
+.dx-datagrid-rowsview {
+  .dx-group-cell:has(.dx-datagrid-group-row-container) {
+    padding-left: 0px;
+    overflow: initial;
+    background-color: transparent;
+  }
+
+  .dx-datagrid-group-row-container {
+    padding-left: $fluent-grid-base-cell-horizontal-padding;
+    text-overflow: ellipsis;
+    display: inline-block;
+    position: sticky;
+    background-color: $datagrid-base-background-color;
+  }
+}
