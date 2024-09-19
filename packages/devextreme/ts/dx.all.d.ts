@@ -23200,7 +23200,7 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxRating> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRatingOptions;
-    export type RatingSelectionMode = 'continouus' | 'single';
+    export type RatingSelectionMode = 'continuous' | 'single';
     /**
      * [descr:_ui_rating_ValueChangedEvent]
      */
