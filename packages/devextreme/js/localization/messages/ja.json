@@ -48,9 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "削除",
         "dxListEditDecorator-more": "もっと",
-        "dxList-halfChecked": "half checked",
-        "dxList-checked": "checked",
-        "dxList-notChecked": "not checked",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "引っ張って更新…",
         "dxScrollView-pulledDownText": "指を離して更新…",

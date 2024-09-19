@@ -48,9 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Smazat",
         "dxListEditDecorator-more": "Více",
-        "dxList-halfChecked": "half checked",
-        "dxList-checked": "checked",
-        "dxList-notChecked": "not checked",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Stáhněte dolů pro obnovení...",
         "dxScrollView-pulledDownText": "Uvolněte pro obnovení...",
