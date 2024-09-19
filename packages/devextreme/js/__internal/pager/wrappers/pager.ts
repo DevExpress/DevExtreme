@@ -58,6 +58,8 @@ export default class Pager extends GridPagerWrapper {
         'activeStateEnabled',
         'focusStateEnabled',
         'hoverStateEnabled',
+
+        '_skipValidation',
       ],
     };
   }

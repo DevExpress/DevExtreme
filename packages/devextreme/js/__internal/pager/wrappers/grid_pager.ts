@@ -26,6 +26,10 @@ export class GridPagerWrapper extends ComponentWrapper {
   }
 
   _validateOptions(options: Record<string, unknown>): Record<string, unknown> {
+    if (options._skipValidation) {
+      return options;
+    }
+
     const initialOptions = super._validateOptions(options);
     let {
       pageSize,
