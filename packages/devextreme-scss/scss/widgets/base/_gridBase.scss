@@ -954,6 +954,12 @@
       &:focus {
         outline: 0;
       }
+
+      &.dx-#{$widget-name}-sticky-column-left  {
+        display: inline-block;
+        overflow: hidden;
+        left: 0;
+      }
     }
 
     .dx-data-row.dx-edit-row {

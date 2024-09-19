@@ -5,7 +5,7 @@ import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ModuleType } from '../m_types';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
-import { StickyPosition } from './const';
+import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
 import {
   getColumnFixedPosition,
@@ -264,7 +264,23 @@ const columnHeadersView = (
 
 const rowsView = (
   Base: ModuleType<RowsView>,
-) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {};
+) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
+  protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
+    // @ts-expect-error
+    const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
+
+    if (this._isStickyColumns()) {
+      // @ts-expect-error
+      const componentWidth = this.component.$element().width();
+      $detailCell
+        .addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft))
+        // @ts-expect-error
+        .width(componentWidth - 2);
+    }
+
+    return $detailCell;
+  }
+};
 
 const footerView = (
   Base: ModuleType<any>,
