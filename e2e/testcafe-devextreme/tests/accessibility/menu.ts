@@ -42,16 +42,23 @@ const options: Options<Properties> = {
   items: [items],
   disabled: [true, false],
   orientation: ['horizontal', 'vertical'],
+  adaptivityEnabled: [true, false],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const { disabled } = optionConfiguration;
+  const { disabled, adaptivityEnabled } = optionConfiguration;
 
   if (disabled) {
     return;
   }
 
   const menu = new Menu();
+
+  if (adaptivityEnabled) {
+    await t.resizeWindow(400, 800); 
+  } else {
+    await t.resizeWindow(1024, 800); 
+  }
 
   await t
     .click(menu.getItem(0))
