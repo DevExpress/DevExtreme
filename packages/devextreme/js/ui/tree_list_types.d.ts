@@ -43,8 +43,6 @@ export {
   StateStoreType,
   StateStoring,
   SummaryType,
-  PagerDisplayMode,
-  PagerPageSize,
   DataStructure,
   Mode,
   ScrollMode,

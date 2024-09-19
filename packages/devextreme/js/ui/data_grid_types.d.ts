@@ -55,8 +55,6 @@ export {
   StateStoreType,
   StateStoring,
   SummaryType,
-  PagerDisplayMode,
-  PagerPageSize,
   DataGridCommandColumnType,
   DataGridExportFormat,
   DataGridScrollMode,

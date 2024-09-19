@@ -12,6 +12,9 @@ import {
   Sortable,
   SortOrder,
   ValidationRule,
+  PagerDisplayMode as PagerDisplayModeType,
+  PagerPageSize as PagerPageSizeType,
+  BasePagerOptions,
 } from '../common';
 
 import {
@@ -69,12 +72,6 @@ import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from '../animation/position';
-
-import {
-  BasePagerOptions,
-  PagerDisplayMode as PagerDisplayModeType,
-  PagerPageSize as PagerPageSizeType,
-} from '../ui/pager';
 
 /**
  * @docid

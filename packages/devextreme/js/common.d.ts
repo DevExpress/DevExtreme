@@ -837,3 +837,58 @@ export type VerticalAlignment = 'bottom' | 'center' | 'top';
  * @namespace DevExpress.common
  */
 export type VerticalEdge = 'bottom' | 'top';
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxPager
+ */
+export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxPager
+ */
+export type PagerPageSize = 'all' | 'auto';
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui
+ */
+export type BasePagerOptions = {
+  /**
+   * @docid
+   * @default "auto"
+   */
+  allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
+  /**
+   * @docid
+   * @default "adaptive"
+   */
+  displayMode?: PagerDisplayMode;
+  /**
+   * @docid
+   * @default "Page {0} of {1} ({2} items)"
+   */
+  infoText?: string;
+  /**
+   * @docid
+   * @default false
+   */
+  showInfo?: boolean;
+  /**
+   * @docid
+   * @default false
+   */
+  showNavigationButtons?: boolean;
+  /**
+   * @docid
+   * @default false
+   */
+  showPageSizeSelector?: boolean;
+  /**
+   * @docid
+   * @default "Page Navigation"
+   */
+  label?: string;
+};

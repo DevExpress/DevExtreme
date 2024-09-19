@@ -13,15 +13,10 @@ import {
     Input,
     Output,
     OnDestroy,
-    EventEmitter,
-    OnChanges,
-    DoCheck,
-    SimpleChanges
+    EventEmitter
 } from '@angular/core';
 
 
-import { Mode } from 'devextreme/common';
-import { PagerDisplayMode, PagerPageSize } from 'devextreme/ui/pager';
 
 import DxPager from 'devextreme/ui/pager';
 
@@ -32,7 +27,6 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
 
@@ -51,11 +45,10 @@ import {
     providers: [
         DxTemplateHost,
         WatcherHelper,
-        NestedOptionHost,
-        IterableDifferHelper
+        NestedOptionHost
     ]
 })
-export class DxPagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+export class DxPagerComponent extends DxComponent implements OnDestroy {
     instance: DxPager = null;
 
     /**
@@ -85,19 +78,6 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.allowedPageSizes]
-    
-     */
-    @Input()
-    get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
-        return this._getOption('allowedPageSizes');
-    }
-    set allowedPageSizes(value: Mode | Array<PagerPageSize | number>) {
-        this._setOption('allowedPageSizes', value);
-    }
-
-
-    /**
      * [descr:WidgetOptions.disabled]
     
      */
@@ -107,19 +87,6 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
     }
     set disabled(value: boolean) {
         this._setOption('disabled', value);
-    }
-
-
-    /**
-     * [descr:BasePagerOptions.displayMode]
-    
-     */
-    @Input()
-    get displayMode(): PagerDisplayMode {
-        return this._getOption('displayMode');
-    }
-    set displayMode(value: PagerDisplayMode) {
-        this._setOption('displayMode', value);
     }
 
 
@@ -189,28 +156,41 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.infoText]
+     * [descr:dxPagerOptions.itemCount]
     
      */
     @Input()
-    get infoText(): string {
-        return this._getOption('infoText');
+    get itemCount(): number {
+        return this._getOption('itemCount');
     }
-    set infoText(value: string) {
-        this._setOption('infoText', value);
+    set itemCount(value: number) {
+        this._setOption('itemCount', value);
     }
 
 
     /**
-     * [descr:BasePagerOptions.label]
+     * [descr:dxPagerOptions.pageIndex]
     
      */
     @Input()
-    get label(): string {
-        return this._getOption('label');
+    get pageIndex(): number {
+        return this._getOption('pageIndex');
     }
-    set label(value: string) {
-        this._setOption('label', value);
+    set pageIndex(value: number) {
+        this._setOption('pageIndex', value);
+    }
+
+
+    /**
+     * [descr:dxPagerOptions.pageSize]
+    
+     */
+    @Input()
+    get pageSize(): number {
+        return this._getOption('pageSize');
+    }
+    set pageSize(value: number) {
+        this._setOption('pageSize', value);
     }
 
 
@@ -224,45 +204,6 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
-    }
-
-
-    /**
-     * [descr:BasePagerOptions.showInfo]
-    
-     */
-    @Input()
-    get showInfo(): boolean {
-        return this._getOption('showInfo');
-    }
-    set showInfo(value: boolean) {
-        this._setOption('showInfo', value);
-    }
-
-
-    /**
-     * [descr:BasePagerOptions.showNavigationButtons]
-    
-     */
-    @Input()
-    get showNavigationButtons(): boolean {
-        return this._getOption('showNavigationButtons');
-    }
-    set showNavigationButtons(value: boolean) {
-        this._setOption('showNavigationButtons', value);
-    }
-
-
-    /**
-     * [descr:BasePagerOptions.showPageSizeSelector]
-    
-     */
-    @Input()
-    get showPageSizeSelector(): boolean {
-        return this._getOption('showPageSizeSelector');
-    }
-    set showPageSizeSelector(value: boolean) {
-        this._setOption('showPageSizeSelector', value);
     }
 
 
@@ -355,21 +296,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() allowedPageSizesChange: EventEmitter<Mode | Array<PagerPageSize | number>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() disabledChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() displayModeChange: EventEmitter<PagerDisplayMode>;
 
     /**
     
@@ -411,14 +338,21 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() infoTextChange: EventEmitter<string>;
+    @Output() itemCountChange: EventEmitter<number>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<string>;
+    @Output() pageIndexChange: EventEmitter<number>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() pageSizeChange: EventEmitter<number>;
 
     /**
     
@@ -426,27 +360,6 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() showInfoChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() showNavigationButtonsChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() showPageSizeSelectorChange: EventEmitter<boolean>;
 
     /**
     
@@ -477,8 +390,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
-            private _watcherHelper: WatcherHelper,
-            private _idh: IterableDifferHelper,
+            _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
@@ -492,26 +404,20 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
-            { emit: 'allowedPageSizesChange' },
             { emit: 'disabledChange' },
-            { emit: 'displayModeChange' },
             { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
-            { emit: 'infoTextChange' },
-            { emit: 'labelChange' },
+            { emit: 'itemCountChange' },
+            { emit: 'pageIndexChange' },
+            { emit: 'pageSizeChange' },
             { emit: 'rtlEnabledChange' },
-            { emit: 'showInfoChange' },
-            { emit: 'showNavigationButtonsChange' },
-            { emit: 'showPageSizeSelectorChange' },
             { emit: 'tabIndexChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
         ]);
-
-        this._idh.setHost(this);
         optionHost.setHost(this);
     }
 
@@ -525,32 +431,6 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
         this._destroyWidget();
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        super.ngOnChanges(changes);
-        this.setupChanges('allowedPageSizes', changes);
-    }
-
-    setupChanges(prop: string, changes: SimpleChanges) {
-        if (!(prop in this._optionsToUpdate)) {
-            this._idh.setup(prop, changes);
-        }
-    }
-
-    ngDoCheck() {
-        this._idh.doCheck('allowedPageSizes');
-        this._watcherHelper.checkWatchers();
-        super.ngDoCheck();
-        super.clearChangedOptions();
-    }
-
-    _setOption(name: string, value: any) {
-        let isSetup = this._idh.setupSingle(name, value);
-        let isChanged = this._idh.getChanges(name, value) !== null;
-
-        if (isSetup || isChanged) {
-            super._setOption(name, value);
-        }
-    }
 }
 
 @NgModule({

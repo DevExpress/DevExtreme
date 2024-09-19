@@ -27,29 +27,14 @@ import { DxoPager } from './base/pager';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'accessKey',
-        'activeStateEnabled',
         'allowedPageSizes',
-        'disabled',
         'displayMode',
-        'elementAttr',
-        'focusStateEnabled',
-        'height',
-        'hint',
-        'hoverStateEnabled',
         'infoText',
         'label',
-        'onContentReady',
-        'onDisposing',
-        'onInitialized',
-        'onOptionChanged',
-        'rtlEnabled',
         'showInfo',
         'showNavigationButtons',
         'showPageSizeSelector',
-        'tabIndex',
-        'visible',
-        'width'
+        'visible'
     ]
 })
 export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {

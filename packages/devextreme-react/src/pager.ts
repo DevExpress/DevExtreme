@@ -7,7 +7,12 @@ import dxPager, {
 
 import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
-type IPagerOptions = React.PropsWithChildren<Properties & IHtmlOptions>
+type IPagerOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+  defaultPageIndex?: number;
+  defaultPageSize?: number;
+  onPageIndexChange?: (value: number) => void;
+  onPageSizeChange?: (value: number) => void;
+}>
 
 interface PagerRef {
   instance: () => dxPager;
@@ -26,13 +31,21 @@ const Pager = memo(
         }
       ), [baseRef.current]);
 
+      const subscribableOptions = useMemo(() => (["pageIndex","pageSize"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultPageIndex: "pageIndex",
+        defaultPageSize: "pageSize",
+      }), []);
 
       return (
         React.createElement(BaseComponent<React.PropsWithChildren<IPagerOptions>>, {
           WidgetClass: dxPager,
           ref: baseRef,
+          subscribableOptions,
           independentEvents,
+          defaults,
           ...props,
         })
       );

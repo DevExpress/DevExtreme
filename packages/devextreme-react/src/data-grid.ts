@@ -1953,30 +1953,14 @@ const OperationDescriptions: typeof _componentOperationDescriptions & IElementDe
 // owners:
 // DataGrid
 type IPagerProps = React.PropsWithChildren<{
-  accessKey?: string;
-  activeStateEnabled?: boolean;
   allowedPageSizes?: Array<number | "all" | "auto"> | "auto";
-  bindingOptions?: Record<string, any>;
-  disabled?: boolean;
   displayMode?: "adaptive" | "compact" | "full";
-  elementAttr?: Record<string, any>;
-  focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
-  hint?: string;
-  hoverStateEnabled?: boolean;
   infoText?: string;
   label?: string;
-  onContentReady?: ((e: EventInfo<any>) => void);
-  onDisposing?: ((e: EventInfo<any>) => void);
-  onInitialized?: ((e: { component: Component<any>, element: any }) => void);
-  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
-  rtlEnabled?: boolean;
   showInfo?: boolean;
   showNavigationButtons?: boolean;
   showPageSizeSelector?: boolean;
-  tabIndex?: number;
   visible?: boolean | "auto";
-  width?: (() => number | string) | number | string;
 }>
 const _componentPager = memo(
   (props: IPagerProps) => {
