@@ -11,7 +11,7 @@ import Editor, {
 } from './editor/editor';
 
 /** @public */
-export type RatingSelectionMode = 'continouus' | 'single';
+export type RatingSelectionMode = 'continuous' | 'single';
 
 /**
  * @docid _ui_rating_ContentReadyEvent
@@ -109,7 +109,7 @@ export interface dxRatingOptions extends EditorOptions<dxRating> {
     precision?: number;
     /**
      * @docid
-     * @default 'continouus'
+     * @default 'continuous'
      * @public
      */
     selectionMode?: RatingSelectionMode;
