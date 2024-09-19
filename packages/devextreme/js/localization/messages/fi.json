@@ -3,6 +3,7 @@
         "Yes": "Kyllä",
         "No": "Ei",
         "Cancel": "Peruuta",
+        "CheckState": "Check State",
         "Close": "Sulkea",
         "Clear": "Tyhjennä",
         "Done": "Valmis",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Poista",
         "dxListEditDecorator-more": "Lisää",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Päivitä vetämällä alas...",
         "dxScrollView-pulledDownText": "Päivitä vapauttamalla...",

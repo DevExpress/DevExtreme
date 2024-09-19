@@ -3,6 +3,7 @@
         "Yes": "Ναί",
         "No": "Όχι",
         "Cancel": "Ακύρωση",
+        "CheckState": "Check State",
         "Close": "Κλείσιμο",
         "Clear": "Εκκαθάριση",
         "Done": "Καταχώρηση",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Διαγραφή",
         "dxListEditDecorator-more": "Περισσότερα",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Σύρετε απο πάνω προς τα κάτω για ανανέωση...",
         "dxScrollView-pulledDownText": "Απελευθερώστε για ανανέωση...",

@@ -559,7 +559,7 @@ QUnit.module('decorators markup', {}, () => {
 
     QUnit.test('item checkbox aria-label attribute should be equal to custom localized text (T1247518)', function(assert) {
         const localizedCheckStateText = 'custom-select-all';
-        localization.loadMessages({ 'en': { 'dxList-checkState': localizedCheckStateText } });
+        localization.loadMessages({ 'en': { 'CheckState': localizedCheckStateText } });
 
         const $list = $($('#list').dxList({
             dataSource: [

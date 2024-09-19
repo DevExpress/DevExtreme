@@ -3,6 +3,7 @@
         "Yes": "Ja",
         "No": "Nej",
         "Cancel": "Avbryt",
+        "CheckState": "Check State",
         "Close": "Stäng",
         "Clear": "Rensa",
         "Done": "Klar",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Radera",
         "dxListEditDecorator-more": "Mer",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Dra neråt för att uppdatera...",
         "dxScrollView-pulledDownText": "Släpp för att uppdatera...",

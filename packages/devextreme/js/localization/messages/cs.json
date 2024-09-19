@@ -3,6 +3,7 @@
         "Yes": "Ano",
         "No": "Ne",
         "Cancel": "Zrušit",
+        "CheckState": "Check State",
         "Close": "Zavřít",
         "Clear": "Smazat",
         "Done": "Hotovo",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Smazat",
         "dxListEditDecorator-more": "Více",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Stáhněte dolů pro obnovení...",
         "dxScrollView-pulledDownText": "Uvolněte pro obnovení...",

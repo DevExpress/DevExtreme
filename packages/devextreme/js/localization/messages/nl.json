@@ -3,6 +3,7 @@
         "Yes": "Ja",
         "No": "Nee",
         "Cancel": "Annuleren",
+        "CheckState": "Check State",
         "Close": "Sluiten",
         "Clear": "Wissen",
         "Done": "Klaar",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Verwijderen",
         "dxListEditDecorator-more": "Meer",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Trek naar beneden om te vernieuwen...",
         "dxScrollView-pulledDownText": "Laat los om te vernieuwen...",

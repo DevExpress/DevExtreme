@@ -3,6 +3,7 @@
         "Yes": "Ja",
         "No": "Nei",
         "Cancel": "Avbryt",
+        "CheckState": "Check State",
         "Close": "Lukke",
         "Clear": "Slett",
         "Done": "Fullført",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Slett",
         "dxListEditDecorator-more": "Mer",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Dra ned for å oppdatere...",
         "dxScrollView-pulledDownText": " Slipp for å oppdatere...",

@@ -3,6 +3,7 @@
         "Yes": "Evet",
         "No": "Hayır",
         "Cancel": "İptal",
+        "CheckState": "Check State",
         "Close": "Kapat",
         "Clear": "Temizle",
         "Done": "Tamam",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Sil",
         "dxListEditDecorator-more": "Daha",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Yenilemek için aşağıya çekin...",
         "dxScrollView-pulledDownText": "Yenilemek için bırakın...",

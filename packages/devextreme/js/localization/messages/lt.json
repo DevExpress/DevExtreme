@@ -3,6 +3,7 @@
         "Yes": "Taip",
         "No": "Ne",
         "Cancel": "Atšaukti",
+        "CheckState": "Check State",
         "Close": "Close",
         "Clear": "Išvalyti",
         "Done": "Atlikta",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Ištrinti",
         "dxListEditDecorator-more": "Daugiau",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "Patraukite žemyn, kad atnaujintumėte...",
         "dxScrollView-pulledDownText": "Atleiskite, kad atnaujintumėte...",

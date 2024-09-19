@@ -3,6 +3,7 @@
         "Yes": "بلی",
         "No": "خیر",
         "Cancel": "لغو",
+        "CheckState": "Check State",
         "Close": "Close",
         "Clear": "حذف",
         "Done": "تایید",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "حذف",
         "dxListEditDecorator-more": "بیشتر",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "برای تازه کردن به پایین بکشید ...",
         "dxScrollView-pulledDownText": "انتشار برای تازه کردن ...",

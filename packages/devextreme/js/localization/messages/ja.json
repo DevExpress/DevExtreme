@@ -3,6 +3,7 @@
         "Yes": "はい",
         "No": "いいえ",
         "Cancel": "キャンセル",
+        "CheckState": "Check State",
         "Close": "閉じる",
         "Clear": "クリア",
         "Done": "完了",
@@ -48,7 +49,6 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "削除",
         "dxListEditDecorator-more": "もっと",
-        "dxList-checkState": "Check State",
 
         "dxScrollView-pullingDownText": "引っ張って更新…",
         "dxScrollView-pulledDownText": "指を離して更新…",
