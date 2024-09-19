@@ -3502,50 +3502,32 @@ QUnit.module('adaptivity: behavior', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Root element should have remove role attribute if adaptivityEnabled option is true at init', function(assert) {
-        new Menu(this.$element, {
+    QUnit.test('Menu role updates correctly with adaptivity enabled on resize', function(assert) {
+        const menu = new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
         });
 
-        assert.notOk(this.$element[0].hasAttribute('role'), 'role attribute is removed');
+        $('#qunit-fixture').width('100%');
+        menu.repaint();
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+        $('#qunit-fixture').width(50);
+        menu.repaint();
+        assert.strictEqual(this.$element.attr('role'), undefined);
     });
 
-    QUnit.test('Root element should have role attribute if adaptivityEnabled option is false at init', function(assert) {
-        new Menu(this.$element, {
+    QUnit.test('Menu role remains unchanged with adaptivity disabled on resize', function(assert) {
+        const menu = new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: false
         });
 
-        assert.ok(this.$element[0].hasAttribute('role'), 'element has role attribute');
-        assert.strictEqual(this.$element.attr('role'), 'menubar', 'element has coprrect role attribute value');
-    });
-
-    QUnit.test('Root element should have role attribute if adaptivityEnabled option is change to false at runtime', function(assert) {
-        const instance = new Menu(this.$element, {
-            items: this.items,
-            adaptivityEnabled: true
-        });
-
-        assert.notOk(this.$element[0].hasAttribute('role'), 'role attribute is removed');
-
-        instance.option('adaptivityEnabled', false);
-
-        assert.ok(this.$element[0].hasAttribute('role'), 'element has role attribute');
-        assert.strictEqual(this.$element.attr('role'), 'menubar', 'element has correct role attribute value');
-    });
-
-    QUnit.test('Root element should remove role attribute if adaptivityEnabled option is change to true at runtime', function(assert) {
-        const instance = new Menu(this.$element, {
-            items: this.items,
-            adaptivityEnabled: false
-        });
-        assert.ok(this.$element[0].hasAttribute('role'), 'element has role attribute');
-        assert.strictEqual(this.$element.attr('role'), 'menubar', 'element has coprrect role attribute value');
-
-        instance.option('adaptivityEnabled', true);
-
-        assert.notOk(this.$element[0].hasAttribute('role'), 'role attribute is removed');
+        $('#qunit-fixture').width('100%');
+        menu.repaint();
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+        $('#qunit-fixture').width(50);
+        menu.repaint();
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
     });
 
     QUnit.test('link attributes should be set correctly (T1181342)', function(assert) {
