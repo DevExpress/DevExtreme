@@ -55,9 +55,9 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   const menu = new Menu();
 
   if (adaptivityEnabled) {
-    await t.resizeWindow(400, 800); 
+    await t.resizeWindow(400, 800);
   } else {
-    await t.resizeWindow(1024, 800); 
+    await t.resizeWindow(1024, 800);
   }
 
   await t
