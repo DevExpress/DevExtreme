@@ -1,4 +1,4 @@
-import type { PagerDisplayMode } from '@js/ui/pager';
+import type { PagerDisplayMode } from '@js/common';
 
 import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
