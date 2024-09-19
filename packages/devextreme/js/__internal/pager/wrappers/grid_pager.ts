@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { ComponentWrapper } from '../../core/r1/component_wrapper';
 import type { Option } from '../../core/r1/types';
+import { validateOptions } from '../utils/validation_utils';
 
 export class GridPagerWrapper extends ComponentWrapper {
   _optionChanged(args: Option): void {
@@ -46,7 +47,7 @@ export class GridPagerWrapper extends ComponentWrapper {
       totalCount = this.option('totalCount') as number;
     }
 
-    const validatedOptions = this._validateOptionsCore(
+    const validatedOptions = validateOptions(
       pageSize as number,
       pageIndex as number,
       totalCount as number,
@@ -56,48 +57,5 @@ export class GridPagerWrapper extends ComponentWrapper {
       ...rest,
       ...validatedOptions,
     };
-  }
-
-  _validateOptionsCore(
-    pageSize: number,
-    oldPageIndex: number,
-    oldItemCount: number,
-  ): Record<string, number> {
-    const itemCount = this.getItemCount(oldItemCount);
-    const pageCount = this.getPageCount(pageSize, oldItemCount);
-    const pageIndex = this.getPageIndex(oldPageIndex, pageSize, itemCount);
-
-    return {
-      pageSize,
-      pageIndex,
-      totalCount: itemCount,
-      pageCount,
-    };
-  }
-
-  private getItemCount(itemCount: number): number {
-    if (itemCount < 0) {
-      return 0;
-    }
-    return itemCount;
-  }
-
-  private getPageCount(pageSize: number, itemCount: number): number {
-    if (pageSize > 0 && itemCount > 0) {
-      return Math.max(1, Math.ceil(itemCount / pageSize));
-    }
-    if (itemCount === 0) {
-      return 0;
-    }
-    return 1;
-  }
-
-  private getPageIndex(pageIndex: number, pageSize: number, itemCount: number): number {
-    if (pageIndex < 1) {
-      return 1;
-    }
-
-    const pageCount = this.getPageCount(pageSize, itemCount);
-    return Math.min(pageIndex, pageCount);
   }
 }
