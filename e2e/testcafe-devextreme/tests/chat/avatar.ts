@@ -11,7 +11,7 @@ fixture.disablePageReloads`ChatAvatar`
 
 test('Chat: avatar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  await testScreenshot(t, takeScreenshot, 'Avatar with initials.png', { element: '#chat' });
+  await testScreenshot(t, takeScreenshot, 'Avatar with two word initials.png', { element: '#chat' });
 
   const chat = new Chat('#chat');
 
@@ -30,8 +30,8 @@ test('Chat: avatar', async (t) => {
 }).before(async () => {
   await appendElementTo('#container', 'div', 'chat');
 
-  const userFirst = createUser(1, 'First');
-  const userSecond = createUser(2, 'Second');
+  const userFirst = createUser(1, 'First User');
+  const userSecond = createUser(2, 'Second User');
 
   const items = generateMessages(2, userFirst, userSecond, false, false, 2);
 

@@ -12,7 +12,6 @@ import MessageGroup from './messagegroup';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 
-const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
@@ -86,10 +85,6 @@ class MessageList extends Widget<Properties> {
     $(this._scrollable.content()).empty();
   }
 
-  _toggleEmptyStateClass(state: boolean): void {
-    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, state);
-  }
-
   _isEmpty(): boolean {
     const { items } = this.option();
 
@@ -128,7 +123,6 @@ class MessageList extends Widget<Properties> {
 
   _renderMessageListContent(): void {
     if (this._isEmpty()) {
-      this._toggleEmptyStateClass(true);
       this._renderEmptyViewContent();
 
       return;
@@ -225,8 +219,6 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
-      this._toggleEmptyStateClass(false);
-
       if (!previousValue.length) {
         this._removeEmptyView();
       }
