@@ -76,8 +76,8 @@ export class GridPagerWrapper extends ComponentWrapper {
   }
 
   private getItemCount(itemCount: number): number {
-    if (itemCount < 1) {
-      return 1;
+    if (itemCount < 0) {
+      return 0;
     }
     return itemCount;
   }
@@ -85,6 +85,9 @@ export class GridPagerWrapper extends ComponentWrapper {
   private getPageCount(pageSize: number, itemCount: number): number {
     if (pageSize > 0 && itemCount > 0) {
       return Math.max(1, Math.ceil(itemCount / pageSize));
+    }
+    if (itemCount === 0) {
+      return 0;
     }
     return 1;
   }
