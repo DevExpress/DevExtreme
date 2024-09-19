@@ -67,7 +67,7 @@ describe('template rendering', () => {
     expect(wrapper.vm.$el.getElementsByClassName('test')).toHaveLength(1);
   });
 
-  fit('should unmount template with two childs in root without exception', async () => {
+  it('should unmount template with two childs in root without exception', async () => {
     const appView = defineComponent({
       props: {
         templateName: {
