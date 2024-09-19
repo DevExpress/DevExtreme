@@ -159,11 +159,6 @@ export {
 } from '../common/grids';
 
 export {
-    PagerDisplayMode,
-    PagerPageSize,
-  } from './pager';
-
-export {
     DataStructure,
     Mode,
     ScrollMode,

@@ -1,4 +1,7 @@
 import Widget, { WidgetOptions } from './widget/ui.widget';
+import {
+    BasePagerOptions,
+} from '../common';
 
 /**
  * @deprecated use Properties instead
