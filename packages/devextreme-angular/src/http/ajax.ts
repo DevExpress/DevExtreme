@@ -186,11 +186,11 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
         xhrSurrogate.statusText = event.statusText;
         xhrSurrogate.response = event;
 
-        if (typeof event.body === 'object') {
-          Object.assign(xhrSurrogate, event.body);
-        }
+        const result = (options?.dataType === 'json' && typeof event.body === 'object')
+            ? event.body
+            : xhrSurrogate;
 
-        return deferred.resolve(xhrSurrogate, SUCCESS);
+        return deferred.resolve(result, SUCCESS);
       }
       return null;
     },
