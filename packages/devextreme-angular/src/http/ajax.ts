@@ -186,9 +186,9 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
         xhrSurrogate.statusText = event.statusText;
         xhrSurrogate.response = event;
 
-        const result = (options?.dataType === 'json' && typeof event.body === 'object')
-            ? event.body
-            : xhrSurrogate;
+        const result = options?.dataType === 'json' && typeof event.body === 'object'
+          ? event.body
+          : xhrSurrogate;
 
         return deferred.resolve(result, SUCCESS);
       }
