@@ -20,7 +20,7 @@ class Avatar extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      name: '',
+      name: 'Unknown User',
       url: '',
     };
   }
@@ -52,12 +52,8 @@ class Avatar extends Widget<Properties> {
   }
 
   _renderInitials(): void {
-    const { name } = this.option();
-
-    if (name) {
-      this._renderInitialsElement();
-      this._updateInitials();
-    }
+    this._renderInitialsElement();
+    this._updateInitials();
   }
 
   _renderImageElement(): void {
@@ -101,10 +97,21 @@ class Avatar extends Widget<Properties> {
 
   _getInitials(name: string | undefined): string {
     if (isDefined(name)) {
-      return String(name).charAt(0).toUpperCase();
+      const splitValue = String(name).trim().split(/\s+/);
+
+      const firstInitial = this._getFirstChar(splitValue[0]);
+      const secondInitial = this._getFirstChar(splitValue[1]);
+
+      const result = `${firstInitial}${secondInitial}`;
+
+      return result;
     }
 
     return '';
+  }
+
+  _getFirstChar(value: string | undefined): string {
+    return value?.charAt(0).toUpperCase() ?? '';
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
