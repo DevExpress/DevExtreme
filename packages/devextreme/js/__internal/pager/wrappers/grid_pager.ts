@@ -25,12 +25,6 @@ export class GridPagerWrapper extends ComponentWrapper {
   }
 
   protected getPageCount(): number {
-    const itemCount = this.option('itemCount') as number;
-    const pageSize = this.option('pageSize') as number;
-
-    if (pageSize && itemCount > 0) {
-      return Math.max(1, Math.ceil(itemCount / pageSize));
-    }
-    return 1;
+    return this.option('pageCount') as number;
   }
 }

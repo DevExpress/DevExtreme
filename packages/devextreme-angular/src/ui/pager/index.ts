@@ -13,10 +13,14 @@ import {
     Input,
     Output,
     OnDestroy,
-    EventEmitter
+    EventEmitter,
+    OnChanges,
+    DoCheck,
+    SimpleChanges
 } from '@angular/core';
 
 
+import { PagerAllPagesMode } from 'devextreme/common';
 
 import DxPager from 'devextreme/ui/pager';
 
@@ -27,6 +31,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
+    IterableDifferHelper,
     WatcherHelper
 } from 'devextreme-angular/core';
 
@@ -45,10 +50,11 @@ import {
     providers: [
         DxTemplateHost,
         WatcherHelper,
-        NestedOptionHost
+        NestedOptionHost,
+        IterableDifferHelper
     ]
 })
-export class DxPagerComponent extends DxComponent implements OnDestroy {
+export class DxPagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
     instance: DxPager = null;
 
     /**
@@ -74,6 +80,19 @@ export class DxPagerComponent extends DxComponent implements OnDestroy {
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxPagerOptions.allowedPageSizes]
+    
+     */
+    @Input()
+    get allowedPageSizes(): Array<PagerAllPagesMode | number> {
+        return this._getOption('allowedPageSizes');
+    }
+    set allowedPageSizes(value: Array<PagerAllPagesMode | number>) {
+        this._setOption('allowedPageSizes', value);
     }
 
 
@@ -296,6 +315,13 @@ export class DxPagerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() allowedPageSizesChange: EventEmitter<Array<PagerAllPagesMode | number>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() disabledChange: EventEmitter<boolean>;
 
     /**
@@ -390,7 +416,8 @@ export class DxPagerComponent extends DxComponent implements OnDestroy {
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
-            _watcherHelper: WatcherHelper,
+            private _watcherHelper: WatcherHelper,
+            private _idh: IterableDifferHelper,
             optionHost: NestedOptionHost,
             transferState: TransferState,
             @Inject(PLATFORM_ID) platformId: any) {
@@ -404,6 +431,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy {
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'allowedPageSizesChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
@@ -418,6 +446,8 @@ export class DxPagerComponent extends DxComponent implements OnDestroy {
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
         ]);
+
+        this._idh.setHost(this);
         optionHost.setHost(this);
     }
 
@@ -431,6 +461,32 @@ export class DxPagerComponent extends DxComponent implements OnDestroy {
         this._destroyWidget();
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        super.ngOnChanges(changes);
+        this.setupChanges('allowedPageSizes', changes);
+    }
+
+    setupChanges(prop: string, changes: SimpleChanges) {
+        if (!(prop in this._optionsToUpdate)) {
+            this._idh.setup(prop, changes);
+        }
+    }
+
+    ngDoCheck() {
+        this._idh.doCheck('allowedPageSizes');
+        this._watcherHelper.checkWatchers();
+        super.ngDoCheck();
+        super.clearChangedOptions();
+    }
+
+    _setOption(name: string, value: any) {
+        let isSetup = this._idh.setupSingle(name, value);
+        let isChanged = this._idh.getChanges(name, value) !== null;
+
+        if (isSetup || isChanged) {
+            super._setOption(name, value);
+        }
+    }
 }
 
 @NgModule({

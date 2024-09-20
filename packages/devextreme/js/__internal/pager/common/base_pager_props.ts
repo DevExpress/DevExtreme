@@ -1,4 +1,4 @@
-import type { PagerDisplayMode } from '@js/common';
+import type { PagerAllPagesMode, PagerDisplayMode } from '@js/common';
 
 import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
@@ -18,7 +18,7 @@ export interface BasePagerProps extends BaseWidgetProps {
   hasKnownLastPage?: boolean;
   pagesNavigatorVisible?: boolean | 'auto';
   showPageSizes?: boolean;
-  pageSizes: (number | 'all')[];
+  pageSizes: (number | PagerAllPagesMode)[];
   rtlEnabled?: boolean;
   showNavigationButtons?: boolean;
   itemCount?: number;

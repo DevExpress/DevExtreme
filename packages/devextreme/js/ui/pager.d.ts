@@ -1,6 +1,7 @@
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     BasePagerOptions,
+    PagerAllPagesMode,
 } from '../common';
 
 /**
@@ -10,25 +11,31 @@ import {
  * @docid
  */
 export interface dxPagerOptions extends BasePagerOptions, WidgetOptions<dxPager> {
-  /**
-   * @docid
-   * @fires Properties.onOptionChanged
-   * @default 1
-   */
-  pageIndex?: number;
+    /**
+     * @docid
+     * @fires Properties.onOptionChanged
+     * @default 1
+     */
+    pageIndex?: number;
 
-  /**
-   * @docid
-   * @fires Properties.onOptionChanged
-   * @default 10
-   */
-  pageSize?: number;
+    /**
+     * @docid
+     * @fires Properties.onOptionChanged
+     * @default 5
+     */
+    pageSize?: number;
 
-  /**
-   * @docid
-   * @default 0
-   */
-  itemCount?: number;
+    /**
+     * @docid
+     * @default 1
+     */
+    itemCount?: number;
+
+    /**
+     * @docid
+     * @default [5, 10]
+     */
+    allowedPageSizes?: Array<(number | PagerAllPagesMode)>;
 }
 
 /**

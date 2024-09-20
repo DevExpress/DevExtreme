@@ -7907,12 +7907,6 @@ declare module DevExpress.ui {
    */
   export type BasePagerOptions = {
     /**
-     * [descr:BasePagerOptions.allowedPageSizes]
-     */
-    allowedPageSizes?:
-      | Array<number | DevExpress.ui.dxPager.PagerPageSize>
-      | DevExpress.common.Mode;
-    /**
      * [descr:BasePagerOptions.displayMode]
      */
     displayMode?: DevExpress.ui.dxPager.PagerDisplayMode;
@@ -21764,6 +21758,11 @@ declare module DevExpress.ui {
      * [descr:dxPagerOptions.itemCount]
      */
     itemCount?: number;
+
+    /**
+     * [descr:dxPagerOptions.allowedPageSizes]
+     */
+    allowedPageSizes?: Array<number | DevExpress.ui.dxPager.PagerAllPagesMode>;
   }
   /**
    * [descr:dxPivotGrid]
@@ -30967,8 +30966,9 @@ declare module DevExpress.ui.dxOverlay {
   export function baseZIndex(zIndex: number): void;
 }
 declare module DevExpress.ui.dxPager {
+  export type PagerAllPagesMode = 'all';
   export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
-  export type PagerPageSize = 'all' | 'auto';
+  export type PagerPageSize = PagerAllPagesMode & 'auto';
 }
 declare module DevExpress.ui.dxPivotGrid {
   export type Cell = dxPivotGridPivotGridCell;

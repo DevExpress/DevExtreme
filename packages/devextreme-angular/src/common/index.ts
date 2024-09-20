@@ -29,6 +29,7 @@ export {
     Orientation,
     PageLoadMode,
     PageOrientation,
+    PagerAllPagesMode,
     PagerDisplayMode,
     PagerPageSize,
     PatternRule,

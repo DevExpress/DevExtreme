@@ -4,6 +4,7 @@ import { createComponent } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
+  "allowedPageSizes" |
   "disabled" |
   "elementAttr" |
   "focusStateEnabled" |
@@ -30,6 +31,7 @@ const DxPager = createComponent({
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
+    allowedPageSizes: Array,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -53,6 +55,7 @@ const DxPager = createComponent({
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
+    "update:allowedPageSizes": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,

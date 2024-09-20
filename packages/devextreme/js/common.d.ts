@@ -848,7 +848,13 @@ export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
  * @public
  * @namespace DevExpress.ui.dxPager
  */
-export type PagerPageSize = 'all' | 'auto';
+export type PagerAllPagesMode = 'all';
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxPager
+ */
+export type PagerPageSize = PagerAllPagesMode & 'auto';
 
 /**
  * @docid
@@ -856,11 +862,6 @@ export type PagerPageSize = 'all' | 'auto';
  * @namespace DevExpress.ui
  */
 export type BasePagerOptions = {
-  /**
-   * @docid
-   * @default "auto"
-   */
-  allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
   /**
    * @docid
    * @default "adaptive"

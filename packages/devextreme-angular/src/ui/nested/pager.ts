@@ -27,7 +27,6 @@ import { DxoPager } from './base/pager';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'allowedPageSizes',
         'displayMode',
         'infoText',
         'label',
