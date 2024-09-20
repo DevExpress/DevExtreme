@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import fx from '@js/animation/fx';
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
@@ -706,8 +707,15 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return false;
   }
 
-  private _isRtlParentStyle() {
-    return this.option('rtlEnabled') && this._$parentContainer?.parent().css('direction') === 'rtl';
+  private _isRtlParentStyle(): boolean {
+    const rtlEnabled = this.option('rtlEnabled') as boolean;
+
+    return rtlEnabled && this._$parentContainer?.parent().css('direction') === 'rtl';
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _correctColumnIndexForPoint(point, correctionValue: number, columns): void {
+    point.columnIndex -= correctionValue;
   }
 
   /**
@@ -720,7 +728,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     const firstPointColumnIndex = !isNextColumnMode && rtlEnabled && !isRtlParentStyle ? 0 : 1;
 
     if (point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && (!rtlEnabled || isRtlParentStyle) ? 1 : 0)) {
-      point.columnIndex -= firstPointColumnIndex;
+      this._correctColumnIndexForPoint(point, firstPointColumnIndex, columns);
       const currentColumn = columns[point.columnIndex] || {};
       const nextColumn = columns[point.columnIndex + 1] || {};
       return !(isNextColumnMode ? currentColumn.allowResizing && nextColumn.allowResizing : currentColumn.allowResizing);
@@ -832,18 +840,18 @@ export class ColumnsResizerViewController extends modules.ViewController {
   }
 
   private _setupResizingInfo(posX) {
-    const that = this;
-    const currentColumnIndex = that._targetPoint.columnIndex;
-    const nextColumnIndex = that._getNextColumnIndex(currentColumnIndex);
-    const currentHeader = that._columnHeadersView.getHeaderElement(currentColumnIndex);
-    const nextHeader = that._columnHeadersView.getHeaderElement(nextColumnIndex);
+    const currentColumnIndex = this._targetPoint.columnIndex;
+    const nextColumnIndex = this._getNextColumnIndex(currentColumnIndex);
+    const $currentHeader = this._columnHeadersView.getHeaderElement(currentColumnIndex);
+    const $nextHeader = this._columnHeadersView.getHeaderElement(nextColumnIndex);
 
-    that._resizingInfo = {
+    this._resizingInfo = {
       startPosX: posX,
       currentColumnIndex,
-      currentColumnWidth: currentHeader && currentHeader.length > 0 ? getBoundingRect(currentHeader[0]).width : 0,
+      currentColumnWidth: $currentHeader?.length ? getBoundingRect($currentHeader[0]).width : 0,
       nextColumnIndex,
-      nextColumnWidth: nextHeader && nextHeader.length > 0 ? getBoundingRect(nextHeader[0]).width : 0,
+      nextColumnWidth: $nextHeader?.length ? getBoundingRect($nextHeader[0]).width : 0,
+      needToInvertResizing: this._needToInvertResizing($currentHeader),
     };
   }
 
@@ -919,6 +927,15 @@ export class ColumnsResizerViewController extends modules.ViewController {
     that._pointsByColumns = pointsByColumns;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _needToInvertResizing($cell: dxElementWrapper): boolean {
+    const rtlEnabled = this.option('rtlEnabled') as boolean;
+    const isRtlParentStyle = this._isRtlParentStyle();
+    const isNextColumnMode = isNextColumnResizingMode(this);
+
+    return (isNextColumnMode || isRtlParentStyle) && rtlEnabled;
+  }
+
   private _unsubscribeFromEvents() {
     this._moveSeparatorHandler && eventsEngine.off(domAdapter.getDocument(), addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
     this._startResizingHandler && eventsEngine.off(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this._startResizingHandler);
@@ -949,10 +966,10 @@ export class ColumnsResizerViewController extends modules.ViewController {
     const columnsSeparatorWidth = this._columnsSeparatorView.width();
     const isNextColumnMode = isNextColumnResizingMode(this);
     const adaptColumnWidthByRatio = isNextColumnMode && this.option('adaptColumnWidthByRatio') && !this.option('columnAutoWidth');
-    const rtlEnabled = this.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
     const column = visibleColumns[resizingInfo.currentColumnIndex];
     const nextColumn = visibleColumns[resizingInfo.nextColumnIndex];
+    const { needToInvertResizing } = resizingInfo;
 
     function isPercentWidth(width) {
       return isString(width) && width.endsWith('%');
@@ -1030,7 +1047,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
     deltaX = posX - resizingInfo.startPosX;
 
-    if ((isNextColumnMode || isRtlParentStyle) && rtlEnabled) {
+    if (needToInvertResizing) {
       deltaX = -deltaX;
     }
 

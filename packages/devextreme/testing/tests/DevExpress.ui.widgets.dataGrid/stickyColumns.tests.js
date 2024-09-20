@@ -86,7 +86,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
     }
 }, () => {
     QUnit.module('Columns with left and right positions', () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -105,7 +105,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 6, x: 600, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -129,7 +129,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 6, x: 600, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -176,7 +176,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -194,7 +194,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 375, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -217,7 +217,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 325, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -262,7 +262,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -280,7 +280,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 375, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -303,7 +303,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 325, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -325,7 +325,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 225, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -360,7 +360,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 375, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -400,7 +400,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 325, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -462,7 +462,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -479,7 +479,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 260, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -501,7 +501,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 260, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -522,7 +522,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[1], { columnIndex: 3, index: 4, x: 260, y: 0 }, 'second point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.$element().width(400);
             this.columns = [
@@ -557,7 +557,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.$element().width(400);
             this.columns = [
@@ -597,7 +597,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn"', {
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.$element().width(400);
             this.columns = [
@@ -702,7 +702,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
     }
 }, () => {
     QUnit.module('Columns with left and right positions', () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -721,7 +721,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 6, x: 125, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -745,7 +745,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 6, x: 125, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -792,7 +792,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -810,7 +810,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 25, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -833,7 +833,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 75, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -878,7 +878,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -895,7 +895,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 100, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -917,7 +917,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 100, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -939,7 +939,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 100, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -973,7 +973,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 100, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1012,7 +1012,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 100, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1074,7 +1074,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1091,7 +1091,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 98, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1113,7 +1113,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 75, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1135,7 +1135,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 175, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1170,7 +1170,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 25, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1210,7 +1210,7 @@ QUnit.module('Column resizing points - columnResizingMode = "nextColumn" (rtlEna
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 75, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1311,7 +1311,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
     }
 }, () => {
     QUnit.module('Columns with left and right positions', () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1322,16 +1322,15 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 6, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 225, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 375, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 6, x: 600, y: 0 }, 'fifth point');
-            assert.deepEqual(pointsByColumns[5], { columnIndex: 6, index: 7, x: 800, y: 0 }, 'sixth point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 5, index: 5, x: 400, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[4], { columnIndex: 6, index: 6, x: 600, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1347,16 +1346,15 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 6, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 225, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 325, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 6, x: 600, y: 0 }, 'fifth point');
-            assert.deepEqual(pointsByColumns[5], { columnIndex: 6, index: 7, x: 800, y: 0 }, 'sixth point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 5, index: 5, x: 400, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[4], { columnIndex: 6, index: 6, x: 600, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1372,13 +1370,12 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 6, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 225, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 250, y: 0 }, 'third point');
             assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 6, x: 600, y: 0 }, 'fifth point');
-            assert.deepEqual(pointsByColumns[5], { columnIndex: 6, index: 7, x: 800, y: 0 }, 'sixth point');
+            assert.deepEqual(pointsByColumns[4], { columnIndex: 6, index: 6, x: 600, y: 0 }, 'fifth point');
         });
     });
 
@@ -1404,7 +1401,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1415,15 +1412,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 175, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 275, y: 0 }, 'third point');
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 375, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 5, x: 550, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1439,15 +1435,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 125, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 225, y: 0 }, 'third point');
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 325, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 5, x: 500, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1493,7 +1488,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1504,14 +1499,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 200, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 252, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 650, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 252, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1527,14 +1521,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 3, x: 225, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 325, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 500, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1556,7 +1549,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 5, x: 350, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1584,14 +1577,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 200, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 275, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 550, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1624,15 +1616,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 200, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 3, x: 225, y: 0 }, 'third point');
             assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 4, x: 325, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 5, x: 500, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1694,7 +1685,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1705,14 +1696,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 202, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 202, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 300, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1728,14 +1718,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 50, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 202, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 202, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 300, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1751,14 +1740,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 1, index: 2, x: 25, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 3, x: 125, y: 0 }, 'second point');
             assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1786,14 +1774,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 100, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 3, x: 125, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 300, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1826,14 +1813,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 50, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 3, x: 125, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 300, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -1866,11 +1852,10 @@ QUnit.module('Column resizing points - columnResizingMode = "widget"', {
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
             assert.deepEqual(pointsByColumns[0], { columnIndex: 1, index: 2, x: 25, y: 0 }, 'first point');
             assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 3, x: 125, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 300, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 5, x: 400, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 300, y: 0 }, 'third point');
         });
     });
 });
@@ -1938,7 +1923,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
     }
 }, () => {
     QUnit.module('Columns with left and right positions', () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1949,16 +1934,15 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 6, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 800, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 600, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 400, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 250, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 5, x: 225, y: 0 }, 'fifth point');
-            assert.deepEqual(pointsByColumns[5], { columnIndex: 6, index: 6, x: 125, y: 0 }, 'sixth point');
+            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 600, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 400, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 250, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 5, index: 5, x: 225, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[4], { columnIndex: 6, index: 6, x: 125, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1974,16 +1958,15 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 6, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 800, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 600, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 400, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 300, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 5, x: 225, y: 0 }, 'fifth point');
-            assert.deepEqual(pointsByColumns[5], { columnIndex: 6, index: 6, x: 125, y: 0 }, 'sixth point');
+            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 600, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 400, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 300, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 5, index: 5, x: 225, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[4], { columnIndex: 6, index: 6, x: 125, y: 0 }, 'fifth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -1999,13 +1982,12 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 6, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 800, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 600, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 400, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 375, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 5, index: 5, x: 225, y: 0 }, 'fifth point');
-            assert.deepEqual(pointsByColumns[5], { columnIndex: 6, index: 6, x: 125, y: 0 }, 'sixth point');
+            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 600, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 400, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 375, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 5, index: 5, x: 225, y: 0 }, 'fourth point');
+            assert.deepEqual(pointsByColumns[4], { columnIndex: 6, index: 6, x: 125, y: 0 }, 'fifth point');
         });
     });
 
@@ -2031,7 +2013,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2042,15 +2024,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 225, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 4, x: 25, y: 0 }, 'fifth point');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 225, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 25, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2066,15 +2047,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 275, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 175, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 4, x: 75, y: 0 }, 'fifth point');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 275, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 175, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 75, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2090,11 +2070,10 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 202, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 102, y: 0 }, 'fourth point');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 3, x: 202, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 4, x: 102, y: 0 }, 'third point');
         });
     });
 
@@ -2120,7 +2099,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2138,7 +2117,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2154,14 +2133,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 510, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 235, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 135, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'fourth point');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 2, index: 2, x: 235, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 3, index: 3, x: 135, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2177,13 +2155,12 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 650, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 3, index: 3, x: 262, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'third point');
+            assert.strictEqual(pointsByColumns.length, 2, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 2, index: 3, x: 262, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'second point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.$element().width(400);
             this.columns = [
@@ -2219,7 +2196,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.$element().width(400);
             this.columns = [
@@ -2253,14 +2230,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 450, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 350, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 200, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'fourth point');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 1, index: 1, x: 350, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 3, index: 3, x: 200, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column after left fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.$element().width(400);
             this.columns = [
@@ -2294,11 +2270,10 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 550, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 375, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 275, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'fourth point');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 2, index: 2, x: 375, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 3, index: 3, x: 275, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 100, y: 0 }, 'third point');
         });
     });
 
@@ -2324,7 +2299,7 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             ];
         }
     }, () => {
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft = 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2335,15 +2310,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 200, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 4, x: 25, y: 0 }, 'fifth point');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 200, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 25, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when scrollLeft !== 0', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2359,15 +2333,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 250, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 175, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 4, x: 75, y: 0 }, 'fifth point');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 250, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 175, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 75, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when scroll position is at the end', function(assert) {
             // arrange
             this.setupDataGrid();
             this.columnHeadersView.render(this.gridContainer);
@@ -2383,14 +2356,13 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 227, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 175, y: 0 }, 'fourth point');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 3, x: 227, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 175, y: 0 }, 'third point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft = 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -2418,15 +2390,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 200, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 4, x: 25, y: 0 }, 'fifth point');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 2, index: 2, x: 200, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 125, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 25, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scrollLeft !== 0', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -2459,15 +2430,14 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 5, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 200, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 3, index: 3, x: 175, y: 0 }, 'fourth point');
-            assert.deepEqual(pointsByColumns[4], { columnIndex: 4, index: 4, x: 75, y: 0 }, 'fifth point');
+            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 200, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 3, index: 3, x: 175, y: 0 }, 'third point');
+            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 75, y: 0 }, 'fourth point');
         });
 
-        QUnit.skipInShadowDomMode('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
+        QUnit.test('should get the correct points when sticky column before right fixed column and scroll position is at the end', function(assert) {
             // arrange
             this.columns = [
                 {
@@ -2500,11 +2470,10 @@ QUnit.module('Column resizing points - columnResizingMode = "widget" (rtlEnabled
             const pointsByColumns = this.columnsResizerController._pointsByColumns;
 
             // assert
-            assert.strictEqual(pointsByColumns.length, 4, 'count points by columns');
-            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 0, x: 400, y: 0 }, 'first point');
-            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 1, x: 300, y: 0 }, 'second point');
-            assert.deepEqual(pointsByColumns[2], { columnIndex: 2, index: 2, x: 200, y: 0 }, 'third point');
-            assert.deepEqual(pointsByColumns[3], { columnIndex: 4, index: 4, x: 175, y: 0 }, 'fourth point');
+            assert.strictEqual(pointsByColumns.length, 3, 'count points by columns');
+            assert.deepEqual(pointsByColumns[0], { columnIndex: 0, index: 1, x: 300, y: 0 }, 'first point');
+            assert.deepEqual(pointsByColumns[1], { columnIndex: 1, index: 2, x: 200, y: 0 }, 'second point');
+            assert.deepEqual(pointsByColumns[2], { columnIndex: 4, index: 4, x: 175, y: 0 }, 'third point');
         });
     });
 });

@@ -1,4 +1,5 @@
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -450,10 +451,10 @@ export class ColumnHeadersView extends ColumnsView {
     return $headerRows && $headerRows.toArray().reduce((sum, headerRow) => sum + getHeight(headerRow), 0) || 0;
   }
 
-  public getHeaderElement(index) {
-    const columnElements = this.getColumnElements();
+  public getHeaderElement(index: number): dxElementWrapper {
+    const $columnElements = this.getColumnElements();
 
-    return columnElements && columnElements.eq(index);
+    return $columnElements?.eq(index) ?? $('');
   }
 
   public getColumnElements(index?, bandColumnIndex?) {

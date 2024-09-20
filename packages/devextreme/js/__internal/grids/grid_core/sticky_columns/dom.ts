@@ -4,8 +4,9 @@ import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import { CLASSES, StickyPosition } from './const';
-import { getColumnFixedPosition } from './utils';
+import { getColumnFixedPosition, isFixedEdge } from './utils';
 
 const addStickyColumnBorderLeftClass = ($cell, addWidgetPrefix): void => {
   $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
@@ -80,12 +81,12 @@ const isStickyCellPinnedToRight = (
   return Math.round(cellRight) >= Math.round(calculatedCellRight);
 };
 
-const isFixedCell = (
+const isFixedCellPinnedToRight = (
   $cell: dxElementWrapper,
+  $container: dxElementWrapper,
   addWidgetPrefix,
-): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft))
-    || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
-    || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
+): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
+  || isStickyCellPinnedToRight($cell, $container, addWidgetPrefix);
 
 const isLastLeftFixedCell = (
   $cell: dxElementWrapper,
@@ -145,11 +146,11 @@ const getNonFixedAreaBoundingRect = (
     const $firstRightFixedCell = getFirstRightFixedCell($cells, $container, addWidgetPrefix);
 
     if ($lastLeftFixedCell?.length) {
-      result.left = getBoundingRect($lastLeftFixedCell[0]).right;
+      result.left = Math.round(getBoundingRect($lastLeftFixedCell[0]).right);
     }
 
     if ($firstRightFixedCell?.length) {
-      result.right = getBoundingRect($firstRightFixedCell[0]).left;
+      result.right = Math.round(getBoundingRect($firstRightFixedCell[0]).left);
     }
   }
 
@@ -157,21 +158,35 @@ const getNonFixedAreaBoundingRect = (
 };
 
 const noNeedToCreateResizingPoint = (
-  point,
-  $cells: dxElementWrapper,
-  $container: dxElementWrapper,
+  that: ColumnHeadersView,
+  {
+    point,
+    column,
+    nextColumn,
+  }: {
+    point: {
+      x: number;
+      index: number;
+      item: HTMLElement;
+      isLeftBoundary: boolean | undefined;
+      isRightBoundary: boolean | undefined;
+    };
+    column;
+    nextColumn;
+  },
   addWidgetPrefix,
 ): boolean => {
-  const { item, isLeftBoundary, isRightBoundary }: {
-    item: HTMLElement;
-    isLeftBoundary: boolean | undefined;
-    isRightBoundary: boolean | undefined;
-  } = point;
+  const { item, isLeftBoundary, isRightBoundary } = point;
   const $item = $(item);
+  const offsetX = Math.round(point.x);
+  const rtlEnabled = that.option('rtlEnabled') as boolean;
   const isSplitPoint = isDefined(isLeftBoundary) || isDefined(isRightBoundary);
+  const $cells = $(that.getColumnElements() ?? '');
+  const $container = $(that.getContent());
+  const isFixedPoint = column?.fixed && nextColumn?.fixed;
+  const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
 
-  if (!isSplitPoint
-    && isFixedCell($(item), addWidgetPrefix) !== isFixedCell($(item).prev(), addWidgetPrefix)) {
+  if (isFixedPoint || isFixedEdge(point, column, nextColumn)) {
     return false;
   }
 
@@ -187,9 +202,13 @@ const noNeedToCreateResizingPoint = (
     }
   }
 
-  const nonFixedAreaBoundingRect = getNonFixedAreaBoundingRect($cells, $container, addWidgetPrefix);
+  const isOutsideVisibleArea = offsetX < nonFixedAreaBoundingRect.left
+    || offsetX > nonFixedAreaBoundingRect.right;
+  const isPointBoundary = offsetX === nonFixedAreaBoundingRect.left
+    || offsetX === nonFixedAreaBoundingRect.right;
+  const isLastOrFirstPoint = rtlEnabled ? point.index === 0 : point.index === $cells.length;
 
-  return point.x <= nonFixedAreaBoundingRect.left || point.x >= nonFixedAreaBoundingRect.right;
+  return isOutsideVisibleArea || (!isLastOrFirstPoint && isPointBoundary);
 };
 
 export const GridCoreStickyColumnsDom = {
@@ -200,4 +219,5 @@ export const GridCoreStickyColumnsDom = {
   addStickyColumnBorderRightClass,
   toggleStickyColumnsClass,
   noNeedToCreateResizingPoint,
+  isFixedCellPinnedToRight,
 };
