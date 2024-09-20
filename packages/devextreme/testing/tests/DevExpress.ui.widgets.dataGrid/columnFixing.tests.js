@@ -983,10 +983,10 @@ QUnit.module('Fixed columns', {
         assert.strictEqual($fixTable.find('tbody > tr').first().find('td').last().html(), '', 'fixed column');
 
         // T445226
-        assert.equal($footerContentElements.filter(':not(.dx-datagrid-content-fixed)').find('.dx-datagrid-summary-item').css('padding-top'), '7px', 'padding top of main content');
-        assert.equal($footerContentElements.filter(':not(.dx-datagrid-content-fixed)').find('.dx-datagrid-summary-item').css('paddingBottom'), '7px', 'padding bottom of main content');
-        assert.equal($footerContentElements.filter('.dx-datagrid-content-fixed').find('.dx-datagrid-summary-item').css('padding-top'), '7px', 'padding top of fixed content');
-        assert.equal($footerContentElements.filter('.dx-datagrid-content-fixed').find('.dx-datagrid-summary-item').css('paddingBottom'), '7px', 'padding bottom of fixed content');
+        assert.equal($footerContentElements.filter(':not(.dx-datagrid-content-fixed)').find('td').css('padding-top'), '14px', 'padding top of main content');
+        assert.equal($footerContentElements.filter(':not(.dx-datagrid-content-fixed)').find('td').css('paddingBottom'), '14px', 'padding bottom of main content');
+        assert.equal($footerContentElements.filter('.dx-datagrid-content-fixed').find('td').css('padding-top'), '14px', 'padding top of fixed content');
+        assert.equal($footerContentElements.filter('.dx-datagrid-content-fixed').find('td').css('paddingBottom'), '14px', 'padding bottom of fixed content');
     });
 
     // T232872
