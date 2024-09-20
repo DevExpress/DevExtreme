@@ -1,3 +1,10 @@
+function getPageSize(pageSize: number): number {
+  if (pageSize < 1) {
+    return 1;
+  }
+  return pageSize;
+}
+
 function getItemCount(itemCount: number): number {
   if (itemCount < 0) {
     return 0;
@@ -22,10 +29,11 @@ function getPageIndex(pageIndex: number, pageSize: number, itemCount: number): n
 }
 
 export function validateOptions(
-  pageSize: number,
+  oldPageSize: number,
   oldPageIndex: number,
   oldItemCount: number,
 ): Record<string, number> {
+  const pageSize = getPageSize(oldPageSize);
   const itemCount = getItemCount(oldItemCount);
   const pageCount = getPageCount(pageSize, oldItemCount);
   const pageIndex = getPageIndex(oldPageIndex, pageSize, itemCount);
