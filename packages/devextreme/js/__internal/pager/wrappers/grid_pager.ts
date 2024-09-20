@@ -26,7 +26,7 @@ export class GridPagerWrapper extends ComponentWrapper {
   }
 
   _validateOptions(options: Record<string, unknown>): Record<string, unknown> {
-    if (options._skipValidation) {
+    if (options._skipValidation || this.option('_skipValidation')) {
       return options;
     }
 
