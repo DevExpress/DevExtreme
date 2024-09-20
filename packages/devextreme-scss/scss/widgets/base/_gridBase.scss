@@ -1000,9 +1000,9 @@
   .dx-#{$widget-name}-total-footer {
     position: relative;
 
-    & > .dx-#{$widget-name}-content .dx-#{$widget-name}-summary-item {
-      padding-top: $grid-total-footer-paddings;
-      padding-bottom: $grid-total-footer-paddings;
+    & > .dx-#{$widget-name}-content .dx-row > td {
+      padding-top: $grid-total-footer-paddings * 2;
+      padding-bottom: $grid-total-footer-paddings * 2;
     }
   }
 
