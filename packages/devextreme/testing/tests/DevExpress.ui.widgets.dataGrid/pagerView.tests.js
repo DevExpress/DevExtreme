@@ -280,7 +280,9 @@ QUnit.module('Pager', {
 
         // assert
         assert.equal(pagerView._createComponent.callCount, 1, '_createComponent call count after partial update');
-        assert.equal(pagerView.getPager().option.callCount, 1, 'pager option call count after partial update');
+
+        // call count increased because the component should check if it need to perform the validation
+        assert.equal(pagerView.getPager().option.callCount, 2, 'pager option call count after partial update');
         assert.deepEqual(pagerView.getPager().option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
             totalCount: 143, // #7259
