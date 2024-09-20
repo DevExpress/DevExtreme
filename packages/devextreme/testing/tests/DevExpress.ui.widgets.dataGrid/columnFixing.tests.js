@@ -943,7 +943,6 @@ QUnit.module('Fixed columns', {
     });
 
     QUnit.test('Draw fixed table for summary', function(assert) {
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
         // arrange
         const that = this;
         const $testElement = $('#container');
