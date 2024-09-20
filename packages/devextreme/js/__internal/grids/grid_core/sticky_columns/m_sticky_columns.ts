@@ -148,7 +148,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
         const styleProps = normalizeOffset(offset);
 
-        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex);
+        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex, true);
       }
     });
   }
