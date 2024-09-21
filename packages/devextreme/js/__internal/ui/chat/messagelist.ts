@@ -50,10 +50,7 @@ class MessageList extends Widget<Properties> {
 
     this._renderMessageListContent();
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this._scrollable.update();
-
-    this._scrollContentToLastMessageGroup();
+    this.update();
   }
 
   _renderEmptyViewContent(): void {
@@ -117,7 +114,7 @@ class MessageList extends Widget<Properties> {
       .appendTo(this.$element());
 
     this._scrollable = this._createComponent($scrollable, Scrollable, {
-      useNative: true,
+      useKeyboard: false,
     });
   }
 
@@ -164,26 +161,16 @@ class MessageList extends Widget<Properties> {
 
       if (sender?.id === lastMessageGroupUserId) {
         lastMessageGroup.renderMessage(message);
-
-        this._scrollContentToLastMessageGroup();
-
-        return;
       }
+    } else {
+      this._createMessageGroupComponent([message], sender?.id);
     }
 
-    this._createMessageGroupComponent([message], sender?.id);
-    this._scrollContentToLastMessageGroup();
+    this._scrollContentToLastMessage();
   }
 
-  _scrollContentToLastMessageGroup(): void {
-    if (!(this._messageGroups?.length && hasWindow())) {
-      return;
-    }
-
-    const lastMessageGroup = this._messageGroups[this._messageGroups.length - 1];
-    const element = lastMessageGroup.$element()[0];
-
-    this._scrollable.scrollToElement(element);
+  _scrollContentToLastMessage(): void {
+    this._scrollable.scrollTo({ top: this._scrollable.content()[0].scrollHeight });
   }
 
   _clean(): void {
@@ -242,6 +229,13 @@ class MessageList extends Widget<Properties> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  update(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._scrollable.update();
+
+    this._scrollContentToLastMessage();
   }
 }
 
