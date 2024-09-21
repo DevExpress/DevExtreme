@@ -8,6 +8,7 @@ export { Bullet } from "./bullet";
 export { Button } from "./button";
 export { ButtonGroup } from "./button-group";
 export { Calendar } from "./calendar";
+export { CardView } from "./card-view";
 export { Chart } from "./chart";
 export { Chat } from "./chat";
 export { CheckBox } from "./check-box";

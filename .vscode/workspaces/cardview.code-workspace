@@ -2,7 +2,7 @@
   "folders": [
     {
       "path": "../..",
-      "name": "Main"
+      "name": "Full"
     },
     {
       "path": "../../packages/devextreme/js/__internal/grids/new/card_view",
@@ -43,6 +43,10 @@
     {
       "path": "../../packages/devextreme-scss/scss/widgets/fluent/cardView",
       "name": "Scss - cardview - fluent",
+    },
+    {
+      "path": "../../packages/devextreme/js/ui/card_view",
+      "name": "Declarations",
     },
   ],
 }

@@ -27,7 +27,7 @@ export class ContentViewContent extends View implements BaseContentViewContent {
 
   public vdom = computed(
     (items, isEditing, fieldTemplate) => (
-      <>
+      <div className={CLASSES.content}>
         {items.map((item) => (
           <Card
             row={item}
@@ -38,7 +38,7 @@ export class ContentViewContent extends View implements BaseContentViewContent {
             fieldTemplate={fieldTemplate}
           />
         ))}
-      </>
+      </div>
     ),
     [
       this.items,

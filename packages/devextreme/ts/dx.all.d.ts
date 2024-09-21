@@ -9456,6 +9456,10 @@ declare module DevExpress.ui {
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
   }
   /**
+   * [descr:dxCardView]
+   */
+  export class dxCardView extends Widget<Properties> {}
+  /**
    * [descr:dxChat]
    */
   export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
@@ -30412,6 +30416,28 @@ declare module DevExpress.ui {
    * [descr:ui.notify(options,stack)]
    */
   export function notify(options: any, stack?: Stack): void;
+  /**
+   * [descr:Properties]
+   */
+  export interface Properties extends WidgetOptions<dxCardView> {
+    /**
+     * [descr:Properties.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<any, any>;
+    /**
+     * [descr:Properties.paging]
+     */
+    paging?: {
+      /**
+       * [descr:Properties.paging.pageSize]
+       */
+      pageSize?: number;
+      /**
+       * [descr:Properties.paging.pageIndex]
+       */
+      pageIndex?: number;
+    };
+  }
   /**
    * [descr:ui.repaintFloatingActionButton()]
    */

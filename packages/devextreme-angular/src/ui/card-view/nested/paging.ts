@@ -8,9 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
 
@@ -24,12 +22,12 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-paging',
+    selector: 'dxo-card-view-paging',
     template: '',
     styles: [''],
     providers: [NestedOptionHost]
 })
-export class DxoPagingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewPagingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get pageIndex(): number {
         return this._getOption('pageIndex');
@@ -46,28 +44,7 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
         this._setOption('pageSize', value);
     }
 
-    @Input()
-    get enabled(): boolean {
-        return this._getOption('enabled');
-    }
-    set enabled(value: boolean) {
-        this._setOption('enabled', value);
-    }
 
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageIndexChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() pageSizeChange: EventEmitter<number>;
     protected get _optionPath() {
         return 'paging';
     }
@@ -76,12 +53,6 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'pageIndexChange' },
-            { emit: 'pageSizeChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }
@@ -100,10 +71,10 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
 
 @NgModule({
   declarations: [
-    DxoPagingComponent
+    DxoCardViewPagingComponent
   ],
   exports: [
-    DxoPagingComponent
+    DxoCardViewPagingComponent
   ],
 })
-export class DxoPagingModule { }
+export class DxoCardViewPagingModule { }
