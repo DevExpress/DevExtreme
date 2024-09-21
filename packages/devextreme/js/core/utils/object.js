@@ -39,7 +39,14 @@ const orderEach = function(map, func) {
     }
 };
 
-const assignValueToProperty = function(target, property, value, assignByReference) {
+const getDeepCopyTarget = (item) => {
+    if(isObject(item)) {
+        return Array.isArray(item) ? [] : {};
+    }
+    return item;
+};
+
+const legacyAssign = function(target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
     if(!assignByReference && variableWrapper.isWrapped(target[property])) {
         variableWrapper.assign(target[property], value);
     } else {
@@ -47,10 +54,37 @@ const assignValueToProperty = function(target, property, value, assignByReferenc
     }
 };
 
+const newAssign = function(target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
+    const goDeeper = extendComplexObject ? isObject(target) : isPlainObject(target);
+    if(!assignByReference && variableWrapper.isWrapped(target[property])) {
+        variableWrapper.assign(target[property], value);
+    } else if(!assignByReference && Array.isArray(value)) {
+        target[property] = value.map(item => deepExtendArraySafe(
+            getDeepCopyTarget(item),
+            item,
+            extendComplexObject,
+            assignByReference,
+            shouldCopyUndefined
+        ));
+    } else if(!assignByReference && goDeeper) {
+        target[property] = deepExtendArraySafe(
+            getDeepCopyTarget(value),
+            value,
+            extendComplexObject,
+            assignByReference,
+            shouldCopyUndefined,
+            newAssign
+        );
+    } else {
+        target[property] = value;
+    }
+};
+
 // B239679, http://bugs.jquery.com/ticket/9477
-const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference) {
+const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference, shouldCopyUndefined, useNewAssign) {
     let prevValue;
     let newValue;
+    const assignFunc = useNewAssign ? newAssign : legacyAssign;
 
     for(const name in changes) {
         prevValue = target[name];
@@ -62,11 +96,15 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
 
         if(isPlainObject(newValue)) {
             const goDeeper = extendComplexObject ? isObject(prevValue) : isPlainObject(prevValue);
-            newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
+            newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
 
-        if(newValue !== undefined && prevValue !== newValue) {
-            assignValueToProperty(target, name, newValue, assignByReference);
+        const isDeepCopyArray = Array.isArray(newValue) && !assignByReference;
+        const hasDifferentNewValue = (shouldCopyUndefined || newValue !== undefined) && prevValue !== newValue ||
+            shouldCopyUndefined && prevValue === undefined;
+
+        if(isDeepCopyArray || hasDifferentNewValue) {
+            assignFunc(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
     }
 
@@ -76,5 +114,7 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
 export {
     clone,
     orderEach,
-    deepExtendArraySafe
+    deepExtendArraySafe,
+    legacyAssign,
+    newAssign
 };

@@ -394,4 +394,30 @@ describe('disposing', () => {
 
     expect(Widget.option.mock.calls.length).toBe(0);
   });
+
+  it('saves and restores focus state after dispose', async () => {
+    let firstRender = true;
+  
+    WidgetClass.mockImplementation((container: HTMLElement) => {
+      const input = document.createElement('input');
+
+      container.appendChild(input);
+
+      if (firstRender) {
+        input.focus();
+      }
+
+      firstRender = false;
+
+      return Widget;
+    })
+
+    testingLib.render(
+      <React.StrictMode>
+        <TestComponent />
+      </React.StrictMode>
+    );
+
+    expect(Widget.focus).toHaveBeenCalledTimes(1);
+  });
 });

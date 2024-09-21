@@ -7,16 +7,16 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import Avatar from './chat_avatar';
-import MessageBubble from './chat_message_bubble';
+import Avatar from './avatar';
+import MessageBubble from './messagebubble';
 
-const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
-const CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS = 'dx-chat-message-group-alignment-start';
-const CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS = 'dx-chat-message-group-alignment-end';
-const CHAT_MESSAGE_GROUP_INFORMATION_CLASS = 'dx-chat-message-group-information';
-const CHAT_MESSAGE_TIME_CLASS = 'dx-chat-message-time';
-const CHAT_MESSAGE_AUTHOR_NAME_CLASS = 'dx-chat-message-author-name';
-const CHAT_MESSAGE_BUBBLE_CONTAINER_CLASS = 'dx-chat-message-bubble-container';
+const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
+const CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS = 'dx-chat-messagegroup-alignment-start';
+const CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS = 'dx-chat-messagegroup-alignment-end';
+const CHAT_MESSAGEGROUP_INFORMATION_CLASS = 'dx-chat-messagegroup-information';
+const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
+const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
+const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 
 export type MessageGroupAlignment = 'start' | 'end';
 
@@ -42,12 +42,12 @@ class MessageGroup extends Widget<Properties> {
     const { alignment } = this.option();
 
     $(this.element())
-      .removeClass(CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS)
-      .removeClass(CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS);
+      .removeClass(CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS)
+      .removeClass(CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS);
 
     const alignmentClass = alignment === 'start'
-      ? CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS
-      : CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS;
+      ? CHAT_MESSAGEGROUP_ALIGNMENT_START_CLASS
+      : CHAT_MESSAGEGROUP_ALIGNMENT_END_CLASS;
 
     $(this.element())
       .addClass(alignmentClass);
@@ -57,7 +57,7 @@ class MessageGroup extends Widget<Properties> {
     const { alignment, items } = this.option();
 
     $(this.element())
-      .addClass(CHAT_MESSAGE_GROUP_CLASS);
+      .addClass(CHAT_MESSAGEGROUP_CLASS);
 
     this._updateAlignmentClass();
 
@@ -100,7 +100,7 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _renderMessageBubbles(items: Message[]): void {
-    this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGE_BUBBLE_CONTAINER_CLASS);
+    this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS);
 
     items.forEach((message) => {
       this._renderMessageBubble(message);
@@ -114,18 +114,18 @@ class MessageGroup extends Widget<Properties> {
     const { timestamp, author } = message;
 
     const $information = $('<div>')
-      .addClass(CHAT_MESSAGE_GROUP_INFORMATION_CLASS);
+      .addClass(CHAT_MESSAGEGROUP_INFORMATION_CLASS);
 
-    const authorName = author?.name ?? '';
+    const authorName = author?.name ?? 'Unknown User';
     const authorNameText = alignment === 'start' ? authorName : '';
 
     $('<div>')
-      .addClass(CHAT_MESSAGE_AUTHOR_NAME_CLASS)
+      .addClass(CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS)
       .text(authorNameText)
       .appendTo($information);
 
     const $time = $('<div>')
-      .addClass(CHAT_MESSAGE_TIME_CLASS)
+      .addClass(CHAT_MESSAGEGROUP_TIME_CLASS)
       .appendTo($information);
 
     if (isDefined(timestamp)) {

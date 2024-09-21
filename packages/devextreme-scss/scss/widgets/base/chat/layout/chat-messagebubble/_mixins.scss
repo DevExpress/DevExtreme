@@ -5,39 +5,39 @@
   $background-color-primary,
   $bubble-container-gap
 ) {
-  .dx-chat-message-bubble-container {
+  .dx-chat-messagegroup-content {
     row-gap: $bubble-container-gap;
   }
 
-  .dx-chat-message-bubble {
+  .dx-chat-messagebubble {
     padding: $padding;
     border-radius: $border-radius;
   }
 
-  .dx-chat-message-group-alignment-start {
-    .dx-chat-message-bubble {
+  .dx-chat-messagegroup-alignment-start {
+    .dx-chat-messagebubble {
       background-color: $background-color-secondary;
 
       &:first-child {
-        border-top-left-radius: $border-radius;
+        border-start-start-radius: $border-radius;
       }
   
       &:last-child {
-        border-bottom-left-radius: $border-radius;
+        border-end-start-radius: $border-radius;
       }
     }
   }
   
-  .dx-chat-message-group-alignment-end {
-    .dx-chat-message-bubble {
+  .dx-chat-messagegroup-alignment-end {
+    .dx-chat-messagebubble {
       background-color: $background-color-primary;
 
       &:first-child {
-        border-top-right-radius: $border-radius;
+        border-start-end-radius: $border-radius;
       }
 
       &:last-child {
-        border-bottom-right-radius: $border-radius;
+        border-end-end-radius: $border-radius;
       }
     }
   }

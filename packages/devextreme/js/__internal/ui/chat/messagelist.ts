@@ -7,16 +7,15 @@ import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
-import type { MessageGroupAlignment } from './chat_message_group';
-import MessageGroup from './chat_message_group';
+import type { MessageGroupAlignment } from './messagegroup';
+import MessageGroup from './messagegroup';
 
-const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
+const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 
-const CHAT_MESSAGE_LIST_EMPTY_CLASS = 'dx-chat-message-list-empty';
-const CHAT_MESSAGE_LIST_EMPTY_VIEW_CLASS = 'dx-chat-empty-view';
-const CHAT_MESSAGE_LIST_EMPTY_IMAGE_CLASS = 'dx-chat-empty-image';
-const CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS = 'dx-chat-empty-message';
-const CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS = 'dx-chat-empty-prompt';
+const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
+const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
+const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
+const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
@@ -43,7 +42,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    $(this.element()).addClass(CHAT_MESSAGE_LIST_CLASS);
+    $(this.element()).addClass(CHAT_MESSAGELIST_CLASS);
 
     super._initMarkup();
 
@@ -59,22 +58,24 @@ class MessageList extends Widget<Properties> {
 
   _renderEmptyViewContent(): void {
     const $emptyView = $('<div>')
-      .addClass(CHAT_MESSAGE_LIST_EMPTY_VIEW_CLASS);
+      .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS);
 
     $('<div>')
       .appendTo($emptyView)
-      .addClass(CHAT_MESSAGE_LIST_EMPTY_IMAGE_CLASS);
+      .addClass(CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS);
 
     const messageText = messageLocalization.format('dxChat-emptyListMessage');
+
     $('<div>')
       .appendTo($emptyView)
-      .addClass(CHAT_MESSAGE_LIST_EMPTY_MESSAGE_CLASS)
+      .addClass(CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS)
       .text(messageText);
 
     const promptText = messageLocalization.format('dxChat-emptyListPrompt');
+
     $('<div>')
       .appendTo($emptyView)
-      .addClass(CHAT_MESSAGE_LIST_EMPTY_PROMPT_CLASS)
+      .addClass(CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS)
       .text(promptText);
 
     $emptyView.appendTo(this._scrollable.content());
@@ -82,10 +83,6 @@ class MessageList extends Widget<Properties> {
 
   _removeEmptyView(): void {
     $(this._scrollable.content()).empty();
-  }
-
-  _toggleEmptyStateClass(state: boolean): void {
-    this.$element().toggleClass(CHAT_MESSAGE_LIST_EMPTY_CLASS, state);
   }
 
   _isEmpty(): boolean {
@@ -126,7 +123,6 @@ class MessageList extends Widget<Properties> {
 
   _renderMessageListContent(): void {
     if (this._isEmpty()) {
-      this._toggleEmptyStateClass(true);
       this._renderEmptyViewContent();
 
       return;
@@ -223,8 +219,6 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
-      this._toggleEmptyStateClass(false);
-
       if (!previousValue.length) {
         this._removeEmptyView();
       }

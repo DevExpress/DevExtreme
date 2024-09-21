@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import ChatHeader from '__internal/ui/chat/chat_header';
+import ChatHeader from '__internal/ui/chat/header';
 
 const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';

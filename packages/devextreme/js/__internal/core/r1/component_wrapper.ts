@@ -558,6 +558,23 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
   }
 
   // Public API
+
+  focus(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const $root = this.$element() as any;
+    const hasFocus = $root.is(':focus') || $root.find(':focus').length > 0;
+    if (hasFocus) {
+      return;
+    }
+
+    if (this.option('focusStateEnabled')) {
+      $root.focus();
+    } else {
+      const focusableElements = $root.find('[tabindex]');
+      focusableElements[0]?.focus();
+    }
+  }
+
   repaint(): void {
     this._isNodeReplaced = false;
     this._shouldRaiseContentReady = true;

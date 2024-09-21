@@ -93,7 +93,7 @@ describe('Template Manager', () => {
         <div className='children-template-container'></div>
         <div className='render-template-container'></div>
         <div className='component-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -120,7 +120,7 @@ describe('Template Manager', () => {
         <div className='children-template-container'></div>
         <div className='render-template-container'></div>
         <div className='component-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -175,7 +175,7 @@ describe('Template Manager', () => {
     render(
       <React.Fragment>
         <div className='render-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -216,7 +216,7 @@ describe('Template Manager', () => {
       <React.Fragment>
         <div className='render-template-container'></div>
         <div className='component-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined}/>
       </React.Fragment>
     );
 
@@ -269,7 +269,7 @@ describe('Template Manager', () => {
       <React.Fragment>
         <div className='render-template-container'></div>
         <div className='component-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -318,7 +318,7 @@ describe('Template Manager', () => {
       <React.Fragment>
         <div className='render-template-container'></div>
         <div className='component-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -371,7 +371,7 @@ describe('Template Manager', () => {
     render(
       <React.Fragment>
         <div className='render-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -422,7 +422,7 @@ describe('Template Manager', () => {
     render(
       <React.Fragment>
         <div className='render-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -475,7 +475,7 @@ describe('Template Manager', () => {
       <React.Fragment>
         <div className='render-template-container'></div>
         <div className='other-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -555,7 +555,7 @@ describe('Template Manager', () => {
     const { rerender } = render(
       <React.Fragment>
         <div className='render-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -575,7 +575,7 @@ describe('Template Manager', () => {
     rerender(
       <React.Fragment>
         <div className='render-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
@@ -594,7 +594,7 @@ describe('Template Manager', () => {
     rerender(
       <React.Fragment>
         <div className='render-template-container'></div>
-        <TemplateManager init={init} />
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.Fragment>
     );
 
