@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -45,6 +46,18 @@ export class DIContext {
   public get<T>(
     id: AbstractType<T>,
   ): T {
+    const instance = this.tryGet(id);
+
+    if (instance) {
+      return instance;
+    }
+
+    throw new Error('DI item is not registered');
+  }
+
+  public tryGet<T>(
+    id: AbstractType<T>,
+  ): T | null {
     if (this.instances.get(id)) {
       return this.instances.get(id) as T;
     }
@@ -53,27 +66,21 @@ export class DIContext {
     if (fabric) {
       const res: T = this.create(fabric as any);
       this.instances.set(id, res);
+      this.instances.set(fabric, res);
       return res;
     }
 
-    throw new Error('DI item is not registered');
+    return null;
   }
 
-  public tryGet<T, TDeps extends readonly any[]>(
-    id: Constructor<T, TDeps>,
-  ): T | null {
-    const res = this.instances.get(id);
-    return res as T;
-  }
-
-  public create<T, TDeps extends readonly any[]>(fabric: DIItem<T, TDeps>): T {
+  private create<T, TDeps extends readonly any[]>(fabric: DIItem<T, TDeps>): T {
     if (this.antiRecursionSet.has(fabric)) {
       throw new Error('dependency cycle in DI');
     }
 
     this.antiRecursionSet.add(fabric);
 
-    const args = (fabric.dependencies ?? []).map((dependency) => this.get(dependency));
+    const args = fabric.dependencies.map((dependency) => this.get(dependency));
 
     this.antiRecursionSet.delete(fabric);
 
