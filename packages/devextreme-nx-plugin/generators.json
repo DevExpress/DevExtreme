@@ -5,6 +5,11 @@
       "factory": "./generators/widget-generator/generator.js",
       "schema": "./generators/widget-generator/schema.json",
       "description": "widget-generator generator"
+    },
+    "bump-version": {
+      "factory": "./generators/bump-version/generator.js",
+      "schema": "./generators/bump-version/schema.json",
+      "description": "bump-version generator"
     }
   }
 }
