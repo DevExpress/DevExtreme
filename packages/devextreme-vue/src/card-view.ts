@@ -1,4 +1,4 @@
-import CardView, { Properties } from "devextreme/ui/card_view";
+import CardView, { Properties } from "devextreme/ui/card_view/index";
 import { createComponent } from "./core/index";
 import { createConfigurationComponent } from "./core/index";
 
