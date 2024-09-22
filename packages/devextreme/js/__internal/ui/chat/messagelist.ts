@@ -1,5 +1,5 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import type { Message } from '@js/ui/chat';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
@@ -75,11 +75,11 @@ class MessageList extends Widget<Properties> {
       .addClass(CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS)
       .text(promptText);
 
-    $emptyView.appendTo(this._scrollable.content());
+    $emptyView.appendTo(this._$content());
   }
 
   _removeEmptyView(): void {
-    $(this._scrollable.content()).empty();
+    this._$content().empty();
   }
 
   _isEmpty(): boolean {
@@ -99,7 +99,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    const $messageGroup = $('<div>').appendTo(this._scrollable.content());
+    const $messageGroup = $('<div>').appendTo(this._$content());
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
@@ -115,6 +115,7 @@ class MessageList extends Widget<Properties> {
 
     this._scrollable = this._createComponent($scrollable, Scrollable, {
       useKeyboard: false,
+      bounceEnabled: false,
     });
   }
 
@@ -169,8 +170,12 @@ class MessageList extends Widget<Properties> {
     this._scrollContentToLastMessage();
   }
 
+  _$content(): dxElementWrapper {
+    return $(this._scrollable.content());
+  }
+
   _scrollContentToLastMessage(): void {
-    this._scrollable.scrollTo({ top: this._scrollable.content()[0].scrollHeight });
+    this._scrollable.scrollTo({ top: this._$content().get(0).scrollHeight });
   }
 
   _clean(): void {
