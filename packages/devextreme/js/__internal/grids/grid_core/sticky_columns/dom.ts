@@ -100,6 +100,13 @@ const isFirstRightFixedCell = (
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
     && $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
 
+const isFixedCell = (
+  $cell: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft))
+      || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
+      || $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
+
 const getLeftFixedCells = ($cells: dxElementWrapper, addWidgetPrefix): dxElementWrapper => $cells
   // @ts-expect-error
   .filter((_, cell: HTMLElement) => $(cell).hasClass(addWidgetPrefix(CLASSES.stickyColumnLeft)));
