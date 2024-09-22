@@ -177,6 +177,10 @@ class MessageList extends Widget<Properties> {
     return $(this._scrollable.content());
   }
 
+  _$content(): dxElementWrapper {
+    return $(this._scrollable.content());
+  }
+
   _scrollContentToLastMessage(): void {
     this._scrollable.scrollTo({ top: this._$content().get(0).scrollHeight });
   }
