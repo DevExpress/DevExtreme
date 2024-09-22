@@ -138,6 +138,10 @@ class Chat extends Widget<Properties> {
     return $input;
   }
 
+  _dimensionChanged(): void {
+    this._messageList.update();
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
