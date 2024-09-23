@@ -9,6 +9,14 @@
     flex-direction: column;
     width: 100%;
   }
+
+  .dx-scrollable-native {
+    &.dx-scrollable-native-ios{
+      .dx-scrollable-content {
+        min-height: 100%;
+      }
+    }
+  }
 }
 
 .dx-chat-messagelist-empty-view {
