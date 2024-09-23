@@ -4,8 +4,12 @@
   "sourceRoot": "packages/devextreme-react",
   "projectType": "library",
   "targets": {
+    "build": {
+      "dependsOn": ["pack"]
+    },
     "pack": {
       "executor": "nx:run-script",
+      "dependsOn": ["^build"],
       "options": {
         "script": "pack"
       },

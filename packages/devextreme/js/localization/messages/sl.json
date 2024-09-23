@@ -3,6 +3,7 @@
         "Yes": "Da",
         "No": "Ne",
         "Cancel": "Prekliči",
+        "CheckState": "Check state",
         "Close": "Zapri",
         "Clear": "Pobriši",
         "Done": "Končano",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Izbriši",
         "dxListEditDecorator-more": "Več",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Povlecite navzdol za osvežitev...",
         "dxScrollView-pulledDownText": "Spustite za osvežitev...",
