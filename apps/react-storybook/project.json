@@ -15,7 +15,8 @@
       "executor": "nx:run-script",
       "options": {
         "script": "start"
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": []

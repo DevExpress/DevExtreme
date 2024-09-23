@@ -136,11 +136,15 @@ export class CompactAppointmentsHelper {
     });
   }
 
-  _createCompactButtonElement({ isCompact, $container, coordinates }) {
+  _createCompactButtonElement({
+    isCompact, $container, coordinates, sortedIndex,
+  }) {
     const result = $('<div>')
       .addClass(APPOINTMENT_COLLECTOR_CLASS)
       .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
       .appendTo($container);
+
+    result.data('dxAppointmentSettings', { sortedIndex });
 
     this._setPosition(result, coordinates);
 

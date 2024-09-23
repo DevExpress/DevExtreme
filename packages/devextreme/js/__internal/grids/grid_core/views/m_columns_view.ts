@@ -1049,12 +1049,12 @@ export class ColumnsView extends ColumnStateMixin(View) {
   /**
    * @extended: column_fixing
    */
-  protected _getContent(isFixedTableRendering?) {
+  public getContent(isFixedTableRendering?) {
     return this._tableElement?.parent();
   }
 
   private _removeContent(isFixedTableRendering) {
-    const $scrollContainer = this._getContent(isFixedTableRendering);
+    const $scrollContainer = this.getContent(isFixedTableRendering);
 
     if ($scrollContainer?.length) {
       $scrollContainer.remove();
