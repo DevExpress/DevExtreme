@@ -81,6 +81,10 @@
     td {
       border-top-color: $material-grid-base-border-color;
       border-bottom-color: $material-grid-base-border-color;
+
+      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+        background-color: $datagrid-group-row-bg;
+      }
     }
   }
 }
@@ -123,11 +127,15 @@
 
 
 .dx-datagrid-rowsview {
-  .dx-group-cell:has(.dx-datagrid-group-row-container) {
-    padding-left: 0px;
-    padding-right: 0px;
-    overflow: initial;
-    background-color: transparent;
+  .dx-row.dx-group-row {
+    .dx-group-cell {
+      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+        padding-left: 0px;
+        padding-right: 0px;
+        overflow: initial;
+        background-color: transparent;
+      }
+    }
   }
 
   .dx-datagrid-group-row-container {
