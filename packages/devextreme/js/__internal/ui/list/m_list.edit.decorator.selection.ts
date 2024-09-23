@@ -187,7 +187,7 @@ registerDecorator(
 
       const stateVariableName = indeterminate ? 'indeterminate' : value ? 'checked' : 'notChecked';
 
-      const label = `${messageLocalization.format('dxList-selectAll')}, ${messageLocalization.format(`dxList-${stateVariableName}`)}`;
+      const label = `${messageLocalization.format('dxList-selectAll')}, ${messageLocalization.format(`dxList-selectAll-${stateVariableName}`)}`;
 
       this._$selectAll.attr({ 'aria-label': label });
     },
