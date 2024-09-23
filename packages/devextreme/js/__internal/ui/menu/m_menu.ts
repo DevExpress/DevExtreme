@@ -278,12 +278,9 @@ class Menu extends MenuBase {
     this.setAria('role', 'menubar');
   }
 
-  _setRoleAria(state: boolean): void {
-    if (this._isAdaptivityEnabled() && state) {
-      this.setAria('role', undefined);
-    } else {
-      this.setAria('role', 'menubar');
-    }
+  _setAriaRole(state: boolean): void {
+    const role = this._isAdaptivityEnabled() && state ? undefined : 'menubar';
+    this.setAria({ role });
   }
 
   _render(): void {
@@ -349,12 +346,12 @@ class Menu extends MenuBase {
 
     if (state) {
       this._hideVisibleSubmenu();
-      this._setRoleAria(state);
     } else {
       this._treeView && this._treeView.collapseAll();
       this._overlay && this._toggleTreeView(state);
-      this._setRoleAria(state);
     }
+
+    this._setAriaRole(state);
 
     $menuItemsContainer.toggle(!state);
     $adaptiveElements.toggle(state);

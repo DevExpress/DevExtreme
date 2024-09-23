@@ -2970,6 +2970,58 @@ QUnit.module('adaptivity: render', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('Adds "menu bar" role when menu is wider than item', function(assert) {
+        $('#qunit-fixture').width(100);
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 1000
+        });
+
+
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+    });
+
+    QUnit.test('No role added when menu is smaller than item', function(assert) {
+        $('#qunit-fixture').width(100);
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 20
+        });
+
+        assert.strictEqual(this.$element.attr('role'), undefined);
+    });
+
+    QUnit.test('Adds "menu bar" role when menu width is increased at runtime', function(assert) {
+        $('#qunit-fixture').width(100);
+        const instance = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 20
+        });
+
+        assert.strictEqual(this.$element.attr('role'), undefined);
+
+        instance.option('width', 1000);
+
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+    });
+
+    QUnit.test('Removes role when menu width is decreased at runtime', function(assert) {
+        $('#qunit-fixture').width(100);
+        const instance = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 1200
+        });
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+
+        instance.option('width', 20);
+
+        assert.strictEqual(this.$element.attr('role'), undefined);
+    });
+
     QUnit.test('Hamburger button should be rendered', function(assert) {
         new Menu(this.$element, {
             items: this.items,
@@ -3502,34 +3554,6 @@ QUnit.module('adaptivity: behavior', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Menu role updates correctly with adaptivity enabled on resize', function(assert) {
-        const menu = new Menu(this.$element, {
-            items: this.items,
-            adaptivityEnabled: true
-        });
-
-        $('#qunit-fixture').width('100%');
-        menu.repaint();
-        assert.strictEqual(this.$element.attr('role'), 'menubar');
-        $('#qunit-fixture').width(50);
-        menu.repaint();
-        assert.strictEqual(this.$element.attr('role'), undefined);
-    });
-
-    QUnit.test('Menu role remains unchanged with adaptivity disabled on resize', function(assert) {
-        const menu = new Menu(this.$element, {
-            items: this.items,
-            adaptivityEnabled: false
-        });
-
-        $('#qunit-fixture').width('100%');
-        menu.repaint();
-        assert.strictEqual(this.$element.attr('role'), 'menubar');
-        $('#qunit-fixture').width(50);
-        menu.repaint();
-        assert.strictEqual(this.$element.attr('role'), 'menubar');
-    });
-
     QUnit.test('link attributes should be set correctly (T1181342)', function(assert) {
         new Menu(this.$element, {
             items: this.items,
