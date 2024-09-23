@@ -214,3 +214,10 @@ export const isLastFixedColumn = function (
 ): boolean {
   return isFirstOrLastColumn(that, column, rowIndex, onlyWithinBandColumn, true, fixedPosition);
 };
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const isFixedEdge = function (point, column, nextColumn): boolean {
+  const isSplitPoint = isDefined(point.isLeftBoundary) || isDefined(point.isRightBoundary);
+
+  return !isSplitPoint && !!column && !!nextColumn && column.fixed !== nextColumn.fixed;
+};
