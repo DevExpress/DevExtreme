@@ -9,6 +9,10 @@ import { appendElementTo } from '../../helpers/domUtils';
 fixture.disablePageReloads`ChatAvatar`
   .page(url(__dirname, '../container.html'));
 
+test('Native automation check', async t => {
+  await t.expect(t.browser.nativeAutomation).ok();
+  //the test continues only if you use native automation
+});
 test('Chat: avatar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await testScreenshot(t, takeScreenshot, 'Avatar with two word initials.png', { element: '#chat' });
