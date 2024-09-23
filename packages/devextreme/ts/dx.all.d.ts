@@ -20720,20 +20720,6 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
-     * [descr:dxMapOptions.providerConfig]
-     */
-    providerConfig?: {
-      /**
-       * [descr:dxMapOptions.providerConfig.mapId]
-       */
-      mapId?: string;
-      /**
-       * [descr:dxMapOptions.providerConfig.useAdvancedMarkers]
-       * @deprecated [depNote:dxMapOptions.providerConfig.useAdvancedMarkers]
-       */
-      useAdvancedMarkers?: boolean;
-    };
-    /**
      * [descr:dxMapOptions.height]
      */
     height?: number | string | (() => number | string);
@@ -20801,6 +20787,20 @@ declare module DevExpress.ui {
      * [descr:dxMapOptions.provider]
      */
     provider?: DevExpress.ui.dxMap.MapProvider;
+    /**
+     * [descr:dxMapOptions.providerConfig]
+     */
+    providerConfig?: {
+      /**
+       * [descr:dxMapOptions.providerConfig.mapId]
+       */
+      mapId?: string;
+      /**
+       * [descr:dxMapOptions.providerConfig.useAdvancedMarkers]
+       * @deprecated [depNote:dxMapOptions.providerConfig.useAdvancedMarkers]
+       */
+      useAdvancedMarkers?: boolean;
+    };
     /**
      * [descr:dxMapOptions.routes]
      */
