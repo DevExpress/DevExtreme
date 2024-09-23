@@ -909,8 +909,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
   public setRowsOpacity(columnIndex, value) {
     super.setRowsOpacity(columnIndex, value);
 
-    const $rows = this._getRowElements(this._fixedTableElement);
-    this._setRowsOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
+    if (this._isFixedColumns) {
+      const $rows = this._getRowElements(this._fixedTableElement);
+      this._setRowsOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
+    }
   }
 
   public getCellIndex($cell) {
@@ -1040,7 +1042,7 @@ const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsBy
 };
 
 const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderColumnFixingExtender extends Base {
-  public _generatePointsByColumns(options) {
+  public _generatePointsByColumns(options, needToCheckPrevPoint) {
     const visibleColumns = options.columns;
     const { targetDraggingPanel } = options;
 
@@ -1051,13 +1053,13 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
         }
         options.columns = targetDraggingPanel.getFixedColumns(options.rowIndex);
 
-        const pointsByColumns = super._generatePointsByColumns(options);
+        const pointsByColumns = super._generatePointsByColumns(options, needToCheckPrevPoint);
         normalizeColumnIndicesByPoints(visibleColumns, options.columns, pointsByColumns);
         return pointsByColumns;
       }
     }
 
-    return super._generatePointsByColumns(options);
+    return super._generatePointsByColumns(options, needToCheckPrevPoint);
   }
 
   protected _pointCreated(point, columns, location, sourceColumn) {
