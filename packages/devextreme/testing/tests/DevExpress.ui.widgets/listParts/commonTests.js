@@ -4344,7 +4344,7 @@ QUnit.module('Accessibility', () => {
 
         const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
 
-        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, checked');
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, Checked');
     });
 
     QUnit.test('Select all element should have correct aria-label when not all items are selected', function(assert) {
@@ -4359,7 +4359,7 @@ QUnit.module('Accessibility', () => {
 
         const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
 
-        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, half checked');
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, Half-checked');
     });
 
     QUnit.test('Select all element should have correct aria-label when selected items change in runtime', function(assert) {
