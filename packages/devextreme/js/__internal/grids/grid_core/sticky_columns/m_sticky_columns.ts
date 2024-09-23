@@ -294,14 +294,6 @@ const rowsView = (
 
     return super._renderCellContent($container, options, renderOptions);
   }
-
-  public _updateCell($cell, parameters) {
-    if (!isGroupRow(parameters) || !this._isStickyColumns()) {
-      return super._updateCell($cell, parameters);
-    }
-
-    return super._updateCell($cell.parent(), parameters);
-  }
 };
 
 const footerView = (
