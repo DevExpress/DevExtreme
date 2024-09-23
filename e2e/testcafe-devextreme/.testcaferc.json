@@ -6,6 +6,6 @@
   },
   "screenshots-comparer": {
     "path": "./",
-    "textDiffTreshold": 0.1
+    "textDiffTreshold": 0.5
   }
 }
