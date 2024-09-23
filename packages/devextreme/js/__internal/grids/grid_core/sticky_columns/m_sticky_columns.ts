@@ -1,7 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type {
+  ColumnsResizerViewController,
+} from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
@@ -11,6 +15,7 @@ import {
   getColumnFixedPosition,
   getStickyOffset,
   isFirstFixedColumn,
+  isFixedEdge,
   isLastFixedColumn,
   normalizeOffset,
   prevColumnIsFixed,
@@ -151,6 +156,18 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     });
   }
 
+  protected setColumnWidths(options): void {
+    const isStickyColumns = this._isStickyColumns();
+    const columnsResizerController = this.getController('columnsResizer');
+    const isColumnResizing = columnsResizerController?.isResizing();
+
+    super.setColumnWidths(options);
+
+    if (isStickyColumns && isColumnResizing) {
+      this.setStickyOffsets();
+    }
+  }
+
   protected _resizeCore() {
     const isStickyColumns = this._isStickyColumns();
 
@@ -270,12 +287,92 @@ const footerView = (
   Base: ModuleType<any>,
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
 
+const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
+  protected _correctColumnIndexForPoint(point, correctionValue: number, columns): void {
+    const rtlEnabled = this.option('rtlEnabled');
+    const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
+    const columnIndex = Math.max(point.index - 1, 0);
+    const column = columns[columnIndex];
+    const nextColumnIndex = this._getNextColumnIndex(columnIndex);
+    const nextColumn = columns[nextColumnIndex];
+
+    if (isWidgetResizingMode && !isFixedEdge(point, column, nextColumn)) {
+      const $container = $(this._columnHeadersView.getContent());
+      const isFixedCellPinnedToRight = GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
+        $(point.item),
+        $container,
+        this.addWidgetPrefix.bind(this),
+      );
+
+      if (isFixedCellPinnedToRight) {
+        point.columnIndex -= rtlEnabled ? 1 : 0;
+
+        return;
+      }
+    }
+
+    super._correctColumnIndexForPoint(point, correctionValue, columns);
+  }
+
+  protected _needToInvertResizing($cell: dxElementWrapper): boolean {
+    const result = super._needToInvertResizing($cell);
+    const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
+
+    if (!result && isWidgetResizingMode) {
+      const $container = $(this._columnHeadersView.getContent());
+
+      return GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
+        $cell,
+        $container,
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return result;
+  }
+
+  protected _generatePointsByColumns(): void {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+
+    super._generatePointsByColumns(isStickyColumns);
+  }
+
+  protected _pointCreated(point, cellsLength, columns) {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+    const result = super._pointCreated(point, cellsLength, columns);
+    const needToCheckPoint = isStickyColumns && cellsLength > 0;
+
+    if (needToCheckPoint && !result) {
+      const column = columns[point.index - 1];
+      const nextColumnIndex = this._getNextColumnIndex(point.index - 1);
+      const nextColumn = columns[nextColumnIndex];
+
+      return GridCoreStickyColumnsDom.noNeedToCreateResizingPoint(
+        this._columnHeadersView,
+        {
+          point,
+          column,
+          nextColumn,
+        },
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return result;
+  }
+};
+
 export const stickyColumnsModule = {
   extenders: {
     views: {
       columnHeadersView,
       rowsView,
       footerView,
+    },
+    controllers: {
+      columnsResizer,
     },
   },
 };

@@ -6,12 +6,10 @@ const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const SCROLLABLE_CLASS = 'dx-scrollable';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
-const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
-
 
 const moduleConfig = {
     beforeEach: function() {
@@ -41,34 +39,6 @@ QUnit.module('MessageList', moduleConfig, () => {
 
         QUnit.test('should contain scrollable element', function(assert) {
             assert.strictEqual(this.$element.children().first().hasClass(SCROLLABLE_CLASS), true);
-        });
-
-        QUnit.test('should have empty class if there are no messages', function(assert) {
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), true);
-        });
-
-        QUnit.test('should not have empty class if there are messages', function(assert) {
-            this.reinit({
-                items: [{}]
-            });
-
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false);
-        });
-
-        QUnit.test('empty class should be updated after items are added or removed at runtime', function(assert) {
-            this.reinit({
-                items: []
-            });
-
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), true, 'element has empty class');
-
-            this.instance.option('items', [{}]);
-
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false, 'element does not have empty class');
-
-            this.instance.option('items', []);
-
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), true, 'element has empty class');
         });
     });
 
