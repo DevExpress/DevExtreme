@@ -66,6 +66,15 @@
   }
 
   .dx-row.dx-group-row {
+    .dx-group-cell {
+      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+        padding-left: 0px;
+        padding-right: 0px;
+        overflow: initial;
+        background-color: transparent;
+      }
+    }
+
     &:not(.dx-row-focused) {
       color: $datagrid-group-row-color;
       background-color: $datagrid-group-row-bg;
@@ -81,6 +90,15 @@
         background-color: $datagrid-group-row-bg;
       }
     }
+  }
+
+  .dx-datagrid-group-row-container {
+    padding-left: $generic-datagrid-cell-padding;
+    padding-right: $generic-datagrid-cell-padding;
+    text-overflow: ellipsis;
+    display: inline-block;
+    position: sticky;
+    background-color: $datagrid-group-row-bg;
   }
 }
 
@@ -130,27 +148,5 @@
   .dx-datagrid-filter-panel-text,
   .dx-datagrid-filter-panel-clear-filter {
     color: $base-accent;
-  }
-}
-
-.dx-datagrid-rowsview {
-  .dx-row.dx-group-row {
-    .dx-group-cell {
-      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
-        padding-left: 0px;
-        padding-right: 0px;
-        overflow: initial;
-        background-color: transparent;
-      }
-    }
-  }
-
-  .dx-datagrid-group-row-container {
-    padding-left: $generic-datagrid-cell-padding;
-    padding-right: $generic-datagrid-cell-padding;
-    text-overflow: ellipsis;
-    display: inline-block;
-    position: sticky;
-    background-color: $datagrid-group-row-bg;
   }
 }

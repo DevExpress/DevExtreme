@@ -67,12 +67,30 @@
 }
 
 .dx-datagrid-rowsview {
+  .dx-datagrid-group-row-container {
+    padding-left: $fluent-grid-base-cell-horizontal-padding;
+    padding-right: $fluent-grid-base-cell-horizontal-padding;
+    text-overflow: ellipsis;
+    display: inline-block;
+    position: sticky;
+    background-color: $datagrid-group-row-bg;
+  }
+
   .dx-row.dx-group-row:first-child {
     border-top: none;
   }
 
 
   .dx-row.dx-group-row {
+    .dx-group-cell {
+      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+        padding-left: 0px;
+        padding-right: 0px;
+        overflow: initial;
+        background-color: transparent;
+      }
+    }
+
     &:not(.dx-row-focused) {
       color: $datagrid-group-row-color;
       background-color: $datagrid-group-row-bg;
@@ -128,24 +146,3 @@
   }
 }
 
-.dx-datagrid-rowsview {
-  .dx-row.dx-group-row {
-    .dx-group-cell {
-      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
-        padding-left: 0px;
-        padding-right: 0px;
-        overflow: initial;
-        background-color: transparent;
-      }
-    }
-  }
-
-  .dx-datagrid-group-row-container {
-    padding-left: $fluent-grid-base-cell-horizontal-padding;
-    padding-right: $fluent-grid-base-cell-horizontal-padding;
-    text-overflow: ellipsis;
-    display: inline-block;
-    position: sticky;
-    background-color: $datagrid-group-row-bg;
-  }
-}
