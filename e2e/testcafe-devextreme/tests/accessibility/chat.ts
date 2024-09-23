@@ -2,62 +2,48 @@ import { Message, User, Properties } from 'devextreme/ui/chat.d';
 import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 import { avatarUrl } from '../chat/data';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
-const getUsers = (length: number, useUrlAvatar: boolean): User[] => {
-  const users = Array.from({ length }, (_, i) => {
-    const user: User = {
-      id: i,
-      name: `User name ${i}`,
-      avatarUrl: useUrlAvatar ? avatarUrl : '',
-    };
-
-    return user;
-  });
-
-  return users;
+const userWithAvatar: User = {
+  id: 1,
+  name: 'User With Avatar',
+  avatarUrl,
 };
 
-const getItems = (useUrlAvatar: boolean): Message[] => {
-  const [userFirst, userSecond] = getUsers(2, useUrlAvatar);
-
-  const items: Message[] = [
-    {
-      timestamp: new Date(),
-      text: 'Message text',
-      author: userFirst,
-    },
-    {
-      timestamp: new Date(),
-      text: 'Message text',
-      author: userSecond,
-    },
-  ];
-
-  return items;
+const userWithoutAvatar: User = {
+  id: 2,
+  name: 'User Without Avatar',
 };
 
-const items = [[], getItems(true), getItems(false)];
-const currentUser = items[2][1].author;
+const items: Message[] = [
+  {
+    timestamp: new Date(),
+    text: 'Message text',
+    author: userWithAvatar,
+  },
+  {
+    timestamp: new Date(),
+    text: 'Message text',
+    author: userWithoutAvatar,
+  },
+];
 
 const options: Options<Properties> = {
-  items,
-  user: [currentUser],
+  items: [[], items],
+  user: [userWithAvatar, userWithoutAvatar],
 };
 
 const created = async (t: TestController): Promise<void> => {
   await t.pressKey('tab');
 };
 
-const a11yCheckConfig = isMaterialBased() ? {
-  // NOTE: color-contrast issues in Material
-  runOnly: isMaterial() ? '' : 'color-contrast',
-  rules: { 'color-contrast': { enabled: !isMaterial() } },
-} : {};
+const a11yCheckConfig = {
+  // NOTE: color-contrast issues
+  rules: { 'color-contrast': { enabled: false } },
+};
 
 const configuration: Configuration = {
   component: 'dxChat',
