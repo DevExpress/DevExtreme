@@ -55,9 +55,9 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   const menu = new Menu();
 
   if (adaptivityEnabled) {
-    menu.option('width', 400);
+    await menu.option('width', 400);
   } else {
-    menu.option('width', 1024);
+    await menu.option('width', 1024);
   }
 
   await t
