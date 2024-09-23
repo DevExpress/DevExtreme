@@ -308,7 +308,7 @@ QUnit.test('selectAll checkbox should have aria-label="Select All" attribute', f
     assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'Select All');
 });
 
-QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
+QUnit.test('checkbox should have aria-label="Check state" attribute', function(assert) {
     initTree({
         items: [ { text: 'item' } ],
         showCheckBoxesMode: 'normal'
@@ -316,7 +316,7 @@ QUnit.test('checkbox should have aria-label="Check State" attribute', function(a
 
     const $checkbox = $(`.${CHECKBOX_CLASS}`);
 
-    assert.strictEqual($checkbox.attr('aria-label'), 'Check State');
+    assert.strictEqual($checkbox.attr('aria-label'), 'Check state');
 });
 
 QUnit.test('checkbox should have a correct aria-label value based on localiztion (T1247518)', function(assert) {
