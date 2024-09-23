@@ -3,7 +3,7 @@ import * as React from "react";
 import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxCardView, {
     Properties
-} from "devextreme/ui/card_view/index";
+} from "devextreme/ui/card_view";
 
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";

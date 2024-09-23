@@ -23,7 +23,7 @@ import {
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
-import DxCardView from 'devextreme/ui/card_view/index';
+import DxCardView from 'devextreme/ui/card_view';
 
 
 import {
