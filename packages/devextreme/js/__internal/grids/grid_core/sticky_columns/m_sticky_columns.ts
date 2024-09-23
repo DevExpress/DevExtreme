@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ModuleType } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { isGroupRow } from '../views/m_rows_view';
@@ -277,7 +278,7 @@ const rowsView = (
       $detailCell
         .addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft))
         // @ts-expect-error
-        .width(componentWidth - 2);
+        .width(componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element));
     }
 
     return $detailCell;

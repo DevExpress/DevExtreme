@@ -8,7 +8,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
-import { getHeight } from '@js/core/utils/size';
+import { getHeight, getInnerWidth, getOuterWidth } from '@js/core/utils/size';
 import { format } from '@js/core/utils/string';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
@@ -742,5 +742,13 @@ export default {
     };
 
     logSpecificDeprecatedWarningIfNeed(columns);
+  },
+
+  getComponentBorderWidth(that, $rowsViewElement) {
+    const borderWidth = that.option('showBorders')
+      ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
+      : 0;
+
+    return borderWidth;
   },
 };
