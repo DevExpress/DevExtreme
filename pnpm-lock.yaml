@@ -396,7 +396,7 @@ importers:
         version: 5.0.5(rollup@4.17.2)
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.10.0)(testcafe@3.5.0)
+        version: 3.5.0(axe-core@4.10.0)(testcafe@3.6.2)
       '@types/eslint':
         specifier: 8.56.2
         version: 8.56.2
@@ -435,7 +435,7 @@ importers:
         version: 7.0.3
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.5.0)
+        version: 2.0.17(testcafe@3.6.2)
       eslint:
         specifier: 8.56.0
         version: 8.56.0
@@ -512,8 +512,8 @@ importers:
         specifier: 0.16.15
         version: 0.16.15
       testcafe:
-        specifier: 3.5.0
-        version: 3.5.0
+        specifier: 3.6.2
+        version: 3.6.2
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.4.17)(@types/node@20.16.5)(typescript@5.4.5)
@@ -750,7 +750,7 @@ importers:
         version: 7.19.6(@babel/core@7.24.5)
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.10.0)(testcafe@3.5.0)
+        version: 3.5.0(axe-core@4.10.0)(testcafe@3.6.2)
       '@types/jquery':
         specifier: 3.5.29
         version: 3.5.29
@@ -762,7 +762,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.5.0)
+        version: 2.0.17(testcafe@3.6.2)
       devextreme-testcafe-models:
         specifier: workspace:*
         version: link:../../packages/testcafe-models
@@ -773,8 +773,8 @@ importers:
         specifier: 0.12.1
         version: 0.12.1
       testcafe:
-        specifier: 3.5.0
-        version: 3.5.0
+        specifier: 3.6.2
+        version: 3.6.2
 
   packages/devextreme:
     dependencies:
@@ -5284,9 +5284,6 @@ packages:
   '@types/less@3.0.6':
     resolution: {integrity: sha512-PecSzorDGdabF57OBeQO/xFbAkYWo88g4Xvnsx7LRwqLC17I7OoKtA3bQB9uXkY6UkMWCOsA8HSVpaoitscdXw==}
 
-  '@types/lodash@4.17.0':
-    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
-
   '@types/lodash@4.17.1':
     resolution: {integrity: sha512-X+2qazGS3jxLAIz5JDXDzglAF3KpijdhFxlf/V1+hEsOUc+HnWi81L/uv/EvGuV90WY+7mPGFCUDGfQC3Gj95Q==}
 
@@ -8782,9 +8779,6 @@ packages:
 
   esotope-hammerhead@0.6.3:
     resolution: {integrity: sha512-Aq6gUznvm0xPtjpbZo9OSsRO1+m+NM0hjZOYufH3HDlJWeOZpBskR/vuP9/tiMaQFD3+ES5BQq5fAY1qOLKWUA==}
-
-  esotope-hammerhead@0.6.7:
-    resolution: {integrity: sha512-nejJRHWvdoymlWnAXJGm8qfaK1hQ7NiMnTQzMSHPUzBrY7Nogu8O0Q6/HcY8AvY58pkkq2loto7oDDZ0zXYQcg==}
 
   esotope-hammerhead@0.6.8:
     resolution: {integrity: sha512-2Zhg0c6NfrNA4QT5s4+QG5WJQtq3Se7GonNwtNwfr7sVIo/7L8rirPfh9yyloEmDA7R0yPgD10teFxhf2vWyIw==}
@@ -14897,10 +14891,6 @@ packages:
     resolution: {integrity: sha512-82vSAAQvBEsgUNVIusb6mSEpyUGv0r0bzT0vXRqLqKSSYRjgXSK8k0PR5Q+YErGlR5k5gmBqVQYuFgMsWUQpWg==}
     engines: {node: '>=14.0.0'}
 
-  testcafe-hammerhead@31.7.0:
-    resolution: {integrity: sha512-80pF5RweoJKbsTgzroXXJAFbR2kkxa5SYVIOZyMICXdgI/JQz7GBcF7mEb4Uwq1+M9Pa9k8QDaO1v5xyDse9BQ==}
-    engines: {node: '>=14.0.0'}
-
   testcafe-hammerhead@31.7.2:
     resolution: {integrity: sha512-wjZ3Y4fXnew6WaoMhD7jTe/zrzSYJMLZulX+/pXS6xed9meUx7zzCSc5epPJEW8Xy3Zo09n7w+m7+2SDej0/Iw==}
     engines: {node: '>=14.0.0'}
@@ -14939,11 +14929,6 @@ packages:
 
   testcafe@2.5.0:
     resolution: {integrity: sha512-msRwIRuc7PXmpKzI9T9CFhNVDqW7JO5XGgVs8wHORKm3jfbBjw9ouRgoqTH+eHGTTB8Hnd8Jdt/2off68Z6ONQ==}
-    engines: {node: '>=16.0.0'}
-    hasBin: true
-
-  testcafe@3.5.0:
-    resolution: {integrity: sha512-EFy3mMMPpmWzkY35X3JDnQw/GNkw2sW90957t3eMj5zmspwu5FBlkEHRNm2SkmcQWHQTcpp0VZ5HXzVSEHvr6w==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
@@ -20397,15 +20382,13 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.11)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -20465,7 +20448,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.11)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
@@ -20880,7 +20863,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
@@ -22273,12 +22256,6 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testcafe-community/axe@3.5.0(axe-core@4.10.0)(testcafe@3.5.0)':
-    dependencies:
-      axe-core: 4.10.0
-      chalk: 2.4.2
-      testcafe: 3.5.0
-
   '@testcafe-community/axe@3.5.0(axe-core@4.10.0)(testcafe@3.6.2)':
     dependencies:
       axe-core: 4.10.0
@@ -22538,8 +22515,6 @@ snapshots:
       '@types/node': 20.12.8
 
   '@types/less@3.0.6': {}
-
-  '@types/lodash@4.17.0': {}
 
   '@types/lodash@4.17.1': {}
 
@@ -24868,7 +24843,7 @@ snapshots:
   callsite-record@4.1.5:
     dependencies:
       '@devexpress/error-stack-parser': 2.0.6
-      '@types/lodash': 4.17.0
+      '@types/lodash': 4.17.1
       callsite: 1.0.0
       chalk: 2.4.2
       highlight-es: 1.0.3
@@ -26124,14 +26099,6 @@ snapshots:
       '@angular-devkit/schematics': 12.2.18
       '@schematics/angular': 12.2.18
 
-  devextreme-screenshot-comparer@2.0.17(testcafe@3.5.0):
-    dependencies:
-      color-diff: 1.3.0
-      looks-same: 7.3.0
-      pngjs: 6.0.0
-      testcafe: 3.5.0
-      tslib: 2.6.2
-
   devextreme-screenshot-comparer@2.0.17(testcafe@3.6.2):
     dependencies:
       color-diff: 1.3.0
@@ -27329,10 +27296,6 @@ snapshots:
       type: 2.7.2
 
   esotope-hammerhead@0.6.3:
-    dependencies:
-      '@types/estree': 0.0.46
-
-  esotope-hammerhead@0.6.7:
     dependencies:
       '@types/estree': 0.0.46
 
@@ -35368,38 +35331,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  testcafe-hammerhead@31.7.0:
-    dependencies:
-      '@adobe/css-tools': 4.3.3
-      '@electron/asar': 3.2.10
-      acorn-hammerhead: 0.6.2
-      bowser: 1.6.0
-      crypto-md5: 1.0.0
-      debug: 4.3.1
-      esotope-hammerhead: 0.6.7
-      http-cache-semantics: 4.1.1
-      httpntlm: 1.8.13
-      iconv-lite: 0.5.1
-      lodash: 4.17.21
-      lru-cache: 2.6.3
-      match-url-wildcard: 0.0.4
-      merge-stream: 1.0.1
-      mime: 1.4.1
-      mustache: 2.3.2
-      nanoid: 3.3.7
-      os-family: 1.1.0
-      parse5: 7.1.2
-      pinkie: 2.0.4
-      read-file-relative: 1.2.0
-      semver: 7.5.3
-      tough-cookie: 4.1.3
-      tunnel-agent: 0.6.0
-      ws: 7.5.9
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-
   testcafe-hammerhead@31.7.2:
     dependencies:
       '@adobe/css-tools': 4.3.3
@@ -35605,109 +35536,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - encoding
-      - supports-color
-      - utf-8-validate
-
-  testcafe@3.5.0:
-    dependencies:
-      '@babel/core': 7.23.9
-      '@babel/plugin-proposal-async-generator-functions': 7.20.7(@babel/core@7.23.9)
-      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.23.9)
-      '@babel/plugin-proposal-decorators': 7.24.1(@babel/core@7.23.9)
-      '@babel/plugin-proposal-object-rest-spread': 7.20.7(@babel/core@7.23.9)
-      '@babel/plugin-proposal-private-methods': 7.18.6(@babel/core@7.23.9)
-      '@babel/plugin-syntax-dynamic-import': 7.8.3(@babel/core@7.23.9)
-      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.23.9)
-      '@babel/plugin-transform-async-to-generator': 7.24.1(@babel/core@7.23.9)
-      '@babel/plugin-transform-exponentiation-operator': 7.24.1(@babel/core@7.23.9)
-      '@babel/plugin-transform-for-of': 7.24.1(@babel/core@7.23.9)
-      '@babel/plugin-transform-runtime': 7.23.3(@babel/core@7.23.9)
-      '@babel/preset-env': 7.23.9(@babel/core@7.23.9)
-      '@babel/preset-flow': 7.24.1(@babel/core@7.23.9)
-      '@babel/preset-react': 7.24.1(@babel/core@7.23.9)
-      '@babel/runtime': 7.24.5
-      '@devexpress/bin-v8-flags-filter': 1.3.0
-      '@devexpress/callsite-record': 4.1.6
-      '@types/node': 12.20.55
-      async-exit-hook: 1.1.2
-      babel-plugin-module-resolver: 5.0.2
-      babel-plugin-syntax-trailing-function-commas: 6.22.0
-      bowser: 2.11.0
-      callsite: 1.0.0
-      chai: 4.3.4
-      chalk: 2.4.2
-      chrome-remote-interface: 0.32.2
-      coffeescript: 2.7.0
-      commander: 8.3.0
-      debug: 4.3.6
-      dedent: 0.4.0
-      del: 3.0.0
-      device-specs: 1.0.1
-      diff: 4.0.2
-      elegant-spinner: 1.0.1
-      email-validator: 2.0.4
-      emittery: 0.4.1
-      endpoint-utils: 1.0.2
-      error-stack-parser: 2.1.4
-      execa: 4.1.0
-      get-os-info: 1.0.2
-      globby: 11.1.0
-      graceful-fs: 4.2.11
-      graphlib: 2.1.8
-      http-status-codes: 2.3.0
-      humanize-duration: 3.32.0
-      import-lazy: 3.1.0
-      indent-string: 1.2.2
-      is-ci: 1.2.1
-      is-docker: 2.2.1
-      is-glob: 2.0.1
-      is-podman: 1.0.1
-      is-stream: 2.0.1
-      json5: 2.2.3
-      lodash: 4.17.21
-      log-update-async-hook: 2.0.7
-      make-dir: 3.1.0
-      mime-db: 1.52.0
-      moment: 2.30.1
-      moment-duration-format-commonjs: 1.0.1
-      mustache: 2.3.2
-      nanoid: 3.3.7
-      os-family: 1.1.0
-      parse5: 1.5.1
-      pify: 2.3.0
-      pinkie: 2.0.4
-      pngjs: 3.4.0
-      pretty-hrtime: 1.0.3
-      promisify-event: 1.0.0
-      prompts: 2.4.2
-      qrcode-terminal: 0.10.0
-      read-file-relative: 1.2.0
-      replicator: 1.0.5
-      resolve-cwd: 1.0.0
-      resolve-from: 4.0.0
-      sanitize-filename: 1.6.3
-      semver: 7.6.3
-      set-cookie-parser: 2.6.0
-      source-map-support: 0.5.21
-      strip-bom: 2.0.0
-      testcafe-browser-tools: 2.0.26
-      testcafe-hammerhead: 31.7.0
-      testcafe-legacy-api: 5.1.6
-      testcafe-reporter-json: 2.2.0
-      testcafe-reporter-list: 2.2.0
-      testcafe-reporter-minimal: 2.2.0
-      testcafe-reporter-spec: 2.2.0
-      testcafe-reporter-xunit: 2.2.3
-      testcafe-safe-storage: 1.1.6
-      testcafe-selector-generator: 0.1.0
-      time-limit-promise: 1.0.4
-      tmp: 0.0.28
-      tree-kill: 1.2.2
-      typescript: 4.7.4
-      unquote: 1.1.1
-      url-to-options: 2.0.0
-    transitivePeerDependencies:
-      - bufferutil
       - supports-color
       - utf-8-validate
 
