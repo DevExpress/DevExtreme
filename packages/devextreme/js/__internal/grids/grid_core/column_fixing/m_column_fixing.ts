@@ -302,10 +302,6 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return $cell;
   }
 
-  protected _getContent(isFixedTableRendering) {
-    return isFixedTableRendering ? this._fixedTableElement?.parent() : super._getContent.apply(this, arguments as any);
-  }
-
   protected _wrapTableInScrollContainer($table, isFixedTableRendering) {
     const $scrollContainer = super._wrapTableInScrollContainer.apply(this, arguments as any);
 
@@ -365,6 +361,10 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     if (column.command !== COMMAND_TRANSPARENT) {
       super._renderCellContent.apply(this, arguments as any);
     }
+  }
+
+  public getContent(isFixedTableRendering) {
+    return isFixedTableRendering ? this._fixedTableElement?.parent() : super.getContent.apply(this, arguments as any);
   }
 
   public _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
@@ -622,6 +622,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   private getFixedColumnElements(rowIndex?) {
     const that = this;
+
+    if (!this._isFixedColumns) {
+      return;
+    }
 
     if (isDefined(rowIndex)) {
       return this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
@@ -1082,7 +1086,7 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerColumnFixingExtender extends Base {
   private _pointsByFixedColumns: any;
 
-  protected _generatePointsByColumns() {
+  protected _generatePointsByColumns(needToCheckPrevPoint) {
     const that = this;
     const columnsController = that._columnsController;
     const columns = columnsController && that._columnsController.getVisibleColumns();
@@ -1092,7 +1096,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     // @ts-expect-error
     const cells = that._columnHeadersView.getFixedColumnElements();
 
-    super._generatePointsByColumns();
+    super._generatePointsByColumns(needToCheckPrevPoint);
 
     if (cells && cells.length > 0) {
       that._pointsByFixedColumns = gridCoreUtils.getPointsByColumns(cells, (point) => {
