@@ -3,7 +3,8 @@
 .dx-cardview-content {
   display: flex;
   flex-wrap: wrap;
-  position: relative;
+  column-gap: $cardview-content-view-column-gap;
+  row-gap: $cardview-content-view-row-gap;
 }
 
 .dx-cardview-card {
@@ -17,12 +18,15 @@
   width: 50%; 
 }
 
+.dx-gridcore-headers {
+  width: fit-content;
+}
+
 .dx-gridcore-header-item {
   background-color: $cardview-header-item-background-color;
   border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
   border-radius: #{$cardview-header-item-border-radius}px;
   padding: $cardview-header-item-padding-vertical $cardview-header-item-padding-horizontal;
   margin: 5px;
-  width: fit-content;
   display: inline-block;
 }
