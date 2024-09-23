@@ -1,0 +1,10 @@
+{
+  "screenshots": {
+    "path": "./",
+    "takeOnFails": true,
+    "pathPattern": "/artifacts/failedtests/${TEST}"
+  },
+  "screenshots-comparer": {
+    "path": "./"
+  }
+}

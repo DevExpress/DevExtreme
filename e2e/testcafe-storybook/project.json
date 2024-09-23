@@ -1,0 +1,35 @@
+{
+  "name": "devextreme-testcafe-tests-storybook",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/testcafe-devextreme",
+  "projectType": "application",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint"
+      },
+      "inputs": [
+        "{projectRoot}/**/*.js",
+        "{projectRoot}/**/*.ts"
+      ],
+      "cache": true
+    },
+    "test": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test"
+      },
+      "inputs": [
+        "^default",
+        "{projectRoot}/helpers/**/*",
+        "{projectRoot}/tests/**/*",
+        "{projectRoot}/.testcaferc.json",
+        "{projectRoot}/runner.js",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "cache": true
+    }
+  },
+  "tags": []
+}
