@@ -370,7 +370,8 @@ QUnit.module('MessageList', moduleConfig, () => {
     QUnit.module('Scrollable integration', () => {
         QUnit.test('scrollable component should be initialized with correct options', function(assert) {
             const expectedOptions = {
-                useNative: true,
+                bounceEnabled: false,
+                useKeyboard: false,
             };
 
             Object.entries(expectedOptions).forEach(([key, value]) => {
@@ -406,7 +407,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
         [MOCK_CURRENT_USER_ID, MOCK_COMPANION_USER_ID].forEach(id => {
             const isCurrentUser = id === MOCK_CURRENT_USER_ID;
-            const textName = `Scrollable should be scrolled to last message group after render ${isCurrentUser ? 'current user' : 'companion'} message`;
+            const textName = `Scrollable should be scrolled to last message after render ${isCurrentUser ? 'current user' : 'companion'} message`;
 
             QUnit.test(textName, function(assert) {
                 assert.expect(1);
@@ -421,11 +422,9 @@ QUnit.module('MessageList', moduleConfig, () => {
                     text: 'NEW MESSAGE',
                 };
 
-                this.scrollable.scrollToElement = ($item) => {
-                    const messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
-                    const lastMessageGroup = messageGroups[messageGroups.length - 1];
-
-                    assert.strictEqual($item, lastMessageGroup);
+                this.scrollable.scrollTo = (offset) => {
+                    const expectedScrollOffset = { top: this.scrollable.$content().prop('scrollHeight') };
+                    assert.deepEqual(offset, expectedScrollOffset);
                 };
 
                 this.instance.option('items', [...items, newMessage]);

@@ -53,20 +53,22 @@ class Chat extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._renderMessageBox();
-    this._renderMessageList();
-
     const { title } = this.option();
 
     if (title) {
       this._renderHeader(title);
     }
+
+    this._renderMessageList();
+    this._renderMessageBox();
+
+    this._messageList.update();
   }
 
   _renderHeader(title: string): void {
     const $header = $('<div>');
 
-    this.element().prepend($header.get(0));
+    this.$element().append($header);
     this._chatHeader = this._createComponent($header, ChatHeader, {
       title,
     });
@@ -78,7 +80,7 @@ class Chat extends Widget<Properties> {
     const currentUserId = user?.id;
     const $messageList = $('<div>');
 
-    this.$element().prepend($messageList);
+    this.$element().append($messageList);
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
@@ -93,7 +95,9 @@ class Chat extends Widget<Properties> {
       hoverStateEnabled,
     } = this.option();
 
-    const $messageBox = $('<div>').appendTo(this.element());
+    const $messageBox = $('<div>');
+
+    this.$element().append($messageBox);
 
     const configuration: MessageBoxProperties = {
       activeStateEnabled,
@@ -132,6 +136,10 @@ class Chat extends Widget<Properties> {
     const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
     return $input;
+  }
+
+  _dimensionChanged(): void {
+    this._messageList.update();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
