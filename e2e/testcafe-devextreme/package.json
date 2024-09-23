@@ -16,6 +16,6 @@
     "devextreme-testcafe-models": "workspace:*",
     "minimist": "1.2.8",
     "nconf": "0.12.1",
-    "testcafe": "3.6.2"
+    "testcafe": "3.5.0"
   }
 }

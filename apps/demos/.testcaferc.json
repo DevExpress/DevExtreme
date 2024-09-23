@@ -5,7 +5,7 @@
   "screenshots": {
     "path": "./",
     "pathPattern": "${TEST}.png",
-    "textDiffTreshold": 0.5
+    "textDiffTreshold": 0.1
   },
   "pageLoadTimeout": 10000
 }
