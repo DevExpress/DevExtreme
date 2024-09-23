@@ -48,6 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "حذف",
         "dxListEditDecorator-more": "المزيد",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "للتحديث اسحب للأسفل...",
         "dxScrollView-pulledDownText": "حرر للتحديث ...",
