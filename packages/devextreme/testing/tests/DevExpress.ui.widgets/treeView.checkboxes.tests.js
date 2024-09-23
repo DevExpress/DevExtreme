@@ -319,7 +319,7 @@ QUnit.test('checkbox should have aria-label="Check state" attribute', function(a
     assert.strictEqual($checkbox.attr('aria-label'), 'Check state');
 });
 
-QUnit.test('checkbox should have a correct aria-label value based on localiztion (T1247518)', function(assert) {
+QUnit.test('checkbox should have a correct aria-label value based on localization (T1247518)', function(assert) {
     const localizedCheckStateText = 'custom-select-all';
     localization.loadMessages({ 'en': { 'CheckState': localizedCheckStateText } });
 
