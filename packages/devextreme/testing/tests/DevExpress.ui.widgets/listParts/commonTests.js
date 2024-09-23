@@ -4329,7 +4329,7 @@ QUnit.module('Accessibility', () => {
 
         const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
 
-        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, not checked');
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, Not checked');
     });
 
     QUnit.test('Select all element should have correct aria-label when all items are selected', function(assert) {
@@ -4375,15 +4375,15 @@ QUnit.module('Accessibility', () => {
 
         const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
 
-        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, half checked');
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, Half-checked');
 
         instance.option({ selectedItems: items });
 
-        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, checked');
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, Checked');
 
         instance.option({ selectedItems: [] });
 
-        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, not checked');
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, Not checked');
     });
 
     QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
