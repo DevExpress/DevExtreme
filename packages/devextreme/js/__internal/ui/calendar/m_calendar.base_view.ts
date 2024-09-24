@@ -151,9 +151,9 @@ const BaseView = (Widget as any).inherit({
 
     if (ranges.length > 2) {
       // @ts-expect-error
-      const dateRangeCount = messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length);
+      const dateRangeCountText = messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length);
 
-      return `${dateRangeCount}`;
+      return `${dateRangeCountText}`;
     }
 
     const selectedDatesText = messageLocalization.format('dxCalendar-selectedDates');
