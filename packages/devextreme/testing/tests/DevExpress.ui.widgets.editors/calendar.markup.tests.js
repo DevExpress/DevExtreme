@@ -26,6 +26,10 @@ const toSelector = function(className) {
     return '.' + className;
 };
 
+const getFormattedDate = (date) => {
+    return dateLocalization.format(new Date(date), ARIA_LABEL_DATE_FORMAT);
+};
+
 const { module: testModule, test } = QUnit;
 
 QUnit.module('Calendar markup', {
@@ -464,23 +468,23 @@ QUnit.module('Aria accessibility', {
             [
                 {
                     value: [ new Date(1726765744957) ],
-                    expectedAriaLabel: 'Calendar. The selected dates: September 19, 2024',
+                    expectedAriaLabel: `Calendar. The selected dates: ${getFormattedDate(1726765744957)}`,
                 },
                 {
-                    value: [ '2024-10-27T16:54:10+03' ],
-                    expectedAriaLabel: 'Calendar. The selected dates: October 27, 2024',
+                    value: [ '2017-03-27T16:54:48' ],
+                    expectedAriaLabel: `Calendar. The selected dates: ${getFormattedDate('2017-03-27T16:54:48')}`,
                 },
                 {
                     value: [ 1726938544957 ],
-                    expectedAriaLabel: 'Calendar. The selected dates: September 21, 2024',
+                    expectedAriaLabel: `Calendar. The selected dates: ${getFormattedDate(1726938544957)}`,
                 },
                 {
                     value: [ 1726938544957, 1726852144957, 1726765744957 ],
-                    expectedAriaLabel: 'Calendar. The selected dates: from September 19, 2024 to September 21, 2024',
+                    expectedAriaLabel: `Calendar. The selected dates: from ${getFormattedDate(1726765744957)} to ${getFormattedDate(1726938544957)}`,
                 },
                 {
                     value: [ 1726938544957, 1726852144957, 1726765744957, 1727111344957, 1727197744957 ],
-                    expectedAriaLabel: 'Calendar. The selected dates: from September 19, 2024 to September 21, 2024, from September 23, 2024 to September 24, 2024',
+                    expectedAriaLabel: `Calendar. The selected dates: from ${getFormattedDate(1726765744957)} to ${getFormattedDate(1726938544957)}, from ${getFormattedDate(1727111344957)} to ${getFormattedDate(1727197744957)}`,
                 },
                 {
                     value: [ 1726938544957, 1726852144957, 1726765744957, 1727111344957, 1727197744957, 1727434511000 ],
