@@ -249,16 +249,28 @@ const columnHeadersView = (
         };
         const fixedPositionItems = [
           {
-            text: columnFixingOptions.texts.leftPosition, value: 'left', disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'), onItemClick,
+            text: columnFixingOptions.texts.leftPosition,
+            icon: columnFixingOptions.icons.leftPosition,
+            value: 'left',
+            disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'),
+            onItemClick,
           },
           {
-            text: columnFixingOptions.texts.rightPosition, value: 'right', disabled: column.fixed && column.fixedPosition === 'right', onItemClick,
+            text: columnFixingOptions.texts.rightPosition,
+            icon: columnFixingOptions.icons.rightPosition,
+            value: 'right',
+            disabled: column.fixed && column.fixedPosition === 'right',
+            onItemClick,
           },
         ];
 
         if (this.option('columnFixing.legacyMode') !== true) {
           fixedPositionItems.push({
-            text: columnFixingOptions.texts.stickyPosition, value: 'sticky', disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky, onItemClick,
+            text: columnFixingOptions.texts.stickyPosition,
+            icon: columnFixingOptions.icons.stickyPosition,
+            value: 'sticky',
+            disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky,
+            onItemClick,
           });
         }
 
@@ -267,11 +279,16 @@ const columnHeadersView = (
         items.push(
           {
             text: columnFixingOptions.texts.fix,
+            icon: columnFixingOptions.icons.fix,
             beginGroup: true,
             items: fixedPositionItems,
           },
           {
-            text: columnFixingOptions.texts.unfix, value: 'none', disabled: !column.fixed, onItemClick,
+            text: columnFixingOptions.texts.unfix,
+            icon: columnFixingOptions.icons.unfix,
+            value: 'none',
+            disabled: !column.fixed,
+            onItemClick,
           },
         );
       }

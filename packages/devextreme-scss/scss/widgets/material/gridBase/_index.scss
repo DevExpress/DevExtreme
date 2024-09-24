@@ -104,6 +104,31 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         .dx-icon-context-menu-sort-none {
           @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
         }
+
+        .dx-icon-fixcolumn {
+          @include dx-icon(fixcolumn);
+          @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
+        }
+
+        .dx-icon-fixcolumnleft {
+          @include dx-icon(fixcolumnleft);
+          @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
+        }
+
+        .dx-icon-fixcolumnright {
+          @include dx-icon(fixcolumnright);
+          @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
+        }
+
+        .dx-icon-stickcolumn {
+          @include dx-icon(stickcolumn);
+          @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
+        }
+
+        .dx-icon-unfixcolumn {
+          @include dx-icon(unfixcolumn);
+          @include dx-icon-sizing($material-grid-base-filter-icon-size - 4);
+        }
       }
     }
 
