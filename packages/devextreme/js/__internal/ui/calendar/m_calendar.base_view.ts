@@ -128,25 +128,10 @@ const BaseView = (Widget as any).inherit({
 
   _getMultipleModeAriaLabel() {
     const localizedWidgetName = this._getLocalizedWidgetName();
-
     const ranges = this._generateMultipleModeRanges();
+    const selectedRangesText = this._getMultipleModeSelectedRangesText(ranges);
 
-    let selectedRangeText = '';
-
-    if (ranges.length === 1) {
-      selectedRangeText = this._getRangeText(ranges[0], 'dxCalendar-selectedDateRange');
-    }
-
-    if (ranges.length === 2) {
-      selectedRangeText = this._getMultipleModeRangesText(ranges);
-    }
-
-    if (ranges.length > 2) {
-      // @ts-expect-error
-      selectedRangeText = `${messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length)}`;
-    }
-
-    const ariaLabel = `${localizedWidgetName}. ${selectedRangeText}`;
+    const ariaLabel = `${localizedWidgetName}. ${selectedRangesText}`;
 
     return ariaLabel;
   },
@@ -544,13 +529,24 @@ const BaseView = (Widget as any).inherit({
     return selectedDatesText;
   },
 
+  _getMultipleModeSelectedRangesText(ranges) {
+    if (ranges.length === 1) {
+      return this._getRangeText(ranges[0], 'dxCalendar-selectedDateRange');
+    }
+
+    if (ranges.length === 2) {
+      return this._getMultipleModeRangesText(ranges);
+    }
+
+    // @ts-expect-error
+    return `${messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length)}`;
+  },
+
   _getMultipleModeRangesText(ranges) {
     const rangesText = ranges.reduce((accumulator: string, range: any[]): string => {
       const rangeText = this._getRangeText(range, 'dxCalendar-selectedDates');
 
-      const result = `${accumulator ? `${accumulator}, ` : ''}${rangeText}`;
-
-      return result;
+      return `${accumulator ? `${accumulator}, ` : ''}${rangeText}`;
     }, '');
 
     const result = `${messageLocalization.format('dxCalendar-selectedDateRanges')} ${rangesText}`;
