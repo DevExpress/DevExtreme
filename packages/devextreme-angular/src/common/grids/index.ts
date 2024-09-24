@@ -46,8 +46,6 @@ export {
     NewRowInfo,
     NewRowPosition,
     Pager,
-    PagerDisplayMode,
-    PagerPageSize,
     PagingBase,
     RowDragging,
     RowDraggingTemplateData,

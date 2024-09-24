@@ -8,10 +8,10 @@ fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<any> = {
-  // disabled: [true, false], //not supported
+
+  pageIndex: [2, 5, 30],
   displayMode: ['full', 'compact'],
   infoText: [undefined, 'Total {2} items. Page {0} of {1}'],
-  pageCount: [10, 100],
   pageSizes: [[1, 2, 3], [3, 6, 9]],
   showInfo: [true, false],
   showNavigationButtons: [true, false],

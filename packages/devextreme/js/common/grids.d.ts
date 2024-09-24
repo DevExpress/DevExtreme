@@ -12,8 +12,7 @@ import {
   Sortable,
   SortOrder,
   ValidationRule,
-  PagerDisplayMode as PagerDisplayModeType,
-  PagerPageSize as PagerPageSizeType,
+  PagerPageSize,
   BasePagerOptions,
 } from '../common';
 
@@ -72,20 +71,6 @@ import {
   WidgetOptions,
 } from '../ui/widget/ui.widget';
 import { PositionConfig } from '../animation/position';
-
-/**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
- */
-export type PagerDisplayMode = PagerDisplayModeType;
-
-/**
- * @docid
- * @public
- * @namespace DevExpress.common.grids
- */
-export type PagerPageSize = PagerPageSizeType;
 
 /**
  * @docid
@@ -2471,11 +2456,17 @@ export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'view
  * @namespace DevExpress.common.grids
  */
 export type Pager = BasePagerOptions & {
-    /**
+  /**
    * @docid
    * @default "auto"
    */
-    visible?: boolean | Mode;
+  allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
+
+  /**
+   * @docid
+   * @default "auto"
+   */
+  visible?: boolean | Mode;
 };
 
 /**

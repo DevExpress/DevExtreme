@@ -14,7 +14,7 @@ import {
 
 
 
-import { Mode, PagerDisplayMode } from 'devextreme/common';
+import { Mode, PagerDisplayMode, PagerPageSize } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -29,6 +29,14 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoTreeListPagerComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
+        return this._getOption('allowedPageSizes');
+    }
+    set allowedPageSizes(value: Mode | Array<PagerPageSize | number>) {
+        this._setOption('allowedPageSizes', value);
+    }
+
     @Input()
     get displayMode(): PagerDisplayMode {
         return this._getOption('displayMode');

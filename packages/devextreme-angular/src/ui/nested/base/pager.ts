@@ -5,12 +5,19 @@ import {
     Component,
 } from '@angular/core';
 
-import { Mode, PagerDisplayMode } from 'devextreme/common';
+import { Mode, PagerDisplayMode, PagerPageSize } from 'devextreme/common';
 
 @Component({
     template: ''
 })
 export abstract class DxoPager extends NestedOption {
+    get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
+        return this._getOption('allowedPageSizes');
+    }
+    set allowedPageSizes(value: Mode | Array<PagerPageSize | number>) {
+        this._setOption('allowedPageSizes', value);
+    }
+
     get displayMode(): PagerDisplayMode {
         return this._getOption('displayMode');
     }

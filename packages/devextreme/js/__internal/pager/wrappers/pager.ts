@@ -38,7 +38,7 @@ export default class Pager extends GridPagerWrapper {
         'hasKnownLastPage',
         'pagesNavigatorVisible',
         'showPageSizes',
-        'pageSizes',
+        'allowedPageSizes',
         'rtlEnabled',
         'showNavigationButtons',
         'itemCount',
@@ -58,6 +58,8 @@ export default class Pager extends GridPagerWrapper {
         'activeStateEnabled',
         'focusStateEnabled',
         'hoverStateEnabled',
+
+        '_skipValidation',
       ],
     };
   }

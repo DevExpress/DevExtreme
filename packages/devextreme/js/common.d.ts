@@ -854,7 +854,7 @@ export type PagerAllPagesMode = 'all';
  * @public
  * @namespace DevExpress.ui.dxPager
  */
-export type PagerPageSize = PagerAllPagesMode & 'auto';
+export type PagerPageSize = 'all' | 'auto';
 
 /**
  * @docid
@@ -892,4 +892,10 @@ export type BasePagerOptions = {
    * @default "Page Navigation"
    */
   label?: string;
+
+   /**
+   * @docid
+   * @default [5, 10]
+   */
+   allowedPageSizes?: Array<(number | PagerAllPagesMode)> | 'auto';
 };

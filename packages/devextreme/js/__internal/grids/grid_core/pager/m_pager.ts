@@ -94,10 +94,11 @@ export class PagerView extends modules.View {
       pagesNavigatorVisible: pagerOptions.visible,
       showNavigationButtons: pagerOptions.showNavigationButtons,
       label: pagerOptions.label,
-      pageSizes: that.getPageSizes(),
+      allowedPageSizes: that.getPageSizes(),
       itemCount: dataController.totalCount(),
       hasKnownLastPage: dataController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
+      _skipValidation: true,
       pageIndexChanged(pageIndex) {
         if (dataController.pageIndex() !== pageIndex - 1) {
           dataController.pageIndex(pageIndex - 1);

@@ -12,7 +12,7 @@ import { getElementMinWidth } from '../utils/get_element_width';
 
 export interface PagerSmallProps {
   parentRef?: RefObject<HTMLElement>;
-  pageSizes: FullPageSize[];
+  allowedPageSizes: FullPageSize[];
   inputAttr?: any;
 }
 
@@ -20,7 +20,7 @@ const PagerSmallDefaultProps: PagerSmallProps = {
   inputAttr: {
     'aria-label': messageLocalization.format('dxPager-ariaPageSize'),
   },
-  pageSizes: [],
+  allowedPageSizes: [],
 };
 
 type PageSizeSmallPropsType = PagerSmallProps & Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal'>;
@@ -53,7 +53,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.state.minWidth,
       this.props.pageSize,
       this.props.pageSizeChangedInternal,
-      this.props.pageSizes,
+      this.props.allowedPageSizes,
       this.props.inputAttr,
     ];
     return [new InfernoEffect(this.updateWidth, dependency)];
@@ -65,7 +65,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.state.minWidth,
       this.props.pageSize,
       this.props.pageSizeChangedInternal,
-      this.props.pageSizes,
+      this.props.allowedPageSizes,
       this.props.inputAttr,
     ];
     this._effects[0]?.update(dependency);
@@ -80,14 +80,14 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
   getWidth(): number {
     return calculateValuesFittedWidth(
       this.state.minWidth,
-      this.props.pageSizes?.map((p) => p.value),
+      this.props.allowedPageSizes?.map((p) => p.value),
     );
   }
 
   render(): JSX.Element {
     const {
       inputAttr,
-      pageSizes,
+      allowedPageSizes,
       pageSize,
       pageSizeChangedInternal,
     } = this.props;
@@ -95,7 +95,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       <SelectBox
         displayExpr="text"
         valueExpr="value"
-        dataSource={pageSizes}
+        dataSource={allowedPageSizes}
         value={pageSize}
         valueChange={pageSizeChangedInternal}
         width={this.getWidth()}

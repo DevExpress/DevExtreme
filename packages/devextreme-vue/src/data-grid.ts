@@ -2091,6 +2091,7 @@ const DxPager = createConfigurationComponent({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:allowedPageSizes": null,
     "update:displayMode": null,
     "update:infoText": null,
     "update:label": null,
@@ -2100,6 +2101,7 @@ const DxPager = createConfigurationComponent({
     "update:visible": null,
   },
   props: {
+    allowedPageSizes: [Array, String],
     displayMode: String,
     infoText: String,
     label: String,

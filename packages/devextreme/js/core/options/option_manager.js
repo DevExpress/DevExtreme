@@ -16,6 +16,7 @@ export class OptionManager {
         this._changingCallback;
         this._changedCallback;
         this._namePreparedCallbacks;
+        this._validateOptionsCallback;
     }
 
     _setByReference(options, rulesOptions) {
@@ -68,6 +69,10 @@ export class OptionManager {
             this._prepareRelevantNames(options, name, options[name], silent);
         }
 
+        if(this._validateOptionsCallback) {
+            options = this._validateOptionsCallback(options);
+        }
+
         for(const name in options) {
             this._setPreparedValue(name, options[name], merge, silent);
         }
@@ -83,6 +88,10 @@ export class OptionManager {
 
     onChanged(callBack) {
         this._changedCallback = callBack;
+    }
+
+    onValidateOptions(callback) {
+        this._validateOptionsCallback = callback;
     }
 
     dispose() {

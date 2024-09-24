@@ -1953,6 +1953,7 @@ const OperationDescriptions: typeof _componentOperationDescriptions & IElementDe
 // owners:
 // DataGrid
 type IPagerProps = React.PropsWithChildren<{
+  allowedPageSizes?: Array<number | "all" | "auto"> | "auto";
   displayMode?: "adaptive" | "compact" | "full";
   infoText?: string;
   label?: string;

@@ -167,6 +167,7 @@ export class Component<
       this._options.onStartChange(() => this.beginUpdate());
       this._options.onEndChange(() => this.endUpdate());
       this._options.addRules(this._defaultOptionsRules());
+      this._options.validateOptions((o) => this._validateOptions(o));
 
       // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (options && options.onInitializing) {
@@ -498,5 +499,9 @@ export class Component<
     this.beginUpdate();
     this._options.reset(name);
     this.endUpdate();
+  }
+
+  _validateOptions(options: TProperties): TProperties {
+    return options;
   }
 }

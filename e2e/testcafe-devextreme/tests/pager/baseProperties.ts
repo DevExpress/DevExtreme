@@ -20,6 +20,7 @@ test('Pager width and height property', async (t) => {
 }).before(async () => createWidget('dxPager', {
   width: 270,
   height: '95px',
+  itemCount: 50,
 }));
 
 test('Pager elementAttr property', async (t) => {
@@ -51,6 +52,7 @@ test('Pager hint, disabled and accessKey properties', async (t) => {
   hint: 'Best Pager',
   disabled: true,
   accessKey: 'F',
+  itemCount: 50,
 }));
 
 test('Pager tabindex and state properties', async (t) => {
@@ -79,6 +81,7 @@ test('Pager tabindex and state properties', async (t) => {
     .expect(pager.element.hasClass('dx-state-active'))
     .ok();
 }).before(async () => createWidget('dxPager', {
+  itemCount: 50,
   disabled: false,
   width: '100%',
   focusStateEnabled: true,
@@ -102,6 +105,7 @@ test('Pager focus method without focusStateEnabled', async (t) => {
     .ok();
 }).before(async () => createWidget('dxPager', {
   focusStateEnabled: false,
+  itemCount: 50,
 }));
 
 test('Pager focus method with focusStateEnabled', async (t) => {
@@ -119,4 +123,5 @@ test('Pager focus method with focusStateEnabled', async (t) => {
     .ok();
 }).before(async () => createWidget('dxPager', {
   focusStateEnabled: true,
+  itemCount: 50,
 }));

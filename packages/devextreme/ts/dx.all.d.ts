@@ -839,6 +839,7 @@ declare module DevExpress {
       previousValue: unknown
     ): void;
     _createElement(element: HTMLElement): void;
+    _validateOptions(options: TProperties): TProperties;
   }
   module DOMComponent {
     /**
@@ -4257,18 +4258,17 @@ declare module DevExpress.common.grids {
    */
   export type Pager = DevExpress.ui.BasePagerOptions & {
     /**
+     * [descr:Pager.allowedPageSizes]
+     */
+    allowedPageSizes?:
+      | Array<number | DevExpress.ui.dxPager.PagerPageSize>
+      | Mode;
+
+    /**
      * [descr:Pager.visible]
      */
     visible?: boolean | Mode;
   };
-  /**
-   * [descr:PagerDisplayMode]
-   */
-  export type PagerDisplayMode = DevExpress.ui.dxPager.PagerDisplayMode;
-  /**
-   * [descr:PagerPageSize]
-   */
-  export type PagerPageSize = DevExpress.ui.dxPager.PagerPageSize;
   /**
    * [descr:PagingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -7930,6 +7930,13 @@ declare module DevExpress.ui {
      * [descr:BasePagerOptions.label]
      */
     label?: string;
+
+    /**
+     * [descr:BasePagerOptions.allowedPageSizes]
+     */
+    allowedPageSizes?:
+      | Array<number | DevExpress.ui.dxPager.PagerAllPagesMode>
+      | 'auto';
   };
   /**
    * [descr:ColCountResponsible]
@@ -30968,7 +30975,7 @@ declare module DevExpress.ui.dxOverlay {
 declare module DevExpress.ui.dxPager {
   export type PagerAllPagesMode = 'all';
   export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
-  export type PagerPageSize = PagerAllPagesMode & 'auto';
+  export type PagerPageSize = 'all' | 'auto';
 }
 declare module DevExpress.ui.dxPivotGrid {
   export type Cell = dxPivotGridPivotGridCell;
