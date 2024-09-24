@@ -20,8 +20,9 @@ import { PagerView } from '@ts/grids/new/grid_core/pager';
 import { Search } from '@ts/grids/new/grid_core/search/controller';
 import { render } from 'inferno';
 
-import { ContentStatusView } from './content_view/content_status_view';
 import { ContentView } from './content_view/content_view';
+import { StatusView } from './content_view/status_view/status_view';
+import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
 
 export class GridCoreNew<Properties> extends Widget<Properties> {
@@ -43,6 +44,8 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
 
   private headerPanelView!: HeaderPanelView;
 
+  private errorController!: ErrorController;
+
   private search!: Search;
 
   protected _registerDIContext(): void {
@@ -56,9 +59,10 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(MainView);
     this.diContext.register(ColumnsChooserView);
     this.diContext.register(Search);
-    this.diContext.register(ContentStatusView);
+    this.diContext.register(StatusView);
     this.diContext.register(FilterPanelView);
     this.diContext.register(ContentView);
+    this.diContext.register(ErrorController);
   }
 
   protected _initDIContext(): void {
@@ -70,6 +74,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.editingController = this.diContext.get(EditingController);
     this.pagerView = this.diContext.get(PagerView);
     this.search = this.diContext.get(Search);
+    this.errorController = this.diContext.get(ErrorController);
   }
 
   protected _init(): void {

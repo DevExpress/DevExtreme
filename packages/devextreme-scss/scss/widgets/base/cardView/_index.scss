@@ -1,4 +1,5 @@
 @use 'colors' as *;
+@use '../gridCore/error_row';
 
 .dx-cardview-content {
   display: flex;
