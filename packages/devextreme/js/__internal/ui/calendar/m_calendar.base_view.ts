@@ -138,9 +138,6 @@ const BaseView = (Widget as any).inherit({
   },
 
   _getMultipleModeAriaLabel() {
-    /**
-     * Result: Calendar. The selected dates: <...>
-     */
     const localizedWidgetName = this._getLocalizedWidgetName();
     const selectedRangesText = this._getMultipleRangesText();
 
@@ -150,14 +147,6 @@ const BaseView = (Widget as any).inherit({
   },
 
   _getMultipleRangesText() {
-    /**
-     * 1. Single date
-     * 2. Single range
-     * 3. Range + date
-     * 4. Date + date
-     * 5. Rage + range
-     * 6. To many ranges
-     */
     const { ranges } = this.option();
 
     if (ranges.length > 2) {
