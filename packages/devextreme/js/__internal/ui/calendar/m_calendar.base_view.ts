@@ -106,7 +106,6 @@ const BaseView = (Widget as any).inherit({
     const { value } = this.option();
 
     const localizedWidgetName = this._getLocalizedWidgetName();
-
     const formattedDate = dateLocalization.format(value, ARIA_LABEL_DATE_FORMAT);
     // @ts-expect-error
     const selectedDatesText = messageLocalization.format('dxCalendar-selectedDate', formattedDate);
@@ -120,7 +119,7 @@ const BaseView = (Widget as any).inherit({
     const { value } = this.option();
 
     const localizedWidgetName = this._getLocalizedWidgetName();
-    const selectedDatesText = this._getRangeModeRangeText(value);
+    const selectedDatesText = this._getRangeText(value, 'dxCalendar-selectedDateRange');
 
     const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
 
@@ -132,22 +131,20 @@ const BaseView = (Widget as any).inherit({
 
     const ranges = this._generateMultipleModeRanges();
 
+    let selectedRangeText = '';
+
     if (ranges.length === 1) {
-      const selectedDatesText = this._getRangeModeRangeText(ranges[0]);
+      selectedRangeText = this._getRangeText(ranges[0], 'dxCalendar-selectedDateRange');
+    }
 
-      const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
-
-      return ariaLabel;
+    if (ranges.length === 2) {
+      selectedRangeText = this._getMultipleModeRangesText(ranges);
     }
 
     if (ranges.length > 2) {
       // @ts-expect-error
-      const ariaLabel = `${localizedWidgetName}. ${messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length)}`;
-
-      return ariaLabel;
+      selectedRangeText = `${messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length)}`;
     }
-
-    const selectedRangeText = this._getMultipleModeRangesText(ranges);
 
     const ariaLabel = `${localizedWidgetName}. ${selectedRangeText}`;
 
@@ -532,7 +529,7 @@ const BaseView = (Widget as any).inherit({
     return new Date(min && date < min ? min : date);
   },
 
-  _getRangeModeRangeText(range) {
+  _getRangeText(range, format) {
     const [startDate, endDate] = range;
 
     const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
@@ -540,30 +537,16 @@ const BaseView = (Widget as any).inherit({
 
     const selectedDatesText = startDate && endDate
       // @ts-expect-error
-      ? messageLocalization.format('dxCalendar-selectedDateRange', formattedStartDate, formattedEndDate)
+      ? messageLocalization.format(format, formattedStartDate, formattedEndDate)
       // @ts-expect-error
       : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate ?? formattedEndDate);
 
     return selectedDatesText;
   },
 
-  _getMultiModeRangeText(range) {
-    const [startDate, endDate] = range;
-
-    const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
-    const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
-
-    const selectedDatesText = startDate && endDate
-      // @ts-expect-error
-      ? messageLocalization.format('dxCalendar-selectedDates', formattedStartDate, formattedEndDate)
-      : formattedStartDate;
-
-    return selectedDatesText;
-  },
-
   _getMultipleModeRangesText(ranges) {
     const rangesText = ranges.reduce((accumulator: string, range: any[]): string => {
-      const rangeText = this._getMultiModeRangeText(range);
+      const rangeText = this._getRangeText(range, 'dxCalendar-selectedDates');
 
       const result = `${accumulator ? `${accumulator}, ` : ''}${rangeText}`;
 
