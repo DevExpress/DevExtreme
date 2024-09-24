@@ -523,8 +523,7 @@ const BaseView = (Widget as any).inherit({
     const selectedDatesText = startDate && endDate
       // @ts-expect-error
       ? messageLocalization.format(format, formattedStartDate, formattedEndDate)
-      // @ts-expect-error
-      : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate ?? formattedEndDate);
+      : formattedStartDate;
 
     return selectedDatesText;
   },

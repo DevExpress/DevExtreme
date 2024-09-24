@@ -464,7 +464,7 @@ QUnit.module('Aria accessibility', {
             [
                 {
                     value: [ 1726938544957 ],
-                    expectedAriaLabel: 'Calendar. The selected date range is from September 21, 2024 to September 21, 2024',
+                    expectedAriaLabel: 'Calendar. The selected date is September 21, 2024',
                 },
                 {
                     value: [ 1726938544957, 1726852144957, 1726765744957 ],

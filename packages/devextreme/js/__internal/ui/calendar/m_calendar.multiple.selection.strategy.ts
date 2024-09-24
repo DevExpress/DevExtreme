@@ -73,6 +73,13 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
       const diffInDays = (currentDay - prevDay) / DAY_INTERVAL;
 
       if (diffInDays > 1) {
+        if (startDate === sortedValue[index - 1]) {
+          // @ts-expect-error
+          ranges.push([startDate]);
+        } else {
+          // @ts-expect-error
+          ranges.push([startDate, sortedValue[index - 1]]);
+        }
         // @ts-expect-error
         ranges.push([startDate, sortedValue[index - 1]]);
 
@@ -80,8 +87,13 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
       }
     });
 
-    // @ts-expect-error
-    ranges.push([startDate, sortedValue[sortedValue.length - 1]]);
+    if (startDate === sortedValue[sortedValue.length - 1]) {
+      // @ts-expect-error
+      ranges.push([startDate]);
+    } else {
+      // @ts-expect-error
+      ranges.push([startDate, sortedValue[sortedValue.length - 1]]);
+    }
 
     return ranges;
   }
