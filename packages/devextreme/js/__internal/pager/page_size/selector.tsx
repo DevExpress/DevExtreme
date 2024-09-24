@@ -24,13 +24,13 @@ export interface PageSizeSelectorProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal' | 'pageSizes' > & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
 
 const PageSizeSelectorDefaultProps: PageSizeSelectorPropsType = {
   isLargeDisplayMode: true,
   pageSize: PagerDefaultProps.pageSize,
   pageSizeChangedInternal: PagerDefaultProps.pageSizeChangedInternal,
-  pageSizes: PagerDefaultProps.pageSizes,
+  allowedPageSizes: PagerDefaultProps.allowedPageSizes,
 };
 
 export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType> {
@@ -75,14 +75,15 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
       text: String(p),
       value: p,
     });
-    const result: FullPageSize[] | undefined = this.props.pageSizes.map<FullPageSize>(mapFunction);
+    // eslint-disable-next-line max-len
+    const result: FullPageSize[] | undefined = this.props.allowedPageSizes.map<FullPageSize>(mapFunction);
     this.__getterCache.normalizedPageSizes = result;
     return result;
   }
 
   componentWillUpdate(nextProps: PageSizeSelectorPropsType) {
     super.componentWillUpdate();
-    if (this.props.pageSizes !== nextProps.pageSizes) {
+    if (this.props.allowedPageSizes !== nextProps.allowedPageSizes) {
       this.__getterCache.normalizedPageSizes = undefined;
     }
   }
@@ -98,7 +99,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
       <div ref={this.htmlRef} className={PAGER_PAGE_SIZES_CLASS}>
         {isLargeDisplayMode && (
         <PageSizeLarge
-          pageSizes={this.getNormalizedPageSizes()}
+          allowedPageSizes={this.getNormalizedPageSizes()}
           pageSize={pageSize}
           pageSizeChangedInternal={pageSizeChangedInternal}
         />
@@ -106,7 +107,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
         {!isLargeDisplayMode && (
         <PageSizeSmall
           parentRef={this.htmlRef}
-          pageSizes={normalizedPageSizes}
+          allowedPageSizes={normalizedPageSizes}
           pageSize={pageSize}
           pageSizeChangedInternal={pageSizeChangedInternal}
         />
