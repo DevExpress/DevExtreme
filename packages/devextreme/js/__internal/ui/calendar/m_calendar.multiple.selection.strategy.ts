@@ -1,3 +1,4 @@
+import { DAY_INTERVAL } from './m_calendar.base_view';
 import CalendarSelectionStrategy from './m_calendar.selection.strategy';
 
 class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
@@ -7,9 +8,12 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
   }
 
   getViewOptions() {
+    const value = this.dateOption('value');
+
     return {
-      value: this.dateOption('value'),
-      range: [],
+      value,
+      // range: [],
+      ranges: this._generateRanges(value),
       selectionMode: 'multiple',
       onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
     };
@@ -51,6 +55,54 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
 
     this.dateValue(selectedDates, event);
+  }
+
+  // TODO: Check in runtime
+  _generateRanges(values) {
+    // TODO: Check with all value formats:
+    // https://js.devexpress.com/jQuery/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#value
+    const datesInMilliseconds = values.map((value) => {
+      const date = new Date(new Date(value).setHours(0, 0, 0, 0)).getTime();
+
+      return date;
+    });
+    const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
+
+    const ranges = [];
+
+    let startDate = sortedDates[0];
+
+    sortedDates.forEach((date, index) => {
+      if (index === 0) {
+        return;
+      }
+
+      const previousDate = sortedDates[index - 1];
+
+      const isNewRange = date - previousDate > DAY_INTERVAL;
+
+      if (isNewRange) {
+        if (startDate === sortedDates[index - 1]) {
+          // @ts-expect-error
+          ranges.push([startDate]);
+        } else {
+          // @ts-expect-error
+          ranges.push([startDate, sortedDates[index - 1]]);
+        }
+
+        startDate = date;
+      }
+    });
+
+    if (startDate === sortedDates[sortedDates.length - 1]) {
+      // @ts-expect-error
+      ranges.push([startDate]);
+    } else {
+      // @ts-expect-error
+      ranges.push([startDate, sortedDates[sortedDates.length - 1]]);
+    }
+
+    return ranges;
   }
 }
 
