@@ -13,6 +13,7 @@
         :allow-deleting="true"
         mode="batch"
       />
+      <DxPager :visible="true"/>
 
       <DxColumn
         :width="130"
@@ -60,6 +61,7 @@ import {
   DxEditing,
   DxSummary,
   DxTotalItem,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import { orders } from './data.ts';
 

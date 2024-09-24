@@ -3,5 +3,8 @@ $(() => {
     dataSource: orders,
     keyExpr: 'OrderNumber',
     showBorders: true,
+    pager: {
+      visible: true,
+    }
   });
 });

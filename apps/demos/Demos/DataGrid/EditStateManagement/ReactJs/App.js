@@ -1,7 +1,7 @@
 import React, {
   useCallback, useEffect, useMemo, useReducer,
 } from 'react';
-import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
 import { LoadPanel } from 'devextreme-react/load-panel';
 import 'whatwg-fetch';
 import reducer from './reducer.js';
@@ -68,6 +68,7 @@ const App = () => {
           editRowKey={state.editRowKey}
           onEditRowKeyChange={onEditRowKeyChange}
         />
+        <Pager visible={true} />
         <Column
           dataField="OrderID"
           allowEditing={false}

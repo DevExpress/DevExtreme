@@ -5,6 +5,7 @@ import DataGrid, {
   FilterRow,
   Paging,
   DataGridTypes,
+  Pager,
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
 import themes from 'devextreme/ui/themes';
@@ -40,6 +41,7 @@ const App = () => {
         />
         <FilterRow visible={true} />
         <Paging defaultPageSize={10} />
+        <Pager visible={true} />
 
         <Column dataField="orderId" caption="Order ID" width={90} />
         <Column dataField="city" />

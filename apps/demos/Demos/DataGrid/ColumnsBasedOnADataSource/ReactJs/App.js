@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid from 'devextreme-react/data-grid';
+import DataGrid, { Pager } from 'devextreme-react/data-grid';
 import { orders } from './data.js';
 
 const App = () => (
@@ -8,6 +8,8 @@ const App = () => (
     dataSource={orders}
     keyExpr="OrderNumber"
     showBorders={true}
-  />
+  >
+    <Pager visible={true} />
+  </DataGrid>
 );
 export default App;

@@ -3,6 +3,7 @@ import DataGrid, {
   Column,
   Sorting,
   Paging,
+  Pager,
 } from 'devextreme-react/data-grid';
 import { weekData } from './data.ts';
 import DiffCell from './DiffCell.tsx';
@@ -17,6 +18,7 @@ const App = () => (
     showBorders={true}>
     <Sorting mode="none" />
     <Paging defaultPageSize={10} />
+    <Pager visible={true} />
     <Column dataField="date" width={110} dataType="date" />
     <Column caption="Open" cellRender={DiffCell} />
     <Column caption="Close" cellRender={DiffCell} />

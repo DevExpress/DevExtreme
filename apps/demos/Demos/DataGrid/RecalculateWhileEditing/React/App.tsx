@@ -1,6 +1,6 @@
 import React from 'react';
 import DataGrid, {
-  Column, Editing, Summary, TotalItem,
+  Column, Editing, Summary, TotalItem, Pager,
 } from 'devextreme-react/data-grid';
 import { orders } from './data.ts';
 
@@ -19,6 +19,7 @@ const App = () => (
       allowUpdating={true}
       allowDeleting={true}>
     </Editing>
+    <Pager visible={true} />
     <Column dataField="OrderNumber" width={130} caption="Invoice Number" />
     <Column dataField="OrderDate" dataType="date" />
     <Column dataField="Employee" />
