@@ -1169,8 +1169,50 @@ describe('component rendering', () => {
       renderItemTemplate({}, container);
 
       expect(container.innerHTML).toBe(
-        '<div>child1</div><div>child2</div><span style="display: none;"></span>',
+        '<span style="display: none;"></span><div>child1</div><div>child2</div>',
       );
+    });
+
+    it('unmounts template with root element node', () => {
+      const vm = defineComponent({
+        template: `<test-component>
+                        <template #item>
+                            <div>child1</div>
+                        </template>
+                    </test-component>`,
+        components: {
+          TestComponent,
+        },
+      });
+
+      mount(vm);
+
+      const container = document.createElement("div");
+      renderItemTemplate({}, container);
+      events.triggerHandler(container.children[0], "dxremove");
+
+      expect(container.children.length).toEqual(0);
+    });
+
+    it('unmounts template with text content', () => {
+      const vm = defineComponent({
+        template: `<test-component>
+                        <template #item>
+                            Template_text_content
+                        </template>
+                    </test-component>`,
+        components: {
+          TestComponent,
+        },
+      });
+
+      mount(vm);
+
+      const container = document.createElement("div");
+      renderItemTemplate({}, container);
+      events.triggerHandler(container.children[0], "dxremove");
+
+      expect(container.children.length).toEqual(0);
     });
 
     it('template should have globalProperties of parent', () => {
