@@ -312,6 +312,15 @@ function initDxComponent() {
   return defineComponent({
     extends: initBaseComponent(),
     methods: {
+/*      $_getExtraIntegrationOptions(): object {
+        return {
+          onInitializing() {
+            (this as any).beginUpdate();
+            (this as any).endUpdate();
+          },
+        };
+      },*/
+
       $_processChildren(children: VNode[]): void {
         children.forEach((childNode: VNode) => {
           if (!childNode || typeof childNode !== 'object') { return; }
