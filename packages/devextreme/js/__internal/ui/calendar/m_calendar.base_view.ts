@@ -138,9 +138,55 @@ const BaseView = (Widget as any).inherit({
   },
 
   _getMultipleModeAriaLabel() {
-    const ariaLabel = this._getLocalizedWidgetName();
+    /**
+     * Result: Calendar. The selected dates: <...>
+     */
+    const localizedWidgetName = this._getLocalizedWidgetName();
+    const selectedRangesText = this._getMultipleRangesText();
+
+    const ariaLabel = `${localizedWidgetName}. ${selectedRangesText}`;
 
     return ariaLabel;
+  },
+
+  _getMultipleRangesText() {
+    /**
+     * 1. Single date
+     * 2. Single range
+     * 3. Range + date
+     * 4. Date + date
+     * 5. Rage + range
+     * 6. To many ranges
+     */
+    const { ranges } = this.option();
+
+    if (ranges.length > 2) {
+      // @ts-expect-error
+      const dateRangeCount = messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length);
+
+      return `${dateRangeCount}`;
+    }
+
+    const selectedDatesText = messageLocalization.format('dxCalendar-selectedDates');
+    const rangesText = ranges.map((range) => this._getMultipleRangeText(range)).join(', ');
+
+    const result = `${selectedDatesText}: ${rangesText}`;
+
+    return result;
+  },
+
+  _getMultipleRangeText(range) {
+    const [startDate, endDate] = range;
+
+    const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
+    const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
+
+    const selectedDatesText = startDate && endDate
+      // @ts-expect-error
+      ? messageLocalization.format('dxCalendar-selectedMultipleDateRange', formattedStartDate, formattedEndDate)
+      : formattedStartDate;
+
+    return selectedDatesText;
   },
 
   _getTableAriaLabel() {

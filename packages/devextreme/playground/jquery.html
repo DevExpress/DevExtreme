@@ -49,13 +49,24 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="calendar"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            $(() => {
+                const calendar = $('#calendar').dxCalendar({
+                    value: [
+                        new Date(1726765744957),
+                        new Date(),
+                        '2024-11-27',
+                        '2024-10-27T16:54:10+03',
+                        1726765744957, // 19
+                        1726852144957, // 20
+                        1726938544957, // 21
+                        1727111344957, // 23
+                        1727197744957, // 24
+                        1727434511000, // 27
+                    ],
+                    selectionMode: 'multiple',
+                }).dxCalendar('instance');
             });
         </script>
     </div>

@@ -12,7 +12,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
 
     return {
       value,
-      // range: [],
+      range: [],
       ranges: this._generateRanges(value),
       selectionMode: 'multiple',
       onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
@@ -57,16 +57,21 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     this.dateValue(selectedDates, event);
   }
 
-  // TODO: Check in runtime
   _generateRanges(values) {
-    // TODO: Check with all value formats:
-    // https://js.devexpress.com/jQuery/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#value
     const datesInMilliseconds = values.map((value) => {
       const date = new Date(new Date(value).setHours(0, 0, 0, 0)).getTime();
 
       return date;
     });
     const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
+
+    const getRange = (date, dates, index) => {
+      const range = date === dates[index - 1]
+        ? [date]
+        : [date, dates[index - 1]];
+
+      return range.map((value) => new Date(value));
+    };
 
     const ranges = [];
 
@@ -78,31 +83,32 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
       }
 
       const previousDate = sortedDates[index - 1];
-
       const isNewRange = date - previousDate > DAY_INTERVAL;
 
       if (isNewRange) {
-        if (startDate === sortedDates[index - 1]) {
-          // @ts-expect-error
-          ranges.push([startDate]);
-        } else {
-          // @ts-expect-error
-          ranges.push([startDate, sortedDates[index - 1]]);
-        }
+        const range = getRange(startDate, sortedDates, index);
+
+        // @ts-expect-error
+        ranges.push(range);
 
         startDate = date;
       }
     });
 
-    if (startDate === sortedDates[sortedDates.length - 1]) {
-      // @ts-expect-error
-      ranges.push([startDate]);
-    } else {
-      // @ts-expect-error
-      ranges.push([startDate, sortedDates[sortedDates.length - 1]]);
-    }
+    const range = getRange(startDate, sortedDates, sortedDates.length);
+
+    // @ts-expect-error
+    ranges.push(range);
 
     return ranges;
+  }
+
+  processValueChanged(value, previousValue): void {
+    const ranges = this._generateRanges(value);
+
+    this._updateViewsOption('ranges', ranges);
+
+    super.processValueChanged(value, previousValue);
   }
 }
 
