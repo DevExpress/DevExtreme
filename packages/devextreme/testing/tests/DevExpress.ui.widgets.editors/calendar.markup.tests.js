@@ -461,18 +461,41 @@ QUnit.module('Aria accessibility', {
                 checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
             });
 
-            QUnit.test(`table aria-label should be equal to "Calendar" when selectionMode=multiple, zoomLevel=${zoomLevel}`, function(assert) {
-                const date = new Date(2024, 3, 21);
+            [
+                {
+                    value: [ new Date(1726765744957) ],
+                    expectedAriaLabel: 'Calendar. The selected dates: September 19, 2024',
+                },
+                {
+                    value: [ '2024-10-27T16:54:10+03' ],
+                    expectedAriaLabel: 'Calendar. The selected dates: October 27, 2024',
+                },
+                {
+                    value: [ 1726938544957 ],
+                    expectedAriaLabel: 'Calendar. The selected dates: September 21, 2024',
+                },
+                {
+                    value: [ 1726938544957, 1726852144957, 1726765744957 ],
+                    expectedAriaLabel: 'Calendar. The selected dates: from September 19, 2024 to September 21, 2024',
+                },
+                {
+                    value: [ 1726938544957, 1726852144957, 1726765744957, 1727111344957, 1727197744957 ],
+                    expectedAriaLabel: 'Calendar. The selected dates: from September 19, 2024 to September 21, 2024, from September 23, 2024 to September 24, 2024',
+                },
+                {
+                    value: [ 1726938544957, 1726852144957, 1726765744957, 1727111344957, 1727197744957, 1727434511000 ],
+                    expectedAriaLabel: 'Calendar. There are 3 selected date ranges',
+                },
+            ].forEach(({ value, expectedAriaLabel }) => {
+                QUnit.test(`table aria-label should be correct when selectionMode=multiple,value=${value},zoomLevel=${zoomLevel}`, function(assert) {
+                    this.$element.dxCalendar({
+                        zoomLevel,
+                        selectionMode: 'multiple',
+                        value,
+                    }).dxCalendar('instance');
 
-                this.$element.dxCalendar({
-                    zoomLevel,
-                    selectionMode: 'multiple',
-                    value: [date],
+                    checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
                 });
-
-                const expectedAriaLabel = 'Calendar';
-
-                checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
             });
 
             QUnit.test(`table aria-label should contain selected date when selectionMode=range, zoomLevel=${zoomLevel}`, function(assert) {
@@ -548,21 +571,23 @@ QUnit.module('Aria accessibility', {
             checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
         });
 
-        QUnit.test('table aria-label should not contain new selected date after value changed when selectionMode=multiple', function(assert) {
+        QUnit.test('table aria-label should contain new selected dates after value changed when selectionMode=multiple', function(assert) {
             const firstDate = new Date(2024, 3, 21);
             const secondDate = new Date(2024, 3, 23);
-
-            const newFirstDate = new Date(2024, 3, 27);
-            const newSecondDate = new Date(2024, 3, 29);
 
             const instance = this.$element.dxCalendar({
                 selectionMode: 'multiple',
                 value: [firstDate, secondDate],
             }).dxCalendar('instance');
 
+            checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar. The selected dates: April 21, 2024, April 23, 2024');
+
+            const newFirstDate = new Date(2024, 3, 27);
+            const newSecondDate = new Date(2024, 3, 29);
+
             instance.option({ value: [newFirstDate, newSecondDate] });
 
-            checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar');
+            checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar. The selected dates: April 27, 2024, April 29, 2024');
         });
 
         QUnit.test('table should have an aria-label "Calendar" when value is [null, null], selectionMode=range', function(assert) {
