@@ -73,7 +73,11 @@ const App = () => {
       <Column dataField="Channel" dataType="string" />
       <Column dataField="Customer" dataType="string" width={150} />
 
-      <Pager allowedPageSizes={pageSizes} showPageSizeSelector={true} />
+      <Pager
+        visible={true}
+        allowedPageSizes={pageSizes}
+        showPageSizeSelector={true}
+      />
       <Paging defaultPageSize={10} />
     </DataGrid>
   );

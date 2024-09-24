@@ -1,8 +1,10 @@
+/* eslint-disable spellcheck/spell-checker */
 import { locate, move } from '@js/animation/translator';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { wrapToArray } from '@js/core/utils/array';
 // @ts-expect-error
@@ -105,17 +107,17 @@ class SchedulerAppointments extends CollectionWidget {
     const parent = super._supportedKeys();
 
     const tabHandler = function (e) {
-      const appointments = this._getAccessAppointments();
-      const focusedAppointment = appointments.filter('.dx-state-focused');
-      let index = focusedAppointment.data(APPOINTMENT_SETTINGS_KEY).sortedIndex;
-      const lastIndex = appointments.length - 1;
+      const navigatableItems = this._getNavigatableItems();
+      const focusedItem = navigatableItems.filter('.dx-state-focused');
+      let index = focusedItem.data(APPOINTMENT_SETTINGS_KEY).sortedIndex;
+      const lastIndex = navigatableItems.length - 1;
 
       if ((index > 0 && e.shiftKey) || (index < lastIndex && !e.shiftKey)) {
         e.preventDefault();
 
         e.shiftKey ? index-- : index++;
 
-        const $nextAppointment = this._getAppointmentByIndex(index);
+        const $nextAppointment = this._getNavigatableItemByIndex(index);
         this._resetTabIndex($nextAppointment);
         // @ts-expect-error
         eventsEngine.trigger($nextAppointment, 'focus');
@@ -145,14 +147,20 @@ class SchedulerAppointments extends CollectionWidget {
     });
   }
 
-  _getAppointmentByIndex(sortedIndex) {
-    const appointments = this._getAccessAppointments();
-
-    return appointments.filter((_, $item) => elementData($item, APPOINTMENT_SETTINGS_KEY).sortedIndex === sortedIndex).eq(0);
+  private _getNavigatableItemByIndex(sortedIndex) {
+    const appointments = this._getNavigatableItems();
+    return appointments.filter(
+      // @ts-expect-error
+      (_, $item) => elementData($item, APPOINTMENT_SETTINGS_KEY).sortedIndex === sortedIndex,
+    ).eq(0);
   }
 
-  _getAccessAppointments() {
-    return (this as any)._itemElements().filter(':visible').not('.dx-state-disabled');
+  private _getNavigatableItems(): dxElementWrapper {
+    // @ts-expect-error
+    const appts = this._itemElements().filter(':visible').not('.dx-state-disabled');
+    // @ts-expect-error
+    const apptCollectors = this.$element().find('.dx-scheduler-appointment-collector');
+    return appts.add(apptCollectors);
   }
 
   _resetTabIndex($appointment) {
@@ -163,11 +171,11 @@ class SchedulerAppointments extends CollectionWidget {
   _moveFocus() {}
 
   _focusTarget() {
-    return (this as any)._itemElements();
+    return (this as any)._getNavigatableItems();
   }
 
   _renderFocusTarget() {
-    const $appointment = this._getAppointmentByIndex(0);
+    const $appointment = this._getNavigatableItemByIndex(0);
 
     this._resetTabIndex($appointment);
   }
@@ -179,7 +187,7 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   _focusOutHandler(e) {
-    const $appointment = this._getAppointmentByIndex(0);
+    const $appointment = this._getNavigatableItemByIndex(0);
     this.option('focusedElement', getPublicElement($appointment));
     super._focusOutHandler(e);
   }
@@ -898,6 +906,7 @@ class SchedulerAppointments extends CollectionWidget {
         items: { data: [], colors: [], settings: [] },
         isAllDay: !!virtualAppointment.isAllDay,
         buttonColor: color,
+        sortedIndex: appointmentSetting.sortedIndex,
       };
     }
 
@@ -935,6 +944,7 @@ class SchedulerAppointments extends CollectionWidget {
           },
           items: virtualItems,
           buttonColor: virtualGroup.buttonColor,
+          sortedIndex: virtualGroup.sortedIndex,
           width: buttonWidth - this.option('_collectorOffset'),
           height: buttonHeight,
           onAppointmentClick: this.option('onItemClick'),

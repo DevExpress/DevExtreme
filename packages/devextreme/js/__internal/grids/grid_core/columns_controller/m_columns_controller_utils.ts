@@ -14,7 +14,7 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 import numberLocalization from '@js/localization/number';
 
 import gridCoreUtils from '../m_utils';
-import type { StickyPosition } from '../sticky_columns/const';
+import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import {
   COLUMN_CHOOSER_LOCATION,
@@ -876,7 +876,7 @@ export const mergeColumns = (that: ColumnsController, columns, commandColumns, n
   return result;
 };
 
-export const isColumnFixed = (that: ColumnsController, column) => (isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing());
+export const isColumnFixed = (that: ColumnsController, column) => (isDefined(column.fixed) || !column.type ? column.fixed && column.fixedPosition !== StickyPosition.Sticky : that._isColumnFixing());
 
 export const convertOwnerBandToColumnReference = (columns) => {
   columns.forEach((column) => {

@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
 import type { NativeEventInfo } from '@js/events';
+import { triggerResizeEvent } from '@js/events/visibility_change';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -85,11 +86,13 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       placeholder: 'Type a message',
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
-      maxHeight: '20em',
+      maxHeight: '8em',
       onInput: (): void => {
         const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
         this._toggleButtonDisableState(shouldButtonBeDisabled);
+
+        triggerResizeEvent(this.$element().parent());
       },
       onEnterKey: (e: EnterKeyEvent): void => {
         if (!e.event?.shiftKey) {
@@ -144,9 +147,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     const { text } = this._textArea.option();
 
-    this._messageSendAction?.({ text, event: e.event });
     this._textArea.reset();
     this._toggleButtonDisableState(true);
+
+    this._messageSendAction?.({ text, event: e.event });
   }
 
   _toggleButtonDisableState(state: boolean): void {

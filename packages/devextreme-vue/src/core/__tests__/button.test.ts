@@ -66,4 +66,34 @@ describe('template rendering', () => {
 
     expect(wrapper.vm.$el.getElementsByClassName('test')).toHaveLength(1);
   });
+
+  it('should unmount template with two childs in root without exception', async () => {
+    const appView = defineComponent({
+      props: {
+        templateName: {
+          type: String,
+          value: 'tpl1'
+        }
+      },
+      template:
+          `<dx-button id="component" :template="templateName">
+                    <template #tpl1>
+                      <div>1</div>
+                      <div>2</div>
+                    </template>
+                    <template #tpl2>
+                      <div>3</div>
+                      <div>4</div>
+                    </template>
+          </dx-button>`,
+      components: {
+        DxButton,
+      },
+    });
+
+
+    const wrapper = mount(appView, {props: {templateName: 'tpl1'}});
+
+    expect(() => wrapper.setProps({templateName: 'tpl2'})).not.toThrow();
+  })
 });
