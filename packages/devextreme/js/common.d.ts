@@ -840,55 +840,61 @@ export type VerticalEdge = 'bottom' | 'top';
 
 /**
  * @public
- * @namespace DevExpress.ui.dxPager
+ * @namespace DevExpress.common
  */
 export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
 
 /**
  * @public
- * @namespace DevExpress.ui.dxPager
+ * @namespace DevExpress.common
  */
 export type PagerAllPagesMode = 'all';
 
 /**
  * @public
- * @namespace DevExpress.ui.dxPager
+ * @namespace DevExpress.common
  */
 export type PagerPageSize = 'all' | 'auto';
 
 /**
  * @docid
  * @public
- * @namespace DevExpress.ui
+ * @namespace DevExpress.common
  */
 export type BasePagerOptions = {
   /**
    * @docid
+   * @public
    * @default "adaptive"
    */
   displayMode?: PagerDisplayMode;
   /**
    * @docid
+   * @public
    * @default "Page {0} of {1} ({2} items)"
    */
   infoText?: string;
   /**
    * @docid
+   * @public
    * @default false
    */
   showInfo?: boolean;
   /**
    * @docid
+   * @public
    * @default false
    */
   showNavigationButtons?: boolean;
   /**
    * @docid
+   * @public
    * @default false
    */
   showPageSizeSelector?: boolean;
   /**
    * @docid
+   * @public
    * @default "Page Navigation"
    */
   label?: string;
