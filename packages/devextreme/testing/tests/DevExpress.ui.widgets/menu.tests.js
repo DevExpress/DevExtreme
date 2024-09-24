@@ -2970,20 +2970,17 @@ QUnit.module('adaptivity: render', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Adds "menu bar" role when menu is wider than item', function(assert) {
-        $('#qunit-fixture').width(100);
+    QUnit.test('Adds "menubar" role when menu is wider than item', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true,
             width: 1000
         });
 
-
         assert.strictEqual(this.$element.attr('role'), 'menubar');
     });
 
     QUnit.test('No role added when menu is smaller than item', function(assert) {
-        $('#qunit-fixture').width(100);
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true,
@@ -2994,7 +2991,6 @@ QUnit.module('adaptivity: render', {
     });
 
     QUnit.test('Adds "menu bar" role when menu width is increased at runtime', function(assert) {
-        $('#qunit-fixture').width(100);
         const instance = new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true,
@@ -3009,7 +3005,6 @@ QUnit.module('adaptivity: render', {
     });
 
     QUnit.test('Removes role when menu width is decreased at runtime', function(assert) {
-        $('#qunit-fixture').width(100);
         const instance = new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true,
