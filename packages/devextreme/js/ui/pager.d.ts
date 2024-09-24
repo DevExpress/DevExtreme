@@ -42,7 +42,8 @@ export interface dxPagerOptions extends BasePagerOptions, WidgetOptions<dxPager>
  * @docid
  * @namespace DevExpress.ui
  * @public
- * @inherits Widget
+ * @inherits Widget, BasePagerOptions
+ * @options dxPagerOptions
  */
 export default class dxPager extends Widget<Properties> {
     /**

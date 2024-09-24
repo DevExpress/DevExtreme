@@ -6,12 +6,15 @@ type AccessibleOptions = Pick<Properties,
   "activeStateEnabled" |
   "allowedPageSizes" |
   "disabled" |
+  "displayMode" |
   "elementAttr" |
   "focusStateEnabled" |
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "infoText" |
   "itemCount" |
+  "label" |
   "onContentReady" |
   "onDisposing" |
   "onInitialized" |
@@ -19,6 +22,9 @@ type AccessibleOptions = Pick<Properties,
   "pageIndex" |
   "pageSize" |
   "rtlEnabled" |
+  "showInfo" |
+  "showNavigationButtons" |
+  "showPageSizeSelector" |
   "tabIndex" |
   "visible" |
   "width"
@@ -33,12 +39,15 @@ const DxPager = createComponent({
     activeStateEnabled: Boolean,
     allowedPageSizes: Array,
     disabled: Boolean,
+    displayMode: String,
     elementAttr: Object,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    infoText: String,
     itemCount: Number,
+    label: String,
     onContentReady: Function,
     onDisposing: Function,
     onInitialized: Function,
@@ -46,6 +55,9 @@ const DxPager = createComponent({
     pageIndex: Number,
     pageSize: Number,
     rtlEnabled: Boolean,
+    showInfo: Boolean,
+    showNavigationButtons: Boolean,
+    showPageSizeSelector: Boolean,
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String]
@@ -57,12 +69,15 @@ const DxPager = createComponent({
     "update:activeStateEnabled": null,
     "update:allowedPageSizes": null,
     "update:disabled": null,
+    "update:displayMode": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:infoText": null,
     "update:itemCount": null,
+    "update:label": null,
     "update:onContentReady": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
@@ -70,6 +85,9 @@ const DxPager = createComponent({
     "update:pageIndex": null,
     "update:pageSize": null,
     "update:rtlEnabled": null,
+    "update:showInfo": null,
+    "update:showNavigationButtons": null,
+    "update:showPageSizeSelector": null,
     "update:tabIndex": null,
     "update:visible": null,
     "update:width": null,
