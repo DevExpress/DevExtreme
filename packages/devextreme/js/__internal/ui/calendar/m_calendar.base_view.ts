@@ -128,8 +128,8 @@ const BaseView = (Widget as any).inherit({
 
   _getMultipleModeAriaLabel() {
     const localizedWidgetName = this._getLocalizedWidgetName();
-    const ranges = this._generateMultipleModeRanges();
-    const selectedRangesText = this._getMultipleModeSelectedRangesText(ranges);
+    const ranges = this.option('_ranges');
+    const selectedRangesText = this._getMultipleModeRangesText(ranges);
 
     const ariaLabel = `${localizedWidgetName}. ${selectedRangesText}`;
 
@@ -529,20 +529,20 @@ const BaseView = (Widget as any).inherit({
     return selectedDatesText;
   },
 
-  _getMultipleModeSelectedRangesText(ranges) {
+  _getMultipleModeRangesText(ranges) {
     if (ranges.length === 1) {
       return this._getRangeText(ranges[0], 'dxCalendar-selectedDateRange');
     }
 
     if (ranges.length === 2) {
-      return this._getMultipleModeRangesText(ranges);
+      return this._getSeveralRangesText(ranges);
     }
 
     // @ts-expect-error
     return `${messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length)}`;
   },
 
-  _getMultipleModeRangesText(ranges) {
+  _getSeveralRangesText(ranges) {
     const rangesText = ranges.reduce((accumulator: string, range: any[]): string => {
       const rangeText = this._getRangeText(range, 'dxCalendar-selectedDates');
 
@@ -552,37 +552,6 @@ const BaseView = (Widget as any).inherit({
     const result = `${messageLocalization.format('dxCalendar-selectedDateRanges')} ${rangesText}`;
 
     return result;
-  },
-
-  _generateMultipleModeRanges() {
-    const { value } = this.option();
-    const sortedValue = value.sort((a, b) => a - b);
-
-    const ranges = [];
-    let startDate = sortedValue[0];
-
-    sortedValue.forEach((date, index) => {
-      if (index === 0) {
-        return;
-      }
-
-      const prevDay = new Date(sortedValue[index - 1]).setHours(0, 0, 0, 0);
-      const currentDay = new Date(date).setHours(0, 0, 0, 0);
-
-      const diffInDays = (currentDay - prevDay) / DAY_INTERVAL;
-
-      if (diffInDays > 1) {
-        // @ts-expect-error
-        ranges.push([startDate, sortedValue[index - 1]]);
-
-        startDate = date;
-      }
-    });
-
-    // @ts-expect-error
-    ranges.push([startDate, sortedValue[sortedValue.length - 1]]);
-
-    return ranges;
   },
 
   _getCellByDate: abstract,
