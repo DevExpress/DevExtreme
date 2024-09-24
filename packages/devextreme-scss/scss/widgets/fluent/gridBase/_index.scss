@@ -115,27 +115,27 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
         }
 
-        .dx-icon-fixcolumn {
+        .dx-icon-fix-column {
           @include dx-icon(fixcolumn);
           @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
         }
 
-        .dx-icon-fixcolumnleft {
+        .dx-icon-fix-column-left {
           @include dx-icon(fixcolumnleft);
           @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
         }
 
-        .dx-icon-fixcolumnright {
+        .dx-icon-fix-column-right {
           @include dx-icon(fixcolumnright);
           @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
         }
 
-        .dx-icon-stickcolumn {
+        .dx-icon-stick-column {
           @include dx-icon(stickcolumn);
           @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
         }
 
-        .dx-icon-unfixcolumn {
+        .dx-icon-unfix-column {
           @include dx-icon(unfixcolumn);
           @include dx-icon-sizing($fluent-grid-base-filter-icon-size - 4);
         }
