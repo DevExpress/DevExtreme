@@ -316,6 +316,7 @@ function initDxComponent() {
         return {
           onInitializing() {
             (this as any).beginUpdate();
+            (this as any).endUpdate();
           },
         };
       },
