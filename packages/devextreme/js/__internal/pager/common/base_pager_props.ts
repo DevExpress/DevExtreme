@@ -17,7 +17,7 @@ export interface BasePagerProps extends BaseWidgetProps {
   visible?: boolean;
   hasKnownLastPage?: boolean;
   pagesNavigatorVisible?: boolean | 'auto';
-  showPageSizes?: boolean;
+  showPageSizeSelector?: boolean;
   allowedPageSizes: (number | 'all')[];
   rtlEnabled?: boolean;
   showNavigationButtons?: boolean;
@@ -36,7 +36,7 @@ export const BasePagerDefaultProps: BasePagerProps = {
   visible: true,
   hasKnownLastPage: true,
   pagesNavigatorVisible: 'auto',
-  showPageSizes: true,
+  showPageSizeSelector: true,
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   totalCount: 1,
