@@ -16,30 +16,28 @@ test('Pager visibile property', async (t) => {
 }));
 
 test('PageSize selector test', async (t) => {
-    const pager = new Pager('#container');
+  const pager = new Pager('#container');
 
-    await t
-        .click(pager.getPageSize(1).element)
-        .expect(pager.option('pageCount'))
-        .eql(13);
-
-  }).before(async () => createWidget('dxPager', {
-    totalCount: 50,
-    pageIndex: 2,
-    pageSize: 8, // pageCount: 7
-    allowedPageSizes: [2, 4, 8],
-  }));
+  await t
+    .click(pager.getPageSize(1).element)
+    .expect(pager.option('pageCount'))
+    .eql(13);
+}).before(async () => createWidget('dxPager', {
+  totalCount: 50,
+  pageIndex: 2,
+  pageSize: 8, // pageCount: 7
+  allowedPageSizes: [2, 4, 8],
+}));
 
 test('PageIndex test', async (t) => {
   const pager = new Pager('#container');
 
   await t
-      .expect(pager.option('pageIndex'))
-      .eql(1)
-      .click(pager.getNavPage('5').element)
-      .expect(pager.option('pageIndex'))
-      .eql(5);
-
+    .expect(pager.option('pageIndex'))
+    .eql(1)
+    .click(pager.getNavPage('5').element)
+    .expect(pager.option('pageIndex'))
+    .eql(5);
 }).before(async () => createWidget('dxPager', {
   totalCount: 50,
   pageIndex: 1,
@@ -50,12 +48,11 @@ test('PageIndex correction test', async (t) => {
   const pager = new Pager('#container');
 
   await t
-      .expect(pager.option('pageIndex'))
-      .eql(10)
-      .click(pager.getPageSize(1).element)
-      .expect(pager.option('pageIndex'))
-      .eql(5);
-
+    .expect(pager.option('pageIndex'))
+    .eql(10)
+    .click(pager.getPageSize(1).element)
+    .expect(pager.option('pageIndex'))
+    .eql(5);
 }).before(async () => createWidget('dxPager', {
   totalCount: 50,
   pageIndex: 10,
