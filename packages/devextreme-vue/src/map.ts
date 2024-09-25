@@ -223,6 +223,25 @@ const DxMarker = defineComponent(DxMarkerConfig);
   tooltip: { isCollectionItem: false, optionName: "tooltip" }
 };
 
+const DxProviderConfigConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:mapId": null,
+    "update:useAdvancedMarkers": null,
+  },
+  props: {
+    mapId: String,
+    useAdvancedMarkers: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxProviderConfigConfig);
+
+const DxProviderConfig = defineComponent(DxProviderConfigConfig);
+
+(DxProviderConfig as any).$_optionName = "providerConfig";
+
 const DxRouteConfig = {
   emits: {
     "update:isActive": null,
