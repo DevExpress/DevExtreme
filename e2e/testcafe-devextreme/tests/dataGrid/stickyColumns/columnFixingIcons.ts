@@ -37,7 +37,6 @@ fixture.disablePageReloads`Column Fixing`.page(
           columnFixing: {
             enabled: true,
             texts: {
-              // @ts-expect-error required
               stickyPosition: 'Stick',
             },
           },
