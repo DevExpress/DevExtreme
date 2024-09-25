@@ -1,7 +1,20 @@
-import * as vue3Strategy from './strategy/vue3/index';
+import { initDxComponent } from './component';
+import { initDxConfiguration } from './configuration-component';
+import { initDxExtensionComponent } from './extension-component';
+import { setVModel } from './vue-helper';
 
-export const {
-  prepareComponentConfig,
-  prepareConfigurationComponentConfig,
-  prepareExtensionComponentConfig,
-} = vue3Strategy;
+export function prepareComponentConfig(config) {
+  config.extends = initDxComponent();
+
+  if (config.model) {
+    setVModel(config);
+  }
+}
+
+export function prepareConfigurationComponentConfig(config: any): void {
+  config.extends = initDxConfiguration();
+}
+
+export function prepareExtensionComponentConfig(config: any): void {
+  config.extends = initDxExtensionComponent();
+}
