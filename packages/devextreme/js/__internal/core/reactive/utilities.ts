@@ -4,7 +4,7 @@
 import { InterruptableComputed, Observable } from './core';
 import { type Subscription, SubscriptionBag } from './subscription';
 import type {
-  Gettable, MapMaybeSubscribable, MaybeSubscribable, Subscribable, Updatable,
+  Gettable, MaybeSubscribable, Subscribable, Updatable,
 } from './types';
 import { isSubscribable } from './types';
 

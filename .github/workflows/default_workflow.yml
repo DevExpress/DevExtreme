@@ -71,3 +71,4 @@ jobs:
         devextreme-demos
         devextreme-react-playground
         devextreme-vue-playground
+        devextreme-testcafe-tests-storybook

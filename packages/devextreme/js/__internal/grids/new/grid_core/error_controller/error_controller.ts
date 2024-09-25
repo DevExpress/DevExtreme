@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { Subscribable } from '@ts/core/reactive';
-import { state } from '@ts/core/reactive';
+import type { Subscribable } from '@ts/core/reactive/index';
+import { state } from '@ts/core/reactive/index';
 
 import { DataController } from '../data_controller/data_controller';
 

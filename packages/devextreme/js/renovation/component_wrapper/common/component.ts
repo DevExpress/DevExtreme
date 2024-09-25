@@ -232,7 +232,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     super._dispose();
   }
 
-  get elementAttr(): HTMLAttributes<unknown> {
+  get elementAttr(): Record<string, unknown> {
     const element = this.$element()[0];
     if (!this._elementAttr) {
       const { attributes } = element;
