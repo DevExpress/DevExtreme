@@ -1,6 +1,7 @@
 import DropDownButton, { Properties } from "devextreme/ui/drop_down_button";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -49,7 +50,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxDropDownButton extends AccessibleOptions {
   readonly instance?: DropDownButton;
 }
-const DxDropDownButton = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -151,9 +153,14 @@ const DxDropDownButton = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxAnimation = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxDropDownButton = defineComponent(componentConfig);
+
+
+const DxAnimationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -164,13 +171,19 @@ const DxAnimation = createConfigurationComponent({
     hide: [Object, Number, String],
     show: [Object, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAnimationConfig);
+
+const DxAnimation = defineComponent(DxAnimationConfig);
+
 (DxAnimation as any).$_optionName = "animation";
 (DxAnimation as any).$_expectedChildren = {
   hide: { isCollectionItem: false, optionName: "hide" },
   show: { isCollectionItem: false, optionName: "show" }
 };
-const DxAt = createConfigurationComponent({
+
+const DxAtConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -181,9 +194,15 @@ const DxAt = createConfigurationComponent({
     x: String,
     y: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAtConfig);
+
+const DxAt = defineComponent(DxAtConfig);
+
 (DxAt as any).$_optionName = "at";
-const DxBoundaryOffset = createConfigurationComponent({
+
+const DxBoundaryOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -194,9 +213,15 @@ const DxBoundaryOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxBoundaryOffsetConfig);
+
+const DxBoundaryOffset = defineComponent(DxBoundaryOffsetConfig);
+
 (DxBoundaryOffset as any).$_optionName = "boundaryOffset";
-const DxCollision = createConfigurationComponent({
+
+const DxCollisionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -207,9 +232,15 @@ const DxCollision = createConfigurationComponent({
     x: String,
     y: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCollisionConfig);
+
+const DxCollision = defineComponent(DxCollisionConfig);
+
 (DxCollision as any).$_optionName = "collision";
-const DxDropDownOptions = createConfigurationComponent({
+
+const DxDropDownOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -316,14 +347,20 @@ const DxDropDownOptions = createConfigurationComponent({
     width: [Function, Number, String],
     wrapperAttr: {}
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxDropDownOptionsConfig);
+
+const DxDropDownOptions = defineComponent(DxDropDownOptionsConfig);
+
 (DxDropDownOptions as any).$_optionName = "dropDownOptions";
 (DxDropDownOptions as any).$_expectedChildren = {
   animation: { isCollectionItem: false, optionName: "animation" },
   position: { isCollectionItem: false, optionName: "position" },
   toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
 };
-const DxFrom = createConfigurationComponent({
+
+const DxFromConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -340,12 +377,18 @@ const DxFrom = createConfigurationComponent({
     scale: Number,
     top: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFromConfig);
+
+const DxFrom = defineComponent(DxFromConfig);
+
 (DxFrom as any).$_optionName = "from";
 (DxFrom as any).$_expectedChildren = {
   position: { isCollectionItem: false, optionName: "position" }
 };
-const DxHide = createConfigurationComponent({
+
+const DxHideConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -372,13 +415,19 @@ const DxHide = createConfigurationComponent({
     to: Object,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHideConfig);
+
+const DxHide = defineComponent(DxHideConfig);
+
 (DxHide as any).$_optionName = "hide";
 (DxHide as any).$_expectedChildren = {
   from: { isCollectionItem: false, optionName: "from" },
   to: { isCollectionItem: false, optionName: "to" }
 };
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -401,10 +450,16 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxMy = createConfigurationComponent({
+
+const DxMyConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -415,9 +470,15 @@ const DxMy = createConfigurationComponent({
     x: String,
     y: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMyConfig);
+
+const DxMy = defineComponent(DxMyConfig);
+
 (DxMy as any).$_optionName = "my";
-const DxOffset = createConfigurationComponent({
+
+const DxOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -428,9 +489,15 @@ const DxOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxOffsetConfig);
+
+const DxOffset = defineComponent(DxOffsetConfig);
+
 (DxOffset as any).$_optionName = "offset";
-const DxPosition = createConfigurationComponent({
+
+const DxPositionConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -451,9 +518,15 @@ const DxPosition = createConfigurationComponent({
     of: {},
     offset: [Object, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPositionConfig);
+
+const DxPosition = defineComponent(DxPositionConfig);
+
 (DxPosition as any).$_optionName = "position";
-const DxShow = createConfigurationComponent({
+
+const DxShowConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -480,9 +553,15 @@ const DxShow = createConfigurationComponent({
     to: Object,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxShowConfig);
+
+const DxShow = defineComponent(DxShowConfig);
+
 (DxShow as any).$_optionName = "show";
-const DxTo = createConfigurationComponent({
+
+const DxToConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -499,9 +578,15 @@ const DxTo = createConfigurationComponent({
     scale: Number,
     top: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToConfig);
+
+const DxTo = defineComponent(DxToConfig);
+
 (DxTo as any).$_optionName = "to";
-const DxToolbarItem = createConfigurationComponent({
+
+const DxToolbarItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -534,7 +619,12 @@ const DxToolbarItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolbarItemConfig);
+
+const DxToolbarItem = defineComponent(DxToolbarItemConfig);
+
 (DxToolbarItem as any).$_optionName = "toolbarItems";
 (DxToolbarItem as any).$_isCollectionItem = true;
 

@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type {
   ColumnsResizerViewController,
+  DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
 import type { ColumnsView } from '../views/m_columns_view';
@@ -364,6 +365,63 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
   }
 };
 
+const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderStickyColumnsExtender extends Base {
+  public _generatePointsByColumns(options): any[] {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+    const { sourceLocation, sourceColumn } = options;
+
+    if (isStickyColumns && sourceLocation === 'headers') {
+      const columnFixedPosition = getColumnFixedPosition(sourceColumn);
+
+      switch (true) {
+        case sourceColumn.fixed && columnFixedPosition === StickyPosition.Left:
+          options.columnElements = GridCoreStickyColumnsDom.getLeftFixedCells(
+            options.columnElements,
+            this.addWidgetPrefix.bind(this),
+          );
+          options.startColumnIndex = options.columnElements.eq(0).index();
+          break;
+        case sourceColumn.fixed && columnFixedPosition === StickyPosition.Right:
+          options.columnElements = GridCoreStickyColumnsDom.getRightFixedCells(
+            options.columnElements,
+            this.addWidgetPrefix.bind(this),
+          );
+          options.startColumnIndex = options.columnElements.eq(0).index();
+          break;
+        default:
+          options.columnElements = GridCoreStickyColumnsDom.getNonFixedAndStickyCells(
+            options.columnElements,
+            this.addWidgetPrefix.bind(this),
+          );
+          options.startColumnIndex = options.columnElements.eq(0).index();
+      }
+    }
+
+    return super._generatePointsByColumns(options, isStickyColumns);
+  }
+
+  protected _pointCreated(point, columns, location, sourceColumn) {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView._isStickyColumns();
+    const $cells = this._columnHeadersView.getColumnElements();
+    const needToCheckPoint = isStickyColumns && location === 'headers' && $cells?.length
+        && (!sourceColumn.fixed || sourceColumn.fixedPosition === StickyPosition.Sticky);
+    const result = super._pointCreated(point, columns, location, sourceColumn);
+
+    if (needToCheckPoint && !result) {
+      return GridCoreStickyColumnsDom.noNeedToCreateReorderingPoint(
+        point,
+        $cells,
+        $(this._columnHeadersView.getContent()),
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return result;
+  }
+};
+
 export const stickyColumnsModule = {
   extenders: {
     views: {
@@ -373,6 +431,7 @@ export const stickyColumnsModule = {
     },
     controllers: {
       columnsResizer,
+      draggingHeader,
     },
   },
 };

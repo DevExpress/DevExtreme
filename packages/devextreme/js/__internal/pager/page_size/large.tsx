@@ -13,14 +13,14 @@ import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
 import type { FullPageSize } from '../common/types';
 
 export interface PageSizeLargeProps {
-  pageSizes: FullPageSize[];
+  allowedPageSizes: FullPageSize[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 type PageSizeLargePropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal'> & PageSizeLargeProps;
 
 export const PageSizeLargeDefaultProps: PageSizeLargePropsType = {
-  pageSizes: [],
+  allowedPageSizes: [],
   pageSize: PagerDefaultProps.pageSize,
   pageSizeChangedInternal: PagerDefaultProps.pageSizeChangedInternal,
 };
@@ -57,9 +57,9 @@ export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> 
     }[] => {
       const {
         pageSize,
-        pageSizes,
+        allowedPageSizes,
       } = this.props;
-      return pageSizes.map((_ref3, index) => {
+      return allowedPageSizes.map((_ref3, index) => {
         const {
           text,
           value: processedPageSize,
@@ -90,7 +90,7 @@ export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> 
 
   componentWillUpdate(nextProps: PageSizeLargePropsType): void {
     const componentChanged = this.props.pageSize !== nextProps.pageSize
-    || this.props.pageSizes !== nextProps.pageSizes
+    || this.props.allowedPageSizes !== nextProps.allowedPageSizes
     || this.props.pageSizeChangedInternal !== nextProps.pageSizeChangedInternal;
     if (componentChanged) {
       this.__getterCache.pageSizesText = undefined;

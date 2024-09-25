@@ -75,6 +75,7 @@ const App = () => (
     />
     <Paging defaultPageSize={12} />
     <Pager
+      visible={true}
       showPageSizeSelector={true}
       allowedPageSizes={allowedPageSizes}
     />

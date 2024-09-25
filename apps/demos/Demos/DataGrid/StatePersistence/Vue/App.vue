@@ -24,6 +24,7 @@
         storage-key="storage"
       />
       <DxPager
+        :visible="true"
         :show-page-size-selector="true"
         :allowed-page-sizes="[5, 10, 20]"
       />

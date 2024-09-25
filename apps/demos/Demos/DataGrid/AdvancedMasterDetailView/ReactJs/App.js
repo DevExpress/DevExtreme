@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Column, DataGrid, MasterDetail, Paging,
+  Column, DataGrid, MasterDetail, Paging, Pager,
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import MasterDetailView from './MasterDetailView.js';
@@ -22,6 +22,7 @@ const App = () => (
       component={MasterDetailView}
     />
     <Paging defaultPageSize={15} />
+    <Pager visible={true} />
 
     <Column dataField="ContactName" />
     <Column dataField="ContactTitle" />

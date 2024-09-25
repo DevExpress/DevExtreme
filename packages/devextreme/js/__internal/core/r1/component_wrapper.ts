@@ -484,6 +484,10 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
     this._invalidate();
   }
 
+  _validateOptions(options: Record<string, unknown>): Record<string, unknown> {
+    return super._validateOptions(options);
+  }
+
   _extractDefaultSlot(): VNode | null {
     if (this.option('_hasAnonymousTemplateContent')) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

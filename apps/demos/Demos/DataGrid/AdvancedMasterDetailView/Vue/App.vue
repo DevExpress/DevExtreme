@@ -6,6 +6,7 @@
     :show-borders="true"
   >
     <DxPaging :page-size="15"/>
+    <DxPager :visible="true"/>
 
     <DxColumn data-field="ContactName"/>
     <DxColumn data-field="ContactTitle"/>
@@ -27,6 +28,7 @@ import {
   DxDataGrid,
   DxColumn,
   DxPaging,
+  DxPager,
   DxMasterDetail,
 } from 'devextreme-vue/data-grid';
 
