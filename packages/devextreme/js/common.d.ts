@@ -898,10 +898,4 @@ export type BasePagerOptions = {
    * @default "Page Navigation"
    */
   label?: string;
-
-   /**
-   * @docid
-   * @default [5, 10]
-   */
-   allowedPageSizes?: Array<(number | PagerAllPagesMode)> | 'auto';
 };

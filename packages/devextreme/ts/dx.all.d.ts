@@ -1367,11 +1367,6 @@ declare module DevExpress.common {
      * [descr:BasePagerOptions.label]
      */
     label?: string;
-
-    /**
-     * [descr:BasePagerOptions.allowedPageSizes]
-     */
-    allowedPageSizes?: Array<number | PagerAllPagesMode> | 'auto';
   };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
