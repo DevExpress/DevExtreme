@@ -40,7 +40,7 @@ export class AppComponent {
     this.statuses = service.getStatuses();
   }
 
-  onReorder = (e: Parameters<DxDataGridTypes.RowDragging['onReorder']>[0]) => {
+  onReorder = (e: DxDataGridTypes.RowDraggingReorderEvent) => {
     const visibleRows = e.component.getVisibleRows();
     const toIndex = this.tasks.findIndex((item) => item.ID === visibleRows[e.toIndex].data.ID);
     const fromIndex = this.tasks.findIndex((item) => item.ID === e.itemData.ID);
