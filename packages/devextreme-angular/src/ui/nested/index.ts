@@ -152,6 +152,7 @@ export * from './popup';
 export * from './position';
 export * from './projection';
 export * from './properties-panel';
+export * from './provider-config';
 export * from './range-container';
 export * from './range-dxi';
 export * from './rangearea';
