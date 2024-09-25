@@ -3,6 +3,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import devices from 'core/devices';
 import List from 'ui/list';
+import localization from 'localization';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 import 'generic_light.css!';
@@ -432,6 +433,8 @@ const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const TOGGLE_DELETE_SWITCH_ICON_CLASS = 'dx-icon-toggle-delete';
 const SELECT_CHECKBOX_CONTAINER_CLASS = 'dx-list-select-checkbox-container';
 const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
+const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
+const SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_RADIO_BUTTON_CONTAINER_CLASS = 'dx-list-select-radiobutton-container';
 const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 const REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container';
@@ -529,6 +532,24 @@ QUnit.module('decorators markup', {}, () => {
         assert.equal($multipleContainer.text(), 'Test', 'select all rendered');
         const $checkbox = $multipleContainer.find('.dx-checkbox');
         assert.equal($checkbox.length, 1, 'checkbox rendered');
+    });
+
+    QUnit.test('item checkbox aria-label attribute should be equal to custom localized text (T1247518)', function(assert) {
+        const localizedCheckStateText = 'custom-select-all';
+        localization.loadMessages({ 'en': { 'CheckState': localizedCheckStateText } });
+
+        const $list = $($('#list').dxList({
+            dataSource: [
+                { id: 1, text: 'Item 1' },
+                { id: 2, text: 'Item 2' },
+                { id: 3, text: 'Item 3' },
+            ],
+            showSelectionControls: true,
+            selectionMode: 'all',
+        }));
+        const $itemCheckBox = $list.find(`.${SELECT_CHECKBOX_CLASS}`).eq(0);
+
+        assert.strictEqual($itemCheckBox.attr('aria-label'), localizedCheckStateText, 'item checkbox aria-label is equal to localized text');
     });
 
     QUnit.test('list item markup should be correct, reordering decorator', function(assert) {

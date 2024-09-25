@@ -3,6 +3,7 @@ import { extend } from '@js/core/utils/extend';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils/index';
+import messageLocalization from '@js/localization/message';
 import CheckBox from '@js/ui/check_box';
 import RadioButton from '@js/ui/radio_group/radio_button';
 import errors from '@js/ui/widget/ui.errors';
@@ -55,7 +56,7 @@ registerDecorator(
       // eslint-disable-next-line no-new
       new this._controlWidget($control, extend(this._commonOptions(), {
         value: this._isSelected($itemElement),
-        elementAttr: { 'aria-label': 'Check State' },
+        elementAttr: { 'aria-label': messageLocalization.format('CheckState') },
         focusStateEnabled: false,
         hoverStateEnabled: false,
         onValueChanged: function (e) {
