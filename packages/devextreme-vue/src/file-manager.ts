@@ -1,6 +1,7 @@
 import FileManager, { Properties } from "devextreme/ui/file_manager";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -61,7 +62,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxFileManager extends AccessibleOptions {
   readonly instance?: FileManager;
 }
-const DxFileManager = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -191,9 +193,14 @@ const DxFileManager = createComponent({
       upload: { isCollectionItem: false, optionName: "upload" }
     };
   }
-});
+};
 
-const DxColumn = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxFileManager = defineComponent(componentConfig);
+
+
+const DxColumnConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -222,10 +229,16 @@ const DxColumn = createConfigurationComponent({
     visibleIndex: Number,
     width: [Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColumnConfig);
+
+const DxColumn = defineComponent(DxColumnConfig);
+
 (DxColumn as any).$_optionName = "columns";
 (DxColumn as any).$_isCollectionItem = true;
-const DxContextMenu = createConfigurationComponent({
+
+const DxContextMenuConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -234,13 +247,19 @@ const DxContextMenu = createConfigurationComponent({
   props: {
     items: Array
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxContextMenuConfig);
+
+const DxContextMenu = defineComponent(DxContextMenuConfig);
+
 (DxContextMenu as any).$_optionName = "contextMenu";
 (DxContextMenu as any).$_expectedChildren = {
   contextMenuItem: { isCollectionItem: true, optionName: "items" },
   item: { isCollectionItem: true, optionName: "items" }
 };
-const DxContextMenuItem = createConfigurationComponent({
+
+const DxContextMenuItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -267,10 +286,16 @@ const DxContextMenuItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxContextMenuItemConfig);
+
+const DxContextMenuItem = defineComponent(DxContextMenuItemConfig);
+
 (DxContextMenuItem as any).$_optionName = "items";
 (DxContextMenuItem as any).$_isCollectionItem = true;
-const DxDetails = createConfigurationComponent({
+
+const DxDetailsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -279,12 +304,18 @@ const DxDetails = createConfigurationComponent({
   props: {
     columns: Array
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxDetailsConfig);
+
+const DxDetails = defineComponent(DxDetailsConfig);
+
 (DxDetails as any).$_optionName = "details";
 (DxDetails as any).$_expectedChildren = {
   column: { isCollectionItem: true, optionName: "columns" }
 };
-const DxFileSelectionItem = createConfigurationComponent({
+
+const DxFileSelectionItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -313,10 +344,16 @@ const DxFileSelectionItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFileSelectionItemConfig);
+
+const DxFileSelectionItem = defineComponent(DxFileSelectionItemConfig);
+
 (DxFileSelectionItem as any).$_optionName = "fileSelectionItems";
 (DxFileSelectionItem as any).$_isCollectionItem = true;
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -355,10 +392,16 @@ const DxItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxItemView = createConfigurationComponent({
+
+const DxItemViewConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -373,12 +416,18 @@ const DxItemView = createConfigurationComponent({
     showFolders: Boolean,
     showParentFolder: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemViewConfig);
+
+const DxItemView = defineComponent(DxItemViewConfig);
+
 (DxItemView as any).$_optionName = "itemView";
 (DxItemView as any).$_expectedChildren = {
   details: { isCollectionItem: false, optionName: "details" }
 };
-const DxNotifications = createConfigurationComponent({
+
+const DxNotificationsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -389,9 +438,15 @@ const DxNotifications = createConfigurationComponent({
     showPanel: Boolean,
     showPopup: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxNotificationsConfig);
+
+const DxNotifications = defineComponent(DxNotificationsConfig);
+
 (DxNotifications as any).$_optionName = "notifications";
-const DxPermissions = createConfigurationComponent({
+
+const DxPermissionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -412,9 +467,15 @@ const DxPermissions = createConfigurationComponent({
     rename: Boolean,
     upload: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPermissionsConfig);
+
+const DxPermissions = defineComponent(DxPermissionsConfig);
+
 (DxPermissions as any).$_optionName = "permissions";
-const DxToolbar = createConfigurationComponent({
+
+const DxToolbarConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -425,14 +486,20 @@ const DxToolbar = createConfigurationComponent({
     fileSelectionItems: Array,
     items: Array
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolbarConfig);
+
+const DxToolbar = defineComponent(DxToolbarConfig);
+
 (DxToolbar as any).$_optionName = "toolbar";
 (DxToolbar as any).$_expectedChildren = {
   fileSelectionItem: { isCollectionItem: true, optionName: "fileSelectionItems" },
   item: { isCollectionItem: true, optionName: "items" },
   toolbarItem: { isCollectionItem: true, optionName: "items" }
 };
-const DxToolbarItem = createConfigurationComponent({
+
+const DxToolbarItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -461,10 +528,16 @@ const DxToolbarItem = createConfigurationComponent({
     visible: Boolean,
     widget: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxToolbarItemConfig);
+
+const DxToolbarItem = defineComponent(DxToolbarItemConfig);
+
 (DxToolbarItem as any).$_optionName = "items";
 (DxToolbarItem as any).$_isCollectionItem = true;
-const DxUpload = createConfigurationComponent({
+
+const DxUploadConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -475,7 +548,12 @@ const DxUpload = createConfigurationComponent({
     chunkSize: Number,
     maxFileSize: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxUploadConfig);
+
+const DxUpload = defineComponent(DxUploadConfig);
+
 (DxUpload as any).$_optionName = "upload";
 
 export default DxFileManager;
