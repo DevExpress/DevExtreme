@@ -169,7 +169,7 @@ test('Header filter should support string height and width', async (t) => {
   },
 }));
 
-test.only('DataGrid - Column Header filter does not properly work if the column caption contains double quotes (T1251768)', async (t) => {
+test('DataGrid - Column Header filter does not properly work if the column caption contains double quotes (T1251768)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
   const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
