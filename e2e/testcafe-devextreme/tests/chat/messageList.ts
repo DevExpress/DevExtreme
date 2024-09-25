@@ -1,6 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
-import { createUser, generateMessages } from './data';
+import { ClientFunction } from 'testcafe';
+import { User } from 'devextreme/ui/chat';
+import { createUser, generateMessages, getLongText } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
@@ -45,7 +47,36 @@ test('Messagelist empty view scenarios', async (t) => {
 test('Messagelist appearance with scrollbar', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  const chat = new Chat('#container');
+
+  await t
+    .hover(chat.messageList)
+    .wait(400);
+
   await testScreenshot(t, takeScreenshot, 'Messagelist with a lot of messages.png', { element: '#container' });
+
+  await ClientFunction(
+    () => {
+      const instance = chat.getInstance();
+      instance.renderMessage({
+        author: instance.option('user') as User,
+        text: 'Lorem ipsum dolor sit amet, \nconsectetur adipiscing elit. Sed do eiusmod tempor \nincididunt ut labore et dolore magna aliqua. Ut enim ad minim \nveniam, quis nostrud exercitation ullamco laboris nisi ut aliquip \nnex ea commodo consequat.',
+      });
+    },
+    { dependencies: { chat } },
+  )();
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after call renderMessage().png', { element: '#container' });
+
+  await t
+    .typeText(chat.getInput(), getLongText());
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after typing in textarea.png', { element: '#container' });
+
+  await t
+    .pressKey('enter');
+
+  await testScreenshot(t, takeScreenshot, 'Message list scrollbar position after send.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
