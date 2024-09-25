@@ -780,16 +780,19 @@ const DxColumnFixing = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:enabled": null,
+    "update:icons": null,
     "update:texts": null,
   },
   props: {
     enabled: Boolean,
+    icons: Object,
     texts: Object
   }
 });
 (DxColumnFixing as any).$_optionName = "columnFixing";
 (DxColumnFixing as any).$_expectedChildren = {
   columnFixingTexts: { isCollectionItem: false, optionName: "texts" },
+  icons: { isCollectionItem: false, optionName: "icons" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
 const DxColumnFixingTexts = createConfigurationComponent({
@@ -1876,6 +1879,25 @@ const DxHide = createConfigurationComponent({
   from: { isCollectionItem: false, optionName: "from" },
   to: { isCollectionItem: false, optionName: "to" }
 };
+const DxIcons = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:fix": null,
+    "update:leftPosition": null,
+    "update:rightPosition": null,
+    "update:stickyPosition": null,
+    "update:unfix": null,
+  },
+  props: {
+    fix: String,
+    leftPosition: String,
+    rightPosition: String,
+    stickyPosition: String,
+    unfix: String
+  }
+});
+(DxIcons as any).$_optionName = "icons";
 const DxItem = createConfigurationComponent({
   emits: {
     "update:isActive": null,
@@ -2966,6 +2988,7 @@ export {
   DxGroupPanel,
   DxHeaderFilter,
   DxHide,
+  DxIcons,
   DxItem,
   DxKeyboardNavigation,
   DxLabel,

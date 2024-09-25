@@ -602,6 +602,13 @@ const ColumnChooserSelection: typeof _componentColumnChooserSelection & IElement
 // DataGrid
 type IColumnFixingProps = React.PropsWithChildren<{
   enabled?: boolean;
+  icons?: Record<string, any> | {
+    fix?: string;
+    leftPosition?: string;
+    rightPosition?: string;
+    stickyPosition?: string;
+    unfix?: string;
+  };
   texts?: Record<string, any> | {
     fix?: string;
     leftPosition?: string;
@@ -619,6 +626,7 @@ const ColumnFixing: typeof _componentColumnFixing & IElementDescriptor = Object.
   OptionName: "columnFixing",
   ExpectedChildren: {
     columnFixingTexts: { optionName: "texts", isCollectionItem: false },
+    icons: { optionName: "icons", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
   },
 })
@@ -1716,6 +1724,25 @@ const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componen
     from: { optionName: "from", isCollectionItem: false },
     to: { optionName: "to", isCollectionItem: false }
   },
+})
+
+// owners:
+// ColumnFixing
+type IIconsProps = React.PropsWithChildren<{
+  fix?: string;
+  leftPosition?: string;
+  rightPosition?: string;
+  stickyPosition?: string;
+  unfix?: string;
+}>
+const _componentIcons = memo(
+  (props: IIconsProps) => {
+    return React.createElement(NestedOption<IIconsProps>, { ...props });
+  }
+);
+
+const Icons: typeof _componentIcons & IElementDescriptor = Object.assign(_componentIcons, {
+  OptionName: "icons",
 })
 
 // owners:
@@ -2874,6 +2901,8 @@ export {
   IHeaderFilterProps,
   Hide,
   IHideProps,
+  Icons,
+  IIconsProps,
   Item,
   IItemProps,
   KeyboardNavigation,
