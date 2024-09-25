@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, Editing, ValidationRule, Button, IButtonProps, Toolbar, Item, Scrolling, DataGridTypes,
+  Column, Editing, ValidationRule, Button, IButtonProps, Toolbar, Item, Scrolling, DataGridTypes, Pager,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Guid from 'devextreme/core/guid';
@@ -56,6 +56,7 @@ const App = () => {
           editRowKey={editRowKey}
           onEditRowKeyChange={setEditRowKey}
         />
+        <Pager visible={true} />
 
         <Column dataField='OrderID' allowEditing={false} />
         <Column dataField='OrderDate' dataType='date'>

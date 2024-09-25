@@ -10,6 +10,9 @@ $(() => {
       allowUpdating: true,
       allowDeleting: true,
     },
+    pager: {
+      visible: true,
+    },
     columns: [{
       dataField: 'OrderNumber',
       width: 130,

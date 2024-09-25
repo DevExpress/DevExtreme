@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid, { Column, Paging, SearchPanel } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Paging, SearchPanel, Pager, } from 'devextreme-react/data-grid';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 
 import { europeanUnion } from './data.ts';
@@ -40,6 +40,7 @@ const App = () => {
         rtlEnabled={rtlEnabled}
         showBorders={true}>
         <Paging defaultPageSize={15} />
+        <Pager visible={true} />
         <SearchPanel visible={true} placeholder={placeholder} />
         <Column dataField={rtlEnabled ? 'nameAr' : 'nameEn'}
           caption={rtlEnabled ? 'الدولة' : 'Name'} />

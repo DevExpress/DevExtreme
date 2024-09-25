@@ -13,6 +13,7 @@
       :allow-deleting="true"
       :allow-updating="true"
     />
+    <DxPager :visible="true"/>
     <DxColumn
       data-field="OrderID"
       :allow-editing="false"
@@ -30,7 +31,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';

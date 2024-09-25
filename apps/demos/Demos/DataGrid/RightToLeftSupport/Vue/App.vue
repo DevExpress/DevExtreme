@@ -8,6 +8,7 @@
       :show-borders="true"
     >
       <DxPaging :page-size="15"/>
+      <DxPager :visible="true"/>
       <DxSearchPanel
         :visible="true"
         :placeholder="placeholder"
@@ -64,6 +65,7 @@ import {
   DxColumn,
   DxPaging,
   DxSearchPanel,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { europeanUnion } from './data.ts';

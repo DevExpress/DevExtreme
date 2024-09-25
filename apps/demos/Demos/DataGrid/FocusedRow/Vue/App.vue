@@ -36,6 +36,7 @@
       />
 
       <DxPaging :page-size="10"/>
+      <DxPager :visible="true"/>
     </DxDataGrid>
 
     <div class="task-info">
@@ -80,7 +81,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDataGrid, DxColumn, DxPaging, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxPaging, DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import DxNumberBox from 'devextreme-vue/number-box';
 import DxCheckBox from 'devextreme-vue/check-box';

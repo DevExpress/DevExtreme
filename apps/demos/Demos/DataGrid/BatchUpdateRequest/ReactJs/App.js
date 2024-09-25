@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
+import DataGrid, { Column, Editing, Pager } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
@@ -51,6 +51,7 @@ const App = () => (
       allowDeleting={true}
       allowUpdating={true}
     />
+    <Pager visible={true} />
     <Column
       dataField="OrderID"
       allowEditing={false}
