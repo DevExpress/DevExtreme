@@ -9,6 +9,9 @@ $(() => {
         ajaxOptions.xhrFields = { withCredentials: true };
       },
     }),
+    pager: {
+      visible: true,
+    },
     showBorders: true,
     editing: {
       mode: 'batch',

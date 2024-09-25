@@ -94,6 +94,7 @@ const App = () => {
       />
 
       <Pager
+        visible={true}
         allowedPageSizes={pageSizes}
         showPageSizeSelector={true}
       />

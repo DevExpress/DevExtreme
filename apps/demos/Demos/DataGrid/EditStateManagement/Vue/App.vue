@@ -20,6 +20,7 @@
         v-model:changes="changes"
         v-model:edit-row-key="editRowKey"
       />
+      <DxPager :visible="true"/>
       <DxColumn
         data-field="OrderID"
         :allow-editing="false"
@@ -51,7 +52,7 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import {
-  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes,
+  DxDataGrid, DxColumn, DxEditing, DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
 import { State } from './store.ts';

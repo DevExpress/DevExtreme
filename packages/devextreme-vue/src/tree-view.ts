@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tree_view";
 import TreeView, { Properties } from "devextreme/ui/tree_view";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -70,7 +71,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxTreeView extends AccessibleOptions {
   readonly instance?: TreeView;
 }
-const DxTreeView = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -212,9 +214,14 @@ const DxTreeView = createComponent({
       searchEditorOptions: { isCollectionItem: false, optionName: "searchEditorOptions" }
     };
   }
-});
+};
 
-const DxButton = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxTreeView = defineComponent(componentConfig);
+
+
+const DxButtonConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -227,13 +234,19 @@ const DxButton = createConfigurationComponent({
     name: String,
     options: Object
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxButtonConfig);
+
+const DxButton = defineComponent(DxButtonConfig);
+
 (DxButton as any).$_optionName = "buttons";
 (DxButton as any).$_isCollectionItem = true;
 (DxButton as any).$_expectedChildren = {
   options: { isCollectionItem: false, optionName: "options" }
 };
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -264,10 +277,16 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxOptions = createConfigurationComponent({
+
+const DxOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -324,9 +343,15 @@ const DxOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxOptionsConfig);
+
+const DxOptions = defineComponent(DxOptionsConfig);
+
 (DxOptions as any).$_optionName = "options";
-const DxSearchEditorOptions = createConfigurationComponent({
+
+const DxSearchEditorOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -445,7 +470,12 @@ const DxSearchEditorOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSearchEditorOptionsConfig);
+
+const DxSearchEditorOptions = defineComponent(DxSearchEditorOptionsConfig);
+
 (DxSearchEditorOptions as any).$_optionName = "searchEditorOptions";
 (DxSearchEditorOptions as any).$_expectedChildren = {
   button: { isCollectionItem: true, optionName: "buttons" }

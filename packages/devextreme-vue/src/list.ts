@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/list";
 import List, { Properties } from "devextreme/ui/list";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -83,7 +84,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxList extends AccessibleOptions {
   readonly instance?: List;
 }
-const DxList = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -253,9 +255,14 @@ const DxList = createComponent({
       searchEditorOptions: { isCollectionItem: false, optionName: "searchEditorOptions" }
     };
   }
-});
+};
 
-const DxButton = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxList = defineComponent(componentConfig);
+
+
+const DxButtonConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -268,13 +275,19 @@ const DxButton = createConfigurationComponent({
     name: String,
     options: Object
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxButtonConfig);
+
+const DxButton = defineComponent(DxButtonConfig);
+
 (DxButton as any).$_optionName = "buttons";
 (DxButton as any).$_isCollectionItem = true;
 (DxButton as any).$_expectedChildren = {
   options: { isCollectionItem: false, optionName: "options" }
 };
-const DxCursorOffset = createConfigurationComponent({
+
+const DxCursorOffsetConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -285,9 +298,15 @@ const DxCursorOffset = createConfigurationComponent({
     x: Number,
     y: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCursorOffsetConfig);
+
+const DxCursorOffset = defineComponent(DxCursorOffsetConfig);
+
 (DxCursorOffset as any).$_optionName = "cursorOffset";
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -310,10 +329,16 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxItemDragging = createConfigurationComponent({
+
+const DxItemDraggingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -384,12 +409,18 @@ const DxItemDragging = createConfigurationComponent({
     scrollSpeed: Number,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemDraggingConfig);
+
+const DxItemDragging = defineComponent(DxItemDraggingConfig);
+
 (DxItemDragging as any).$_optionName = "itemDragging";
 (DxItemDragging as any).$_expectedChildren = {
   cursorOffset: { isCollectionItem: false, optionName: "cursorOffset" }
 };
-const DxMenuItem = createConfigurationComponent({
+
+const DxMenuItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -400,10 +431,16 @@ const DxMenuItem = createConfigurationComponent({
     action: Function,
     text: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMenuItemConfig);
+
+const DxMenuItem = defineComponent(DxMenuItemConfig);
+
 (DxMenuItem as any).$_optionName = "menuItems";
 (DxMenuItem as any).$_isCollectionItem = true;
-const DxOptions = createConfigurationComponent({
+
+const DxOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -460,9 +497,15 @@ const DxOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxOptionsConfig);
+
+const DxOptions = defineComponent(DxOptionsConfig);
+
 (DxOptions as any).$_optionName = "options";
-const DxSearchEditorOptions = createConfigurationComponent({
+
+const DxSearchEditorOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -581,7 +624,12 @@ const DxSearchEditorOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSearchEditorOptionsConfig);
+
+const DxSearchEditorOptions = defineComponent(DxSearchEditorOptionsConfig);
+
 (DxSearchEditorOptions as any).$_optionName = "searchEditorOptions";
 (DxSearchEditorOptions as any).$_expectedChildren = {
   button: { isCollectionItem: true, optionName: "buttons" }

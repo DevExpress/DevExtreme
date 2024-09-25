@@ -6,6 +6,7 @@ import DataGrid, {
   Selection,
   Paging,
   DataGridTypes,
+  Pager,
 } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
@@ -37,6 +38,7 @@ const App = () => (
     <Selection mode="multiple" />
     <Grouping autoExpandAll={true} />
     <Paging defaultPageSize={10} />
+    <Pager visible={true} />
     <Export enabled={true} formats={exportFormats} allowExportSelectedData={true} />
 
     <Column dataField="CompanyName" dataType="string" />

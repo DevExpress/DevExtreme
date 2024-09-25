@@ -5,6 +5,7 @@ import DataGrid, {
   GroupPanel,
   Paging,
   SearchPanel,
+  Pager,
 } from 'devextreme-react/data-grid';
 import CheckBox from 'devextreme-react/check-box';
 import { customers } from './data.ts';
@@ -29,6 +30,7 @@ const App = () => {
         <SearchPanel visible={true} />
         <Grouping autoExpandAll={autoExpandAll} />
         <Paging defaultPageSize={10} />
+        <Pager visible={true} />
 
         <Column dataField="CompanyName" dataType="string" />
         <Column dataField="Phone" dataType="string" />

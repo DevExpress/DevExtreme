@@ -1,11 +1,20 @@
-import * as vue2Stategy from './strategy/vue2/index';
-import * as vue3Stategy from './strategy/vue3/index';
-import { isVue3 } from './version';
+import { initDxComponent } from './component';
+import { initDxConfiguration } from './configuration-component';
+import { initDxExtensionComponent } from './extension-component';
+import { setVModel } from './vue-helper';
 
-const strategy = isVue3() ? vue3Stategy : vue2Stategy;
+export function prepareComponentConfig(config) {
+  config.extends = initDxComponent();
 
-export const { createComponent } = strategy;
+  if (config.model) {
+    setVModel(config);
+  }
+}
 
-export const { createConfigurationComponent } = strategy;
+export function prepareConfigurationComponentConfig(config: any): void {
+  config.extends = initDxConfiguration();
+}
 
-export const { createExtensionComponent } = strategy;
+export function prepareExtensionComponentConfig(config: any): void {
+  config.extends = initDxExtensionComponent();
+}

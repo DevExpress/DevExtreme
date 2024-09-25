@@ -1,4 +1,4 @@
-import rollupConfig from './rollup.config';
+import rollupConfig from './rollup.config.mjs';
 
 delete rollupConfig.output.file;
 

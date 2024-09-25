@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/validation_summary";
 import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "elementAttr" |
@@ -19,7 +20,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxValidationSummary extends AccessibleOptions {
   readonly instance?: ValidationSummary;
 }
-const DxValidationSummary = createComponent({
+
+const componentConfig = {
   props: {
     elementAttr: Object,
     hoverStateEnabled: Boolean,
@@ -58,9 +60,14 @@ const DxValidationSummary = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxValidationSummary = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -77,7 +84,12 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 

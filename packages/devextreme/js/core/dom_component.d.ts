@@ -135,6 +135,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     _refresh(): void;
     _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown): void;
     _createElement(element: HTMLElement): void;
+    _validateOptions(options: TProperties): TProperties;
 }
 
 export type ComponentClass<TProperties> = {

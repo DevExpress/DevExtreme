@@ -7,6 +7,7 @@ import DataGrid, {
   Toolbar,
   Item,
   Scrolling,
+  Pager,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Guid from 'devextreme/core/guid';
@@ -66,6 +67,7 @@ const App = () => {
           editRowKey={editRowKey}
           onEditRowKeyChange={setEditRowKey}
         />
+        <Pager visible={true} />
 
         <Column
           dataField="OrderID"
