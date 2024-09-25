@@ -13,7 +13,7 @@ export interface HeaderItemProps {
 export function HeaderItem(props: HeaderItemProps): JSX.Element {
   return (
     <div className={CLASSES.headerItem}>
-      {props.column.name}
+      {props.column.caption}
     </div>
   );
 }

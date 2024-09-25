@@ -9,7 +9,7 @@ const testProps: CardProps = {
   row: {
     cells: [{
       value: 'qwe',
-      column: normalizeColumn('asd'),
+      column: normalizeColumn('asd', 1),
     }],
     key: 1,
   },

@@ -1,9 +1,9 @@
 import type { ColumnBase } from '@js/common/grids';
 
-export interface Column extends Pick<Required<ColumnBase>, 'alignment' | 'dataType' | 'visible'> {
+export interface Column extends Pick<Required<ColumnBase>, 'alignment' | 'dataType' | 'visible' | 'caption' | 'visibleIndex'> {
   dataField?: string;
 
-  name?: string;
+  name: string;
 
   calculateCellValue: (this: this, data: unknown) => unknown | Promise<unknown>;
 

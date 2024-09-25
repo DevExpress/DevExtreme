@@ -33,7 +33,7 @@ export class Card extends PureComponent<CardProps> {
             // eslint-disable-next-line max-len, @typescript-eslint/explicit-function-return-type
             defaultTemplate={{ render(model, _index, container) { render(<Field {...model} />, $(container).get(0)); } }}
             alignment={cell.column.alignment}
-            title={cell.column.name}
+            title={cell.column.caption}
             value={cell.value}
             isEditing={this.props.isEditing}
             onChanged={(v): void => {

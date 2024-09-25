@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataType } from '@js/common';
+import { captionize } from '@js/core/utils/inflector';
 
 import type { Column, ColumnProperties } from './types';
 
-const defaultColumnProperties: Column = {
+const defaultColumnProperties = {
   dataType: 'string',
-  calculateCellValue(data) {
+  calculateCellValue(data): unknown {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return data[this.dataField!];
   },
   alignment: 'left',
   visible: true,
-};
+} satisfies Partial<Column>;
 
 const defaultColumnPropertiesByDataType: Record<DataType, Exclude<ColumnProperties, string>> = {
   boolean: {
@@ -35,7 +36,7 @@ const defaultColumnPropertiesByDataType: Record<DataType, Exclude<ColumnProperti
   },
 };
 
-export function normalizeColumn(column: ColumnProperties): Column {
+export function normalizeColumn(column: ColumnProperties, index: number): Column {
   let col = column;
 
   if (typeof col === 'string') {
@@ -46,12 +47,15 @@ export function normalizeColumn(column: ColumnProperties): Column {
     col.dataType ?? defaultColumnProperties.dataType
   ];
 
-  const name = col.dataField;
+  const name = col.name ?? col.dataField ?? `column${index}`;
+  const caption = captionize(name);
 
   return {
-    name,
     ...defaultColumnProperties,
     ...dataTypeDefault,
+    name,
+    caption,
+    visibleIndex: index,
     ...col,
   };
 }
