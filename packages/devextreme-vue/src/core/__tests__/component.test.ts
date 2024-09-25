@@ -19,7 +19,7 @@ import {
   prepareComponentConfig,
   prepareExtensionComponentConfig,
   prepareConfigurationComponentConfig
-} from "../strategy/vue3";
+} from "../index";
 
 interface CustomApp extends App {
   test: string;
