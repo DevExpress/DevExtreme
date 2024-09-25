@@ -22,7 +22,7 @@ if (window && window.config.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  dataSource: string[];
+  dataSource: Image[];
 
   slideshowDelay = 2000;
 

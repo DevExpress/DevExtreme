@@ -4,20 +4,20 @@
 
 <div id="employee">
   <p>
-    Birth date: <b>{{ employeeInfo.Birth_Date }}</b>
+    Birth date: <b>{{ employeeInfo?.Birth_Date }}</b>
   </p>
   <p class="address">
     Address:<br />
-    <b>{{ employeeInfo.City }}</b
+    <b>{{ employeeInfo?.City }}</b
     ><br />
-    <span>{{ employeeInfo.Zipcode }}</span>
-    <span>{{ employeeInfo.Address }}</span>
+    <span>{{ employeeInfo?.Zipcode }}</span>
+    <span>{{ employeeInfo?.Address }}</span>
   </p>
   <p>
     Phone:
-    <b>{{ employeeInfo.Mobile_Phone }}</b
+    <b>{{ employeeInfo?.Mobile_Phone }}</b
     ><br />
-    Email: <b>{{ employeeInfo.Email }}</b>
+    Email: <b>{{ employeeInfo?.Email }}</b>
   </p>
 </div>
 
