@@ -1339,6 +1339,40 @@ declare module DevExpress.common {
      */
     validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
   };
+  /**
+   * [descr:BasePagerOptions]
+   */
+  export type BasePagerOptions = {
+    /**
+     * [descr:BasePagerOptions.displayMode]
+     */
+    displayMode?: PagerDisplayMode;
+    /**
+     * [descr:BasePagerOptions.infoText]
+     */
+    infoText?: string;
+    /**
+     * [descr:BasePagerOptions.showInfo]
+     */
+    showInfo?: boolean;
+    /**
+     * [descr:BasePagerOptions.showNavigationButtons]
+     */
+    showNavigationButtons?: boolean;
+    /**
+     * [descr:BasePagerOptions.showPageSizeSelector]
+     */
+    showPageSizeSelector?: boolean;
+    /**
+     * [descr:BasePagerOptions.label]
+     */
+    label?: string;
+
+    /**
+     * [descr:BasePagerOptions.allowedPageSizes]
+     */
+    allowedPageSizes?: Array<number | PagerAllPagesMode> | 'auto';
+  };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
   /**
@@ -1657,6 +1691,9 @@ declare module DevExpress.common {
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
+  export type PagerAllPagesMode = 'all';
+  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
+  export type PagerPageSize = 'all' | 'auto';
   /**
    * [descr:PatternRule]
    */
@@ -4256,13 +4293,11 @@ declare module DevExpress.common.grids {
   /**
    * [descr:Pager]
    */
-  export type Pager = DevExpress.ui.BasePagerOptions & {
+  export type Pager = BasePagerOptions & {
     /**
      * [descr:Pager.allowedPageSizes]
      */
-    allowedPageSizes?:
-      | Array<number | DevExpress.ui.dxPager.PagerPageSize>
-      | Mode;
+    allowedPageSizes?: Array<number | PagerPageSize> | Mode;
 
     /**
      * [descr:Pager.visible]
@@ -7902,42 +7937,6 @@ declare module DevExpress.ui {
    * [descr:dxSchedulerAppointment]
    */
   export type Appointment = dxSchedulerAppointment;
-  /**
-   * [descr:BasePagerOptions]
-   */
-  export type BasePagerOptions = {
-    /**
-     * [descr:BasePagerOptions.displayMode]
-     */
-    displayMode?: DevExpress.ui.dxPager.PagerDisplayMode;
-    /**
-     * [descr:BasePagerOptions.infoText]
-     */
-    infoText?: string;
-    /**
-     * [descr:BasePagerOptions.showInfo]
-     */
-    showInfo?: boolean;
-    /**
-     * [descr:BasePagerOptions.showNavigationButtons]
-     */
-    showNavigationButtons?: boolean;
-    /**
-     * [descr:BasePagerOptions.showPageSizeSelector]
-     */
-    showPageSizeSelector?: boolean;
-    /**
-     * [descr:BasePagerOptions.label]
-     */
-    label?: string;
-
-    /**
-     * [descr:BasePagerOptions.allowedPageSizes]
-     */
-    allowedPageSizes?:
-      | Array<number | DevExpress.ui.dxPager.PagerAllPagesMode>
-      | 'auto';
-  };
   /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -21749,7 +21748,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPagerOptions]
    */
   export interface dxPagerOptions
-    extends BasePagerOptions,
+    extends DevExpress.common.BasePagerOptions,
       WidgetOptions<dxPager> {
     /**
      * [descr:dxPagerOptions.pageIndex]
@@ -21769,7 +21768,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPagerOptions.allowedPageSizes]
      */
-    allowedPageSizes?: Array<number | DevExpress.ui.dxPager.PagerAllPagesMode>;
+    allowedPageSizes?: Array<number | DevExpress.common.PagerAllPagesMode>;
   }
   /**
    * [descr:dxPivotGrid]
@@ -30971,11 +30970,6 @@ declare module DevExpress.ui.dxOverlay {
    * [descr:ui.dxOverlay.baseZIndex(zIndex)]
    */
   export function baseZIndex(zIndex: number): void;
-}
-declare module DevExpress.ui.dxPager {
-  export type PagerAllPagesMode = 'all';
-  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
-  export type PagerPageSize = 'all' | 'auto';
 }
 declare module DevExpress.ui.dxPivotGrid {
   export type Cell = dxPivotGridPivotGridCell;

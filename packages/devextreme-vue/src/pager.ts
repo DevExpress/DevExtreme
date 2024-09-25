@@ -1,5 +1,6 @@
 import Pager, { Properties } from "devextreme/ui/pager";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -33,7 +34,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxPager extends AccessibleOptions {
   readonly instance?: Pager;
 }
-const DxPager = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -101,7 +103,11 @@ const DxPager = createComponent({
     (this as any).$_WidgetClass = Pager;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxPager = defineComponent(componentConfig);
 
 export default DxPager;
 export {
