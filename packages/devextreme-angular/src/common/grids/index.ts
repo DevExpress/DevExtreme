@@ -10,7 +10,6 @@ export {
     ColumnChooserSelectionConfig,
     ColumnCustomizeTextArg,
     ColumnFixing,
-    ColumnFixingIcons,
     ColumnFixingTexts,
     ColumnHeaderFilter,
     ColumnHeaderFilterSearchConfig,
