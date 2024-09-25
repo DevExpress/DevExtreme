@@ -395,10 +395,10 @@ declare module DevExpress.common.charts {
     export type GroupExpandMode = DevExpress.common.grids.GroupExpandMode;
     /** @deprecated Use DevExpress.common.grids.NewRowPosition instead */
     export type NewRowPosition = DevExpress.common.grids.NewRowPosition;
-    /** @deprecated Use DevExpress.common.grids.PagerDisplayMode instead */
-    export type PagerDisplayMode = DevExpress.common.grids.PagerDisplayMode;
-    /** @deprecated Use DevExpress.common.grids.PagerPageSize instead */
-    export type PagerPageSize = DevExpress.common.grids.PagerPageSize;
+    /** @deprecated Use DevExpress.common.PagerDisplayMode instead */
+    export type PagerDisplayMode = DevExpress.common.PagerDisplayMode;
+    /** @deprecated Use DevExpress.common.PagerPageSize instead */
+    export type PagerPageSize = DevExpress.common.PagerPageSize;
     /** @deprecated Use DevExpress.common.grids.SelectedFilterOperation instead */
     export type SelectedFilterOperation = DevExpress.common.grids.SelectedFilterOperation;
     /** @deprecated Use DevExpress.common.grids.SelectionColumnDisplayMode instead */
