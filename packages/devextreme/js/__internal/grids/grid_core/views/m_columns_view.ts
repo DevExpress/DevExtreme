@@ -1215,8 +1215,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       $cell = $cell.add($cell.find(`.${this.addWidgetPrefix(GROUP_ROW_CONTAINER)}`));
     }
 
-    if ($cell.length) {
-      const cell = $cell.get(0) as HTMLElement;
+    for (let i = 0; i < $cell.length; i += 1) {
+      const cell = $cell.get(i) as HTMLElement;
 
       Object.assign(cell.style, styleProps);
     }
