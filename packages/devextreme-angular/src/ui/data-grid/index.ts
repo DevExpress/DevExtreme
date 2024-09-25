@@ -58,6 +58,7 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchModule } from 'devextreme-angular/ui/nested';
 import { DxoSelectionModule } from 'devextreme-angular/ui/nested';
 import { DxoColumnFixingModule } from 'devextreme-angular/ui/nested';
+import { DxoIconsModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -122,6 +123,7 @@ import { DxoDataGridOffsetModule } from 'devextreme-angular/ui/data-grid/nested'
 import { DxoDataGridSearchModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridColumnFixingModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridIconsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridColumnModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridButtonModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -323,10 +325,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnFixing(): { enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } } {
+    get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } } {
         return this._getOption('columnFixing');
     }
-    set columnFixing(value: { enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } }) {
+    set columnFixing(value: { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } }) {
         this._setOption('columnFixing', value);
     }
 
@@ -1573,7 +1575,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } }>;
+    @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } }>;
 
     /**
     
@@ -2265,6 +2267,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSearchModule,
     DxoSelectionModule,
     DxoColumnFixingModule,
+    DxoIconsModule,
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
@@ -2328,6 +2331,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridSearchModule,
     DxoDataGridSelectionModule,
     DxoDataGridColumnFixingModule,
+    DxoDataGridIconsModule,
     DxoDataGridTextsModule,
     DxiDataGridColumnModule,
     DxiDataGridButtonModule,
@@ -2400,6 +2404,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSearchModule,
     DxoSelectionModule,
     DxoColumnFixingModule,
+    DxoIconsModule,
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
@@ -2463,6 +2468,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridSearchModule,
     DxoDataGridSelectionModule,
     DxoDataGridColumnFixingModule,
+    DxoDataGridIconsModule,
     DxoDataGridTextsModule,
     DxiDataGridColumnModule,
     DxiDataGridButtonModule,

@@ -37,6 +37,14 @@ export class DxoDataGridColumnFixingComponent extends NestedOption implements On
     }
 
     @Input()
+    get icons(): { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } {
+        return this._getOption('icons');
+    }
+    set icons(value: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }) {
+        this._setOption('icons', value);
+    }
+
+    @Input()
     get texts(): { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } {
         return this._getOption('texts');
     }
