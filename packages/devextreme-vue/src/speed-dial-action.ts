@@ -1,5 +1,6 @@
 import SpeedDialAction, { Properties } from "devextreme/ui/speed_dial_action";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -24,7 +25,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxSpeedDialAction extends AccessibleOptions {
   readonly instance?: SpeedDialAction;
 }
-const DxSpeedDialAction = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -74,7 +76,11 @@ const DxSpeedDialAction = createComponent({
     (this as any).$_WidgetClass = SpeedDialAction;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxSpeedDialAction = defineComponent(componentConfig);
 
 export default DxSpeedDialAction;
 export {

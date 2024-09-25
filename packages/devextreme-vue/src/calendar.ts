@@ -1,5 +1,6 @@
 import Calendar, { Properties } from "devextreme/ui/calendar";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -47,7 +48,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxCalendar extends AccessibleOptions {
   readonly instance?: Calendar;
 }
-const DxCalendar = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -155,7 +157,11 @@ const DxCalendar = createComponent({
     (this as any).$_WidgetClass = Calendar;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxCalendar = defineComponent(componentConfig);
 
 export default DxCalendar;
 export {
