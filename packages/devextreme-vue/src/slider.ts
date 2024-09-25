@@ -1,6 +1,7 @@
 import Slider, { Properties } from "devextreme/ui/slider";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -43,7 +44,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxSlider extends AccessibleOptions {
   readonly instance?: Slider;
 }
-const DxSlider = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -134,9 +136,14 @@ const DxSlider = createComponent({
       tooltip: { isCollectionItem: false, optionName: "tooltip" }
     };
   }
-});
+};
 
-const DxFormat = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxSlider = defineComponent(componentConfig);
+
+
+const DxFormatConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -155,9 +162,15 @@ const DxFormat = createConfigurationComponent({
     type: String,
     useCurrencyAccountingStyle: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFormatConfig);
+
+const DxFormat = defineComponent(DxFormatConfig);
+
 (DxFormat as any).$_optionName = "format";
-const DxLabel = createConfigurationComponent({
+
+const DxLabelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -170,12 +183,18 @@ const DxLabel = createConfigurationComponent({
     position: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLabelConfig);
+
+const DxLabel = defineComponent(DxLabelConfig);
+
 (DxLabel as any).$_optionName = "label";
 (DxLabel as any).$_expectedChildren = {
   format: { isCollectionItem: false, optionName: "format" }
 };
-const DxTooltip = createConfigurationComponent({
+
+const DxTooltipConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -190,7 +209,12 @@ const DxTooltip = createConfigurationComponent({
     position: String,
     showMode: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTooltipConfig);
+
+const DxTooltip = defineComponent(DxTooltipConfig);
+
 (DxTooltip as any).$_optionName = "tooltip";
 (DxTooltip as any).$_expectedChildren = {
   format: { isCollectionItem: false, optionName: "format" }

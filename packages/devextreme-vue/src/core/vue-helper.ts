@@ -92,10 +92,6 @@ export function getComponentProps(component: ComponentPublicInstance): VNodeProp
   return getNormalizedProps(props);
 }
 
-export function usedConfigurationProps(node: VNode): VNodeProps | null {
-  return node.props;
-}
-
 export function getNodeOptions(component: Pick<ComponentPublicInstance, '$'>) {
   if (component.$) {
     return component.$.vnode;
@@ -110,12 +106,6 @@ export function getNodeTypeOfComponent(component: Pick<ComponentPublicInstance, 
 
 export function getVModelValue(options: Record<string, any>) {
   return options[VMODEL_NAME];
-}
-
-export function setCompatOptions(component: Record<string, unknown>) {
-  component.compatConfig = {
-    MODE: 3,
-  };
 }
 
 export function setVModel(config: any): void {

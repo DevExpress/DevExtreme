@@ -1,6 +1,7 @@
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -86,7 +87,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxScheduler extends AccessibleOptions {
   readonly instance?: Scheduler;
 }
-const DxScheduler = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     adaptivityEnabled: Boolean,
@@ -276,9 +278,14 @@ const DxScheduler = createComponent({
       view: { isCollectionItem: true, optionName: "views" }
     };
   }
-});
+};
 
-const DxAppointmentDragging = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxScheduler = defineComponent(componentConfig);
+
+
+const DxAppointmentDraggingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -305,9 +312,15 @@ const DxAppointmentDragging = createConfigurationComponent({
     scrollSensitivity: Number,
     scrollSpeed: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAppointmentDraggingConfig);
+
+const DxAppointmentDragging = defineComponent(DxAppointmentDraggingConfig);
+
 (DxAppointmentDragging as any).$_optionName = "appointmentDragging";
-const DxEditing = createConfigurationComponent({
+
+const DxEditingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -326,9 +339,15 @@ const DxEditing = createConfigurationComponent({
     allowTimeZoneEditing: Boolean,
     allowUpdating: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEditingConfig);
+
+const DxEditing = defineComponent(DxEditingConfig);
+
 (DxEditing as any).$_optionName = "editing";
-const DxResource = createConfigurationComponent({
+
+const DxResourceConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -351,10 +370,16 @@ const DxResource = createConfigurationComponent({
     useColorAsDefault: Boolean,
     valueExpr: [Function, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxResourceConfig);
+
+const DxResource = defineComponent(DxResourceConfig);
+
 (DxResource as any).$_optionName = "resources";
 (DxResource as any).$_isCollectionItem = true;
-const DxScrolling = createConfigurationComponent({
+
+const DxScrollingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -363,9 +388,15 @@ const DxScrolling = createConfigurationComponent({
   props: {
     mode: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxScrollingConfig);
+
+const DxScrolling = defineComponent(DxScrollingConfig);
+
 (DxScrolling as any).$_optionName = "scrolling";
-const DxView = createConfigurationComponent({
+
+const DxViewConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -431,7 +462,12 @@ const DxView = createConfigurationComponent({
     timeCellTemplate: {},
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxViewConfig);
+
+const DxView = defineComponent(DxViewConfig);
+
 (DxView as any).$_optionName = "views";
 (DxView as any).$_isCollectionItem = true;
 (DxView as any).$_expectedChildren = {

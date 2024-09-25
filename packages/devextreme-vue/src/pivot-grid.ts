@@ -1,6 +1,7 @@
 import PivotGrid, { Properties } from "devextreme/ui/pivot_grid";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "allowExpandAll" |
@@ -48,7 +49,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxPivotGrid extends AccessibleOptions {
   readonly instance?: PivotGrid;
 }
-const DxPivotGrid = createComponent({
+
+const componentConfig = {
   props: {
     allowExpandAll: Boolean,
     allowFiltering: Boolean,
@@ -155,9 +157,14 @@ const DxPivotGrid = createComponent({
       texts: { isCollectionItem: false, optionName: "texts" }
     };
   }
-});
+};
 
-const DxExport = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxPivotGrid = defineComponent(componentConfig);
+
+
+const DxExportConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -166,9 +173,15 @@ const DxExport = createConfigurationComponent({
   props: {
     enabled: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxExportConfig);
+
+const DxExport = defineComponent(DxExportConfig);
+
 (DxExport as any).$_optionName = "export";
-const DxFieldChooser = createConfigurationComponent({
+
+const DxFieldChooserConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -200,13 +213,19 @@ const DxFieldChooser = createConfigurationComponent({
     title: String,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFieldChooserConfig);
+
+const DxFieldChooser = defineComponent(DxFieldChooserConfig);
+
 (DxFieldChooser as any).$_optionName = "fieldChooser";
 (DxFieldChooser as any).$_expectedChildren = {
   fieldChooserTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-const DxFieldChooserTexts = createConfigurationComponent({
+
+const DxFieldChooserTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -223,9 +242,15 @@ const DxFieldChooserTexts = createConfigurationComponent({
     filterFields: String,
     rowFields: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFieldChooserTextsConfig);
+
+const DxFieldChooserTexts = defineComponent(DxFieldChooserTextsConfig);
+
 (DxFieldChooserTexts as any).$_optionName = "texts";
-const DxFieldPanel = createConfigurationComponent({
+
+const DxFieldPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -246,13 +271,19 @@ const DxFieldPanel = createConfigurationComponent({
     texts: Object,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFieldPanelConfig);
+
+const DxFieldPanel = defineComponent(DxFieldPanelConfig);
+
 (DxFieldPanel as any).$_optionName = "fieldPanel";
 (DxFieldPanel as any).$_expectedChildren = {
   fieldPanelTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-const DxFieldPanelTexts = createConfigurationComponent({
+
+const DxFieldPanelTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -267,9 +298,15 @@ const DxFieldPanelTexts = createConfigurationComponent({
     filterFieldArea: String,
     rowFieldArea: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxFieldPanelTextsConfig);
+
+const DxFieldPanelTexts = defineComponent(DxFieldPanelTextsConfig);
+
 (DxFieldPanelTexts as any).$_optionName = "texts";
-const DxHeaderFilter = createConfigurationComponent({
+
+const DxHeaderFilterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -292,14 +329,20 @@ const DxHeaderFilter = createConfigurationComponent({
     texts: Object,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHeaderFilterConfig);
+
+const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
+
 (DxHeaderFilter as any).$_optionName = "headerFilter";
 (DxHeaderFilter as any).$_expectedChildren = {
   headerFilterTexts: { isCollectionItem: false, optionName: "texts" },
   search: { isCollectionItem: false, optionName: "search" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
-const DxHeaderFilterTexts = createConfigurationComponent({
+
+const DxHeaderFilterTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -312,9 +355,15 @@ const DxHeaderFilterTexts = createConfigurationComponent({
     emptyValue: String,
     ok: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxHeaderFilterTextsConfig);
+
+const DxHeaderFilterTexts = defineComponent(DxHeaderFilterTextsConfig);
+
 (DxHeaderFilterTexts as any).$_optionName = "texts";
-const DxLoadPanel = createConfigurationComponent({
+
+const DxLoadPanelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -339,9 +388,15 @@ const DxLoadPanel = createConfigurationComponent({
     text: String,
     width: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLoadPanelConfig);
+
+const DxLoadPanel = defineComponent(DxLoadPanelConfig);
+
 (DxLoadPanel as any).$_optionName = "loadPanel";
-const DxPivotGridTexts = createConfigurationComponent({
+
+const DxPivotGridTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -370,9 +425,15 @@ const DxPivotGridTexts = createConfigurationComponent({
     sortRowBySummary: String,
     total: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPivotGridTextsConfig);
+
+const DxPivotGridTexts = defineComponent(DxPivotGridTextsConfig);
+
 (DxPivotGridTexts as any).$_optionName = "texts";
-const DxScrolling = createConfigurationComponent({
+
+const DxScrollingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -383,9 +444,15 @@ const DxScrolling = createConfigurationComponent({
     mode: String,
     useNative: [Boolean, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxScrollingConfig);
+
+const DxScrolling = defineComponent(DxScrollingConfig);
+
 (DxScrolling as any).$_optionName = "scrolling";
-const DxSearch = createConfigurationComponent({
+
+const DxSearchConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -400,9 +467,15 @@ const DxSearch = createConfigurationComponent({
     mode: String,
     timeout: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSearchConfig);
+
+const DxSearch = defineComponent(DxSearchConfig);
+
 (DxSearch as any).$_optionName = "search";
-const DxStateStoring = createConfigurationComponent({
+
+const DxStateStoringConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -421,9 +494,15 @@ const DxStateStoring = createConfigurationComponent({
     storageKey: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxStateStoringConfig);
+
+const DxStateStoring = defineComponent(DxStateStoringConfig);
+
 (DxStateStoring as any).$_optionName = "stateStoring";
-const DxTexts = createConfigurationComponent({
+
+const DxTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -476,7 +555,12 @@ const DxTexts = createConfigurationComponent({
     sortRowBySummary: String,
     total: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTextsConfig);
+
+const DxTexts = defineComponent(DxTextsConfig);
+
 (DxTexts as any).$_optionName = "texts";
 
 export default DxPivotGrid;
