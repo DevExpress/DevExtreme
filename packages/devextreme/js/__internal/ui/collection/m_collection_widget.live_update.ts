@@ -34,11 +34,15 @@ export default CollectionWidget.inherit({
       }
     };
 
-    this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
+    this._beforeInit();
   },
 
   reload() {
     this._correctionIndex = 0;
+  },
+
+  _beforeInit() {
+    this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
   },
 
   _init() {

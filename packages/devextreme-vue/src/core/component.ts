@@ -312,14 +312,13 @@ function initDxComponent() {
   return defineComponent({
     extends: initBaseComponent(),
     methods: {
-/*      $_getExtraIntegrationOptions(): object {
+      $_getExtraIntegrationOptions(): object {
         return {
           onInitializing() {
             (this as any).beginUpdate();
-            (this as any).endUpdate();
           },
         };
-      },*/
+      },
 
       $_processChildren(children: VNode[]): void {
         children.forEach((childNode: VNode) => {
@@ -336,6 +335,7 @@ function initDxComponent() {
 
       this.$_createWidget(this.$el);
       thisComponent.$_instance.endUpdate();
+      thisComponent.$_instance._beforeInit?.();
       restoreNodes(this.$el, nodes);
 
       if (this.$slots && this.$slots.default) {

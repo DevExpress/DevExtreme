@@ -247,6 +247,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this._updateTemplates();
     this.instance.endUpdate();
     this.recreatedNestedComponents = [];
+    this.instance._beforeInit?.();
   }
 
   ngAfterViewChecked(): void {
