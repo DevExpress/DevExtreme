@@ -694,7 +694,7 @@ export type ColumnFixingIcons = {
    * @docid GridBaseOptions.columnFixing.icons.stickyPosition
    * @default "stick-column"
    */
-  unfix?: string;
+  stickyPosition?: string;
 };
 
 /**
