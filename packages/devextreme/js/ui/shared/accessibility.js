@@ -57,7 +57,7 @@ function processKeyDown(viewName, instance, event, action, $mainElement, execute
 
 export function saveFocusedElementInfo(target, instance) {
     const $target = $(target);
-    const ariaLabel = $target.attr('aria-label').replace(/"/g, '\\"');
+    const ariaLabel = $target.attr('aria-label')?.replace(/"/g, '\\"');
     const $activeElements = getActiveAccessibleElements(ariaLabel, instance.element());
     const targetIndex = $activeElements.index($target);
 
