@@ -148,3 +148,86 @@ fixture.disablePageReloads`a11y - appointment`
     });
   });
 });
+
+test('appointments & collector buttons can be navigated', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  // forward
+  await t.click(scheduler.workSpace);
+  await t.pressKey('tab');
+  await t.expect(
+    scheduler.getAppointment('App 1').element.focused,
+  ).ok();
+
+  await t.pressKey('tab');
+  await t.expect(
+    scheduler.collectors.get(0).isFocused,
+  ).ok();
+
+  await t.pressKey('tab');
+  await t.expect(
+    scheduler.getAppointment('App 2').element.focused,
+  ).ok();
+
+  await t.pressKey('tab');
+  await t.expect(
+    scheduler.getAppointment('App 4').element.focused,
+  ).ok();
+
+  // backward
+
+  await t.pressKey('shift+tab');
+  await t.expect(
+    scheduler.getAppointment('App 2').element.focused,
+  ).ok();
+
+  await t.pressKey('shift+tab');
+  await t.expect(
+    scheduler.collectors.get(0).isFocused,
+  ).ok();
+
+  await t.pressKey('shift+tab');
+  await t.expect(
+    scheduler.getAppointment('App 1').element.focused,
+  ).ok();
+
+  // open list
+  await t.pressKey('tab');
+  await t.expect(
+    scheduler.collectors.get(0).isFocused,
+  ).ok();
+
+  await t.pressKey('enter');
+  await t.expect(
+    scheduler.appointmentTooltip.element.count,
+  ).eql(1);
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [
+      {
+        text: 'App 1',
+        startDate: new Date(2021, 1, 1),
+        endDate: new Date(2021, 1, 1),
+      },
+      {
+        text: 'App 2',
+        startDate: new Date(2021, 1, 2),
+        endDate: new Date(2021, 1, 2),
+      },
+      {
+        text: 'App 3',
+        startDate: new Date(2021, 1, 2),
+        endDate: new Date(2021, 1, 2),
+      },
+      {
+        text: 'App 4',
+        startDate: new Date(2021, 1, 3),
+        endDate: new Date(2021, 1, 3),
+      },
+    ],
+    allDayPanelMode: 'hidden',
+    currentView: 'month',
+    maxAppointmentsPerCell: 1,
+    currentDate: new Date(2021, 1, 1),
+  });
+});

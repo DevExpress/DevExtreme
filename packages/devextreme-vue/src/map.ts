@@ -1,6 +1,7 @@
 import Map, { Properties } from "devextreme/ui/map";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -40,7 +41,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxMap extends AccessibleOptions {
   readonly instance?: Map;
 }
-const DxMap = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -127,9 +129,14 @@ const DxMap = createComponent({
       route: { isCollectionItem: true, optionName: "routes" }
     };
   }
-});
+};
 
-const DxApiKey = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxMap = defineComponent(componentConfig);
+
+
+const DxApiKeyConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -142,9 +149,15 @@ const DxApiKey = createConfigurationComponent({
     google: String,
     googleStatic: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxApiKeyConfig);
+
+const DxApiKey = defineComponent(DxApiKeyConfig);
+
 (DxApiKey as any).$_optionName = "apiKey";
-const DxCenter = createConfigurationComponent({
+
+const DxCenterConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -155,9 +168,15 @@ const DxCenter = createConfigurationComponent({
     lat: Number,
     lng: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCenterConfig);
+
+const DxCenter = defineComponent(DxCenterConfig);
+
 (DxCenter as any).$_optionName = "center";
-const DxLocation = createConfigurationComponent({
+
+const DxLocationConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -168,9 +187,15 @@ const DxLocation = createConfigurationComponent({
     lat: Number,
     lng: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLocationConfig);
+
+const DxLocation = defineComponent(DxLocationConfig);
+
 (DxLocation as any).$_optionName = "location";
-const DxMarker = createConfigurationComponent({
+
+const DxMarkerConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -185,27 +210,20 @@ const DxMarker = createConfigurationComponent({
     onClick: Function,
     tooltip: [Object, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxMarkerConfig);
+
+const DxMarker = defineComponent(DxMarkerConfig);
+
 (DxMarker as any).$_optionName = "markers";
 (DxMarker as any).$_isCollectionItem = true;
 (DxMarker as any).$_expectedChildren = {
   location: { isCollectionItem: false, optionName: "location" },
   tooltip: { isCollectionItem: false, optionName: "tooltip" }
 };
-const DxProviderConfig = createConfigurationComponent({
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:mapId": null,
-    "update:useAdvancedMarkers": null,
-  },
-  props: {
-    mapId: String,
-    useAdvancedMarkers: Boolean
-  }
-});
-(DxProviderConfig as any).$_optionName = "providerConfig";
-const DxRoute = createConfigurationComponent({
+
+const DxRouteConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -222,13 +240,19 @@ const DxRoute = createConfigurationComponent({
     opacity: Number,
     weight: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRouteConfig);
+
+const DxRoute = defineComponent(DxRouteConfig);
+
 (DxRoute as any).$_optionName = "routes";
 (DxRoute as any).$_isCollectionItem = true;
 (DxRoute as any).$_expectedChildren = {
   location: { isCollectionItem: true, optionName: "locations" }
 };
-const DxTooltip = createConfigurationComponent({
+
+const DxTooltipConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -239,7 +263,12 @@ const DxTooltip = createConfigurationComponent({
     isShown: Boolean,
     text: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTooltipConfig);
+
+const DxTooltip = defineComponent(DxTooltipConfig);
+
 (DxTooltip as any).$_optionName = "tooltip";
 
 export default DxMap;

@@ -2,8 +2,9 @@ import type { PagerDisplayMode } from '@js/common/grids';
 
 import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
+import { BaseWidgetDefaultProps, type BaseWidgetProps } from '../base_props';
 
-export interface BasePagerProps {
+export interface BasePagerProps extends BaseWidgetProps {
   gridCompatibility?: boolean;
   className?: string;
   showInfo?: boolean;
@@ -17,7 +18,7 @@ export interface BasePagerProps {
   hasKnownLastPage?: boolean;
   pagesNavigatorVisible?: boolean | 'auto';
   showPageSizes?: boolean;
-  pageSizes: (number | 'all')[];
+  allowedPageSizes: (number | 'all')[];
   rtlEnabled?: boolean;
   showNavigationButtons?: boolean;
   totalCount?: number;
@@ -26,17 +27,18 @@ export interface BasePagerProps {
 }
 
 export const BasePagerDefaultProps: BasePagerProps = {
+  ...BaseWidgetDefaultProps,
   gridCompatibility: true,
   showInfo: false,
   displayMode: 'adaptive',
   maxPagesCount: 10,
-  pageCount: 10,
+  pageCount: 1,
   visible: true,
   hasKnownLastPage: true,
   pagesNavigatorVisible: 'auto',
   showPageSizes: true,
-  pageSizes: [5, 10],
+  allowedPageSizes: [5, 10],
   showNavigationButtons: false,
-  totalCount: 0,
+  totalCount: 1,
   label: messageLocalization.format('dxPager-ariaLabel'),
 };

@@ -34,6 +34,7 @@ const Widget = {
   clearExtensions: jest.fn(),
   dispose: jest.fn(),
   skipOptionsRollBack: false,
+  focus: jest.fn(),
 };
 
 const WidgetClass = jest.fn<typeof Widget, any>(() => Widget);

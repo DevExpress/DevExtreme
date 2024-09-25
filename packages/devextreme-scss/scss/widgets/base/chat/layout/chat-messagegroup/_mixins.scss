@@ -7,7 +7,7 @@
   $information-color,
   $information-gap
 ) {
-  .dx-chat-message-group {
+  .dx-chat-messagegroup {
     row-gap: $messagegroup-gap;
     padding-bottom: $messagegroup-padding;
 
@@ -16,17 +16,17 @@
     }
   }
 
-  .dx-chat-message-group-information {
+  .dx-chat-messagegroup-information {
     column-gap: $information-gap;
   }
   
-  .dx-chat-message-group-alignment-start {
+  .dx-chat-messagegroup-alignment-start {
     grid-template-columns: $messagegroup-start-template;
     column-gap: $messagegroup-start-gap;
   }
   
-  .dx-chat-message-time,
-  .dx-chat-message-author-name {
+  .dx-chat-messagegroup-time,
+  .dx-chat-messagegroup-author-name {
     font-size: $information-font-size;
     color: $information-color;
   }

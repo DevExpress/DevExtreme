@@ -76,6 +76,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const useDeferUpdateForTemplates = useRef(false);
     const guardsUpdateScheduled = useRef(false);
     const childElementsDetached = useRef(false);
+    const shouldRestoreFocus = useRef(false);
     const optionsManager = useRef<OptionsManager>(new OptionsManager());
     const childNodes = useRef<Node[]>();
 
@@ -256,6 +257,13 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       getConfig,
     ]);
 
+    const onTemplatesRendered = useCallback(() => {
+      if (shouldRestoreFocus.current && instance.current?.focus) {
+        instance.current.focus();
+        shouldRestoreFocus.current = false;
+      }
+    }, [shouldRestoreFocus.current, instance.current]);
+
     const onComponentUpdated = useCallback(() => {
       if (!optionsManager.current?.isInstanceSet) {
         return;
@@ -312,14 +320,20 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       if (instance.current) {
         const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
 
+        shouldRestoreFocus.current = !!element.current?.contains(document.activeElement);
         childNodes.current?.forEach((child) => child.parentNode?.removeChild(child));
         childElementsDetached.current = true;
 
         if (element.current) {
+          const preventFocusOut = (e: FocusEvent) => e.stopPropagation();
+
+          events.on(element.current, 'focusout', preventFocusOut);
           events.triggerHandler(element.current, DX_REMOVE_EVENT, dxRemoveArgs);
+          events.off(element.current, 'focusout', preventFocusOut);
         }
 
         instance.current.dispose();
+        instance.current = null;
       }
       optionsManager.current.dispose();
 
@@ -331,6 +345,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       element.current,
       optionsManager.current,
       childElementsDetached.current,
+      shouldRestoreFocus.current,
     ]);
 
     useLayoutEffect(() => {
@@ -407,6 +422,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         renderContent(),
         React.createElement(TemplateManager, {
           init: setTemplateManagerHooks,
+          onTemplatesRendered,
         }),
       ),
       isPortalComponent && renderPortal(),

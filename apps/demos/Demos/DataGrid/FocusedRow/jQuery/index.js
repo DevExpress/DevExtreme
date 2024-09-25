@@ -45,6 +45,9 @@ $(() => {
     paging: {
       pageSize: 10,
     },
+    pager: {
+      visible: true,
+    },
     onFocusedRowChanging(e) {
       const rowsCount = e.component.getVisibleRows().length;
       const pageCount = e.component.pageCount();

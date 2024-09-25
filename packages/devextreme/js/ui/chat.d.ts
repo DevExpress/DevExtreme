@@ -38,9 +38,7 @@ export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
  * @inherits NativeEventInfo
  */
 export type MessageSendEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
-    /**
-     * @docid
-     */
+    /** @docid _ui_chat_MessageSendEvent.message */
     readonly message?: Message;
 };
 
@@ -52,7 +50,6 @@ export type MessageSendEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEv
 export type User = {
     /**
      * @docid
-     * @default string
      * @public
      */
     id?: number | string;

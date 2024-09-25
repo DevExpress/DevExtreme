@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, Selection, FilterRow, Paging,
+  Column, Selection, FilterRow, Paging, Pager,
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
 import themes from 'devextreme/ui/themes';
@@ -35,6 +35,7 @@ const App = () => {
         />
         <FilterRow visible={true} />
         <Paging defaultPageSize={10} />
+        <Pager visible={true} />
 
         <Column
           dataField="orderId"

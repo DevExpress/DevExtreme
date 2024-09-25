@@ -833,6 +833,7 @@ declare module DevExpress {
       previousValue: unknown
     ): void;
     _createElement(element: HTMLElement): void;
+    _validateOptions(options: TProperties): TProperties;
   }
   module DOMComponent {
     /**
@@ -9490,7 +9491,7 @@ declare module DevExpress.ui {
       KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
     > & {
       /**
-       * [descr:MessageSendEvent.message]
+       * [descr:_ui_chat_MessageSendEvent.message]
        */
       readonly message?: Message;
     };

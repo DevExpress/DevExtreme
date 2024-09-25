@@ -3,6 +3,7 @@
         "Yes": "Да",
         "No": "Нет",
         "Cancel": "Отмена",
+        "CheckState": "Check state",
         "Close": "Закрыть",
         "Clear": "Очистить",
         "Done": "Готово",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Удалить",
         "dxListEditDecorator-more": "Еще",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Потяните, чтобы обновить...",
         "dxScrollView-pulledDownText": "Отпустите, чтобы обновить...",

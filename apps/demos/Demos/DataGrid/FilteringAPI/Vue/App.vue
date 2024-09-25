@@ -22,6 +22,7 @@
       :column-auto-width="true"
       :show-borders="true"
     >
+      <DxPager :visible="true"/>
       <DxColumn
         :width="80"
         data-field="Task_ID"
@@ -54,6 +55,7 @@ import { ref } from 'vue';
 import {
   DxColumn,
   DxDataGrid,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import 'devextreme/data/odata/store';

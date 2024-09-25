@@ -1,6 +1,7 @@
 import Form, { Properties } from "devextreme/ui/form";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -48,7 +49,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxForm extends AccessibleOptions {
   readonly instance?: Form;
 }
-const DxForm = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -153,9 +155,14 @@ const DxForm = createComponent({
       TabbedItem: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxAsyncRule = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxForm = defineComponent(componentConfig);
+
+
+const DxAsyncRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -172,13 +179,19 @@ const DxAsyncRule = createConfigurationComponent({
     type: String,
     validationCallback: Function
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxAsyncRuleConfig);
+
+const DxAsyncRule = defineComponent(DxAsyncRuleConfig);
+
 (DxAsyncRule as any).$_optionName = "validationRules";
 (DxAsyncRule as any).$_isCollectionItem = true;
 (DxAsyncRule as any).$_predefinedProps = {
   type: "async"
 };
-const DxButtonItem = createConfigurationComponent({
+
+const DxButtonItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -203,7 +216,12 @@ const DxButtonItem = createConfigurationComponent({
     visible: Boolean,
     visibleIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxButtonItemConfig);
+
+const DxButtonItem = defineComponent(DxButtonItemConfig);
+
 (DxButtonItem as any).$_optionName = "items";
 (DxButtonItem as any).$_isCollectionItem = true;
 (DxButtonItem as any).$_predefinedProps = {
@@ -212,7 +230,8 @@ const DxButtonItem = createConfigurationComponent({
 (DxButtonItem as any).$_expectedChildren = {
   buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" }
 };
-const DxButtonOptions = createConfigurationComponent({
+
+const DxButtonOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -269,9 +288,15 @@ const DxButtonOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxButtonOptionsConfig);
+
+const DxButtonOptions = defineComponent(DxButtonOptionsConfig);
+
 (DxButtonOptions as any).$_optionName = "buttonOptions";
-const DxColCountByScreen = createConfigurationComponent({
+
+const DxColCountByScreenConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -286,9 +311,15 @@ const DxColCountByScreen = createConfigurationComponent({
     sm: Number,
     xs: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxColCountByScreenConfig);
+
+const DxColCountByScreen = defineComponent(DxColCountByScreenConfig);
+
 (DxColCountByScreen as any).$_optionName = "colCountByScreen";
-const DxCompareRule = createConfigurationComponent({
+
+const DxCompareRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -305,13 +336,19 @@ const DxCompareRule = createConfigurationComponent({
     message: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCompareRuleConfig);
+
+const DxCompareRule = defineComponent(DxCompareRuleConfig);
+
 (DxCompareRule as any).$_optionName = "validationRules";
 (DxCompareRule as any).$_isCollectionItem = true;
 (DxCompareRule as any).$_predefinedProps = {
   type: "compare"
 };
-const DxCustomRule = createConfigurationComponent({
+
+const DxCustomRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -328,13 +365,19 @@ const DxCustomRule = createConfigurationComponent({
     type: String,
     validationCallback: Function
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxCustomRuleConfig);
+
+const DxCustomRule = defineComponent(DxCustomRuleConfig);
+
 (DxCustomRule as any).$_optionName = "validationRules";
 (DxCustomRule as any).$_isCollectionItem = true;
 (DxCustomRule as any).$_predefinedProps = {
   type: "custom"
 };
-const DxEmailRule = createConfigurationComponent({
+
+const DxEmailRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -347,13 +390,19 @@ const DxEmailRule = createConfigurationComponent({
     message: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEmailRuleConfig);
+
+const DxEmailRule = defineComponent(DxEmailRuleConfig);
+
 (DxEmailRule as any).$_optionName = "validationRules";
 (DxEmailRule as any).$_isCollectionItem = true;
 (DxEmailRule as any).$_predefinedProps = {
   type: "email"
 };
-const DxEmptyItem = createConfigurationComponent({
+
+const DxEmptyItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -372,13 +421,19 @@ const DxEmptyItem = createConfigurationComponent({
     visible: Boolean,
     visibleIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxEmptyItemConfig);
+
+const DxEmptyItem = defineComponent(DxEmptyItemConfig);
+
 (DxEmptyItem as any).$_optionName = "items";
 (DxEmptyItem as any).$_isCollectionItem = true;
 (DxEmptyItem as any).$_predefinedProps = {
   itemType: "empty"
 };
-const DxGroupItem = createConfigurationComponent({
+
+const DxGroupItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -411,7 +466,12 @@ const DxGroupItem = createConfigurationComponent({
     visible: Boolean,
     visibleIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxGroupItemConfig);
+
+const DxGroupItem = defineComponent(DxGroupItemConfig);
+
 (DxGroupItem as any).$_optionName = "items";
 (DxGroupItem as any).$_isCollectionItem = true;
 (DxGroupItem as any).$_predefinedProps = {
@@ -420,7 +480,8 @@ const DxGroupItem = createConfigurationComponent({
 (DxGroupItem as any).$_expectedChildren = {
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
 };
-const DxItem = createConfigurationComponent({
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -491,10 +552,16 @@ const DxItem = createConfigurationComponent({
     visible: Boolean,
     visibleIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-const DxLabel = createConfigurationComponent({
+
+const DxLabelConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -513,9 +580,15 @@ const DxLabel = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxLabelConfig);
+
+const DxLabel = defineComponent(DxLabelConfig);
+
 (DxLabel as any).$_optionName = "label";
-const DxNumericRule = createConfigurationComponent({
+
+const DxNumericRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -528,13 +601,19 @@ const DxNumericRule = createConfigurationComponent({
     message: String,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxNumericRuleConfig);
+
+const DxNumericRule = defineComponent(DxNumericRuleConfig);
+
 (DxNumericRule as any).$_optionName = "validationRules";
 (DxNumericRule as any).$_isCollectionItem = true;
 (DxNumericRule as any).$_predefinedProps = {
   type: "numeric"
 };
-const DxPatternRule = createConfigurationComponent({
+
+const DxPatternRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -549,13 +628,19 @@ const DxPatternRule = createConfigurationComponent({
     pattern: [RegExp, String],
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPatternRuleConfig);
+
+const DxPatternRule = defineComponent(DxPatternRuleConfig);
+
 (DxPatternRule as any).$_optionName = "validationRules";
 (DxPatternRule as any).$_isCollectionItem = true;
 (DxPatternRule as any).$_predefinedProps = {
   type: "pattern"
 };
-const DxRangeRule = createConfigurationComponent({
+
+const DxRangeRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -574,13 +659,19 @@ const DxRangeRule = createConfigurationComponent({
     reevaluate: Boolean,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRangeRuleConfig);
+
+const DxRangeRule = defineComponent(DxRangeRuleConfig);
+
 (DxRangeRule as any).$_optionName = "validationRules";
 (DxRangeRule as any).$_isCollectionItem = true;
 (DxRangeRule as any).$_predefinedProps = {
   type: "range"
 };
-const DxRequiredRule = createConfigurationComponent({
+
+const DxRequiredRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -593,13 +684,19 @@ const DxRequiredRule = createConfigurationComponent({
     trim: Boolean,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxRequiredRuleConfig);
+
+const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
+
 (DxRequiredRule as any).$_optionName = "validationRules";
 (DxRequiredRule as any).$_isCollectionItem = true;
 (DxRequiredRule as any).$_predefinedProps = {
   type: "required"
 };
-const DxSimpleItem = createConfigurationComponent({
+
+const DxSimpleItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -634,7 +731,12 @@ const DxSimpleItem = createConfigurationComponent({
     visible: Boolean,
     visibleIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxSimpleItemConfig);
+
+const DxSimpleItem = defineComponent(DxSimpleItemConfig);
+
 (DxSimpleItem as any).$_optionName = "items";
 (DxSimpleItem as any).$_isCollectionItem = true;
 (DxSimpleItem as any).$_predefinedProps = {
@@ -653,7 +755,8 @@ const DxSimpleItem = createConfigurationComponent({
   StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
   validationRule: { isCollectionItem: true, optionName: "validationRules" }
 };
-const DxStringLengthRule = createConfigurationComponent({
+
+const DxStringLengthRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -672,13 +775,19 @@ const DxStringLengthRule = createConfigurationComponent({
     trim: Boolean,
     type: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxStringLengthRuleConfig);
+
+const DxStringLengthRule = defineComponent(DxStringLengthRuleConfig);
+
 (DxStringLengthRule as any).$_optionName = "validationRules";
 (DxStringLengthRule as any).$_isCollectionItem = true;
 (DxStringLengthRule as any).$_predefinedProps = {
   type: "stringLength"
 };
-const DxTab = createConfigurationComponent({
+
+const DxTabConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -705,13 +814,19 @@ const DxTab = createConfigurationComponent({
     template: {},
     title: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTabConfig);
+
+const DxTab = defineComponent(DxTabConfig);
+
 (DxTab as any).$_optionName = "tabs";
 (DxTab as any).$_isCollectionItem = true;
 (DxTab as any).$_expectedChildren = {
   colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
 };
-const DxTabbedItem = createConfigurationComponent({
+
+const DxTabbedItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -734,7 +849,12 @@ const DxTabbedItem = createConfigurationComponent({
     visible: Boolean,
     visibleIndex: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTabbedItemConfig);
+
+const DxTabbedItem = defineComponent(DxTabbedItemConfig);
+
 (DxTabbedItem as any).$_optionName = "items";
 (DxTabbedItem as any).$_isCollectionItem = true;
 (DxTabbedItem as any).$_predefinedProps = {
@@ -744,7 +864,8 @@ const DxTabbedItem = createConfigurationComponent({
   tab: { isCollectionItem: true, optionName: "tabs" },
   tabPanelOptions: { isCollectionItem: false, optionName: "tabPanelOptions" }
 };
-const DxTabPanelOptions = createConfigurationComponent({
+
+const DxTabPanelOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -841,13 +962,19 @@ const DxTabPanelOptions = createConfigurationComponent({
     visible: Boolean,
     width: [Function, Number, String]
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTabPanelOptionsConfig);
+
+const DxTabPanelOptions = defineComponent(DxTabPanelOptionsConfig);
+
 (DxTabPanelOptions as any).$_optionName = "tabPanelOptions";
 (DxTabPanelOptions as any).$_expectedChildren = {
   item: { isCollectionItem: true, optionName: "items" },
   tabPanelOptionsItem: { isCollectionItem: true, optionName: "items" }
 };
-const DxTabPanelOptionsItem = createConfigurationComponent({
+
+const DxTabPanelOptionsItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -872,10 +999,16 @@ const DxTabPanelOptionsItem = createConfigurationComponent({
     title: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxTabPanelOptionsItemConfig);
+
+const DxTabPanelOptionsItem = defineComponent(DxTabPanelOptionsItemConfig);
+
 (DxTabPanelOptionsItem as any).$_optionName = "items";
 (DxTabPanelOptionsItem as any).$_isCollectionItem = true;
-const DxValidationRule = createConfigurationComponent({
+
+const DxValidationRuleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -904,7 +1037,12 @@ const DxValidationRule = createConfigurationComponent({
     type: String,
     validationCallback: Function
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxValidationRuleConfig);
+
+const DxValidationRule = defineComponent(DxValidationRuleConfig);
+
 (DxValidationRule as any).$_optionName = "validationRules";
 (DxValidationRule as any).$_isCollectionItem = true;
 (DxValidationRule as any).$_predefinedProps = {

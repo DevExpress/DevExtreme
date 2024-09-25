@@ -17,6 +17,7 @@ on:
         required: false
 
 env:
+  NX_SKIP_NX_CACHE: true
   FILTER: ${{ github.event_name == 'workflow_dispatch' && inputs.filter || '' }}
   SET_TIMESTAMP_VERSION:  ${{ inputs.tag == 'daily' }}
   MOVE_DAILY_TAG: ${{ inputs.tag == 'daily' }}
@@ -207,7 +208,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: DevExpress/github-actions/send-teams-notification@main
+      - uses: DevExpress/github-actions/send-teams-notification@v1
         with:
           hook_url: ${{secrets.TEAMS_ALERT}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}

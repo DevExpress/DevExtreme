@@ -20,6 +20,9 @@ $(() => {
         'ResponsibleEmployee/Employee_Full_Name',
       ],
     },
+    pager: {
+      visible: true,
+    },
     selection: {
       mode: 'multiple',
       deferred: true,
