@@ -191,6 +191,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this._initPlatform();
     this._initOptions();
 
+    this._initialOptions.onInitializing = function () {
+      this.beginUpdate();
+    };
+
     this.instance = this._createInstance(element, this._initialOptions);
     this._initEvents();
     this._initialOptions = {};
