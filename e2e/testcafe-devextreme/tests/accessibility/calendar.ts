@@ -16,6 +16,7 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   showTodayButton: [true, false],
   showWeekNumbers: [true, false],
+  selectionMode: ['multiple', 'range', 'single'],
   zoomLevel: ['century', 'decade', 'month', 'year'],
 };
 
