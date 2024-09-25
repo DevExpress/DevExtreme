@@ -111,7 +111,6 @@ createTestCafe({
 
         const runOptions = {
             quarantineMode: { successThreshold: 1, attemptLimit: 5 },
-            disableNativeAutomation: true,
         };
 
         if(args.componentFolder.trim() !== 'renovation') {
@@ -159,9 +158,9 @@ function setShadowDom(args) {
 function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome --headless=old --disable-gpu --window-size=1200,800';
+            return 'chrome --headless=new --disable-gpu --window-size=1200,800';
         case 'chrome:docker':
-            return 'chromium --headless=old --no-sandbox --disable-gpu --window-size=1200,800';
+            return 'chromium --headless=new --no-sandbox --disable-gpu --window-size=1200,800';
     }
 
     return browser;
