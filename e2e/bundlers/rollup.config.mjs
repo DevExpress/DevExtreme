@@ -2,6 +2,8 @@ import path from 'node:path';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonJs from '@rollup/plugin-commonjs';
 import alias from '@rollup/plugin-alias';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default {
     input: './entry/modules_esm.js',
