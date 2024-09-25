@@ -48,6 +48,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Poista",
         "dxListEditDecorator-more": "Lisää",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Päivitä vetämällä alas...",
         "dxScrollView-pulledDownText": "Päivitä vapauttamalla...",
