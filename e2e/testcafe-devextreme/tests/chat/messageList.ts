@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
 import { ClientFunction } from 'testcafe';
 import { User } from 'devextreme/ui/chat';
+import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import { createUser, generateMessages, getLongText } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
@@ -69,14 +70,25 @@ test('Messagelist appearance with scrollbar', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after call renderMessage().png', { element: '#container' });
 
   await t
-    .typeText(chat.getInput(), getLongText());
+    .typeText(chat.getInput(), getLongText())
+    .pressKey('shift+enter');
 
   await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after typing in textarea.png', { element: '#container' });
 
   await t
     .pressKey('enter');
 
-  await testScreenshot(t, takeScreenshot, 'Message list scrollbar position after send.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after send.png', { element: '#container' });
+
+  const scrollable = chat.getScrollable();
+  const topOffset = (await scrollable.scrollOffset()).top;
+
+  await scrollable.scrollTo({ top: topOffset - 100 });
+
+  await t
+    .typeText(chat.getInput(), getLongText());
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar middle position after typing in textarea.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -92,5 +104,44 @@ test('Messagelist appearance with scrollbar', async (t) => {
     user: userSecond,
     width: 400,
     height: 600,
+  });
+});
+
+test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const tabPanel = new TabPanel('#container');
+
+  await t
+    .click(tabPanel.tabs.getItem(1).element);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist scroll position after rendering in invisible container.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+
+  const items = generateMessages(17, userFirst, userSecond, true, false, 2);
+
+  return createWidget('dxTabPanel', {
+    width: 400,
+    height: 500,
+    deferRendering: true,
+    templatesRenderAsynchronously: true,
+    dataSource: [{
+      title: 'Tab_1',
+      collapsible: true,
+      text: 'Tab_1 content',
+    }, {
+      title: 'Tab_2',
+      collapsible: true,
+      template: ClientFunction(() => ($('<div>') as any).dxChat({
+        items,
+        user: userSecond,
+      }), { dependencies: { items, userSecond } }),
+    }],
   });
 });

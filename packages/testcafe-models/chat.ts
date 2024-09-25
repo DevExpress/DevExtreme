@@ -1,11 +1,15 @@
 import type { WidgetName } from './types';
 import Widget from './internal/widget';
+import Scrollable from './scrollView/scrollable';
+import TextArea from './textArea';
 import dxChat from 'devextreme/ui/chat';
 
 const CLASS = {
   input: 'dx-texteditor-input',
   messageList: 'dx-chat-messagelist',
   messageBoxButton: 'dx-chat-messagebox-button',
+  scrollable: 'dx-scrollable',
+  textArea: 'dx-textarea',
 };
 
 export default class Chat extends Widget {
@@ -24,7 +28,15 @@ export default class Chat extends Widget {
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxChat'; }
 
+  getTextArea(): TextArea {
+    return new TextArea(this.element.find(`.${CLASS.textArea}`));
+  }
+
   getInput(): Selector {
-    return this.element.find(`.${CLASS.input}`);
+    return this.getTextArea().getInput();
+  }
+
+  getScrollable(): Scrollable {
+      return new Scrollable(this.element.find(`.${CLASS.scrollable}`));
   }
 }
