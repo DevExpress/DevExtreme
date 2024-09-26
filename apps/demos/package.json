@@ -52,7 +52,7 @@
         "inferno-create-element": "7.4.11",
         "jquery": "3.6.3",
         "jspdf": "2.5.1",
-        "jspdf-autotable": "3.8.2",
+        "jspdf-autotable": "3.8.3",
         "jszip": "^3.10.1",
         "luxon": "3.4.4",
         "mustache": "4.2.0",
