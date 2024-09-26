@@ -307,6 +307,26 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @public
      */
     provider?: MapProvider;
+        /**
+     * @docid
+     * @default { mapId: '', useAdvancedMarkers: true }
+     * @public
+     */
+    providerConfig?: {
+      /**
+       * @docid
+       * @public
+       * @default ""
+       */
+      mapId?: string;
+      /**
+       * @docid
+       * @public
+       * @default true
+       * @deprecated
+       */
+      useAdvancedMarkers?: boolean;
+    };
     /**
      * @docid
      * @fires dxMapOptions.onRouteAdded
