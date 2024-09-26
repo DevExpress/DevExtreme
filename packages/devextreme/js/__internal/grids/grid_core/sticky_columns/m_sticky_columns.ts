@@ -295,6 +295,20 @@ const rowsView = (
 
     return super._renderCellContent($container, options, renderOptions);
   }
+
+  protected _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+    // @ts-expect-error
+    super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    const stickySummarySelector = `.${this.addWidgetPrefix(CLASSES.stickyColumn)}`;
+
+    if (
+      $groupCell.parent().find(stickySummarySelector).length
+      && GridCoreStickyColumnsDom.doesGroupCellEndInFirstColumn($groupCell)
+    ) {
+      GridCoreStickyColumnsDom
+        .addStickyColumnBorderRightClass($groupCell, this.addWidgetPrefix.bind(this));
+    }
+  }
 };
 
 const footerView = (

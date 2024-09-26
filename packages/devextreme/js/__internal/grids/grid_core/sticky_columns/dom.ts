@@ -37,11 +37,23 @@ const toggleStickyColumnsClass = ($element, isStickyColumns, addWidgetPrefix): v
   $element.toggleClass(addWidgetPrefix(CLASSES.stickyColumns), isStickyColumns);
 };
 
+const doesGroupCellEndInFirstColumn = ($groupCell): boolean => {
+  const $groupRow = $groupCell.parent();
+  const commandColumns = $groupRow.children().filter(
+    (i) => i < $groupCell.index(),
+  );
+
+  const groupColSpanWithoutCommand = $groupCell.attr('colspan') - commandColumns.length;
+
+  return groupColSpanWithoutCommand === 1;
+};
+
 export const GridCoreStickyColumnsDom = {
   addFirstHeaderClass,
   addColumnNoBorderClass,
   addStickyColumnClass,
   addStickyColumnBorderLeftClass,
   addStickyColumnBorderRightClass,
+  doesGroupCellEndInFirstColumn,
   toggleStickyColumnsClass,
 };
