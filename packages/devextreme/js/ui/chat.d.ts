@@ -50,7 +50,6 @@ export type MessageSendEvent = NativeEventInfo<dxChat, KeyboardEvent | PointerEv
 export type User = {
     /**
      * @docid
-     * @default string
      * @public
      */
     id?: number | string;

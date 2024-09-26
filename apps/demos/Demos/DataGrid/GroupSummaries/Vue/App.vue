@@ -7,6 +7,7 @@
       key-expr="ID"
     >
       <DxSelection mode="single"/>
+      <DxPager :visible="true"/>
       <DxColumn
         :width="130"
         data-field="OrderNumber"
@@ -81,6 +82,7 @@ import {
   DxSummary,
   DxGroupItem,
   DxSortByGroupSummaryInfo,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import { orders } from './data.ts';
 

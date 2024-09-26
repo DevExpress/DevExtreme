@@ -431,6 +431,10 @@ const Scrollable = (DOMComponent as any).inherit({
   },
 
   scrollTo(targetLocation) {
+    if (!hasWindow()) {
+      return;
+    }
+
     targetLocation = this._normalizeLocation(targetLocation);
 
     this._updateIfNeed();

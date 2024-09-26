@@ -19,11 +19,11 @@
       background-color: $background-color-secondary;
 
       &:first-child {
-        border-top-left-radius: $border-radius;
+        border-start-start-radius: $border-radius;
       }
   
       &:last-child {
-        border-bottom-left-radius: $border-radius;
+        border-end-start-radius: $border-radius;
       }
     }
   }
@@ -33,11 +33,11 @@
       background-color: $background-color-primary;
 
       &:first-child {
-        border-top-right-radius: $border-radius;
+        border-start-end-radius: $border-radius;
       }
 
       &:last-child {
-        border-bottom-right-radius: $border-radius;
+        border-end-end-radius: $border-radius;
       }
     }
   }

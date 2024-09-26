@@ -10,6 +10,7 @@ export class Options {
         this._deprecatedCallback;
         this._startChangeCallback;
         this._endChangeCallback;
+        this._validateOptionsCallback;
 
         this._default = defaultOptions;
         this._deprecated = deprecatedOptions;
@@ -141,6 +142,9 @@ export class Options {
 
     onChanged(callBack) {
         this._optionManager.onChanged(callBack);
+    }
+    validateOptions(callBack) {
+        this._optionManager.onValidateOptions(callBack);
     }
 
     onDeprecated(callBack) {

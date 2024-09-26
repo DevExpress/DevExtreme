@@ -66,4 +66,15 @@ QUnit.test('root with custom size', function(assert) {
     assert.strictEqual($scrollView[0].style.height, '50px', 'outer height of the element must be equal to custom height');
 });
 
+QUnit.test('should not raise any errors when scrollTo() method is called', function(assert) {
+    const $scrollView = $('#scrollView').dxScrollView();
+    const instance = $scrollView.dxScrollView('instance');
+
+    try {
+        instance.scrollTo({ top: 10 });
+        assert.ok(true, 'No errors were raised');
+    } catch(e) {
+        assert.ok(false, `Error: ${e}`);
+    }
+});
 

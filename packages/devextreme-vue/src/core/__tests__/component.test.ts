@@ -13,12 +13,34 @@ import globalConfig from '../config';
 import Configuration from '../configuration';
 import { IConfigurable, IConfigurationComponent } from '../configuration-component';
 import { IExtension } from '../extension-component';
-import { createComponent, createConfigurationComponent, createExtensionComponent } from '../index';
 
 import { getNodeOptions } from '../vue-helper';
+import {
+  prepareComponentConfig,
+  prepareExtensionComponentConfig,
+  prepareConfigurationComponentConfig
+} from "../index";
 
 interface CustomApp extends App {
   test: string;
+}
+
+function createComponent(config) {
+  prepareComponentConfig(config);
+
+  return defineComponent(config);
+}
+
+function createConfigurationComponent(config) {
+  prepareConfigurationComponentConfig(config);
+
+  return defineComponent(config);
+}
+
+function createExtensionComponent(config) {
+  prepareExtensionComponentConfig(config);
+
+  return defineComponent(config);
 }
 
 const eventHandlers = {};
@@ -330,7 +352,7 @@ describe('component rendering', () => {
     it('updates pendingOptions from a widget component configuration updateFunc', () => {
       const wrapper = mount(TestComponent);
 
-      const pendingOptions = (wrapper.vm as any as IWidgetComponent).$_pendingOptions;
+      const pendingOptions = (wrapper.vm as unknown as IWidgetComponent).$_pendingOptions;
 
       const name = 'abc';
       const value = {};
@@ -682,14 +704,14 @@ describe('component rendering', () => {
 
         const WidgetComponent = createComponent({
           beforeCreate() {
-            (this as IWidgetComponent).$_WidgetClass = WidgetClass;
-            (this as IWidgetComponent).$_expectedChildren = expected;
+            (this as unknown as IWidgetComponent).$_WidgetClass = WidgetClass;
+            (this as unknown as IWidgetComponent).$_expectedChildren = expected;
           },
         });
 
         const wrapper = mount(WidgetComponent);
 
-        expect((wrapper.vm as any as IWidgetComponent).$_config.expectedChildren).toBe(expected);
+        expect((wrapper.vm as unknown as IWidgetComponent).$_config.expectedChildren).toBe(expected);
       });
 
       it('initialized for config component', () => {
@@ -1169,8 +1191,50 @@ describe('component rendering', () => {
       renderItemTemplate({}, container);
 
       expect(container.innerHTML).toBe(
-        '<div>child1</div><div>child2</div><span style="display: none;"></span>',
+        '<span style="display: none;"></span><div>child1</div><div>child2</div>',
       );
+    });
+
+    it('unmounts template with root element node', () => {
+      const vm = defineComponent({
+        template: `<test-component>
+                        <template #item>
+                            <div>child1</div>
+                        </template>
+                    </test-component>`,
+        components: {
+          TestComponent,
+        },
+      });
+
+      mount(vm);
+
+      const container = document.createElement("div");
+      renderItemTemplate({}, container);
+      events.triggerHandler(container.children[0], "dxremove");
+
+      expect(container.children.length).toEqual(0);
+    });
+
+    it('unmounts template with text content', () => {
+      const vm = defineComponent({
+        template: `<test-component>
+                        <template #item>
+                            Template_text_content
+                        </template>
+                    </test-component>`,
+        components: {
+          TestComponent,
+        },
+      });
+
+      mount(vm);
+
+      const container = document.createElement("div");
+      renderItemTemplate({}, container);
+      events.triggerHandler(container.children[0], "dxremove");
+
+      expect(container.children.length).toEqual(0);
     });
 
     it('template should have globalProperties of parent', () => {
@@ -1390,8 +1454,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const vm = defineComponent({
           template: `<test-component>
@@ -1424,8 +1488,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const component = defineComponent({
           template: `<test-component :prop1='prop1Value'>
@@ -1473,8 +1537,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const vm = defineComponent({
           template: `<test-component>
@@ -1502,8 +1566,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const vm = defineComponent({
           template: `<test-component>
@@ -1532,8 +1596,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const vm = defineComponent({
           template: `<test-component>
@@ -1565,8 +1629,8 @@ describe('component rendering', () => {
             prop1: Number,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const vm = defineComponent({
           template: `<test-component>
@@ -1595,7 +1659,7 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'item';
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'item';
 
         const wrapper = defineComponent({
           template: `<test-component>
@@ -1623,8 +1687,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const SubNested = buildTestConfigCtor();
         (SubNested as IConfigurationComponent).$_optionName = 'subNestedOption';
@@ -1654,8 +1718,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const SubNested = buildTestConfigCtor();
         (SubNested as IConfigurationComponent).$_optionName = 'subNestedOption';
@@ -1684,8 +1748,8 @@ describe('component rendering', () => {
             template: String,
           },
         });
-        (NestedItem as IConfigurationComponent).$_optionName = 'items';
-        (NestedItem as IConfigurationComponent).$_isCollectionItem = true;
+        (NestedItem as unknown as IConfigurationComponent).$_optionName = 'items';
+        (NestedItem as unknown as IConfigurationComponent).$_isCollectionItem = true;
 
         const SubNested = buildTestConfigCtor();
         (SubNested as IConfigurationComponent).$_optionName = 'subNestedOption';
@@ -1713,7 +1777,7 @@ describe('component rendering', () => {
     const ExtensionWidgetClass = jest.fn(createWidget);
     const TestExtensionComponent = createExtensionComponent({
       beforeCreate() {
-        (this as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
+        (this as unknown as IWidgetComponent).$_WidgetClass = ExtensionWidgetClass;
       },
       props: {
         prop: Array,

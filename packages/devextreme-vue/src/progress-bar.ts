@@ -1,5 +1,6 @@
 import ProgressBar, { Properties } from "devextreme/ui/progress_bar";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "disabled" |
@@ -34,7 +35,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxProgressBar extends AccessibleOptions {
   readonly instance?: ProgressBar;
 }
-const DxProgressBar = createComponent({
+
+const componentConfig = {
   props: {
     disabled: Boolean,
     elementAttr: Object,
@@ -104,7 +106,11 @@ const DxProgressBar = createComponent({
     (this as any).$_WidgetClass = ProgressBar;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxProgressBar = defineComponent(componentConfig);
 
 export default DxProgressBar;
 export {

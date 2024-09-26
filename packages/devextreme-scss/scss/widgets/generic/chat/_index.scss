@@ -36,6 +36,7 @@
   $chat-information-gap
 );
 @include chat-messagelist-empty(
+  $chat-messagelist-padding,
   $chat-messagelist-empty-icon-box-size,
   $chat-messagelist-empty-icon-size,
   $chat-messagelist-empty-icon-margin-bottom,

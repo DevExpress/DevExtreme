@@ -18,7 +18,7 @@ export interface BasePagerProps extends BaseWidgetProps {
   hasKnownLastPage?: boolean;
   pagesNavigatorVisible?: boolean | 'auto';
   showPageSizes?: boolean;
-  pageSizes: (number | 'all')[];
+  allowedPageSizes: (number | 'all')[];
   rtlEnabled?: boolean;
   showNavigationButtons?: boolean;
   totalCount?: number;
@@ -32,13 +32,13 @@ export const BasePagerDefaultProps: BasePagerProps = {
   showInfo: false,
   displayMode: 'adaptive',
   maxPagesCount: 10,
-  pageCount: 10,
+  pageCount: 1,
   visible: true,
   hasKnownLastPage: true,
   pagesNavigatorVisible: 'auto',
   showPageSizes: true,
-  pageSizes: [5, 10],
+  allowedPageSizes: [5, 10],
   showNavigationButtons: false,
-  totalCount: 0,
+  totalCount: 1,
   label: messageLocalization.format('dxPager-ariaLabel'),
 };

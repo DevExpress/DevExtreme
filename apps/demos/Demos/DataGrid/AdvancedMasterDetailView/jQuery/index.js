@@ -10,6 +10,9 @@ $(() => {
     paging: {
       pageSize: 15,
     },
+    pager: {
+      visible: true,
+    },
     remoteOperations: true,
     columns: [
       'ContactName',
