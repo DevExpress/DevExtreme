@@ -45,9 +45,9 @@ export default CollectionWidget.inherit({
 
   _init() {
     this.callBase();
+    this._afterCreate();
     this._refreshItemsCache();
     this._correctionIndex = 0;
-    this._afterCreate();
   },
 
   _findItemElementByKey(key) {
