@@ -190,12 +190,12 @@ class MessageList extends Widget<Properties> {
       const newMessageGroupItem = item ?? {};
       const id = newMessageGroupItem.author?.id;
 
-      const isTimeoutExpired = this._isTimeoutExpired(
+      const isTimeoutExceeded = this._isTimeoutExceeded(
         currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
         item,
       );
 
-      if (id === currentMessageGroupUserId && !isTimeoutExpired) {
+      if (id === currentMessageGroupUserId && !isTimeoutExceeded) {
         currentMessageGroupItems.push(newMessageGroupItem);
       } else {
         this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
@@ -220,9 +220,9 @@ class MessageList extends Widget<Properties> {
       const lastMessageGroupItem = lastMessageGroup.option('items')[0];
       const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
 
-      const isTimeoutExpired = this._isTimeoutExpired(lastMessageGroupItem, message);
+      const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupItem, message);
 
-      if (sender?.id === lastMessageGroupUserId && !isTimeoutExpired) {
+      if (sender?.id === lastMessageGroupUserId && !isTimeoutExceeded) {
         lastMessageGroup.renderMessage(message);
         this._scrollContentToLastMessage();
 
@@ -293,18 +293,20 @@ class MessageList extends Widget<Properties> {
     }
   }
 
-  _isTimeoutExpired(lastMessage: Message, currentMessage: Message): boolean {
-    const lastTimestamp = lastMessage.timestamp;
-    const currentTimestamp = currentMessage.timestamp;
+  _isTimeoutExceeded(lastMessage: Message, newMessage: Message): boolean {
+    const lastMessageTimestamp = lastMessage?.timestamp;
+    const newMessageTimestamp = newMessage?.timestamp;
 
-    if (!lastTimestamp || !currentTimestamp) {
+    if (!lastMessageTimestamp || !newMessageTimestamp) {
       return false;
     }
 
-    const convertedLastTimestamp = new Date(lastTimestamp).getTime();
-    const convertedCurrentTimestamp = new Date(currentTimestamp).getTime();
+    const lastMessageTimestampInMs = new Date(lastMessageTimestamp).getTime();
+    const newMessageTimestampInMs = new Date(newMessageTimestamp).getTime();
 
-    return convertedCurrentTimestamp - convertedLastTimestamp > MESSAGEGROUP_TIMEOUT;
+    const result = newMessageTimestampInMs - lastMessageTimestampInMs > MESSAGEGROUP_TIMEOUT;
+
+    return result;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
