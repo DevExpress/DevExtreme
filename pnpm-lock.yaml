@@ -208,17 +208,17 @@ importers:
         specifier: ^3.2.47
         version: 3.4.27
       cldr-core:
-        specifier: 40.0.0
-        version: 40.0.0
+        specifier: 45.0.0
+        version: 45.0.0
       cldr-data:
         specifier: 36.0.1
         version: 36.0.1
       cldr-dates-full:
-        specifier: 40.0.0
-        version: 40.0.0(cldr-numbers-full@40.0.0(cldr-core@40.0.0))
+        specifier: 45.0.0
+        version: 45.0.0(cldr-numbers-full@45.0.0(cldr-core@45.0.0))
       cldr-numbers-full:
-        specifier: 40.0.0
-        version: 40.0.0(cldr-core@40.0.0)
+        specifier: 45.0.0
+        version: 45.0.0(cldr-core@45.0.0)
       cldrjs:
         specifier: 0.5.5
         version: 0.5.5
@@ -891,11 +891,11 @@ importers:
         specifier: 5.3.2
         version: 5.3.2(@popperjs/core@2.11.8)
       cldr-core:
-        specifier: 41.0.0
-        version: 41.0.0
+        specifier: 45.0.0
+        version: 45.0.0
       cldr-numbers-full:
-        specifier: 41.0.0
-        version: 41.0.0(cldr-core@41.0.0)
+        specifier: 45.0.0
+        version: 45.0.0(cldr-core@45.0.0)
       cldrjs:
         specifier: 0.5.5
         version: 0.5.5
@@ -7072,11 +7072,8 @@ packages:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
     engines: {node: '>=0.10.0'}
 
-  cldr-core@40.0.0:
-    resolution: {integrity: sha512-0nmiOR9I2ImfspRTvFhzF7uXYtVCnHMYULrIncArrsnICUxNnZVEJ6pHPRUtB3J8i4VkwQQMRcs9yl4+wxVP4g==}
-
-  cldr-core@41.0.0:
-    resolution: {integrity: sha512-8UL/NVueD9BeyrYGjZWrAvhowmQt4THriUB04jxRHWST9Lmc9K1pISPjnbh0kIfRueslZ37EvQ53dxOm5w8pjQ==}
+  cldr-core@45.0.0:
+    resolution: {integrity: sha512-gQVxy3gzOQpXiTRGmlKiRQFLYimrr1RgvqGKZCS61JgmdkeNm7+LZGx+Lhw5/AW0t8WMM/uZhf4CMva6LuUobQ==}
 
   cldr-data-downloader@1.0.0-1:
     resolution: {integrity: sha512-jskJncLkJlkBCdqdgzLSV9sOOLyEdeVOtwJOwVwRyliVJ+4822KZWvfaD620c9Lk7el3auwFDg92FXYjGA5BhQ==}
@@ -7085,20 +7082,15 @@ packages:
   cldr-data@36.0.1:
     resolution: {integrity: sha512-74leCbj4QIBno+a8MVwO4Kiqv4J1PXDcFhlgOhh86rnLljppLxxi8odVeMjqFsnEG2xxCu98P4iO9mkNXn5v9Q==}
 
-  cldr-dates-full@40.0.0:
-    resolution: {integrity: sha512-AqsXdzaga/kN2+Gbtj72ztWjFG+JdnZd2Yu5SNZb7ZwWR6zESGXOdymPaR3phKosIpsNrDsye1RQC33pv+fOAw==}
+  cldr-dates-full@45.0.0:
+    resolution: {integrity: sha512-HeJ7BM0tqRnI2xIHhKPx6Mr4mEdW81nYrpW7VGXkl4NMdX6XbggJoGzb+odJwSiF4LPS+pzdFTdcYp9vohkOqg==}
     peerDependencies:
-      cldr-numbers-full: 40.0.0
+      cldr-numbers-full: 45.0.0
 
-  cldr-numbers-full@40.0.0:
-    resolution: {integrity: sha512-NE5uKg0JDAcg5Pn6MKDg50cAKkUQtMd+mOxGPfDZVL+JRUHimQFvY/21KuzLBTI1i1IDbhEF9so/iXMmUJugPg==}
+  cldr-numbers-full@45.0.0:
+    resolution: {integrity: sha512-5Lf03tqz7XgHEA2hXTHAxOAYxea5d/BYMIAtt8HtGmrfHK2vNLJgaOoqALx801GJgQjCBoYs6f0P98qUkji+CQ==}
     peerDependencies:
-      cldr-core: 40.0.0
-
-  cldr-numbers-full@41.0.0:
-    resolution: {integrity: sha512-HWw9xEr3HCElmA4cc8+MjVDKVXx4y5uJWSii/g0ThZqqRVXTYlWMVb+0xdjXfE0wMxLip3JLH3Rm0s4Kimhz3w==}
-    peerDependencies:
-      cldr-core: 41.0.0
+      cldr-core: 45.0.0
 
   cldrjs@0.5.5:
     resolution: {integrity: sha512-KDwzwbmLIPfCgd8JERVDpQKrUUM1U4KpFJJg2IROv89rF172lLufoJnqJ/Wea6fXL5bO6WjuLMzY8V52UWPvkA==}
@@ -25220,9 +25212,7 @@ snapshots:
       isobject: 3.0.1
       static-extend: 0.1.2
 
-  cldr-core@40.0.0: {}
-
-  cldr-core@41.0.0: {}
+  cldr-core@45.0.0: {}
 
   cldr-data-downloader@1.0.0-1:
     dependencies:
@@ -25241,17 +25231,13 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  cldr-dates-full@40.0.0(cldr-numbers-full@40.0.0(cldr-core@40.0.0)):
+  cldr-dates-full@45.0.0(cldr-numbers-full@45.0.0(cldr-core@45.0.0)):
     dependencies:
-      cldr-numbers-full: 40.0.0(cldr-core@40.0.0)
+      cldr-numbers-full: 45.0.0(cldr-core@45.0.0)
 
-  cldr-numbers-full@40.0.0(cldr-core@40.0.0):
+  cldr-numbers-full@45.0.0(cldr-core@45.0.0):
     dependencies:
-      cldr-core: 40.0.0
-
-  cldr-numbers-full@41.0.0(cldr-core@41.0.0):
-    dependencies:
-      cldr-core: 41.0.0
+      cldr-core: 45.0.0
 
   cldrjs@0.5.5: {}
 
