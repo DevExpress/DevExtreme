@@ -37,8 +37,7 @@ gulp.task(GENERATE,
     (done) => {
         generateVueComponents(
             JSON.parse(fs.readFileSync(config.metadataPath).toString()),
-            config.baseComponent,
-            config.configComponent,
+            config.componentGeneratorTplConfig,
             {
                 componentsDir: config.generatedComponentsDir,
                 indexFileName: config.indexFileName

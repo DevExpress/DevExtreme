@@ -41,7 +41,9 @@ const items: Item[] = [
 const options: Options<Properties> = {
   items: [items],
   disabled: [true, false],
+  width: [400, 1024],
   orientation: ['horizontal', 'vertical'],
+  adaptivityEnabled: [true, false],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {

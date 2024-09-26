@@ -20808,6 +20808,20 @@ declare module DevExpress.ui {
      */
     provider?: DevExpress.ui.dxMap.MapProvider;
     /**
+     * [descr:dxMapOptions.providerConfig]
+     */
+    providerConfig?: {
+      /**
+       * [descr:dxMapOptions.providerConfig.mapId]
+       */
+      mapId?: string;
+      /**
+       * [descr:dxMapOptions.providerConfig.useAdvancedMarkers]
+       * @deprecated [depNote:dxMapOptions.providerConfig.useAdvancedMarkers]
+       */
+      useAdvancedMarkers?: boolean;
+    };
+    /**
      * [descr:dxMapOptions.routes]
      */
     routes?: Array<{

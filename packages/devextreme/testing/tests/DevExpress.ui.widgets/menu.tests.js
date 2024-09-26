@@ -2970,6 +2970,53 @@ QUnit.module('adaptivity: render', {
         fx.off = false;
     }
 }, () => {
+    QUnit.test('Adds "menubar" role when menu is wider than item', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 1000
+        });
+
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+    });
+
+    QUnit.test('No role added when menu is smaller than item', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 20
+        });
+
+        assert.strictEqual(this.$element.attr('role'), undefined);
+    });
+
+    QUnit.test('Adds "menu bar" role when menu width is increased at runtime', function(assert) {
+        const instance = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 20
+        });
+
+        assert.strictEqual(this.$element.attr('role'), undefined);
+
+        instance.option('width', 1000);
+
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+    });
+
+    QUnit.test('Removes role when menu width is decreased at runtime', function(assert) {
+        const instance = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true,
+            width: 1200
+        });
+        assert.strictEqual(this.$element.attr('role'), 'menubar');
+
+        instance.option('width', 20);
+
+        assert.strictEqual(this.$element.attr('role'), undefined);
+    });
+
     QUnit.test('Hamburger button should be rendered', function(assert) {
         new Menu(this.$element, {
             items: this.items,

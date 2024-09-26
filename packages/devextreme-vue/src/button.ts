@@ -1,5 +1,6 @@
 import Button, { Properties } from "devextreme/ui/button";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -31,7 +32,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxButton extends AccessibleOptions {
   readonly instance?: Button;
 }
-const DxButton = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -95,7 +97,11 @@ const DxButton = createComponent({
     (this as any).$_WidgetClass = Button;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxButton = defineComponent(componentConfig);
 
 export default DxButton;
 export {

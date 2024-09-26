@@ -1,7 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/splitter";
 import Splitter, { Properties } from "devextreme/ui/splitter";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "allowKeyboardNavigation" |
@@ -34,7 +35,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxSplitter extends AccessibleOptions {
   readonly instance?: Splitter;
 }
-const DxSplitter = createComponent({
+
+const componentConfig = {
   props: {
     allowKeyboardNavigation: Boolean,
     dataSource: {},
@@ -103,9 +105,14 @@ const DxSplitter = createComponent({
       item: { isCollectionItem: true, optionName: "items" }
     };
   }
-});
+};
 
-const DxItem = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxSplitter = defineComponent(componentConfig);
+
+
+const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -134,7 +141,12 @@ const DxItem = createConfigurationComponent({
     text: String,
     visible: Boolean
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxItemConfig);
+
+const DxItem = defineComponent(DxItemConfig);
+
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 

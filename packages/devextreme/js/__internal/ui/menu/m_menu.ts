@@ -278,6 +278,11 @@ class Menu extends MenuBase {
     this.setAria('role', 'menubar');
   }
 
+  _setAriaRole(state: boolean): void {
+    const role = this._isAdaptivityEnabled() && state ? undefined : 'menubar';
+    this.setAria({ role });
+  }
+
   _render(): void {
     super._render();
     this._initAdaptivity();
@@ -345,6 +350,8 @@ class Menu extends MenuBase {
       this._treeView && this._treeView.collapseAll();
       this._overlay && this._toggleTreeView(state);
     }
+
+    this._setAriaRole(state);
 
     $menuItemsContainer.toggle(!state);
     $adaptiveElements.toggle(state);
