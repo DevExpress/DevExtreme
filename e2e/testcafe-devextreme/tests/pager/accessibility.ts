@@ -3,6 +3,7 @@ import Pager from 'devextreme-testcafe-models/pager';
 import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
+import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'));
@@ -28,14 +29,15 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pager = new Pager('#container');
-  await t
-    .expect(await takeScreenshot(`pager-dm_${displayMode}-`
+
+  await testScreenshot(t, takeScreenshot, `pager-dm_${displayMode}-`
             + `${infoText ? 'has' : 'has_no'}_it-`
             + `si_${showInfo.toString()}-`
             + `snb_${showNavigationButtons.toString()}-`
             + `spss_${showPageSizeSelector.toString()}`
-            + '.png', pager.element))
-    .ok()
+            + '.png',
+          { element: pager.element });
+  await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 };
