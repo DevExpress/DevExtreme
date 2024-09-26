@@ -13,7 +13,7 @@ fixture.disablePageReloads`Column Fixing`.page(
 
 [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach(
   (theme) => {
-    test('Sticky columns: add icons for context menu', async (t) => {
+    test('Fixed columns: add icons for context menu', async (t) => {
       const dataGrid = new DataGrid('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await t
