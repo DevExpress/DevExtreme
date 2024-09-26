@@ -658,7 +658,7 @@ export type ColumnFixingTexts = {
    */
   unfix?: string;
   /**
-   * @docid GridBaseOptions.columnFixing.texts.unfix
+   * @docid GridBaseOptions.columnFixing.texts.stickPosition
    * @default "Stick in place"
    */
   stickyPosition?: string;

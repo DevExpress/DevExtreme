@@ -867,12 +867,14 @@ const DxColumnFixingTextsConfig = {
     "update:fix": null,
     "update:leftPosition": null,
     "update:rightPosition": null,
+    "update:stickPosition": null,
     "update:unfix": null,
   },
   props: {
     fix: String,
     leftPosition: String,
     rightPosition: String,
+    stickPosition: String,
     unfix: String
   }
 };
@@ -2785,6 +2787,7 @@ const DxTextsConfig = {
     "update:rightPosition": null,
     "update:saveAllChanges": null,
     "update:saveRowChanges": null,
+    "update:stickPosition": null,
     "update:undeleteRow": null,
     "update:unfix": null,
     "update:validationCancelChanges": null,
@@ -2809,6 +2812,7 @@ const DxTextsConfig = {
     rightPosition: String,
     saveAllChanges: String,
     saveRowChanges: String,
+    stickPosition: String,
     undeleteRow: String,
     unfix: String,
     validationCancelChanges: String

@@ -3025,7 +3025,7 @@ declare module DevExpress.common.grids {
      */
     unfix?: string;
     /**
-     * [descr:GridBaseOptions.columnFixing.texts.unfix]
+     * [descr:GridBaseOptions.columnFixing.texts.stickPosition]
      */
     stickyPosition?: string;
   };
