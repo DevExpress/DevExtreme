@@ -479,15 +479,15 @@ QUnit.module('Aria accessibility', {
                     expectedAriaLabel: `Calendar. The selected dates: ${getFormattedDate(1726938544957)}`,
                 },
                 {
-                    value: [ 1726938544957, 1726852144957, 1726765744957 ],
-                    expectedAriaLabel: `Calendar. The selected dates: from ${getFormattedDate(1726765744957)} to ${getFormattedDate(1726938544957)}`,
+                    value: [ '2024-09-21T17:09:04', '2024-09-20T17:09:04', '2024-09-19T17:09:04' ],
+                    expectedAriaLabel: `Calendar. The selected dates: from ${getFormattedDate('2024-09-19T17:09:04')} to ${getFormattedDate('2024-09-21T17:09:04')}`,
                 },
                 {
-                    value: [ 1726938544957, 1726852144957, 1726765744957, 1727111344957, 1727197744957 ],
-                    expectedAriaLabel: `Calendar. The selected dates: from ${getFormattedDate(1726765744957)} to ${getFormattedDate(1726938544957)}, from ${getFormattedDate(1727111344957)} to ${getFormattedDate(1727197744957)}`,
+                    value: [ '2024-09-21T17:09:04', '2024-09-20T17:09:04', '2024-09-19T17:09:04', '2024-09-23T17:09:04', '2024-09-24T17:09:04', ],
+                    expectedAriaLabel: `Calendar. The selected dates: from ${getFormattedDate('2024-09-19T17:09:04')} to ${getFormattedDate('2024-09-21T17:09:04')}, from ${getFormattedDate('2024-09-23T17:09:04')} to ${getFormattedDate('2024-09-24T17:09:04')}`,
                 },
                 {
-                    value: [ 1726938544957, 1726852144957, 1726765744957, 1727111344957, 1727197744957, 1727434511000 ],
+                    value: [ '2024-09-21T17:09:04', '2024-09-20T17:09:04', '2024-09-19T17:09:04', '2024-09-23T17:09:04', '2024-09-24T17:09:04', '2024-09-27T10:55:11' ],
                     expectedAriaLabel: 'Calendar. There are 3 selected date ranges',
                 },
             ].forEach(({ value, expectedAriaLabel }) => {
