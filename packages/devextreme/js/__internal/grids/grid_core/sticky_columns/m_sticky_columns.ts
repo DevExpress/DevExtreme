@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { setWidth } from '@js/core/utils/size';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type {
@@ -306,7 +307,8 @@ const rowsView = (
   }
 
   private _updateMasterDetailWidths() {
-    this._$element?.find('.dx-master-detail-cell')?.width?.(
+    setWidth(
+      this._$element?.find('.dx-master-detail-cell'),
       this._getMasterDetailWidth(),
     );
   }
