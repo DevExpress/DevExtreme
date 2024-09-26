@@ -268,20 +268,40 @@ const columnHeadersView = (
 const rowsView = (
   Base: ModuleType<RowsView>,
 ) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
+  private _getMasterDetailWidth(): number {
+    // @ts-expect-error
+    const componentWidth = this.component.$element().width();
+    return componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element);
+  }
+
   protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
     // @ts-expect-error
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
     if (this._isStickyColumns()) {
-      // @ts-expect-error
-      const componentWidth = this.component.$element().width();
       $detailCell
         .addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft))
         // @ts-expect-error
-        .width(componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element));
+        .width(this._getMasterDetailWidth());
     }
 
     return $detailCell;
+  }
+
+  private _updateMasterDetailWidths() {
+    this._$element.find('.dx-master-detail-cell').width(
+      this._getMasterDetailWidth(),
+    );
+  }
+
+  protected _resizeCore() {
+    const isStickyColumns = this._isStickyColumns();
+
+    super._resizeCore.apply(this, arguments as any);
+
+    if (isStickyColumns) {
+      this._updateMasterDetailWidths();
+    }
   }
 
   protected _renderCellContent($cell, options, renderOptions) {
