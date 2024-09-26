@@ -335,7 +335,7 @@ function initDxComponent() {
 
       this.$_createWidget(this.$el);
       thisComponent.$_instance.endUpdate();
-      thisComponent.$_instance._beforeInit?.();
+      // thisComponent.$_instance._afterCreate?.();
       restoreNodes(this.$el, nodes);
 
       if (this.$slots && this.$slots.default) {

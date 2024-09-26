@@ -33,15 +33,13 @@ export default CollectionWidget.inherit({
         e.storeLoadOptions.skip += this._correctionIndex;
       }
     };
-
-    this._beforeInit();
   },
 
   reload() {
     this._correctionIndex = 0;
   },
 
-  _beforeInit() {
+  _afterCreate() {
     this._dataController?.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions);
   },
 
@@ -49,6 +47,7 @@ export default CollectionWidget.inherit({
     this.callBase();
     this._refreshItemsCache();
     this._correctionIndex = 0;
+    this._afterCreate();
   },
 
   _findItemElementByKey(key) {
