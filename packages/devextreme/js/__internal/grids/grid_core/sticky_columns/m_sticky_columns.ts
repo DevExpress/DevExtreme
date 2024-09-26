@@ -287,7 +287,7 @@ const rowsView = (
 ) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
   private _getMasterDetailWidth(): number {
     // @ts-expect-error
-    const componentWidth = this.component.$element().width();
+    const componentWidth = this.component.$element().width?.() ?? 0;
     return componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element);
   }
 
@@ -306,7 +306,7 @@ const rowsView = (
   }
 
   private _updateMasterDetailWidths() {
-    this._$element.find('.dx-master-detail-cell').width(
+    this._$element?.find('.dx-master-detail-cell')?.width?.(
       this._getMasterDetailWidth(),
     );
   }
