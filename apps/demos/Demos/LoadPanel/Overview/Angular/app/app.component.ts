@@ -26,7 +26,7 @@ if (window && window.config.packageConfigPaths) {
 export class AppComponent {
   employee: Employee;
 
-  employeeInfo: Employee | {} = {};
+  employeeInfo: Employee | null = null;
 
   loadingVisible = false;
 
@@ -45,7 +45,7 @@ export class AppComponent {
   }
 
   showLoadPanel() {
-    this.employeeInfo = {};
+    this.employeeInfo = null;
     this.loadingVisible = true;
   }
 }
