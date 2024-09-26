@@ -689,6 +689,45 @@ const getMachineTimezoneName = () => {
         : null;
 };
 
+const getRangesByDates = (dates) => {
+    const datesInMilliseconds = dates.map((value) => {
+        const date = new Date(new Date(value).setHours(0, 0, 0, 0)).getTime();
+
+        return date;
+    });
+
+    const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
+
+    const getRange = (date, dates, index) => {
+        const range = date === dates[index - 1]
+            ? [date]
+            : [date, dates[index - 1]];
+
+        return range.map((value) => new Date(value));
+    };
+
+    const msInDay = toMilliseconds('day');
+    const ranges = [];
+
+    let startDate = sortedDates[0];
+
+    for(let i = 1; i <= sortedDates.length; ++i) {
+        const currentDate = sortedDates[i];
+        const previousDate = sortedDates[i - 1];
+        const isNewRange = currentDate - previousDate > msInDay;
+
+        if(isNewRange || i === sortedDates.length) {
+            const range = getRange(startDate, sortedDates, i);
+
+            ranges.push(range);
+
+            startDate = currentDate;
+        }
+    }
+
+    return ranges;
+};
+
 const dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
@@ -752,6 +791,8 @@ const dateUtils = {
     createDateWithFullYear: createDateWithFullYear,
 
     getMachineTimezoneName: getMachineTimezoneName,
+
+    getRangesByDates: getRangesByDates,
 };
 
 dateUtils.sameView = function(view, date1, date2) {

@@ -147,24 +147,27 @@ const BaseView = (Widget as any).inherit({
   },
 
   _getMultipleRangesText() {
-    const { ranges } = this.option();
+    const { value } = this.option();
+    const ranges = coreDateUtils.getRangesByDates(value);
 
     if (ranges.length > 2) {
       // @ts-expect-error
       const dateRangeCountText = messageLocalization.format('dxCalendar-selectedDateRangeCount', ranges.length);
 
-      return `${dateRangeCountText}`;
+      return dateRangeCountText;
     }
 
     const selectedDatesText = messageLocalization.format('dxCalendar-selectedDates');
-    const rangesText = ranges.map((range) => this._getMultipleRangeText(range)).join(', ');
+    const rangesText = ranges
+      .map((range) => this._getRangeText(range))
+      .join(', ');
 
     const result = `${selectedDatesText}: ${rangesText}`;
 
     return result;
   },
 
-  _getMultipleRangeText(range) {
+  _getRangeText(range) {
     const [startDate, endDate] = range;
 
     const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
