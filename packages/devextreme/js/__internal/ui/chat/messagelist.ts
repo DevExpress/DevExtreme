@@ -26,7 +26,7 @@ const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 
-const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
+export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
