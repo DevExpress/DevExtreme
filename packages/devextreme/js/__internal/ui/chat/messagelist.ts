@@ -26,6 +26,8 @@ const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 
+const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
+
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
@@ -186,10 +188,14 @@ class MessageList extends Widget<Properties> {
 
     items.forEach((item, index) => {
       const newMessageGroupItem = item ?? {};
-
       const id = newMessageGroupItem.author?.id;
 
-      if (id === currentMessageGroupUserId) {
+      const isTimeoutExpired = this._isTimeoutExpired(
+        currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
+        item,
+      );
+
+      if (id === currentMessageGroupUserId && !isTimeoutExpired) {
         currentMessageGroupItems.push(newMessageGroupItem);
       } else {
         this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
@@ -211,9 +217,12 @@ class MessageList extends Widget<Properties> {
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
 
     if (lastMessageGroup) {
-      const lastMessageGroupUserId = lastMessageGroup.option('items')[0].author?.id;
+      const lastMessageGroupItem = lastMessageGroup.option('items')[0];
+      const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
 
-      if (sender?.id === lastMessageGroupUserId) {
+      const isTimeoutExpired = this._isTimeoutExpired(lastMessageGroupItem, message);
+
+      if (sender?.id === lastMessageGroupUserId && !isTimeoutExpired) {
         lastMessageGroup.renderMessage(message);
         this._scrollContentToLastMessage();
 
@@ -282,6 +291,20 @@ class MessageList extends Widget<Properties> {
 
       this._renderMessage(newMessage ?? {});
     }
+  }
+
+  _isTimeoutExpired(lastMessage: Message, currentMessage: Message): boolean {
+    const lastTimestamp = lastMessage.timestamp;
+    const currentTimestamp = currentMessage.timestamp;
+
+    if (!lastTimestamp || !currentTimestamp) {
+      return false;
+    }
+
+    const convertedLastTimestamp = new Date(lastTimestamp).getTime();
+    const convertedCurrentTimestamp = new Date(currentTimestamp).getTime();
+
+    return convertedCurrentTimestamp - convertedLastTimestamp > MESSAGEGROUP_TIMEOUT;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

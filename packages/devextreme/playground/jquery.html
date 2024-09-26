@@ -52,9 +52,38 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
+
+                const user = {
+                    id: 1,
+                    name: 'User 1',
+                }
+
+                $("#button").dxChat({
+                    height: 500,
+                    user,
+                    items: [
+                        {
+                            timestamp: new Date().getTime() - MESSAGEGROUP_TIMEOUT - 2000,
+                            author: user,
+                            text: 't',
+                        },
+                        {
+                            timestamp: new Date().getTime() - MESSAGEGROUP_TIMEOUT - 1000,
+                            author: user,
+                            text: 't',
+                        },
+                        {
+                            timestamp: new Date().getTime() - MESSAGEGROUP_TIMEOUT - 500,
+                            author: user,
+                            text: 't',
+                        },
+                        {
+                            timestamp: new Date().getTime() + MESSAGEGROUP_TIMEOUT ,
+                            author: user,
+                            text: 'NEXT MG',
+                        },
+                    ],
                 });
             });
         </script>
