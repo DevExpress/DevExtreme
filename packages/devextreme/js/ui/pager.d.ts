@@ -9,6 +9,7 @@ import {
  * @namespace DevExpress.ui
  * @public
  * @docid
+ * @inherits BasePagerOptions
  */
 export interface dxPagerOptions extends BasePagerOptions, WidgetOptions<dxPager> {
     /**
@@ -43,6 +44,7 @@ export interface dxPagerOptions extends BasePagerOptions, WidgetOptions<dxPager>
  * @namespace DevExpress.ui
  * @public
  * @inherits Widget
+ * @options dxPagerOptions
  */
 export default class dxPager extends Widget<Properties> {
     /**
