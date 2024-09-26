@@ -817,3 +817,12 @@ declare module DevExpress.ui.dxDiagram {
     /** @deprecated Use DevExpress.ui.dxDiagram.Units instead */
     export type DiagramUnits = DevExpress.ui.dxDiagram.Units;
 }
+
+// 24.2
+
+declare module DevExpress.common.grids {
+  /** @deprecated Use DevExpress.common.PagerDisplayMode instead */
+  export type PagerDisplayMode = DevExpress.common.PagerDisplayMode;
+  /** @deprecated Use DevExpress.common.PagerPageSize instead */
+  export type PagerPageSize = DevExpress.common.PagerPageSize;
+}
