@@ -4,10 +4,12 @@ import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
 import MessageBox from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
+import { DataSource } from 'data/data_source/data_source';
 
 import { isRenderer } from 'core/utils/type';
 
 import config from 'core/config';
+import ArrayStore from 'data/array_store';
 
 const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
@@ -16,6 +18,7 @@ const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
+const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -394,6 +397,155 @@ QUnit.module('Chat', moduleConfig, () => {
             const activeElement = root.shadowRoot ? root.shadowRoot.activeElement : document.activeElement;
 
             assert.strictEqual(activeElement, this.$input.get(0));
+        });
+
+        QUnit.test('getDataSource() should return null when dataSource is not defined', function(assert) {
+            this.reinit({
+                items: []
+            });
+
+            assert.strictEqual(this.instance.getDataSource(), null);
+        });
+
+        QUnit.test('getDataSource() should return the dataSource object when dataSource is passed', function(assert) {
+            this.reinit({
+                dataSource: [{ text: 'message_text' }]
+            });
+
+            assert.ok(this.instance.getDataSource() instanceof DataSource);
+        });
+    });
+
+    QUnit.module('Data Layer Integration', moduleConfig, () => {
+        QUnit.test('Should render empty view container if dataSource is empty', function(assert) {
+            this.reinit({
+                dataSource: {
+                    store: new ArrayStore([])
+                }
+            });
+
+            assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).length, 1);
+        });
+
+        QUnit.test('Should remove or render empty view container after dataSource is updated at runtime', function(assert) {
+            this.instance.option('dataSource', {
+                store: new ArrayStore([{}]),
+            });
+
+            assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).length, 0);
+
+            this.instance.option('dataSource', {
+                store: new ArrayStore([])
+            });
+
+            assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).length, 1);
+        });
+
+        QUnit.test('Items should synchronize with dataSource when declared as an array', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            this.reinit({
+                dataSource: messages,
+            });
+
+            assert.deepEqual(this.instance.option('items'), messages);
+        });
+
+        QUnit.test('items option should be updated after calling renderMessage(newMessage)', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            this.reinit({
+                items: messages,
+            });
+
+            const newMessage = { text: 'message_3' };
+            this.instance.renderMessage(newMessage);
+
+            const expectedData = [...messages, newMessage];
+            assert.deepEqual(this.instance.option('items'), expectedData, 'items option should contain all messages including the new one');
+            assert.deepEqual(this.instance.option('dataSource'), null, 'dataSource option should remain null');
+        });
+
+        QUnit.test('dataSource option should be updated after calling renderMessage(newMessage)', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            this.reinit({
+                dataSource: [...messages],
+            });
+
+            const newMessage = { text: 'message_3' };
+            this.instance.renderMessage(newMessage);
+
+            const expectedData = [...messages, newMessage];
+            assert.deepEqual(this.instance.option('items'), expectedData, 'items option should contain all messages including the new one');
+            assert.deepEqual(this.instance.option('dataSource'), expectedData, 'dataSource option should contain all messages including the new one');
+        });
+
+        QUnit.test('Items should synchronize with DataSource store', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+
+            this.reinit({
+                dataSource: new DataSource({
+                    store: new ArrayStore({
+                        data: messages,
+                    }),
+                })
+            });
+
+            assert.deepEqual(this.instance.option('items'), messages);
+        });
+
+        QUnit.test('Items should synchronize with DataSource store after adding new message', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+
+            this.reinit({
+                dataSource: new DataSource({
+                    store: new ArrayStore({
+                        data: [...messages],
+                    }),
+                })
+            });
+
+            const newMessage = { text: 'message_3' };
+            this.instance.renderMessage(newMessage);
+
+            const expectedData = [...messages, newMessage];
+
+            assert.deepEqual(this.instance.option('items'), expectedData);
+        });
+
+        QUnit.test('Items should synchronize with dataSource when declared as a store', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            this.reinit({
+                dataSource: new ArrayStore(messages),
+            });
+
+            assert.deepEqual(this.instance.option('items'), messages);
+        });
+
+        QUnit.test('DataSource pagination is false by default', function(assert) {
+            this.instance.option('dataSource', {
+                store: new ArrayStore([{}]),
+            });
+
+            assert.strictEqual(this.instance.getDataSource().paginate(), false);
+        });
+
+        QUnit.test('should handle dataSource loading error', function(assert) {
+            const deferred = $.Deferred();
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            this.reinit({
+                dataSource: messages
+            });
+
+            this.instance.option({
+                dataSource: {
+                    load() {
+                        return deferred.promise();
+                    }
+                },
+            });
+
+            deferred.reject();
+
+            assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).length, 1, 'empty view container was rendered on loading failure');
         });
     });
 });

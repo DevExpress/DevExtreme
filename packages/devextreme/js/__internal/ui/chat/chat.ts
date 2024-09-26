@@ -2,6 +2,10 @@ import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
+import type { Options as DataSourceOptions } from '@js/data/data_source';
+import { DataSource } from '@js/data/data_source/data_source';
+import DataHelperMixin from '@js/data_helper';
 import type { Message, MessageSendEvent, Properties as ChatProperties } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -45,7 +49,25 @@ class Chat extends Widget<Properties> {
   _init(): void {
     super._init();
 
+    // @ts-expect-error
+    this._initDataController();
+
+    // @ts-expect-error
+    this._refreshDataSource();
+
     this._createMessageSendAction();
+  }
+
+  _dataSourceLoadErrorHandler(): void {
+    this.option('items', []);
+  }
+
+  _dataSourceChangedHandler(newItems: Message[]): void {
+    this.option('items', newItems.slice());
+  }
+
+  _dataSourceOptions(): DataSourceOptions {
+    return { paginate: false };
   }
 
   _initMarkup(): void {
@@ -171,8 +193,11 @@ class Chat extends Widget<Properties> {
         break;
       }
       case 'items':
-      case 'dataSource':
         this._messageList.option(name, value);
+        break;
+      case 'dataSource':
+        // @ts-expect-error
+        this._refreshDataSource();
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -183,13 +208,25 @@ class Chat extends Widget<Properties> {
   }
 
   renderMessage(message: Message = {}): void {
-    const { items } = this.option();
+    // @ts-expect-error
+    const dataSource = this.getDataSource();
 
-    const newItems = [...items ?? [], message];
+    if (!isDefined(dataSource)) {
+      const { items } = this.option();
 
-    this.option('items', newItems);
+      const newItems = [...items ?? [], message];
+      this.option('items', newItems);
+      return;
+    }
+
+    dataSource.store().insert(message).done(() => {
+      dataSource.load();
+    });
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(Chat as any).include(DataHelperMixin);
 
 registerComponent('dxChat', Chat);
 
