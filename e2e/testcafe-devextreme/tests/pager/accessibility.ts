@@ -30,13 +30,17 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pager = new Pager('#container');
 
-  await testScreenshot(t, takeScreenshot, `pager-dm_${displayMode}-`
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    `pager-dm_${displayMode}-`
             + `${infoText ? 'has' : 'has_no'}_it-`
             + `si_${showInfo.toString()}-`
             + `snb_${showNavigationButtons.toString()}-`
             + `spss_${showPageSizeSelector.toString()}`
             + '.png',
-          { element: pager.element });
+    { element: pager.element },
+  );
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
