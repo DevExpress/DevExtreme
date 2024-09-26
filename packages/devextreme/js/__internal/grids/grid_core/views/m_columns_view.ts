@@ -52,6 +52,7 @@ const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
+const GROUP_ROW_CONTAINER = 'group-row-container';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
 
@@ -1195,19 +1196,38 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIndex;
   }
 
-  private setCellPropertiesCore(styleProps: CSSStyleDeclaration, $row, visibleCellIndex) {
-    const $cell = $row.hasClass(GROUP_ROW_CLASS)
-      ? $row.find(`td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`)
+  private setCellPropertiesCore(
+    styleProps: CSSStyleDeclaration,
+    $row: dxElementWrapper,
+    visibleCellIndex: number,
+    includeGroupCell: boolean,
+  ) {
+    const groupSelector = includeGroupCell
+      ? `td[aria-colindex='${visibleCellIndex + 1}']`
+      : `td[aria-colindex='${visibleCellIndex + 1}']:not(.${GROUP_CELL_CLASS})`;
+
+    let $cell = $row.hasClass(GROUP_ROW_CLASS)
+      ? $row.find(groupSelector)
       : $row.find('td').eq(visibleCellIndex);
 
-    if ($cell.length) {
-      const cell = $cell.get(0) as HTMLElement;
+    if ($cell.is(`.${GROUP_CELL_CLASS}`)) {
+      // @ts-expect-error
+      $cell = $cell.add($cell.find(`.${this.addWidgetPrefix(GROUP_ROW_CONTAINER)}`));
+    }
+
+    for (let i = 0; i < $cell.length; i += 1) {
+      const cell = $cell.get(i) as HTMLElement;
 
       Object.assign(cell.style, styleProps);
     }
   }
 
-  protected setCellProperties(styleProps: CSSStyleDeclaration, columnIndex: number, rowIndex?: number) {
+  protected setCellProperties(
+    styleProps: CSSStyleDeclaration,
+    columnIndex: number,
+    rowIndex?: number,
+    includeGroupCell = false,
+  ) {
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length) {
@@ -1217,13 +1237,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $rows = $tableElement.children().children('.dx-row').not(`.${DETAIL_ROW_CLASS}`);
 
     if (isDefined(rowIndex)) {
-      this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex);
+      this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), columnIndex, includeGroupCell);
     } else {
       for (let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
         const visibleIndex = this.getVisibleColumnIndex(columnIndex, rowIndex);
 
         if (visibleIndex >= 0) {
-          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex);
+          this.setCellPropertiesCore(styleProps, $rows.eq(rowIndex), visibleIndex, includeGroupCell);
         }
       }
     }

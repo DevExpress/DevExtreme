@@ -8,10 +8,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
-import {
-  getHeight,
-  getInnerWidth, getOuterWidth, getWidth,
-} from '@js/core/utils/size';
+import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
@@ -508,9 +505,7 @@ export class ResizingController extends modules.ViewController {
           resultWidths[lastColumnIndex] = 'auto';
           isColumnWidthsCorrected = true;
           if (hasWidth === false && !hasPercentWidth) {
-            const borderWidth = that.option('showBorders')
-              ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
-              : 0;
+            const borderWidth = gridCoreUtils.getComponentBorderWidth(this, $rowsViewElement);
 
             that._maxWidth = totalWidth + scrollbarWidth + borderWidth;
             // @ts-expect-error

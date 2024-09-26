@@ -954,6 +954,12 @@
       &:focus {
         outline: 0;
       }
+
+      &.dx-#{$widget-name}-sticky-column-left  {
+        display: inline-block;
+        overflow: hidden;
+        left: 0;
+      }
     }
 
     .dx-data-row.dx-edit-row {
@@ -994,9 +1000,9 @@
   .dx-#{$widget-name}-total-footer {
     position: relative;
 
-    & > .dx-#{$widget-name}-content {
-      padding-top: $grid-total-footer-paddings;
-      padding-bottom: $grid-total-footer-paddings;
+    & > .dx-#{$widget-name}-content .dx-row > td {
+      padding-top: $grid-total-footer-paddings * 2;
+      padding-bottom: $grid-total-footer-paddings * 2;
     }
   }
 
