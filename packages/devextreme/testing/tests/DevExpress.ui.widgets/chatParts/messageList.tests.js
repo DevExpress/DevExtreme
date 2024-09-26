@@ -373,7 +373,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 const scrollable = this.getScrollable();
                 return $(scrollable.content()).height() - $(scrollable.container()).height();
             };
-            this._resizeTimeout = 10;
+            this._resizeTimeout = 40;
         },
     }, () => {
         QUnit.test('should be initialized with correct options', function(assert) {
