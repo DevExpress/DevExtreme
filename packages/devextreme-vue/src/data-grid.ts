@@ -2179,7 +2179,8 @@ const DxHide = defineComponent(DxHideConfig);
   from: { isCollectionItem: false, optionName: "from" },
   to: { isCollectionItem: false, optionName: "to" }
 };
-const DxIcons = createConfigurationComponent({
+
+const DxIconsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -2196,10 +2197,13 @@ const DxIcons = createConfigurationComponent({
     stickyPosition: String,
     unfix: String
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxIconsConfig);
+
+const DxIcons = defineComponent(DxIconsConfig);
+
 (DxIcons as any).$_optionName = "icons";
-const DxItem = createConfigurationComponent({
-=======
 
 const DxItemConfig = {
   emits: {
