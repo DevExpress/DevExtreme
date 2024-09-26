@@ -68,8 +68,8 @@
   .dx-row.dx-group-row {
     .dx-group-cell {
       &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 0;
+        padding-right: 0;
         overflow: initial;
         overflow-x: clip;
         background-color: transparent;
