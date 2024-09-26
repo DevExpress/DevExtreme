@@ -136,14 +136,6 @@ test('Form labels should have correct width after render in invisible container'
 
     await t.click(dateRangeBox.dropDownButton);
 
-    await testScreenshot(t, takeScreenshot, `TEST TEST TEST ${validationMessagePosition}.png`, {
-      element: 'body',
-      shouldTestInCompact: true,
-      compactCallBack: async () => {
-        await form.validate();
-      },
-    });
-
     await testScreenshot(t, takeScreenshot, `The validation message overlay position ${validationMessagePosition} for DateRangeBox after opening.png`, {
       element: '#container',
       shouldTestInCompact: true,
