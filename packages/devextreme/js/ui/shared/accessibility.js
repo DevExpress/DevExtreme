@@ -57,7 +57,7 @@ function processKeyDown(viewName, instance, event, action, $mainElement, execute
 
 export function saveFocusedElementInfo(target, instance) {
     const $target = $(target);
-    const ariaLabel = $target.attr('aria-label')?.replace(/"/g, '\\"');
+    const ariaLabel = $target.attr('aria-label');
     const $activeElements = getActiveAccessibleElements(ariaLabel, instance.element());
     const targetIndex = $activeElements.index($target);
 
@@ -71,7 +71,8 @@ function getActiveAccessibleElements(ariaLabel, viewElement) {
     let $activeElements;
 
     if(ariaLabel) {
-        $activeElements = $viewElement.find(`[aria-label="${ariaLabel}"][tabindex]`);
+        const escapedAriaLabel = ariaLabel?.replace(/"/g, '\\"');
+        $activeElements = $viewElement.find(`[aria-label="${escapedAriaLabel}"][tabindex]`);
     } else {
         $activeElements = $viewElement.find('[tabindex]');
     }
@@ -158,7 +159,8 @@ export function restoreFocus(instance) {
     if(!instance.option('useLegacyKeyboardNavigation') && focusedElementInfo) {
         const viewInstance = focusedElementInfo.viewInstance;
         if(viewInstance) {
-            const $activeElements = getActiveAccessibleElements(focusedElementInfo.ariaLabel, viewInstance.element());
+            const escapedAriaLabel = focusedElementInfo.ariaLabel?.replace(/"/g, '\\"');
+            const $activeElements = getActiveAccessibleElements(escapedAriaLabel, viewInstance.element());
             const $targetElement = $activeElements.eq(focusedElementInfo.index);
 
             focusedElementInfo = null;
