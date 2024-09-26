@@ -158,9 +158,9 @@ function setShadowDom(args) {
 function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome --headless=new --disable-gpu --window-size=1200,800';
+            return 'chrome --headless --disable-gpu --window-size=1200,800';
         case 'chrome:docker':
-            return 'chromium --headless=new --no-sandbox --disable-gpu --window-size=1200,800';
+            return 'chromium --headless --no-sandbox --disable-gpu --window-size=1200,800';
     }
 
     return browser;
