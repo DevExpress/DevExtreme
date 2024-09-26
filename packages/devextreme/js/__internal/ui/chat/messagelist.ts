@@ -1,4 +1,3 @@
-import { cancelAnimationFrame, requestAnimationFrame } from '@js/animation/frame';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -37,7 +36,7 @@ class MessageList extends Widget<Properties> {
 
   private _containerClientHeight = 0;
 
-  private _shouldSkipContainerResize?: boolean;
+  private _suppressResizeHandling?: boolean;
 
   private _scrollable!: Scrollable<unknown>;
 
@@ -66,7 +65,7 @@ class MessageList extends Widget<Properties> {
 
     this._attachResizeObserverSubscription();
 
-    this._shouldSkipContainerResize = true;
+    this._suppressResizeHandling = true;
   }
 
   _attachResizeObserverSubscription(): void {
@@ -83,16 +82,16 @@ class MessageList extends Widget<Properties> {
   }
 
   _resizeHandler({ contentRect, target }: ResizeObserverEntry): void {
-    if (this._shouldSkipContainerResize
+    const newHeight = contentRect.height;
+
+    if (this._suppressResizeHandling
       && this._isAttached(target)
       && isElementVisible(target as HTMLElement)
     ) {
       this._scrollContentToLastMessage();
-      this._containerClientHeight = target.clientHeight;
 
-      this._shouldSkipContainerResize = false;
+      this._suppressResizeHandling = false;
     } else {
-      const newHeight = contentRect.height;
       const heightChange = this._containerClientHeight - newHeight;
 
       let { scrollTop } = target;
@@ -102,9 +101,9 @@ class MessageList extends Widget<Properties> {
       }
 
       this._scrollable.scrollTo({ top: scrollTop });
-
-      this._containerClientHeight = newHeight;
     }
+
+    this._containerClientHeight = newHeight;
   }
 
   _renderEmptyViewContent(): void {
