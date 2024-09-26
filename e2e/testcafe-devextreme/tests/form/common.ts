@@ -116,7 +116,7 @@ test('Form labels should have correct width after render in invisible container'
 ['auto', 'bottom', 'left', 'right', 'top'].forEach((validationMessagePosition) => {
   test(`The validation message overlay for DateRangeBox with position ${validationMessagePosition} should be correctly positioned both before and after opening`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    await t.resizeWindow(900, 800);
+    await t.maximizeWindow();
     const form = new Form('#form');
     const dateRangeBox = new DateRangeBox(`.${DATERANGEBOX_CLASS}`);
 
