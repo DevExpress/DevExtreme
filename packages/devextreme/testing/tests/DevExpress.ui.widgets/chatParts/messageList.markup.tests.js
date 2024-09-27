@@ -51,6 +51,13 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).length, 1);
         });
 
+        QUnit.test('container should be have id attribute', function(assert) {
+            const id = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).attr('id');
+
+            assert.strictEqual(id !== undefined, true);
+            assert.strictEqual(id !== '', true);
+        });
+
         QUnit.test('container should not be rendered if there are messages', function(assert) {
             this.reinit({
                 items: [{}]
