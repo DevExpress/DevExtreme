@@ -2,13 +2,14 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const SCHEDULER_SELECTOR = '#container';
 
 fixture.disablePageReloads`Month view vertical grouping `
   .page(url(__dirname, '../../container.html'));
 
-test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {
+safeSizeTest('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appointment in the month view (T1122185)', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -20,7 +21,7 @@ test('Scrolling: usual. Shouldn\'t overlap the next group with long all-day appo
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [1200, 800]).before(async () => {
   await createWidget(
     'dxScheduler',
     {
