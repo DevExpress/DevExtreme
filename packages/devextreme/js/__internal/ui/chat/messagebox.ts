@@ -152,7 +152,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _updateAria(value: string | null): void {
     $(this._textArea.$element())
       .find(`.${TEXTEDITOR_INPUT_CLASS}`)
-      .attr('aria-describedby', value);
+      .attr('aria-labelledby', value);
   }
 
   _isValuableTextEntered(): boolean {

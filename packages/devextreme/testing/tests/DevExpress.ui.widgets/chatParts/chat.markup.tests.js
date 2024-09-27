@@ -102,11 +102,11 @@ QUnit.module('Chat', moduleConfig, () => {
             },
         ].forEach(({ attribute, expectedValue }) => {
             QUnit.test(`root element should have correct ${attribute}`, function(assert) {
-                assert.strictEqual(this.$element.attr(attribute), expectedValue);
+                assert.strictEqual(this.$element.attr(attribute), expectedValue, `${attribute} is correct`);
             });
         });
 
-        QUnit.test('textarea should not have aria-describedby attribute if there are items', function(assert) {
+        QUnit.test('textarea should not have aria-labelledby attribute if there are items', function(assert) {
             this.reinit({
                 items: [
                     { text: '1' },
@@ -116,17 +116,17 @@ QUnit.module('Chat', moduleConfig, () => {
 
             const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-            assert.strictEqual($textArea.attr('aria-describedby'), undefined);
+            assert.strictEqual($textArea.attr('aria-labelledby'), undefined);
         });
 
-        QUnit.test('textarea should have correct aria-describedby attribute if there are not items', function(assert) {
+        QUnit.test('textarea should have correct aria-labelledby attribute if there are not items', function(assert) {
             const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const $emptyView = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
 
-            assert.strictEqual($textArea.attr('aria-describedby'), $emptyView.attr('id'));
+            assert.strictEqual($textArea.attr('aria-labelledby'), $emptyView.attr('id'));
         });
 
-        QUnit.test('textarea should get rid of aria-describedby attribute if items has been added in runtime', function(assert) {
+        QUnit.test('textarea should get rid of aria-labelledby attribute if items has been added in runtime', function(assert) {
             this.instance.option({
                 items: [
                     { text: '1' },
@@ -136,10 +136,10 @@ QUnit.module('Chat', moduleConfig, () => {
 
             const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-            assert.strictEqual($textArea.attr('aria-describedby'), undefined);
+            assert.strictEqual($textArea.attr('aria-labelledby'), undefined);
         });
 
-        QUnit.test('textarea should get aria-describedby attribute if items has been removed in runtime', function(assert) {
+        QUnit.test('textarea should get aria-labelledby attribute if items has been removed in runtime', function(assert) {
             this.reinit({
                 items: [
                     { text: '1' },
@@ -152,7 +152,7 @@ QUnit.module('Chat', moduleConfig, () => {
             const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const $emptyView = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
 
-            assert.strictEqual($textArea.attr('aria-describedby'), $emptyView.attr('id'));
+            assert.strictEqual($textArea.attr('aria-labelledby'), $emptyView.attr('id'));
         });
     });
 });

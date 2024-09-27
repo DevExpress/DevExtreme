@@ -60,6 +60,7 @@ class MessageList extends Widget<Properties> {
 
     this._renderScrollable();
     this._renderMessageListContent();
+    this._updateAria();
   }
 
   _renderContentImpl(): void {
@@ -244,12 +245,6 @@ class MessageList extends Widget<Properties> {
     return $(this._scrollable.element()).find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
   }
 
-  _clean(): void {
-    this._messageGroups = [];
-
-    super._clean();
-  }
-
   _isMessageAddedToEnd(value: Message[], previousValue: Message[]): boolean {
     const valueLength = value.length;
     const previousValueLength = previousValue.length;
@@ -301,6 +296,24 @@ class MessageList extends Widget<Properties> {
     const result = newMessageTimestampInMs - lastMessageTimestampInMs > MESSAGEGROUP_TIMEOUT;
 
     return result;
+  }
+
+  _updateAria(): void {
+    const aria = {
+      role: 'log',
+      atomic: 'false',
+      label: 'Message list',
+      live: 'polite',
+      relevant: 'additions',
+    };
+
+    this.setAria(aria);
+  }
+
+  _clean(): void {
+    this._messageGroups = [];
+
+    super._clean();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

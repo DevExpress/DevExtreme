@@ -51,13 +51,6 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).length, 1);
         });
 
-        QUnit.test('container should be have id attribute', function(assert) {
-            const id = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).attr('id');
-
-            assert.strictEqual(id !== undefined, true);
-            assert.strictEqual(id !== '', true);
-        });
-
         QUnit.test('container should not be rendered if there are messages', function(assert) {
             this.reinit({
                 items: [{}]
@@ -92,6 +85,42 @@ QUnit.module('MessageList', moduleConfig, () => {
             const $emptyView = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
 
             assert.strictEqual($emptyView.find(`.${CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS}`).length, 1);
+        });
+    });
+
+    QUnit.module('Accessibility', () => {
+        QUnit.test('container should be have id attribute', function(assert) {
+            const id = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).attr('id');
+
+            assert.strictEqual(id !== undefined, true);
+            assert.strictEqual(id !== '', true);
+        });
+
+        [
+            {
+                attribute: 'role',
+                expectedValue: 'log',
+            },
+            {
+                attribute: 'aria-atomic',
+                expectedValue: 'false',
+            },
+            {
+                attribute: 'aria-label',
+                expectedValue: 'Message list',
+            },
+            {
+                attribute: 'aria-live',
+                expectedValue: 'polite',
+            },
+            {
+                attribute: 'aria-relevant',
+                expectedValue: 'additions',
+            },
+        ].forEach(({ attribute, expectedValue }) => {
+            QUnit.test(`element should have correct attribute ${attribute}`, function(assert) {
+                assert.strictEqual(this.$element.attr(attribute), expectedValue, `${attribute} is correct`);
+            });
         });
     });
 });
