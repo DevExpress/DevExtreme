@@ -2,6 +2,7 @@ import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import dateSerialization from '@js/core/utils/date_serialization';
 import { contains } from '@js/core/utils/dom';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
@@ -302,8 +303,8 @@ class MessageList extends Widget<Properties> {
       return false;
     }
 
-    const lastMessageTimestampInMs = new Date(lastMessageTimestamp).getTime();
-    const newMessageTimestampInMs = new Date(newMessageTimestamp).getTime();
+    const lastMessageTimestampInMs = dateSerialization.deserializeDate(lastMessageTimestamp);
+    const newMessageTimestampInMs = dateSerialization.deserializeDate(newMessageTimestamp);
 
     const result = newMessageTimestampInMs - lastMessageTimestampInMs > MESSAGEGROUP_TIMEOUT;
 
