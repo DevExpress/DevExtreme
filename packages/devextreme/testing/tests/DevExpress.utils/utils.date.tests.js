@@ -2,7 +2,7 @@ import dateUtils from 'core/utils/date';
 const { test, module } = QUnit;
 
 module('getRangesByDates', {}, () => {
-    test('getRangesByDates should generate correctly ranges when dates is empty array', function(assert) {
+    test('getRangesByDates should generate correct ranges when dates is empty array', function(assert) {
         const dates = [];
         const expectedResult = [];
 
@@ -11,7 +11,7 @@ module('getRangesByDates', {}, () => {
         assert.deepEqual(result, expectedResult);
     });
 
-    test('getRangesByDates should generate correctly ranges when dates is 1-length array', function(assert) {
+    test('getRangesByDates should generate correct ranges when dates is 1-length array', function(assert) {
         const dates = [ new Date('2024-11-27T13:27:01') ];
         const expectedResult = [ [ new Date('2024-11-27T00:00:00') ] ];
 
@@ -20,7 +20,7 @@ module('getRangesByDates', {}, () => {
         assert.deepEqual(result, expectedResult);
     });
 
-    test('getRangesByDates should generate correctly ranges when dates is array with single range', function(assert) {
+    test('getRangesByDates should generate correct ranges when dates is array with single range', function(assert) {
         const dates = [
             new Date('2024-09-27T02:17:07'),
             new Date('2024-09-28T02:17:07'),
@@ -39,7 +39,7 @@ module('getRangesByDates', {}, () => {
         assert.deepEqual(result, expectedResult);
     });
 
-    test('getRangesByDates should generate correctly ranges', function(assert) {
+    test('getRangesByDates should generate correct ranges', function(assert) {
         const dates = [
             new Date('2024-11-27T13:27:01'),
             new Date('2024-10-27T16:54:10'),
