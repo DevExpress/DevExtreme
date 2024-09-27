@@ -41,7 +41,7 @@ const CALENDAR_DXHOVERSTART_EVENT_NAME = addNamespace(hoverStartEventName, 'dxCa
 
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
-export const DAY_INTERVAL = 86400000;
+const DAY_INTERVAL = 86400000;
 
 const CURRENT_DATE_TEXT = {
   month: messageLocalization.format('dxCalendar-currentDay'),
@@ -148,7 +148,7 @@ const BaseView = (Widget as any).inherit({
 
   _getMultipleRangesText() {
     const { value } = this.option();
-    const ranges = coreDateUtils.getRangesByDates(value);
+    const ranges = coreDateUtils.getRangesByDates(value.map((date) => new Date(date)));
 
     if (ranges.length > 2) {
       // @ts-expect-error

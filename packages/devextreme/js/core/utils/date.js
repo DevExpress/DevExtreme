@@ -5,6 +5,7 @@ import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
 import { toMilliseconds } from '../../renovation/ui/common/utils/date/index';
+import dateSerialization from './date_serialization';
 
 const DAYS_IN_WEEK = 7;
 const THURSDAY_WEEK_NUMBER = 4;
@@ -690,12 +691,7 @@ const getMachineTimezoneName = () => {
 };
 
 const getRangesByDates = (dates) => {
-    const datesInMilliseconds = dates.map((value) => {
-        const date = new Date(new Date(value).setHours(0, 0, 0, 0)).getTime();
-
-        return date;
-    });
-
+    const datesInMilliseconds = dates.map((value) => correctDateWithUnitBeginning(value, 'day').getTime());
     const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
 
     const getRange = (date, dates, index) => {
@@ -703,7 +699,7 @@ const getRangesByDates = (dates) => {
             ? [date]
             : [date, dates[index - 1]];
 
-        return range.map((value) => new Date(value));
+        return range.map((value) => dateSerialization.deserializeDate(value));
     };
 
     const msInDay = toMilliseconds('day');
