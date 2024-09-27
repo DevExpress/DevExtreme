@@ -694,30 +694,27 @@ const getRangesByDates = (dates) => {
     const datesInMilliseconds = dates.map((value) => correctDateWithUnitBeginning(value, 'day').getTime());
     const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
 
-    const getRange = (date, dates, index) => {
-        const range = date === dates[index - 1]
-            ? [date]
-            : [date, dates[index - 1]];
-
-        return range.map((value) => dateSerialization.deserializeDate(value));
-    };
-
     const msInDay = toMilliseconds('day');
     const ranges = [];
 
     let startDate = sortedDates[0];
 
     for(let i = 1; i <= sortedDates.length; ++i) {
-        const currentDate = sortedDates[i];
-        const previousDate = sortedDates[i - 1];
-        const isNewRange = currentDate - previousDate > msInDay;
+        const nextDate = sortedDates[i];
+        const currentDate = sortedDates[i - 1];
+
+        const isNewRange = nextDate - currentDate > msInDay;
 
         if(isNewRange || i === sortedDates.length) {
-            const range = getRange(startDate, sortedDates, i);
+            const range = startDate === sortedDates[i - 1]
+                ? [startDate]
+                : [startDate, sortedDates[i - 1]];
 
-            ranges.push(range);
+            const serializedRange = range.map((value) => dateSerialization.deserializeDate(value));
 
-            startDate = currentDate;
+            ranges.push(serializedRange);
+
+            startDate = nextDate;
         }
     }
 
