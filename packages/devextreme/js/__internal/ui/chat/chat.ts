@@ -63,7 +63,7 @@ class Chat extends Widget<Properties> {
     this._renderMessageBox();
 
     this._updateRootAria();
-    this._updateTextAreaAria();
+    this._updateMessageBoxAria();
   }
 
   _renderHeader(title: string): void {
@@ -121,11 +121,11 @@ class Chat extends Widget<Properties> {
     this.setAria(aria, this.$element());
   }
 
-  _updateTextAreaAria(): void {
+  _updateMessageBoxAria(): void {
     const $emptyView = this._messageList.$element().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
     const emptyViewId = $emptyView?.attr('id') ?? null;
 
-    this._messageBox._updateTextAreaAria(emptyViewId);
+    this._messageBox._updateAria(emptyViewId);
   }
 
   _createMessageSendAction(): void {
@@ -186,7 +186,7 @@ class Chat extends Widget<Properties> {
       case 'items':
       case 'dataSource':
         this._messageList.option(name, value);
-        this._updateTextAreaAria();
+        this._updateMessageBoxAria();
         break;
       case 'onMessageSend':
         this._createMessageSendAction();

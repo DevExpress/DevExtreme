@@ -6,6 +6,8 @@ const CHAT_CLASS = 'dx-chat';
 const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
+const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -102,6 +104,55 @@ QUnit.module('Chat', moduleConfig, () => {
             QUnit.test(`root element should have correct ${attribute}`, function(assert) {
                 assert.strictEqual(this.$element.attr(attribute), expectedValue);
             });
+        });
+
+        QUnit.test('textarea should not have aria-describedby attribute if there are items', function(assert) {
+            this.reinit({
+                items: [
+                    { text: '1' },
+                    { text: '2' },
+                ],
+            });
+
+            const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($textArea.attr('aria-describedby'), undefined);
+        });
+
+        QUnit.test('textarea should have correct aria-describedby attribute if there are not items', function(assert) {
+            const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const $emptyView = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+
+            assert.strictEqual($textArea.attr('aria-describedby'), $emptyView.attr('id'));
+        });
+
+        QUnit.test('textarea should get rid of aria-describedby attribute if items has been added in runtime', function(assert) {
+            this.instance.option({
+                items: [
+                    { text: '1' },
+                    { text: '2' },
+                ],
+            });
+
+            const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($textArea.attr('aria-describedby'), undefined);
+        });
+
+        QUnit.test('textarea should get aria-describedby attribute if items has been removed in runtime', function(assert) {
+            this.reinit({
+                items: [
+                    { text: '1' },
+                    { text: '2' },
+                ],
+            });
+
+            this.instance.option({ items: [] });
+
+            const $textArea = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const $emptyView = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+
+            assert.strictEqual($textArea.attr('aria-describedby'), $emptyView.attr('id'));
         });
     });
 });

@@ -13,6 +13,7 @@ import TextArea from '../m_text_area';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
@@ -148,8 +149,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._button.option('disabled', state);
   }
 
-  _updateTextAreaAria(value: string | null): void {
-    $(this._textArea.$element()).attr('aria-describedby', value);
+  _updateAria(value: string | null): void {
+    $(this._textArea.$element())
+      .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+      .attr('aria-describedby', value);
   }
 
   _isValuableTextEntered(): boolean {
