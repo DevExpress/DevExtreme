@@ -61,8 +61,6 @@ class Chat extends Widget<Properties> {
 
     this._renderMessageList();
     this._renderMessageBox();
-
-    this._messageList.update();
   }
 
   _renderHeader(title: string): void {
@@ -136,10 +134,6 @@ class Chat extends Widget<Properties> {
     const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
     return $input;
-  }
-
-  _dimensionChanged(): void {
-    this._messageList.update();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

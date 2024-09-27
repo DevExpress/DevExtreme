@@ -1,6 +1,5 @@
 import $ from '@js/core/renderer';
 import type { NativeEventInfo } from '@js/events';
-import { triggerResizeEvent } from '@js/events/visibility_change';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -91,8 +90,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
         this._toggleButtonDisableState(shouldButtonBeDisabled);
-
-        triggerResizeEvent(this.$element().parent());
       },
       onEnterKey: (e: EnterKeyEvent): void => {
         if (!e.event?.shiftKey) {
