@@ -212,17 +212,18 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderMessage(message: Message): void {
-    const sender = message.author;
+    const { author } = message;
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
 
     if (lastMessageGroup) {
-      const lastMessageGroupItem = lastMessageGroup.option('items')[0];
+      const { items } = lastMessageGroup.option();
+      const lastMessageGroupItem = items[items.length - 1];
       const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
 
       const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupItem, message);
 
-      if (sender?.id === lastMessageGroupUserId && !isTimeoutExceeded) {
+      if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded) {
         lastMessageGroup.renderMessage(message);
         this._scrollContentToLastMessage();
 
@@ -230,7 +231,7 @@ class MessageList extends Widget<Properties> {
       }
     }
 
-    this._createMessageGroupComponent([message], sender?.id);
+    this._createMessageGroupComponent([message], author?.id);
 
     this._scrollContentToLastMessage();
   }
