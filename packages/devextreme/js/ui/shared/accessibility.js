@@ -62,7 +62,7 @@ export function saveFocusedElementInfo(target, instance) {
     const targetIndex = $activeElements.index($target);
 
     focusedElementInfo = extend({},
-        { ariaLabel: ariaLabel, index: targetIndex },
+        { ariaLabel: ariaLabel.replace(/"/g, '\\"'), index: targetIndex },
         { viewInstance: instance });
 }
 
@@ -159,8 +159,7 @@ export function restoreFocus(instance) {
     if(!instance.option('useLegacyKeyboardNavigation') && focusedElementInfo) {
         const viewInstance = focusedElementInfo.viewInstance;
         if(viewInstance) {
-            const escapedAriaLabel = focusedElementInfo.ariaLabel?.replace(/"/g, '\\"');
-            const $activeElements = getActiveAccessibleElements(escapedAriaLabel, viewInstance.element());
+            const $activeElements = getActiveAccessibleElements(focusedElementInfo.ariaLabel, viewInstance.element());
             const $targetElement = $activeElements.eq(focusedElementInfo.index);
 
             focusedElementInfo = null;
