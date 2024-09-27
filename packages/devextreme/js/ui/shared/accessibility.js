@@ -62,7 +62,7 @@ export function saveFocusedElementInfo(target, instance) {
     const targetIndex = $activeElements.index($target);
 
     focusedElementInfo = extend({},
-        { ariaLabel: ariaLabel.replace(/"/g, '\\"'), index: targetIndex },
+        { ariaLabel: ariaLabel?.replace(/"/g, '\\"'), index: targetIndex },
         { viewInstance: instance });
 }
 
