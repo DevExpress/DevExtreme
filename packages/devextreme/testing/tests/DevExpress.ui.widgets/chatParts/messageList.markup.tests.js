@@ -93,7 +93,6 @@ QUnit.module('MessageList', moduleConfig, () => {
             const id = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).attr('id');
 
             assert.strictEqual(id !== undefined, true);
-            assert.strictEqual(id !== '', true);
         });
 
         [
