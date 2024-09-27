@@ -1,3 +1,4 @@
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
@@ -102,7 +103,8 @@ class MessageList extends Widget<Properties> {
 
   _renderEmptyViewContent(): void {
     const $emptyView = $('<div>')
-      .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS);
+      .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS)
+      .attr('id', `dx-${new Guid()}`);
 
     $('<div>')
       .appendTo($emptyView)
