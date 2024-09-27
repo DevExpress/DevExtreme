@@ -52,8 +52,9 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxChat({
-                    height: 600,
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
