@@ -61,6 +61,8 @@ class Chat extends Widget<Properties> {
 
     this._renderMessageList();
     this._renderMessageBox();
+
+    this._updateAria();
   }
 
   _renderHeader(title: string): void {
@@ -107,6 +109,15 @@ class Chat extends Widget<Properties> {
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
+  }
+
+  _updateAria(): void {
+    const aria = {
+      role: 'group',
+      label: 'Chat',
+    };
+
+    this.setAria(aria, this.$element());
   }
 
   _createMessageSendAction(): void {

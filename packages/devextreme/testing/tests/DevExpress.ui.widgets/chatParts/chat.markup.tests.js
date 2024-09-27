@@ -87,5 +87,22 @@ QUnit.module('Chat', moduleConfig, () => {
             assert.strictEqual(this.$element.hasClass(CHAT_CLASS), true);
         });
     });
+
+    QUnit.module('Accessibility', () => {
+        [
+            {
+                attribute: 'role',
+                expectedValue: 'group',
+            },
+            {
+                attribute: 'aria-label',
+                expectedValue: 'Chat',
+            },
+        ].forEach(({ attribute, expectedValue }) => {
+            QUnit.test(`root element should have correct ${attribute}`, function(assert) {
+                assert.strictEqual(this.$element.attr(attribute), expectedValue);
+            });
+        });
+    });
 });
 
