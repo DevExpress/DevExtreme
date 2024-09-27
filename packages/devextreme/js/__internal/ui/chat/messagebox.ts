@@ -60,12 +60,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._renderButton();
   }
 
-  _isValuableTextEntered(): boolean {
-    const { text } = this._textArea.option();
-
-    return !!text?.trim();
-  }
-
   _renderTextArea(): void {
     const {
       activeStateEnabled,
@@ -152,6 +146,16 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _toggleButtonDisableState(state: boolean): void {
     this._button.option('disabled', state);
+  }
+
+  _updateTextAreaAria(value: string | null): void {
+    $(this._textArea.$element()).attr('aria-describedby', value);
+  }
+
+  _isValuableTextEntered(): boolean {
+    const { text } = this._textArea.option();
+
+    return !!text?.trim();
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

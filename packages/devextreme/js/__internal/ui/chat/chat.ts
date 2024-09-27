@@ -12,7 +12,7 @@ import type {
   Properties as MessageBoxProperties,
 } from './messagebox';
 import MessageBox from './messagebox';
-import MessageList from './messagelist';
+import MessageList, { CHAT_MESSAGELIST_EMPTY_VIEW_CLASS } from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -62,7 +62,8 @@ class Chat extends Widget<Properties> {
     this._renderMessageList();
     this._renderMessageBox();
 
-    this._updateAria();
+    this._updateRootAria();
+    this._updateTextAreaAria();
   }
 
   _renderHeader(title: string): void {
@@ -111,13 +112,20 @@ class Chat extends Widget<Properties> {
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
   }
 
-  _updateAria(): void {
+  _updateRootAria(): void {
     const aria = {
       role: 'group',
       label: 'Chat',
     };
 
     this.setAria(aria, this.$element());
+  }
+
+  _updateTextAreaAria(): void {
+    const $emptyView = this._messageList.$element().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+    const emptyViewId = $emptyView?.attr('id') ?? null;
+
+    this._messageBox._updateTextAreaAria(emptyViewId);
   }
 
   _createMessageSendAction(): void {
@@ -178,6 +186,7 @@ class Chat extends Widget<Properties> {
       case 'items':
       case 'dataSource':
         this._messageList.option(name, value);
+        this._updateTextAreaAria();
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
