@@ -89,18 +89,10 @@ QUnit.module('MessageList', moduleConfig, () => {
     });
 
     QUnit.module('Accessibility', () => {
-<<<<<<< HEAD
         QUnit.test('emptyView should have id attribute', function(assert) {
             const id = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).attr('id');
 
             assert.notStrictEqual(id, undefined);
-=======
-        QUnit.test('container should be have id attribute', function(assert) {
-            const id = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).attr('id');
-
-            assert.strictEqual(id !== undefined, true);
-            assert.strictEqual(id !== '', true);
->>>>>>> 6dfbac4b6b (Chat: Support Accessibility)
         });
 
         [
