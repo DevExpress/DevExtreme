@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Card } from "devextreme/esm/__internal/grids/new/card_view/content_view/card";
+import { Card as InfernoCard } from "devextreme/esm/__internal/grids/new/card_view/content_view/card";
 import { InfernoToReact } from "../utils";
 
 interface Props {
@@ -17,15 +17,16 @@ interface Props {
   };
 }
 
+const Card = InfernoToReact<Props>(InfernoCard);
+
 const meta: Meta<Props> = {
   title: "Grids/CardView/Card",
+  component: Card,
 };
 
 export default meta;
 
 type Story = StoryObj<Props>;
-
-
 
 export const DefaultMode: Story = {
   args: {
@@ -70,5 +71,4 @@ export const DefaultMode: Story = {
       key: 1,
     },
   },
-  render: (props) => <InfernoToReact component={Card} props={props} />,
 };
