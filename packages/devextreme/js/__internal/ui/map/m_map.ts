@@ -15,12 +15,14 @@ import { addNamespace } from '@js/events/utils/index';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 
+import azure from './m_provider.dynamic.azure';
 import bing from './m_provider.dynamic.bing';
 import google from './m_provider.dynamic.google';
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 import googleStatic from './m_provider.google_static';
 
 const PROVIDERS = {
+  azure,
   googleStatic,
   google,
   bing,
