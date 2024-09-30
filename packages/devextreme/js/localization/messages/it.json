@@ -325,6 +325,7 @@
         "dxAvatar-userName": "Unknown User",
         "dxAvatar-imageAlt": "Avatar",
 
+        "dxChat-elementAriaLabel": "Chat",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
