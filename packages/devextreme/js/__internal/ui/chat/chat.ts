@@ -12,7 +12,7 @@ import type {
   Properties as MessageBoxProperties,
 } from './messagebox';
 import MessageBox from './messagebox';
-import MessageList, { CHAT_MESSAGELIST_EMPTY_VIEW_CLASS } from './messagelist';
+import MessageList from './messagelist';
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -122,10 +122,9 @@ class Chat extends Widget<Properties> {
   }
 
   _updateMessageBoxAria(): void {
-    const $emptyView = this._messageList.$element().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
-    const emptyViewId = $emptyView?.attr('id') ?? null;
+    const emptyViewId = this._messageList.getEmptyViewId();
 
-    this._messageBox._updateAria(emptyViewId);
+    this._messageBox.updateTextAreaAria(emptyViewId);
   }
 
   _createMessageSendAction(): void {

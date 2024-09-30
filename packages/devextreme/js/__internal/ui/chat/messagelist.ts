@@ -19,7 +19,7 @@ import MessageGroup from './messagegroup';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 
-export const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
+const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
@@ -329,6 +329,13 @@ class MessageList extends Widget<Properties> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  getEmptyViewId(): string | null {
+    const $emptyView = this.$element().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+    const emptyViewId = $emptyView?.attr('id') ?? null;
+
+    return emptyViewId;
   }
 }
 
