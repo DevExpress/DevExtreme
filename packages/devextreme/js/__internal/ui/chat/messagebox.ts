@@ -119,6 +119,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       type: 'default',
       stylingMode: 'text',
       disabled: true,
+      elementAttr: { 'aria-label': 'Send' },
       onClick: (e): void => {
         this._sendHandler(e);
       },
