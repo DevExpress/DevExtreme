@@ -3,11 +3,13 @@ import { getStyleAttribute, setStyleAttribute } from '../../../helpers/domUtils'
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { scrollTo } from './utils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Scheduler: Virtual Scrolling`
   .page(url(__dirname, '../../container.html'));
 
-test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
+safeSizeTest('Appointment should not repaint after scrolling if present on viewport', async (t) => {
+  // TODO
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('', 0);
 
@@ -17,7 +19,7 @@ test('Appointment should not repaint after scrolling if present on viewport', as
   await scrollTo(new Date(2020, 8, 17, 4));
 
   await t.expect(await getStyleAttribute(element)).eql('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
-}).before(async () => {
+}, [1200, 1000]).before(async () => {
   await createWidget('dxScheduler', {
     height: 600,
     width: 800,
