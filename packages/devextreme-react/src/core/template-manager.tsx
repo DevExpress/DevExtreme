@@ -36,7 +36,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
   return props;
 }
 
-export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
+export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRendered }) => {
   const [instantiationModels, setInstantiationModels] = useState({
     collection: new TemplateInstantiationModels(),
   });
@@ -158,7 +158,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     if (updateContext) {
       updateContext.onUpdated();
     }
-  }, [updateContext]);
+
+    onTemplatesRendered();
+  }, [updateContext, onTemplatesRendered]);
 
   if (instantiationModels.collection.empty) {
     return null;
