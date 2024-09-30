@@ -21,7 +21,7 @@ class Avatar extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      name: messageLocalization.format('dxAvatar-userName'),
+      name: messageLocalization.format('dxAvatar-defaultUserName'),
       url: '',
     };
   }

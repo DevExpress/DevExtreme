@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDefined } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -116,7 +117,7 @@ class MessageGroup extends Widget<Properties> {
     const $information = $('<div>')
       .addClass(CHAT_MESSAGEGROUP_INFORMATION_CLASS);
 
-    const authorName = author?.name ?? 'Unknown User';
+    const authorName = author?.name ?? messageLocalization.format('dxChat-defaultUserName');
     const authorNameText = alignment === 'start' ? authorName : '';
 
     $('<div>')
