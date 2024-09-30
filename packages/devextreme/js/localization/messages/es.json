@@ -329,6 +329,7 @@
         "dxChat-textareaPlaceholder": "Type a message",
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
+        "dxChat-messageListAriaLabel": "Message list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
