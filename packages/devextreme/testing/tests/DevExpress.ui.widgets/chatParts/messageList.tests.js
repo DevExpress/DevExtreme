@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import MessageList from '__internal/ui/chat/messagelist';
+import MessageList, { MESSAGEGROUP_TIMEOUT } from '__internal/ui/chat/messagelist';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import {
     generateMessages,
@@ -244,6 +244,113 @@ QUnit.module('MessageList', moduleConfig, () => {
             const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
             assert.strictEqual(messageGroup.option('alignment'), 'end');
+        });
+
+        QUnit.test(`new message group should be rendered if ${MESSAGEGROUP_TIMEOUT} ms elapsed between the last and new messages`, function(assert) {
+            const items = [
+                {
+                    timestamp: '2024-09-26T14:00:00',
+                    text: 'first messagegroup',
+                },
+                {
+                    timestamp: '2024-09-26T14:02:00',
+                    text: 'first messagegroup',
+                },
+                {
+                    timestamp: '2024-09-26T14:05:01',
+                    text: 'first messagegroup',
+                },
+                {
+                    timestamp: '2024-09-26T14:10:02',
+                    text: 'second messagegroup',
+                },
+            ];
+
+            this.reinit({
+                items,
+            });
+
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
+            const $firstMessageGroupBubbles = $messageGroups.eq(0).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+            const $secondMessageGroupBubbles = $messageGroups.eq(1).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 2, 'correct messagegroup count');
+            assert.strictEqual($firstMessageGroupBubbles.length, 3, 'correct bubble count');
+            assert.strictEqual($secondMessageGroupBubbles.length, 1, 'correct bubble count');
+        });
+
+        QUnit.test(`new message group should not be rendered if ${MESSAGEGROUP_TIMEOUT} ms elapsed between the first and new messages at runtime`, function(assert) {
+            const user = { id: 1 };
+
+            const items = [
+                {
+                    timestamp: '2024-09-26T14:00:00',
+                    text: 'first messagegroup, 1',
+                    author: user,
+                },
+                {
+                    timestamp: '2024-09-26T14:02:00',
+                    text: 'first messagegroup, 2',
+                    author: user,
+                },
+            ];
+
+            this.reinit({
+                items,
+                user,
+            });
+
+            const newMessage = {
+                timestamp: '2024-09-26T14:05:02',
+                text: 'first messagegroup, 3',
+                author: user,
+            };
+
+            this.instance.option({ items: [ ...items, newMessage ] });
+
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
+            const $firstMessageGroupBubbles = $messageGroups.eq(0).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 1, 'correct messagegroup count');
+            assert.strictEqual($firstMessageGroupBubbles.length, 3, 'correct bubble count');
+        });
+
+        QUnit.test(`new message group should be rendered if ${MESSAGEGROUP_TIMEOUT} ms elapsed between the last and new messages at runtime`, function(assert) {
+            const user = { id: 1 };
+
+            const items = [
+                {
+                    timestamp: '2024-09-26T14:00:00',
+                    text: 'first messagegroup, 1',
+                    author: user,
+                },
+                {
+                    timestamp: '2024-09-26T14:02:00',
+                    text: 'first messagegroup, 2',
+                    author: user,
+                },
+            ];
+
+            this.reinit({
+                items,
+                user,
+            });
+
+            const newMessage = {
+                timestamp: '2024-09-26T14:07:01',
+                text: 'second messagegroup, 1',
+                author: user,
+            };
+
+            this.instance.option({ items: [ ...items, newMessage ] });
+
+            const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
+            const $firstMessageGroupBubbles = $messageGroups.eq(0).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+            const $secondMessageGroupBubbles = $messageGroups.eq(1).find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+
+            assert.strictEqual($messageGroups.length, 2, 'correct messagegroup count');
+            assert.strictEqual($firstMessageGroupBubbles.length, 2, 'correct bubble count');
+            assert.strictEqual($secondMessageGroupBubbles.length, 1, 'correct bubble count');
         });
     });
 

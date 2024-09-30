@@ -2,6 +2,7 @@ import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import dateSerialization from '@js/core/utils/date_serialization';
 import { contains } from '@js/core/utils/dom';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
@@ -25,6 +26,8 @@ const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
+
+export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
@@ -186,10 +189,14 @@ class MessageList extends Widget<Properties> {
 
     items.forEach((item, index) => {
       const newMessageGroupItem = item ?? {};
-
       const id = newMessageGroupItem.author?.id;
 
-      if (id === currentMessageGroupUserId) {
+      const isTimeoutExceeded = this._isTimeoutExceeded(
+        currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
+        item,
+      );
+
+      if (id === currentMessageGroupUserId && !isTimeoutExceeded) {
         currentMessageGroupItems.push(newMessageGroupItem);
       } else {
         this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
@@ -206,14 +213,18 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderMessage(message: Message): void {
-    const sender = message.author;
+    const { author } = message;
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
 
     if (lastMessageGroup) {
-      const lastMessageGroupUserId = lastMessageGroup.option('items')[0].author?.id;
+      const { items } = lastMessageGroup.option();
+      const lastMessageGroupItem = items[items.length - 1];
+      const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
 
-      if (sender?.id === lastMessageGroupUserId) {
+      const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupItem, message);
+
+      if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded) {
         lastMessageGroup.renderMessage(message);
         this._scrollContentToLastMessage();
 
@@ -221,7 +232,7 @@ class MessageList extends Widget<Properties> {
       }
     }
 
-    this._createMessageGroupComponent([message], sender?.id);
+    this._createMessageGroupComponent([message], author?.id);
 
     this._scrollContentToLastMessage();
   }
@@ -282,6 +293,22 @@ class MessageList extends Widget<Properties> {
 
       this._renderMessage(newMessage ?? {});
     }
+  }
+
+  _isTimeoutExceeded(lastMessage: Message, newMessage: Message): boolean {
+    const lastMessageTimestamp = lastMessage?.timestamp;
+    const newMessageTimestamp = newMessage?.timestamp;
+
+    if (!lastMessageTimestamp || !newMessageTimestamp) {
+      return false;
+    }
+
+    const lastMessageTimestampInMs = dateSerialization.deserializeDate(lastMessageTimestamp);
+    const newMessageTimestampInMs = dateSerialization.deserializeDate(newMessageTimestamp);
+
+    const result = newMessageTimestampInMs - lastMessageTimestampInMs > MESSAGEGROUP_TIMEOUT;
+
+    return result;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
