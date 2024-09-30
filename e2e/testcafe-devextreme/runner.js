@@ -74,7 +74,7 @@ createTestCafe({
             fs.rmSync('./screenshots', { recursive: true });
         }
 
-        const browsers = [args.browsers.split(' '), sizes].map(expandBrowserAlias);
+        const browsers = expandBrowserAlias(args.browsers, sizes);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -172,14 +172,17 @@ function setShadowDom(args) {
 }
 
 function expandBrowserAlias(browser, sizes) {
-    switch(browser) {
-        case 'chrome:devextreme-shr2':
-            return `chrome:headless --disable-gpu --window-size=${sizes[0]},${sizes[1]}`;
-        case 'chrome:docker':
-            return `chromium:headless --no-sandbox --disable-gpu --window-size=${sizes[0]},${sizes[1]}`;
-    }
-
-    return browser;
+    browser.split(' ').map((browserArg) => {
+        switch(browserArg) {
+            case 'chrome:devextreme-shr2':
+                return `chrome:headless --disable-gpu --window-size=${sizes[0]},${sizes[1]}`;
+            case 'chrome:docker':
+                return `chromium:headless --no-sandbox --disable-gpu --window-size=${sizes[0]},${sizes[1]}`;
+        }
+    
+        return browserArg;
+    })
+    
 }
 
 function getArgs() {
