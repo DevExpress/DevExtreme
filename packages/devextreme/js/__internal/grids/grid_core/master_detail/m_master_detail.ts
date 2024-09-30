@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
@@ -339,7 +340,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
     return template;
   }
 
-  private _isDetailRow(row) {
+  protected _isDetailRow(row) {
     return row && row.rowType && row.rowType.indexOf('detail') === 0;
   }
 
@@ -359,34 +360,39 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
 
   protected _renderCells($row, options) {
     const { row } = options;
-    let $detailCell;
-    const visibleColumns = this._columnsController.getVisibleColumns();
 
     if (row.rowType && this._isDetailRow(row)) {
       if (this._needRenderCell(0, options.columnIndices)) {
-        $detailCell = this._renderCell($row, {
-          value: null,
-          row,
-          rowIndex: row.rowIndex,
-          column: { command: 'detail' },
-          columnIndex: 0,
-          change: options.change,
-        });
-
-        $detailCell
-          .addClass(CELL_FOCUS_DISABLED_CLASS)
-          .addClass(MASTER_DETAIL_CELL_CLASS)
-          .attr('colSpan', visibleColumns.length);
-
-        const isEditForm = row.isEditing;
-
-        if (!isEditForm) {
-          $detailCell.attr('aria-roledescription', messageLocalization.format('dxDataGrid-masterDetail'));
-        }
+        this._renderMasterDetailCell($row, row, options);
       }
     } else {
       super._renderCells.apply(this, arguments as any);
     }
+  }
+  protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
+    const visibleColumns = this._columnsController.getVisibleColumns();
+
+    const $detailCell = this._renderCell($row, {
+      value: null,
+      row,
+      rowIndex: row.rowIndex,
+      column: { command: 'detail' },
+      columnIndex: 0,
+      change: options.change,
+    });
+
+    $detailCell
+      .addClass(CELL_FOCUS_DISABLED_CLASS)
+      .addClass(MASTER_DETAIL_CELL_CLASS)
+      .attr('colSpan', visibleColumns.length);
+
+    const isEditForm = row.isEditing;
+
+    if (!isEditForm) {
+      $detailCell.attr('aria-roledescription', messageLocalization.format('dxDataGrid-masterDetail'));
+    }
+
+    return $detailCell;
   }
 };
 

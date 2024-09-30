@@ -431,8 +431,8 @@ function() {
 
         assert.equal(pageSizesElements.length, 0, 'page size elements count');
     });
-    QUnit.test('Page sizes render when showPageSizes is false', function(assert) {
-        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, showPageSizes: false, allowedPageSizes: [5, 10, 20] });
+    QUnit.test('Page sizes render when showPageSizeSelector is false', function(assert) {
+        $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, showPageSizeSelector: false, allowedPageSizes: [5, 10, 20] });
 
         const pageSizesElements = $('.dx-page-size');
         const pageSizesContainer = $('.dx-page-sizes');
@@ -904,7 +904,7 @@ function() {
             pageCount: 10,
             allowedPageSizes: [5, 10, 20],
             showInfo: false,
-            showPageSizes: false,
+            showPageSizeSelector: false,
             itemCount: 46,
             pagesCountText: 'of'
         });
@@ -928,7 +928,7 @@ function() {
             pageCount: 110,
             itemCount: 550,
             allowedPageSizes: [5, 10, 20],
-            showPageSizes: false,
+            showPageSizeSelector: false,
             pagesCountText: 'of'
         });
         const editor = $('.dx-page-index').dxNumberBox('instance');

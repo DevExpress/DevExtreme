@@ -626,6 +626,11 @@ export type ColumnFixing = {
    * @type object
    */
   texts?: ColumnFixingTexts;
+  /**
+   * @docid GridBaseOptions.columnFixing.icons
+   * @type object
+   */
+  icons?: ColumnFixingIcons;
 };
 
 /**
@@ -654,6 +659,44 @@ export type ColumnFixingTexts = {
    * @default "Unfix"
    */
   unfix?: string;
+  /**
+   * @docid GridBaseOptions.columnFixing.texts.stickPosition
+   * @default "Stick in place"
+   */
+  stickyPosition?: string;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type ColumnFixingIcons = {
+  /**
+   * @docid GridBaseOptions.columnFixing.icons.fix
+   * @default "fix-column"
+   */
+  fix?: string;
+  /**
+   * @docid GridBaseOptions.columnFixing.icons.leftPosition
+   * @default "fix-column-left"
+   */
+  leftPosition?: string;
+  /**
+   * @docid GridBaseOptions.columnFixing.icons.rightPosition
+   * @default "fix-column-right"
+   */
+  rightPosition?: string;
+  /**
+   * @docid GridBaseOptions.columnFixing.icons.unfix
+   * @default "unfix-column"
+   */
+  unfix?: string;
+  /**
+   * @docid GridBaseOptions.columnFixing.icons.stickyPosition
+   * @default "stick-column"
+   */
+  stickyPosition?: string;
 };
 
 /**

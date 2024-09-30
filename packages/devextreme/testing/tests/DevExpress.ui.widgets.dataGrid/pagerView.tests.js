@@ -95,7 +95,7 @@ QUnit.module('Pager', {
         assert.equal(pager.option('pageIndex'), 2, 'pageIndex');
         assert.equal(pager.option('pageCount'), 21, 'pageCount');
         assert.equal(pager.option('pageSize'), 7, 'pageSize');
-        assert.ok(pager.option('showPageSizes'), 'showPageSizes');
+        assert.ok(pager.option('showPageSizeSelector'), 'showPageSizeSelector');
         assert.deepEqual(pager.option('allowedPageSizes'), [2, 7, 9], 'allowedPageSizes');
         assert.ok(!pager.option('hasKnownLastPage'), 'hasKnownLastPage');
         assert.ok(pager.option('visible'), 'visible');

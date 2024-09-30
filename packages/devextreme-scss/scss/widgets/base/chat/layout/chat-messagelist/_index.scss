@@ -4,6 +4,11 @@
   flex-grow: 1;
   overflow: hidden;
 
+  .dx-scrollable-container {
+    overscroll-behavior: contain;
+    will-change: scroll-position;
+  }
+
   .dx-scrollable-content {
     display: flex;
     flex-direction: column;
@@ -11,7 +16,7 @@
   }
 
   .dx-scrollable-native {
-    &.dx-scrollable-native-ios{
+    &.dx-scrollable-native-ios {
       .dx-scrollable-content {
         min-height: 100%;
       }

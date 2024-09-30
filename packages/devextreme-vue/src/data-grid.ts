@@ -859,10 +859,12 @@ const DxColumnFixingConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:enabled": null,
+    "update:icons": null,
     "update:texts": null,
   },
   props: {
     enabled: Boolean,
+    icons: Object,
     texts: Object
   }
 };
@@ -874,6 +876,7 @@ const DxColumnFixing = defineComponent(DxColumnFixingConfig);
 (DxColumnFixing as any).$_optionName = "columnFixing";
 (DxColumnFixing as any).$_expectedChildren = {
   columnFixingTexts: { isCollectionItem: false, optionName: "texts" },
+  icons: { isCollectionItem: false, optionName: "icons" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
 
@@ -884,12 +887,14 @@ const DxColumnFixingTextsConfig = {
     "update:fix": null,
     "update:leftPosition": null,
     "update:rightPosition": null,
+    "update:stickPosition": null,
     "update:unfix": null,
   },
   props: {
     fix: String,
     leftPosition: String,
     rightPosition: String,
+    stickPosition: String,
     unfix: String
   }
 };
@@ -2177,6 +2182,31 @@ const DxHide = defineComponent(DxHideConfig);
   to: { isCollectionItem: false, optionName: "to" }
 };
 
+const DxIconsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:fix": null,
+    "update:leftPosition": null,
+    "update:rightPosition": null,
+    "update:stickyPosition": null,
+    "update:unfix": null,
+  },
+  props: {
+    fix: String,
+    leftPosition: String,
+    rightPosition: String,
+    stickyPosition: String,
+    unfix: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxIconsConfig);
+
+const DxIcons = defineComponent(DxIconsConfig);
+
+(DxIcons as any).$_optionName = "icons";
+
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
@@ -3182,6 +3212,7 @@ const DxTextsConfig = {
     "update:rightPosition": null,
     "update:saveAllChanges": null,
     "update:saveRowChanges": null,
+    "update:stickPosition": null,
     "update:sum": null,
     "update:sumOtherColumn": null,
     "update:undeleteRow": null,
@@ -3222,6 +3253,7 @@ const DxTextsConfig = {
     rightPosition: String,
     saveAllChanges: String,
     saveRowChanges: String,
+    stickPosition: String,
     sum: String,
     sumOtherColumn: String,
     undeleteRow: String,
@@ -3488,6 +3520,7 @@ export {
   DxGroupPanel,
   DxHeaderFilter,
   DxHide,
+  DxIcons,
   DxItem,
   DxKeyboardNavigation,
   DxLabel,

@@ -260,12 +260,24 @@ const noNeedToCreateReorderingPoint = (
   return point.x < nonFixedAreaBoundingRect.left || point.x > nonFixedAreaBoundingRect.right;
 };
 
+const doesGroupCellEndInFirstColumn = ($groupCell): boolean => {
+  const $groupRow = $groupCell.parent();
+  const commandColumns = $groupRow.children().filter(
+    (i) => i < $groupCell.index(),
+  );
+
+  const groupColSpanWithoutCommand = $groupCell.attr('colspan') - commandColumns.length;
+
+  return groupColSpanWithoutCommand === 1;
+};
+
 export const GridCoreStickyColumnsDom = {
   addFirstHeaderClass,
   addColumnNoBorderClass,
   addStickyColumnClass,
   addStickyColumnBorderLeftClass,
   addStickyColumnBorderRightClass,
+  doesGroupCellEndInFirstColumn,
   toggleStickyColumnsClass,
   getLeftFixedCells,
   getRightFixedCells,

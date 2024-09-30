@@ -15,4 +15,5 @@ export const CLASSES = {
   stickyColumns: 'sticky-columns',
   firstHeader: 'first-header',
   columnNoBorder: 'column-no-border',
+  groupRowContainer: 'group-row-container',
 };

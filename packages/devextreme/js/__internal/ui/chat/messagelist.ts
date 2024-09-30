@@ -1,12 +1,21 @@
+import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import resizeObserverSingleton from '@js/core/resize_observer';
+import { contains } from '@js/core/utils/dom';
+import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
+import {
+  isReachedBottom,
+} from '@js/renovation/ui/scroll_view/utils/get_boundary_props';
+import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
 import type { Message } from '@js/ui/chat';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
+import { isElementVisible } from '../splitter/utils/layout';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup from './messagegroup';
 
@@ -23,7 +32,11 @@ export interface Properties extends WidgetOptions<MessageList> {
 }
 
 class MessageList extends Widget<Properties> {
-  _messageGroups?: MessageGroup[];
+  private _messageGroups?: MessageGroup[];
+
+  private _containerClientHeight = 0;
+
+  private _suppressResizeHandling?: boolean;
 
   private _scrollable!: Scrollable<unknown>;
 
@@ -50,7 +63,47 @@ class MessageList extends Widget<Properties> {
 
     this._renderMessageListContent();
 
-    this.update();
+    this._attachResizeObserverSubscription();
+
+    this._suppressResizeHandling = true;
+  }
+
+  _attachResizeObserverSubscription(): void {
+    if (hasWindow()) {
+      const element = this._getScrollContainer();
+
+      resizeObserverSingleton.unobserve(element);
+      resizeObserverSingleton.observe(element, (entry) => this._resizeHandler(entry));
+    }
+  }
+
+  _isAttached(element: Element): boolean {
+    return !!contains(domAdapter.getBody(), element);
+  }
+
+  _resizeHandler({ contentRect, target }: ResizeObserverEntry): void {
+    const newHeight = contentRect.height;
+
+    if (this._suppressResizeHandling
+      && this._isAttached(target)
+      && isElementVisible(target as HTMLElement)
+    ) {
+      this._scrollContentToLastMessage();
+
+      this._suppressResizeHandling = false;
+    } else {
+      const heightChange = this._containerClientHeight - newHeight;
+
+      let { scrollTop } = target;
+
+      if (heightChange >= 1 || !isReachedBottom(target as HTMLDivElement, target.scrollTop, 0, 1)) {
+        scrollTop += heightChange;
+      }
+
+      this._scrollable.scrollTo({ top: scrollTop });
+    }
+
+    this._containerClientHeight = newHeight;
   }
 
   _renderEmptyViewContent(): void {
@@ -162,7 +215,7 @@ class MessageList extends Widget<Properties> {
 
       if (sender?.id === lastMessageGroupUserId) {
         lastMessageGroup.renderMessage(message);
-        this.update();
+        this._scrollContentToLastMessage();
 
         return;
       }
@@ -170,7 +223,7 @@ class MessageList extends Widget<Properties> {
 
     this._createMessageGroupComponent([message], sender?.id);
 
-    this.update();
+    this._scrollContentToLastMessage();
   }
 
   _$content(): dxElementWrapper {
@@ -178,7 +231,14 @@ class MessageList extends Widget<Properties> {
   }
 
   _scrollContentToLastMessage(): void {
-    this._scrollable.scrollTo({ top: this._$content().get(0).scrollHeight });
+    const scrollOffsetTopMax = getScrollTopMax(this._getScrollContainer());
+
+    this._scrollable.scrollTo({ top: scrollOffsetTopMax });
+  }
+
+  _getScrollContainer(): HTMLElement {
+    // @ts-expect-error
+    return $(this._scrollable.container()).get(0);
   }
 
   _clean(): void {
@@ -237,13 +297,6 @@ class MessageList extends Widget<Properties> {
       default:
         super._optionChanged(args);
     }
-  }
-
-  update(): void {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this._scrollable.update();
-
-    this._scrollContentToLastMessage();
   }
 }
 

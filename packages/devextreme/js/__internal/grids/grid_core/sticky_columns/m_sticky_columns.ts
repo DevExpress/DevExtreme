@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { setWidth } from '@js/core/utils/size';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type {
@@ -8,9 +9,11 @@ import type {
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
-import { StickyPosition } from './const';
+import { isGroupRow } from '../views/m_rows_view';
+import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
 import {
   getColumnFixedPosition,
@@ -152,7 +155,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
         const styleProps = normalizeOffset(offset);
 
-        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex);
+        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex, true);
       }
     });
   }
@@ -249,16 +252,28 @@ const columnHeadersView = (
         };
         const fixedPositionItems = [
           {
-            text: columnFixingOptions.texts.leftPosition, value: 'left', disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'), onItemClick,
+            text: columnFixingOptions.texts.leftPosition,
+            icon: columnFixingOptions.icons.leftPosition,
+            value: 'left',
+            disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'),
+            onItemClick,
           },
           {
-            text: columnFixingOptions.texts.rightPosition, value: 'right', disabled: column.fixed && column.fixedPosition === 'right', onItemClick,
+            text: columnFixingOptions.texts.rightPosition,
+            icon: columnFixingOptions.icons.rightPosition,
+            value: 'right',
+            disabled: column.fixed && column.fixedPosition === 'right',
+            onItemClick,
           },
         ];
 
         if (this.option('columnFixing.legacyMode') !== true) {
           fixedPositionItems.push({
-            text: columnFixingOptions.texts.stickyPosition, value: 'sticky', disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky, onItemClick,
+            text: columnFixingOptions.texts.stickyPosition,
+            icon: columnFixingOptions.icons.stickyPosition,
+            value: 'sticky',
+            disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky,
+            onItemClick,
           });
         }
 
@@ -267,11 +282,16 @@ const columnHeadersView = (
         items.push(
           {
             text: columnFixingOptions.texts.fix,
+            icon: columnFixingOptions.icons.fix,
             beginGroup: true,
             items: fixedPositionItems,
           },
           {
-            text: columnFixingOptions.texts.unfix, value: 'none', disabled: !column.fixed, onItemClick,
+            text: columnFixingOptions.texts.unfix,
+            icon: columnFixingOptions.icons.unfix,
+            value: 'none',
+            disabled: !column.fixed,
+            onItemClick,
           },
         );
       }
@@ -282,7 +302,70 @@ const columnHeadersView = (
 
 const rowsView = (
   Base: ModuleType<RowsView>,
-) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {};
+) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
+  private _getMasterDetailWidth(): number {
+    // @ts-expect-error
+    const componentWidth = this.component.$element().width?.() ?? 0;
+    return componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element);
+  }
+
+  protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
+    // @ts-expect-error
+    const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
+
+    if (this._isStickyColumns()) {
+      $detailCell
+        .addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft))
+        // @ts-expect-error
+        .width(this._getMasterDetailWidth());
+    }
+
+    return $detailCell;
+  }
+
+  private _updateMasterDetailWidths() {
+    setWidth(
+      this._$element?.find('.dx-master-detail-cell'),
+      this._getMasterDetailWidth(),
+    );
+  }
+
+  protected _resizeCore() {
+    const isStickyColumns = this._isStickyColumns();
+
+    super._resizeCore.apply(this, arguments as any);
+
+    if (isStickyColumns) {
+      this._updateMasterDetailWidths();
+    }
+  }
+
+  protected _renderCellContent($cell, options, renderOptions) {
+    if (!isGroupRow(options) || !this._isStickyColumns()) {
+      return super._renderCellContent($cell, options, renderOptions);
+    }
+
+    const $container = $('<div>')
+      .addClass(this.addWidgetPrefix(CLASSES.groupRowContainer))
+      .appendTo($cell);
+
+    return super._renderCellContent($container, options, renderOptions);
+  }
+
+  protected _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+    // @ts-expect-error
+    super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    const stickySummarySelector = `.${this.addWidgetPrefix(CLASSES.stickyColumn)}`;
+
+    if (
+      $groupCell.parent().find(stickySummarySelector).length
+      && GridCoreStickyColumnsDom.doesGroupCellEndInFirstColumn($groupCell)
+    ) {
+      GridCoreStickyColumnsDom
+        .addStickyColumnBorderRightClass($groupCell, this.addWidgetPrefix.bind(this));
+    }
+  }
+};
 
 const footerView = (
   Base: ModuleType<any>,
