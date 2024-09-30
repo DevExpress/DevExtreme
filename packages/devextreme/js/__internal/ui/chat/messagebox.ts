@@ -150,10 +150,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._button.option('disabled', state);
   }
 
-  _updateAria(value: string | null): void {
+  _updateAria(emptyViewId: string | null): void {
     $(this._textArea.$element())
       .find(`.${TEXTEDITOR_INPUT_CLASS}`)
-      .attr('aria-labelledby', value);
+      .attr('aria-labelledby', emptyViewId);
   }
 
   _isValuableTextEntered(): boolean {
