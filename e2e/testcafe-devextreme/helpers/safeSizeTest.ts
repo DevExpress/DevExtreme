@@ -35,13 +35,14 @@ const decorateTestCafeBefore = (
 
 const decorateTestCafeAfter = (
   testCafeTest: TestFn,
+  sizeRestoreTo?: BrowserSizeType
 ): void => {
   const originAfter = testCafeTest.after;
 
   const decoratedAfter = (afterFunc: TestCafeFn): TestFn => {
     const decoratedFunc = async (t: TestController) => {
       await afterFunc(t);
-      await restoreBrowserSize(t);
+      await restoreBrowserSize(t, sizeRestoreTo);
     };
 
     originAfter(decoratedFunc);
@@ -57,11 +58,12 @@ const safeSizeTest = (
   name: string,
   testFunction: TestCafeFn,
   size: BrowserSizeType = DEFAULT_BROWSER_SIZE,
+  sizeRestoreTo?: BrowserSizeType
 ): TestFn => {
   const testCafeTest = test(name, testFunction);
 
   decorateTestCafeBefore(testCafeTest, size);
-  decorateTestCafeAfter(testCafeTest);
+  decorateTestCafeAfter(testCafeTest, sizeRestoreTo);
 
   testCafeTest.before(emptyFunction);
   testCafeTest.after(emptyFunction);

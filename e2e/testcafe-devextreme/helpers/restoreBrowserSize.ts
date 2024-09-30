@@ -2,9 +2,9 @@
 type BrowserSizeType = [width: number, height: number];
 const DEFAULT_BROWSER_SIZE: BrowserSizeType = [1200, 800];
 
-const restoreBrowserSize = async (t: TestController):
+const restoreBrowserSize = async (t: TestController, sizeRestoreTo?: BrowserSizeType):
 Promise<any> => {
-  const [width, height] = DEFAULT_BROWSER_SIZE;
+  const [width, height] = sizeRestoreTo || DEFAULT_BROWSER_SIZE;
   await t.resizeWindow(width, height);
 };
 

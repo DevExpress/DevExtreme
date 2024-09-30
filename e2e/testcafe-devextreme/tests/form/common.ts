@@ -5,6 +5,7 @@ import { testScreenshot, isMaterialBased } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 
@@ -44,7 +45,7 @@ test('Color of the mark (T882067)', async (t) => {
   showOptionalMark: true,
 }));
 
-test('Form labels should have correct width after render in invisible container', async (t) => {
+safeSizeTest('Form labels should have correct width after render in invisible container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'Form labels width after render in invisible container.png');
@@ -52,7 +53,7 @@ test('Form labels should have correct width after render in invisible container'
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [1200, 800], [1200, 1000]).before(async () => {
   await appendElementTo('#container', 'div', 'form');
   await insertStylesheetRulesToPage('#container { display: none; }');
 
