@@ -4,7 +4,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
-import { DataSource } from '@js/data/data_source/data_source';
 import DataHelperMixin from '@js/data_helper';
 import type { Message, MessageSendEvent, Properties as ChatProperties } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';

@@ -5,6 +5,7 @@ import MessageList from '__internal/ui/chat/messagelist';
 import MessageBox from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
 
 import { isRenderer } from 'core/utils/type';
 
@@ -71,6 +72,14 @@ const moduleConfig = {
             this.instance.dispose();
 
             init(options);
+        };
+
+        this.getEmptyView = () => {
+            return this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+        };
+
+        this.getBubbles = () => {
+            return this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
         };
 
         init();
@@ -236,7 +245,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.$sendButton.trigger('dxclick');
 
-                const $bubbles = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+                const $bubbles = this.getBubbles();
                 const bubble = $bubbles[$bubbles.length - 1];
 
                 assert.strictEqual($(bubble).text(), text);
@@ -345,7 +354,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
                 this.instance.renderMessage(newMessage);
 
-                const $bubbles = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+                const $bubbles = this.getBubbles();
 
                 assert.strictEqual($bubbles.length, 4, 'false');
                 assert.strictEqual($bubbles.last().text(), text ? text : '', 'text value is correct');
@@ -546,6 +555,90 @@ QUnit.module('Chat', moduleConfig, () => {
             deferred.reject();
 
             assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).length, 1, 'empty view container was rendered on loading failure');
+        });
+
+        QUnit.test('should render all messages correctly when using an asynchronous data source', function(assert) {
+            const clock = sinon.useFakeTimers();
+
+            try {
+                const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+                const timeout = 1000;
+
+                const store = new CustomStore({
+                    load: function() {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            d.resolve(messages);
+                        }, timeout);
+                        return d.promise();
+                    },
+                });
+
+                this.reinit({
+                    dataSource: store,
+                });
+
+                assert.strictEqual(this.getEmptyView().length, 1, 'empty messagelist view should be rendered');
+                assert.strictEqual(this.getBubbles().length, 0, 'there should be no message bubbles rendered');
+
+                clock.tick(timeout / 2);
+
+                assert.strictEqual(this.getEmptyView().length, 1, 'empty messagelist view should still be visible while data is loading');
+                assert.strictEqual(this.getBubbles().length, 0, 'should still be no message bubbles rendered while data is loading');
+
+                clock.tick(timeout / 2);
+
+                assert.strictEqual(this.getEmptyView().length, 0, 'empty messagelist view should not be visible when data is loaded');
+                assert.strictEqual(this.getBubbles().length, 2, 'message bubbles should be rendered when data is loaded');
+
+            } finally {
+                clock.restore();
+            }
+        });
+
+        QUnit.test('new message should be rendered when using an asynchronous custom store', function(assert) {
+            const clock = sinon.useFakeTimers();
+
+            try {
+                const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+                const timeout = 1000;
+
+                const store = new CustomStore({
+                    load: function() {
+                        const d = $.Deferred();
+                        setTimeout(function() {
+                            d.resolve(messages);
+                        }, timeout);
+                        return d.promise();
+                    },
+                    insert: function(values) {
+                        const d = $.Deferred();
+
+                        setTimeout(() => {
+                            messages.push(values);
+                            d.resolve(values);
+                        }, timeout);
+
+                        return d.promise();
+                    },
+                });
+
+                this.reinit({
+                    dataSource: store,
+                });
+
+                clock.tick(timeout);
+
+                const newMessage = { text: 'message_3' };
+                this.instance.renderMessage(newMessage);
+
+                clock.tick(timeout * 2);
+
+                assert.deepEqual(this.instance.option('items'), messages, 'items option should contain all messages including the new one');
+                assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
+            } finally {
+                clock.restore();
+            }
         });
     });
 });
