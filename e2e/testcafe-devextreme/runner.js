@@ -172,7 +172,7 @@ function setShadowDom(args) {
 }
 
 function expandBrowserAlias(browser, sizes) {
-    browser.split(' ').map((browserArg) => {
+    return browser.split(' ').map((browserArg) => {
         switch(browserArg) {
             case 'chrome:devextreme-shr2':
                 return `chrome:headless --disable-gpu --window-size=${sizes[0]},${sizes[1]}`;
