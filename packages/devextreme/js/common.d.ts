@@ -858,7 +858,7 @@ export type PagerPageSize = 'all' | 'auto';
 
 /**
  * @docid
- * @public
+ * @hidden
  * @namespace DevExpress.common
  */
 export type BasePagerOptions = {

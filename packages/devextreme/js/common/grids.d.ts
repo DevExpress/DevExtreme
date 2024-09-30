@@ -2501,12 +2501,14 @@ export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'view
 export type Pager = BasePagerOptions & {
   /**
    * @docid
+   * @public
    * @default "auto"
    */
   allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
 
   /**
    * @docid
+   * @public
    * @default "auto"
    */
   visible?: boolean | Mode;
