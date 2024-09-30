@@ -322,6 +322,9 @@
         "dxCalendar-selectedDateRangeCount": "There are {0} selected date ranges",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
 
+        "dxAvatar-userName": "Unknown User",
+        "dxAvatar-imageAlt": "Avatar",
+
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
