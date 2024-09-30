@@ -130,7 +130,12 @@
 .dx-icon-triangleright,
 .dx-icon-triangleleft,
 .dx-icon-sendfilled,
-.dx-icon-chat {
+.dx-icon-chat,
+.dx-icon-fixcolumn,
+.dx-icon-fixcolumnleft,
+.dx-icon-fixcolumnright,
+.dx-icon-stickcolumn,
+.dx-icon-unfixcolumn {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -465,6 +470,7 @@ $icons: (
     "triangledown":"\f16c",
     "triangleright":"\f16d",
     "triangleleft":"\f16e",
+    "fixcolumn":"\f16f",
     "expandform": "\f170",
     "description": "\f171",
     "belloutline": "\f172",
@@ -475,6 +481,10 @@ $icons: (
     "datausage": "\f177",
     "datapie": "\f178",
     "pinmap": "\f179",
+    "unfixcolumn":"\f17a",
+    "fixcolumnleft":"\f17b",
+    "stickcolumn":"\f17c",
+    "fixcolumnright":"\f17d",
 );
 
 // stylelint-enable

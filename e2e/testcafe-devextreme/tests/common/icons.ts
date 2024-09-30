@@ -271,6 +271,11 @@ const iconSet = {
   triangleleft: '\f16e',
   sendfilled: '\f09a',
   chat: '\f17e',
+  fixcolumn: '\f16f',
+  unfixcolumn: '\f17a',
+  fixcolumnleft: '\f17b',
+  stickcolumn: '\f17c',
+  fixcolumnright: '\f17d',
 };
 
 fixture.disablePageReloads`Icons`

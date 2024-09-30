@@ -2974,6 +2974,35 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.columnFixing.texts]
      */
     texts?: ColumnFixingTexts;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons]
+     */
+    icons?: ColumnFixingIcons;
+  };
+  /**
+   * [descr:ColumnFixingIcons]
+   */
+  export type ColumnFixingIcons = {
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.fix]
+     */
+    fix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.leftPosition]
+     */
+    leftPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.rightPosition]
+     */
+    rightPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.unfix]
+     */
+    unfix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.stickyPosition]
+     */
+    stickyPosition?: string;
   };
   /**
    * [descr:ColumnFixingTexts]
@@ -2995,6 +3024,10 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.columnFixing.texts.unfix]
      */
     unfix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.stickPosition]
+     */
+    stickyPosition?: string;
   };
   export type ColumnHeaderFilter = {
     /**

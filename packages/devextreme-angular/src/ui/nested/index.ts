@@ -102,6 +102,7 @@ export * from './hide';
 export * from './history-toolbar';
 export * from './horizontal-line';
 export * from './hover-style';
+export * from './icons';
 export * from './image-upload';
 export * from './image';
 export * from './indent';

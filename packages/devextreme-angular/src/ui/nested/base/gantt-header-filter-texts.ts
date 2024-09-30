@@ -31,6 +31,13 @@ export abstract class DxoGanttHeaderFilterTexts extends NestedOption {
         this._setOption('rightPosition', value);
     }
 
+    get stickPosition(): string {
+        return this._getOption('stickPosition');
+    }
+    set stickPosition(value: string) {
+        this._setOption('stickPosition', value);
+    }
+
     get unfix(): string {
         return this._getOption('unfix');
     }

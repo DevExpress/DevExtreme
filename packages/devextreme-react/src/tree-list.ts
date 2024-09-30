@@ -558,10 +558,18 @@ const ColumnChooserSelection: typeof _componentColumnChooserSelection & IElement
 // TreeList
 type IColumnFixingProps = React.PropsWithChildren<{
   enabled?: boolean;
+  icons?: Record<string, any> | {
+    fix?: string;
+    leftPosition?: string;
+    rightPosition?: string;
+    stickyPosition?: string;
+    unfix?: string;
+  };
   texts?: Record<string, any> | {
     fix?: string;
     leftPosition?: string;
     rightPosition?: string;
+    stickPosition?: string;
     unfix?: string;
   };
 }>
@@ -575,6 +583,7 @@ const ColumnFixing: typeof _componentColumnFixing & IElementDescriptor = Object.
   OptionName: "columnFixing",
   ExpectedChildren: {
     columnFixingTexts: { optionName: "texts", isCollectionItem: false },
+    icons: { optionName: "icons", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
   },
 })
@@ -585,6 +594,7 @@ type IColumnFixingTextsProps = React.PropsWithChildren<{
   fix?: string;
   leftPosition?: string;
   rightPosition?: string;
+  stickPosition?: string;
   unfix?: string;
 }>
 const _componentColumnFixingTexts = memo(
@@ -1448,6 +1458,25 @@ const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componen
 })
 
 // owners:
+// ColumnFixing
+type IIconsProps = React.PropsWithChildren<{
+  fix?: string;
+  leftPosition?: string;
+  rightPosition?: string;
+  stickyPosition?: string;
+  unfix?: string;
+}>
+const _componentIcons = memo(
+  (props: IIconsProps) => {
+    return React.createElement(NestedOption<IIconsProps>, { ...props });
+  }
+);
+
+const Icons: typeof _componentIcons & IElementDescriptor = Object.assign(_componentIcons, {
+  OptionName: "icons",
+})
+
+// owners:
 // Toolbar
 type IItemProps = React.PropsWithChildren<{
   cssClass?: string;
@@ -2174,6 +2203,7 @@ type ITextsProps = React.PropsWithChildren<{
   fix?: string;
   leftPosition?: string;
   rightPosition?: string;
+  stickPosition?: string;
   unfix?: string;
   clearFilter?: string;
   createFilter?: string;
@@ -2469,6 +2499,8 @@ export {
   IHeaderFilterProps,
   Hide,
   IHideProps,
+  Icons,
+  IIconsProps,
   Item,
   IItemProps,
   KeyboardNavigation,
