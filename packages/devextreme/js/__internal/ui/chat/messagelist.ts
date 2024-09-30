@@ -34,7 +34,7 @@ export interface Properties extends WidgetOptions<MessageList> {
 class MessageList extends Widget<Properties> {
   private _messageGroups?: MessageGroup[];
 
-  private _containerClientHeight?: number;
+  private _containerClientHeight!: number;
 
   private _scrollable!: Scrollable<unknown>;
 
@@ -75,13 +75,14 @@ class MessageList extends Widget<Properties> {
   }
 
   _resizeHandler({ contentRect, target }: ResizeObserverEntry): void {
-    const newHeight = contentRect.height;
-
     if (!isElementInDom($(target)) || !isElementVisible(target as HTMLElement)) {
       return;
     }
 
-    if (!isDefined(this._containerClientHeight)) {
+    const isInitialRendering = !isDefined(this._containerClientHeight);
+    const newHeight = contentRect.height;
+
+    if (isInitialRendering) {
       this._scrollContentToLastMessage();
     } else {
       const heightChange = this._containerClientHeight - newHeight;
