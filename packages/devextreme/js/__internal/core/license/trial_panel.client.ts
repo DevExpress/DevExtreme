@@ -14,7 +14,7 @@ export interface CustomTrialPanelStyles {
   buttonStyles?: StylesMap;
 }
 
-export const isClient = (): boolean => typeof HTMLElement !== 'undefined';
+export const isClient = (): boolean => typeof HTMLElement !== 'undefined' && typeof customElements !== 'undefined';
 
 const SafeHTMLElement = isClient()
   ? HTMLElement
