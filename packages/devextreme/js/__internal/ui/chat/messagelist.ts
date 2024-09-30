@@ -1,13 +1,9 @@
-import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
-import { contains } from '@js/core/utils/dom';
-import { hasWindow } from '@js/core/utils/window';
+import { isElementInDom } from '@js/core/utils/dom';
+import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
-import {
-  isReachedBottom,
-} from '@js/renovation/ui/scroll_view/utils/get_boundary_props';
 import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
 import type { Message } from '@js/ui/chat';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
@@ -26,6 +22,8 @@ const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 
+const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
@@ -34,9 +32,7 @@ export interface Properties extends WidgetOptions<MessageList> {
 class MessageList extends Widget<Properties> {
   private _messageGroups?: MessageGroup[];
 
-  private _containerClientHeight = 0;
-
-  private _suppressResizeHandling?: boolean;
+  private _containerClientHeight?: number;
 
   private _scrollable!: Scrollable<unknown>;
 
@@ -60,47 +56,42 @@ class MessageList extends Widget<Properties> {
     super._initMarkup();
 
     this._renderScrollable();
-
     this._renderMessageListContent();
+  }
+
+  _renderContentImpl(): void {
+    super._renderContentImpl();
 
     this._attachResizeObserverSubscription();
-
-    this._suppressResizeHandling = true;
   }
 
   _attachResizeObserverSubscription(): void {
-    if (hasWindow()) {
-      const element = this._getScrollContainer();
+    const element = this.$element().get(0);
 
-      resizeObserverSingleton.unobserve(element);
-      resizeObserverSingleton.observe(element, (entry) => this._resizeHandler(entry));
-    }
-  }
-
-  _isAttached(element: Element): boolean {
-    return !!contains(domAdapter.getBody(), element);
+    resizeObserverSingleton.unobserve(element);
+    resizeObserverSingleton.observe(element, (entry) => this._resizeHandler(entry));
   }
 
   _resizeHandler({ contentRect, target }: ResizeObserverEntry): void {
     const newHeight = contentRect.height;
 
-    if (this._suppressResizeHandling
-      && this._isAttached(target)
-      && isElementVisible(target as HTMLElement)
-    ) {
-      this._scrollContentToLastMessage();
+    if (!isElementInDom($(target)) || !isElementVisible(target as HTMLElement)) {
+      return;
+    }
 
-      this._suppressResizeHandling = false;
+    if (!isDefined(this._containerClientHeight)) {
+      this._scrollContentToLastMessage();
     } else {
       const heightChange = this._containerClientHeight - newHeight;
+      const isHeightDecreasing = heightChange > 0;
 
-      let { scrollTop } = target;
+      let scrollTop = this._scrollable.scrollTop();
 
-      if (heightChange >= 1 || !isReachedBottom(target as HTMLDivElement, target.scrollTop, 0, 1)) {
+      if (isHeightDecreasing) {
         scrollTop += heightChange;
-      }
 
-      this._scrollable.scrollTo({ top: scrollTop });
+        this._scrollable.scrollTo({ top: scrollTop });
+      }
     }
 
     this._containerClientHeight = newHeight;
@@ -231,14 +222,13 @@ class MessageList extends Widget<Properties> {
   }
 
   _scrollContentToLastMessage(): void {
-    const scrollOffsetTopMax = getScrollTopMax(this._getScrollContainer());
-
-    this._scrollable.scrollTo({ top: scrollOffsetTopMax });
+    this._scrollable.scrollTo({
+      top: getScrollTopMax(this._scrollableContainer()),
+    });
   }
 
-  _getScrollContainer(): HTMLElement {
-    // @ts-expect-error
-    return $(this._scrollable.container()).get(0);
+  _scrollableContainer(): Element {
+    return $(this._scrollable.element()).find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
   }
 
   _clean(): void {
