@@ -25,7 +25,7 @@ export interface PagerContentProps extends PagerProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
   rootElementRef?: RefObject<HTMLDivElement>;
-  pageSizesRef?: RefObject<HTMLDivElement>;
+  allowedPageSizesRef?: RefObject<HTMLDivElement>;
   pagesRef?: RefObject<HTMLElement>;
   infoTextRef?: RefObject<HTMLDivElement>;
 }
@@ -178,11 +178,11 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     const {
       rtlEnabled,
       visible,
-      showPageSizes,
-      pageSizesRef,
+      showPageSizeSelector,
+      allowedPageSizesRef,
       pageSize,
       pageSizeChangedInternal,
-      pageSizes,
+      allowedPageSizes,
       infoTextRef,
       infoText,
       pageCount,
@@ -230,13 +230,13 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
 
         { ...elementAttr as object }
       >
-        {showPageSizes && (
+        {showPageSizeSelector && (
           <PageSizeSelector
-            rootElementRef={pageSizesRef}
+            rootElementRef={allowedPageSizesRef}
             isLargeDisplayMode={this.getIsLargeDisplayMode()}
             pageSize={pageSize}
             pageSizeChangedInternal={pageSizeChangedInternal}
-            pageSizes={pageSizes}
+            allowedPageSizes={allowedPageSizes}
           />
         )}
         {this.getPagesContainerVisible() && (

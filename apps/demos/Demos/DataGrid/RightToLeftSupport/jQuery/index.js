@@ -61,6 +61,9 @@ $(() => {
     paging: {
       pageSize: 15,
     },
+    pager: {
+      visible: true,
+    },
     columns: englishColumns,
   }).dxDataGrid('instance');
 

@@ -53,6 +53,14 @@ export class DxoDataGridTextsComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
+    get stickPosition(): string {
+        return this._getOption('stickPosition');
+    }
+    set stickPosition(value: string) {
+        this._setOption('stickPosition', value);
+    }
+
+    @Input()
     get unfix(): string {
         return this._getOption('unfix');
     }

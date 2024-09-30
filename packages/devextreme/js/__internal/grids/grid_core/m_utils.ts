@@ -8,7 +8,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
-import { getHeight } from '@js/core/utils/size';
+import { getHeight, getInnerWidth, getOuterWidth } from '@js/core/utils/size';
 import { format } from '@js/core/utils/string';
 import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
@@ -154,6 +154,29 @@ const equalFilterParameters = function (filter1, filter2) {
       && toComparable(filter1.selectedFilterOperation) === toComparable(filter2.selectedFilterOperation);
   }
   return toComparable(filter1) == toComparable(filter2); // eslint-disable-line eqeqeq
+};
+
+const createPoint = function (options): Record<string, any> {
+  return {
+    index: options.index,
+    columnIndex: options.columnIndex,
+    x: options.x,
+    y: options.y,
+  };
+};
+
+const addPointIfNeed = function (points, pointProps, pointCreated): void {
+  let notCreatePoint = false;
+
+  if (pointCreated) {
+    notCreatePoint = pointCreated(pointProps);
+  }
+
+  if (!notCreatePoint) {
+    const point = createPoint(pointProps);
+
+    points.push(point);
+  }
 };
 
 function normalizeGroupingLoadOptions(group) {
@@ -418,45 +441,60 @@ export default {
     return (!sortParameters1 || !sortParameters1.length) === (!sortParameters2 || !sortParameters2.length);
   },
 
-  getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex?) {
-    const cellsLength = items.length;
-    let notCreatePoint = false;
+  getPointsByColumns(items, pointCreated, isVertical?, startColumnIndex = 0, needToCheckPrevPoint = false) {
+    const result: any[] = [];
+    const cellsLength: number = items.length;
     let item;
     let offset;
-    let columnIndex = startColumnIndex || 0;
-    const result: any[] = [];
+    let columnIndex = startColumnIndex;
     let rtlEnabled;
 
     for (let i = 0; i <= cellsLength; i++) {
       if (i < cellsLength) {
-        item = items.eq(i);
-        offset = item.offset();
-        rtlEnabled = item.css('direction') === 'rtl';
+        item = items[i];
+        offset = getBoundingRect(item);
+        // @ts-expect-error
+        rtlEnabled = $(item).css('direction') === 'rtl';
       }
 
-      const point = {
+      const pointProps: any = {
         index: columnIndex,
-        // @ts-expect-error
-        x: offset ? offset.left + (!isVertical && (rtlEnabled ^ (i === cellsLength)) ? getBoundingRect(item[0]).width : 0) : 0,
-        y: offset ? offset.top + (isVertical && i === cellsLength ? getBoundingRect(item[0]).height : 0) : 0,
         columnIndex,
+        item,
+        x: !isVertical && rtlEnabled !== (i === cellsLength)
+          ? offset?.right ?? 0
+          : offset?.left ?? 0,
+        y: isVertical && i === cellsLength ? offset?.bottom ?? 0 : offset?.top ?? 0,
       };
 
       if (!isVertical && i > 0) {
-        const prevItemOffset = items.eq(i - 1).offset();
+        const prevItemOffset = getBoundingRect(items[i - 1]);
+        const prevItemOffsetX = rtlEnabled ? prevItemOffset.left : prevItemOffset.right;
 
-        if (prevItemOffset.top < point.y) {
-          point.y = prevItemOffset.top;
+        if (prevItemOffset.top < pointProps.y) {
+          pointProps.y = prevItemOffset.top;
+        }
+
+        if (needToCheckPrevPoint && Math.round(prevItemOffsetX) !== Math.round(pointProps.x)) {
+          const prevPointProps: any = {
+            ...pointProps,
+            item: items[i - 1],
+            x: prevItemOffsetX,
+          };
+
+          if (rtlEnabled) {
+            pointProps.isRightBoundary = true;
+            prevPointProps.isLeftBoundary = true;
+          } else {
+            pointProps.isLeftBoundary = true;
+            prevPointProps.isRightBoundary = true;
+          }
+
+          addPointIfNeed(result, prevPointProps, pointCreated);
         }
       }
 
-      if (pointCreated) {
-        notCreatePoint = pointCreated(point);
-      }
-
-      if (!notCreatePoint) {
-        result.push(point);
-      }
+      addPointIfNeed(result, pointProps, pointCreated);
       columnIndex++;
     }
     return result;
@@ -742,5 +780,13 @@ export default {
     };
 
     logSpecificDeprecatedWarningIfNeed(columns);
+  },
+
+  getComponentBorderWidth(that, $rowsViewElement) {
+    const borderWidth = that.option('showBorders')
+      ? Math.ceil(getOuterWidth($rowsViewElement) - getInnerWidth($rowsViewElement))
+      : 0;
+
+    return borderWidth;
   },
 };

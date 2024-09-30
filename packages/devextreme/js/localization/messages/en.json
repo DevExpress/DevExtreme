@@ -3,6 +3,7 @@
         "Yes": "Yes",
         "No": "No",
         "Cancel": "Cancel",
+        "CheckState": "Check state",
         "Close": "Close",
         "Clear": "Clear",
         "Done": "Done",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Delete",
         "dxListEditDecorator-more": "More",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Pull down to refresh...",
         "dxScrollView-pulledDownText": "Release to refresh...",
@@ -312,7 +316,10 @@
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
         "dxCalendar-selectedDate": "The selected date is {0}",
+        "dxCalendar-selectedDates": "The selected dates",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
+        "dxCalendar-selectedMultipleDateRange": "from {0} to {1}",
+        "dxCalendar-selectedDateRangeCount": "There are {0} selected date ranges",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
 
         "dxChat-emptyListMessage": "There are no messages in this chat",

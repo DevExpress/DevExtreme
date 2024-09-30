@@ -7,6 +7,7 @@ import DataGrid, {
   Column,
   Lookup,
   RequiredRule,
+  Pager,
 } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import SelectBox from 'devextreme-react/select-box';
@@ -85,6 +86,7 @@ const App = () => (
         enabled={true}
         defaultPageSize={15}
       />
+      <Pager visible={true} />
       <HeaderFilter visible={true} />
       <SearchPanel visible={true} />
       <Editing

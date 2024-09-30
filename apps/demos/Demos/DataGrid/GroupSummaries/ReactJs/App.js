@@ -5,6 +5,7 @@ import DataGrid, {
   Summary,
   GroupItem,
   SortByGroupSummaryInfo,
+  Pager,
 } from 'devextreme-react/data-grid';
 import { orders } from './data.js';
 
@@ -16,6 +17,7 @@ const App = () => (
     showBorders={true}
   >
     <Selection mode="single" />
+    <Pager visible={true} />
     <Column
       dataField="OrderNumber"
       width={130}

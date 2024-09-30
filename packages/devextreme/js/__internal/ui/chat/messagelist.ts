@@ -1,22 +1,33 @@
+import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import resizeObserverSingleton from '@js/core/resize_observer';
+import dateSerialization from '@js/core/utils/date_serialization';
+import { contains } from '@js/core/utils/dom';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
+import {
+  isReachedBottom,
+} from '@js/renovation/ui/scroll_view/utils/get_boundary_props';
+import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
 import type { Message } from '@js/ui/chat';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
+import { isElementVisible } from '../splitter/utils/layout';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup from './messagegroup';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 
-const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
+
+export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
@@ -24,7 +35,11 @@ export interface Properties extends WidgetOptions<MessageList> {
 }
 
 class MessageList extends Widget<Properties> {
-  _messageGroups?: MessageGroup[];
+  private _messageGroups?: MessageGroup[];
+
+  private _containerClientHeight = 0;
+
+  private _suppressResizeHandling?: boolean;
 
   private _scrollable!: Scrollable<unknown>;
 
@@ -51,10 +66,47 @@ class MessageList extends Widget<Properties> {
 
     this._renderMessageListContent();
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this._scrollable.update();
+    this._attachResizeObserverSubscription();
 
-    this._scrollContentToLastMessageGroup();
+    this._suppressResizeHandling = true;
+  }
+
+  _attachResizeObserverSubscription(): void {
+    if (hasWindow()) {
+      const element = this._getScrollContainer();
+
+      resizeObserverSingleton.unobserve(element);
+      resizeObserverSingleton.observe(element, (entry) => this._resizeHandler(entry));
+    }
+  }
+
+  _isAttached(element: Element): boolean {
+    return !!contains(domAdapter.getBody(), element);
+  }
+
+  _resizeHandler({ contentRect, target }: ResizeObserverEntry): void {
+    const newHeight = contentRect.height;
+
+    if (this._suppressResizeHandling
+      && this._isAttached(target)
+      && isElementVisible(target as HTMLElement)
+    ) {
+      this._scrollContentToLastMessage();
+
+      this._suppressResizeHandling = false;
+    } else {
+      const heightChange = this._containerClientHeight - newHeight;
+
+      let { scrollTop } = target;
+
+      if (heightChange >= 1 || !isReachedBottom(target as HTMLDivElement, target.scrollTop, 0, 1)) {
+        scrollTop += heightChange;
+      }
+
+      this._scrollable.scrollTo({ top: scrollTop });
+    }
+
+    this._containerClientHeight = newHeight;
   }
 
   _renderEmptyViewContent(): void {
@@ -79,15 +131,11 @@ class MessageList extends Widget<Properties> {
       .addClass(CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS)
       .text(promptText);
 
-    $emptyView.appendTo(this._scrollable.content());
+    $emptyView.appendTo(this._$content());
   }
 
   _removeEmptyView(): void {
-    $(this._scrollable.content()).empty();
-  }
-
-  _toggleEmptyStateClass(state: boolean): void {
-    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, state);
+    this._$content().empty();
   }
 
   _isEmpty(): boolean {
@@ -107,7 +155,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    const $messageGroup = $('<div>').appendTo(this._scrollable.content());
+    const $messageGroup = $('<div>').appendTo(this._$content());
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
@@ -122,13 +170,13 @@ class MessageList extends Widget<Properties> {
       .appendTo(this.$element());
 
     this._scrollable = this._createComponent($scrollable, Scrollable, {
-      useNative: true,
+      useKeyboard: false,
+      bounceEnabled: false,
     });
   }
 
   _renderMessageListContent(): void {
     if (this._isEmpty()) {
-      this._toggleEmptyStateClass(true);
       this._renderEmptyViewContent();
 
       return;
@@ -141,10 +189,14 @@ class MessageList extends Widget<Properties> {
 
     items.forEach((item, index) => {
       const newMessageGroupItem = item ?? {};
-
       const id = newMessageGroupItem.author?.id;
 
-      if (id === currentMessageGroupUserId) {
+      const isTimeoutExceeded = this._isTimeoutExceeded(
+        currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
+        item,
+      );
+
+      if (id === currentMessageGroupUserId && !isTimeoutExceeded) {
         currentMessageGroupItems.push(newMessageGroupItem);
       } else {
         this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
@@ -161,35 +213,43 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderMessage(message: Message): void {
-    const sender = message.author;
+    const { author } = message;
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
 
     if (lastMessageGroup) {
-      const lastMessageGroupUserId = lastMessageGroup.option('items')[0].author?.id;
+      const { items } = lastMessageGroup.option();
+      const lastMessageGroupItem = items[items.length - 1];
+      const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
 
-      if (sender?.id === lastMessageGroupUserId) {
+      const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupItem, message);
+
+      if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded) {
         lastMessageGroup.renderMessage(message);
-
-        this._scrollContentToLastMessageGroup();
+        this._scrollContentToLastMessage();
 
         return;
       }
     }
 
-    this._createMessageGroupComponent([message], sender?.id);
-    this._scrollContentToLastMessageGroup();
+    this._createMessageGroupComponent([message], author?.id);
+
+    this._scrollContentToLastMessage();
   }
 
-  _scrollContentToLastMessageGroup(): void {
-    if (!(this._messageGroups?.length && hasWindow())) {
-      return;
-    }
+  _$content(): dxElementWrapper {
+    return $(this._scrollable.content());
+  }
 
-    const lastMessageGroup = this._messageGroups[this._messageGroups.length - 1];
-    const element = lastMessageGroup.$element()[0];
+  _scrollContentToLastMessage(): void {
+    const scrollOffsetTopMax = getScrollTopMax(this._getScrollContainer());
 
-    this._scrollable.scrollToElement(element);
+    this._scrollable.scrollTo({ top: scrollOffsetTopMax });
+  }
+
+  _getScrollContainer(): HTMLElement {
+    // @ts-expect-error
+    return $(this._scrollable.container()).get(0);
   }
 
   _clean(): void {
@@ -225,8 +285,6 @@ class MessageList extends Widget<Properties> {
     if (shouldItemsBeUpdatedCompletely) {
       this._invalidate();
     } else {
-      this._toggleEmptyStateClass(false);
-
       if (!previousValue.length) {
         this._removeEmptyView();
       }
@@ -235,6 +293,22 @@ class MessageList extends Widget<Properties> {
 
       this._renderMessage(newMessage ?? {});
     }
+  }
+
+  _isTimeoutExceeded(lastMessage: Message, newMessage: Message): boolean {
+    const lastMessageTimestamp = lastMessage?.timestamp;
+    const newMessageTimestamp = newMessage?.timestamp;
+
+    if (!lastMessageTimestamp || !newMessageTimestamp) {
+      return false;
+    }
+
+    const lastMessageTimestampInMs = dateSerialization.deserializeDate(lastMessageTimestamp);
+    const newMessageTimestampInMs = dateSerialization.deserializeDate(newMessageTimestamp);
+
+    const result = newMessageTimestampInMs - lastMessageTimestampInMs > MESSAGEGROUP_TIMEOUT;
+
+    return result;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

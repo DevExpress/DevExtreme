@@ -25,6 +25,7 @@ export * from './from';
 export * from './group-operation-descriptions';
 export * from './header-filter';
 export * from './hide';
+export * from './icons';
 export * from './item-dxi';
 export * from './keyboard-navigation';
 export * from './label';

@@ -30,6 +30,7 @@ import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import gridCoreUtils from '../m_utils';
+import { CLASSES } from '../sticky_columns/const';
 import { ColumnsView } from './m_columns_view';
 
 const ROWS_VIEW_CLASS = 'rowsview';
@@ -52,7 +53,7 @@ const LOADPANEL_HIDE_TIMEOUT = 200;
 function getMaxHorizontalScrollOffset(scrollable) {
   return scrollable ? Math.round(scrollable.scrollWidth() - scrollable.clientWidth()) : 0;
 }
-function isGroupRow({ rowType, column }) {
+export function isGroupRow({ rowType, column }) {
   return rowType === 'group'
     && isDefined(column.groupIndex)
     && !column.showWhenGrouped && !column.command;
@@ -212,7 +213,12 @@ export class RowsView extends ColumnsView {
    */
   public _updateCell($cell, options) {
     if (isGroupRow(options)) {
-      $cell.addClass(GROUP_CELL_CLASS);
+      const isGroupContainer = $cell.is(`.${this.addWidgetPrefix(CLASSES.groupRowContainer)}`);
+      const $groupCell = isGroupContainer
+        ? $cell.parent()
+        : $cell;
+
+      $groupCell.addClass(GROUP_CELL_CLASS);
     }
     super._updateCell.apply(this, arguments as any);
   }

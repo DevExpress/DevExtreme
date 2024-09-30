@@ -5,6 +5,7 @@ import { adjust } from './math';
 import { each } from './iterator';
 import { camelize } from './inflector';
 import { toMilliseconds } from '../../renovation/ui/common/utils/date/index';
+import dateSerialization from './date_serialization';
 
 const DAYS_IN_WEEK = 7;
 const THURSDAY_WEEK_NUMBER = 4;
@@ -689,6 +690,37 @@ const getMachineTimezoneName = () => {
         : null;
 };
 
+const getRangesByDates = (dates) => {
+    const datesInMilliseconds = dates.map((value) => correctDateWithUnitBeginning(value, 'day').getTime());
+    const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
+
+    const msInDay = toMilliseconds('day');
+    const ranges = [];
+
+    let startDate = sortedDates[0];
+
+    for(let i = 1; i <= sortedDates.length; ++i) {
+        const nextDate = sortedDates[i];
+        const currentDate = sortedDates[i - 1];
+
+        const isNewRange = nextDate - currentDate > msInDay;
+
+        if(isNewRange || i === sortedDates.length) {
+            const range = startDate === sortedDates[i - 1]
+                ? [startDate]
+                : [startDate, sortedDates[i - 1]];
+
+            const serializedRange = range.map((value) => dateSerialization.deserializeDate(value));
+
+            ranges.push(serializedRange);
+
+            startDate = nextDate;
+        }
+    }
+
+    return ranges;
+};
+
 const dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
@@ -752,6 +784,8 @@ const dateUtils = {
     createDateWithFullYear: createDateWithFullYear,
 
     getMachineTimezoneName: getMachineTimezoneName,
+
+    getRangesByDates: getRangesByDates,
 };
 
 dateUtils.sameView = function(view, date1, date2) {

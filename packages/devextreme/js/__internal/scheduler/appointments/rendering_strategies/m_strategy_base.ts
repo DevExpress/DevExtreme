@@ -463,6 +463,12 @@ class BaseRenderingStrategy {
 
     const createItem = (currentItem, index?) => {
       const currentIndex = index || 0;
+      const skipSortIndex = this._skipSortedIndex(currentIndex);
+
+      if (skipSortIndex) {
+        stack.shouldShiftAfterSkip = true;
+      }
+
       return {
         index: currentIndex,
         i: currentItem.i,
@@ -472,7 +478,7 @@ class BaseRenderingStrategy {
         top: currentItem.top,
         bottom: currentItem.bottom,
         allDay: currentItem.allDay,
-        sortedIndex: this._skipSortedIndex(currentIndex) ? null : sortedIndex++,
+        sortedIndex: skipSortIndex ? stack.startSortedIndex : sortedIndex++,
       };
     };
 
@@ -483,17 +489,24 @@ class BaseRenderingStrategy {
       stack.top = currentItem.top;
       stack.bottom = currentItem.bottom;
       stack.allDay = currentItem.allDay;
+      stack.startSortedIndex = stack.items[0].sortedIndex;
     };
-    const pushItemsInResult = (items) => {
-      items.forEach((item) => {
+    const pushItemsInResult = (stack) => {
+      stack.items.forEach((item) => {
         result.push({
           index: item.index,
           count: maxIndexInStack + 1,
           i: item.i,
           j: item.j,
-          sortedIndex: item.sortedIndex,
+          sortedIndex: stack.shouldShiftAfterSkip && !this._skipSortedIndex(item.index)
+            ? item.sortedIndex + 1
+            : item.sortedIndex,
         });
       });
+
+      if (stack.shouldShiftAfterSkip) {
+        sortedIndex += 1;
+      }
     };
 
     for (i = 0; i < sortedArray.length; i++) {
@@ -518,14 +531,14 @@ class BaseRenderingStrategy {
         stack.bottom = Math.max(stack.bottom, currentItem.bottom);
         stack.allDay = currentItem.allDay;
       } else {
-        pushItemsInResult(stack.items);
+        pushItemsInResult(stack);
         stack = {};
         startNewStack(currentItem);
         maxIndexInStack = 0;
       }
     }
     if (stack.items) {
-      pushItemsInResult(stack.items);
+      pushItemsInResult(stack);
     }
 
     return result.sort((a, b) => {

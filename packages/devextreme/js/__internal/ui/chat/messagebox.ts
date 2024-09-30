@@ -85,7 +85,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       placeholder: 'Type a message',
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
-      maxHeight: '20em',
+      maxHeight: '8em',
       onInput: (): void => {
         const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
@@ -144,9 +144,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     const { text } = this._textArea.option();
 
-    this._messageSendAction?.({ text, event: e.event });
     this._textArea.reset();
     this._toggleButtonDisableState(true);
+
+    this._messageSendAction?.({ text, event: e.event });
   }
 
   _toggleButtonDisableState(state: boolean): void {

@@ -12,7 +12,23 @@ module.exports = {
   generatedComponentsDir: './src',
   coreComponentsDir: './src/core',
   indexFileName: './src/index.ts',
-  baseComponent: './core/index',
-  configComponent: './core/index',
+  componentGeneratorTplConfig: {
+    createComponentFn: {
+      name: 'defineComponent',
+      path: 'vue',
+    },
+    prepareComponentConfigFn: {
+      name: 'prepareComponentConfig',
+      path: './core/index',
+    },
+    prepareExtensionComponentConfigFn: {
+      name: 'prepareExtensionComponentConfig',
+      path: './core/index',
+    },
+    prepareConfigurationComponentConfigFn: {
+      name: 'prepareConfigurationComponentConfig',
+      path: './core/index',
+    },
+  },
   widgetsPackage: 'devextreme'
 };

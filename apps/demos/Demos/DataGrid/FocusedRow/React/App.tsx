@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
-  DataGrid, Column, Paging, DataGridTypes,
+  DataGrid, Column, Paging, DataGridTypes, Pager,
 } from 'devextreme-react/data-grid';
 import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
 import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
@@ -88,6 +88,7 @@ const App = () => {
         showBorders={true}
       >
         <Paging defaultPageSize={10} />
+        <Pager visible={true} />
         <Column
           dataField="Task_ID"
           width={80} />

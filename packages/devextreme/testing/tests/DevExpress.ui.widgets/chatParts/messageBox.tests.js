@@ -63,7 +63,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 stylingMode: 'outlined',
                 placeholder: 'Type a message',
                 autoResizeEnabled: true,
-                maxHeight: '20em',
+                maxHeight: '8em',
                 valueChangeEvent: 'input'
             };
 

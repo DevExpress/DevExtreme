@@ -1,16 +1,25 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
+import { setWidth } from '@js/core/utils/size';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type {
+  ColumnsResizerViewController,
+  DraggingHeaderViewController,
+} from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
-import { StickyPosition } from './const';
+import { isGroupRow } from '../views/m_rows_view';
+import { CLASSES, StickyPosition } from './const';
 import { GridCoreStickyColumnsDom } from './dom';
 import {
   getColumnFixedPosition,
   getStickyOffset,
   isFirstFixedColumn,
+  isFixedEdge,
   isLastFixedColumn,
   normalizeOffset,
   prevColumnIsFixed,
@@ -146,9 +155,21 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
         const styleProps = normalizeOffset(offset);
 
-        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex);
+        this.setCellProperties(styleProps, visibleColumnIndex, rowIndex, true);
       }
     });
+  }
+
+  protected setColumnWidths(options): void {
+    const isStickyColumns = this._isStickyColumns();
+    const columnsResizerController = this.getController('columnsResizer');
+    const isColumnResizing = columnsResizerController?.isResizing();
+
+    super.setColumnWidths(options);
+
+    if (isStickyColumns && isColumnResizing) {
+      this.setStickyOffsets();
+    }
   }
 
   protected _resizeCore() {
@@ -231,16 +252,28 @@ const columnHeadersView = (
         };
         const fixedPositionItems = [
           {
-            text: columnFixingOptions.texts.leftPosition, value: 'left', disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'), onItemClick,
+            text: columnFixingOptions.texts.leftPosition,
+            icon: columnFixingOptions.icons.leftPosition,
+            value: 'left',
+            disabled: column.fixed && (!column.fixedPosition || column.fixedPosition === 'left'),
+            onItemClick,
           },
           {
-            text: columnFixingOptions.texts.rightPosition, value: 'right', disabled: column.fixed && column.fixedPosition === 'right', onItemClick,
+            text: columnFixingOptions.texts.rightPosition,
+            icon: columnFixingOptions.icons.rightPosition,
+            value: 'right',
+            disabled: column.fixed && column.fixedPosition === 'right',
+            onItemClick,
           },
         ];
 
         if (this.option('columnFixing.legacyMode') !== true) {
           fixedPositionItems.push({
-            text: columnFixingOptions.texts.stickyPosition, value: 'sticky', disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky, onItemClick,
+            text: columnFixingOptions.texts.stickyPosition,
+            icon: columnFixingOptions.icons.stickyPosition,
+            value: 'sticky',
+            disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky,
+            onItemClick,
           });
         }
 
@@ -249,11 +282,16 @@ const columnHeadersView = (
         items.push(
           {
             text: columnFixingOptions.texts.fix,
+            icon: columnFixingOptions.icons.fix,
             beginGroup: true,
             items: fixedPositionItems,
           },
           {
-            text: columnFixingOptions.texts.unfix, value: 'none', disabled: !column.fixed, onItemClick,
+            text: columnFixingOptions.texts.unfix,
+            icon: columnFixingOptions.icons.unfix,
+            value: 'none',
+            disabled: !column.fixed,
+            onItemClick,
           },
         );
       }
@@ -264,11 +302,208 @@ const columnHeadersView = (
 
 const rowsView = (
   Base: ModuleType<RowsView>,
-) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {};
+) => class RowsViewStickyColumnsExtender extends baseStickyColumns(Base) {
+  private _getMasterDetailWidth(): number {
+    // @ts-expect-error
+    const componentWidth = this.component.$element().width?.() ?? 0;
+    return componentWidth - gridCoreUtils.getComponentBorderWidth(this, this._$element);
+  }
+
+  protected _renderMasterDetailCell($row, row, options): dxElementWrapper {
+    // @ts-expect-error
+    const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
+
+    if (this._isStickyColumns()) {
+      $detailCell
+        .addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft))
+        // @ts-expect-error
+        .width(this._getMasterDetailWidth());
+    }
+
+    return $detailCell;
+  }
+
+  private _updateMasterDetailWidths() {
+    setWidth(
+      this._$element?.find('.dx-master-detail-cell'),
+      this._getMasterDetailWidth(),
+    );
+  }
+
+  protected _resizeCore() {
+    const isStickyColumns = this._isStickyColumns();
+
+    super._resizeCore.apply(this, arguments as any);
+
+    if (isStickyColumns) {
+      this._updateMasterDetailWidths();
+    }
+  }
+
+  protected _renderCellContent($cell, options, renderOptions) {
+    if (!isGroupRow(options) || !this._isStickyColumns()) {
+      return super._renderCellContent($cell, options, renderOptions);
+    }
+
+    const $container = $('<div>')
+      .addClass(this.addWidgetPrefix(CLASSES.groupRowContainer))
+      .appendTo($cell);
+
+    return super._renderCellContent($container, options, renderOptions);
+  }
+
+  protected _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+    // @ts-expect-error
+    super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
+    const stickySummarySelector = `.${this.addWidgetPrefix(CLASSES.stickyColumn)}`;
+
+    if (
+      $groupCell.parent().find(stickySummarySelector).length
+      && GridCoreStickyColumnsDom.doesGroupCellEndInFirstColumn($groupCell)
+    ) {
+      GridCoreStickyColumnsDom
+        .addStickyColumnBorderRightClass($groupCell, this.addWidgetPrefix.bind(this));
+    }
+  }
+};
 
 const footerView = (
   Base: ModuleType<any>,
 ) => class FooterViewStickyColumnsExtender extends baseStickyColumns(Base) {};
+
+const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerStickyColumnsExtender extends Base {
+  protected _correctColumnIndexForPoint(point, correctionValue: number, columns): void {
+    const rtlEnabled = this.option('rtlEnabled');
+    const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
+    const columnIndex = Math.max(point.index - 1, 0);
+    const column = columns[columnIndex];
+    const nextColumnIndex = this._getNextColumnIndex(columnIndex);
+    const nextColumn = columns[nextColumnIndex];
+
+    if (isWidgetResizingMode && !isFixedEdge(point, column, nextColumn)) {
+      const $container = $(this._columnHeadersView.getContent());
+      const isFixedCellPinnedToRight = GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
+        $(point.item),
+        $container,
+        this.addWidgetPrefix.bind(this),
+      );
+
+      if (isFixedCellPinnedToRight) {
+        point.columnIndex -= rtlEnabled ? 1 : 0;
+
+        return;
+      }
+    }
+
+    super._correctColumnIndexForPoint(point, correctionValue, columns);
+  }
+
+  protected _needToInvertResizing($cell: dxElementWrapper): boolean {
+    const result = super._needToInvertResizing($cell);
+    const isWidgetResizingMode = this.option('columnResizingMode') === 'widget';
+
+    if (!result && isWidgetResizingMode) {
+      const $container = $(this._columnHeadersView.getContent());
+
+      return GridCoreStickyColumnsDom.isFixedCellPinnedToRight(
+        $cell,
+        $container,
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return result;
+  }
+
+  protected _generatePointsByColumns(): void {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+
+    super._generatePointsByColumns(isStickyColumns);
+  }
+
+  protected _pointCreated(point, cellsLength, columns) {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+    const result = super._pointCreated(point, cellsLength, columns);
+    const needToCheckPoint = isStickyColumns && cellsLength > 0;
+
+    if (needToCheckPoint && !result) {
+      const column = columns[point.index - 1];
+      const nextColumnIndex = this._getNextColumnIndex(point.index - 1);
+      const nextColumn = columns[nextColumnIndex];
+
+      return GridCoreStickyColumnsDom.noNeedToCreateResizingPoint(
+        this._columnHeadersView,
+        {
+          point,
+          column,
+          nextColumn,
+        },
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return result;
+  }
+};
+
+const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderStickyColumnsExtender extends Base {
+  public _generatePointsByColumns(options): any[] {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView?._isStickyColumns();
+    const { sourceLocation, sourceColumn } = options;
+
+    if (isStickyColumns && sourceLocation === 'headers') {
+      const columnFixedPosition = getColumnFixedPosition(sourceColumn);
+
+      switch (true) {
+        case sourceColumn.fixed && columnFixedPosition === StickyPosition.Left:
+          options.columnElements = GridCoreStickyColumnsDom.getLeftFixedCells(
+            options.columnElements,
+            this.addWidgetPrefix.bind(this),
+          );
+          options.startColumnIndex = options.columnElements.eq(0).index();
+          break;
+        case sourceColumn.fixed && columnFixedPosition === StickyPosition.Right:
+          options.columnElements = GridCoreStickyColumnsDom.getRightFixedCells(
+            options.columnElements,
+            this.addWidgetPrefix.bind(this),
+          );
+          options.startColumnIndex = options.columnElements.eq(0).index();
+          break;
+        default:
+          options.columnElements = GridCoreStickyColumnsDom.getNonFixedAndStickyCells(
+            options.columnElements,
+            this.addWidgetPrefix.bind(this),
+          );
+          options.startColumnIndex = options.columnElements.eq(0).index();
+      }
+    }
+
+    return super._generatePointsByColumns(options, isStickyColumns);
+  }
+
+  protected _pointCreated(point, columns, location, sourceColumn) {
+    // @ts-expect-error
+    const isStickyColumns = this._columnHeadersView._isStickyColumns();
+    const $cells = this._columnHeadersView.getColumnElements();
+    const needToCheckPoint = isStickyColumns && location === 'headers' && $cells?.length
+        && (!sourceColumn.fixed || sourceColumn.fixedPosition === StickyPosition.Sticky);
+    const result = super._pointCreated(point, columns, location, sourceColumn);
+
+    if (needToCheckPoint && !result) {
+      return GridCoreStickyColumnsDom.noNeedToCreateReorderingPoint(
+        point,
+        $cells,
+        $(this._columnHeadersView.getContent()),
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return result;
+  }
+};
 
 export const stickyColumnsModule = {
   extenders: {
@@ -276,6 +511,10 @@ export const stickyColumnsModule = {
       columnHeadersView,
       rowsView,
       footerView,
+    },
+    controllers: {
+      columnsResizer,
+      draggingHeader,
     },
   },
 };

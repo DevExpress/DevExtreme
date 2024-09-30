@@ -1,5 +1,6 @@
 import ValidationGroup, { Properties } from "devextreme/ui/validation_group";
-import { createComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "elementAttr" |
@@ -13,7 +14,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxValidationGroup extends AccessibleOptions {
   readonly instance?: ValidationGroup;
 }
-const DxValidationGroup = createComponent({
+
+const componentConfig = {
   props: {
     elementAttr: Object,
     height: [Function, Number, String],
@@ -41,7 +43,11 @@ const DxValidationGroup = createComponent({
     (this as any).$_WidgetClass = ValidationGroup;
     (this as any).$_hasAsyncTemplate = true;
   }
-});
+};
+
+prepareComponentConfig(componentConfig);
+
+const DxValidationGroup = defineComponent(componentConfig);
 
 export default DxValidationGroup;
 export {

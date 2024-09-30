@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useMemo, useReducer,
 } from 'react';
 import DataGrid, {
-  Column, DataGridTypes, Editing,
+  Column, DataGridTypes, Editing, Pager,
 } from 'devextreme-react/data-grid';
 import { LoadPanel } from 'devextreme-react/load-panel';
 import 'whatwg-fetch';
@@ -70,6 +70,7 @@ const App = () => {
           editRowKey={state.editRowKey}
           onEditRowKeyChange={onEditRowKeyChange}
         />
+        <Pager visible={true} />
         <Column dataField="OrderID" allowEditing={false}></Column>
         <Column dataField="ShipName"></Column>
         <Column dataField="ShipCountry"></Column>

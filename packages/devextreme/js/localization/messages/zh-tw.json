@@ -3,6 +3,7 @@
         "Yes": "是",
         "No": "否",
         "Cancel": "取消",
+        "CheckState": "Check state",
         "Close": "關閉",
         "Clear": "清除",
         "Done": "完成",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "刪除",
         "dxListEditDecorator-more": "更多",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "下拉以重新整理...",
         "dxScrollView-pulledDownText": "放開以重新整理...",
@@ -312,7 +316,10 @@
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
         "dxCalendar-selectedDate": "The selected date is {0}",
+        "dxCalendar-selectedDates": "The selected dates",
         "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
+        "dxCalendar-selectedMultipleDateRange": "from {0} to {1}",
+        "dxCalendar-selectedDateRangeCount": "There are {0} selected date ranges",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
 
         "dxChat-emptyListMessage": "There are no messages in this chat",

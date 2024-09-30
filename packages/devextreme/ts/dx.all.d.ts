@@ -833,6 +833,7 @@ declare module DevExpress {
       previousValue: unknown
     ): void;
     _createElement(element: HTMLElement): void;
+    _validateOptions(options: TProperties): TProperties;
   }
   module DOMComponent {
     /**
@@ -2973,6 +2974,35 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.columnFixing.texts]
      */
     texts?: ColumnFixingTexts;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons]
+     */
+    icons?: ColumnFixingIcons;
+  };
+  /**
+   * [descr:ColumnFixingIcons]
+   */
+  export type ColumnFixingIcons = {
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.fix]
+     */
+    fix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.leftPosition]
+     */
+    leftPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.rightPosition]
+     */
+    rightPosition?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.unfix]
+     */
+    unfix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.icons.stickyPosition]
+     */
+    stickyPosition?: string;
   };
   /**
    * [descr:ColumnFixingTexts]
@@ -2994,6 +3024,10 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseOptions.columnFixing.texts.unfix]
      */
     unfix?: string;
+    /**
+     * [descr:GridBaseOptions.columnFixing.texts.stickPosition]
+     */
+    stickyPosition?: string;
   };
   export type ColumnHeaderFilter = {
     /**
@@ -20787,6 +20821,20 @@ declare module DevExpress.ui {
      * [descr:dxMapOptions.provider]
      */
     provider?: DevExpress.ui.dxMap.MapProvider;
+    /**
+     * [descr:dxMapOptions.providerConfig]
+     */
+    providerConfig?: {
+      /**
+       * [descr:dxMapOptions.providerConfig.mapId]
+       */
+      mapId?: string;
+      /**
+       * [descr:dxMapOptions.providerConfig.useAdvancedMarkers]
+       * @deprecated [depNote:dxMapOptions.providerConfig.useAdvancedMarkers]
+       */
+      useAdvancedMarkers?: boolean;
+    };
     /**
      * [descr:dxMapOptions.routes]
      */
