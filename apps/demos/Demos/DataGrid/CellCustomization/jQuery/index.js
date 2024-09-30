@@ -11,6 +11,9 @@ $(() => {
     paging: {
       pageSize: 10,
     },
+    pager: {
+      visible: true,
+    },
     onCellPrepared(options) {
       const fieldData = options.value;
       let fieldHtml = '';

@@ -19,6 +19,7 @@
         :width="240"
         placeholder="Search..."
       />
+      <DxPager :visible="true"/>
       <DxColumn
         :width="140"
         data-field="OrderNumber"
@@ -101,6 +102,7 @@ import {
   DxSearchPanel,
   DxFilterRow,
   DxDataGridTypes,
+  DxPager,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';

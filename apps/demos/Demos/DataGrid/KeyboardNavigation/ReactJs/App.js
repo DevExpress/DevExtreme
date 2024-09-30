@@ -33,6 +33,7 @@ const App = () => (
       <FilterPanel visible={true} />
       <FilterRow visible={true} />
       <Pager
+        visible={true}
         allowedPageSizes={allowedPageSizes}
         showPageSizeSelector={true}
         showNavigationButtons={true}

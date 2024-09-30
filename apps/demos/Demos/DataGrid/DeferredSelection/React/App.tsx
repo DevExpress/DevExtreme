@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, DataGridTypes, FilterRow, Selection,
+  Column, DataGridTypes, FilterRow, Selection, Pager,
 } from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
 import query from 'devextreme/data/query';
@@ -69,6 +69,7 @@ const App = () => {
       >
         <Selection mode="multiple" deferred={true} />
         <FilterRow visible={true} />
+        <Pager visible={true} />
         <Column caption="Subject" dataField="Task_Subject" />
         <Column
           caption="Start Date"

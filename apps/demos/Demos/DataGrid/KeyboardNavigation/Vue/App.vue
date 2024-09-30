@@ -16,6 +16,7 @@
     <DxFilterRow :visible="true"/>
     <DxFilterPanel :visible="true"/>
     <DxPager
+      :visible="true"
       :allowed-page-sizes="[5, 10]"
       :show-page-size-selector="true"
       :show-navigation-buttons="true"
