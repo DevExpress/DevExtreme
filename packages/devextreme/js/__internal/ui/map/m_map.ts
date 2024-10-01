@@ -99,7 +99,7 @@ const Map = Widget.inherit({
   _logDeprecatedBingProvider() {
     this._logDeprecatedOptionWarning('provider: bing', {
       since: '24.2',
-      message: 'Use other map providers.',
+      message: 'Use other map providers, such as Azure, Google, or GoogleStatic.',
     });
   },
 

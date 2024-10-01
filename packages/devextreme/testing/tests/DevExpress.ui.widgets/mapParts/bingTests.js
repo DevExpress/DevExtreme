@@ -1315,7 +1315,7 @@ QUnit.test('should raise a deprecation warning when provider is set to bing', fu
             'dxMap',
             'provider: bing',
             '24.2',
-            'Use other map providers.'
+            'Use other map providers, such as Azure, Google, or GoogleStatic.'
         ], 'warning is raised with correct parameters');
     } finally {
         errorsLogger.log.restore();
