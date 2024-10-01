@@ -21,7 +21,7 @@ class Avatar extends Widget<Properties> {
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      name: messageLocalization.format('dxAvatar-defaultUserName'),
+      name: 'Unknown User',
       url: '',
     };
   }
@@ -85,7 +85,7 @@ class Avatar extends Widget<Properties> {
     const { name } = this.option();
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._$content?.attr('alt', name || messageLocalization.format('dxAvatar-imageAlt'));
+    this._$content?.attr('alt', name || messageLocalization.format('dxAvatar-defaultImageAlt'));
   }
 
   _isValuableUrl(): boolean {
