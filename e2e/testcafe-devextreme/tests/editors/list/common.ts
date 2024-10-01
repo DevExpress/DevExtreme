@@ -5,6 +5,7 @@ import { isMaterialBased, isFluent, testScreenshot } from '../../../helpers/them
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture`List`
   .page(url(__dirname, '../../container.html'));
@@ -344,7 +345,7 @@ test('The delete button should be displayed correctly after the list item focuse
   itemDeleteMode: 'static',
 }));
 
-test('The button icon in custom template should be displayed correctly after the list item focused (T1216108)', async (t) => {
+safeSizeTest('The button icon in custom template should be displayed correctly after the list item focused (T1216108)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const list = new List('#container');
 
@@ -355,7 +356,7 @@ test('The button icon in custom template should be displayed correctly after the
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxList', {
+}, [1200, 800]).before(async () => createWidget('dxList', {
   dataSource: [{ text: 'item 1' }],
   itemTemplate: (_, __, element) => {
     const button = ($('<div>') as any).dxButton({

@@ -238,7 +238,7 @@ test('Calendar with multiview rendered correct', async (t) => {
     }, '#calendar');
   });
 
-  test(`Calendar ${zoomLevel} view with today button rendered correct`, async (t) => {
+  safeSizeTest(`Calendar ${zoomLevel} view with today button rendered correct`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view with today button.png`, { element: '#container', shouldTestInCompact: true });
@@ -246,7 +246,7 @@ test('Calendar with multiview rendered correct', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 900]).before(async () => {
     await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
     await appendElementTo('#container', 'div', 'calendar');
 

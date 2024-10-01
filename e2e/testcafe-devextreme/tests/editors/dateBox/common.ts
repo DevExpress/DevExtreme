@@ -10,6 +10,7 @@ import {
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const DATEBOX_CLASS = 'dx-datebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
@@ -25,7 +26,7 @@ fixture.disablePageReloads`DateBox render`
 
 stylingModes.forEach((stylingMode) => {
   labelModes.forEach((labelMode) => {
-    test(`DateBox styles, stylingMode=${stylingMode}, labelMode=${labelMode}`, async (t) => {
+    safeSizeTest(`DateBox styles, stylingMode=${stylingMode}, labelMode=${labelMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await testScreenshot(t, takeScreenshot, `Datebox stylingMode=${stylingMode}, labelMode=${labelMode}.png`, { shouldTestInCompact: true });
@@ -45,7 +46,7 @@ stylingModes.forEach((stylingMode) => {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (t) => {
+    }, [1200, 800]).before(async (t) => {
       t.ctx.ids = [];
 
       await insertStylesheetRulesToPage(`.${DATEBOX_CLASS} { display: inline-block; margin: 5px; }`);

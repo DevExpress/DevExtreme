@@ -7,6 +7,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 
@@ -48,7 +49,7 @@ stylingModes.forEach((stylingMode) => {
 });
 
 [true, false].forEach((isValid) => {
-  test(`NumberBox with buttons container, isValid=${isValid}`, async (t) => {
+  safeSizeTest(`NumberBox with buttons container, isValid=${isValid}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
@@ -60,7 +61,7 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 800]).before(async () => {
     for (const stylingMode of stylingModes) {
       for (const buttons of [
         ['clear'],
