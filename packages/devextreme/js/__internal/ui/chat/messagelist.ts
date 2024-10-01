@@ -332,10 +332,14 @@ class MessageList extends Widget<Properties> {
   }
 
   getEmptyViewId(): string | null {
-    const $emptyView = this.$element().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
-    const emptyViewId = $emptyView?.attr('id') ?? null;
+    if (this._isEmpty()) {
+      const $emptyView = this._$content().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+      const emptyViewId = $emptyView.attr('id') ?? null;
 
-    return emptyViewId;
+      return emptyViewId;
+    }
+
+    return null;
   }
 }
 

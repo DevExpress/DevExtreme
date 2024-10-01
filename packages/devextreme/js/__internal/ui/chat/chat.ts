@@ -124,7 +124,7 @@ class Chat extends Widget<Properties> {
   _updateMessageBoxAria(): void {
     const emptyViewId = this._messageList.getEmptyViewId();
 
-    this._messageBox.updateTextAreaAria(emptyViewId);
+    this._messageBox.updateInputAria(emptyViewId);
   }
 
   _createMessageSendAction(): void {

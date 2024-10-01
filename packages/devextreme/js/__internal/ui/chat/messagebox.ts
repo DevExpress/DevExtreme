@@ -175,7 +175,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     }
   }
 
-  updateTextAreaAria(emptyViewId: string | null): void {
+  updateInputAria(emptyViewId: string | null): void {
     this._textArea.option({
       inputAttr: {
         'aria-labelledby': emptyViewId,
