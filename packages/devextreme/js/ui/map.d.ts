@@ -14,7 +14,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type MapProvider = 'bing' | 'google' | 'googleStatic';
+export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
 /** @public */
 export type RouteMode = 'driving' | 'walking';
 /** @public */
@@ -159,12 +159,18 @@ export interface MapLocation {
 export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid
-     * @default { bing: '', google: '', googleStatic: '' }
+     * @default { azure: '', bing: '', google: '', googleStatic: '' }
      * @public
      */
     apiKey?: string | {
       /**
        * @docid
+       * @default ""
+       */
+      azure?: string;
+      /**
+       * @docid
+       * @deprecated
        * @default ""
        */
       bing?: string;

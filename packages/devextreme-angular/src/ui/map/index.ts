@@ -110,10 +110,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get apiKey(): string | { bing?: string, google?: string, googleStatic?: string } {
+    get apiKey(): string | { azure?: string, bing?: string, google?: string, googleStatic?: string } {
         return this._getOption('apiKey');
     }
-    set apiKey(value: string | { bing?: string, google?: string, googleStatic?: string }) {
+    set apiKey(value: string | { azure?: string, bing?: string, google?: string, googleStatic?: string }) {
         this._setOption('apiKey', value);
     }
 
@@ -468,7 +468,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() apiKeyChange: EventEmitter<string | { bing?: string, google?: string, googleStatic?: string }>;
+    @Output() apiKeyChange: EventEmitter<string | { azure?: string, bing?: string, google?: string, googleStatic?: string }>;
 
     /**
     
