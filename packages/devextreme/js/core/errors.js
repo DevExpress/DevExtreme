@@ -254,6 +254,7 @@ export default errorUtils({
     * @name ErrorsCore.W0019
     */
     W0019: 'DevExtreme: Unable to Locate a Valid License Key.\n\n' +
+        'Detailed license/registration related information and instructions: https://js.devexpress.com/Documentation/Licensing/.\n\n' +
         'If you are using a 30-day trial version of DevExtreme, you must uninstall all copies of DevExtreme once your 30-day trial period expires. For terms and conditions that govern use of DevExtreme UI components/libraries, please refer to the DevExtreme End User License Agreement: https://js.devexpress.com/EULAs/DevExtremeComplete.\n\n' +
         'To use DevExtreme in a commercial project, you must purchase a license. For pricing/licensing options, please visit: https://js.devexpress.com/Buy.\n\n' +
         'If you have licensing-related questions or need help with a purchase, please email clientservices@devexpress.com.\n\n',
@@ -261,6 +262,7 @@ export default errorUtils({
      * @name ErrorsCore.W0020
      */
     W0020: 'DevExtreme: License Key Has Expired.\n\n' +
+        'Detailed license/registration related information and instructions: https://js.devexpress.com/Documentation/Licensing/.\n\n' +
         'A mismatch exists between the license key used and the DevExtreme version referenced in this project.\n\n' +
         'To proceed, you can:\n' +
         '• use a version of DevExtreme linked to your license key: https://www.devexpress.com/ClientCenter/DownloadManager\n' +
@@ -270,12 +272,14 @@ export default errorUtils({
      * @name ErrorsCore.W0021
      */
     W0021: 'DevExtreme: License Key Verification Has Failed.\n\n' +
+        'Detailed license/registration related information and instructions: https://js.devexpress.com/Documentation/Licensing/.\n\n' +
         'To verify your DevExtreme license, make certain to specify a correct key in the GlobalConfig. If you continue to encounter this error, please visit https://www.devexpress.com/ClientCenter/DownloadManager to obtain a valid license key.\n\n' +
         'If you have a valid license and this problem persists, please submit a support ticket via the DevExpress Support Center. We will be happy to follow-up: https://supportcenter.devexpress.com/ticket/create.\n\n',
     /**
      * @name ErrorsCore.W0022
      */
     W0022: 'DevExtreme: Pre-release software. Not suitable for commercial use.\n\n' +
+        'Detailed license/registration related information and instructions: https://js.devexpress.com/Documentation/Licensing/.\n\n' +
         'Pre-release software may contain deficiencies and as such, should not be considered for use or integrated in any mission critical application.\n\n',
     /**
      * @name ErrorsCore.W0023
