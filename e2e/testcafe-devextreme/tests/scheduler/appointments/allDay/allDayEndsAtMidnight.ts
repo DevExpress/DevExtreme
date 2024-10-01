@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Scheduler - All day appointments`
   .page(url(__dirname, '../../../container.html'));
@@ -24,7 +25,7 @@ const setViewOptions = (startDayHour, endDayHour) => {
 
 ['week', 'month', 'timelineDay', 'timelineMonth'].forEach((view) => {
   VIEW_RANGE_HOURS.forEach(([startDayHour, endDayHour]) => {
-    test(
+    safeSizeTest(
       `all-day appointment ends at midnight.
      view=${view}, startDayHour=${startDayHour}, endDayHour=${endDayHour} (T1128938)`,
       async (t) => {
@@ -39,6 +40,7 @@ const setViewOptions = (startDayHour, endDayHour) => {
         await t.expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
       },
+      [1200, 800],
     ).before(async () => {
       await createWidget(
         'dxScheduler',

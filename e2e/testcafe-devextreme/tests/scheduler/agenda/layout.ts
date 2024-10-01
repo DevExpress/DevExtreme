@@ -2,6 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Agenda:layout`
   .page(url(__dirname, '../../container.html'));
@@ -138,17 +139,17 @@ const createScheduler = async (
 
 [false, true].forEach((rtlEnabled) => {
   [undefined, resourcesData].forEach((resources) => {
-    test(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
+    safeSizeTest(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
       await t.expect(await compareScreenshot(t, `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`)).ok();
-    })
+    }, [1200, 800])
       .before(async () => createScheduler(rtlEnabled, resources, undefined));
   });
 });
 
 [false, true].forEach((rtlEnabled) => {
-  test(`Agenda test layout with groups(rtl=${rtlEnabled}`, async (t) => {
+  safeSizeTest(`Agenda test layout with groups(rtl=${rtlEnabled}`, async (t) => {
     await t.expect(await compareScreenshot(t, `agenda-layout-groups-rtl=${rtlEnabled}.png`)).ok();
-  }).before(async () => createScheduler(rtlEnabled, resourcesData, ['roomId']));
+  }, [1200, 800]).before(async () => createScheduler(rtlEnabled, resourcesData, ['roomId']));
 });
 
 test('Agenda test appointment state', async (t) => {

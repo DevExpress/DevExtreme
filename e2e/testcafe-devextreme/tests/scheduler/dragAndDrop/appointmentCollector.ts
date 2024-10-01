@@ -4,11 +4,12 @@ import { appointmentCollectorData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../container.html'));
 
-test('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
+safeSizeTest('Drag-n-drop between a scheduler table cell and the appointment tooltip', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Approve Personal Computer Upgrade Plan');
   const collector = scheduler.collectors.find('2');
@@ -33,7 +34,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
     .ok()
     .expect(appointment.element.exists)
     .notOk();
-}).before(async () => createScheduler({
+}, [1200, 800]).before(async () => createScheduler({
   views: ['week'],
   currentView: 'week',
   dataSource: appointmentCollectorData,
@@ -41,7 +42,7 @@ test('Drag-n-drop between a scheduler table cell and the appointment tooltip', a
   width: 1000,
 }));
 
-test('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
+safeSizeTest('Drag-n-drop to the cell on the left should work in week view (T1005115)', async (t) => {
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('1');
   const { appointmentTooltip } = scheduler;
@@ -60,7 +61,7 @@ test('Drag-n-drop to the cell on the left should work in week view (T1005115)', 
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxScheduler', {
+}, [1200, 800]).before(async () => createWidget('dxScheduler', {
   currentDate: new Date(2019, 3, 1),
   views: ['week'],
   currentView: 'week',
