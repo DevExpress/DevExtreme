@@ -124,6 +124,41 @@ QUnit.module('rendering', () => {
         }
     });
 
+    QUnit.test('multiview items.visible option should always be default to true', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1' }
+            ]
+        });
+        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+
+        assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
+    });
+
+    QUnit.test('multiview should not render items those that are option visible is false', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false }
+            ]
+        });
+        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+
+        assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
+        assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'second item is hidden');
+    });
+
+    QUnit.test('when all items are not visible selectIndex should be 0', function(assert) {
+        const multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: false }
+            ]
+        }).dxMultiView('instance');
+
+        assert.strictEqual(multiView.option('selectedIndex'), 0, 'selectedIndex is back at 0');
+    });
+
     QUnit.test('multiView should trigger resize event for item content after item visibility changed', function(assert) {
         const resizeHandler = sinon.spy();
 
@@ -480,6 +515,21 @@ QUnit.module('interaction via swipe', {
         });
     });
 
+    QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false }
+            ]
+        });
+        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(-0.1);
+        assert.strictEqual(position($itemContainer), 0, 'container did not move');
+        pointer.swipeEnd();
+    });
+
     QUnit.test('item container should not be moved by swipe if items count less then 2', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1]
@@ -741,6 +791,57 @@ QUnit.module('loop', {
         delete this.animationStartAction;
     }
 }, () => {
+    QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false }
+            ],
+            loop: true
+        });
+        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(-0.1);
+        assert.strictEqual(position($itemContainer), 0, 'container did not move');
+        pointer.swipeEnd();
+    });
+
+    QUnit.test('when swiping left on the first item, show last visible item', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true }
+            ],
+            loop: true
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
+
+        assert.strictEqual(instance.option('selectedIndex'), 2, 'Correct item is shown after swiping left');
+    });
+
+    QUnit.test('when swiping right on the last item, show first visible item', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true }
+            ],
+            loop: true,
+            selectedIndex: 2
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'Correct item is shown after swiping right');
+    });
+
     QUnit.test('item container should be moved right if selected index is 0', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3],
