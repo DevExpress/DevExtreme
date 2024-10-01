@@ -207,7 +207,7 @@ const Map = Widget.inherit({
   },
 
   _optionChanged(args) {
-    const { name } = args;
+    const { name, value } = args;
 
     const changeBag = this._optionChangeBag;
     this._optionChangeBag = null;
@@ -225,6 +225,9 @@ const Map = Widget.inherit({
       case 'provider':
         this._suppressAsyncAction = true;
         this._invalidate();
+        if (value === 'bing') {
+          this._logDeprecatedBingProvider();
+        }
         break;
       case 'apiKey':
         errors.log('W1001');

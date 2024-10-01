@@ -1303,21 +1303,25 @@ QUnit.test('click', function(assert) {
 
 });
 
-QUnit.test('should raise a deprecation warning when provider is set to bing', function(assert) {
-    sinon.spy(errorsLogger, 'log');
+['init', 'runtime'].forEach((scenario) => {
+    QUnit.test(`should raise a deprecation warning when provider is set to bing on ${scenario}`, function(assert) {
+        sinon.spy(errorsLogger, 'log');
+        try {
+            const map = $('#map').dxMap({
+                provider: scenario === 'init' ? 'bing' : 'google'
+            }).dxMap('instance');
 
-    try {
-        $('#map').dxMap({
-            provider: 'bing'
-        });
-        assert.deepEqual(errorsLogger.log.firstCall.args, [
-            'W0001',
-            'dxMap',
-            'provider: bing',
-            '24.2',
-            'Use other map providers, such as Azure, Google, or GoogleStatic.'
-        ], 'warning is raised with correct parameters');
-    } finally {
-        errorsLogger.log.restore();
-    }
+            map.option('provider', 'bing');
+
+            assert.deepEqual(errorsLogger.log.firstCall.args, [
+                'W0001',
+                'dxMap',
+                'provider: bing',
+                '24.2',
+                'Use other map providers, such as Azure, Google, or GoogleStatic.'
+            ], 'warning is raised with correct parameters');
+        } finally {
+            errorsLogger.log.restore();
+        }
+    });
 });
