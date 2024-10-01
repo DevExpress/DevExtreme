@@ -80,7 +80,7 @@ const componentConfig = {
     shading: Boolean,
     shadingColor: String,
     tabIndex: Number,
-    type: String,
+    type: {},
     visible: Boolean,
     width: [Function, Number, String],
     wrapperAttr: {}
@@ -176,8 +176,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -214,8 +214,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -271,14 +271,14 @@ const DxHideConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -300,8 +300,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -343,11 +343,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -377,14 +377,14 @@ const DxShowConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 

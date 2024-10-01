@@ -30,7 +30,7 @@ const componentConfig = {
   props: {
     area: {},
     elementAttr: Object,
-    handles: String,
+    handles: {},
     height: [Function, Number, String],
     keepAspectRatio: Boolean,
     maxHeight: Number,

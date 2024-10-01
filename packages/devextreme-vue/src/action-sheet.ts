@@ -134,10 +134,10 @@ const DxItemConfig = {
     disabled: Boolean,
     icon: String,
     onClick: Function,
-    stylingMode: String,
+    stylingMode: {},
     template: {},
     text: String,
-    type: String
+    type: {}
   }
 };
 

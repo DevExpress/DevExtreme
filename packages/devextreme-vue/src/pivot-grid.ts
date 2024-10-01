@@ -56,7 +56,7 @@ const componentConfig = {
     allowFiltering: Boolean,
     allowSorting: Boolean,
     allowSortingBySummary: Boolean,
-    dataFieldArea: String,
+    dataFieldArea: {},
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -77,7 +77,7 @@ const componentConfig = {
     onExporting: Function,
     onInitialized: Function,
     onOptionChanged: Function,
-    rowHeaderLayout: String,
+    rowHeaderLayout: {},
     rtlEnabled: Boolean,
     scrolling: Object,
     showBorders: Boolean,
@@ -85,7 +85,7 @@ const componentConfig = {
     showColumnTotals: Boolean,
     showRowGrandTotals: Boolean,
     showRowTotals: Boolean,
-    showTotalsPrior: String,
+    showTotalsPrior: {},
     stateStoring: Object,
     tabIndex: Number,
     texts: Object,
@@ -197,17 +197,10 @@ const DxFieldChooserConfig = {
   },
   props: {
     allowSearch: Boolean,
-    applyChangesMode: String,
+    applyChangesMode: {},
     enabled: Boolean,
     height: Number,
-    layout: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2
-      ].indexOf(v) !== -1
-    },
+    layout: {},
     searchTimeout: Number,
     texts: Object,
     title: String,
@@ -441,8 +434,8 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    mode: String,
-    useNative: [Boolean, String]
+    mode: {},
+    useNative: {}
   }
 };
 
@@ -464,7 +457,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: {},
     timeout: Number
   }
 };
@@ -492,7 +485,7 @@ const DxStateStoringConfig = {
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: String
+    type: {}
   }
 };
 

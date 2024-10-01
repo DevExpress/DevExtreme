@@ -95,7 +95,7 @@ const componentConfig = {
     onShowing: Function,
     onShown: Function,
     onTitleRendered: Function,
-    position: [Function, Object, String],
+    position: {},
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -216,8 +216,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -254,8 +254,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -311,14 +311,14 @@ const DxHideConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -340,8 +340,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -383,11 +383,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -417,14 +417,14 @@ const DxShowConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -481,16 +481,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: {},
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 

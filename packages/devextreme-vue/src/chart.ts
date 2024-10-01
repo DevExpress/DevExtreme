@@ -134,24 +134,24 @@ const componentConfig = {
     onTooltipShown: Function,
     onZoomEnd: Function,
     onZoomStart: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    palette: {},
+    paletteExtensionMode: {},
     panes: [Array, Object],
     pathModified: Boolean,
-    pointSelectionMode: String,
+    pointSelectionMode: {},
     redrawOnResize: Boolean,
     resizePanesOnZoom: Boolean,
-    resolveLabelOverlapping: String,
+    resolveLabelOverlapping: {},
     rotated: Boolean,
     rtlEnabled: Boolean,
     scrollBar: Object,
     series: [Array, Object],
-    seriesSelectionMode: String,
+    seriesSelectionMode: {},
     seriesTemplate: Object,
     size: Object,
     stickyHovering: Boolean,
     synchronizeMultiAxes: Boolean,
-    theme: String,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     valueAxis: [Array, Object],
@@ -307,7 +307,7 @@ const DxAggregationConfig = {
   props: {
     calculate: Function,
     enabled: Boolean,
-    method: String
+    method: {}
   }
 };
 
@@ -361,7 +361,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: String,
+    easing: {},
     enabled: Boolean,
     maxPointCountSupported: Number
   }
@@ -434,13 +434,13 @@ const DxAnnotationConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: {},
     value: [Date, Number, String],
     width: Number,
-    wordWrap: String,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -475,7 +475,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -566,11 +566,11 @@ const DxArgumentAxisConfig = {
   },
   props: {
     aggregateByCategory: Boolean,
-    aggregatedPointsPosition: String,
+    aggregatedPointsPosition: {},
     aggregationGroupWidth: Number,
-    aggregationInterval: [Number, Object, String],
+    aggregationInterval: {},
     allowDecimals: Boolean,
-    argumentType: String,
+    argumentType: {},
     axisDivisionFactor: Number,
     breaks: Array,
     breakStyle: Object,
@@ -580,11 +580,11 @@ const DxArgumentAxisConfig = {
     constantLineStyle: Object,
     customPosition: [Date, Number, String],
     customPositionAxis: String,
-    discreteAxisDivisionMode: String,
+    discreteAxisDivisionMode: {},
     endOnTick: Boolean,
     grid: Object,
     holidays: Array,
-    hoverMode: String,
+    hoverMode: {},
     inverted: Boolean,
     label: Object,
     linearThreshold: Number,
@@ -593,24 +593,24 @@ const DxArgumentAxisConfig = {
     minorGrid: Object,
     minorTick: Object,
     minorTickCount: Number,
-    minorTickInterval: [Number, Object, String],
+    minorTickInterval: {},
     minValueMargin: Number,
-    minVisualRangeLength: [Number, Object, String],
+    minVisualRangeLength: {},
     offset: Number,
     opacity: Number,
     placeholderSize: Number,
-    position: String,
+    position: {},
     singleWorkdays: Array,
     strips: Array,
     stripStyle: Object,
     tick: Object,
-    tickInterval: [Number, Object, String],
+    tickInterval: {},
     title: [Object, String],
-    type: String,
+    type: {},
     valueMarginsEnabled: Boolean,
     visible: Boolean,
     visualRange: [Array, Object],
-    visualRangeUpdateMode: String,
+    visualRangeUpdateMode: {},
     wholeRange: [Array, Object],
     width: Number,
     workdaysOnly: Boolean,
@@ -663,7 +663,7 @@ const DxArgumentFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -687,7 +687,7 @@ const DxAxisConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -713,9 +713,9 @@ const DxAxisConstantLineStyleLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
-    position: String,
-    verticalAlignment: String,
+    horizontalAlignment: {},
+    position: {},
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -747,21 +747,21 @@ const DxAxisLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     customizeHint: Function,
     customizeText: Function,
-    displayMode: String,
+    displayMode: {},
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     indentFromAxis: Number,
-    overlappingBehavior: String,
-    position: String,
+    overlappingBehavior: {},
+    position: {},
     rotationAngle: Number,
     staggeringSpacing: Number,
     template: {},
-    textOverflow: String,
+    textOverflow: {},
     visible: Boolean,
-    wordWrap: String
+    wordWrap: {}
   }
 };
 
@@ -783,12 +783,12 @@ const DxAxisTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     font: Object,
     margin: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -836,7 +836,7 @@ const DxBorderConfig = {
     bottom: Boolean,
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     left: Boolean,
     opacity: Number,
     right: Boolean,
@@ -882,7 +882,7 @@ const DxBreakStyleConfig = {
   },
   props: {
     color: String,
-    line: String,
+    line: {},
     width: Number
   }
 };
@@ -909,14 +909,14 @@ const DxChartTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -946,8 +946,8 @@ const DxChartTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -1038,13 +1038,13 @@ const DxCommonAnnotationSettingsConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String,
+    type: {},
     value: [Date, Number, String],
     width: Number,
-    wordWrap: String,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -1084,12 +1084,12 @@ const DxCommonAxisSettingsConfig = {
     "update:width": null,
   },
   props: {
-    aggregatedPointsPosition: String,
+    aggregatedPointsPosition: {},
     allowDecimals: Boolean,
     breakStyle: Object,
     color: String,
     constantLineStyle: Object,
-    discreteAxisDivisionMode: String,
+    discreteAxisDivisionMode: {},
     endOnTick: Boolean,
     grid: Object,
     inverted: Boolean,
@@ -1136,7 +1136,7 @@ const DxCommonAxisSettingsConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -1164,7 +1164,7 @@ const DxCommonAxisSettingsConstantLineStyleLabelConfig = {
   },
   props: {
     font: Object,
-    position: String,
+    position: {},
     visible: Boolean
   }
 };
@@ -1193,18 +1193,18 @@ const DxCommonAxisSettingsLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: String,
-    displayMode: String,
+    alignment: {},
+    displayMode: {},
     font: Object,
     indentFromAxis: Number,
-    overlappingBehavior: String,
-    position: String,
+    overlappingBehavior: {},
+    position: {},
     rotationAngle: Number,
     staggeringSpacing: Number,
     template: {},
-    textOverflow: String,
+    textOverflow: {},
     visible: Boolean,
-    wordWrap: String
+    wordWrap: {}
   }
 };
 
@@ -1225,11 +1225,11 @@ const DxCommonAxisSettingsTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     font: Object,
     margin: Number,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -1344,14 +1344,14 @@ const DxCommonSeriesSettingsConfig = {
     closeValueField: String,
     color: [Object, String],
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     fullstackedarea: {},
     fullstackedbar: {},
     fullstackedline: {},
     fullstackedspline: {},
     fullstackedsplinearea: {},
     highValueField: String,
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     ignoreEmptyPoints: Boolean,
     innerColor: String,
@@ -1370,7 +1370,7 @@ const DxCommonSeriesSettingsConfig = {
     rangeValue2Field: String,
     reduction: Object,
     scatter: {},
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     showInLegend: Boolean,
     sizeField: String,
@@ -1386,7 +1386,7 @@ const DxCommonSeriesSettingsConfig = {
     stepline: {},
     stock: {},
     tagField: String,
-    type: String,
+    type: {},
     valueErrorBar: Object,
     valueField: String,
     visible: Boolean,
@@ -1429,7 +1429,7 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     width: Number
@@ -1469,17 +1469,17 @@ const DxCommonSeriesSettingsLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: String,
-    argumentFormat: [Object, Function, String],
+    alignment: {},
+    argumentFormat: {},
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     horizontalOffset: Number,
-    position: String,
+    position: {},
     rotationAngle: Number,
     showForZeroValues: Boolean,
     verticalOffset: Number,
@@ -1515,7 +1515,7 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     width: Number
@@ -1571,7 +1571,7 @@ const DxConstantLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     displayBehindSeries: Boolean,
     extendAxis: Boolean,
     label: Object,
@@ -1602,10 +1602,10 @@ const DxConstantLineLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
-    position: String,
+    horizontalAlignment: {},
+    position: {},
     text: String,
-    verticalAlignment: String,
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -1629,7 +1629,7 @@ const DxConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -1658,7 +1658,7 @@ const DxCrosshairConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     enabled: Boolean,
     horizontalLine: [Boolean, Object],
     label: Object,
@@ -1790,7 +1790,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -1834,7 +1834,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: {},
     opacity: Number,
     step: Number,
     width: Number
@@ -1879,7 +1879,7 @@ const DxHorizontalLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     label: Object,
     opacity: Number,
     visible: Boolean,
@@ -1911,7 +1911,7 @@ const DxHorizontalLineLabelConfig = {
     backgroundColor: String,
     customizeText: Function,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     visible: Boolean
   }
 };
@@ -1937,7 +1937,7 @@ const DxHoverStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     size: Number,
@@ -2004,32 +2004,32 @@ const DxLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: String,
-    argumentFormat: [Object, Function, String],
+    alignment: {},
+    argumentFormat: {},
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeHint: Function,
     customizeText: Function,
     displayFormat: String,
-    displayMode: String,
+    displayMode: {},
     font: Object,
-    format: [Object, Function, String],
-    horizontalAlignment: String,
+    format: {},
+    horizontalAlignment: {},
     horizontalOffset: Number,
     indentFromAxis: Number,
-    overlappingBehavior: String,
-    position: String,
+    overlappingBehavior: {},
+    position: {},
     rotationAngle: Number,
     showForZeroValues: Boolean,
     staggeringSpacing: Number,
     template: {},
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
+    textOverflow: {},
+    verticalAlignment: {},
     verticalOffset: Number,
     visible: Boolean,
-    wordWrap: String
+    wordWrap: {}
   }
 };
 
@@ -2077,21 +2077,21 @@ const DxLegendConfig = {
     customizeItems: Function,
     customizeText: Function,
     font: Object,
-    horizontalAlignment: String,
-    hoverMode: String,
-    itemsAlignment: String,
-    itemTextPosition: String,
+    horizontalAlignment: {},
+    hoverMode: {},
+    itemsAlignment: {},
+    itemTextPosition: {},
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: String,
+    orientation: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    position: String,
+    position: {},
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: String,
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -2124,12 +2124,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: String
+    verticalAlignment: {}
   }
 };
 
@@ -2410,7 +2410,7 @@ const DxPaneBorderConfig = {
   props: {
     bottom: Boolean,
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     left: Boolean,
     opacity: Number,
     right: Boolean,
@@ -2444,13 +2444,13 @@ const DxPointConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     image: [Object, String],
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     size: Number,
-    symbol: String,
+    symbol: {},
     visible: Boolean
   }
 };
@@ -2580,7 +2580,7 @@ const DxReductionConfig = {
   },
   props: {
     color: String,
-    level: String
+    level: {}
   }
 };
 
@@ -2605,7 +2605,7 @@ const DxScrollBarConfig = {
     color: String,
     offset: Number,
     opacity: Number,
-    position: String,
+    position: {},
     visible: Boolean,
     width: Number
   }
@@ -2632,7 +2632,7 @@ const DxSelectionStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     size: Number,
@@ -2702,9 +2702,9 @@ const DxSeriesConfig = {
     closeValueField: String,
     color: [Object, String],
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     highValueField: String,
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     ignoreEmptyPoints: Boolean,
     innerColor: String,
@@ -2720,14 +2720,14 @@ const DxSeriesConfig = {
     rangeValue1Field: String,
     rangeValue2Field: String,
     reduction: Object,
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     showInLegend: Boolean,
     sizeField: String,
     stack: String,
     tag: {},
     tagField: String,
-    type: String,
+    type: {},
     valueErrorBar: Object,
     valueField: String,
     visible: Boolean,
@@ -2753,7 +2753,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     visible: Boolean,
     width: Number
   }
@@ -2867,9 +2867,9 @@ const DxStripLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     text: String,
-    verticalAlignment: String
+    verticalAlignment: {}
   }
 };
 
@@ -2914,8 +2914,8 @@ const DxStripStyleLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
-    verticalAlignment: String
+    horizontalAlignment: {},
+    verticalAlignment: {}
   }
 };
 
@@ -2939,8 +2939,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -3026,16 +3026,16 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -3070,7 +3070,7 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: [Object, Function, String],
+    argumentFormat: {},
     arrowLength: Number,
     border: Object,
     color: String,
@@ -3080,9 +3080,9 @@ const DxTooltipConfig = {
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     interactive: Boolean,
-    location: String,
+    location: {},
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -3118,7 +3118,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -3204,7 +3204,7 @@ const DxValueAxisConfig = {
     "update:width": null,
   },
   props: {
-    aggregatedPointsPosition: String,
+    aggregatedPointsPosition: {},
     allowDecimals: Boolean,
     autoBreaksEnabled: Boolean,
     axisDivisionFactor: Number,
@@ -3215,7 +3215,7 @@ const DxValueAxisConfig = {
     constantLines: Array,
     constantLineStyle: Object,
     customPosition: [Date, Number, String],
-    discreteAxisDivisionMode: String,
+    discreteAxisDivisionMode: {},
     endOnTick: Boolean,
     grid: Object,
     inverted: Boolean,
@@ -3227,29 +3227,29 @@ const DxValueAxisConfig = {
     minorGrid: Object,
     minorTick: Object,
     minorTickCount: Number,
-    minorTickInterval: [Number, Object, String],
+    minorTickInterval: {},
     minValueMargin: Number,
-    minVisualRangeLength: [Number, Object, String],
+    minVisualRangeLength: {},
     multipleAxesSpacing: Number,
     name: String,
     offset: Number,
     opacity: Number,
     pane: String,
     placeholderSize: Number,
-    position: String,
+    position: {},
     showZero: Boolean,
     strips: Array,
     stripStyle: Object,
     synchronizedValue: Number,
     tick: Object,
-    tickInterval: [Number, Object, String],
+    tickInterval: {},
     title: [Object, String],
-    type: String,
+    type: {},
     valueMarginsEnabled: Boolean,
-    valueType: String,
+    valueType: {},
     visible: Boolean,
     visualRange: [Array, Object],
-    visualRangeUpdateMode: String,
+    visualRangeUpdateMode: {},
     wholeRange: [Array, Object],
     width: Number
   }
@@ -3294,13 +3294,13 @@ const DxValueErrorBarConfig = {
   },
   props: {
     color: String,
-    displayMode: String,
+    displayMode: {},
     edgeLength: Number,
     highValueField: String,
     lineWidth: Number,
     lowValueField: String,
     opacity: Number,
-    type: String,
+    type: {},
     value: Number
   }
 };
@@ -3324,7 +3324,7 @@ const DxVerticalLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     label: Object,
     opacity: Number,
     visible: Boolean,
@@ -3352,7 +3352,7 @@ const DxVisualRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: [Number, Object, String],
+    length: {},
     startValue: [Date, Number, String]
   }
 };
@@ -3373,7 +3373,7 @@ const DxWholeRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: [Number, Object, String],
+    length: {},
     startValue: [Date, Number, String]
   }
 };
@@ -3418,11 +3418,11 @@ const DxZoomAndPanConfig = {
   props: {
     allowMouseWheel: Boolean,
     allowTouchGestures: Boolean,
-    argumentAxis: String,
+    argumentAxis: {},
     dragBoxStyle: Object,
     dragToZoom: Boolean,
-    panKey: String,
-    valueAxis: String
+    panKey: {},
+    valueAxis: {}
   }
 };
 

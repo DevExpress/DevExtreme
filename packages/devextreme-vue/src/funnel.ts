@@ -55,7 +55,7 @@ interface DxFunnel extends AccessibleOptions {
 const componentConfig = {
   props: {
     adaptiveLayout: Object,
-    algorithm: String,
+    algorithm: {},
     argumentField: String,
     colorField: String,
     dataSource: {},
@@ -83,16 +83,16 @@ const componentConfig = {
     onLegendClick: Function,
     onOptionChanged: Function,
     onSelectionChanged: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    palette: {},
+    paletteExtensionMode: {},
     pathModified: Boolean,
     redrawOnResize: Boolean,
-    resolveLabelOverlapping: String,
+    resolveLabelOverlapping: {},
     rtlEnabled: Boolean,
-    selectionMode: String,
+    selectionMode: {},
     size: Object,
     sortData: Boolean,
-    theme: String,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     valueField: String
@@ -207,7 +207,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -313,7 +313,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -340,14 +340,14 @@ const DxFunnelTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -377,8 +377,8 @@ const DxFunnelTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -401,7 +401,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: {},
     opacity: Number,
     step: Number,
     width: Number
@@ -510,14 +510,14 @@ const DxLabelConfig = {
     connector: Object,
     customizeText: Function,
     font: Object,
-    format: [Object, Function, String],
-    horizontalAlignment: String,
+    format: {},
+    horizontalAlignment: {},
     horizontalOffset: Number,
-    position: String,
+    position: {},
     showForZeroValues: Boolean,
-    textOverflow: String,
+    textOverflow: {},
     visible: Boolean,
-    wordWrap: String
+    wordWrap: {}
   }
 };
 
@@ -545,7 +545,7 @@ const DxLabelBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     visible: Boolean,
     width: Number
   }
@@ -593,19 +593,19 @@ const DxLegendConfig = {
     customizeItems: Function,
     customizeText: Function,
     font: Object,
-    horizontalAlignment: String,
-    itemsAlignment: String,
-    itemTextPosition: String,
+    horizontalAlignment: {},
+    itemsAlignment: {},
+    itemTextPosition: {},
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: String,
+    orientation: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: String,
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -638,7 +638,7 @@ const DxLegendBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -665,12 +665,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: String
+    verticalAlignment: {}
   }
 };
 
@@ -843,8 +843,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -870,14 +870,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Object, Number],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -917,7 +917,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -951,7 +951,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number

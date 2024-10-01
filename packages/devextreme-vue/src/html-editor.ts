@@ -79,18 +79,18 @@ const componentConfig = {
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    stylingMode: String,
+    stylingMode: {},
     tabIndex: Number,
     tableContextMenu: Object,
     tableResizing: Object,
     toolbar: Object,
     validationError: {},
     validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: {},
-    valueType: String,
+    valueType: {},
     variables: Object,
     visible: Boolean,
     width: [Function, Number, String]
@@ -293,12 +293,12 @@ const DxFileUploaderOptionsConfig = {
     uploadFailedMessage: String,
     uploadFile: Function,
     uploadHeaders: {},
-    uploadMethod: String,
-    uploadMode: String,
+    uploadMethod: {},
+    uploadMode: {},
     uploadUrl: String,
     validationError: {},
     validationErrors: Array,
-    validationStatus: String,
+    validationStatus: {},
     value: Array,
     visible: Boolean,
     width: [Function, Number, String]
@@ -323,7 +323,7 @@ const DxImageUploadConfig = {
   },
   props: {
     fileUploaderOptions: Object,
-    fileUploadMode: String,
+    fileUploadMode: {},
     tabs: Array,
     uploadDirectory: String,
     uploadUrl: String
@@ -373,23 +373,23 @@ const DxItemConfig = {
     closeMenuOnClick: Boolean,
     cssClass: String,
     disabled: Boolean,
-    formatName: String,
+    formatName: {},
     formatValues: Array,
     html: String,
     icon: String,
     items: Array,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String,
+    name: {},
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -460,7 +460,7 @@ const DxTabConfig = {
     "update:name": null,
   },
   props: {
-    name: String
+    name: {}
   }
 };
 
@@ -516,7 +516,7 @@ const DxTableContextMenuItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array,
-    name: String,
+    name: {},
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -603,19 +603,19 @@ const DxToolbarItemConfig = {
     acceptedValues: Array,
     cssClass: String,
     disabled: Boolean,
-    formatName: String,
+    formatName: {},
     formatValues: Array,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String,
+    name: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 

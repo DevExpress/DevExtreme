@@ -81,14 +81,14 @@ const componentConfig = {
     pathModified: Boolean,
     pointColor: String,
     pointSize: Number,
-    pointSymbol: String,
+    pointSymbol: {},
     rtlEnabled: Boolean,
     showFirstLast: Boolean,
     showMinMax: Boolean,
     size: Object,
-    theme: String,
+    theme: {},
     tooltip: Object,
-    type: String,
+    type: {},
     valueField: String,
     winColor: String,
     winlossThreshold: Number
@@ -170,7 +170,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -224,7 +224,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -333,7 +333,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,

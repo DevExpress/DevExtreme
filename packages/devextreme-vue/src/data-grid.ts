@@ -141,9 +141,9 @@ const componentConfig = {
     columnFixing: Object,
     columnHidingEnabled: Boolean,
     columnMinWidth: Number,
-    columnResizingMode: String,
+    columnResizingMode: {},
     columns: Array,
-    columnWidth: [Number, String],
+    columnWidth: {},
     customizeColumns: Function,
     dataRowTemplate: {},
     dataSource: {},
@@ -157,7 +157,7 @@ const componentConfig = {
     filterBuilderPopup: Object,
     filterPanel: Object,
     filterRow: Object,
-    filterSyncEnabled: [Boolean, String],
+    filterSyncEnabled: {},
     filterValue: [Array, Function, String],
     focusedColumnIndex: Number,
     focusedRowEnabled: Boolean,
@@ -218,7 +218,7 @@ const componentConfig = {
     onToolbarPreparing: Function,
     pager: Object,
     paging: Object,
-    remoteOperations: [Boolean, Object, String],
+    remoteOperations: {},
     renderAsync: Boolean,
     repaintChangesOnly: Boolean,
     rowAlternationEnabled: Boolean,
@@ -450,7 +450,7 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
+    type: {},
     validationCallback: Function
   }
 };
@@ -473,8 +473,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -522,7 +522,7 @@ const DxButtonConfig = {
     disabled: [Boolean, Function],
     hint: String,
     icon: String,
-    name: String,
+    name: {},
     onClick: Function,
     template: {},
     text: String,
@@ -550,7 +550,7 @@ const DxChangeConfig = {
     data: {},
     insertAfterKey: {},
     insertBeforeKey: {},
-    type: String
+    type: {}
   }
 };
 
@@ -592,8 +592,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -672,7 +672,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     allowEditing: Boolean,
     allowExporting: Boolean,
     allowFiltering: Boolean,
@@ -697,18 +697,18 @@ const DxColumnConfig = {
     cssClass: String,
     customizeText: Function,
     dataField: String,
-    dataType: String,
+    dataType: {},
     editCellTemplate: {},
     editorOptions: {},
     encodeHtml: Boolean,
     falseText: String,
     filterOperations: Array,
-    filterType: String,
+    filterType: {},
     filterValue: {},
     filterValues: Array,
     fixed: Boolean,
-    fixedPosition: String,
-    format: [Object, Function, String],
+    fixedPosition: {},
+    format: {},
     formItem: Object,
     groupCellTemplate: {},
     groupIndex: Number,
@@ -721,16 +721,16 @@ const DxColumnConfig = {
     name: String,
     ownerBand: Number,
     renderAsync: Boolean,
-    selectedFilterOperation: String,
+    selectedFilterOperation: {},
     setCellValue: Function,
     showEditorAlways: Boolean,
     showInColumnChooser: Boolean,
     showWhenGrouped: Boolean,
     sortIndex: Number,
     sortingMethod: Function,
-    sortOrder: String,
+    sortOrder: {},
     trueText: String,
-    type: String,
+    type: {},
     validationRules: Array,
     visible: Boolean,
     visibleIndex: Number,
@@ -788,12 +788,12 @@ const DxColumnChooserConfig = {
     emptyPanelText: String,
     enabled: Boolean,
     height: [Number, String],
-    mode: String,
+    mode: {},
     position: Object,
     search: Object,
     searchTimeout: Number,
     selection: Object,
-    sortOrder: String,
+    sortOrder: {},
     title: String,
     width: [Number, String]
   }
@@ -922,10 +922,10 @@ const DxColumnHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String],
+    groupInterval: {},
     height: [Number, String],
     search: Object,
-    searchMode: String,
+    searchMode: {},
     width: [Number, String]
   }
 };
@@ -953,7 +953,7 @@ const DxColumnHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: {},
     searchExpr: [Array, Function, String],
     timeout: Number
   }
@@ -1002,10 +1002,10 @@ const DxCompareRuleConfig = {
   },
   props: {
     comparisonTarget: Function,
-    comparisonType: String,
+    comparisonType: {},
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: {}
   }
 };
 
@@ -1084,7 +1084,7 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
+    type: {},
     validationCallback: Function
   }
 };
@@ -1148,7 +1148,7 @@ const DxDataGridHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: {},
     timeout: Number
   }
 };
@@ -1194,10 +1194,10 @@ const DxDataGridSelectionConfig = {
   props: {
     allowSelectAll: Boolean,
     deferred: Boolean,
-    mode: String,
-    selectAllMode: String,
-    sensitivity: String,
-    showCheckBoxesMode: String
+    mode: {},
+    selectAllMode: {},
+    sensitivity: {},
+    showCheckBoxesMode: {}
   }
 };
 
@@ -1237,12 +1237,12 @@ const DxEditingConfig = {
     editColumnName: String,
     editRowKey: {},
     form: Object,
-    mode: String,
-    newRowPosition: String,
+    mode: {},
+    newRowPosition: {},
     popup: Object,
-    refreshMode: String,
+    refreshMode: {},
     selectTextOnEditStart: Boolean,
-    startEditAction: String,
+    startEditAction: {},
     texts: {},
     useIcons: Boolean
   }
@@ -1309,7 +1309,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: {}
   }
 };
 
@@ -1394,12 +1394,12 @@ const DxFieldConfig = {
     caption: String,
     customizeText: Function,
     dataField: String,
-    dataType: String,
+    dataType: {},
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
     filterOperations: Array,
-    format: [Object, Function, String],
+    format: {},
     lookup: Object,
     name: String,
     trueText: String
@@ -1609,7 +1609,7 @@ const DxFilterBuilderPopupConfig = {
     onShowing: Function,
     onShown: Function,
     onTitleRendered: Function,
-    position: [Function, Object, String],
+    position: {},
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -1737,7 +1737,7 @@ const DxFilterRowConfig = {
     "update:visible": null,
   },
   props: {
-    applyFilter: String,
+    applyFilter: {},
     applyFilterText: String,
     betweenEndText: String,
     betweenStartText: String,
@@ -1810,7 +1810,7 @@ const DxFormConfig = {
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
     bindingOptions: Object,
-    colCount: [Number, String],
+    colCount: {},
     colCountByScreen: Object,
     customizeItem: Function,
     disabled: Boolean,
@@ -1822,8 +1822,8 @@ const DxFormConfig = {
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     items: Array,
-    labelLocation: String,
-    labelMode: String,
+    labelLocation: {},
+    labelMode: {},
     minColWidth: Number,
     onContentReady: Function,
     onDisposing: Function,
@@ -1874,7 +1874,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -1909,10 +1909,10 @@ const DxFormItemConfig = {
     cssClass: String,
     dataField: String,
     editorOptions: {},
-    editorType: String,
+    editorType: {},
     helpText: String,
     isRequired: Boolean,
-    itemType: String,
+    itemType: {},
     label: Object,
     name: String,
     template: {},
@@ -1983,7 +1983,7 @@ const DxGroupingConfig = {
     allowCollapsing: Boolean,
     autoExpandAll: Boolean,
     contextMenuEnabled: Boolean,
-    expandMode: String,
+    expandMode: {},
     texts: Object
   }
 };
@@ -2047,8 +2047,8 @@ const DxGroupItemConfig = {
     showInColumn: String,
     showInGroupFooter: Boolean,
     skipEmptyValues: Boolean,
-    summaryType: String,
-    valueFormat: [Object, Function, String]
+    summaryType: {},
+    valueFormat: {}
   }
 };
 
@@ -2096,7 +2096,7 @@ const DxGroupPanelConfig = {
   props: {
     allowColumnDragging: Boolean,
     emptyPanelText: String,
-    visible: [Boolean, String]
+    visible: {}
   }
 };
 
@@ -2126,10 +2126,10 @@ const DxHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String],
+    groupInterval: {},
     height: [Number, String],
     search: Object,
-    searchMode: String,
+    searchMode: {},
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
@@ -2161,14 +2161,14 @@ const DxHideConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -2229,16 +2229,16 @@ const DxItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String,
+    name: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -2261,8 +2261,8 @@ const DxKeyboardNavigationConfig = {
   props: {
     editOnKeyPress: Boolean,
     enabled: Boolean,
-    enterKeyAction: String,
-    enterKeyDirection: String
+    enterKeyAction: {},
+    enterKeyDirection: {}
   }
 };
 
@@ -2284,8 +2284,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: String,
-    location: String,
+    alignment: {},
+    location: {},
     showColon: Boolean,
     template: {},
     text: String,
@@ -2314,7 +2314,7 @@ const DxLoadPanelConfig = {
     "update:width": null,
   },
   props: {
-    enabled: [Boolean, String],
+    enabled: {},
     height: [Number, String],
     indicatorSrc: String,
     shading: Boolean,
@@ -2386,8 +2386,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -2408,7 +2408,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: {}
   }
 };
 
@@ -2492,14 +2492,14 @@ const DxPagerConfig = {
     "update:visible": null,
   },
   props: {
-    allowedPageSizes: [Array, String],
-    displayMode: String,
+    allowedPageSizes: {},
+    displayMode: {},
     infoText: String,
     label: String,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
     showPageSizeSelector: Boolean,
-    visible: [Boolean, String]
+    visible: {}
   }
 };
 
@@ -2543,7 +2543,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String
+    type: {}
   }
 };
 
@@ -2648,7 +2648,7 @@ const DxPopupConfig = {
     onShowing: Function,
     onShown: Function,
     onTitleRendered: Function,
-    position: [Function, Object, String],
+    position: {},
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -2690,11 +2690,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -2723,7 +2723,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String
+    type: {}
   }
 };
 
@@ -2775,7 +2775,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String
+    type: {}
   }
 };
 
@@ -2825,9 +2825,9 @@ const DxRowDraggingConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: String,
+    dragDirection: {},
     dragTemplate: {},
-    dropFeedbackMode: String,
+    dropFeedbackMode: {},
     filter: String,
     group: String,
     handle: String,
@@ -2868,15 +2868,15 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    columnRenderingMode: String,
-    mode: String,
+    columnRenderingMode: {},
+    mode: {},
     preloadEnabled: Boolean,
     renderAsync: Boolean,
-    rowRenderingMode: String,
+    rowRenderingMode: {},
     scrollByContent: Boolean,
     scrollByThumb: Boolean,
-    showScrollbar: String,
-    useNative: [Boolean, String]
+    showScrollbar: {},
+    useNative: {}
   }
 };
 
@@ -2899,7 +2899,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: {},
     searchExpr: [Array, Function, String],
     timeout: Number
   }
@@ -2956,12 +2956,12 @@ const DxSelectionConfig = {
   props: {
     allowSelectAll: Boolean,
     deferred: Boolean,
-    mode: String,
+    mode: {},
     recursive: Boolean,
-    selectAllMode: String,
+    selectAllMode: {},
     selectByClick: Boolean,
-    sensitivity: String,
-    showCheckBoxesMode: String
+    sensitivity: {},
+    showCheckBoxesMode: {}
   }
 };
 
@@ -2989,14 +2989,14 @@ const DxShowConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -3016,7 +3016,7 @@ const DxSortByGroupSummaryInfoConfig = {
   },
   props: {
     groupColumn: String,
-    sortOrder: String,
+    sortOrder: {},
     summaryItem: [Number, String]
   }
 };
@@ -3042,7 +3042,7 @@ const DxSortingConfig = {
     ascendingText: String,
     clearText: String,
     descendingText: String,
-    mode: String,
+    mode: {},
     showSortIndexes: Boolean
   }
 };
@@ -3070,7 +3070,7 @@ const DxStateStoringConfig = {
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: String
+    type: {}
   }
 };
 
@@ -3097,7 +3097,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String
+    type: {}
   }
 };
 
@@ -3341,16 +3341,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: {},
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: {},
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -3377,7 +3377,7 @@ const DxTotalItemConfig = {
     "update:valueFormat": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     column: String,
     cssClass: String,
     customizeText: Function,
@@ -3385,8 +3385,8 @@ const DxTotalItemConfig = {
     name: String,
     showInColumn: String,
     skipEmptyValues: Boolean,
-    summaryType: String,
-    valueFormat: [Object, Function, String]
+    summaryType: {},
+    valueFormat: {}
   }
 };
 
@@ -3418,7 +3418,7 @@ const DxValidationRuleConfig = {
   },
   props: {
     comparisonTarget: Function,
-    comparisonType: String,
+    comparisonType: {},
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -3426,7 +3426,7 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String,
+    type: {},
     validationCallback: Function
   }
 };
@@ -3457,7 +3457,7 @@ const DxValueFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };

@@ -71,7 +71,7 @@ const componentConfig = {
     size: Object,
     subvalueIndicator: Object,
     subvalues: Array,
-    theme: String,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     value: Number,
@@ -153,7 +153,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: String,
+    easing: {},
     enabled: Boolean
   }
 };
@@ -195,7 +195,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -297,7 +297,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -343,10 +343,10 @@ const DxLabelConfig = {
   props: {
     customizeText: Function,
     font: Object,
-    format: [Object, Function, String],
-    hideFirstOrLast: String,
+    format: {},
+    hideFirstOrLast: {},
     indentFromTick: Number,
-    overlappingBehavior: String,
+    overlappingBehavior: {},
     useRangeColors: Boolean,
     visible: Boolean
   }
@@ -476,9 +476,9 @@ const DxRangeContainerConfig = {
   props: {
     backgroundColor: [Object, String],
     offset: Number,
-    orientation: String,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    orientation: {},
+    palette: {},
+    paletteExtensionMode: {},
     ranges: Array,
     width: Number
   }
@@ -519,7 +519,7 @@ const DxScaleConfig = {
     label: Object,
     minorTick: Object,
     minorTickInterval: Number,
-    orientation: String,
+    orientation: {},
     scaleDivisionFactor: Number,
     startValue: Number,
     tick: Object,
@@ -596,8 +596,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -640,11 +640,11 @@ const DxSubvalueIndicatorConfig = {
     baseValue: Number,
     beginAdaptingAtRadius: Number,
     color: [Object, String],
-    horizontalOrientation: String,
+    horizontalOrientation: {},
     indentFromCenter: Number,
     length: Number,
     offset: Number,
-    palette: [Array, String],
+    palette: {},
     secondColor: String,
     secondFraction: Number,
     size: Number,
@@ -652,7 +652,7 @@ const DxSubvalueIndicatorConfig = {
     spindleSize: Number,
     text: Object,
     type: String,
-    verticalOrientation: String,
+    verticalOrientation: {},
     width: Number
   }
 };
@@ -679,7 +679,7 @@ const DxTextConfig = {
   props: {
     customizeText: Function,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     indent: Number
   }
 };
@@ -735,14 +735,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -788,7 +788,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
@@ -840,11 +840,11 @@ const DxValueIndicatorConfig = {
     baseValue: Number,
     beginAdaptingAtRadius: Number,
     color: [Object, String],
-    horizontalOrientation: String,
+    horizontalOrientation: {},
     indentFromCenter: Number,
     length: Number,
     offset: Number,
-    palette: [Array, String],
+    palette: {},
     secondColor: String,
     secondFraction: Number,
     size: Number,
@@ -852,7 +852,7 @@ const DxValueIndicatorConfig = {
     spindleSize: Number,
     text: Object,
     type: String,
-    verticalOrientation: String,
+    verticalOrientation: {},
     width: Number
   }
 };

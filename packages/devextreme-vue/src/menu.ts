@@ -85,15 +85,15 @@ const componentConfig = {
     onSubmenuHiding: Function,
     onSubmenuShowing: Function,
     onSubmenuShown: Function,
-    orientation: String,
+    orientation: {},
     rtlEnabled: Boolean,
     selectByClick: Boolean,
     selectedExpr: [Function, String],
     selectedItem: {},
-    selectionMode: String,
-    showFirstSubmenuMode: [Object, String],
-    showSubmenuMode: [Object, String],
-    submenuDirection: String,
+    selectionMode: {},
+    showFirstSubmenuMode: {},
+    showSubmenuMode: {},
+    submenuDirection: {},
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String]
@@ -197,8 +197,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -235,8 +235,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -311,14 +311,14 @@ const DxHideConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -380,8 +380,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: {},
+    y: {}
   }
 };
 
@@ -423,11 +423,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -464,14 +464,14 @@ const DxShowConfig = {
   props: {
     complete: Function,
     delay: Number,
-    direction: String,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function,
     to: Object,
-    type: String
+    type: {}
   }
 };
 
@@ -490,7 +490,7 @@ const DxShowFirstSubmenuModeConfig = {
   },
   props: {
     delay: [Number, Object],
-    name: String
+    name: {}
   }
 };
 
@@ -512,7 +512,7 @@ const DxShowSubmenuModeConfig = {
   },
   props: {
     delay: [Number, Object],
-    name: String
+    name: {}
   }
 };
 

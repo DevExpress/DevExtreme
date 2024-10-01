@@ -72,12 +72,12 @@ const componentConfig = {
     rtlEnabled: Boolean,
     scale: Object,
     selectedRangeColor: String,
-    selectedRangeUpdateMode: String,
+    selectedRangeUpdateMode: {},
     shutter: Object,
     size: Object,
     sliderHandle: Object,
     sliderMarker: Object,
-    theme: String,
+    theme: {},
     title: [Object, String],
     value: [Array, Object]
   },
@@ -162,7 +162,7 @@ const DxAggregationConfig = {
   props: {
     calculate: Function,
     enabled: Boolean,
-    method: String
+    method: {}
   }
 };
 
@@ -221,7 +221,7 @@ const DxArgumentFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -265,7 +265,7 @@ const DxBackgroundImageConfig = {
     "update:url": null,
   },
   props: {
-    location: String,
+    location: {},
     url: String
   }
 };
@@ -291,11 +291,11 @@ const DxBehaviorConfig = {
   props: {
     allowSlidersSwap: Boolean,
     animationEnabled: Boolean,
-    callValueChanged: String,
+    callValueChanged: {},
     manualRangeSelectionEnabled: Boolean,
     moveSelectedRangeByClick: Boolean,
     snapToTicks: Boolean,
-    valueChangeMode: String
+    valueChangeMode: {}
   }
 };
 
@@ -316,7 +316,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     visible: Boolean,
     width: Number
   }
@@ -358,7 +358,7 @@ const DxBreakStyleConfig = {
   },
   props: {
     color: String,
-    line: String,
+    line: {},
     width: Number
   }
 };
@@ -397,8 +397,8 @@ const DxChartConfig = {
     maxBubbleSize: Number,
     minBubbleSize: Number,
     negativesAsZeroes: Boolean,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    palette: {},
+    paletteExtensionMode: {},
     series: [Array, Object],
     seriesTemplate: Object,
     topIndent: Number,
@@ -519,14 +519,14 @@ const DxCommonSeriesSettingsConfig = {
     closeValueField: String,
     color: [Object, String],
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     fullstackedarea: {},
     fullstackedbar: {},
     fullstackedline: {},
     fullstackedspline: {},
     fullstackedsplinearea: {},
     highValueField: String,
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     ignoreEmptyPoints: Boolean,
     innerColor: String,
@@ -545,7 +545,7 @@ const DxCommonSeriesSettingsConfig = {
     rangeValue2Field: String,
     reduction: Object,
     scatter: {},
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     showInLegend: Boolean,
     sizeField: String,
@@ -561,7 +561,7 @@ const DxCommonSeriesSettingsConfig = {
     stepline: {},
     stock: {},
     tagField: String,
-    type: String,
+    type: {},
     valueErrorBar: Object,
     valueField: String,
     visible: Boolean,
@@ -604,7 +604,7 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     width: Number
@@ -644,17 +644,17 @@ const DxCommonSeriesSettingsLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: String,
-    argumentFormat: [Object, Function, String],
+    alignment: {},
+    argumentFormat: {},
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     horizontalOffset: Number,
-    position: String,
+    position: {},
     rotationAngle: Number,
     showForZeroValues: Boolean,
     verticalOffset: Number,
@@ -690,7 +690,7 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     width: Number
@@ -821,7 +821,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -842,7 +842,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: {},
     opacity: Number,
     step: Number,
     width: Number
@@ -889,7 +889,7 @@ const DxHoverStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     size: Number,
@@ -914,7 +914,7 @@ const DxImageConfig = {
   },
   props: {
     height: [Number, Object],
-    location: String,
+    location: {},
     url: [String, Object],
     width: [Number, Object]
   }
@@ -968,18 +968,18 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: String,
-    argumentFormat: [Object, Function, String],
+    alignment: {},
+    argumentFormat: {},
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     horizontalOffset: Number,
-    overlappingBehavior: String,
-    position: String,
+    overlappingBehavior: {},
+    position: {},
     rotationAngle: Number,
     showForZeroValues: Boolean,
     topIndent: Number,
@@ -1118,7 +1118,7 @@ const DxMarkerLabelConfig = {
   },
   props: {
     customizeText: Function,
-    format: [Object, Function, String]
+    format: {}
   }
 };
 
@@ -1271,13 +1271,13 @@ const DxPointConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     image: [Object, String],
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     size: Number,
-    symbol: String,
+    symbol: {},
     visible: Boolean
   }
 };
@@ -1407,7 +1407,7 @@ const DxReductionConfig = {
   },
   props: {
     color: String,
-    level: String
+    level: {}
   }
 };
 
@@ -1455,12 +1455,12 @@ const DxScaleConfig = {
   props: {
     aggregateByCategory: Boolean,
     aggregationGroupWidth: Number,
-    aggregationInterval: [Number, Object, String],
+    aggregationInterval: {},
     allowDecimals: Boolean,
     breaks: Array,
     breakStyle: Object,
     categories: Array,
-    discreteAxisDivisionMode: String,
+    discreteAxisDivisionMode: {},
     endOnTick: Boolean,
     endValue: [Date, Number, String],
     holidays: Array,
@@ -1468,19 +1468,19 @@ const DxScaleConfig = {
     linearThreshold: Number,
     logarithmBase: Number,
     marker: Object,
-    maxRange: [Number, Object, String],
+    maxRange: {},
     minorTick: Object,
     minorTickCount: Number,
-    minorTickInterval: [Number, Object, String],
-    minRange: [Number, Object, String],
+    minorTickInterval: {},
+    minRange: {},
     placeholderHeight: Number,
     showCustomBoundaryTicks: Boolean,
     singleWorkdays: Array,
     startValue: [Date, Number, String],
     tick: Object,
-    tickInterval: [Number, Object, String],
-    type: String,
-    valueType: String,
+    tickInterval: {},
+    type: {},
+    valueType: {},
     workdaysOnly: Boolean,
     workWeek: Array
   }
@@ -1520,8 +1520,8 @@ const DxScaleLabelConfig = {
   props: {
     customizeText: Function,
     font: Object,
-    format: [Object, Function, String],
-    overlappingBehavior: String,
+    format: {},
+    overlappingBehavior: {},
     topIndent: Number,
     visible: Boolean
   }
@@ -1552,7 +1552,7 @@ const DxSelectionStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: String,
+    dashStyle: {},
     hatching: Object,
     highlight: Boolean,
     size: Number,
@@ -1622,9 +1622,9 @@ const DxSeriesConfig = {
     closeValueField: String,
     color: [Object, String],
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: {},
     highValueField: String,
-    hoverMode: String,
+    hoverMode: {},
     hoverStyle: Object,
     ignoreEmptyPoints: Boolean,
     innerColor: String,
@@ -1640,14 +1640,14 @@ const DxSeriesConfig = {
     rangeValue1Field: String,
     rangeValue2Field: String,
     reduction: Object,
-    selectionMode: String,
+    selectionMode: {},
     selectionStyle: Object,
     showInLegend: Boolean,
     sizeField: String,
     stack: String,
     tag: {},
     tagField: String,
-    type: String,
+    type: {},
     valueErrorBar: Object,
     valueField: String,
     visible: Boolean,
@@ -1673,7 +1673,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: {},
     visible: Boolean,
     width: Number
   }
@@ -1781,7 +1781,7 @@ const DxSliderMarkerConfig = {
     color: String,
     customizeText: Function,
     font: Object,
-    format: [Object, Function, String],
+    format: {},
     invalidRangeColor: String,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -1814,8 +1814,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -1898,14 +1898,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -1949,7 +1949,7 @@ const DxValueConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: [Number, Object, String],
+    length: {},
     startValue: [Date, Number, String]
   }
 };
@@ -1979,8 +1979,8 @@ const DxValueAxisConfig = {
     logarithmBase: Number,
     max: Number,
     min: Number,
-    type: String,
-    valueType: String
+    type: {},
+    valueType: {}
   }
 };
 
@@ -2006,13 +2006,13 @@ const DxValueErrorBarConfig = {
   },
   props: {
     color: String,
-    displayMode: String,
+    displayMode: {},
     edgeLength: Number,
     highValueField: String,
     lineWidth: Number,
     lowValueField: String,
     opacity: Number,
-    type: String,
+    type: {},
     value: Number
   }
 };

@@ -112,7 +112,7 @@ const componentConfig = {
     rootFolderName: String,
     rtlEnabled: Boolean,
     selectedItemKeys: Array,
-    selectionMode: String,
+    selectionMode: {},
     tabIndex: Number,
     toolbar: Object,
     upload: Object,
@@ -217,14 +217,14 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: String,
+    alignment: {},
     caption: String,
     cssClass: String,
     dataField: String,
-    dataType: String,
+    dataType: {},
     hidingPriority: Number,
     sortIndex: Number,
-    sortOrder: String,
+    sortOrder: {},
     visible: Boolean,
     visibleIndex: Number,
     width: [Number, String]
@@ -280,7 +280,7 @@ const DxContextMenuItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array,
-    name: String,
+    name: {},
     selectable: Boolean,
     selected: Boolean,
     text: String,
@@ -335,14 +335,14 @@ const DxFileSelectionItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    locateInMenu: String,
-    location: String,
-    name: String,
+    locateInMenu: {},
+    location: {},
+    name: {},
     options: {},
-    showText: String,
+    showText: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -381,16 +381,16 @@ const DxItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array,
-    locateInMenu: String,
-    location: String,
-    name: String,
+    locateInMenu: {},
+    location: {},
+    name: {},
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String,
+    showText: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 
@@ -412,7 +412,7 @@ const DxItemViewConfig = {
   },
   props: {
     details: Object,
-    mode: String,
+    mode: {},
     showFolders: Boolean,
     showParentFolder: Boolean
   }
@@ -519,14 +519,14 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    locateInMenu: String,
-    location: String,
-    name: String,
+    locateInMenu: {},
+    location: {},
+    name: {},
     options: {},
-    showText: String,
+    showText: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: {}
   }
 };
 

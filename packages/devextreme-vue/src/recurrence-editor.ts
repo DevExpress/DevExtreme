@@ -57,9 +57,9 @@ const componentConfig = {
     tabIndex: Number,
     validationError: {},
     validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: String,
     visible: Boolean,
     width: [Function, Number, String]

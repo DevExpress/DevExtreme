@@ -81,11 +81,11 @@ const componentConfig = {
     tooltip: Object,
     validationError: {},
     validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: Array,
-    valueChangeMode: String,
+    valueChangeMode: {},
     visible: Boolean,
     width: [Function, Number, String]
   },
@@ -168,7 +168,7 @@ const DxFormatConfig = {
     formatter: Function,
     parser: Function,
     precision: Number,
-    type: String,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -188,8 +188,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    format: [Object, Function, String],
-    position: String,
+    format: {},
+    position: {},
     visible: Boolean
   }
 };
@@ -214,9 +214,9 @@ const DxTooltipConfig = {
   },
   props: {
     enabled: Boolean,
-    format: [Object, Function, String],
-    position: String,
-    showMode: String
+    format: {},
+    position: {},
+    showMode: {}
   }
 };
 
