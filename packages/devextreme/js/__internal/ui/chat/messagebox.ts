@@ -60,12 +60,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._renderButton();
   }
 
-  _isValuableTextEntered(): boolean {
-    const { text } = this._textArea.option();
-
-    return !!text?.trim();
-  }
-
   _renderTextArea(): void {
     const {
       activeStateEnabled,
@@ -124,6 +118,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       type: 'default',
       stylingMode: 'text',
       disabled: true,
+      elementAttr: { 'aria-label': 'Send' },
       onClick: (e): void => {
         this._sendHandler(e);
       },
@@ -154,6 +149,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._button.option('disabled', state);
   }
 
+  _isValuableTextEntered(): boolean {
+    const { text } = this._textArea.option();
+
+    return !!text?.trim();
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
@@ -172,6 +173,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  updateInputAria(emptyViewId: string | null): void {
+    this._textArea.option({
+      inputAttr: {
+        'aria-labelledby': emptyViewId,
+      },
+    });
   }
 }
 

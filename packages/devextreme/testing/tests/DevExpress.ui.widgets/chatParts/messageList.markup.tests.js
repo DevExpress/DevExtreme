@@ -87,4 +87,39 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($emptyView.find(`.${CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS}`).length, 1);
         });
     });
+
+    QUnit.module('Accessibility', () => {
+        QUnit.test('emptyView should have id attribute', function(assert) {
+            const id = this.$element.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`).attr('id');
+
+            assert.notStrictEqual(id, undefined);
+        });
+
+        [
+            {
+                attribute: 'role',
+                expectedValue: 'log',
+            },
+            {
+                attribute: 'aria-atomic',
+                expectedValue: 'false',
+            },
+            {
+                attribute: 'aria-label',
+                expectedValue: 'Message list',
+            },
+            {
+                attribute: 'aria-live',
+                expectedValue: 'polite',
+            },
+            {
+                attribute: 'aria-relevant',
+                expectedValue: 'additions',
+            },
+        ].forEach(({ attribute, expectedValue }) => {
+            QUnit.test(`element should have correct attribute ${attribute}`, function(assert) {
+                assert.strictEqual(this.$element.attr(attribute), expectedValue, `${attribute} is correct`);
+            });
+        });
+    });
 });
