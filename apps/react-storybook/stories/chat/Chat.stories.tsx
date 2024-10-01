@@ -1,10 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
-
-import { author_info_1, author_info_2, initialMessages } from './data';
-
-import { Button } from 'devextreme-react';
+import { firstAuthor, secondAuthor, initialMessages } from './data';
 import { Popup } from 'devextreme-react/popup';
 
 import './styles.css';
@@ -33,19 +30,19 @@ const commonArgs: ChatTypes.Properties = {
     focusStateEnabled: true,
 };
 
-export const Common: Story = {
+export const Overview: Story = {
     args: {
         items: initialMessages,
-        user: author_info_1,
+        user: firstAuthor,
         ...commonArgs,
     },
     argTypes: {
         user: {
             control: 'select',
-            options: [author_info_1.name, author_info_2.name],
+            options: [firstAuthor.name, secondAuthor.name],
             mapping: {
-                [author_info_1.name]: author_info_1,
-                [author_info_2.name]: author_info_2,
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
             },
         },
         hint: {
@@ -96,7 +93,7 @@ export const Common: Story = {
 export const PopupIntegration: Story = {
     args: {
         items: initialMessages,
-        user: author_info_2,
+        user: secondAuthor,
         ...commonArgs,
         width: '100%',
         height: '100%'
@@ -104,10 +101,10 @@ export const PopupIntegration: Story = {
     argTypes: {
         user: {
             control: 'select',
-            options: [author_info_1.name, author_info_2.name],
+            options: [firstAuthor.name, secondAuthor.name],
             mapping: {
-                [author_info_1.name]: author_info_1,
-                [author_info_2.name]: author_info_2,
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
             },
         },
         hint: {
@@ -133,56 +130,35 @@ export const PopupIntegration: Story = {
             setMessages((prevMessages) => [...prevMessages, message]);
         }, []);
         
-        const [popupWithScrollViewVisible, setPopupWithScrollViewVisible] = useState(false);
-        
-        const showPopupWithScrollView = useCallback(() => {
-            setPopupWithScrollViewVisible(true);
-        }, [setPopupWithScrollViewVisible]);
-        
-        const hide = useCallback(() => {
-            setPopupWithScrollViewVisible(false);
-        }, [setPopupWithScrollViewVisible]);
-        
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Button
-                    text="Show Chat In Popup"
-                    width={300}
-                    type="default"
-                    onClick={showPopupWithScrollView}
-                />
-                
-                <Popup
-                    width={400}
-                    height={500}
-                    visible={popupWithScrollViewVisible}
-                    onHiding={hide}
-                    hideOnOutsideClick={true}
-                    showCloseButton={true}
-                    title="Chat title"
-                    position={{
-                        my: 'right bottom',
-                        at: 'right bottom',
-                        offset: '-20 -20',
-                    }}
+            <Popup
+                width={300}
+                height={350}
+                visible={true}
+                showCloseButton={false}
+                title="Chat title"
+                position={{
+                    my: 'right bottom',
+                    at: 'right bottom',
+                    offset: '-20 -20',
+                }}
+            >
+                <Chat
+                    width={width}
+                    height={height}
+                    items={messages}
+                    disabled={disabled}
+                    rtlEnabled={rtlEnabled}
+                    user={user}
+                    onMessageSend={onMessageSend}
+                    visible={visible}
+                    hint={hint}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
                 >
-                    <Chat
-                        width={width}
-                        height={height}
-                        items={messages}
-                        disabled={disabled}
-                        rtlEnabled={rtlEnabled}
-                        user={user}
-                        onMessageSend={onMessageSend}
-                        visible={visible}
-                        hint={hint}
-                        activeStateEnabled={activeStateEnabled}
-                        focusStateEnabled={focusStateEnabled}
-                        hoverStateEnabled={hoverStateEnabled}
-                    >
-                    </Chat>
-                </Popup>
-            </div>
+                </Chat>
+            </Popup>
         );
     }
 }
