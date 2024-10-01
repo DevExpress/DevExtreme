@@ -206,20 +206,24 @@ class Chat extends Widget<Properties> {
     }
   }
 
+  _insertNewItem(item: Message): void {
+    const { items } = this.option();
+
+    const newItems = [...items ?? [], item];
+    this.option('items', newItems);
+  }
+
   renderMessage(message: Message = {}): void {
     // @ts-expect-error
     const dataSource = this.getDataSource();
 
     if (!isDefined(dataSource)) {
-      const { items } = this.option();
-
-      const newItems = [...items ?? [], message];
-      this.option('items', newItems);
+      this._insertNewItem(message);
       return;
     }
 
     dataSource.store().insert(message).done(() => {
-      dataSource.load();
+      this._insertNewItem(message);
     });
   }
 }
