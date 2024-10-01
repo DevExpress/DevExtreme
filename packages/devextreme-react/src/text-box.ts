@@ -10,6 +10,7 @@ import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
+import type { TextEditorButtonLocation, ButtonStyle, ButtonType } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -85,7 +86,7 @@ const TextBox = memo(
 // owners:
 // TextBox
 type IButtonProps = React.PropsWithChildren<{
-  location?: "after" | "before";
+  location?: TextEditorButtonLocation;
   name?: string;
   options?: dxButtonOptions;
 }>
@@ -122,11 +123,11 @@ type IOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;

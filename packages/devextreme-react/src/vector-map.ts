@@ -8,9 +8,10 @@ import dxVectorMap, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, dxVectorMapAnnotationConfig, MapLayerElement, VectorMapLegendItem } from "devextreme/viz/vector_map";
-import type { Font as ChartsFont } from "devextreme/common/charts";
+import type { ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, dxVectorMapAnnotationConfig, MapLayerElement, VectorMapMarkerType, VectorMapLayerType, VectorMapLegendItem, VectorMapMarkerShape } from "devextreme/viz/vector_map";
+import type { DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, Palette } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
+import type { HorizontalAlignment, VerticalEdge, ExportFormat, SingleMultipleOrNone, Position, Orientation } from "devextreme/common";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 
@@ -103,7 +104,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -135,12 +136,12 @@ type IAnnotationProps = React.PropsWithChildren<{
   };
   template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
-  type?: "text" | "image" | "custom";
+  type?: AnnotationType;
   width?: number;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
   x?: number;
   y?: number;
   render?: (...params: any) => React.ReactNode;
@@ -181,7 +182,7 @@ const Annotation: typeof _componentAnnotation & IElementDescriptor = Object.assi
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -219,7 +220,7 @@ const Background: typeof _componentBackground & IElementDescriptor = Object.assi
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -243,7 +244,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -274,12 +275,12 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   };
   template?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   tooltipEnabled?: boolean;
   tooltipTemplate?: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template;
-  type?: "text" | "image" | "custom";
+  type?: AnnotationType;
   width?: number;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
   x?: number;
   y?: number;
   render?: (...params: any) => React.ReactNode;
@@ -312,11 +313,11 @@ type IControlBarProps = React.PropsWithChildren<{
   borderColor?: string;
   color?: string;
   enabled?: boolean;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number;
   opacity?: number;
   panVisible?: boolean;
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
   zoomVisible?: boolean;
 }>
 const _componentControlBar = memo(
@@ -335,7 +336,7 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
@@ -425,7 +426,7 @@ type ILayerProps = React.PropsWithChildren<{
   customize?: ((elements: Array<MapLayerElement>) => void);
   dataField?: string;
   dataSource?: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string;
-  elementType?: "bubble" | "dot" | "image" | "pie";
+  elementType?: VectorMapMarkerType;
   hoveredBorderColor?: string;
   hoveredBorderWidth?: number;
   hoveredColor?: string;
@@ -439,17 +440,17 @@ type ILayerProps = React.PropsWithChildren<{
   minSize?: number;
   name?: string;
   opacity?: number;
-  palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office";
+  palette?: Array<string> | Palette;
   paletteIndex?: number;
   paletteSize?: number;
   selectedBorderColor?: string;
   selectedBorderWidth?: number;
   selectedColor?: string;
-  selectionMode?: "single" | "multiple" | "none";
+  selectionMode?: SingleMultipleOrNone;
   size?: number;
   sizeGroupingField?: string;
   sizeGroups?: Array<number>;
-  type?: "area" | "line" | "marker";
+  type?: VectorMapLayerType;
 }>
 const _componentLayer = memo(
   (props: ILayerProps) => {
@@ -472,7 +473,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -483,9 +484,9 @@ type ILegendProps = React.PropsWithChildren<{
   customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
   customizeText?: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string);
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
-  itemsAlignment?: "center" | "left" | "right";
-  itemTextPosition?: "bottom" | "left" | "right" | "top";
+  horizontalAlignment?: HorizontalAlignment;
+  itemsAlignment?: HorizontalAlignment;
+  itemTextPosition?: Position;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -493,10 +494,10 @@ type ILegendProps = React.PropsWithChildren<{
     top?: number;
   };
   markerColor?: string;
-  markerShape?: "circle" | "square";
+  markerShape?: VectorMapMarkerShape;
   markerSize?: number;
   markerTemplate?: ((legendItem: VectorMapLegendItem, element: any) => string | any) | template;
-  orientation?: "horizontal" | "vertical";
+  orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   rowCount?: number;
@@ -507,7 +508,7 @@ type ILegendProps = React.PropsWithChildren<{
   };
   title?: Record<string, any> | string | {
     font?: ChartsFont;
-    horizontalAlignment?: "center" | "left" | "right";
+    horizontalAlignment?: HorizontalAlignment;
     margin?: Record<string, any> | {
       bottom?: number;
       left?: number;
@@ -521,9 +522,9 @@ type ILegendProps = React.PropsWithChildren<{
       text?: string;
     };
     text?: string;
-    verticalAlignment?: "bottom" | "top";
+    verticalAlignment?: VerticalEdge;
   };
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
   visible?: boolean;
   markerRender?: (...params: any) => React.ReactNode;
   markerComponent?: React.ComponentType<any>;
@@ -557,7 +558,7 @@ const Legend: typeof _componentLegend & IElementDescriptor = Object.assign(_comp
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -571,7 +572,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
     text?: string;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = memo(
   (props: ILegendTitleProps) => {
@@ -732,8 +733,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = memo(
   (props: ISubtitleProps) => {
@@ -750,7 +751,7 @@ const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_
 // VectorMap
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | number | {
     bottom?: number;
     left?: number;
@@ -762,13 +763,13 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  verticalAlignment?: VerticalEdge;
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = memo(
   (props: ITitleProps) => {
@@ -786,7 +787,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -837,7 +838,7 @@ const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -856,7 +857,7 @@ const TooltipBorder: typeof _componentTooltipBorder & IElementDescriptor = Objec
 // VectorMap
 type IVectorMapTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -868,13 +869,13 @@ type IVectorMapTitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentVectorMapTitle = memo(
   (props: IVectorMapTitleProps) => {
@@ -898,8 +899,8 @@ type IVectorMapTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentVectorMapTitleSubtitle = memo(
   (props: IVectorMapTitleSubtitleProps) => {

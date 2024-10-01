@@ -7,7 +7,7 @@ import dxCalendar, {
 
 import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
-import type { DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/calendar";
+import type { CalendarZoomLevel, DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/calendar";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -23,9 +23,9 @@ type ICalendarOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IC
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
   defaultValue?: Array<Date | number | string> | Date | number | string;
-  defaultZoomLevel?: "century" | "decade" | "month" | "year";
+  defaultZoomLevel?: CalendarZoomLevel;
   onValueChange?: (value: Array<Date | number | string> | Date | number | string) => void;
-  onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
+  onZoomLevelChange?: (value: CalendarZoomLevel) => void;
 }>
 
 interface CalendarRef {

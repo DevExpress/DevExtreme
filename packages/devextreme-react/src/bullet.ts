@@ -9,9 +9,10 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescrip
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/bullet";
+import type { DashStyle, Font as ChartsFont } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
-import type { Font as ChartsFont } from "devextreme/common/charts";
 
+import type * as LocalizationTypes from "devextreme/common";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -75,7 +76,7 @@ const Bullet = memo(
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -116,7 +117,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: LocalizationTypes.Format | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
@@ -188,7 +189,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;

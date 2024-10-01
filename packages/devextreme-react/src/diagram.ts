@@ -8,7 +8,8 @@ import dxDiagram, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, CustomCommand, dxDiagramShape } from "devextreme/ui/diagram";
+import type { ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, DataLayoutType, Command as DiagramCommand, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType, dxDiagramShape, ConnectorLineEnd, ConnectorLineType, PanelVisibility } from "devextreme/ui/diagram";
+import type { Orientation, ToolbarItemLocation } from "devextreme/common";
 import type { dxSVGElement } from "devextreme/core/element";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
@@ -122,8 +123,8 @@ const Diagram = memo(
 // owners:
 // Nodes
 type IAutoLayoutProps = React.PropsWithChildren<{
-  orientation?: "horizontal" | "vertical";
-  type?: "auto" | "off" | "tree" | "layered";
+  orientation?: Orientation;
+  type?: DataLayoutType;
 }>
 const _componentAutoLayout = memo(
   (props: IAutoLayoutProps) => {
@@ -144,9 +145,9 @@ const AutoLayout: typeof _componentAutoLayout & IElementDescriptor = Object.assi
 // ViewToolbar
 type ICommandProps = React.PropsWithChildren<{
   icon?: string;
-  items?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
-  location?: "after" | "before" | "center";
-  name?: "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox";
+  items?: Array<DiagramCommand | CustomCommand>;
+  location?: ToolbarItemLocation;
+  name?: DiagramCommand | string;
   text?: string;
 }>
 const _componentCommand = memo(
@@ -164,9 +165,9 @@ const Command: typeof _componentCommand & IElementDescriptor = Object.assign(_co
 // Command
 type ICommandItemProps = React.PropsWithChildren<{
   icon?: string;
-  items?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
-  location?: "after" | "before" | "center";
-  name?: "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox";
+  items?: Array<DiagramCommand | CustomCommand>;
+  location?: ToolbarItemLocation;
+  name?: DiagramCommand | string;
   text?: string;
 }>
 const _componentCommandItem = memo(
@@ -200,7 +201,7 @@ const ConnectionPoint: typeof _componentConnectionPoint & IElementDescriptor = O
 // owners:
 // Diagram
 type IContextMenuProps = React.PropsWithChildren<{
-  commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+  commands?: Array<DiagramCommand | CustomCommand>;
   enabled?: boolean;
 }>
 const _componentContextMenu = memo(
@@ -219,11 +220,11 @@ const ContextMenu: typeof _componentContextMenu & IElementDescriptor = Object.as
 // owners:
 // Diagram
 type IContextToolboxProps = React.PropsWithChildren<{
-  category?: "general" | "flowchart" | "orgChart" | "containers" | "custom";
-  displayMode?: "icons" | "texts";
+  category?: ShapeCategory | string;
+  displayMode?: ToolboxDisplayMode;
   enabled?: boolean;
   shapeIconsPerRow?: number;
-  shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">;
+  shapes?: Array<ShapeType>;
   width?: number;
 }>
 const _componentContextToolbox = memo(
@@ -248,7 +249,7 @@ type ICustomShapeProps = React.PropsWithChildren<{
   backgroundImageTop?: number;
   backgroundImageUrl?: string;
   backgroundImageWidth?: number;
-  baseType?: "text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight";
+  baseType?: ShapeType | string;
   category?: string;
   connectionPoints?: Array<Record<string, any>> | {
     x?: number;
@@ -311,9 +312,9 @@ const CustomShape: typeof _componentCustomShape & IElementDescriptor = Object.as
 // owners:
 // Diagram
 type IDefaultItemPropertiesProps = React.PropsWithChildren<{
-  connectorLineEnd?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle";
-  connectorLineStart?: "none" | "arrow" | "outlinedTriangle" | "filledTriangle";
-  connectorLineType?: "straight" | "orthogonal";
+  connectorLineEnd?: ConnectorLineEnd;
+  connectorLineStart?: ConnectorLineEnd;
+  connectorLineType?: ConnectorLineType;
   shapeMaxHeight?: number;
   shapeMaxWidth?: number;
   shapeMinHeight?: number;
@@ -424,12 +425,12 @@ const GridSize: typeof _componentGridSize & IElementDescriptor = Object.assign(_
 // Tab
 // Toolbox
 type IGroupProps = React.PropsWithChildren<{
-  commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+  commands?: Array<DiagramCommand | CustomCommand>;
   title?: string;
-  category?: "general" | "flowchart" | "orgChart" | "containers" | "custom";
-  displayMode?: "icons" | "texts";
+  category?: ShapeCategory | string;
+  displayMode?: ToolboxDisplayMode;
   expanded?: boolean;
-  shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">;
+  shapes?: Array<ShapeType>;
 }>
 const _componentGroup = memo(
   (props: IGroupProps) => {
@@ -445,7 +446,7 @@ const Group: typeof _componentGroup & IElementDescriptor = Object.assign(_compon
 // owners:
 // Diagram
 type IHistoryToolbarProps = React.PropsWithChildren<{
-  commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+  commands?: Array<DiagramCommand | CustomCommand>;
   visible?: boolean;
 }>
 const _componentHistoryToolbar = memo(
@@ -466,9 +467,9 @@ const HistoryToolbar: typeof _componentHistoryToolbar & IElementDescriptor = Obj
 // PageSize
 type IItemProps = React.PropsWithChildren<{
   icon?: string;
-  items?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
-  location?: "after" | "before" | "center";
-  name?: "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox";
+  items?: Array<DiagramCommand | CustomCommand>;
+  location?: ToolbarItemLocation;
+  name?: DiagramCommand | string;
   text?: string;
   height?: number;
   width?: number;
@@ -487,7 +488,7 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
 // owners:
 // Diagram
 type IMainToolbarProps = React.PropsWithChildren<{
-  commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+  commands?: Array<DiagramCommand | CustomCommand>;
   visible?: boolean;
 }>
 const _componentMainToolbar = memo(
@@ -506,9 +507,9 @@ const MainToolbar: typeof _componentMainToolbar & IElementDescriptor = Object.as
 // owners:
 // Diagram
 type INodesProps = React.PropsWithChildren<{
-  autoLayout?: Record<string, any> | "auto" | "off" | "tree" | "layered" | {
-    orientation?: "horizontal" | "vertical";
-    type?: "auto" | "off" | "tree" | "layered";
+  autoLayout?: DataLayoutType | Record<string, any> | {
+    orientation?: Orientation;
+    type?: DataLayoutType;
   };
   autoSizeEnabled?: boolean;
   containerChildrenExpr?: ((data: any, value: any) => any) | string;
@@ -598,14 +599,14 @@ const PageSizeItem: typeof _componentPageSizeItem & IElementDescriptor = Object.
 // Diagram
 type IPropertiesPanelProps = React.PropsWithChildren<{
   tabs?: Array<Record<string, any>> | {
-    commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+    commands?: Array<DiagramCommand | CustomCommand>;
     groups?: Array<Record<string, any>> | {
-      commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+      commands?: Array<DiagramCommand | CustomCommand>;
       title?: string;
     }[];
     title?: string;
   }[];
-  visibility?: "auto" | "visible" | "collapsed" | "disabled";
+  visibility?: PanelVisibility;
 }>
 const _componentPropertiesPanel = memo(
   (props: IPropertiesPanelProps) => {
@@ -623,9 +624,9 @@ const PropertiesPanel: typeof _componentPropertiesPanel & IElementDescriptor = O
 // owners:
 // PropertiesPanel
 type ITabProps = React.PropsWithChildren<{
-  commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+  commands?: Array<DiagramCommand | CustomCommand>;
   groups?: Array<Record<string, any>> | {
-    commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+    commands?: Array<DiagramCommand | CustomCommand>;
     title?: string;
   }[];
   title?: string;
@@ -649,7 +650,7 @@ const Tab: typeof _componentTab & IElementDescriptor = Object.assign(_componentT
 // owners:
 // Tab
 type ITabGroupProps = React.PropsWithChildren<{
-  commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+  commands?: Array<DiagramCommand | CustomCommand>;
   title?: string;
 }>
 const _componentTabGroup = memo(
@@ -670,15 +671,15 @@ const TabGroup: typeof _componentTabGroup & IElementDescriptor = Object.assign(_
 // Diagram
 type IToolboxProps = React.PropsWithChildren<{
   groups?: Array<Record<string, any>> | {
-    category?: "general" | "flowchart" | "orgChart" | "containers" | "custom";
-    displayMode?: "icons" | "texts";
+    category?: ShapeCategory | string;
+    displayMode?: ToolboxDisplayMode;
     expanded?: boolean;
-    shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">;
+    shapes?: Array<ShapeType>;
     title?: string;
   }[];
   shapeIconsPerRow?: number;
   showSearch?: boolean;
-  visibility?: "auto" | "visible" | "collapsed" | "disabled";
+  visibility?: PanelVisibility;
   width?: number;
 }>
 const _componentToolbox = memo(
@@ -698,10 +699,10 @@ const Toolbox: typeof _componentToolbox & IElementDescriptor = Object.assign(_co
 // owners:
 // Toolbox
 type IToolboxGroupProps = React.PropsWithChildren<{
-  category?: "general" | "flowchart" | "orgChart" | "containers" | "custom";
-  displayMode?: "icons" | "texts";
+  category?: ShapeCategory | string;
+  displayMode?: ToolboxDisplayMode;
   expanded?: boolean;
-  shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">;
+  shapes?: Array<ShapeType>;
   title?: string;
 }>
 const _componentToolboxGroup = memo(
@@ -718,7 +719,7 @@ const ToolboxGroup: typeof _componentToolboxGroup & IElementDescriptor = Object.
 // owners:
 // Diagram
 type IViewToolbarProps = React.PropsWithChildren<{
-  commands?: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">;
+  commands?: Array<DiagramCommand | CustomCommand>;
   visible?: boolean;
 }>
 const _componentViewToolbar = memo(

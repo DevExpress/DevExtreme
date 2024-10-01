@@ -9,7 +9,8 @@ import dxToolbar, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/toolbar";
+import type { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
+import type { ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
@@ -101,15 +102,15 @@ type IItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;

@@ -8,10 +8,11 @@ import dxScheduler, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerScrolling } from "devextreme/ui/scheduler";
+import type { ViewType, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AllDayPanelMode, AppointmentTemplateData, AppointmentTooltipTemplateData, CellAppointmentsLimit, dxSchedulerScrolling } from "devextreme/ui/scheduler";
 import type { event } from "devextreme/events/index";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
+import type { ScrollMode, FirstDayOfWeek, Orientation } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 
 import type dxSortable from "devextreme/ui/sortable";
@@ -60,9 +61,9 @@ type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, I
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
   defaultCurrentDate?: Date | number | string;
-  defaultCurrentView?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
+  defaultCurrentView?: ViewType;
   onCurrentDateChange?: (value: Date | number | string) => void;
-  onCurrentViewChange?: (value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") => void;
+  onCurrentViewChange?: (value: ViewType) => void;
 }>
 
 interface SchedulerRef {
@@ -229,7 +230,7 @@ const Resource: typeof _componentResource & IElementDescriptor = Object.assign(_
 // Scheduler
 // View
 type IScrollingProps = React.PropsWithChildren<{
-  mode?: "standard" | "virtual";
+  mode?: ScrollMode;
 }>
 const _componentScrolling = memo(
   (props: IScrollingProps) => {
@@ -245,7 +246,7 @@ const Scrolling: typeof _componentScrolling & IElementDescriptor = Object.assign
 // Scheduler
 type IViewProps = React.PropsWithChildren<{
   agendaDuration?: number;
-  allDayPanelMode?: "all" | "allDay" | "hidden";
+  allDayPanelMode?: AllDayPanelMode;
   appointmentCollectorTemplate?: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template;
   appointmentTemplate?: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
   appointmentTooltipTemplate?: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template;
@@ -254,12 +255,12 @@ type IViewProps = React.PropsWithChildren<{
   dateCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
   dropDownAppointmentTemplate?: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template;
   endDayHour?: number;
-  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  firstDayOfWeek?: FirstDayOfWeek;
   groupByDate?: boolean;
-  groupOrientation?: "horizontal" | "vertical";
+  groupOrientation?: Orientation;
   groups?: Array<string>;
   intervalCount?: number;
-  maxAppointmentsPerCell?: number | "auto" | "unlimited";
+  maxAppointmentsPerCell?: CellAppointmentsLimit | number;
   name?: string;
   offset?: number;
   resourceCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
@@ -267,7 +268,7 @@ type IViewProps = React.PropsWithChildren<{
   startDate?: Date | number | string;
   startDayHour?: number;
   timeCellTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
-  type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
+  type?: ViewType;
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;
   appointmentRender?: (...params: any) => React.ReactNode;

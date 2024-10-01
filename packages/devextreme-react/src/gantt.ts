@@ -8,19 +8,22 @@ import dxGantt, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttContextMenuItem, dxGanttFilterRowOperationDescriptions, dxGanttHeaderFilterTexts, dxGanttToolbarItem } from "devextreme/ui/gantt";
+import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttContextMenuItem, GanttPredefinedContextMenuItem, dxGanttFilterRowOperationDescriptions, dxGanttHeaderFilterTexts, GanttPredefinedToolbarItem, GanttScaleType, dxGanttToolbarItem } from "devextreme/ui/gantt";
+import type { HorizontalAlignment, DataType, SearchMode, SortOrder, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
 import type { template } from "devextreme/core/templates/template";
+import type { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-import type { ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { dxContextMenuItem } from "devextreme/ui/context_menu";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 
 import type dxTreeList from "devextreme/ui/tree_list";
 import type DataSource from "devextreme/data/data_source";
 
 import type * as LocalizationTypes from "devextreme/localization";
+import type * as LocalizationTypes from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -147,7 +150,7 @@ const Gantt = memo(
 // owners:
 // Gantt
 type IColumnProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
+  alignment?: HorizontalAlignment;
   allowFiltering?: boolean;
   allowHeaderFiltering?: boolean;
   allowSorting?: boolean;
@@ -160,11 +163,11 @@ type IColumnProps = React.PropsWithChildren<{
   cssClass?: string;
   customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
   dataField?: string;
-  dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
+  dataType?: DataType;
   encodeHtml?: boolean;
   falseText?: string;
-  filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string>;
-  filterType?: "exclude" | "include";
+  filterOperations?: Array<FilterOperation | string>;
+  filterType?: FilterType;
   filterValue?: any;
   filterValues?: Array<any>;
   format?: LocalizationTypes.Format;
@@ -173,17 +176,17 @@ type IColumnProps = React.PropsWithChildren<{
     allowSearch?: boolean;
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-    groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
+    groupInterval?: HeaderFilterGroupInterval | number;
     height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: "contains" | "startswith" | "equals";
+    searchMode?: SearchMode;
     width?: number | string;
   };
   minWidth?: number;
-  selectedFilterOperation?: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith";
+  selectedFilterOperation?: SelectedFilterOperation;
   sortIndex?: number;
   sortingMethod?: ((value1: any, value2: any) => number);
-  sortOrder?: "asc" | "desc";
+  sortOrder?: SortOrder;
   trueText?: string;
   visible?: boolean;
   visibleIndex?: number;
@@ -192,12 +195,12 @@ type IColumnProps = React.PropsWithChildren<{
   onFilterValueChange?: (value: any) => void;
   defaultFilterValues?: Array<any>;
   onFilterValuesChange?: (value: Array<any>) => void;
-  defaultSelectedFilterOperation?: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith";
-  onSelectedFilterOperationChange?: (value: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith") => void;
+  defaultSelectedFilterOperation?: SelectedFilterOperation;
+  onSelectedFilterOperationChange?: (value: SelectedFilterOperation) => void;
   defaultSortIndex?: number;
   onSortIndexChange?: (value: number) => void;
-  defaultSortOrder?: "asc" | "desc";
-  onSortOrderChange?: (value: "asc" | "desc") => void;
+  defaultSortOrder?: SortOrder;
+  onSortOrderChange?: (value: SortOrder) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
   defaultVisibleIndex?: number;
@@ -247,10 +250,10 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
+  groupInterval?: HeaderFilterGroupInterval | number;
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
+  searchMode?: SearchMode;
   width?: number | string;
 }>
 const _componentColumnHeaderFilter = memo(
@@ -272,7 +275,7 @@ const ColumnHeaderFilter: typeof _componentColumnHeaderFilter & IElementDescript
 type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
@@ -290,7 +293,7 @@ const ColumnHeaderFilterSearch: typeof _componentColumnHeaderFilterSearch & IEle
 // Gantt
 type IContextMenuProps = React.PropsWithChildren<{
   enabled?: boolean;
-  items?: Array<dxGanttContextMenuItem | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">;
+  items?: Array<dxGanttContextMenuItem | GanttPredefinedContextMenuItem>;
 }>
 const _componentContextMenu = memo(
   (props: IContextMenuProps) => {
@@ -314,7 +317,7 @@ type IContextMenuItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
   items?: Array<dxContextMenuItem>;
-  name?: "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager";
+  name?: GanttPredefinedContextMenuItem | string;
   selectable?: boolean;
   selected?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -413,7 +416,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: LocalizationTypes.Format | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
@@ -458,7 +461,7 @@ const GanttHeaderFilter: typeof _componentGanttHeaderFilter & IElementDescriptor
 type IGanttHeaderFilterSearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   timeout?: number;
 }>
 const _componentGanttHeaderFilterSearch = memo(
@@ -478,10 +481,10 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
-  groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
+  groupInterval?: HeaderFilterGroupInterval | number;
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
+  searchMode?: SearchMode;
   width?: number | string;
   searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
@@ -506,7 +509,7 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   icon?: string;
   items?: Array<dxContextMenuItem>;
-  name?: "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager" | "separator" | "fullScreen" | "showResources" | "showDependencies";
+  name?: GanttPredefinedContextMenuItem | string | GanttPredefinedToolbarItem;
   selectable?: boolean;
   selected?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -514,12 +517,12 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   cssClass?: string;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
-  showText?: "always" | "inMenu";
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  showText?: ShowTextMode;
+  widget?: ToolbarItemComponent;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   menuItemRender?: (...params: any) => React.ReactNode;
@@ -609,8 +612,8 @@ const Resources: typeof _componentResources & IElementDescriptor = Object.assign
 // owners:
 // Gantt
 type IScaleTypeRangeProps = React.PropsWithChildren<{
-  max?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years";
-  min?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years";
+  max?: GanttScaleType;
+  min?: GanttScaleType;
 }>
 const _componentScaleTypeRange = memo(
   (props: IScaleTypeRangeProps) => {
@@ -628,7 +631,7 @@ const ScaleTypeRange: typeof _componentScaleTypeRange & IElementDescriptor = Obj
 type ISearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
@@ -648,7 +651,7 @@ type ISortingProps = React.PropsWithChildren<{
   ascendingText?: string;
   clearText?: string;
   descendingText?: string;
-  mode?: "single" | "multiple" | "none";
+  mode?: SingleMultipleOrNone | string;
   showSortIndexes?: boolean;
 }>
 const _componentSorting = memo(
@@ -722,7 +725,7 @@ const Texts: typeof _componentTexts & IElementDescriptor = Object.assign(_compon
 // owners:
 // Gantt
 type IToolbarProps = React.PropsWithChildren<{
-  items?: Array<dxGanttToolbarItem | "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">;
+  items?: Array<dxGanttToolbarItem | GanttPredefinedToolbarItem>;
 }>
 const _componentToolbar = memo(
   (props: IToolbarProps) => {
@@ -744,16 +747,16 @@ type IToolbarItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies";
+  name?: GanttPredefinedToolbarItem | string;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;

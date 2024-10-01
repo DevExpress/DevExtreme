@@ -9,6 +9,8 @@ import { ExtensionComponent as BaseComponent } from "./core/extension-component"
 import { IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
+import type { ValidationRuleType, ComparisonOperator } from "devextreme/common";
+
 type IValidatorOptions = React.PropsWithChildren<Properties & IHtmlOptions>
 
 interface ValidatorRef {
@@ -88,7 +90,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
 }>
 const _componentAsyncRule = memo(
@@ -109,10 +111,10 @@ const AsyncRule: typeof _componentAsyncRule & IElementDescriptor = Object.assign
 // Validator
 type ICompareRuleProps = React.PropsWithChildren<{
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentCompareRule = memo(
   (props: ICompareRuleProps) => {
@@ -134,7 +136,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
 }>
 const _componentCustomRule = memo(
@@ -156,7 +158,7 @@ const CustomRule: typeof _componentCustomRule & IElementDescriptor = Object.assi
 type IEmailRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentEmailRule = memo(
   (props: IEmailRuleProps) => {
@@ -177,7 +179,7 @@ const EmailRule: typeof _componentEmailRule & IElementDescriptor = Object.assign
 type INumericRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentNumericRule = memo(
   (props: INumericRuleProps) => {
@@ -199,7 +201,7 @@ type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   pattern?: RegExp | string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentPatternRule = memo(
   (props: IPatternRuleProps) => {
@@ -223,7 +225,7 @@ type IRangeRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRangeRule = memo(
   (props: IRangeRuleProps) => {
@@ -244,7 +246,7 @@ const RangeRule: typeof _componentRangeRule & IElementDescriptor = Object.assign
 type IRequiredRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRequiredRule = memo(
   (props: IRequiredRuleProps) => {
@@ -268,7 +270,7 @@ type IStringLengthRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: number;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentStringLengthRule = memo(
   (props: IStringLengthRuleProps) => {
@@ -289,14 +291,14 @@ const StringLengthRule: typeof _componentStringLengthRule & IElementDescriptor =
 type IValidationRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   ignoreEmptyValue?: boolean;
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;
 }>
 const _componentValidationRule = memo(

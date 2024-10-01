@@ -9,9 +9,11 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescrip
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, dxFunnelItem, FunnelLegendItem } from "devextreme/viz/funnel";
-import type { Font as ChartsFont } from "devextreme/common/charts";
+import type { DashStyle, Font as ChartsFont, TextOverflow, WordWrap, HatchDirection, LabelPosition } from "devextreme/common/charts";
+import type { ExportFormat, HorizontalAlignment, VerticalEdge, HorizontalEdge, Position, Orientation } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 
+import type * as LocalizationTypes from "devextreme/common";
 import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -117,7 +119,7 @@ type IBorderProps = React.PropsWithChildren<{
   color?: string;
   visible?: boolean;
   width?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   cornerRadius?: number;
   opacity?: number;
 }>
@@ -155,7 +157,7 @@ type IExportProps = React.PropsWithChildren<{
   backgroundColor?: string;
   enabled?: boolean;
   fileName?: string;
-  formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">;
+  formats?: Array<ExportFormat>;
   margin?: number;
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
@@ -204,7 +206,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: LocalizationTypes.Format | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
@@ -221,7 +223,7 @@ const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_comp
 // Funnel
 type IFunnelTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -233,13 +235,13 @@ type IFunnelTitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  verticalAlignment?: "bottom" | "top";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  verticalAlignment?: VerticalEdge;
+  wordWrap?: WordWrap;
 }>
 const _componentFunnelTitle = memo(
   (props: IFunnelTitleProps) => {
@@ -263,8 +265,8 @@ type IFunnelTitleSubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentFunnelTitleSubtitle = memo(
   (props: IFunnelTitleSubtitleProps) => {
@@ -283,7 +285,7 @@ const FunnelTitleSubtitle: typeof _componentFunnelTitleSubtitle & IElementDescri
 // HoverStyle
 // SelectionStyle
 type IHatchingProps = React.PropsWithChildren<{
-  direction?: "left" | "none" | "right";
+  direction?: HatchDirection;
   opacity?: number;
   step?: number;
   width?: number;
@@ -307,7 +309,7 @@ type IHoverStyleProps = React.PropsWithChildren<{
     width?: number;
   };
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -343,7 +345,7 @@ type IItemProps = React.PropsWithChildren<{
       width?: number;
     };
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -356,7 +358,7 @@ type IItemProps = React.PropsWithChildren<{
       width?: number;
     };
     hatching?: Record<string, any> | {
-      direction?: "left" | "none" | "right";
+      direction?: HatchDirection;
       opacity?: number;
       step?: number;
       width?: number;
@@ -404,7 +406,7 @@ type ILabelProps = React.PropsWithChildren<{
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     visible?: boolean;
     width?: number;
   };
@@ -417,13 +419,13 @@ type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string);
   font?: ChartsFont;
   format?: LocalizationTypes.Format;
-  horizontalAlignment?: "left" | "right";
+  horizontalAlignment?: HorizontalEdge;
   horizontalOffset?: number;
-  position?: "columns" | "inside" | "outside";
+  position?: LabelPosition;
   showForZeroValues?: boolean;
-  textOverflow?: "ellipsis" | "hide" | "none";
+  textOverflow?: TextOverflow;
   visible?: boolean;
-  wordWrap?: "normal" | "breakWord" | "none";
+  wordWrap?: WordWrap;
 }>
 const _componentLabel = memo(
   (props: ILabelProps) => {
@@ -446,7 +448,7 @@ const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_compon
 // Label
 type ILabelBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   visible?: boolean;
   width?: number;
 }>
@@ -467,7 +469,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -478,9 +480,9 @@ type ILegendProps = React.PropsWithChildren<{
   customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
   customizeText?: ((itemInfo: { item: dxFunnelItem, text: string }) => string);
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
-  itemsAlignment?: "center" | "left" | "right";
-  itemTextPosition?: "bottom" | "left" | "right" | "top";
+  horizontalAlignment?: HorizontalAlignment;
+  itemsAlignment?: HorizontalAlignment;
+  itemTextPosition?: Position;
   margin?: number | Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -489,14 +491,14 @@ type ILegendProps = React.PropsWithChildren<{
   };
   markerSize?: number;
   markerTemplate?: ((legendItem: FunnelLegendItem, element: any) => string | any) | template;
-  orientation?: "horizontal" | "vertical";
+  orientation?: Orientation;
   paddingLeftRight?: number;
   paddingTopBottom?: number;
   rowCount?: number;
   rowItemSpacing?: number;
   title?: Record<string, any> | string | {
     font?: ChartsFont;
-    horizontalAlignment?: "center" | "left" | "right";
+    horizontalAlignment?: HorizontalAlignment;
     margin?: Record<string, any> | {
       bottom?: number;
       left?: number;
@@ -510,9 +512,9 @@ type ILegendProps = React.PropsWithChildren<{
       text?: string;
     };
     text?: string;
-    verticalAlignment?: "bottom" | "top";
+    verticalAlignment?: VerticalEdge;
   };
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
   visible?: boolean;
   markerRender?: (...params: any) => React.ReactNode;
   markerComponent?: React.ComponentType<any>;
@@ -545,7 +547,7 @@ const Legend: typeof _componentLegend & IElementDescriptor = Object.assign(_comp
 type ILegendBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;
@@ -564,7 +566,7 @@ const LegendBorder: typeof _componentLegendBorder & IElementDescriptor = Object.
 // Legend
 type ILegendTitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | {
     bottom?: number;
     left?: number;
@@ -578,7 +580,7 @@ type ILegendTitleProps = React.PropsWithChildren<{
     text?: string;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
+  verticalAlignment?: VerticalEdge;
 }>
 const _componentLegendTitle = memo(
   (props: ILegendTitleProps) => {
@@ -673,7 +675,7 @@ type ISelectionStyleProps = React.PropsWithChildren<{
     width?: number;
   };
   hatching?: Record<string, any> | {
-    direction?: "left" | "none" | "right";
+    direction?: HatchDirection;
     opacity?: number;
     step?: number;
     width?: number;
@@ -736,8 +738,8 @@ type ISubtitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
   offset?: number;
   text?: string;
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentSubtitle = memo(
   (props: ISubtitleProps) => {
@@ -754,7 +756,7 @@ const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_
 // Funnel
 type ITitleProps = React.PropsWithChildren<{
   font?: ChartsFont;
-  horizontalAlignment?: "center" | "left" | "right";
+  horizontalAlignment?: HorizontalAlignment;
   margin?: Record<string, any> | number | {
     bottom?: number;
     left?: number;
@@ -766,13 +768,13 @@ type ITitleProps = React.PropsWithChildren<{
     font?: ChartsFont;
     offset?: number;
     text?: string;
-    textOverflow?: "ellipsis" | "hide" | "none";
-    wordWrap?: "normal" | "breakWord" | "none";
+    textOverflow?: TextOverflow;
+    wordWrap?: WordWrap;
   };
   text?: string;
-  verticalAlignment?: "bottom" | "top";
-  textOverflow?: "ellipsis" | "hide" | "none";
-  wordWrap?: "normal" | "breakWord" | "none";
+  verticalAlignment?: VerticalEdge;
+  textOverflow?: TextOverflow;
+  wordWrap?: WordWrap;
 }>
 const _componentTitle = memo(
   (props: ITitleProps) => {
@@ -790,7 +792,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: "dash" | "dot" | "longDash" | "solid";
+    dashStyle?: DashStyle;
     opacity?: number;
     visible?: boolean;
     width?: number;
@@ -843,7 +845,7 @@ const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: "dash" | "dot" | "longDash" | "solid";
+  dashStyle?: DashStyle;
   opacity?: number;
   visible?: boolean;
   width?: number;

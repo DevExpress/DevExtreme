@@ -8,9 +8,10 @@ import dxTooltip, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { PositionConfig } from "devextreme/animation/position";
+import type { Position as CommonPosition, HorizontalAlignment, VerticalAlignment, Direction, PositionAlignment } from "devextreme/common";
+import type { PositionConfig, CollisionResolution, CollisionResolutionCombination } from "devextreme/animation/position";
 import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ShowingEvent, ShownEvent } from "devextreme/ui/tooltip";
-import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
+import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -30,11 +31,11 @@ type ITooltipOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ITo
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   defaultHeight?: (() => number | string) | number | string;
-  defaultPosition?: PositionConfig | "bottom" | "left" | "right" | "top";
+  defaultPosition?: CommonPosition | PositionConfig;
   defaultVisible?: boolean;
   defaultWidth?: (() => number | string) | number | string;
   onHeightChange?: (value: (() => number | string) | number | string) => void;
-  onPositionChange?: (value: PositionConfig | "bottom" | "left" | "right" | "top") => void;
+  onPositionChange?: (value: CommonPosition | PositionConfig) => void;
   onVisibleChange?: (value: boolean) => void;
   onWidthChange?: (value: (() => number | string) | number | string) => void;
 }>
@@ -122,8 +123,8 @@ const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign
 // owners:
 // Position
 type IAtProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentAt = memo(
   (props: IAtProps) => {
@@ -154,8 +155,8 @@ const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Obj
 // owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
-  x?: "fit" | "flip" | "flipfit" | "none";
-  y?: "fit" | "flip" | "flipfit" | "none";
+  x?: CollisionResolution;
+  y?: CollisionResolution;
 }>
 const _componentCollision = memo(
   (props: ICollisionProps) => {
@@ -194,14 +195,14 @@ const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentHide = memo(
   (props: IHideProps) => {
@@ -236,8 +237,8 @@ const HideEvent: typeof _componentHideEvent & IElementDescriptor = Object.assign
 // owners:
 // Position
 type IMyProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentMy = memo(
   (props: IMyProps) => {
@@ -269,22 +270,22 @@ const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_comp
 // From
 // Tooltip
 type IPositionProps = React.PropsWithChildren<{
-  at?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   boundary?: any | string;
   boundaryOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  collision?: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | {
-    x?: "fit" | "flip" | "flipfit" | "none";
-    y?: "fit" | "flip" | "flipfit" | "none";
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
   };
-  my?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   of?: any | string;
   offset?: Record<string, any> | string | {
@@ -307,14 +308,14 @@ const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentShow = memo(
   (props: IShowProps) => {
