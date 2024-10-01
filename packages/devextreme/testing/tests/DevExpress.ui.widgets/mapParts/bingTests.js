@@ -1303,7 +1303,7 @@ QUnit.test('click', function(assert) {
 
 });
 
-QUnit.test('provider: bing using should raise a deprecation warning', function(assert) {
+QUnit.test('should raise a deprecation warning when provider is set to bing', function(assert) {
     sinon.spy(errorsLogger, 'log');
 
     try {
@@ -1315,7 +1315,7 @@ QUnit.test('provider: bing using should raise a deprecation warning', function(a
             'dxMap',
             'provider: bing',
             '24.2',
-            'Bing provider is deprecated, please migrate to Azure or Google provider.'
+            'Use other map providers.'
         ], 'warning is raised with correct parameters');
     } finally {
         errorsLogger.log.restore();
