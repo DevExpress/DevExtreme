@@ -86,6 +86,23 @@ const Map = Widget.inherit({
     ]);
   },
 
+  ctor(element, options) {
+    this.callBase(element, options);
+
+    if (options) {
+      if ('provider' in options && options.provider === 'bing') {
+        this._logDeprecatedBingProvider();
+      }
+    }
+  },
+
+  _logDeprecatedBingProvider() {
+    this._logDeprecatedOptionWarning('provider: bing', {
+      since: '24.2',
+      message: 'Bing provider is deprecated, please migrate to Azure or Google provider.',
+    });
+  },
+
   _setDeprecatedOptions() {
     this.callBase();
     extend(this._deprecatedOptions, {

@@ -1,6 +1,7 @@
 /* global Microsoft */
 
 import $ from 'jquery';
+import errorsLogger from 'core/errors';
 import testing from './utils.js';
 import BingProvider from '__internal/ui/map/m_provider.dynamic.bing';
 import ajaxMock from '../../../helpers/ajaxMock.js';
@@ -1300,4 +1301,23 @@ QUnit.test('click', function(assert) {
         done();
     });
 
+});
+
+QUnit.test('provider: bing using should raise a deprecation warning', function(assert) {
+    sinon.spy(errorsLogger, 'log');
+
+    try {
+        $('#map').dxMap({
+            provider: 'bing'
+        });
+        assert.deepEqual(errorsLogger.log.firstCall.args, [
+            'W0001',
+            'dxMap',
+            'provider: bing',
+            '24.2',
+            'Bing provider is deprecated, please migrate to Azure or Google provider.'
+        ], 'warning is raised with correct parameters');
+    } finally {
+        errorsLogger.log.restore();
+    }
 });
