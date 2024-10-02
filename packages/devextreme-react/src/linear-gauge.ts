@@ -10,11 +10,9 @@ import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/linear_gauge";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, LabelOverlap, ChartsColor, Palette, PaletteExtensionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
-import type { ExportFormat, Orientation, HorizontalAlignment, VerticalAlignment, HorizontalEdge, VerticalEdge } from "devextreme/common";
+import type { ExportFormat, Format as CommonFormat, Orientation, HorizontalAlignment, VerticalAlignment, HorizontalEdge, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { template } from "devextreme/core/templates/template";
-
-import type * as LocalizationTypes from "devextreme/common";
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -221,7 +219,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
@@ -254,7 +252,7 @@ const Geometry: typeof _componentGeometry & IElementDescriptor = Object.assign(_
 type ILabelProps = React.PropsWithChildren<{
   customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indentFromTick?: number;
   overlappingBehavior?: LabelOverlap;
   useRangeColors?: boolean;
@@ -404,7 +402,7 @@ type IScaleProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
     customizeText?: ((scaleValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indentFromTick?: number;
     overlappingBehavior?: LabelOverlap;
     useRangeColors?: boolean;
@@ -523,7 +521,7 @@ type ISubvalueIndicatorProps = React.PropsWithChildren<{
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";
@@ -549,7 +547,7 @@ const SubvalueIndicator: typeof _componentSubvalueIndicator & IElementDescriptor
 type ITextProps = React.PropsWithChildren<{
   customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indent?: number;
 }>
 const _componentText = memo(
@@ -642,7 +640,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   interactive?: boolean;
   opacity?: number;
   paddingLeftRight?: number;
@@ -700,7 +698,7 @@ type IValueIndicatorProps = React.PropsWithChildren<{
   text?: Record<string, any> | {
     customizeText?: ((indicatedValue: { value: number, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indent?: number;
   };
   type?: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle";

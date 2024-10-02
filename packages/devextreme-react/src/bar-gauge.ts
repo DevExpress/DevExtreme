@@ -10,11 +10,9 @@ import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, BarGaugeBarInfo, BarGaugeLegendItem } from "devextreme/viz/bar_gauge";
 import type { AnimationEaseMode, Font as ChartsFont, TextOverflow, WordWrap, DashStyle } from "devextreme/common/charts";
-import type { HorizontalAlignment, VerticalEdge, ExportFormat, Position, Orientation } from "devextreme/common";
+import type { HorizontalAlignment, VerticalEdge, ExportFormat, Format as CommonFormat, Position, Orientation } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { template } from "devextreme/core/templates/template";
-
-import type * as LocalizationTypes from "devextreme/common";
-import type * as LocalizationTypes from "devextreme/localization";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -260,7 +258,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
@@ -296,7 +294,7 @@ type IItemTextFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentItemTextFormat = memo(
@@ -316,7 +314,7 @@ type ILabelProps = React.PropsWithChildren<{
   connectorWidth?: number;
   customizeText?: ((barValue: { value: number, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indent?: number;
   visible?: boolean;
 }>
@@ -354,7 +352,7 @@ type ILegendProps = React.PropsWithChildren<{
   font?: ChartsFont;
   horizontalAlignment?: HorizontalAlignment;
   itemsAlignment?: HorizontalAlignment;
-  itemTextFormat?: LocalizationTypes.Format;
+  itemTextFormat?: LocalizationFormat;
   itemTextPosition?: Position;
   margin?: number | Record<string, any> | {
     bottom?: number;
@@ -647,7 +645,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((scaleValue: { index: number, value: number, valueText: string }) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   interactive?: boolean;
   opacity?: number;
   paddingLeftRight?: number;

@@ -11,11 +11,10 @@ import NestedOption from "./core/nested-option";
 import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeriesType, PolarChartSeries, ValueAxisVisualRangeUpdateMode } from "devextreme/viz/polar_chart";
 import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsColor, SeriesHoverMode, HatchDirection, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode } from "devextreme/common/charts";
 import type { template } from "devextreme/core/templates/template";
-import type { ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
+import type { Format as LocalizationFormat } from "devextreme/localization";
+import type { Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
-import type * as LocalizationTypes from "devextreme/localization";
-import type * as LocalizationTypes from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -296,7 +295,7 @@ type IArgumentAxisProps = React.PropsWithChildren<{
     customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
     customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indentFromAxis?: number;
     overlappingBehavior?: LabelOverlap;
     visible?: boolean;
@@ -444,7 +443,7 @@ type IArgumentFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentArgumentFormat = memo(
@@ -464,7 +463,7 @@ type IAxisLabelProps = React.PropsWithChildren<{
   customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
   customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indentFromAxis?: number;
   overlappingBehavior?: LabelOverlap;
   visible?: boolean;
@@ -776,7 +775,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   };
   ignoreEmptyPoints?: boolean;
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
@@ -792,7 +791,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     position?: RelativePosition;
     rotationAngle?: number;
     showForZeroValues?: boolean;
@@ -940,7 +939,7 @@ const CommonSeriesSettingsHoverStyle: typeof _componentCommonSeriesSettingsHover
 // owners:
 // CommonSeriesSettings
 type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
@@ -956,7 +955,7 @@ type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   customizeText?: ((pointInfo: any) => string);
   displayFormat?: string;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   position?: RelativePosition;
   rotationAngle?: number;
   showForZeroValues?: boolean;
@@ -1197,7 +1196,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
@@ -1314,10 +1313,10 @@ type ILabelProps = React.PropsWithChildren<{
   visible?: boolean;
   customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string);
   customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string);
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   indentFromAxis?: number;
   overlappingBehavior?: LabelOverlap;
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
@@ -1898,7 +1897,7 @@ type ISeriesProps = React.PropsWithChildren<{
   };
   ignoreEmptyPoints?: boolean;
   label?: Record<string, any> | {
-    argumentFormat?: LocalizationTypes.Format;
+    argumentFormat?: LocalizationFormat;
     backgroundColor?: string;
     border?: Record<string, any> | {
       color?: string;
@@ -1914,7 +1913,7 @@ type ISeriesProps = React.PropsWithChildren<{
     customizeText?: ((pointInfo: any) => string);
     displayFormat?: string;
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     position?: RelativePosition;
     rotationAngle?: number;
     showForZeroValues?: boolean;
@@ -2263,7 +2262,7 @@ const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_compon
 // owners:
 // PolarChart
 type ITooltipProps = React.PropsWithChildren<{
-  argumentFormat?: LocalizationTypes.Format;
+  argumentFormat?: LocalizationFormat;
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
@@ -2279,7 +2278,7 @@ type ITooltipProps = React.PropsWithChildren<{
   customizeTooltip?: ((pointInfo: any) => Record<string, any>);
   enabled?: boolean;
   font?: ChartsFont;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   interactive?: boolean;
   opacity?: number;
   paddingLeftRight?: number;
@@ -2380,7 +2379,7 @@ type IValueAxisProps = React.PropsWithChildren<{
     customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string);
     customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
-    format?: LocalizationTypes.Format;
+    format?: LocalizationFormat;
     indentFromAxis?: number;
     overlappingBehavior?: LabelOverlap;
     visible?: boolean;

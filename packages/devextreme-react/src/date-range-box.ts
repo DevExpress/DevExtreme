@@ -12,7 +12,7 @@ import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, 
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, OptionChangedEvent as ButtonOptionChangedEvent, ClickEvent } from "devextreme/ui/button";
 import type { DisposingEvent as CalendarDisposingEvent, InitializedEvent as CalendarInitializedEvent, ValueChangedEvent as CalendarValueChangedEvent, DisabledDate, CalendarZoomLevel, OptionChangedEvent, CalendarSelectionMode, WeekNumberRule } from "devextreme/ui/calendar";
 import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
-import type { HorizontalAlignment, VerticalAlignment, TextEditorButtonLocation, FirstDayOfWeek, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Direction, ButtonStyle, ButtonType, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
+import type { HorizontalAlignment, VerticalAlignment, TextEditorButtonLocation, FirstDayOfWeek, ValidationMessageMode, Position as CommonPosition, ValidationStatus, Format, PositionAlignment, Direction, ButtonStyle, ButtonType, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
 import type { event, EventInfo } from "devextreme/events/index";
@@ -24,8 +24,6 @@ import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collectio
 import type dxOverlay from "devextreme/ui/overlay";
 import type DOMComponent from "devextreme/core/dom_component";
 import type dxPopup from "devextreme/ui/popup";
-
-import type * as LocalizationTypes from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -288,7 +286,7 @@ type IDisplayFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: Format | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentDisplayFormat = memo(

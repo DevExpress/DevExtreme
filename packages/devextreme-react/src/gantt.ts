@@ -9,10 +9,11 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescrip
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttContextMenuItem, GanttPredefinedContextMenuItem, dxGanttFilterRowOperationDescriptions, dxGanttHeaderFilterTexts, GanttPredefinedToolbarItem, GanttScaleType, dxGanttToolbarItem } from "devextreme/ui/gantt";
-import type { HorizontalAlignment, DataType, SearchMode, SortOrder, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
+import type { HorizontalAlignment, DataType, Format as CommonFormat, SearchMode, SortOrder, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
 import type { template } from "devextreme/core/templates/template";
 import type { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, HeaderFilterSearchConfig } from "devextreme/common/grids";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { dxContextMenuItem } from "devextreme/ui/context_menu";
@@ -21,9 +22,6 @@ import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 
 import type dxTreeList from "devextreme/ui/tree_list";
 import type DataSource from "devextreme/data/data_source";
-
-import type * as LocalizationTypes from "devextreme/localization";
-import type * as LocalizationTypes from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -170,7 +168,7 @@ type IColumnProps = React.PropsWithChildren<{
   filterType?: FilterType;
   filterValue?: any;
   filterValues?: Array<any>;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template;
   headerFilter?: Record<string, any> | {
     allowSearch?: boolean;
@@ -416,7 +414,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(

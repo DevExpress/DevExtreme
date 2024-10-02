@@ -11,12 +11,13 @@ import NestedOption from "./core/nested-option";
 
 import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
 import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterSearchConfig, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, PagerDisplayMode, DataRenderMode, StateStoreType } from "devextreme/common/grids";
-import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, DataType, SearchMode, SortOrder, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
+import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
 import type { template } from "devextreme/core/templates/template";
 import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
@@ -32,7 +33,6 @@ import type dxForm from "devextreme/ui/form";
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
 
-import type * as LocalizationTypes from "devextreme/localization";
 import type * as CommonTypes from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
@@ -408,7 +408,7 @@ type IColumnProps = React.PropsWithChildren<{
   filterValues?: Array<any>;
   fixed?: boolean;
   fixedPosition?: FixedPosition;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   formItem?: dxFormSimpleItem;
   groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;
   groupIndex?: number;
@@ -1060,7 +1060,7 @@ type IFieldProps = React.PropsWithChildren<{
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<FilterBuilderOperation | string>;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
     dataSource?: Array<any> | DataSourceOptions | Store;
@@ -1466,7 +1466,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
@@ -1616,7 +1616,7 @@ type IGroupItemProps = React.PropsWithChildren<{
   showInGroupFooter?: boolean;
   skipEmptyValues?: boolean;
   summaryType?: string | SummaryType;
-  valueFormat?: LocalizationTypes.Format;
+  valueFormat?: LocalizationFormat;
 }>
 const _componentGroupItem = memo(
   (props: IGroupItemProps) => {
@@ -2518,7 +2518,7 @@ type ISummaryProps = React.PropsWithChildren<{
     showInGroupFooter?: boolean;
     skipEmptyValues?: boolean;
     summaryType?: string | SummaryType;
-    valueFormat?: LocalizationTypes.Format;
+    valueFormat?: LocalizationFormat;
   }[];
   recalculateWhileEditing?: boolean;
   skipEmptyValues?: boolean;
@@ -2543,7 +2543,7 @@ type ISummaryProps = React.PropsWithChildren<{
     showInColumn?: string;
     skipEmptyValues?: boolean;
     summaryType?: string | SummaryType;
-    valueFormat?: LocalizationTypes.Format;
+    valueFormat?: LocalizationFormat;
   }[];
 }>
 const _componentSummary = memo(
@@ -2736,7 +2736,7 @@ type ITotalItemProps = React.PropsWithChildren<{
   showInColumn?: string;
   skipEmptyValues?: boolean;
   summaryType?: string | SummaryType;
-  valueFormat?: LocalizationTypes.Format;
+  valueFormat?: LocalizationFormat;
 }>
 const _componentTotalItem = memo(
   (props: ITotalItemProps) => {
@@ -2790,7 +2790,7 @@ type IValueFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentValueFormat = memo(

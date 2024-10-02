@@ -9,13 +9,11 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescrip
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField, FilterBuilderOperation } from "devextreme/ui/filter_builder";
-import type { DataType } from "devextreme/common";
+import type { DataType, Format as CommonFormat } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
+import type { Format as LocalizationFormat } from "devextreme/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
-
-import type * as LocalizationTypes from "devextreme/localization";
-import type * as LocalizationTypes from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -125,7 +123,7 @@ type IFieldProps = React.PropsWithChildren<{
   editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<FilterBuilderOperation | string>;
-  format?: LocalizationTypes.Format;
+  format?: LocalizationFormat;
   lookup?: Record<string, any> | {
     allowClearing?: boolean;
     dataSource?: Array<any> | DataSourceOptions | Store;
@@ -191,7 +189,7 @@ type IFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: LocalizationTypes.Format | string;
+  type?: CommonFormat | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentFormat = memo(
