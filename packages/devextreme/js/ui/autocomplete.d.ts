@@ -4,12 +4,10 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-    AsyncCancelable,
 } from '../events/index';
 
 import dxDropDownList, {
     dxDropDownListOptions,
-    SelectionChangingInfo,
     SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 

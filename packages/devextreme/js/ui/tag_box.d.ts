@@ -9,7 +9,6 @@ import {
 
 import {
     Cancelable,
-    AsyncCancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -18,7 +17,6 @@ import {
 } from '../events/index';
 
 import {
-    SelectionChangingInfo,
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
