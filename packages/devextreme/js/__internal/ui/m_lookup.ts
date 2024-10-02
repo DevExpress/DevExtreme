@@ -15,6 +15,7 @@ import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
 import Popover from '@js/ui/popover/ui.popover';
@@ -558,19 +559,43 @@ const Lookup = DropDownList.inherit({
 
     this._$popup.addClass(LOOKUP_POPUP_CLASS);
     this._popup.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
+
+    this._attachPopupFocusOutEvent();
   },
 
-  _focusOutHandler(): void {
-    debugger;
-  },
+  _attachPopupFocusOutEvent(): void {
+    const popupFocusoutEventName = addNamespace('focusout', this.NAME);
+    const $overlayContent = this._popup.$overlayContent();
 
-  _focusOutPopupHandler(): void {
-    debugger;
+    eventsEngine.off($overlayContent, popupFocusoutEventName);
+
+    eventsEngine.on($overlayContent, popupFocusoutEventName, (e) => {
+      const { relatedTarget } = e;
+
+      if (!isDefined(relatedTarget)) {
+        /**
+         * Handling the case when a click is on an internal element, e.g. Toolbar,
+         * but relatedTarget === null because the Toolbar is unfocusable (to give a theory).
+         * We can do this because clicks outside the component are handled by Overlay itself.
+         * We don't need to handle these cases, nor do we need to
+         * worry about the overlay being closed.
+         */
+        return;
+      }
+
+      const isTargetOutOfComponent = this._isTargetOutOfComponent(relatedTarget);
+
+      if (isTargetOutOfComponent) {
+        this.close();
+      }
+    });
   },
 
   _renderPopover() {
-    this._popup = this._createComponent(this._$popup, Popover, extend(
-      this._popupConfig(),
+    const popupConfig = this._popupConfig();
+
+    const options = extend(
+      popupConfig,
       this._options.cache('dropDownOptions'),
       {
         showEvent: null,
@@ -581,10 +606,12 @@ const Lookup = DropDownList.inherit({
         hideOnParentScroll: true,
         _fixWrapperPosition: false,
         width: this._isInitialOptionValue('dropDownOptions.width')
-          ? function () { return getOuterWidth(this.$element()); }.bind(this)
-          : this._popupConfig().width,
+          ? () => getOuterWidth(this.$element())
+          : popupConfig.width,
       },
-    ));
+    );
+
+    this._popup = this._createComponent(this._$popup, Popover, options);
 
     this._popup.$overlayContent().attr('role', 'dialog');
 
@@ -594,13 +621,13 @@ const Lookup = DropDownList.inherit({
       hiding: this._popupHidingHandler.bind(this),
       hidden: this._popupHiddenHandler.bind(this),
       contentReady: this._contentReadyHandler.bind(this),
-      focusout: this._focusOutPopupHandler.bind(this),
     });
 
-    if (this.option('_scrollToSelectedItemEnabled')) this._popup._$arrow.remove();
+    if (this.option('_scrollToSelectedItemEnabled')) {
+      this._popup._$arrow.remove();
+    }
 
     this._setPopupContentId(this._popup.$content());
-
     this._contentReadyHandler();
   },
 

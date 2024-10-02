@@ -395,10 +395,6 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
 
   _toggleBodyScroll: noop,
 
-  _focusOutHandler(): void {
-    debugger;
-  },
-
   _animateShowing() {
     const animation = this._getAnimationConfig() ?? {};
     const showAnimation = this._normalizeAnimation(animation.show, 'to');

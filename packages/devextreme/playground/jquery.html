@@ -47,6 +47,15 @@
         body {
             height: 100vh;
         }
+
+        button {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        #lookup {
+            margin-left: 20px;
+        }
     </style>
 </head>
 
@@ -57,8 +66,10 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
+        <button>button</button>
         <div id="lookup"></div>
         <button>button</button>
+        <div id="products"></div>
 
         <script>
             const employeesList = ['John Heart', 'Samantha Bright', 'Arthur Miller', 'Robert Reagan', 'Greta Sims', 'Brett Wade',
@@ -69,16 +80,45 @@
                 'Maggie Boxter', 'Terry Bradley', 'Gabe Jones', 'Lucy Ball', 'Jim Packard', 'Hannah Brookly', 'Harv Mudd', 'Clark Morgan',
                 'Todd Hoffman', 'Jackie Garmin', 'Lincoln Bartlett', 'Brad Farkus', 'Jenny Hobbs', 'Dallas Lou', 'Stu Pizaro'];
 
+            const simpleProducts = [
+                'HD Video Player',
+                'SuperHD Video Player',
+                'SuperPlasma 50',
+                'SuperLED 50',
+                'SuperLED 42',
+                'SuperLCD 55',
+                'SuperLCD 42',
+                'SuperPlasma 65',
+                'SuperLCD 70',
+                'Projector Plus',
+                'Projector PlusHT',
+                'ExcelRemote IR',
+                'ExcelRemote BT',
+                'ExcelRemote IP',
+            ];
+
             $(() => {
                 $('#lookup').dxLookup({
                     items: employeesList,
                     value: employeesList[0],
+                    // focusStateEnabled: false,
+                    // usePopover: false,
+                    searchEnabled: false,
                     inputAttr: {
                         'aria-label': 'Simple lookup',
                     },
+                    dropDownOptions: {
+                        hideOnOutsideClick: true,
+                    },
                 });
+
+                // $('#products').dxSelectBox({
+                //     items: simpleProducts,
+                //     inputAttr: { 'aria-label': 'Simple Product' },
+                // });
             });
         </script>
     </div>
 </body>
+
 </html>
