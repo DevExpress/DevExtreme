@@ -38,7 +38,7 @@ const ITEM_URL_CLASS = 'dx-item-url';
 
 export type Properties = dxMenuBaseOptions<MenuBase, Item>;
 
-abstract class MenuBase extends HierarchicalCollectionWidget<Properties> {
+class MenuBase extends HierarchicalCollectionWidget<Properties> {
   static ItemClass = MenuItem;
 
   _editStrategy?: MenuBaseEditStrategy;
@@ -53,10 +53,6 @@ abstract class MenuBase extends HierarchicalCollectionWidget<Properties> {
   };
 
   _showSubmenusTimeout?: any;
-
-  abstract _isTargetOutOfComponent(target: Element): boolean;
-
-  abstract _hideOnFocusOut(): void;
 
   _getDefaultOptions() {
     return extend(super._getDefaultOptions(), {
@@ -222,20 +218,6 @@ abstract class MenuBase extends HierarchicalCollectionWidget<Properties> {
       recursiveExpansion: false,
       searchValue: '',
     };
-  }
-
-  _focusOutHandler(e) {
-    const { relatedTarget } = e;
-
-    if (relatedTarget) {
-      const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
-
-      if (isTargetOutside) {
-        this._hideOnFocusOut();
-      }
-    }
-
-    super._focusOutHandler(e);
   }
 
   _selectByItem(selectedItem): void {

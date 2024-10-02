@@ -514,8 +514,6 @@ const DropDownEditor = TextBox.inherit({
       this._createPopup();
     }
 
-    // debugger;
-
     this.$element().toggleClass(DROP_DOWN_EDITOR_ACTIVE, opened);
     this._setPopupOption('visible', opened);
 
