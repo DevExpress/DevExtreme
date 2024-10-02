@@ -35,7 +35,6 @@ export interface SelectionChangingInfo<TItem extends ItemLike = any> {
 
 /**
  * @docid
- * @public
  * @type object
  * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
  */

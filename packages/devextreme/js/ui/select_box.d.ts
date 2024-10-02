@@ -409,11 +409,6 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @docid dxSelectBoxOptions.onSelectionChanging
- * @type_function_param1 e:{ui/select_box:SelectionChangingEvent}
- */
-onSelectionChanging?: ((e: SelectionChangingEvent) => void);
-/**
  * @docid dxSelectBoxOptions.onSelectionChanged
  * @type_function_param1 e:{ui/select_box:SelectionChangedEvent}
  */

@@ -224,7 +224,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @namespace DevExpress.ui
  * @docid
  */
-export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged' | 'onSelectionChanging'>> {
+export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
      * @docid
      * @default "instantly"
@@ -265,14 +265,6 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @public
      */
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tag_box:SelectionChangingEvent}
-     * @action
-     * @public
-     */
-    onSelectionChanging?: ((e: SelectionChangingEvent) => void);
     /**
      * @docid
      * @default null
@@ -353,7 +345,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged' | 'onSelectionChanging'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
 
 /**
 * @hidden

@@ -54,7 +54,6 @@ type AccessibleOptions = Pick<Properties,
   "onOptionChanged" |
   "onPaste" |
   "onSelectionChanged" |
-  "onSelectionChanging" |
   "onValueChanged" |
   "opened" |
   "openOnFieldClick" |
@@ -144,7 +143,6 @@ const componentConfig = {
     onOptionChanged: Function,
     onPaste: Function,
     onSelectionChanged: Function,
-    onSelectionChanging: Function,
     onValueChanged: Function,
     opened: Boolean,
     openOnFieldClick: Boolean,
@@ -230,7 +228,6 @@ const componentConfig = {
     "update:onOptionChanged": null,
     "update:onPaste": null,
     "update:onSelectionChanged": null,
-    "update:onSelectionChanging": null,
     "update:onValueChanged": null,
     "update:opened": null,
     "update:openOnFieldClick": null,

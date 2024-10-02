@@ -442,11 +442,6 @@ onOpened?: ((e: OpenedEvent) => void);
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
- * @docid dxLookupOptions.onSelectionChanging
- * @type_function_param1 e:{ui/lookup:SelectionChangingEvent}
- */
-onSelectionChanging?: ((e: SelectionChangingEvent) => void);
-/**
  * @docid dxLookupOptions.onSelectionChanged
  * @type_function_param1 e:{ui/lookup:SelectionChangedEvent}
  */

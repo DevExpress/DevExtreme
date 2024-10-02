@@ -346,11 +346,6 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
  */
 onPaste?: ((e: PasteEvent) => void);
 /**
- * @docid dxAutocompleteOptions.onSelectionChanging
- * @type_function_param1 e:{ui/autocomplete:SelectionChangingEvent}
- */
-onSelectionChanging?: ((e: SelectionChangingEvent) => void);
-/**
  * @docid dxAutocompleteOptions.onSelectionChanged
  * @type_function_param1 e:{ui/autocomplete:SelectionChangedEvent}
  */

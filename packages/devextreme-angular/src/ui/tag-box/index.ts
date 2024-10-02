@@ -30,7 +30,7 @@ import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_s
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent, ValueChangedEvent } from 'devextreme/ui/tag_box';
+import { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/tag_box';
 
 import DxTagBox from 'devextreme/ui/tag_box';
 
@@ -1144,14 +1144,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
     /**
     
-     * [descr:dxTagBoxOptions.onSelectionChanging]
-    
-    
-     */
-    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
-
-    /**
-    
      * [descr:dxTagBoxOptions.onValueChanged]
     
     
@@ -1717,7 +1709,6 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'selectAllValueChanged', emit: 'onSelectAllValueChanged' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { subscribe: 'valueChanged', emit: 'onValueChanged' },
             { emit: 'acceptCustomValueChange' },
             { emit: 'accessKeyChange' },

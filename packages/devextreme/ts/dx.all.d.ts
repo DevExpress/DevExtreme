@@ -8006,6 +8006,7 @@ declare module DevExpress.ui {
     }
     /**
      * [descr:SelectionChangingEvent]
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
     export type SelectionChangingEvent<TComponent> =
       DevExpress.events.AsyncCancelable &
@@ -14986,12 +14987,6 @@ declare module DevExpress.ui {
         KeyboardEvent | MouseEvent | PointerEvent
       > &
         DevExpress.events.ItemInfo
-    ) => void;
-    /**
-     * [descr:dxDropDownListOptions.onSelectionChanging]
-     */
-    onSelectionChanging?: (
-      e: DevExpress.ui.dxDropDownList.SelectionChangingEvent<TComponent>
     ) => void;
     /**
      * [descr:dxDropDownListOptions.onSelectionChanged]
@@ -26669,10 +26664,7 @@ declare module DevExpress.ui {
   export interface dxTagBoxOptions
     extends Pick<
       dxSelectBoxOptions<dxTagBox>,
-      Exclude<
-        keyof dxSelectBoxOptions<dxTagBox>,
-        'onSelectionChanged' | 'onSelectionChanging'
-      >
+      Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>
     > {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
@@ -26701,12 +26693,6 @@ declare module DevExpress.ui {
      */
     onSelectAllValueChanged?: (
       e: DevExpress.ui.dxTagBox.SelectAllValueChangedEvent
-    ) => void;
-    /**
-     * [descr:dxTagBoxOptions.onSelectionChanging]
-     */
-    onSelectionChanging?: (
-      e: DevExpress.ui.dxTagBox.SelectionChangingEvent
     ) => void;
     /**
      * [descr:dxTagBoxOptions.onSelectionChanged]
