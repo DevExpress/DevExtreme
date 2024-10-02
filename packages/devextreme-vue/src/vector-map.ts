@@ -55,18 +55,18 @@ interface DxVectorMap extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    annotations: Array as PropType<any[]>,
+    annotations: Array as PropType<Array<any> | Array<Object>>,
     background: Object,
-    bounds: Array as PropType<Number[]>,
-    center: Array as PropType<Number[]>,
+    bounds: Array as PropType<Array<number>>,
+    center: Array as PropType<Array<number>>,
     commonAnnotationSettings: Object,
     controlBar: Object,
     customizeAnnotation: Function as PropType<(annotation: Object | any) => Object>,
     disabled: Boolean,
     elementAttr: Object,
     export: Object,
-    layers: [Array, Object] as PropType<(Object[]) | (Object)>,
-    legends: Array as PropType<Object[]>,
+    layers: [Array, Object] as PropType<Array<Object> | Object>,
+    legends: Array as PropType<Array<Object>>,
     loadingIndicator: Object,
     maxZoomFactor: Number,
     onCenterChanged: Function as PropType<(e: CenterChangedEvent) => void>,
@@ -85,7 +85,7 @@ const componentConfig = {
     onZoomFactorChanged: Function as PropType<(e: ZoomFactorChangedEvent) => void>,
     panningEnabled: Boolean,
     pathModified: Boolean,
-    projection: [Object, String] as PropType<(Object) | ("equirectangular" | "lambert" | "mercator" | "miller") | (Object) | (Object)>,
+    projection: [Object, String] as PropType<Object | ("equirectangular" | "lambert" | "mercator" | "miller") | Object | Object>,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
     size: Object,
@@ -213,7 +213,7 @@ const DxAnnotationConfig = {
     arrowWidth: Number,
     border: Object,
     color: String,
-    coordinates: Array as PropType<Number[]>,
+    coordinates: Array as PropType<Array<number>>,
     customizeTooltip: Function as PropType<(annotation: Object | any) => Object>,
     data: {},
     description: String,
@@ -366,7 +366,7 @@ const DxCommonAnnotationSettingsConfig = {
     arrowWidth: Number,
     border: Object,
     color: String,
-    coordinates: Array as PropType<Number[]>,
+    coordinates: Array as PropType<Array<number>>,
     customizeTooltip: Function as PropType<(annotation: Object | any) => Object>,
     data: {},
     description: String,
@@ -447,7 +447,7 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array as PropType<String[]>,
+    formats: Array as PropType<Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">>,
     margin: Number,
     printingEnabled: Boolean,
     svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
@@ -569,8 +569,8 @@ const DxLayerConfig = {
     borderWidth: Number,
     color: String,
     colorGroupingField: String,
-    colorGroups: Array as PropType<Number[]>,
-    customize: Function as PropType<(elements: Object[]) => void>,
+    colorGroups: Array as PropType<Array<number>>,
+    customize: Function as PropType<(elements: Array<Object>) => void>,
     dataField: String,
     dataSource: {},
     elementType: String as PropType<"bubble" | "dot" | "image" | "pie">,
@@ -583,7 +583,7 @@ const DxLayerConfig = {
     minSize: Number,
     name: String,
     opacity: Number,
-    palette: [Array, String] as PropType<(String[]) | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
     paletteIndex: Number,
     paletteSize: Number,
     selectedBorderColor: String,
@@ -592,7 +592,7 @@ const DxLayerConfig = {
     selectionMode: String as PropType<"single" | "multiple" | "none">,
     size: Number,
     sizeGroupingField: String,
-    sizeGroups: Array as PropType<Number[]>,
+    sizeGroups: Array as PropType<Array<number>>,
     type: String as PropType<"area" | "line" | "marker">
   }
 };
@@ -643,7 +643,7 @@ const DxLegendConfig = {
     columnCount: Number,
     columnItemSpacing: Number,
     customizeHint: Function as PropType<(itemInfo: Object) => string>,
-    customizeItems: Function as PropType<(items: Object[]) => Object[]>,
+    customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
     customizeText: Function as PropType<(itemInfo: Object) => string>,
     font: Object,
     horizontalAlignment: String as PropType<"center" | "left" | "right">,
@@ -802,8 +802,8 @@ const DxProjectionConfig = {
   },
   props: {
     aspectRatio: Number,
-    from: Function as PropType<(coordinates: Number[]) => Number[]>,
-    to: Function as PropType<(coordinates: Number[]) => Number[]>
+    from: Function as PropType<(coordinates: Array<number>) => Array<number>>,
+    to: Function as PropType<(coordinates: Array<number>) => Array<number>>
   }
 };
 

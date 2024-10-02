@@ -55,11 +55,11 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<any[]>,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     loop: Boolean,
     noDataText: String,
@@ -78,7 +78,7 @@ const componentConfig = {
     swipeEnabled: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

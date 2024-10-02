@@ -39,10 +39,10 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     animationDuration: Number,
     animationEnabled: Boolean,
-    closeOnOutsideClick: [Boolean, Function] as PropType<(Boolean) | ((event: Object) => Boolean)>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     maxSize: Number,
@@ -58,7 +58,7 @@ const componentConfig = {
     shading: Boolean,
     template: {},
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

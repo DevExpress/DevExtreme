@@ -77,12 +77,12 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<String[] | Object[]>,
+    buttons: Array as PropType<Array<"clear" | "spins"> | Array<Object>>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -121,14 +121,14 @@ const componentConfig = {
     text: String,
     useLargeSpinButtons: Boolean,
     validationError: {},
-    validationErrors: Array as PropType<any[]>,
+    validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<"always" | "auto">,
     validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: Number,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -247,8 +247,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: Number | Date) => string>,
-    parser: Function as PropType<(value: string) => (Number | Date)>,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
     type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
@@ -298,7 +298,7 @@ const DxOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
@@ -316,7 +316,7 @@ const DxOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 

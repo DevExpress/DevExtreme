@@ -78,14 +78,14 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     imageUpload: Object,
     isDirty: Boolean,
     isValid: Boolean,
     mediaResizing: Object,
-    mentions: Array as PropType<Object[]>,
+    mentions: Array as PropType<Array<Object>>,
     name: String,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -103,7 +103,7 @@ const componentConfig = {
     tableResizing: Object,
     toolbar: Object,
     validationError: {},
-    validationErrors: Array as PropType<any[]>,
+    validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<"always" | "auto">,
     validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
@@ -111,7 +111,7 @@ const componentConfig = {
     valueType: String as PropType<"html" | "markdown">,
     variables: Object,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -260,7 +260,7 @@ const DxFileUploaderOptionsConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowCanceling: Boolean,
-    allowedFileExtensions: Array as PropType<String[]>,
+    allowedFileExtensions: Array as PropType<Array<string>>,
     bindingOptions: Object,
     chunkSize: Number,
     dialogTrigger: {},
@@ -268,7 +268,7 @@ const DxFileUploaderOptionsConfig = {
     dropZone: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -309,17 +309,17 @@ const DxFileUploaderOptionsConfig = {
     uploadCustomData: {},
     uploadedMessage: String,
     uploadFailedMessage: String,
-    uploadFile: Function as PropType<(file: any, progressCallback: Function) => any>,
+    uploadFile: Function as PropType<(file: any, progressCallback: () => void) => any>,
     uploadHeaders: {},
     uploadMethod: String as PropType<"POST" | "PUT">,
     uploadMode: String as PropType<"instantly" | "useButtons" | "useForm">,
     uploadUrl: String,
     validationError: {},
-    validationErrors: Array as PropType<any[]>,
+    validationErrors: Array as PropType<Array<any>>,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
-    value: Array as PropType<any[]>,
+    value: Array as PropType<Array<any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -342,7 +342,7 @@ const DxImageUploadConfig = {
   props: {
     fileUploaderOptions: Object,
     fileUploadMode: String as PropType<"base64" | "server" | "both">,
-    tabs: Array as PropType<Object[] | String[]>,
+    tabs: Array as PropType<Array<Object> | Array<"url" | "file">>,
     uploadDirectory: String,
     uploadUrl: String
   }
@@ -386,16 +386,16 @@ const DxItemConfig = {
     "update:widget": null,
   },
   props: {
-    acceptedValues: Array as PropType<Boolean[] | Number[] | String[]>,
+    acceptedValues: Array as PropType<Array<Boolean> | Array<number> | Array<string>>,
     beginGroup: Boolean,
     closeMenuOnClick: Boolean,
     cssClass: String,
     disabled: Boolean,
     formatName: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
-    formatValues: Array as PropType<Boolean[] | Number[] | String[]>,
+    formatValues: Array as PropType<Array<Boolean> | Array<number> | Array<string>>,
     html: String,
     icon: String,
-    items: Array as PropType<Object[] | String[]>,
+    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>,
     locateInMenu: String as PropType<"always" | "auto" | "never">,
     location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
@@ -426,7 +426,7 @@ const DxMediaResizingConfig = {
     "update:enabled": null,
   },
   props: {
-    allowedTargets: Array as PropType<String[]>,
+    allowedTargets: Array as PropType<Array<string>>,
     enabled: Boolean
   }
 };
@@ -453,14 +453,14 @@ const DxMentionConfig = {
   },
   props: {
     dataSource: {},
-    displayExpr: [Function, String] as PropType<((item: Object) => string) | (String)>,
+    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
     itemTemplate: {},
     marker: String,
     minSearchLength: Number,
-    searchExpr: [Array, Function, String] as PropType<(Function[] | String[]) | (Function) | (String)>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     searchTimeout: Number,
     template: {},
-    valueExpr: [Function, String] as PropType<(() => void) | (String)>
+    valueExpr: [Function, String] as PropType<(() => void) | string>
   }
 };
 
@@ -498,7 +498,7 @@ const DxTableContextMenuConfig = {
   },
   props: {
     enabled: Boolean,
-    items: Array as PropType<Object[] | String[]>
+    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>
   }
 };
 
@@ -533,7 +533,7 @@ const DxTableContextMenuItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array as PropType<Object[] | String[]>,
+    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>,
     name: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">,
     selectable: Boolean,
     selected: Boolean,
@@ -581,7 +581,7 @@ const DxToolbarConfig = {
   },
   props: {
     container: {},
-    items: Array as PropType<Object[] | String[]>,
+    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">>,
     multiline: Boolean
   }
 };
@@ -618,11 +618,11 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    acceptedValues: Array as PropType<Boolean[] | Number[] | String[]>,
+    acceptedValues: Array as PropType<Array<Boolean> | Array<number> | Array<string>>,
     cssClass: String,
     disabled: Boolean,
     formatName: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
-    formatValues: Array as PropType<Boolean[] | Number[] | String[]>,
+    formatValues: Array as PropType<Array<Boolean> | Array<number> | Array<string>>,
     html: String,
     locateInMenu: String as PropType<"always" | "auto" | "never">,
     location: String as PropType<"after" | "before" | "center">,
@@ -653,7 +653,7 @@ const DxVariablesConfig = {
   },
   props: {
     dataSource: {},
-    escapeChar: [Array, String] as PropType<(String[]) | (String)>
+    escapeChar: [Array, String] as PropType<Array<string> | string>
   }
 };
 

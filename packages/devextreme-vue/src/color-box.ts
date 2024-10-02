@@ -85,7 +85,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     applyButtonText: String,
     applyValueMode: String as PropType<"instantly" | "useButtons">,
-    buttons: Array as PropType<String[] | Object[]>,
+    buttons: Array as PropType<Array<"clear" | "dropDown"> | Array<Object>>,
     cancelButtonText: String,
     deferRendering: Boolean,
     disabled: Boolean,
@@ -95,7 +95,7 @@ const componentConfig = {
     elementAttr: Object,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -132,13 +132,13 @@ const componentConfig = {
     tabIndex: Number,
     text: String,
     validationError: {},
-    validationErrors: Array as PropType<any[]>,
+    validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<"always" | "auto">,
     validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -388,7 +388,7 @@ const DxDropDownOptionsConfig = {
     accessKey: String,
     animation: Object,
     bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function] as PropType<(Boolean) | ((event: Object) => Boolean)>,
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -399,15 +399,15 @@ const DxDropDownOptionsConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
-    hideOnOutsideClick: [Boolean, Function] as PropType<(Boolean) | ((event: Object) => Boolean)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
-    maxWidth: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
-    minHeight: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
-    minWidth: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     onContentReady: Function as PropType<(e: Object) => void>,
     onDisposing: Function as PropType<(e: Object) => void>,
     onHidden: Function as PropType<(e: Object) => void>,
@@ -420,7 +420,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object, String] as PropType<(() => void) | (Object) | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | (Object)>,
+    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -431,9 +431,9 @@ const DxDropDownOptionsConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array as PropType<Object[]>,
+    toolbarItems: Array as PropType<Array<Object>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -591,7 +591,7 @@ const DxOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
@@ -609,7 +609,7 @@ const DxOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -632,11 +632,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<(Object) | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String] as PropType<(Object) | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
-    my: [Object, String] as PropType<(Object) | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
+    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     of: {},
     offset: [Object, String]
   }

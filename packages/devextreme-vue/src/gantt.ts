@@ -89,7 +89,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSelection: Boolean,
-    columns: Array as PropType<Object[] | String[]>,
+    columns: Array as PropType<Array<Object> | Array<string>>,
     contextMenu: Object,
     dependencies: Object,
     disabled: Boolean,
@@ -111,7 +111,7 @@ const componentConfig = {
     },
     focusStateEnabled: Boolean,
     headerFilter: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
@@ -156,7 +156,7 @@ const componentConfig = {
     showRowLines: Boolean,
     sorting: Object,
     startDateRange: Date,
-    stripLines: Array as PropType<Object[]>,
+    stripLines: Array as PropType<Array<Object>>,
     tabIndex: Number,
     taskContentTemplate: {},
     taskListWidth: Number,
@@ -168,7 +168,7 @@ const componentConfig = {
     toolbar: Object,
     validation: Object,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -322,9 +322,9 @@ const DxColumnConfig = {
     allowHeaderFiltering: Boolean,
     allowSorting: Boolean,
     calculateCellValue: Function as PropType<(rowData: Object) => any>,
-    calculateDisplayValue: [Function, String] as PropType<((rowData: Object) => any) | (String)>,
-    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string | null, target: string) => (string | Function | any[])>,
-    calculateSortValue: [Function, String] as PropType<((rowData: Object) => any) | (String)>,
+    calculateDisplayValue: [Function, String] as PropType<((rowData: Object) => any) | string>,
+    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string | any, target: string) => (string | Function | Array<any>)>,
+    calculateSortValue: [Function, String] as PropType<((rowData: Object) => any) | string>,
     caption: String,
     cellTemplate: {},
     cssClass: String,
@@ -333,17 +333,17 @@ const DxColumnConfig = {
     dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
     encodeHtml: Boolean,
     falseText: String,
-    filterOperations: Array as PropType<String[] | String[]>,
+    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof"> | Array<string>>,
     filterType: String as PropType<"exclude" | "include">,
     filterValue: {},
-    filterValues: Array as PropType<any[]>,
-    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    filterValues: Array as PropType<Array<any>>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     headerCellTemplate: {},
     headerFilter: Object,
     minWidth: Number,
     selectedFilterOperation: String as PropType<"<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith">,
     sortIndex: Number,
-    sortingMethod: Function as PropType<(value1: any, value2: any) => Number>,
+    sortingMethod: Function as PropType<(value1: any, value2: any) => number>,
     sortOrder: String as PropType<"asc" | "desc">,
     trueText: String,
     visible: Boolean,
@@ -381,7 +381,7 @@ const DxColumnHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String] as PropType<(Number) | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
+    groupInterval: [Number, String] as PropType<number | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
     height: [Number, String],
     search: Object,
     searchMode: String as PropType<"contains" | "startswith" | "equals">,
@@ -413,7 +413,7 @@ const DxColumnHeaderFilterSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: String as PropType<"contains" | "startswith" | "equals">,
-    searchExpr: [Array, Function, String] as PropType<(Function[] | String[]) | (Function) | (String)>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     timeout: Number
   }
 };
@@ -433,7 +433,7 @@ const DxContextMenuConfig = {
   },
   props: {
     enabled: Boolean,
-    items: Array as PropType<Object[] | String[]>
+    items: Array as PropType<Array<Object> | Array<"undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">>
   }
 };
 
@@ -468,7 +468,7 @@ const DxContextMenuItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array as PropType<Object[]>,
+    items: Array as PropType<Array<Object>>,
     name: String as PropType<"undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">,
     selectable: Boolean,
     selected: Boolean,
@@ -497,10 +497,10 @@ const DxDependenciesConfig = {
   },
   props: {
     dataSource: {},
-    keyExpr: [Function, String] as PropType<(() => void) | (String)>,
-    predecessorIdExpr: [Function, String] as PropType<(() => void) | (String)>,
-    successorIdExpr: [Function, String] as PropType<(() => void) | (String)>,
-    typeExpr: [Function, String] as PropType<(() => void) | (String)>
+    keyExpr: [Function, String] as PropType<(() => void) | string>,
+    predecessorIdExpr: [Function, String] as PropType<(() => void) | string>,
+    successorIdExpr: [Function, String] as PropType<(() => void) | string>,
+    typeExpr: [Function, String] as PropType<(() => void) | string>
   }
 };
 
@@ -590,8 +590,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: Number | Date) => string>,
-    parser: Function as PropType<(value: string) => (Number | Date)>,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
     type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
@@ -683,7 +683,7 @@ const DxHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String] as PropType<(Number) | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
+    groupInterval: [Number, String] as PropType<number | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
     height: [Number, String],
     search: Object,
     searchMode: String as PropType<"contains" | "startswith" | "equals">,
@@ -731,7 +731,7 @@ const DxItemConfig = {
     disabled: Boolean,
     html: String,
     icon: String,
-    items: Array as PropType<Object[]>,
+    items: Array as PropType<Array<Object>>,
     locateInMenu: String as PropType<"always" | "auto" | "never">,
     location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
@@ -802,9 +802,9 @@ const DxResourceAssignmentsConfig = {
   },
   props: {
     dataSource: {},
-    keyExpr: [Function, String] as PropType<(() => void) | (String)>,
-    resourceIdExpr: [Function, String] as PropType<(() => void) | (String)>,
-    taskIdExpr: [Function, String] as PropType<(() => void) | (String)>
+    keyExpr: [Function, String] as PropType<(() => void) | string>,
+    resourceIdExpr: [Function, String] as PropType<(() => void) | string>,
+    taskIdExpr: [Function, String] as PropType<(() => void) | string>
   }
 };
 
@@ -824,10 +824,10 @@ const DxResourcesConfig = {
     "update:textExpr": null,
   },
   props: {
-    colorExpr: [Function, String] as PropType<(() => void) | (String)>,
+    colorExpr: [Function, String] as PropType<(() => void) | string>,
     dataSource: {},
-    keyExpr: [Function, String] as PropType<(() => void) | (String)>,
-    textExpr: [Function, String] as PropType<(() => void) | (String)>
+    keyExpr: [Function, String] as PropType<(() => void) | string>,
+    textExpr: [Function, String] as PropType<(() => void) | string>
   }
 };
 
@@ -870,7 +870,7 @@ const DxSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: String as PropType<"contains" | "startswith" | "equals">,
-    searchExpr: [Array, Function, String] as PropType<(Function[] | String[]) | (Function) | (String)>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     timeout: Number
   }
 };
@@ -917,8 +917,8 @@ const DxStripLineConfig = {
   },
   props: {
     cssClass: String,
-    end: [Date, Function, Number, String] as PropType<(Date) | (() => (Date | Number | string)) | (Number) | (String)>,
-    start: [Date, Function, Number, String] as PropType<(Date) | (() => (Date | Number | string)) | (Number) | (String)>,
+    end: [Date, Function, Number, String] as PropType<Date | (() => (Date | number | string)) | number | string>,
+    start: [Date, Function, Number, String] as PropType<Date | (() => (Date | number | string)) | number | string>,
     title: String
   }
 };
@@ -944,14 +944,14 @@ const DxTasksConfig = {
     "update:titleExpr": null,
   },
   props: {
-    colorExpr: [Function, String] as PropType<(() => void) | (String)>,
+    colorExpr: [Function, String] as PropType<(() => void) | string>,
     dataSource: {},
-    endExpr: [Function, String] as PropType<(() => void) | (String)>,
-    keyExpr: [Function, String] as PropType<(() => void) | (String)>,
-    parentIdExpr: [Function, String] as PropType<(() => void) | (String)>,
-    progressExpr: [Function, String] as PropType<(() => void) | (String)>,
-    startExpr: [Function, String] as PropType<(() => void) | (String)>,
-    titleExpr: [Function, String] as PropType<(() => void) | (String)>
+    endExpr: [Function, String] as PropType<(() => void) | string>,
+    keyExpr: [Function, String] as PropType<(() => void) | string>,
+    parentIdExpr: [Function, String] as PropType<(() => void) | string>,
+    progressExpr: [Function, String] as PropType<(() => void) | string>,
+    startExpr: [Function, String] as PropType<(() => void) | string>,
+    titleExpr: [Function, String] as PropType<(() => void) | string>
   }
 };
 
@@ -989,7 +989,7 @@ const DxToolbarConfig = {
     "update:items": null,
   },
   props: {
-    items: Array as PropType<Object[] | String[]>
+    items: Array as PropType<Array<Object> | Array<"separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">>
   }
 };
 

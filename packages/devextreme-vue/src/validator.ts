@@ -26,15 +26,15 @@ const componentConfig = {
   props: {
     adapter: Object,
     elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     name: String,
     onDisposing: Function as PropType<(e: Object) => void>,
     onInitialized: Function as PropType<(e: Object) => void>,
     onOptionChanged: Function as PropType<(e: Object) => void>,
     onValidated: Function as PropType<(validatedInfo: Object) => void>,
     validationGroup: String,
-    validationRules: Array as PropType<Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[]>,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -97,7 +97,7 @@ const DxAdapterConfig = {
     focus: Function as PropType<() => void>,
     getValue: Function as PropType<() => void>,
     reset: Function as PropType<() => void>,
-    validationRequestsCallbacks: Array as PropType<Function[]>
+    validationRequestsCallbacks: Array as PropType<Array<() => void>>
   }
 };
 

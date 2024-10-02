@@ -42,7 +42,7 @@ const componentConfig = {
   props: {
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -58,15 +58,15 @@ const componentConfig = {
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showStatus: Boolean,
-    statusFormat: [Function, String] as PropType<((ratio: Number, value: Number) => string) | (String)>,
+    statusFormat: [Function, String] as PropType<((ratio: number, value: number) => string) | string>,
     validationError: {},
-    validationErrors: Array as PropType<any[]>,
+    validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<"always" | "auto">,
     validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: {},
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

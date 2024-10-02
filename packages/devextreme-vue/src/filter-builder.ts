@@ -44,15 +44,15 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
-    customOperations: Array as PropType<Object[]>,
+    customOperations: Array as PropType<Array<Object>>,
     disabled: Boolean,
     elementAttr: Object,
-    fields: Array as PropType<Object[]>,
+    fields: Array as PropType<Array<Object>>,
     filterOperationDescriptions: Object,
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object,
-    groupOperations: Array as PropType<String[]>,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    groupOperations: Array as PropType<Array<"and" | "or" | "notAnd" | "notOr">>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     maxGroupLevel: Number,
@@ -65,9 +65,9 @@ const componentConfig = {
     onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    value: [Array, Function, String] as PropType<(any[]) | (Function) | (String)>,
+    value: [Array, Function, String] as PropType<Array<any> | Function | string>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -136,10 +136,10 @@ const DxCustomOperationConfig = {
     "update:name": null,
   },
   props: {
-    calculateFilterExpression: Function as PropType<(filterValue: any, field: Object) => (string | Function | any[])>,
+    calculateFilterExpression: Function as PropType<(filterValue: any, field: Object) => (string | Function | Array<any>)>,
     caption: String,
     customizeText: Function as PropType<(fieldInfo: Object) => string>,
-    dataTypes: Array as PropType<String[]>,
+    dataTypes: Array as PropType<Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">>,
     editorTemplate: {},
     hasValue: Boolean,
     icon: String,
@@ -173,7 +173,7 @@ const DxFieldConfig = {
     "update:trueText": null,
   },
   props: {
-    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string) => (string | Function | any[])>,
+    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string) => (string | Function | Array<any>)>,
     caption: String,
     customizeText: Function as PropType<(fieldInfo: Object) => string>,
     dataField: String,
@@ -181,8 +181,8 @@ const DxFieldConfig = {
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
-    filterOperations: Array as PropType<String[] | String[]>,
-    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between"> | Array<string>>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     lookup: Object,
     name: String,
     trueText: String
@@ -254,8 +254,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: Number | Date) => string>,
-    parser: Function as PropType<(value: string) => (Number | Date)>,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
     type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
@@ -302,9 +302,9 @@ const DxLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object] as PropType<(any[]) | (Object) | (Object)>,
-    displayExpr: [Function, String] as PropType<((data: Object) => string) | (String)>,
-    valueExpr: [Function, String] as PropType<((data: Object) => (string | Number | Boolean)) | (String)>
+    dataSource: [Array, Object] as PropType<Array<any> | Object | Object>,
+    displayExpr: [Function, String] as PropType<((data: Object) => string) | string>,
+    valueExpr: [Function, String] as PropType<((data: Object) => (string | number | Boolean)) | string>
   }
 };
 

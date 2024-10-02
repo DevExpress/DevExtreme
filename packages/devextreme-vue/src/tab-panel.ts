@@ -67,12 +67,12 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
     itemHoldTimeout: Number,
-    items: Array as PropType<any[]>,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
     loop: Boolean,
@@ -102,7 +102,7 @@ const componentConfig = {
     tabIndex: Number,
     tabsPosition: String as PropType<"bottom" | "left" | "right" | "top">,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

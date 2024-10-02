@@ -75,7 +75,7 @@ const componentConfig = {
   props: {
     adaptiveLayout: Object,
     animation: [Boolean, Object],
-    annotations: Array as PropType<any[]>,
+    annotations: Array as PropType<Array<any> | Array<Object>>,
     argumentAxis: Object,
     barGroupPadding: Number,
     barGroupWidth: Number,
@@ -116,14 +116,14 @@ const componentConfig = {
     onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
     onZoomEnd: Function as PropType<(e: ZoomEndEvent) => void>,
     onZoomStart: Function as PropType<(e: ZoomStartEvent) => void>,
-    palette: [Array, String] as PropType<(String[]) | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
     paletteExtensionMode: String as PropType<"alternate" | "blend" | "extrapolate">,
     pathModified: Boolean,
     pointSelectionMode: String as PropType<"single" | "multiple">,
     redrawOnResize: Boolean,
     resolveLabelOverlapping: String as PropType<"hide" | "none">,
     rtlEnabled: Boolean,
-    series: [Array, Object] as PropType<(Object[]) | (Object) | (Object)>,
+    series: [Array, Object] as PropType<Array<Object> | Object | Object>,
     seriesSelectionMode: String as PropType<"single" | "multiple">,
     seriesTemplate: Object,
     size: Object,
@@ -433,9 +433,9 @@ const DxArgumentAxisConfig = {
     allowDecimals: Boolean,
     argumentType: String as PropType<"datetime" | "numeric" | "string">,
     axisDivisionFactor: Number,
-    categories: Array as PropType<Date[] | Number[] | String[]>,
+    categories: Array as PropType<Array<Date> | Array<number> | Array<string>>,
     color: String,
-    constantLines: Array as PropType<Object[]>,
+    constantLines: Array as PropType<Array<Object>>,
     constantLineStyle: Object,
     discreteAxisDivisionMode: String as PropType<"betweenLabels" | "crossLabels">,
     endOnTick: Boolean,
@@ -449,15 +449,15 @@ const DxArgumentAxisConfig = {
     minorGrid: Object,
     minorTick: Object,
     minorTickCount: Number,
-    minorTickInterval: [Number, Object, String] as PropType<(Number) | (Object) | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
+    minorTickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     opacity: Number,
     originValue: Number,
     period: Number,
     startAngle: Number,
-    strips: Array as PropType<Object[]>,
+    strips: Array as PropType<Array<Object>>,
     stripStyle: Object,
     tick: Object,
-    tickInterval: [Number, Object, String] as PropType<(Number) | (Object) | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
+    tickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     type: String as PropType<"continuous" | "discrete" | "logarithmic">,
     visible: Boolean,
     width: Number
@@ -553,8 +553,8 @@ const DxArgumentFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: Number | Date) => string>,
-    parser: Function as PropType<(value: string) => (Number | Date)>,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
     type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
@@ -583,7 +583,7 @@ const DxAxisLabelConfig = {
     customizeHint: Function as PropType<(argument: Object) => string>,
     customizeText: Function as PropType<(argument: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     indentFromAxis: Number,
     overlappingBehavior: String as PropType<"hide" | "none">,
     visible: Boolean
@@ -986,14 +986,14 @@ const DxCommonSeriesSettingsLabelConfig = {
     "update:visible": null,
   },
   props: {
-    argumentFormat: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    argumentFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function as PropType<(pointInfo: Object) => string>,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     position: String as PropType<"inside" | "outside">,
     rotationAngle: Number,
     showForZeroValues: Boolean,
@@ -1177,7 +1177,7 @@ const DxDataPrepareSettingsConfig = {
   props: {
     checkTypeForAllData: Boolean,
     convertToAxisDataType: Boolean,
-    sortingMethod: [Boolean, Function] as PropType<(Boolean) | ((a: Object, b: Object) => Number)>
+    sortingMethod: [Boolean, Function] as PropType<Boolean | ((a: Object, b: Object) => number)>
   }
 };
 
@@ -1203,7 +1203,7 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array as PropType<String[]>,
+    formats: Array as PropType<Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">>,
     margin: Number,
     printingEnabled: Boolean,
     svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
@@ -1254,8 +1254,8 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function as PropType<(value: Number | Date) => string>,
-    parser: Function as PropType<(value: string) => (Number | Date)>,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
     type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
@@ -1386,7 +1386,7 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    argumentFormat: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    argumentFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     backgroundColor: String,
     border: Object,
     connector: Object,
@@ -1394,7 +1394,7 @@ const DxLabelConfig = {
     customizeText: Function as PropType<(argument: Object) => string>,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     indentFromAxis: Number,
     overlappingBehavior: String as PropType<"hide" | "none">,
     position: String as PropType<"inside" | "outside">,
@@ -1445,7 +1445,7 @@ const DxLegendConfig = {
     columnCount: Number,
     columnItemSpacing: Number,
     customizeHint: Function as PropType<(seriesInfo: Object) => string>,
-    customizeItems: Function as PropType<(items: Object[]) => Object[]>,
+    customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
     customizeText: Function as PropType<(seriesInfo: Object) => string>,
     font: Object,
     horizontalAlignment: String as PropType<"center" | "left" | "right">,
@@ -2332,7 +2332,7 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    argumentFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     arrowLength: Number,
     border: Object,
     color: String,
@@ -2342,7 +2342,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(pointInfo: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
@@ -2434,9 +2434,9 @@ const DxValueAxisConfig = {
   props: {
     allowDecimals: Boolean,
     axisDivisionFactor: Number,
-    categories: Array as PropType<Date[] | Number[] | String[]>,
+    categories: Array as PropType<Array<Date> | Array<number> | Array<string>>,
     color: String,
-    constantLines: Array as PropType<Object[]>,
+    constantLines: Array as PropType<Array<Object>>,
     constantLineStyle: Object,
     discreteAxisDivisionMode: String as PropType<"betweenLabels" | "crossLabels">,
     endOnTick: Boolean,
@@ -2449,22 +2449,22 @@ const DxValueAxisConfig = {
     minorGrid: Object,
     minorTick: Object,
     minorTickCount: Number,
-    minorTickInterval: [Number, Object, String] as PropType<(Number) | (Object) | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
+    minorTickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     minValueMargin: Number,
-    minVisualRangeLength: [Number, Object, String] as PropType<(Number) | (Object) | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
+    minVisualRangeLength: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     opacity: Number,
     showZero: Boolean,
-    strips: Array as PropType<Object[]>,
+    strips: Array as PropType<Array<Object>>,
     stripStyle: Object,
     tick: Object,
-    tickInterval: [Number, Object, String] as PropType<(Number) | (Object) | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
+    tickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     type: String as PropType<"continuous" | "discrete" | "logarithmic">,
     valueMarginsEnabled: Boolean,
     valueType: String as PropType<"datetime" | "numeric" | "string">,
     visible: Boolean,
-    visualRange: [Array, Object] as PropType<(Date[] | Number[] | String[]) | (Object) | (Object)>,
+    visualRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
     visualRangeUpdateMode: String as PropType<"auto" | "keep" | "reset">,
-    wholeRange: [Array, Object] as PropType<(Date[] | Number[] | String[]) | (Object) | (Object)>,
+    wholeRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
     width: Number
   }
 };
@@ -2531,7 +2531,7 @@ const DxVisualRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: [Number, Object, String] as PropType<(Number) | (Object) | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
+    length: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     startValue: [Date, Number, String]
   }
 };
@@ -2555,7 +2555,7 @@ const DxWholeRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: [Number, Object, String] as PropType<(Number) | (Object) | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
+    length: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     startValue: [Date, Number, String]
   }
 };

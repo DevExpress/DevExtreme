@@ -80,18 +80,18 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    colCount: [Number, String] as PropType<(Number) | ("auto")>,
+    colCount: [Number, String] as PropType<number | "auto">,
     colCountByScreen: Object,
     customizeItem: Function as PropType<(item: Object | Object | Object | Object | Object) => void>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
     formData: {},
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
-    items: Array as PropType<Object[] | Object[] | Object[] | Object[] | Object[]>,
+    items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
     labelLocation: String as PropType<"left" | "right" | "top">,
     labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
     minColWidth: Number,
@@ -115,7 +115,7 @@ const componentConfig = {
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -292,7 +292,7 @@ const DxButtonOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
@@ -310,7 +310,7 @@ const DxButtonOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -483,7 +483,7 @@ const DxGroupItemConfig = {
     colCountByScreen: Object,
     colSpan: Number,
     cssClass: String,
-    items: Array as PropType<Object[] | Object[] | Object[] | Object[] | Object[]>,
+    items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
     itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
     name: String,
     template: {},
@@ -561,17 +561,17 @@ const DxItemConfig = {
     html: String,
     icon: String,
     isRequired: Boolean,
-    items: Array as PropType<Object[] | Object[] | Object[] | Object[] | Object[]>,
+    items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
     itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
     label: Object,
     name: String,
     tabPanelOptions: Object,
-    tabs: Array as PropType<Object[]>,
+    tabs: Array as PropType<Array<Object>>,
     tabTemplate: {},
     template: {},
     text: String,
     title: String,
-    validationRules: Array as PropType<Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[]>,
+    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
     verticalAlignment: String as PropType<"bottom" | "center" | "top">,
     visible: Boolean,
     visibleIndex: Number
@@ -751,7 +751,7 @@ const DxSimpleItemConfig = {
     label: Object,
     name: String,
     template: {},
-    validationRules: Array as PropType<Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[] | Object[]>,
+    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -833,7 +833,7 @@ const DxTabConfig = {
     colCountByScreen: Object,
     disabled: Boolean,
     icon: String,
-    items: Array as PropType<Object[] | Object[] | Object[] | Object[] | Object[]>,
+    items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
     tabTemplate: {},
     template: {},
     title: String
@@ -869,7 +869,7 @@ const DxTabbedItemConfig = {
     itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
     name: String,
     tabPanelOptions: Object,
-    tabs: Array as PropType<Object[]>,
+    tabs: Array as PropType<Array<Object>>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -949,12 +949,12 @@ const DxTabPanelOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
     itemHoldTimeout: Number,
-    items: Array as PropType<any[]>,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
     loop: Boolean,
@@ -984,7 +984,7 @@ const DxTabPanelOptionsConfig = {
     tabIndex: Number,
     tabsPosition: String as PropType<"bottom" | "left" | "right" | "top">,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 

@@ -43,10 +43,10 @@ const componentConfig = {
     direction: String as PropType<"col" | "row">,
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<any[]>,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -58,7 +58,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

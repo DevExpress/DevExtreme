@@ -50,7 +50,7 @@ const componentConfig = {
     encodeHtml: Boolean,
     focusStateEnabled: Boolean,
     headerFilter: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     layout: {
@@ -72,7 +72,7 @@ const componentConfig = {
     tabIndex: Number,
     texts: Object,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

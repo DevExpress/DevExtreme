@@ -67,7 +67,7 @@ const componentConfig = {
     fieldChooser: Object,
     fieldPanel: Object,
     headerFilter: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hideEmptySummaryCells: Boolean,
     hint: String,
     loadPanel: Object,
@@ -92,7 +92,7 @@ const componentConfig = {
     tabIndex: Number,
     texts: Object,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -444,7 +444,7 @@ const DxScrollingConfig = {
   },
   props: {
     mode: String as PropType<"standard" | "virtual">,
-    useNative: [Boolean, String] as PropType<(Boolean) | ("auto")>
+    useNative: [Boolean, String] as PropType<Boolean | "auto">
   }
 };
 

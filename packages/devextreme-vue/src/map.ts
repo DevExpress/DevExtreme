@@ -50,16 +50,16 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     apiKey: [Object, String],
     autoAdjust: Boolean,
-    center: [Array, Object, String] as PropType<(Number[]) | (Object) | (String)>,
+    center: [Array, Object, String] as PropType<Array<number> | Object | string>,
     controls: Boolean,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     markerIconSrc: String,
-    markers: Array as PropType<Object[]>,
+    markers: Array as PropType<Array<Object>>,
     onClick: Function as PropType<(e: ClickEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
@@ -71,12 +71,12 @@ const componentConfig = {
     onRouteRemoved: Function as PropType<(e: RouteRemovedEvent) => void>,
     provider: String as PropType<"bing" | "google" | "googleStatic">,
     providerConfig: Object,
-    routes: Array as PropType<Object[]>,
+    routes: Array as PropType<Array<Object>>,
     rtlEnabled: Boolean,
     tabIndex: Number,
     type: String as PropType<"hybrid" | "roadmap" | "satellite">,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoom: Number
   },
   emits: {
@@ -208,7 +208,7 @@ const DxMarkerConfig = {
   },
   props: {
     iconSrc: String,
-    location: [Array, Object, String] as PropType<(Number[]) | (Object) | (String)>,
+    location: [Array, Object, String] as PropType<Array<number> | Object | string>,
     onClick: Function as PropType<() => void>,
     tooltip: [Object, String]
   }
@@ -256,7 +256,7 @@ const DxRouteConfig = {
   },
   props: {
     color: String,
-    locations: Array as PropType<Object[]>,
+    locations: Array as PropType<Array<Object>>,
     mode: String as PropType<"driving" | "walking">,
     opacity: Number,
     weight: Number

@@ -38,14 +38,14 @@ interface DxResponsiveBox extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    cols: Array as PropType<Object[]>,
+    cols: Array as PropType<Array<Object>>,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<any[]>,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -55,12 +55,12 @@ const componentConfig = {
     onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
     onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    rows: Array as PropType<Object[]>,
+    rows: Array as PropType<Array<Object>>,
     rtlEnabled: Boolean,
     screenByWidth: Function as PropType<() => void>,
     singleColumnScreen: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -148,7 +148,7 @@ const DxItemConfig = {
   props: {
     disabled: Boolean,
     html: String,
-    location: [Array, Object] as PropType<(Object[]) | (Object)>,
+    location: [Array, Object] as PropType<Array<Object> | Object>,
     template: {},
     text: String,
     visible: Boolean

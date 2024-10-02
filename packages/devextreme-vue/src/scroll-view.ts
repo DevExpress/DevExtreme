@@ -39,7 +39,7 @@ const componentConfig = {
     direction: String as PropType<"both" | "horizontal" | "vertical">,
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
@@ -56,7 +56,7 @@ const componentConfig = {
     scrollByThumb: Boolean,
     showScrollbar: String as PropType<"onScroll" | "onHover" | "always" | "never">,
     useNative: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

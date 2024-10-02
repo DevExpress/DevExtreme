@@ -132,22 +132,22 @@ const componentConfig = {
     collapsibleGroups: Boolean,
     dataSource: {},
     disabled: Boolean,
-    displayExpr: [Function, String] as PropType<((item: Object) => string) | (String)>,
+    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
     elementAttr: Object,
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     indicateLoading: Boolean,
     itemDeleteMode: String as PropType<"context" | "slideButton" | "slideItem" | "static" | "swipe" | "toggle">,
     itemDragging: Object,
     itemHoldTimeout: Number,
-    items: Array as PropType<any[]>,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
-    keyExpr: [Function, String] as PropType<(() => void) | (String)>,
-    menuItems: Array as PropType<Object[]>,
+    keyExpr: [Function, String] as PropType<(() => void) | string>,
+    menuItems: Array as PropType<Array<Object>>,
     menuMode: String as PropType<"context" | "slide">,
     nextButtonText: String,
     noDataText: String,
@@ -183,22 +183,22 @@ const componentConfig = {
     scrollingEnabled: Boolean,
     searchEditorOptions: Object,
     searchEnabled: Boolean,
-    searchExpr: [Array, Function, String] as PropType<(Function[] | String[]) | (Function) | (String)>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     searchMode: String as PropType<"contains" | "startswith" | "equals">,
     searchTimeout: Number,
     searchValue: String,
     selectAllMode: String as PropType<"allPages" | "page">,
     selectAllText: String,
     selectByClick: Boolean,
-    selectedItemKeys: Array as PropType<any[]>,
-    selectedItems: Array as PropType<any[]>,
+    selectedItemKeys: Array as PropType<Array<any>>,
+    selectedItems: Array as PropType<Array<any>>,
     selectionMode: String as PropType<"single" | "multiple" | "all" | "none">,
     showScrollbar: String as PropType<"always" | "never" | "onHover" | "onScroll">,
     showSelectionControls: Boolean,
     tabIndex: Number,
     useNativeScrolling: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -429,7 +429,7 @@ const DxItemDraggingConfig = {
     filter: String,
     group: String,
     handle: String,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     itemOrientation: String as PropType<"horizontal" | "vertical">,
     moveItemOnDrop: Boolean,
     onAdd: Function as PropType<(e: ItemDraggingAddEvent) => void>,
@@ -445,7 +445,7 @@ const DxItemDraggingConfig = {
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -515,7 +515,7 @@ const DxOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
@@ -533,7 +533,7 @@ const DxOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -608,11 +608,11 @@ const DxSearchEditorOptionsConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     bindingOptions: Object,
-    buttons: Array as PropType<String[] | String[] | Object[]>,
+    buttons: Array as PropType<Array<string> | Array<"clear"> | Array<Object>>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -653,14 +653,14 @@ const DxSearchEditorOptionsConfig = {
     text: String,
     useMaskedValue: Boolean,
     validationError: {},
-    validationErrors: Array as PropType<any[]>,
+    validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<"always" | "auto">,
     validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: String,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 

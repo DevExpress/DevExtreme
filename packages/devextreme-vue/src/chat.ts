@@ -38,10 +38,10 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array as PropType<Object[]>,
+    items: Array as PropType<Array<Object>>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onMessageSend: Function as PropType<(e: MessageSendEvent) => void>,
@@ -49,7 +49,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     user: Object,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

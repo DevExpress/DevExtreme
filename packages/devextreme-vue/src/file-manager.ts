@@ -69,18 +69,18 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    allowedFileExtensions: Array as PropType<String[]>,
+    allowedFileExtensions: Array as PropType<Array<string>>,
     contextMenu: Object,
     currentPath: String,
-    currentPathKeys: Array as PropType<String[]>,
-    customizeDetailColumns: Function as PropType<(columns: Object[]) => Object[]>,
+    currentPathKeys: Array as PropType<Array<string>>,
+    customizeDetailColumns: Function as PropType<(columns: Array<Object>) => Array<Object>>,
     customizeThumbnail: Function as PropType<(fileSystemItem: Object) => string>,
     disabled: Boolean,
     elementAttr: Object,
     fileSystemProvider: {},
     focusedItemKey: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     itemView: Object,
@@ -113,13 +113,13 @@ const componentConfig = {
     permissions: Object,
     rootFolderName: String,
     rtlEnabled: Boolean,
-    selectedItemKeys: Array as PropType<String[]>,
+    selectedItemKeys: Array as PropType<Array<string>>,
     selectionMode: String as PropType<"single" | "multiple">,
     tabIndex: Number,
     toolbar: Object,
     upload: Object,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -247,7 +247,7 @@ const DxContextMenuConfig = {
     "update:items": null,
   },
   props: {
-    items: Array as PropType<Object[] | String[]>
+    items: Array as PropType<Array<Object> | Array<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">>
   }
 };
 
@@ -281,7 +281,7 @@ const DxContextMenuItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array as PropType<Object[]>,
+    items: Array as PropType<Array<Object>>,
     name: String as PropType<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">,
     selectable: Boolean,
     selected: Boolean,
@@ -304,7 +304,7 @@ const DxDetailsConfig = {
     "update:columns": null,
   },
   props: {
-    columns: Array as PropType<Object[] | String[]>
+    columns: Array as PropType<Array<Object> | Array<string>>
   }
 };
 
@@ -382,7 +382,7 @@ const DxItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    items: Array as PropType<Object[]>,
+    items: Array as PropType<Array<Object>>,
     locateInMenu: String as PropType<"always" | "auto" | "never">,
     location: String as PropType<"after" | "before" | "center">,
     name: String as PropType<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete" | "showNavPane" | "switchView" | "clearSelection" | "separator">,
@@ -485,8 +485,8 @@ const DxToolbarConfig = {
     "update:items": null,
   },
   props: {
-    fileSelectionItems: Array as PropType<Object[] | String[]>,
-    items: Array as PropType<Object[] | String[]>
+    fileSelectionItems: Array as PropType<Array<Object> | Array<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>,
+    items: Array as PropType<Array<Object> | Array<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>
   }
 };
 

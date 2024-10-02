@@ -63,7 +63,7 @@ const componentConfig = {
     autoZoomMode: String as PropType<"fitContent" | "fitWidth" | "disabled">,
     contextMenu: Object,
     contextToolbox: Object,
-    customShapes: Array as PropType<Object[]>,
+    customShapes: Array as PropType<Array<Object>>,
     customShapeTemplate: {},
     customShapeToolboxTemplate: {},
     defaultItemProperties: Object,
@@ -75,7 +75,7 @@ const componentConfig = {
     fullScreen: Boolean,
     gridSize: [Number, Object],
     hasChanges: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     historyToolbar: Object,
     mainToolbar: Object,
     nodes: Object,
@@ -104,7 +104,7 @@ const componentConfig = {
     viewToolbar: Object,
     viewUnits: String as PropType<"in" | "cm" | "px">,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoomLevel: [Number, Object]
   },
   emits: {
@@ -222,7 +222,7 @@ const DxCommandConfig = {
   },
   props: {
     icon: String,
-    items: Array as PropType<Object[] | String[]>,
+    items: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     location: String as PropType<"after" | "before" | "center">,
     name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String
@@ -248,7 +248,7 @@ const DxCommandItemConfig = {
   },
   props: {
     icon: String,
-    items: Array as PropType<Object[] | String[]>,
+    items: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     location: String as PropType<"after" | "before" | "center">,
     name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String
@@ -290,7 +290,7 @@ const DxContextMenuConfig = {
     "update:enabled": null,
   },
   props: {
-    commands: Array as PropType<Object[] | String[]>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     enabled: Boolean
   }
 };
@@ -320,7 +320,7 @@ const DxContextToolboxConfig = {
     displayMode: String as PropType<"icons" | "texts">,
     enabled: Boolean,
     shapeIconsPerRow: Number,
-    shapes: Array as PropType<String[]>,
+    shapes: Array as PropType<Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">>,
     width: Number
   }
 };
@@ -386,7 +386,7 @@ const DxCustomShapeConfig = {
     backgroundImageWidth: Number,
     baseType: String as PropType<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">,
     category: String,
-    connectionPoints: Array as PropType<Object[]>,
+    connectionPoints: Array as PropType<Array<Object>>,
     defaultHeight: Number,
     defaultImageUrl: String,
     defaultText: String,
@@ -481,22 +481,22 @@ const DxEdgesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
     dataSource: {},
-    fromExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    fromLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    fromPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    lineTypeExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    pointsExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    toExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    toLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    toPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>
+    fromExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    fromLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    fromPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    lineTypeExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    pointsExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    toExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    toLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    toPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>
   }
 };
 
@@ -564,7 +564,7 @@ const DxGridSizeConfig = {
     "update:value": null,
   },
   props: {
-    items: Array as PropType<Number[]>,
+    items: Array as PropType<Array<number>>,
     value: Number
   }
 };
@@ -588,10 +588,10 @@ const DxGroupConfig = {
   },
   props: {
     category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
-    commands: Array as PropType<Object[] | String[]>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     displayMode: String as PropType<"icons" | "texts">,
     expanded: Boolean,
-    shapes: Array as PropType<String[]>,
+    shapes: Array as PropType<Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">>,
     title: String
   }
 };
@@ -611,7 +611,7 @@ const DxHistoryToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array as PropType<Object[] | String[]>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     visible: Boolean
   }
 };
@@ -640,7 +640,7 @@ const DxItemConfig = {
   props: {
     height: Number,
     icon: String,
-    items: Array as PropType<Object[] | String[]>,
+    items: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     location: String as PropType<"after" | "before" | "center">,
     name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String,
@@ -663,7 +663,7 @@ const DxMainToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array as PropType<Object[] | String[]>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     visible: Boolean
   }
 };
@@ -703,26 +703,26 @@ const DxNodesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    autoLayout: [Object, String] as PropType<(Object) | ("auto" | "off" | "tree" | "layered")>,
+    autoLayout: [Object, String] as PropType<Object | ("auto" | "off" | "tree" | "layered")>,
     autoSizeEnabled: Boolean,
-    containerChildrenExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    containerKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    containerChildrenExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    containerKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
     dataSource: {},
-    heightExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    imageUrlExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    itemsExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    leftExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    parentKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    topExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    typeExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    widthExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
-    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>
+    heightExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    imageUrlExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    itemsExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    leftExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    parentKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    topExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    typeExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    widthExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
+    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>
   }
 };
 
@@ -745,7 +745,7 @@ const DxPageSizeConfig = {
   },
   props: {
     height: Number,
-    items: Array as PropType<Object[]>,
+    items: Array as PropType<Array<Object>>,
     width: Number
   }
 };
@@ -790,7 +790,7 @@ const DxPropertiesPanelConfig = {
     "update:visibility": null,
   },
   props: {
-    tabs: Array as PropType<Object[]>,
+    tabs: Array as PropType<Array<Object>>,
     visibility: String as PropType<"auto" | "visible" | "collapsed" | "disabled">
   }
 };
@@ -813,8 +813,8 @@ const DxTabConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array as PropType<Object[] | String[]>,
-    groups: Array as PropType<Object[]>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
+    groups: Array as PropType<Array<Object>>,
     title: String
   }
 };
@@ -839,7 +839,7 @@ const DxTabGroupConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array as PropType<Object[] | String[]>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     title: String
   }
 };
@@ -865,7 +865,7 @@ const DxToolboxConfig = {
     "update:width": null,
   },
   props: {
-    groups: Array as PropType<Object[]>,
+    groups: Array as PropType<Array<Object>>,
     shapeIconsPerRow: Number,
     showSearch: Boolean,
     visibility: String as PropType<"auto" | "visible" | "collapsed" | "disabled">,
@@ -897,7 +897,7 @@ const DxToolboxGroupConfig = {
     category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
     displayMode: String as PropType<"icons" | "texts">,
     expanded: Boolean,
-    shapes: Array as PropType<String[]>,
+    shapes: Array as PropType<Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">>,
     title: String
   }
 };
@@ -917,7 +917,7 @@ const DxViewToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array as PropType<Object[] | String[]>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     visible: Boolean
   }
 };
@@ -939,7 +939,7 @@ const DxZoomLevelConfig = {
     "update:value": null,
   },
   props: {
-    items: Array as PropType<Number[]>,
+    items: Array as PropType<Array<number>>,
     value: Number
   }
 };

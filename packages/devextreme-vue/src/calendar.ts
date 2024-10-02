@@ -58,7 +58,7 @@ const componentConfig = {
     cellTemplate: {},
     dateSerializationFormat: String,
     disabled: Boolean,
-    disabledDates: [Array, Function] as PropType<(Date[]) | ((data: Object) => Boolean)>,
+    disabledDates: [Array, Function] as PropType<Array<Date> | ((data: Object) => Boolean)>,
     elementAttr: Object,
     firstDayOfWeek: {
       type: Number,
@@ -73,7 +73,7 @@ const componentConfig = {
       ].indexOf(v) !== -1
     },
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -95,14 +95,14 @@ const componentConfig = {
     showWeekNumbers: Boolean,
     tabIndex: Number,
     validationError: {},
-    validationErrors: Array as PropType<any[]>,
+    validationErrors: Array as PropType<Array<any>>,
     validationMessageMode: String as PropType<"always" | "auto">,
     validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
-    value: [Array, Date, Number, String] as PropType<(Date[] | Number[] | String[]) | (Date) | (Number) | (String)>,
+    value: [Array, Date, Number, String] as PropType<(Array<Date> | Array<number> | Array<string>) | Date | number | string>,
     visible: Boolean,
     weekNumberRule: String as PropType<"auto" | "firstDay" | "fullWeek" | "firstFourDays">,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoomLevel: String as PropType<"century" | "decade" | "month" | "year">
   },
   emits: {

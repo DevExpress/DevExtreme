@@ -131,12 +131,12 @@ const componentConfig = {
     },
     focusStateEnabled: Boolean,
     groupByDate: Boolean,
-    groups: Array as PropType<String[]>,
-    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    groups: Array as PropType<Array<string>>,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     indicatorUpdateInterval: Number,
     max: [Date, Number, String],
-    maxAppointmentsPerCell: [Number, String] as PropType<(Number) | ("auto" | "unlimited")>,
+    maxAppointmentsPerCell: [Number, String] as PropType<number | ("auto" | "unlimited")>,
     min: [Date, Number, String],
     noDataText: String,
     offset: Number,
@@ -163,10 +163,10 @@ const componentConfig = {
     recurrenceRuleExpr: String,
     remoteFiltering: Boolean,
     resourceCellTemplate: {},
-    resources: Array as PropType<Object[]>,
+    resources: Array as PropType<Array<Object>>,
     rtlEnabled: Boolean,
     scrolling: Object,
-    selectedCellData: Array as PropType<any[]>,
+    selectedCellData: Array as PropType<Array<any>>,
     shadeUntilCurrentTime: Boolean,
     showAllDayPanel: Boolean,
     showCurrentTimeIndicator: Boolean,
@@ -178,9 +178,9 @@ const componentConfig = {
     timeCellTemplate: {},
     timeZone: String,
     useDropDownViewSwitcher: Boolean,
-    views: Array as PropType<Object[] | String[]>,
+    views: Array as PropType<Array<Object> | Array<string>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -366,11 +366,11 @@ const DxResourceConfig = {
     allowMultiple: Boolean,
     colorExpr: String,
     dataSource: {},
-    displayExpr: [Function, String] as PropType<((resource: Object) => string) | (String)>,
+    displayExpr: [Function, String] as PropType<((resource: Object) => string) | string>,
     fieldExpr: String,
     label: String,
     useColorAsDefault: Boolean,
-    valueExpr: [Function, String] as PropType<(() => void) | (String)>
+    valueExpr: [Function, String] as PropType<(() => void) | string>
   }
 };
 
@@ -452,9 +452,9 @@ const DxViewConfig = {
     },
     groupByDate: Boolean,
     groupOrientation: String as PropType<"horizontal" | "vertical">,
-    groups: Array as PropType<String[]>,
+    groups: Array as PropType<Array<string>>,
     intervalCount: Number,
-    maxAppointmentsPerCell: [Number, String] as PropType<(Number) | ("auto" | "unlimited")>,
+    maxAppointmentsPerCell: [Number, String] as PropType<number | ("auto" | "unlimited")>,
     name: String,
     offset: Number,
     resourceCellTemplate: {},
