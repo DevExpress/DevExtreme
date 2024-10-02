@@ -560,15 +560,14 @@ const Lookup = DropDownList.inherit({
     this._$popup.addClass(LOOKUP_POPUP_CLASS);
     this._popup.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
 
-    this._attachPopupFocusOutEvent();
+    this._attachPopupFocusoutHandler();
   },
 
-  _attachPopupFocusOutEvent(): void {
+  _attachPopupFocusoutHandler(): void {
     const popupFocusoutEventName = addNamespace('focusout', this.NAME);
     const $overlayContent = this._popup.$overlayContent();
 
     eventsEngine.off($overlayContent, popupFocusoutEventName);
-
     eventsEngine.on($overlayContent, popupFocusoutEventName, (e) => {
       const { relatedTarget } = e;
 
@@ -583,9 +582,10 @@ const Lookup = DropDownList.inherit({
         return;
       }
 
-      const isTargetOutOfComponent = this._isTargetOutOfComponent(relatedTarget);
+      const isTargetLookupField = relatedTarget === this._$field.get(0);
+      const isTargetOutOfPopup = this._isTargetOutOfComponent(relatedTarget);
 
-      if (isTargetOutOfComponent) {
+      if (isTargetOutOfPopup && !isTargetLookupField) {
         this.close();
       }
     });

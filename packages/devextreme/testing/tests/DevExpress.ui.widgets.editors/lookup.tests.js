@@ -1033,11 +1033,14 @@ QUnit.module('Lookup', {
 
         openPopupWithList(firstLookup);
 
-        // NOTE: in ShadowDOM mode one selected item is inside ShadowDOM
-        // and other is in document
+        // NOTE: in ShadowDOM mode the two selected elements are inside the ShadowDOM
+        // because the overlays were closed and moved to the overlay container
         if(QUnit.isInShadowDomMode()) {
-            assert.strictEqual(document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
-            assert.strictEqual($('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
+            const listItemSelectedInDocument = document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
+            const listItemSelectedInShadowDOM = $('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
+
+            assert.strictEqual(listItemSelectedInDocument.length, 0);
+            assert.strictEqual(listItemSelectedInShadowDOM.length, 2);
         } else {
             assert.strictEqual($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
         }
