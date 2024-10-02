@@ -4,6 +4,7 @@ import { changeTheme } from '../../../../helpers/changeTheme';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { Themes } from '../../../../helpers/themes';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
@@ -146,7 +147,7 @@ const createDataGrid = async ({
 };
 
 const markupTest = (matrixOptions) => {
-  test(`Should show group panel borders with ${getTestParams(matrixOptions)}`, async (t) => {
+  safeSizeTest(`Should show group panel borders with ${getTestParams(matrixOptions)}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(GRID_SELECTOR);
     const rowIdx = matrixOptions.hasMasterDetail ? 8 : 5;
@@ -163,7 +164,7 @@ const markupTest = (matrixOptions) => {
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 800]).before(async () => {
     await changeTheme(matrixOptions.theme);
     await createDataGrid(matrixOptions);
   }).after(async () => changeTheme(Themes.genericLight));

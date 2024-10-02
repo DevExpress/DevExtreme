@@ -54,12 +54,27 @@ createTestCafe({
         setTestingTheme(args);
         setShadowDom(args);
 
+        let sizes = [];
+        switch (componentFolder) {
+            case 'form':
+                sizes = [1200, 1000];
+                break;
+            case 'scheduler':
+                sizes = [1200, 800];
+                break;
+            case 'editors': 
+                sizes = [1200, 800];
+                break;
+            default:
+                sizes = [1200, 800];
+        }
+
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./screenshots')) {
             fs.rmSync('./screenshots', { recursive: true });
         }
 
-        const browsers = args.browsers.split(' ').map(expandBrowserAlias);
+        const browsers = expandBrowserAlias(args.browsers, sizes);
         // eslint-disable-next-line no-console
         console.log('Browsers:', browsers);
 
@@ -111,6 +126,7 @@ createTestCafe({
 
         const runOptions = {
             quarantineMode: { successThreshold: 1, attemptLimit: 5 },
+            disableNativeAutomation: true,
         };
 
         if(args.componentFolder.trim() !== 'renovation') {
@@ -155,15 +171,18 @@ function setShadowDom(args) {
     process.env.shadowDom = args.shadowDom;
 }
 
-function expandBrowserAlias(browser) {
-    switch(browser) {
-        case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu --window-size=1200,800';
-        case 'chrome:docker':
-            return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
-    }
-
-    return browser;
+function expandBrowserAlias(browser, sizes) {
+    return browser.split(' ').map((browserArg) => {
+        switch(browserArg) {
+            case 'chrome:devextreme-shr2':
+                return `chrome:headless --disable-gpu --window-size=${sizes[0]},${sizes[1]}`;
+            case 'chrome:docker':
+                return `chromium:headless --no-sandbox --disable-gpu --window-size=${sizes[0]},${sizes[1]}`;
+        }
+    
+        return browserArg;
+    })
+    
 }
 
 function getArgs() {

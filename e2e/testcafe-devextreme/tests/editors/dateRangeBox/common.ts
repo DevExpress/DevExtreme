@@ -13,6 +13,7 @@ import {
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';
@@ -29,7 +30,7 @@ fixture.disablePageReloads`DateRangeBox render`
 
 stylingModes.forEach((stylingMode) => {
   [true, false].forEach((isValid) => {
-    test(`DateRangeBox styles, stylingMode=${stylingMode}, isValid=${isValid}`, async (t) => {
+    safeSizeTest(`DateRangeBox styles, stylingMode=${stylingMode}, isValid=${isValid}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await testScreenshot(t, takeScreenshot, `DateRangeBox stylingMode=${stylingMode} isValid=${isValid}.png`, { shouldTestInCompact: true });
@@ -58,7 +59,7 @@ stylingModes.forEach((stylingMode) => {
       await t
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
-    }).before(async (t) => {
+    }, [1200, 800]).before(async (t) => {
       t.ctx.ids = [];
 
       await insertStylesheetRulesToPage(`.${DATERANGEBOX_CLASS} { display: inline-flex; margin: 5px; }`);

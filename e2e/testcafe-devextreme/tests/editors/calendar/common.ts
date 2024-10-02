@@ -7,6 +7,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import {
   appendElementTo, setClassAttribute, setStyleAttribute,
 } from '../../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const STATE_HOVER_CLASS = 'dx-state-hover';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
@@ -237,7 +238,7 @@ test('Calendar with multiview rendered correct', async (t) => {
     }, '#calendar');
   });
 
-  test(`Calendar ${zoomLevel} view with today button rendered correct`, async (t) => {
+  safeSizeTest(`Calendar ${zoomLevel} view with today button rendered correct`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `Calendar ${zoomLevel} view with today button.png`, { element: '#container', shouldTestInCompact: true });
@@ -245,7 +246,7 @@ test('Calendar with multiview rendered correct', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 900]).before(async () => {
     await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
     await appendElementTo('#container', 'div', 'calendar');
 
@@ -279,7 +280,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
 [CALENDAR_CELL_CLASS, CALENDAR_TODAY_CLASS].forEach((cellClass) => {
   const testName = `Calendar ${cellClass === CALENDAR_TODAY_CLASS ? 'today ' : ''}cell styles`;
 
-  test(testName, async (t) => {
+  safeSizeTest(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const calendar = new Calendar('#calendar');
@@ -332,7 +333,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 900]).before(async () => {
     await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
     await appendElementTo('#container', 'div', 'calendar');
 
@@ -345,7 +346,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
 ['year', 'decade', 'century'].forEach((zoomLevel) => {
   const testName = `Calendar ${zoomLevel} view cell styles`;
 
-  test(testName, async (t) => {
+  safeSizeTest(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const calendar = new Calendar('#calendar');
@@ -390,7 +391,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 900]).before(async () => {
     await setStyleAttribute(Selector('#container'), 'width: 600px; height: 800px;');
     await appendElementTo('#container', 'div', 'calendar');
 

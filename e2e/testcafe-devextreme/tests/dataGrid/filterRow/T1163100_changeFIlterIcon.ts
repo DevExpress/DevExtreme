@@ -3,6 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture`Header Filter T1163100 change filter icon`
   .page(url(__dirname, '../../container.html'));
@@ -30,7 +31,7 @@ const generateTestData = (rowCount: number) => new Array(rowCount)
       ['usual', undefined],
       ['virtual', { columnRenderingMode: 'virtual', rowRenderingMode: 'virtual' }],
     ] as const).forEach(([scrollingName, scrolling]) => {
-      test(`Should change filter row icon (columns ${firstColumnsName} ${secondColumnsName}, scrolling ${scrollingName}`, async (t) => {
+      safeSizeTest(`Should change filter row icon (columns ${firstColumnsName} ${secondColumnsName}, scrolling ${scrollingName}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         const dataGrid = new DataGrid(GRID_SELECTOR);
 
@@ -48,7 +49,7 @@ const generateTestData = (rowCount: number) => new Array(rowCount)
 
         await t.expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async () => createWidget('dxDataGrid', {
+      }, [1200, 800]).before(async () => createWidget('dxDataGrid', {
         dataSource: generateTestData(25),
         filterRow: {
           visible: true,

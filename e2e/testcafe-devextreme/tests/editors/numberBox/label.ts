@@ -7,6 +7,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 
@@ -16,7 +17,7 @@ fixture.disablePageReloads`NumberBox_Label`
   .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
-  test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
+  safeSizeTest(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `NumberBox label with stylingMode=${stylingMode}.png`, { element: '#container' });
@@ -24,7 +25,7 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 800]).before(async () => {
     const componentOption = {
       label: 'label text',
       stylingMode,
@@ -48,7 +49,7 @@ stylingModes.forEach((stylingMode) => {
 });
 
 [true, false].forEach((isValid) => {
-  test(`NumberBox with buttons container, isValid=${isValid}`, async (t) => {
+  safeSizeTest(`NumberBox with buttons container, isValid=${isValid}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await insertStylesheetRulesToPage(`#container { display: flex; flex-wrap: wrap; } .${NUMBERBOX_CLASS} { width: 220px; margin: 2px; }`);
@@ -60,7 +61,7 @@ stylingModes.forEach((stylingMode) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async () => {
+  }, [1200, 800]).before(async () => {
     for (const stylingMode of stylingModes) {
       for (const buttons of [
         ['clear'],

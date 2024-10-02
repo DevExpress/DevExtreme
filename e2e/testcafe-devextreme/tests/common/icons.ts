@@ -8,6 +8,7 @@ import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
 } from '../../helpers/domUtils';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 const ICON_CLASS = 'dx-icon';
 const iconSet = {
@@ -281,7 +282,7 @@ const iconSet = {
 fixture.disablePageReloads`Icons`
   .page(url(__dirname, '../container.html'));
 
-test('Icon set', async (t) => {
+safeSizeTest('Icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'Icon set.png');
@@ -289,7 +290,7 @@ test('Icon set', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [1200, 800]).before(async () => {
   for (const [iconName, glyph] of Object.entries(iconSet)) {
     const id = `dx-${new Guid()}`;
 
@@ -315,7 +316,7 @@ test('Icon set', async (t) => {
   }
 });
 
-test('SVG icon set', async (t) => {
+safeSizeTest('SVG icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'SVG icon set.png');
@@ -323,7 +324,7 @@ test('SVG icon set', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [1200, 800]).before(async () => {
   for (const [iconName, glyph] of Object.entries(iconSet)) {
     const id = `dx-${new Guid()}`;
 

@@ -7,11 +7,12 @@ import {
 } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Outlook dragging, for case scheduler in container with transform style`
   .page(url(__dirname, '../../../../container.html'));
 
-test('Dragging should be work right in case dxScheduler placed in container with transform style', async (t) => {
+safeSizeTest('Dragging should be work right in case dxScheduler placed in container with transform style', async (t) => {
   const scheduler = new Scheduler('#scheduler');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -36,7 +37,7 @@ test('Dragging should be work right in case dxScheduler placed in container with
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [1200, 800]).before(async () => {
   await setStyleAttribute(Selector('#container'), 'margin-top: 100px; margin-left: 100px; transform: translate(0px, 0px);');
   await appendElementTo('#container', 'div', 'scheduler');
 

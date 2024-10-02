@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Scheduler: Grouping overflow`
   .page(url(__dirname, '../../container.html'));
@@ -12,7 +13,7 @@ fixture.disablePageReloads`Scheduler: Grouping overflow`
       [[9, 14, 60], [0, 24, 360]].forEach(([startDayHour, endDayHour, cellDuration]) => {
         const allParams = `${viewType}-${groupOrientation}-${allDayPanelMode}-${startDayHour}-${endDayHour}`;
 
-        test(`Long appointments should not overflow group view (${allParams})`, async (t) => {
+        safeSizeTest(`Long appointments should not overflow group view (${allParams})`, async (t) => {
           const scheduler = new Scheduler('#container');
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -21,7 +22,7 @@ fixture.disablePageReloads`Scheduler: Grouping overflow`
             .ok()
             .expect(compareResults.isValid())
             .ok(compareResults.errorMessages());
-        }).before(async () => createWidget('dxScheduler', {
+        }, [1200, 800]).before(async () => createWidget('dxScheduler', {
           dataSource: [
             {
               text: '1',
