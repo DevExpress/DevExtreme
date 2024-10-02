@@ -13,7 +13,6 @@ import {
     EventInfo,
     NativeEventInfo,
     ItemInfo,
-    AsyncCancelable,
 } from '../../events/index';
 
 import {
