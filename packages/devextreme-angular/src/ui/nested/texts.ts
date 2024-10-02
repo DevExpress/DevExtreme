@@ -30,7 +30,7 @@ import { DxoGanttHeaderFilterTexts } from './base/gantt-header-filter-texts';
         'fix',
         'leftPosition',
         'rightPosition',
-        'stickPosition',
+        'stickyPosition',
         'unfix',
         'addRow',
         'cancelAllChanges',
