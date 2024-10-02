@@ -13,6 +13,7 @@ import {
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import numberLocalization from '@js/localization/number';
 
+import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import gridCoreUtils from '../m_utils';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
@@ -775,16 +776,10 @@ export const getRowCount = function (that: ColumnsController) {
   return rowCount;
 };
 
-export const isCustomCommandColumn = (that: ColumnsController, commandColumn): boolean => {
-  const customCommandColumns = that._columns.filter((column) => column.type === commandColumn.type);
-
-  return !!customCommandColumns.length;
-};
-
 export const getFixedPosition = function (that: ColumnsController, column) {
   const rtlEnabled = that.option('rtlEnabled');
 
-  if (column.command && !isCustomCommandColumn(that, column) || !column.fixedPosition) {
+  if (column.command && !gridCoreUtils.isCustomCommandColumn(that, column) || !column.fixedPosition) {
     return rtlEnabled ? 'right' : 'left';
   }
 
@@ -956,19 +951,23 @@ const isFirstOrLastBandColumn = function (
 const isFirstOrLastColumnCore = function (
   that: ColumnsController,
   column: any,
-  rowIndex: number,
+  rowIndex: number | null,
   onlyWithinBandColumn = false,
   isLast = false,
   fixedPosition?: StickyPosition,
 ): boolean {
-  const getColumns = (index: number): any => that.getVisibleColumns(index)
+  const getColumns = (index: number | null): any => that.getVisibleColumns(index)
     .filter((col) => {
       let res = true;
+
+      if (col.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+        return false;
+      }
 
       if (onlyWithinBandColumn && column) {
         res &&= col.ownerBand === column.ownerBand;
       } else if (fixedPosition) {
-        res &&= col.fixed && getColumnFixedPosition(col) === fixedPosition;
+        res &&= col.fixed && getColumnFixedPosition(that, col) === fixedPosition;
       }
 
       return res;
@@ -985,7 +984,7 @@ const isFirstOrLastColumnCore = function (
 export const isFirstOrLastColumn = function (
   that: ColumnsController,
   targetColumn: any,
-  rowIndex: number,
+  rowIndex: number | null,
   onlyWithinBandColumn = false,
   isLast = false,
   fixedPosition?: StickyPosition,
