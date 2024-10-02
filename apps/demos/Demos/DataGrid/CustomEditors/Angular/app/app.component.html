@@ -5,6 +5,7 @@
   (onRowInserted)="$event.component.navigateToRow($event.key)"
 >
   <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
+  <dxo-pager [visible]="true"></dxo-pager>
   <dxo-header-filter [visible]="true"></dxo-header-filter>
   <dxo-search-panel [visible]="true"></dxo-search-panel>
   <dxo-editing mode="cell" [allowUpdating]="true" [allowAdding]="true">
