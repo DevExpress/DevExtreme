@@ -302,7 +302,7 @@ class MessageList extends Widget<Properties> {
     const aria = {
       role: 'log',
       atomic: 'false',
-      label: 'Message list',
+      label: messageLocalization.format('dxChat-messageListAriaLabel'),
       live: 'polite',
       relevant: 'additions',
     };
