@@ -1,6 +1,7 @@
 /* global Microsoft */
 
 import $ from 'jquery';
+import errorsLogger from 'core/errors';
 import testing from './utils.js';
 import BingProvider from '__internal/ui/map/m_provider.dynamic.bing';
 import ajaxMock from '../../../helpers/ajaxMock.js';
@@ -1300,4 +1301,27 @@ QUnit.test('click', function(assert) {
         done();
     });
 
+});
+
+['init', 'runtime'].forEach((scenario) => {
+    QUnit.test(`should raise a deprecation warning when provider is set to bing on ${scenario}`, function(assert) {
+        sinon.spy(errorsLogger, 'log');
+        try {
+            const map = $('#map').dxMap({
+                provider: scenario === 'init' ? 'bing' : 'google'
+            }).dxMap('instance');
+
+            map.option('provider', 'bing');
+
+            assert.deepEqual(errorsLogger.log.firstCall.args, [
+                'W0001',
+                'dxMap',
+                'provider: bing',
+                '24.2',
+                'Use other map providers, such as Azure, Google, or GoogleStatic.'
+            ], 'warning is raised with correct parameters');
+        } finally {
+            errorsLogger.log.restore();
+        }
+    });
 });
