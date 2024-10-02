@@ -7968,7 +7968,7 @@ packages:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
   devextreme-internal-tools@file:devextreme-internal-tools-16.0.0-beta.6.tgz:
-    resolution: {integrity: sha512-IOIeMYGVwF9wd9PvmpP0YKMZxw8sCal6qJIPNtjcBv6Akgqv3YNIK4p64K+ZTryiATyGOfx+UjTGXH99yy47/A==, tarball: file:devextreme-internal-tools-16.0.0-beta.6.tgz}
+    resolution: {integrity: sha512-mkBPnX2GM7wx0khB3xfpPTlaF5g0cLPyV1pIB9FGRRyDJAVCdrimw8JCGB6DonrWFezNa5mgfM6gH8APstROVA==, tarball: file:devextreme-internal-tools-16.0.0-beta.6.tgz}
     version: 16.0.0-beta.6
     engines: {node: '>=12.0.0'}
     hasBin: true
@@ -30025,7 +30025,7 @@ snapshots:
       jest-environment-jsdom: 26.6.2
       jest-environment-node: 26.6.2
       jest-get-type: 26.3.0
-      jest-jasmine2: 26.6.3
+      jest-jasmine2: 26.6.3(ts-node@10.9.2(@swc/core@1.4.17(@swc/helpers@0.5.11))(@types/node@20.12.8)(typescript@5.4.5))
       jest-regex-util: 26.0.0
       jest-resolve: 26.6.2
       jest-util: 26.6.2
@@ -30323,7 +30323,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  jest-jasmine2@26.6.3:
+  jest-jasmine2@26.6.3(ts-node@10.9.2(@swc/core@1.4.17(@swc/helpers@0.5.11))(@types/node@20.12.8)(typescript@5.4.5)):
     dependencies:
       '@babel/traverse': 7.24.5
       '@jest/environment': 26.6.2
@@ -30344,7 +30344,11 @@ snapshots:
       pretty-format: 26.6.2
       throat: 5.0.0
     transitivePeerDependencies:
+      - bufferutil
+      - canvas
       - supports-color
+      - ts-node
+      - utf-8-validate
 
   jest-leak-detector@26.6.2:
     dependencies:
