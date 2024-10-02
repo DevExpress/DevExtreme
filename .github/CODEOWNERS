@@ -1,7 +1,7 @@
 # General d.ts files
 
-*.d.ts                          @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
-/packages/devextreme/ts/**      @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/**/*.d.ts                               @DevExpress/devextreme-apireviewers
+/packages/devextreme/ts/**                                      @DevExpress/devextreme-apireviewers
 
 # Localization strings
 
@@ -14,14 +14,14 @@
 /packages/devextreme/js/__internal/grids/**                     @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/grid_core/**                         @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/shared/**                            @DevExpress/devextreme-grids
-/packages/devextreme/js/common/grids.d.ts                       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/packages/devextreme/js/common/grids.d.ts                       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
 /packages/devextreme-scss/scss/widgets/base/_gridBase.scss      @DevExpress/devextreme-grids
 /packages/devextreme-scss/scss/widgets/generic/gridBase/**      @DevExpress/devextreme-grids
 /packages/devextreme-scss/scss/widgets/material/gridBase/**     @DevExpress/devextreme-grids
 
 ## data_grid
 
-/packages/devextreme/js/ui/data_grid.d.ts                       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/packages/devextreme/js/ui/data_grid.d.ts                       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
 /packages/devextreme/js/ui/data_grid.js                         @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/data_grid/**                         @DevExpress/devextreme-grids
 /packages/devextreme-scss/scss/widgets/base/dataGrid/**         @DevExpress/devextreme-grids
@@ -33,7 +33,7 @@
 
 ## tree_list
 
-/packages/devextreme/js/ui/tree_list.d.ts                   @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/packages/devextreme/js/ui/tree_list.d.ts                   @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
 /packages/devextreme/js/ui/tree_list.js                     @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/tree_list/**                     @DevExpress/devextreme-grids
 /packages/devextreme-scss/scss/widgets/base/treeList/**     @DevExpress/devextreme-grids
@@ -45,7 +45,7 @@
 
 ## pivot_grid
 
-/packages/devextreme/js/ui/pivot_grid.d.ts                      @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers @DevExpress/devextreme-techwriters
+/packages/devextreme/js/ui/pivot_grid.d.ts                      @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
 /packages/devextreme/js/ui/pivot_grid.js                        @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/pivot_grid/**                        @DevExpress/devextreme-grids
 /packages/devextreme-scss/scss/widgets/base/pivotGrid/**        @DevExpress/devextreme-grids

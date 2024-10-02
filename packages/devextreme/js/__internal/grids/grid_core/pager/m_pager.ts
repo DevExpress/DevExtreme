@@ -88,7 +88,7 @@ export class PagerView extends View {
       pageIndex: getPageIndex(dataController),
       pageCount: dataController.pageCount(),
       pageSize: dataController.pageSize(),
-      showPageSizes: pagerOptions.showPageSizeSelector,
+      showPageSizeSelector: pagerOptions.showPageSizeSelector,
       showInfo: pagerOptions.showInfo,
       displayMode: pagerOptions.displayMode,
       pagesNavigatorVisible: pagerOptions.visible,

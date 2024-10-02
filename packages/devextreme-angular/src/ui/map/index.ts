@@ -42,6 +42,7 @@ import { DxiCenterModule } from 'devextreme-angular/ui/nested';
 import { DxiMarkerModule } from 'devextreme-angular/ui/nested';
 import { DxiLocationModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoProviderConfigModule } from 'devextreme-angular/ui/nested';
 import { DxiRouteModule } from 'devextreme-angular/ui/nested';
 
 import { DxoMapApiKeyModule } from 'devextreme-angular/ui/map/nested';
@@ -49,6 +50,7 @@ import { DxiMapCenterModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapMarkerModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
+import { DxoMapProviderConfigModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
 
 import { DxiCenterComponent } from 'devextreme-angular/ui/nested';
@@ -269,6 +271,19 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     }
     set provider(value: MapProvider) {
         this._setOption('provider', value);
+    }
+
+
+    /**
+     * [descr:dxMapOptions.providerConfig]
+    
+     */
+    @Input()
+    get providerConfig(): { mapId?: string, useAdvancedMarkers?: boolean } {
+        return this._getOption('providerConfig');
+    }
+    set providerConfig(value: { mapId?: string, useAdvancedMarkers?: boolean }) {
+        this._setOption('providerConfig', value);
     }
 
 
@@ -544,6 +559,13 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() providerConfigChange: EventEmitter<{ mapId?: string, useAdvancedMarkers?: boolean }>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() routesChange: EventEmitter<Array<any | { color?: string, locations?: Array<any | { lat?: number, lng?: number }>, mode?: RouteMode, opacity?: number, weight?: number }>>;
 
     /**
@@ -686,6 +708,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
             { emit: 'markerIconSrcChange' },
             { emit: 'markersChange' },
             { emit: 'providerChange' },
+            { emit: 'providerConfigChange' },
             { emit: 'routesChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'tabIndexChange' },
@@ -748,12 +771,14 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxiMarkerModule,
     DxiLocationModule,
     DxoTooltipModule,
+    DxoProviderConfigModule,
     DxiRouteModule,
     DxoMapApiKeyModule,
     DxiMapCenterModule,
     DxiMapMarkerModule,
     DxiMapLocationModule,
     DxoMapTooltipModule,
+    DxoMapProviderConfigModule,
     DxiMapRouteModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -768,12 +793,14 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     DxiMarkerModule,
     DxiLocationModule,
     DxoTooltipModule,
+    DxoProviderConfigModule,
     DxiRouteModule,
     DxoMapApiKeyModule,
     DxiMapCenterModule,
     DxiMapMarkerModule,
     DxiMapLocationModule,
     DxoMapTooltipModule,
+    DxoMapProviderConfigModule,
     DxiMapRouteModule,
     DxTemplateModule
   ]

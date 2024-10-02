@@ -37,7 +37,7 @@ export default class Pager extends GridPagerWrapper {
         'visible',
         'hasKnownLastPage',
         'pagesNavigatorVisible',
-        'showPageSizes',
+        'showPageSizeSelector',
         'allowedPageSizes',
         'rtlEnabled',
         'showNavigationButtons',

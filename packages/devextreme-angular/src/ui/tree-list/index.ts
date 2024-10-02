@@ -57,6 +57,7 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoSearchModule } from 'devextreme-angular/ui/nested';
 import { DxoSelectionModule } from 'devextreme-angular/ui/nested';
 import { DxoColumnFixingModule } from 'devextreme-angular/ui/nested';
+import { DxoIconsModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -112,6 +113,7 @@ import { DxoTreeListOffsetModule } from 'devextreme-angular/ui/tree-list/nested'
 import { DxoTreeListSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColumnFixingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListIconsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTextsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListColumnModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListButtonModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -315,10 +317,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnFixing(): { enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } } {
+    get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string } } {
         return this._getOption('columnFixing');
     }
-    set columnFixing(value: { enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } }) {
+    set columnFixing(value: { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string } }) {
         this._setOption('columnFixing', value);
     }
 
@@ -1557,7 +1559,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } }>;
+    @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string } }>;
 
     /**
     
@@ -2221,6 +2223,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSearchModule,
     DxoSelectionModule,
     DxoColumnFixingModule,
+    DxoIconsModule,
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
@@ -2275,6 +2278,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSearchModule,
     DxoTreeListSelectionModule,
     DxoTreeListColumnFixingModule,
+    DxoTreeListIconsModule,
     DxoTreeListTextsModule,
     DxiTreeListColumnModule,
     DxiTreeListButtonModule,
@@ -2338,6 +2342,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSearchModule,
     DxoSelectionModule,
     DxoColumnFixingModule,
+    DxoIconsModule,
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
@@ -2392,6 +2397,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSearchModule,
     DxoTreeListSelectionModule,
     DxoTreeListColumnFixingModule,
+    DxoTreeListIconsModule,
     DxoTreeListTextsModule,
     DxiTreeListColumnModule,
     DxiTreeListButtonModule,

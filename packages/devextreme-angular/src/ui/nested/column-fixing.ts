@@ -37,10 +37,18 @@ export class DxoColumnFixingComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get texts(): { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } {
+    get icons(): { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } {
+        return this._getOption('icons');
+    }
+    set icons(value: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }) {
+        this._setOption('icons', value);
+    }
+
+    @Input()
+    get texts(): { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string } {
         return this._getOption('texts');
     }
-    set texts(value: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string }) {
+    set texts(value: { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string }) {
         this._setOption('texts', value);
     }
 

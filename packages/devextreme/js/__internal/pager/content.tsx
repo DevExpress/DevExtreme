@@ -178,7 +178,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     const {
       rtlEnabled,
       visible,
-      showPageSizes,
+      showPageSizeSelector,
       allowedPageSizesRef,
       pageSize,
       pageSizeChangedInternal,
@@ -230,7 +230,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
 
         { ...elementAttr as object }
       >
-        {showPageSizes && (
+        {showPageSizeSelector && (
           <PageSizeSelector
             rootElementRef={allowedPageSizesRef}
             isLargeDisplayMode={this.getIsLargeDisplayMode()}

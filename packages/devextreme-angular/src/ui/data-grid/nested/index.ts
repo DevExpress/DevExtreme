@@ -29,6 +29,7 @@ export * from './group-panel';
 export * from './grouping';
 export * from './header-filter';
 export * from './hide';
+export * from './icons';
 export * from './item-dxi';
 export * from './keyboard-navigation';
 export * from './label';

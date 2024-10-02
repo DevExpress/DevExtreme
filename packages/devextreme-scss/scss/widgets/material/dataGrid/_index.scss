@@ -64,12 +64,31 @@
 }
 
 .dx-datagrid-rowsview {
+  .dx-datagrid-group-row-container {
+    padding-left: $material-grid-base-cell-horizontal-padding;
+    padding-right: $material-grid-base-cell-horizontal-padding;
+    text-overflow: ellipsis;
+    display: inline-block;
+    position: sticky;
+    background-color: $datagrid-group-row-bg;
+  }
+
   .dx-row.dx-group-row:first-child {
     border-top: none;
   }
 
 
   .dx-row.dx-group-row {
+    .dx-group-cell {
+      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+        padding-left: 0;
+        padding-right: 0;
+        overflow: initial;
+        overflow-x: clip;
+        background-color: transparent;
+      }
+    }
+
     &:not(.dx-row-focused) {
       color: $datagrid-group-row-color;
       background-color: $datagrid-group-row-bg;
@@ -81,6 +100,10 @@
     td {
       border-top-color: $material-grid-base-border-color;
       border-bottom-color: $material-grid-base-border-color;
+
+      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+        background-color: $datagrid-group-row-bg;
+      }
     }
   }
 }

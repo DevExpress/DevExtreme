@@ -28,6 +28,7 @@ type AccessibleOptions = Pick<Properties,
   "onRouteAdded" |
   "onRouteRemoved" |
   "provider" |
+  "providerConfig" |
   "routes" |
   "rtlEnabled" |
   "tabIndex" |
@@ -67,6 +68,7 @@ const componentConfig = {
     onRouteAdded: Function,
     onRouteRemoved: Function,
     provider: String,
+    providerConfig: Object,
     routes: Array,
     rtlEnabled: Boolean,
     tabIndex: Number,
@@ -102,6 +104,7 @@ const componentConfig = {
     "update:onRouteAdded": null,
     "update:onRouteRemoved": null,
     "update:provider": null,
+    "update:providerConfig": null,
     "update:routes": null,
     "update:rtlEnabled": null,
     "update:tabIndex": null,
@@ -122,6 +125,7 @@ const componentConfig = {
       apiKey: { isCollectionItem: false, optionName: "apiKey" },
       center: { isCollectionItem: false, optionName: "center" },
       marker: { isCollectionItem: true, optionName: "markers" },
+      providerConfig: { isCollectionItem: false, optionName: "providerConfig" },
       route: { isCollectionItem: true, optionName: "routes" }
     };
   }
@@ -219,6 +223,25 @@ const DxMarker = defineComponent(DxMarkerConfig);
   tooltip: { isCollectionItem: false, optionName: "tooltip" }
 };
 
+const DxProviderConfigConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:mapId": null,
+    "update:useAdvancedMarkers": null,
+  },
+  props: {
+    mapId: String,
+    useAdvancedMarkers: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxProviderConfigConfig);
+
+const DxProviderConfig = defineComponent(DxProviderConfigConfig);
+
+(DxProviderConfig as any).$_optionName = "providerConfig";
+
 const DxRouteConfig = {
   emits: {
     "update:isActive": null,
@@ -274,6 +297,7 @@ export {
   DxCenter,
   DxLocation,
   DxMarker,
+  DxProviderConfig,
   DxRoute,
   DxTooltip
 };

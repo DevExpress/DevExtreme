@@ -67,6 +67,7 @@ const Map = memo(
         apiKey: { optionName: "apiKey", isCollectionItem: false },
         center: { optionName: "center", isCollectionItem: false },
         marker: { optionName: "markers", isCollectionItem: true },
+        providerConfig: { optionName: "providerConfig", isCollectionItem: false },
         route: { optionName: "routes", isCollectionItem: true }
       }), []);
 
@@ -167,6 +168,22 @@ const Marker: typeof _componentMarker & IElementDescriptor = Object.assign(_comp
 
 // owners:
 // Map
+type IProviderConfigProps = React.PropsWithChildren<{
+  mapId?: string;
+  useAdvancedMarkers?: boolean;
+}>
+const _componentProviderConfig = memo(
+  (props: IProviderConfigProps) => {
+    return React.createElement(NestedOption<IProviderConfigProps>, { ...props });
+  }
+);
+
+const ProviderConfig: typeof _componentProviderConfig & IElementDescriptor = Object.assign(_componentProviderConfig, {
+  OptionName: "providerConfig",
+})
+
+// owners:
+// Map
 type IRouteProps = React.PropsWithChildren<{
   color?: string;
   locations?: Array<Record<string, any>> | {
@@ -220,6 +237,8 @@ export {
   ILocationProps,
   Marker,
   IMarkerProps,
+  ProviderConfig,
+  IProviderConfigProps,
   Route,
   IRouteProps,
   Tooltip,
