@@ -750,7 +750,7 @@ export class ColumnsController extends modules.Controller {
           column.fixedPosition = parentBandColumns[0]?.fixedPosition ?? column.fixedPosition;
 
           if (column.fixed && column.fixedPosition !== StickyPosition.Sticky) {
-            const isDefaultCommandColumn = !!column.command && !gridCoreUtils.isCustomCommandColumn(this, column);
+            const isDefaultCommandColumn = !!column.command && !gridCoreUtils.isCustomCommandColumn(this._columns, column);
 
             let isFixedToEnd = column.fixedPosition === 'right';
 
@@ -1839,7 +1839,7 @@ export class ColumnsController extends modules.Controller {
 
   public getColumnId(column) {
     if (column.command && column.type === GROUP_COMMAND_COLUMN_NAME) {
-      if (gridCoreUtils.isCustomCommandColumn(this, column)) {
+      if (gridCoreUtils.isCustomCommandColumn(this._columns, column)) {
         return `type:${column.type}`;
       }
 

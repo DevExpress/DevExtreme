@@ -779,7 +779,7 @@ export const getRowCount = function (that: ColumnsController) {
 export const getFixedPosition = function (that: ColumnsController, column) {
   const rtlEnabled = that.option('rtlEnabled');
 
-  if (column.command && !gridCoreUtils.isCustomCommandColumn(that, column) || !column.fixedPosition) {
+  if (column.command && !gridCoreUtils.isCustomCommandColumn(that._columns, column) || !column.fixedPosition) {
     return rtlEnabled ? 'right' : 'left';
   }
 
