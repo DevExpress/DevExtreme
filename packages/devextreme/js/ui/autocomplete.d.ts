@@ -165,14 +165,6 @@ export type OptionChangedEvent = EventInfo<dxAutocomplete> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 
 /**
- * @docid _ui_autocomplete_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
- */
-export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxAutocomplete> & SelectionChangingInfo;
-
-/**
  * @docid _ui_autocomplete_SelectionChangedEvent
  * @public
  * @type object

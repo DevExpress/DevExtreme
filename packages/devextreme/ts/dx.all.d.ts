@@ -8920,12 +8920,6 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxAutocomplete> &
         DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     /**
-     * [descr:_ui_autocomplete_SelectionChangingEvent]
-     */
-    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
-      DevExpress.events.EventInfo<dxAutocomplete> &
-      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
-    /**
      * [descr:_ui_autocomplete_ValueChangedEvent]
      */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
@@ -14927,23 +14921,6 @@ declare module DevExpress.ui {
        */
       readonly selectedItem: T;
     }
-    /**
-     * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent]
-     */
-    export type SelectionChangingEvent<TComponent> =
-      DevExpress.events.AsyncCancelable &
-        DevExpress.events.EventInfo<TComponent> &
-        SelectionChangingInfo;
-    /**
-     * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo]
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export interface SelectionChangingInfo<T = any> {
-      /**
-       * [descr:_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo.selectedItem]
-       */
-      readonly selectedItem: T;
-    }
   }
   /**
    * [descr:dxDropDownListOptions]
@@ -20435,12 +20412,6 @@ declare module DevExpress.ui {
      */
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxLookup> &
       DevExpress.ui.dxDropDownList.SelectionChangedInfo;
-    /**
-     * [descr:_ui_lookup_SelectionChangingEvent]
-     */
-    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
-      DevExpress.events.EventInfo<dxLookup> &
-      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxLookup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
     /**
@@ -25028,12 +24999,6 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxSelectBox> &
         DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     /**
-     * [descr:_ui_select_box_SelectionChangingEvent]
-     */
-    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
-      DevExpress.events.EventInfo<dxSelectBox> &
-      DevExpress.ui.dxDropDownList.SelectionChangingInfo;
-    /**
      * [descr:_ui_select_box_ValueChangedEvent]
      */
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
@@ -26637,14 +26602,6 @@ declare module DevExpress.ui {
      */
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTagBox> &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<
-        string | number | any
-      >;
-    /**
-     * [descr:_ui_tag_box_SelectionChangingEvent]
-     */
-    export type SelectionChangingEvent = DevExpress.events.AsyncCancelable &
-      DevExpress.events.EventInfo<dxTagBox> &
-      DevExpress.ui.CollectionWidget.SelectionChangingInfo<
         string | number | any
       >;
     /**

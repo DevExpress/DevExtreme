@@ -129,14 +129,6 @@ export type PullRefreshEvent = EventInfo<dxLookup>;
 export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & ScrollInfo;
 
 /**
- * @docid _ui_lookup_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
- */
-export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxLookup> & SelectionChangingInfo;
-
-/**
  * @docid _ui_lookup_SelectionChangedEvent
  * @public
  * @type object

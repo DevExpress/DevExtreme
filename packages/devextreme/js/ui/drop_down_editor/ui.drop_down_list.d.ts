@@ -33,26 +33,6 @@ import {
 } from '../../common';
 
 /**
- * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
- * @hidden
- */
-export interface SelectionChangingInfo<T = any> {
-    /**
-     * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo.selectedItem
-     * @type object
-     */
-    readonly selectedItem: T;
-}
-
-/**
- * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
- */
-export type SelectionChangingEvent<TComponent> = AsyncCancelable & EventInfo<TComponent> & SelectionChangingInfo;
-
-/**
  * @docid _ui_drop_down_editor_ui_drop_down_list_SelectionChangedInfo
  * @hidden
  */

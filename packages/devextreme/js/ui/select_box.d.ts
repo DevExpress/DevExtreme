@@ -196,14 +196,6 @@ export type OptionChangedEvent = EventInfo<dxSelectBox> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 
 /**
- * @docid _ui_select_box_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
- */
-export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxSelectBox> & SelectionChangingInfo;
-
-/**
  * @docid _ui_select_box_SelectionChangedEvent
  * @public
  * @type object

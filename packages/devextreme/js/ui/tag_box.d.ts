@@ -193,14 +193,6 @@ export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
 };
 
 /**
- * @docid _ui_tag_box_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
- */
-export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxTagBox> & SelectionChangingInfo<string | number | any>;
-
-/**
  * @docid _ui_tag_box_SelectionChangedEvent
  * @public
  * @type object
