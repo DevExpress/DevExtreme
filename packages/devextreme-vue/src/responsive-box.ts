@@ -1,5 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
+import { PropType } from "vue";
 import ResponsiveBox, { Properties } from "devextreme/ui/responsive_box";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent ,} from "devextreme/ui/responsive_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -36,29 +38,29 @@ interface DxResponsiveBox extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    cols: Array,
+    cols: Array as PropType<Object[]>,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array,
+    items: Array as PropType<any[]>,
     itemTemplate: {},
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    rows: Array,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    rows: Array as PropType<Object[]>,
     rtlEnabled: Boolean,
-    screenByWidth: Function,
+    screenByWidth: Function as PropType<() => void>,
     singleColumnScreen: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
   },
   emits: {
     "update:isActive": null,
@@ -146,7 +148,7 @@ const DxItemConfig = {
   props: {
     disabled: Boolean,
     html: String,
-    location: [Array, Object],
+    location: [Array, Object] as PropType<(Object[]) | (Object)>,
     template: {},
     text: String,
     visible: Boolean

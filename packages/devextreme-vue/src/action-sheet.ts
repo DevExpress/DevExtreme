@@ -1,5 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/action_sheet";
+import { PropType } from "vue";
 import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
+import {  CancelClickEvent , ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent ,} from "devextreme/ui/action_sheet";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -44,21 +46,21 @@ const componentConfig = {
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array,
+    items: Array as PropType<any[]>,
     itemTemplate: {},
-    onCancelClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
+    onCancelClick: Function as PropType<(e: CancelClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     showCancelButton: Boolean,
     showTitle: Boolean,
@@ -66,7 +68,7 @@ const componentConfig = {
     title: String,
     usePopover: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
   },
   emits: {
     "update:isActive": null,
@@ -133,11 +135,11 @@ const DxItemConfig = {
   props: {
     disabled: Boolean,
     icon: String,
-    onClick: Function,
-    stylingMode: String,
+    onClick: Function as PropType<(e: Object) => void>,
+    stylingMode: String as PropType<"text" | "outlined" | "contained">,
     template: {},
     text: String,
-    type: String
+    type: String as PropType<"danger" | "default" | "normal" | "success">
   }
 };
 

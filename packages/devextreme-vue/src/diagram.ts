@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Diagram, { Properties } from "devextreme/ui/diagram";
+import {  ContentReadyEvent , CustomCommandEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemDblClickEvent , OptionChangedEvent , RequestEditOperationEvent , RequestLayoutUpdateEvent , SelectionChangedEvent ,} from "devextreme/ui/diagram";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -58,10 +60,10 @@ interface DxDiagram extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    autoZoomMode: String,
+    autoZoomMode: String as PropType<"fitContent" | "fitWidth" | "disabled">,
     contextMenu: Object,
     contextToolbox: Object,
-    customShapes: Array,
+    customShapes: Array as PropType<Object[]>,
     customShapeTemplate: {},
     customShapeToolboxTemplate: {},
     defaultItemProperties: Object,
@@ -73,22 +75,22 @@ const componentConfig = {
     fullScreen: Boolean,
     gridSize: [Number, Object],
     hasChanges: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     historyToolbar: Object,
     mainToolbar: Object,
     nodes: Object,
-    onContentReady: Function,
-    onCustomCommand: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemDblClick: Function,
-    onOptionChanged: Function,
-    onRequestEditOperation: Function,
-    onRequestLayoutUpdate: Function,
-    onSelectionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onCustomCommand: Function as PropType<(e: CustomCommandEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemDblClick: Function as PropType<(e: ItemDblClickEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onRequestEditOperation: Function as PropType<(e: RequestEditOperationEvent) => void>,
+    onRequestLayoutUpdate: Function as PropType<(e: RequestLayoutUpdateEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
     pageColor: String,
-    pageOrientation: String,
+    pageOrientation: String as PropType<"portrait" | "landscape">,
     pageSize: Object,
     propertiesPanel: Object,
     readOnly: Boolean,
@@ -97,12 +99,12 @@ const componentConfig = {
     simpleView: Boolean,
     snapToGrid: Boolean,
     toolbox: Object,
-    units: String,
+    units: String as PropType<"in" | "cm" | "px">,
     useNativeScrolling: Boolean,
     viewToolbar: Object,
-    viewUnits: String,
+    viewUnits: String as PropType<"in" | "cm" | "px">,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     zoomLevel: [Number, Object]
   },
   emits: {
@@ -197,8 +199,8 @@ const DxAutoLayoutConfig = {
     "update:type": null,
   },
   props: {
-    orientation: String,
-    type: String
+    orientation: String as PropType<"horizontal" | "vertical">,
+    type: String as PropType<"auto" | "off" | "tree" | "layered">
   }
 };
 
@@ -220,9 +222,9 @@ const DxCommandConfig = {
   },
   props: {
     icon: String,
-    items: Array,
-    location: String,
-    name: String,
+    items: Array as PropType<Object[] | String[]>,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String
   }
 };
@@ -246,9 +248,9 @@ const DxCommandItemConfig = {
   },
   props: {
     icon: String,
-    items: Array,
-    location: String,
-    name: String,
+    items: Array as PropType<Object[] | String[]>,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String
   }
 };
@@ -288,7 +290,7 @@ const DxContextMenuConfig = {
     "update:enabled": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Object[] | String[]>,
     enabled: Boolean
   }
 };
@@ -314,11 +316,11 @@ const DxContextToolboxConfig = {
     "update:width": null,
   },
   props: {
-    category: String,
-    displayMode: String,
+    category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
+    displayMode: String as PropType<"icons" | "texts">,
     enabled: Boolean,
     shapeIconsPerRow: Number,
-    shapes: Array,
+    shapes: Array as PropType<String[]>,
     width: Number
   }
 };
@@ -382,9 +384,9 @@ const DxCustomShapeConfig = {
     backgroundImageTop: Number,
     backgroundImageUrl: String,
     backgroundImageWidth: Number,
-    baseType: String,
+    baseType: String as PropType<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">,
     category: String,
-    connectionPoints: Array,
+    connectionPoints: Array as PropType<Object[]>,
     defaultHeight: Number,
     defaultImageUrl: String,
     defaultText: String,
@@ -439,9 +441,9 @@ const DxDefaultItemPropertiesConfig = {
     "update:textStyle": null,
   },
   props: {
-    connectorLineEnd: String,
-    connectorLineStart: String,
-    connectorLineType: String,
+    connectorLineEnd: String as PropType<"none" | "arrow" | "outlinedTriangle" | "filledTriangle">,
+    connectorLineStart: String as PropType<"none" | "arrow" | "outlinedTriangle" | "filledTriangle">,
+    connectorLineType: String as PropType<"straight" | "orthogonal">,
     shapeMaxHeight: Number,
     shapeMaxWidth: Number,
     shapeMinHeight: Number,
@@ -479,22 +481,22 @@ const DxEdgesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    customDataExpr: [Function, String],
+    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
     dataSource: {},
-    fromExpr: [Function, String],
-    fromLineEndExpr: [Function, String],
-    fromPointIndexExpr: [Function, String],
-    keyExpr: [Function, String],
-    lineTypeExpr: [Function, String],
-    lockedExpr: [Function, String],
-    pointsExpr: [Function, String],
-    styleExpr: [Function, String],
-    textExpr: [Function, String],
-    textStyleExpr: [Function, String],
-    toExpr: [Function, String],
-    toLineEndExpr: [Function, String],
-    toPointIndexExpr: [Function, String],
-    zIndexExpr: [Function, String]
+    fromExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    fromLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    fromPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    lineTypeExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    pointsExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    toExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    toLineEndExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    toPointIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>
   }
 };
 
@@ -562,7 +564,7 @@ const DxGridSizeConfig = {
     "update:value": null,
   },
   props: {
-    items: Array,
+    items: Array as PropType<Number[]>,
     value: Number
   }
 };
@@ -585,11 +587,11 @@ const DxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: String,
-    commands: Array,
-    displayMode: String,
+    category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
+    commands: Array as PropType<Object[] | String[]>,
+    displayMode: String as PropType<"icons" | "texts">,
     expanded: Boolean,
-    shapes: Array,
+    shapes: Array as PropType<String[]>,
     title: String
   }
 };
@@ -609,7 +611,7 @@ const DxHistoryToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Object[] | String[]>,
     visible: Boolean
   }
 };
@@ -638,9 +640,9 @@ const DxItemConfig = {
   props: {
     height: Number,
     icon: String,
-    items: Array,
-    location: String,
-    name: String,
+    items: Array as PropType<Object[] | String[]>,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String,
     width: Number
   }
@@ -661,7 +663,7 @@ const DxMainToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Object[] | String[]>,
     visible: Boolean
   }
 };
@@ -701,26 +703,26 @@ const DxNodesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    autoLayout: [Object, String],
+    autoLayout: [Object, String] as PropType<(Object) | ("auto" | "off" | "tree" | "layered")>,
     autoSizeEnabled: Boolean,
-    containerChildrenExpr: [Function, String],
-    containerKeyExpr: [Function, String],
-    customDataExpr: [Function, String],
+    containerChildrenExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    containerKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    customDataExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
     dataSource: {},
-    heightExpr: [Function, String],
-    imageUrlExpr: [Function, String],
-    itemsExpr: [Function, String],
-    keyExpr: [Function, String],
-    leftExpr: [Function, String],
-    lockedExpr: [Function, String],
-    parentKeyExpr: [Function, String],
-    styleExpr: [Function, String],
-    textExpr: [Function, String],
-    textStyleExpr: [Function, String],
-    topExpr: [Function, String],
-    typeExpr: [Function, String],
-    widthExpr: [Function, String],
-    zIndexExpr: [Function, String]
+    heightExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    imageUrlExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    itemsExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    keyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    leftExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    lockedExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    parentKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    styleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    textExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    textStyleExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    topExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    typeExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    widthExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>,
+    zIndexExpr: [Function, String] as PropType<((data: any, value: any) => any) | (String)>
   }
 };
 
@@ -743,7 +745,7 @@ const DxPageSizeConfig = {
   },
   props: {
     height: Number,
-    items: Array,
+    items: Array as PropType<Object[]>,
     width: Number
   }
 };
@@ -788,8 +790,8 @@ const DxPropertiesPanelConfig = {
     "update:visibility": null,
   },
   props: {
-    tabs: Array,
-    visibility: String
+    tabs: Array as PropType<Object[]>,
+    visibility: String as PropType<"auto" | "visible" | "collapsed" | "disabled">
   }
 };
 
@@ -811,8 +813,8 @@ const DxTabConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array,
-    groups: Array,
+    commands: Array as PropType<Object[] | String[]>,
+    groups: Array as PropType<Object[]>,
     title: String
   }
 };
@@ -837,7 +839,7 @@ const DxTabGroupConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Object[] | String[]>,
     title: String
   }
 };
@@ -863,10 +865,10 @@ const DxToolboxConfig = {
     "update:width": null,
   },
   props: {
-    groups: Array,
+    groups: Array as PropType<Object[]>,
     shapeIconsPerRow: Number,
     showSearch: Boolean,
-    visibility: String,
+    visibility: String as PropType<"auto" | "visible" | "collapsed" | "disabled">,
     width: Number
   }
 };
@@ -892,10 +894,10 @@ const DxToolboxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: String,
-    displayMode: String,
+    category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
+    displayMode: String as PropType<"icons" | "texts">,
     expanded: Boolean,
-    shapes: Array,
+    shapes: Array as PropType<String[]>,
     title: String
   }
 };
@@ -915,7 +917,7 @@ const DxViewToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array,
+    commands: Array as PropType<Object[] | String[]>,
     visible: Boolean
   }
 };
@@ -937,7 +939,7 @@ const DxZoomLevelConfig = {
     "update:value": null,
   },
   props: {
-    items: Array,
+    items: Array as PropType<Number[]>,
     value: Number
   }
 };

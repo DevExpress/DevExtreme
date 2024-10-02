@@ -1,7 +1,16 @@
+import { PropType } from "vue";
 import NumberBox, { Properties } from "devextreme/ui/number_box";
+import {  ChangeEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , KeyDownEvent , KeyUpEvent , OptionChangedEvent , PasteEvent , ValueChangedEvent ,} from "devextreme/ui/number_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
+import { 
+ ClickEvent  as OptionsClickEvent,
+ ContentReadyEvent  as OptionsContentReadyEvent,
+ DisposingEvent  as OptionsDisposingEvent,
+ InitializedEvent  as OptionsInitializedEvent,
+ OptionChangedEvent  as OptionsOptionChangedEvent,
+} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -68,12 +77,12 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array,
+    buttons: Array as PropType<String[] | Object[]>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    format: [Object, Function, String],
-    height: [Function, Number, String],
+    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -81,45 +90,45 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: String,
+    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
     max: Number,
     min: Number,
-    mode: String,
+    mode: String as PropType<"number" | "text" | "tel">,
     name: String,
-    onChange: Function,
-    onContentReady: Function,
-    onCopy: Function,
-    onCut: Function,
-    onDisposing: Function,
-    onEnterKey: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
-    onInitialized: Function,
-    onInput: Function,
-    onKeyDown: Function,
-    onKeyUp: Function,
-    onOptionChanged: Function,
-    onPaste: Function,
-    onValueChanged: Function,
+    onChange: Function as PropType<(e: ChangeEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onCopy: Function as PropType<(e: CopyEvent) => void>,
+    onCut: Function as PropType<(e: CutEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onEnterKey: Function as PropType<(e: EnterKeyEvent) => void>,
+    onFocusIn: Function as PropType<(e: FocusInEvent) => void>,
+    onFocusOut: Function as PropType<(e: FocusOutEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onInput: Function as PropType<(e: InputEvent) => void>,
+    onKeyDown: Function as PropType<(e: KeyDownEvent) => void>,
+    onKeyUp: Function as PropType<(e: KeyUpEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPaste: Function as PropType<(e: PasteEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
     showSpinButtons: Boolean,
     step: Number,
-    stylingMode: String,
+    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
     tabIndex: Number,
     text: String,
     useLargeSpinButtons: Boolean,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationErrors: Array as PropType<any[]>,
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: Number,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
   },
   emits: {
     "update:isActive": null,
@@ -209,7 +218,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String,
+    location: String as PropType<"after" | "before">,
     name: String,
     options: Object
   }
@@ -238,10 +247,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: Number | Date) => string>,
+    parser: Function as PropType<(value: string) => (Number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -289,25 +298,25 @@ const DxOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onClick: Function as PropType<(e: OptionsClickEvent) => void>,
+    onContentReady: Function as PropType<(e: OptionsContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: OptionsDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: OptionsInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionsOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String,
+    stylingMode: String as PropType<"text" | "outlined" | "contained">,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String,
+    type: String as PropType<"danger" | "default" | "normal" | "success">,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
   }
 };
 

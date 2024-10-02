@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Funnel, { Properties } from "devextreme/viz/funnel";
+import {  DisposingEvent , DrawnEvent , ExportedEvent , ExportingEvent , FileSavingEvent , HoverChangedEvent , IncidentOccurredEvent , InitializedEvent , ItemClickEvent , LegendClickEvent , OptionChangedEvent , SelectionChangedEvent ,} from "devextreme/viz/funnel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -55,7 +57,7 @@ interface DxFunnel extends AccessibleOptions {
 const componentConfig = {
   props: {
     adaptiveLayout: Object,
-    algorithm: String,
+    algorithm: String as PropType<"dynamicHeight" | "dynamicSlope">,
     argumentField: String,
     colorField: String,
     dataSource: {},
@@ -71,28 +73,28 @@ const componentConfig = {
     margin: Object,
     neckHeight: Number,
     neckWidth: Number,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onHoverChanged: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onLegendClick: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onHoverChanged: Function as PropType<(e: HoverChangedEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onLegendClick: Function as PropType<(e: LegendClickEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    palette: [Array, String] as PropType<(String[]) | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    paletteExtensionMode: String as PropType<"alternate" | "blend" | "extrapolate">,
     pathModified: Boolean,
     redrawOnResize: Boolean,
-    resolveLabelOverlapping: String,
+    resolveLabelOverlapping: String as PropType<"hide" | "none" | "shift">,
     rtlEnabled: Boolean,
-    selectionMode: String,
+    selectionMode: String as PropType<"single" | "multiple" | "none">,
     size: Object,
     sortData: Boolean,
-    theme: String,
+    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
     title: [Object, String],
     tooltip: Object,
     valueField: String
@@ -207,7 +209,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -259,10 +261,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<String[]>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -310,10 +312,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: Number | Date) => string>,
+    parser: Function as PropType<(value: string) => (Number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -340,14 +342,14 @@ const DxFunnelTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    verticalAlignment: String as PropType<"bottom" | "top">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -377,8 +379,8 @@ const DxFunnelTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -401,7 +403,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: String as PropType<"left" | "none" | "right">,
     opacity: Number,
     step: Number,
     width: Number
@@ -508,16 +510,16 @@ const DxLabelConfig = {
     backgroundColor: String,
     border: Object,
     connector: Object,
-    customizeText: Function,
+    customizeText: Function as PropType<(itemInfo: Object) => string>,
     font: Object,
-    format: [Object, Function, String],
-    horizontalAlignment: String,
+    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    horizontalAlignment: String as PropType<"left" | "right">,
     horizontalOffset: Number,
-    position: String,
+    position: String as PropType<"columns" | "inside" | "outside">,
     showForZeroValues: Boolean,
-    textOverflow: String,
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean,
-    wordWrap: String
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -545,7 +547,7 @@ const DxLabelBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     visible: Boolean,
     width: Number
   }
@@ -589,23 +591,23 @@ const DxLegendConfig = {
     border: Object,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function,
-    customizeItems: Function,
-    customizeText: Function,
+    customizeHint: Function as PropType<(itemInfo: Object) => string>,
+    customizeItems: Function as PropType<(items: Object[]) => Object[]>,
+    customizeText: Function as PropType<(itemInfo: Object) => string>,
     font: Object,
-    horizontalAlignment: String,
-    itemsAlignment: String,
-    itemTextPosition: String,
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    itemsAlignment: String as PropType<"center" | "left" | "right">,
+    itemTextPosition: String as PropType<"bottom" | "left" | "right" | "top">,
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: String,
+    orientation: String as PropType<"horizontal" | "vertical">,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: String,
+    verticalAlignment: String as PropType<"bottom" | "top">,
     visible: Boolean
   }
 };
@@ -638,7 +640,7 @@ const DxLegendBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String,
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -665,12 +667,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: String
+    verticalAlignment: String as PropType<"bottom" | "top">
   }
 };
 
@@ -843,8 +845,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -870,14 +872,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: [Object, Number],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    verticalAlignment: String as PropType<"bottom" | "top">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -914,10 +916,10 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<(info: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -951,7 +953,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number

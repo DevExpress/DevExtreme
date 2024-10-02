@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
+import {  ContentReadyEvent , ContextMenuPreparingEvent , DisposingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/pivot_grid_field_chooser";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -41,14 +43,14 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSearch: Boolean,
-    applyChangesMode: String,
+    applyChangesMode: String as PropType<"instantly" | "onDemand">,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
     encodeHtml: Boolean,
     focusStateEnabled: Boolean,
     headerFilter: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hint: String,
     hoverStateEnabled: Boolean,
     layout: {
@@ -59,18 +61,18 @@ const componentConfig = {
         2
       ].indexOf(v) !== -1
     },
-    onContentReady: Function,
-    onContextMenuPreparing: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onContextMenuPreparing: Function as PropType<(e: ContextMenuPreparingEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     searchTimeout: Number,
     state: {},
     tabIndex: Number,
     texts: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
   },
   emits: {
     "update:isActive": null,
@@ -217,7 +219,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String,
+    mode: String as PropType<"contains" | "startswith" | "equals">,
     timeout: Number
   }
 };

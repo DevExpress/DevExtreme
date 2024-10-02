@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import TreeMap, { Properties } from "devextreme/viz/tree_map";
+import {  ClickEvent , DisposingEvent , DrawnEvent , DrillEvent , ExportedEvent , ExportingEvent , FileSavingEvent , HoverChangedEvent , IncidentOccurredEvent , InitializedEvent , NodesInitializedEvent , NodesRenderingEvent , OptionChangedEvent , SelectionChangedEvent ,} from "devextreme/viz/tree_map";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -65,31 +67,31 @@ const componentConfig = {
     idField: String,
     interactWithGroup: Boolean,
     labelField: String,
-    layoutAlgorithm: [Function, String],
-    layoutDirection: String,
+    layoutAlgorithm: [Function, String] as PropType<((e: Object) => void) | ("sliceanddice" | "squarified" | "strip")>,
+    layoutDirection: String as PropType<"leftBottomRightTop" | "leftTopRightBottom" | "rightBottomLeftTop" | "rightTopLeftBottom">,
     loadingIndicator: Object,
     maxDepth: Number,
-    onClick: Function,
-    onDisposing: Function,
-    onDrawn: Function,
-    onDrill: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onHoverChanged: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onNodesInitialized: Function,
-    onNodesRendering: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onDrill: Function as PropType<(e: DrillEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onHoverChanged: Function as PropType<(e: HoverChangedEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onNodesInitialized: Function as PropType<(e: NodesInitializedEvent) => void>,
+    onNodesRendering: Function as PropType<(e: NodesRenderingEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
     parentField: String,
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
-    selectionMode: String,
+    selectionMode: String as PropType<"single" | "multiple" | "none">,
     size: Object,
-    theme: String,
+    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
     tile: Object,
     title: [Object, String],
     tooltip: Object,
@@ -178,7 +180,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -205,10 +207,10 @@ const DxColorizerConfig = {
   props: {
     colorCodeField: String,
     colorizeGroups: Boolean,
-    palette: [Array, String],
-    paletteExtensionMode: String,
-    range: Array,
-    type: String
+    palette: [Array, String] as PropType<(String[]) | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    paletteExtensionMode: String as PropType<"alternate" | "blend" | "extrapolate">,
+    range: Array as PropType<Number[]>,
+    type: String as PropType<"discrete" | "gradient" | "none" | "range">
   }
 };
 
@@ -234,10 +236,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<String[]>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -285,10 +287,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: Number | Date) => string>,
+    parser: Function as PropType<(value: string) => (Number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -348,7 +350,7 @@ const DxGroupLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: String,
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean
   }
 };
@@ -392,9 +394,9 @@ const DxLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: String,
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean,
-    wordWrap: String
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -532,8 +534,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -590,9 +592,9 @@ const DxTileLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: String,
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean,
-    wordWrap: String
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -621,14 +623,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    verticalAlignment: String as PropType<"bottom" | "top">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -670,10 +672,10 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<(info: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -707,7 +709,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number

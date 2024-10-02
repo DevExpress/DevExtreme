@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Map, { Properties } from "devextreme/ui/map";
+import {  ClickEvent , DisposingEvent , InitializedEvent , MarkerAddedEvent , MarkerRemovedEvent , OptionChangedEvent , ReadyEvent , RouteAddedEvent , RouteRemovedEvent ,} from "devextreme/ui/map";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -28,7 +30,6 @@ type AccessibleOptions = Pick<Properties,
   "onRouteAdded" |
   "onRouteRemoved" |
   "provider" |
-  "providerConfig" |
   "routes" |
   "rtlEnabled" |
   "tabIndex" |
@@ -48,33 +49,32 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     apiKey: [Object, String],
     autoAdjust: Boolean,
-    center: [Array, Object, String],
+    center: [Array, Object, String] as PropType<(Number[]) | (Object) | (String)>,
     controls: Boolean,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hint: String,
     hoverStateEnabled: Boolean,
     markerIconSrc: String,
-    markers: Array,
-    onClick: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onMarkerAdded: Function,
-    onMarkerRemoved: Function,
-    onOptionChanged: Function,
-    onReady: Function,
-    onRouteAdded: Function,
-    onRouteRemoved: Function,
-    provider: String,
-    providerConfig: Object,
-    routes: Array,
+    markers: Array as PropType<Object[]>,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onMarkerAdded: Function as PropType<(e: MarkerAddedEvent) => void>,
+    onMarkerRemoved: Function as PropType<(e: MarkerRemovedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onReady: Function as PropType<(e: ReadyEvent) => void>,
+    onRouteAdded: Function as PropType<(e: RouteAddedEvent) => void>,
+    onRouteRemoved: Function as PropType<(e: RouteRemovedEvent) => void>,
+    provider: String as PropType<"bing" | "google" | "googleStatic">,
+    routes: Array as PropType<Object[]>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    type: String,
+    type: String as PropType<"hybrid" | "roadmap" | "satellite">,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     zoom: Number
   },
   emits: {
@@ -104,7 +104,6 @@ const componentConfig = {
     "update:onRouteAdded": null,
     "update:onRouteRemoved": null,
     "update:provider": null,
-    "update:providerConfig": null,
     "update:routes": null,
     "update:rtlEnabled": null,
     "update:tabIndex": null,
@@ -125,7 +124,6 @@ const componentConfig = {
       apiKey: { isCollectionItem: false, optionName: "apiKey" },
       center: { isCollectionItem: false, optionName: "center" },
       marker: { isCollectionItem: true, optionName: "markers" },
-      providerConfig: { isCollectionItem: false, optionName: "providerConfig" },
       route: { isCollectionItem: true, optionName: "routes" }
     };
   }
@@ -206,8 +204,8 @@ const DxMarkerConfig = {
   },
   props: {
     iconSrc: String,
-    location: [Array, Object, String],
-    onClick: Function,
+    location: [Array, Object, String] as PropType<(Number[]) | (Object) | (String)>,
+    onClick: Function as PropType<() => void>,
     tooltip: [Object, String]
   }
 };
@@ -223,25 +221,6 @@ const DxMarker = defineComponent(DxMarkerConfig);
   tooltip: { isCollectionItem: false, optionName: "tooltip" }
 };
 
-const DxProviderConfigConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:mapId": null,
-    "update:useAdvancedMarkers": null,
-  },
-  props: {
-    mapId: String,
-    useAdvancedMarkers: Boolean
-  }
-};
-
-prepareConfigurationComponentConfig(DxProviderConfigConfig);
-
-const DxProviderConfig = defineComponent(DxProviderConfigConfig);
-
-(DxProviderConfig as any).$_optionName = "providerConfig";
-
 const DxRouteConfig = {
   emits: {
     "update:isActive": null,
@@ -254,8 +233,8 @@ const DxRouteConfig = {
   },
   props: {
     color: String,
-    locations: Array,
-    mode: String,
+    locations: Array as PropType<Object[]>,
+    mode: String as PropType<"driving" | "walking">,
     opacity: Number,
     weight: Number
   }
@@ -297,7 +276,6 @@ export {
   DxCenter,
   DxLocation,
   DxMarker,
-  DxProviderConfig,
   DxRoute,
   DxTooltip
 };

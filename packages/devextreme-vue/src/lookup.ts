@@ -1,7 +1,20 @@
+import { PropType } from "vue";
 import Lookup, { Properties } from "devextreme/ui/lookup";
+import {  ClosedEvent , ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , OpenedEvent , OptionChangedEvent , PageLoadingEvent , PullRefreshEvent , ScrollEvent , SelectionChangedEvent , SelectionChangingEvent , ValueChangedEvent ,} from "devextreme/ui/lookup";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
+import { 
+ ContentReadyEvent  as DropDownOptionsContentReadyEvent,
+ DisposingEvent  as DropDownOptionsDisposingEvent,
+ HiddenEvent  as DropDownOptionsHiddenEvent,
+ HidingEvent  as DropDownOptionsHidingEvent,
+ InitializedEvent  as DropDownOptionsInitializedEvent,
+ OptionChangedEvent  as DropDownOptionsOptionChangedEvent,
+ ShowingEvent  as DropDownOptionsShowingEvent,
+ ShownEvent  as DropDownOptionsShownEvent,
+ TitleRenderedEvent  as DropDownOptionsTitleRenderedEvent,
+} from "devextreme/ui/popover";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -98,14 +111,14 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: String,
+    applyValueMode: String as PropType<"instantly" | "useButtons">,
     cancelButtonText: String,
     cleanSearchOnOpening: Boolean,
     clearButtonText: String,
     dataSource: {},
     deferRendering: Boolean,
     disabled: Boolean,
-    displayExpr: [Function, String],
+    displayExpr: [Function, String] as PropType<((item: Object) => string) | (String)>,
     displayValue: String,
     dropDownCentered: Boolean,
     dropDownOptions: Object,
@@ -115,36 +128,36 @@ const componentConfig = {
     fullScreen: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array,
+    items: Array as PropType<any[]>,
     itemTemplate: {},
     label: String,
-    labelMode: String,
+    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
     minSearchLength: Number,
     name: String,
     nextButtonText: String,
     noDataText: String,
-    onClosed: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onOpened: Function,
-    onOptionChanged: Function,
-    onPageLoading: Function,
-    onPullRefresh: Function,
-    onScroll: Function,
-    onSelectionChanged: Function,
-    onSelectionChanging: Function,
-    onValueChanged: Function,
+    onClosed: Function as PropType<(e: ClosedEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onOpened: Function as PropType<(e: OpenedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPageLoading: Function as PropType<(e: PageLoadingEvent) => void>,
+    onPullRefresh: Function as PropType<(e: PullRefreshEvent) => void>,
+    onScroll: Function as PropType<(e: ScrollEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onSelectionChanging: Function as PropType<(e: SelectionChangingEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     opened: Boolean,
     pageLoadingText: String,
-    pageLoadMode: String,
+    pageLoadMode: String as PropType<"nextButton" | "scrollBottom">,
     placeholder: String,
     pulledDownText: String,
     pullingDownText: String,
@@ -152,8 +165,8 @@ const componentConfig = {
     refreshingText: String,
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
-    searchExpr: [Array, Function, String],
-    searchMode: String,
+    searchExpr: [Array, Function, String] as PropType<(Function[] | String[]) | (Function) | (String)>,
+    searchMode: String as PropType<"contains" | "startswith">,
     searchPlaceholder: String,
     searchStartEvent: String,
     searchTimeout: Number,
@@ -161,22 +174,22 @@ const componentConfig = {
     showCancelButton: Boolean,
     showClearButton: Boolean,
     showDataBeforeSearch: Boolean,
-    stylingMode: String,
+    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
     tabIndex: Number,
     text: String,
     useItemTextAsTitle: Boolean,
     useNativeScrolling: Boolean,
     usePopover: Boolean,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationErrors: Array as PropType<any[]>,
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: {},
     valueChangeEvent: String,
-    valueExpr: [Function, String],
+    valueExpr: [Function, String] as PropType<((item: Object) => (string | Number | Boolean)) | (String)>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     wrapItemText: Boolean
   },
   emits: {
@@ -318,8 +331,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -356,8 +369,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
+    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
   }
 };
 
@@ -416,32 +429,32 @@ const DxDropDownOptionsConfig = {
   props: {
     animation: Object,
     bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<(Boolean) | ((event: Object) => Boolean)>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
     enableBodyScroll: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hideEvent: [Object, String],
-    hideOnOutsideClick: [Boolean, Function],
+    hideOnOutsideClick: [Boolean, Function] as PropType<(Boolean) | ((event: Object) => Boolean)>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: [Object, String],
+    maxHeight: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    maxWidth: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    minHeight: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    minWidth: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    onContentReady: Function as PropType<(e: DropDownOptionsContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DropDownOptionsDisposingEvent) => void>,
+    onHidden: Function as PropType<(e: DropDownOptionsHiddenEvent) => void>,
+    onHiding: Function as PropType<(e: DropDownOptionsHidingEvent) => void>,
+    onInitialized: Function as PropType<(e: DropDownOptionsInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: DropDownOptionsOptionChangedEvent) => void>,
+    onShowing: Function as PropType<(e: DropDownOptionsShowingEvent) => void>,
+    onShown: Function as PropType<(e: DropDownOptionsShownEvent) => void>,
+    onTitleRendered: Function as PropType<(e: DropDownOptionsTitleRenderedEvent) => void>,
+    position: [Object, String] as PropType<(Object) | ("bottom" | "left" | "right" | "top") | (Object)>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
@@ -451,9 +464,9 @@ const DxDropDownOptionsConfig = {
     target: {},
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Object[]>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     wrapperAttr: {}
   }
 };
@@ -515,16 +528,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -591,8 +604,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -634,11 +647,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: [Object, String] as PropType<(Object) | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: [Object, String] as PropType<(Object) | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
+    my: [Object, String] as PropType<(Object) | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     of: {},
     offset: [Object, String]
   }
@@ -666,16 +679,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -751,16 +764,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: String as PropType<"always" | "inMenu">,
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: String as PropType<"bottom" | "top">,
     visible: Boolean,
-    widget: String
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 

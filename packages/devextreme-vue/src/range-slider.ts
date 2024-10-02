@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import RangeSlider, { Properties } from "devextreme/ui/range_slider";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/range_slider";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -57,7 +59,7 @@ const componentConfig = {
     end: Number,
     endName: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -66,11 +68,11 @@ const componentConfig = {
     label: Object,
     max: Number,
     min: Number,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showRange: Boolean,
@@ -80,14 +82,14 @@ const componentConfig = {
     tabIndex: Number,
     tooltip: Object,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
-    value: Array,
-    valueChangeMode: String,
+    validationErrors: Array as PropType<any[]>,
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    value: Array as PropType<Number[]>,
+    valueChangeMode: String as PropType<"onHandleMove" | "onHandleRelease">,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
   },
   emits: {
     "update:isActive": null,
@@ -165,10 +167,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: Number | Date) => string>,
+    parser: Function as PropType<(value: string) => (Number | Date)>,
     precision: Number,
-    type: String,
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -188,8 +190,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    format: [Object, Function, String],
-    position: String,
+    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    position: String as PropType<"bottom" | "top">,
     visible: Boolean
   }
 };
@@ -214,9 +216,9 @@ const DxTooltipConfig = {
   },
   props: {
     enabled: Boolean,
-    format: [Object, Function, String],
-    position: String,
-    showMode: String
+    format: [Object, Function, String] as PropType<(Object) | ((value: Number | Date) => string) | (Object) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    position: String as PropType<"bottom" | "top">,
+    showMode: String as PropType<"always" | "onHover">
   }
 };
 

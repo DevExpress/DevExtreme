@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Draggable, { Properties } from "devextreme/ui/draggable";
+import {  DisposingEvent , DragEndEvent , DragMoveEvent , DragStartEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/draggable";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -40,22 +42,22 @@ const componentConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: String,
+    dragDirection: String as PropType<"both" | "horizontal" | "vertical">,
     dragTemplate: {},
     elementAttr: Object,
     group: String,
     handle: String,
-    height: [Function, Number, String],
-    onDisposing: Function,
-    onDragEnd: Function,
-    onDragMove: Function,
-    onDragStart: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    height: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDragEnd: Function as PropType<(e: DragEndEvent) => void>,
+    onDragMove: Function as PropType<(e: DragMoveEvent) => void>,
+    onDragStart: Function as PropType<(e: DragStartEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (Number | string)) | (Number) | (String)>
   },
   emits: {
     "update:isActive": null,
