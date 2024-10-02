@@ -1,6 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -84,7 +85,7 @@ class Avatar extends Widget<Properties> {
     const { name } = this.option();
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._$content?.attr('alt', name || 'Avatar');
+    this._$content?.attr('alt', name || messageLocalization.format('dxAvatar-defaultImageAlt'));
   }
 
   _isValuableUrl(): boolean {

@@ -2,6 +2,10 @@ import registerComponent from '@js/core/component_registrator';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
+import type { Options as DataSourceOptions } from '@js/data/data_source';
+import DataHelperMixin from '@js/data_helper';
+import messageLocalization from '@js/localization/message';
 import type { Message, MessageSendEvent, Properties as ChatProperties } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -45,7 +49,25 @@ class Chat extends Widget<Properties> {
   _init(): void {
     super._init();
 
+    // @ts-expect-error
+    this._initDataController();
+
+    // @ts-expect-error
+    this._refreshDataSource();
+
     this._createMessageSendAction();
+  }
+
+  _dataSourceLoadErrorHandler(): void {
+    this.option('items', []);
+  }
+
+  _dataSourceChangedHandler(newItems: Message[]): void {
+    this.option('items', newItems.slice());
+  }
+
+  _dataSourceOptions(): DataSourceOptions {
+    return { paginate: false };
   }
 
   _initMarkup(): void {
@@ -61,6 +83,9 @@ class Chat extends Widget<Properties> {
 
     this._renderMessageList();
     this._renderMessageBox();
+
+    this._updateRootAria();
+    this._updateMessageBoxAria();
   }
 
   _renderHeader(title: string): void {
@@ -107,6 +132,21 @@ class Chat extends Widget<Properties> {
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
+  }
+
+  _updateRootAria(): void {
+    const aria = {
+      role: 'group',
+      label: messageLocalization.format('dxChat-elementAriaLabel'),
+    };
+
+    this.setAria(aria, this.$element());
+  }
+
+  _updateMessageBoxAria(): void {
+    const emptyViewId = this._messageList.getEmptyViewId();
+
+    this._messageBox.updateInputAria(emptyViewId);
   }
 
   _createMessageSendAction(): void {
@@ -165,8 +205,12 @@ class Chat extends Widget<Properties> {
         break;
       }
       case 'items':
-      case 'dataSource':
         this._messageList.option(name, value);
+        this._updateMessageBoxAria();
+        break;
+      case 'dataSource':
+        // @ts-expect-error
+        this._refreshDataSource();
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
@@ -176,14 +220,30 @@ class Chat extends Widget<Properties> {
     }
   }
 
-  renderMessage(message: Message = {}): void {
+  _insertNewItem(item: Message): void {
     const { items } = this.option();
 
-    const newItems = [...items ?? [], message];
-
+    const newItems = [...items ?? [], item];
     this.option('items', newItems);
   }
+
+  renderMessage(message: Message = {}): void {
+    // @ts-expect-error
+    const dataSource = this.getDataSource();
+
+    if (!isDefined(dataSource)) {
+      this._insertNewItem(message);
+      return;
+    }
+
+    dataSource.store().insert(message).done(() => {
+      this._insertNewItem(message);
+    });
+  }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(Chat as any).include(DataHelperMixin);
 
 registerComponent('dxChat', Chat);
 

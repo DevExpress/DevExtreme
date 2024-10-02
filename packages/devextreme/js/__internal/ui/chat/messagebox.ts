@@ -1,5 +1,6 @@
 import $ from '@js/core/renderer';
 import type { NativeEventInfo } from '@js/events';
+import messageLocalization from '@js/localization/message';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -60,12 +61,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._renderButton();
   }
 
-  _isValuableTextEntered(): boolean {
-    const { text } = this._textArea.option();
-
-    return !!text?.trim();
-  }
-
   _renderTextArea(): void {
     const {
       activeStateEnabled,
@@ -82,7 +77,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled,
       hoverStateEnabled,
       stylingMode: 'outlined',
-      placeholder: 'Type a message',
+      placeholder: messageLocalization.format('dxChat-textareaPlaceholder'),
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '8em',
@@ -124,6 +119,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       type: 'default',
       stylingMode: 'text',
       disabled: true,
+      elementAttr: { 'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel') },
       onClick: (e): void => {
         this._sendHandler(e);
       },
@@ -154,6 +150,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._button.option('disabled', state);
   }
 
+  _isValuableTextEntered(): boolean {
+    const { text } = this._textArea.option();
+
+    return !!text?.trim();
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value } = args;
 
@@ -172,6 +174,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  updateInputAria(emptyViewId: string | null): void {
+    this._textArea.option({
+      inputAttr: {
+        'aria-labelledby': emptyViewId,
+      },
+    });
   }
 }
 

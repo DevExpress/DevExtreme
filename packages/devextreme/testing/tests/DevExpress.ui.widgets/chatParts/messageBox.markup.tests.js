@@ -47,4 +47,12 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual($button.hasClass(CHAT_MESSAGEBOX_BUTTON_CLASS), true);
         });
     });
+
+    QUnit.module('Accessibility', moduleConfig, () => {
+        QUnit.test('send button should have correct aria-label', function(assert) {
+            const $button = this.$element.find(`.${BUTTON_CLASS}`);
+
+            assert.strictEqual($button.attr('aria-label'), 'Send');
+        });
+    });
 });
