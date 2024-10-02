@@ -9,14 +9,14 @@
       "options": {
         "script": "build"
       },
-      "outputs": ["{projectRoot}/storybook-static"]
+      "outputs": ["storybook-static"]
     },
     "start": {
       "executor": "nx:run-script",
       "options": {
         "script": "start"
       },
-      "dependsOn": ["^build"]
+      "dependsOn": []
     }
   },
   "tags": []

@@ -1,3 +1,4 @@
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
@@ -59,6 +60,7 @@ class MessageList extends Widget<Properties> {
 
     this._renderScrollable();
     this._renderMessageListContent();
+    this._updateAria();
   }
 
   _renderContentImpl(): void {
@@ -102,7 +104,8 @@ class MessageList extends Widget<Properties> {
 
   _renderEmptyViewContent(): void {
     const $emptyView = $('<div>')
-      .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS);
+      .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS)
+      .attr('id', `dx-${new Guid()}`);
 
     $('<div>')
       .appendTo($emptyView)
@@ -242,12 +245,6 @@ class MessageList extends Widget<Properties> {
     return $(this._scrollable.element()).find(`.${SCROLLABLE_CONTAINER_CLASS}`).get(0);
   }
 
-  _clean(): void {
-    this._messageGroups = [];
-
-    super._clean();
-  }
-
   _isMessageAddedToEnd(value: Message[], previousValue: Message[]): boolean {
     const valueLength = value.length;
     const previousValueLength = previousValue.length;
@@ -301,6 +298,24 @@ class MessageList extends Widget<Properties> {
     return result;
   }
 
+  _updateAria(): void {
+    const aria = {
+      role: 'log',
+      atomic: 'false',
+      label: 'Message list',
+      live: 'polite',
+      relevant: 'additions',
+    };
+
+    this.setAria(aria);
+  }
+
+  _clean(): void {
+    this._messageGroups = [];
+
+    super._clean();
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name, value, previousValue } = args;
 
@@ -314,6 +329,17 @@ class MessageList extends Widget<Properties> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  getEmptyViewId(): string | null {
+    if (this._isEmpty()) {
+      const $emptyView = this._$content().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+      const emptyViewId = $emptyView.attr('id') ?? null;
+
+      return emptyViewId;
+    }
+
+    return null;
   }
 }
 
