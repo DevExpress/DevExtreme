@@ -124,7 +124,7 @@ QUnit.module('rendering', () => {
         }
     });
 
-    QUnit.test('multiview items.visible option should always be default to true', function(assert) {
+    QUnit.test('item should be visible if no item.visible property is specified', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
                 { text: '1' }
@@ -135,7 +135,7 @@ QUnit.module('rendering', () => {
         assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
     });
 
-    QUnit.test('multiview should not render items those that are option visible is false', function(assert) {
+    QUnit.test('items with visible=false should be hidden', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
                 { text: '1', visible: true },
@@ -146,17 +146,6 @@ QUnit.module('rendering', () => {
 
         assert.notOk($items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'first item is visible');
         assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'second item is hidden');
-    });
-
-    QUnit.test('when all items are not visible selectIndex should be 0', function(assert) {
-        const multiView = $('#multiView').dxMultiView({
-            items: [
-                { text: '1', visible: false },
-                { text: '2', visible: false }
-            ]
-        }).dxMultiView('instance');
-
-        assert.strictEqual(multiView.option('selectedIndex'), 0, 'selectedIndex is back at 0');
     });
 
     QUnit.test('multiView should trigger resize event for item content after item visibility changed', function(assert) {
@@ -522,12 +511,48 @@ QUnit.module('interaction via swipe', {
                 { text: '2', visible: false }
             ]
         });
+        const instance = $multiView.dxMultiView('instance');
         const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
         const pointer = pointerMock($multiView);
 
-        pointer.start().swipeStart().swipe(-0.1);
+        pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
         assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        pointer.swipeEnd();
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+    });
+
+    QUnit.test('swiping right should skip hidden items', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true }
+            ]
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
+        assert.strictEqual(position($itemContainer), $itemContainer.width() / 10, 'container did move');
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+    });
+
+    QUnit.test('swiping left should skip hidden items', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true }
+            ],
+            selectedIndex: 2
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const pointer = pointerMock($multiView);
+
+        pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
+        assert.strictEqual(position($itemContainer), -$itemContainer.width() / 10, 'container did move');
+        assert.strictEqual(instance.option('selectedIndex'), 2, 'selectedIndex is not changed');
     });
 
     QUnit.test('item container should not be moved by swipe if items count less then 2', function(assert) {
@@ -799,20 +824,21 @@ QUnit.module('loop', {
             ],
             loop: true
         });
+        const instance = $multiView.dxMultiView('instance');
         const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
         const pointer = pointerMock($multiView);
 
-        pointer.start().swipeStart().swipe(-0.1);
+        pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
         assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        pointer.swipeEnd();
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex does not change');
     });
 
     QUnit.test('when swiping left on the first item, show last visible item', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
                 { text: '1', visible: true },
-                { text: '2', visible: false },
-                { text: '3', visible: true }
+                { text: '2', visible: true },
+                { text: '3', visible: false }
             ],
             loop: true
         });
@@ -821,14 +847,14 @@ QUnit.module('loop', {
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
 
-        assert.strictEqual(instance.option('selectedIndex'), 2, 'Correct item is shown after swiping left');
+        assert.strictEqual(instance.option('selectedIndex'), 1, 'Correct item is shown after swiping left');
     });
 
     QUnit.test('when swiping right on the last item, show first visible item', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
-                { text: '1', visible: true },
-                { text: '2', visible: false },
+                { text: '1', visible: false },
+                { text: '2', visible: true },
                 { text: '3', visible: true }
             ],
             loop: true,
@@ -839,7 +865,7 @@ QUnit.module('loop', {
 
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
 
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'Correct item is shown after swiping right');
+        assert.strictEqual(instance.option('selectedIndex'), 1, 'Correct item is shown after swiping right');
     });
 
     QUnit.test('item container should be moved right if selected index is 0', function(assert) {

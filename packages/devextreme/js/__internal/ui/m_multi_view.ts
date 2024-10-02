@@ -113,7 +113,7 @@ const MultiView = CollectionWidget.inherit({
     const step = this._swipeDirection > 0 ? -1 : 1;
 
     while (!this._isItemVisible(index)) {
-      index = (index + step + count) % count;
+      index = (index + step) % count;
     }
 
     return index;
@@ -146,10 +146,6 @@ const MultiView = CollectionWidget.inherit({
     this._deferredItems = [];
 
     this.callBase();
-
-    // const keys = this.option('items').find(item => item.visible === true || item.visible === undefined);
-    // const selectedItemIndices = this._getSelectedItemIndices([keys]);
-    // this.option('selectedIndex', selectedItemIndices[0]);
 
     const selectedItemIndices = this._getSelectedItemIndices();
 
@@ -271,7 +267,7 @@ const MultiView = CollectionWidget.inherit({
   },
 
   _isItemVisible(index) {
-    return this.option('items')[index].visible ?? true;
+    return this.option('items')[index]?.visible ?? true;
   },
 
   _updateItemsVisibility(selectedIndex, newIndex) {
@@ -410,10 +406,11 @@ const MultiView = CollectionWidget.inherit({
     const selectedIndex = this.option('selectedIndex');
     const newIndex = this._normalizeIndex(selectedIndex - swipeDirection);
 
-    if (selectedIndex !== newIndex) {
-      _translator.move(this._$itemContainer, offset * this._itemWidth());
+    if (selectedIndex === newIndex) {
+      return;
     }
 
+    _translator.move(this._$itemContainer, offset * this._itemWidth());
     this._updateItems(selectedIndex, newIndex);
   },
 
