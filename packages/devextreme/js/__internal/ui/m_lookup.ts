@@ -560,6 +560,14 @@ const Lookup = DropDownList.inherit({
     this._popup.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
   },
 
+  _focusOutHandler(): void {
+    debugger;
+  },
+
+  _focusOutPopupHandler(): void {
+    debugger;
+  },
+
   _renderPopover() {
     this._popup = this._createComponent(this._$popup, Popover, extend(
       this._popupConfig(),
@@ -586,6 +594,7 @@ const Lookup = DropDownList.inherit({
       hiding: this._popupHidingHandler.bind(this),
       hidden: this._popupHiddenHandler.bind(this),
       contentReady: this._contentReadyHandler.bind(this),
+      focusout: this._focusOutPopupHandler.bind(this),
     });
 
     if (this.option('_scrollToSelectedItemEnabled')) this._popup._$arrow.remove();

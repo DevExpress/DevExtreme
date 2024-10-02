@@ -288,7 +288,7 @@ class Menu extends MenuBase {
     this._initAdaptivity();
   }
 
-  _isTargetOutOfComponent(relatedTarget): boolean {
+  _isTargetOutOfComponent(relatedTarget: Element): boolean {
     const isInsideRootMenu = $(relatedTarget).closest(`.${DX_MENU_CLASS}`).length !== 0;
     const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
@@ -297,18 +297,8 @@ class Menu extends MenuBase {
     return isTargetOutOfComponent;
   }
 
-  _focusOutHandler(e) {
-    const { relatedTarget } = e;
-
-    if (relatedTarget) {
-      const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
-
-      if (isTargetOutside) {
-        this._hideVisibleSubmenu();
-      }
-    }
-
-    super._focusOutHandler(e);
+  _hideOnFocusOut(): void {
+    this._hideVisibleSubmenu();
   }
 
   _renderHamburgerButton(): Element {
