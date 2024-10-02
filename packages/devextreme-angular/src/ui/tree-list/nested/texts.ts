@@ -53,11 +53,11 @@ export class DxoTreeListTextsComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get stickPosition(): string {
-        return this._getOption('stickPosition');
+    get stickyPosition(): string {
+        return this._getOption('stickyPosition');
     }
-    set stickPosition(value: string) {
-        this._setOption('stickPosition', value);
+    set stickyPosition(value: string) {
+        this._setOption('stickyPosition', value);
     }
 
     @Input()
