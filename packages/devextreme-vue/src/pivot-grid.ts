@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import PivotGrid, { Properties } from "devextreme/ui/pivot_grid";
+import {  CellClickEvent , CellPreparedEvent , ContentReadyEvent , ContextMenuPreparingEvent , DisposingEvent , ExportingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/pivot_grid";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -56,7 +58,7 @@ const componentConfig = {
     allowFiltering: Boolean,
     allowSorting: Boolean,
     allowSortingBySummary: Boolean,
-    dataFieldArea: {},
+    dataFieldArea: String as PropType<"column" | "row">,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -65,19 +67,19 @@ const componentConfig = {
     fieldChooser: Object,
     fieldPanel: Object,
     headerFilter: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hideEmptySummaryCells: Boolean,
     hint: String,
     loadPanel: Object,
-    onCellClick: Function,
-    onCellPrepared: Function,
-    onContentReady: Function,
-    onContextMenuPreparing: Function,
-    onDisposing: Function,
-    onExporting: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    rowHeaderLayout: {},
+    onCellClick: Function as PropType<(e: CellClickEvent) => void>,
+    onCellPrepared: Function as PropType<(e: CellPreparedEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onContextMenuPreparing: Function as PropType<(e: ContextMenuPreparingEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    rowHeaderLayout: String as PropType<"standard" | "tree">,
     rtlEnabled: Boolean,
     scrolling: Object,
     showBorders: Boolean,
@@ -85,12 +87,12 @@ const componentConfig = {
     showColumnTotals: Boolean,
     showRowGrandTotals: Boolean,
     showRowTotals: Boolean,
-    showTotalsPrior: {},
+    showTotalsPrior: String as PropType<"both" | "columns" | "none" | "rows">,
     stateStoring: Object,
     tabIndex: Number,
     texts: Object,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -197,10 +199,17 @@ const DxFieldChooserConfig = {
   },
   props: {
     allowSearch: Boolean,
-    applyChangesMode: {},
+    applyChangesMode: String as PropType<"instantly" | "onDemand">,
     enabled: Boolean,
     height: Number,
-    layout: {},
+    layout: {
+      type: Number,
+      validator: (v) => typeof(v) !== "number" || [
+        0,
+        1,
+        2
+      ].indexOf(v) !== -1
+    },
     searchTimeout: Number,
     texts: Object,
     title: String,
@@ -434,8 +443,8 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    mode: {},
-    useNative: {}
+    mode: String as PropType<"standard" | "virtual">,
+    useNative: [Boolean, String] as PropType<Boolean | "auto">
   }
 };
 
@@ -457,7 +466,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: {},
+    mode: String as PropType<"contains" | "startswith" | "equals">,
     timeout: Number
   }
 };
@@ -480,12 +489,12 @@ const DxStateStoringConfig = {
     "update:type": null,
   },
   props: {
-    customLoad: Function,
-    customSave: Function,
+    customLoad: Function as PropType<() => any>,
+    customSave: Function as PropType<(state: Object) => void>,
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: {}
+    type: String as PropType<"custom" | "localStorage" | "sessionStorage">
   }
 };
 

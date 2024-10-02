@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import ButtonGroup, { Properties } from "devextreme/ui/button_group";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , OptionChangedEvent , SelectionChangedEvent ,} from "devextreme/ui/button_group";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -43,25 +45,25 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array,
-    keyExpr: [Function, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
+    items: Array as PropType<Array<Object>>,
+    keyExpr: [Function, String] as PropType<(() => void) | string>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    selectedItemKeys: Array,
-    selectedItems: Array,
-    selectionMode: {},
-    stylingMode: {},
+    selectedItemKeys: Array as PropType<Array<any>>,
+    selectedItems: Array as PropType<Array<any>>,
+    selectionMode: String as PropType<"single" | "multiple" | "none">,
+    stylingMode: String as PropType<"text" | "outlined" | "contained">,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -131,7 +133,7 @@ const DxItemConfig = {
     icon: String,
     template: {},
     text: String,
-    type: {},
+    type: String as PropType<"danger" | "default" | "normal" | "success">,
     visible: Boolean
   }
 };

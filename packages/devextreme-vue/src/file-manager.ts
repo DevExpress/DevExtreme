@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import FileManager, { Properties } from "devextreme/ui/file_manager";
+import {  ContentReadyEvent , ContextMenuItemClickEvent , ContextMenuShowingEvent , CurrentDirectoryChangedEvent , DirectoryCreatedEvent , DirectoryCreatingEvent , DisposingEvent , ErrorOccurredEvent , FileUploadedEvent , FileUploadingEvent , FocusedItemChangedEvent , InitializedEvent , ItemCopiedEvent , ItemCopyingEvent , ItemDeletedEvent , ItemDeletingEvent , ItemDownloadingEvent , ItemMovedEvent , ItemMovingEvent , ItemRenamedEvent , ItemRenamingEvent , OptionChangedEvent , SelectedFileOpenedEvent , SelectionChangedEvent , ToolbarItemClickEvent ,} from "devextreme/ui/file_manager";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -67,57 +69,57 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    allowedFileExtensions: Array,
+    allowedFileExtensions: Array as PropType<Array<string>>,
     contextMenu: Object,
     currentPath: String,
-    currentPathKeys: Array,
-    customizeDetailColumns: Function,
-    customizeThumbnail: Function,
+    currentPathKeys: Array as PropType<Array<string>>,
+    customizeDetailColumns: Function as PropType<(columns: Array<Object>) => Array<Object>>,
+    customizeThumbnail: Function as PropType<(fileSystemItem: Object) => string>,
     disabled: Boolean,
     elementAttr: Object,
     fileSystemProvider: {},
     focusedItemKey: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     itemView: Object,
     notifications: Object,
-    onContentReady: Function,
-    onContextMenuItemClick: Function,
-    onContextMenuShowing: Function,
-    onCurrentDirectoryChanged: Function,
-    onDirectoryCreated: Function,
-    onDirectoryCreating: Function,
-    onDisposing: Function,
-    onErrorOccurred: Function,
-    onFileUploaded: Function,
-    onFileUploading: Function,
-    onFocusedItemChanged: Function,
-    onInitialized: Function,
-    onItemCopied: Function,
-    onItemCopying: Function,
-    onItemDeleted: Function,
-    onItemDeleting: Function,
-    onItemDownloading: Function,
-    onItemMoved: Function,
-    onItemMoving: Function,
-    onItemRenamed: Function,
-    onItemRenaming: Function,
-    onOptionChanged: Function,
-    onSelectedFileOpened: Function,
-    onSelectionChanged: Function,
-    onToolbarItemClick: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onContextMenuItemClick: Function as PropType<(e: ContextMenuItemClickEvent) => void>,
+    onContextMenuShowing: Function as PropType<(e: ContextMenuShowingEvent) => void>,
+    onCurrentDirectoryChanged: Function as PropType<(e: CurrentDirectoryChangedEvent) => void>,
+    onDirectoryCreated: Function as PropType<(e: DirectoryCreatedEvent) => void>,
+    onDirectoryCreating: Function as PropType<(e: DirectoryCreatingEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onErrorOccurred: Function as PropType<(e: ErrorOccurredEvent) => void>,
+    onFileUploaded: Function as PropType<(e: FileUploadedEvent) => void>,
+    onFileUploading: Function as PropType<(e: FileUploadingEvent) => void>,
+    onFocusedItemChanged: Function as PropType<(e: FocusedItemChangedEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemCopied: Function as PropType<(e: ItemCopiedEvent) => void>,
+    onItemCopying: Function as PropType<(e: ItemCopyingEvent) => void>,
+    onItemDeleted: Function as PropType<(e: ItemDeletedEvent) => void>,
+    onItemDeleting: Function as PropType<(e: ItemDeletingEvent) => void>,
+    onItemDownloading: Function as PropType<(e: ItemDownloadingEvent) => void>,
+    onItemMoved: Function as PropType<(e: ItemMovedEvent) => void>,
+    onItemMoving: Function as PropType<(e: ItemMovingEvent) => void>,
+    onItemRenamed: Function as PropType<(e: ItemRenamedEvent) => void>,
+    onItemRenaming: Function as PropType<(e: ItemRenamingEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onSelectedFileOpened: Function as PropType<(e: SelectedFileOpenedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onToolbarItemClick: Function as PropType<(e: ToolbarItemClickEvent) => void>,
     permissions: Object,
     rootFolderName: String,
     rtlEnabled: Boolean,
-    selectedItemKeys: Array,
-    selectionMode: {},
+    selectedItemKeys: Array as PropType<Array<string>>,
+    selectionMode: String as PropType<"single" | "multiple">,
     tabIndex: Number,
     toolbar: Object,
     upload: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -217,14 +219,14 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: {},
+    alignment: String as PropType<"center" | "left" | "right">,
     caption: String,
     cssClass: String,
     dataField: String,
-    dataType: {},
+    dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
     hidingPriority: Number,
     sortIndex: Number,
-    sortOrder: {},
+    sortOrder: String as PropType<"asc" | "desc">,
     visible: Boolean,
     visibleIndex: Number,
     width: [Number, String]
@@ -245,7 +247,7 @@ const DxContextMenuConfig = {
     "update:items": null,
   },
   props: {
-    items: Array
+    items: Array as PropType<Array<Object> | Array<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">>
   }
 };
 
@@ -279,8 +281,8 @@ const DxContextMenuItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array,
-    name: {},
+    items: Array as PropType<Array<Object>>,
+    name: String as PropType<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">,
     selectable: Boolean,
     selected: Boolean,
     text: String,
@@ -302,7 +304,7 @@ const DxDetailsConfig = {
     "update:columns": null,
   },
   props: {
-    columns: Array
+    columns: Array as PropType<Array<Object> | Array<string>>
   }
 };
 
@@ -335,14 +337,14 @@ const DxFileSelectionItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    locateInMenu: {},
-    location: {},
-    name: {},
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">,
     options: {},
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     text: String,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 
@@ -380,17 +382,17 @@ const DxItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    items: Array,
-    locateInMenu: {},
-    location: {},
-    name: {},
+    items: Array as PropType<Array<Object>>,
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete" | "showNavPane" | "switchView" | "clearSelection" | "separator">,
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     text: String,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 
@@ -412,7 +414,7 @@ const DxItemViewConfig = {
   },
   props: {
     details: Object,
-    mode: {},
+    mode: String as PropType<"details" | "thumbnails">,
     showFolders: Boolean,
     showParentFolder: Boolean
   }
@@ -483,8 +485,8 @@ const DxToolbarConfig = {
     "update:items": null,
   },
   props: {
-    fileSelectionItems: Array,
-    items: Array
+    fileSelectionItems: Array as PropType<Array<Object> | Array<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>,
+    items: Array as PropType<Array<Object> | Array<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>
   }
 };
 
@@ -519,14 +521,14 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    locateInMenu: {},
-    location: {},
-    name: {},
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">,
     options: {},
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     text: String,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 

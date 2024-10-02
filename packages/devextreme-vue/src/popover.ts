@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Popover, { Properties } from "devextreme/ui/popover";
+import {  ContentReadyEvent , DisposingEvent , HiddenEvent , HidingEvent , InitializedEvent , OptionChangedEvent , ShowingEvent , ShownEvent , TitleRenderedEvent ,} from "devextreme/ui/popover";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -53,32 +55,32 @@ interface DxPopover extends AccessibleOptions {
 const componentConfig = {
   props: {
     animation: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
     enableBodyScroll: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hideEvent: [Object, String],
-    hideOnOutsideClick: [Boolean, Function],
+    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: {},
+    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onHidden: Function as PropType<(e: HiddenEvent) => void>,
+    onHiding: Function as PropType<(e: HidingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onShowing: Function as PropType<(e: ShowingEvent) => void>,
+    onShown: Function as PropType<(e: ShownEvent) => void>,
+    onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
+    position: [Object, String] as PropType<Object | ("bottom" | "left" | "right" | "top") | Object>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
@@ -88,9 +90,9 @@ const componentConfig = {
     target: {},
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<Object>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapperAttr: {}
   },
   emits: {
@@ -191,8 +193,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -229,8 +231,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
+    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
   }
 };
 
@@ -284,16 +286,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -334,8 +336,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -377,11 +379,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: {},
+    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: {},
-    my: {},
+    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
+    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     of: {},
     offset: [Object, String]
   }
@@ -409,16 +411,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -494,16 +496,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: {},
-    location: {},
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
     options: {},
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     template: {},
     text: String,
-    toolbar: {},
+    toolbar: String as PropType<"bottom" | "top">,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 

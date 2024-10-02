@@ -1,5 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
+import { PropType } from "vue";
 import TileView, { Properties } from "devextreme/ui/tile_view";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent ,} from "devextreme/ui/tile_view";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -48,31 +50,31 @@ const componentConfig = {
     baseItemHeight: Number,
     baseItemWidth: Number,
     dataSource: {},
-    direction: {},
+    direction: String as PropType<"horizontal" | "vertical">,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     itemMargin: Number,
-    items: Array,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     noDataText: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    showScrollbar: {},
+    showScrollbar: String as PropType<"always" | "never" | "onHover" | "onScroll">,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

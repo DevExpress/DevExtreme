@@ -1,5 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/splitter";
+import { PropType } from "vue";
 import Splitter, { Properties } from "devextreme/ui/splitter";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemCollapsedEvent , ItemContextMenuEvent , ItemExpandedEvent , ItemRenderedEvent , OptionChangedEvent , ResizeEvent , ResizeEndEvent , ResizeStartEvent ,} from "devextreme/ui/splitter";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -42,27 +44,27 @@ const componentConfig = {
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hoverStateEnabled: Boolean,
-    items: Array,
+    items: Array as PropType<Array<Object>>,
     itemTemplate: {},
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemCollapsed: Function,
-    onItemContextMenu: Function,
-    onItemExpanded: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    orientation: {},
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemCollapsed: Function as PropType<(e: ItemCollapsedEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemExpanded: Function as PropType<(e: ItemExpandedEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onResize: Function as PropType<(e: ResizeEvent) => void>,
+    onResizeEnd: Function as PropType<(e: ResizeEndEvent) => void>,
+    onResizeStart: Function as PropType<(e: ResizeStartEvent) => void>,
+    orientation: String as PropType<"horizontal" | "vertical">,
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

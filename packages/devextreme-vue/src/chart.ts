@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Chart, { Properties } from "devextreme/viz/chart";
+import {  ArgumentAxisClickEvent , DisposingEvent , DoneEvent , DrawnEvent , ExportedEvent , ExportingEvent , FileSavingEvent , IncidentOccurredEvent , InitializedEvent , LegendClickEvent , OptionChangedEvent , PointClickEvent , PointHoverChangedEvent , PointSelectionChangedEvent , SeriesClickEvent , SeriesHoverChangedEvent , SeriesSelectionChangedEvent , TooltipHiddenEvent , TooltipShownEvent , ZoomEndEvent , ZoomStartEvent ,} from "devextreme/viz/chart";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -87,7 +89,7 @@ const componentConfig = {
     adaptiveLayout: Object,
     adjustOnZoom: Boolean,
     animation: [Boolean, Object],
-    annotations: Array,
+    annotations: Array as PropType<Array<any> | Array<Object>>,
     argumentAxis: Object,
     autoHidePointMarkers: Boolean,
     barGroupPadding: Number,
@@ -98,9 +100,9 @@ const componentConfig = {
     commonSeriesSettings: Object,
     containerBackgroundColor: String,
     crosshair: Object,
-    customizeAnnotation: Function,
-    customizeLabel: Function,
-    customizePoint: Function,
+    customizeAnnotation: Function as PropType<(annotation: Object | any) => Object>,
+    customizeLabel: Function as PropType<(pointInfo: Object) => Object>,
+    customizePoint: Function as PropType<(pointInfo: Object) => Object>,
     dataPrepareSettings: Object,
     dataSource: {},
     defaultPane: String,
@@ -113,48 +115,48 @@ const componentConfig = {
     maxBubbleSize: Number,
     minBubbleSize: Number,
     negativesAsZeroes: Boolean,
-    onArgumentAxisClick: Function,
-    onDisposing: Function,
-    onDone: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onLegendClick: Function,
-    onOptionChanged: Function,
-    onPointClick: Function,
-    onPointHoverChanged: Function,
-    onPointSelectionChanged: Function,
-    onSeriesClick: Function,
-    onSeriesHoverChanged: Function,
-    onSeriesSelectionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
-    onZoomEnd: Function,
-    onZoomStart: Function,
-    palette: {},
-    paletteExtensionMode: {},
-    panes: [Array, Object],
+    onArgumentAxisClick: Function as PropType<(e: ArgumentAxisClickEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDone: Function as PropType<(e: DoneEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onLegendClick: Function as PropType<(e: LegendClickEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPointClick: Function as PropType<(e: PointClickEvent) => void>,
+    onPointHoverChanged: Function as PropType<(e: PointHoverChangedEvent) => void>,
+    onPointSelectionChanged: Function as PropType<(e: PointSelectionChangedEvent) => void>,
+    onSeriesClick: Function as PropType<(e: SeriesClickEvent) => void>,
+    onSeriesHoverChanged: Function as PropType<(e: SeriesHoverChangedEvent) => void>,
+    onSeriesSelectionChanged: Function as PropType<(e: SeriesSelectionChangedEvent) => void>,
+    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
+    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
+    onZoomEnd: Function as PropType<(e: ZoomEndEvent) => void>,
+    onZoomStart: Function as PropType<(e: ZoomStartEvent) => void>,
+    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    paletteExtensionMode: String as PropType<"alternate" | "blend" | "extrapolate">,
+    panes: [Array, Object] as PropType<Array<Object> | Object>,
     pathModified: Boolean,
-    pointSelectionMode: {},
+    pointSelectionMode: String as PropType<"single" | "multiple">,
     redrawOnResize: Boolean,
     resizePanesOnZoom: Boolean,
-    resolveLabelOverlapping: {},
+    resolveLabelOverlapping: String as PropType<"hide" | "none" | "stack">,
     rotated: Boolean,
     rtlEnabled: Boolean,
     scrollBar: Object,
-    series: [Array, Object],
-    seriesSelectionMode: {},
+    series: [Array, Object] as PropType<Array<Object> | Object | Object>,
+    seriesSelectionMode: String as PropType<"single" | "multiple">,
     seriesTemplate: Object,
     size: Object,
     stickyHovering: Boolean,
     synchronizeMultiAxes: Boolean,
-    theme: {},
+    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
     title: [Object, String],
     tooltip: Object,
-    valueAxis: [Array, Object],
+    valueAxis: [Array, Object] as PropType<Array<Object> | Object>,
     zoomAndPan: Object
   },
   emits: {
@@ -305,9 +307,9 @@ const DxAggregationConfig = {
     "update:method": null,
   },
   props: {
-    calculate: Function,
+    calculate: Function as PropType<(aggregationInfo: Object, series: Object) => (Object | Array<Object>)>,
     enabled: Boolean,
-    method: {}
+    method: String as PropType<"avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom">
   }
 };
 
@@ -361,7 +363,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: {},
+    easing: String as PropType<"easeOutCubic" | "linear">,
     enabled: Boolean,
     maxPointCountSupported: Number
   }
@@ -418,7 +420,7 @@ const DxAnnotationConfig = {
     axis: String,
     border: Object,
     color: String,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<(annotation: Object | any) => Object>,
     data: {},
     description: String,
     font: Object,
@@ -434,13 +436,13 @@ const DxAnnotationConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: {},
+    type: String as PropType<"text" | "image" | "custom">,
     value: [Date, Number, String],
     width: Number,
-    wordWrap: {},
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">,
     x: Number,
     y: Number
   }
@@ -475,7 +477,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -566,25 +568,25 @@ const DxArgumentAxisConfig = {
   },
   props: {
     aggregateByCategory: Boolean,
-    aggregatedPointsPosition: {},
+    aggregatedPointsPosition: String as PropType<"betweenTicks" | "crossTicks">,
     aggregationGroupWidth: Number,
-    aggregationInterval: {},
+    aggregationInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     allowDecimals: Boolean,
-    argumentType: {},
+    argumentType: String as PropType<"datetime" | "numeric" | "string">,
     axisDivisionFactor: Number,
-    breaks: Array,
+    breaks: Array as PropType<Array<Object>>,
     breakStyle: Object,
-    categories: Array,
+    categories: Array as PropType<Array<Date> | Array<number> | Array<string>>,
     color: String,
-    constantLines: Array,
+    constantLines: Array as PropType<Array<Object>>,
     constantLineStyle: Object,
     customPosition: [Date, Number, String],
     customPositionAxis: String,
-    discreteAxisDivisionMode: {},
+    discreteAxisDivisionMode: String as PropType<"betweenLabels" | "crossLabels">,
     endOnTick: Boolean,
     grid: Object,
-    holidays: Array,
-    hoverMode: {},
+    holidays: Array as PropType<(Array<Date> | Array<string>) | Array<number>>,
+    hoverMode: String as PropType<"allArgumentPoints" | "none">,
     inverted: Boolean,
     label: Object,
     linearThreshold: Number,
@@ -593,28 +595,28 @@ const DxArgumentAxisConfig = {
     minorGrid: Object,
     minorTick: Object,
     minorTickCount: Number,
-    minorTickInterval: {},
+    minorTickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     minValueMargin: Number,
-    minVisualRangeLength: {},
+    minVisualRangeLength: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     offset: Number,
     opacity: Number,
     placeholderSize: Number,
-    position: {},
-    singleWorkdays: Array,
-    strips: Array,
+    position: String as PropType<"bottom" | "left" | "right" | "top">,
+    singleWorkdays: Array as PropType<(Array<Date> | Array<string>) | Array<number>>,
+    strips: Array as PropType<Array<Object>>,
     stripStyle: Object,
     tick: Object,
-    tickInterval: {},
+    tickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     title: [Object, String],
-    type: {},
+    type: String as PropType<"continuous" | "discrete" | "logarithmic">,
     valueMarginsEnabled: Boolean,
     visible: Boolean,
-    visualRange: [Array, Object],
-    visualRangeUpdateMode: {},
-    wholeRange: [Array, Object],
+    visualRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
+    visualRangeUpdateMode: String as PropType<"auto" | "keep" | "reset" | "shift">,
+    wholeRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
     width: Number,
     workdaysOnly: Boolean,
-    workWeek: Array
+    workWeek: Array as PropType<Array<number>>
   }
 };
 
@@ -660,10 +662,10 @@ const DxArgumentFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -687,7 +689,7 @@ const DxAxisConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -713,9 +715,9 @@ const DxAxisConstantLineStyleLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
-    position: {},
-    verticalAlignment: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    position: String as PropType<"inside" | "outside">,
+    verticalAlignment: String as PropType<"bottom" | "center" | "top">,
     visible: Boolean
   }
 };
@@ -747,21 +749,21 @@ const DxAxisLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: {},
-    customizeHint: Function,
-    customizeText: Function,
-    displayMode: {},
+    alignment: String as PropType<"center" | "left" | "right">,
+    customizeHint: Function as PropType<(argument: Object) => string>,
+    customizeText: Function as PropType<(argument: Object) => string>,
+    displayMode: String as PropType<"rotate" | "stagger" | "standard">,
     font: Object,
-    format: {},
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     indentFromAxis: Number,
-    overlappingBehavior: {},
-    position: {},
+    overlappingBehavior: String as PropType<"rotate" | "stagger" | "none" | "hide">,
+    position: String as PropType<"inside" | "outside" | "bottom" | "left" | "right" | "top">,
     rotationAngle: Number,
     staggeringSpacing: Number,
     template: {},
-    textOverflow: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean,
-    wordWrap: {}
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -783,12 +785,12 @@ const DxAxisTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: {},
+    alignment: String as PropType<"center" | "left" | "right">,
     font: Object,
     margin: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -836,7 +838,7 @@ const DxBorderConfig = {
     bottom: Boolean,
     color: String,
     cornerRadius: Number,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     left: Boolean,
     opacity: Number,
     right: Boolean,
@@ -882,7 +884,7 @@ const DxBreakStyleConfig = {
   },
   props: {
     color: String,
-    line: {},
+    line: String as PropType<"straight" | "waved">,
     width: Number
   }
 };
@@ -909,14 +911,14 @@ const DxChartTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    verticalAlignment: String as PropType<"bottom" | "top">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -946,8 +948,8 @@ const DxChartTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -1023,7 +1025,7 @@ const DxCommonAnnotationSettingsConfig = {
     axis: String,
     border: Object,
     color: String,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<(annotation: Object | any) => Object>,
     data: {},
     description: String,
     font: Object,
@@ -1038,13 +1040,13 @@ const DxCommonAnnotationSettingsConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: {},
+    type: String as PropType<"text" | "image" | "custom">,
     value: [Date, Number, String],
     width: Number,
-    wordWrap: {},
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">,
     x: Number,
     y: Number
   }
@@ -1084,12 +1086,12 @@ const DxCommonAxisSettingsConfig = {
     "update:width": null,
   },
   props: {
-    aggregatedPointsPosition: {},
+    aggregatedPointsPosition: String as PropType<"betweenTicks" | "crossTicks">,
     allowDecimals: Boolean,
     breakStyle: Object,
     color: String,
     constantLineStyle: Object,
-    discreteAxisDivisionMode: {},
+    discreteAxisDivisionMode: String as PropType<"betweenLabels" | "crossLabels">,
     endOnTick: Boolean,
     grid: Object,
     inverted: Boolean,
@@ -1136,7 +1138,7 @@ const DxCommonAxisSettingsConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -1164,7 +1166,7 @@ const DxCommonAxisSettingsConstantLineStyleLabelConfig = {
   },
   props: {
     font: Object,
-    position: {},
+    position: String as PropType<"inside" | "outside">,
     visible: Boolean
   }
 };
@@ -1193,18 +1195,18 @@ const DxCommonAxisSettingsLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: {},
-    displayMode: {},
+    alignment: String as PropType<"center" | "left" | "right">,
+    displayMode: String as PropType<"rotate" | "stagger" | "standard">,
     font: Object,
     indentFromAxis: Number,
-    overlappingBehavior: {},
-    position: {},
+    overlappingBehavior: String as PropType<"rotate" | "stagger" | "none" | "hide">,
+    position: String as PropType<"inside" | "outside" | "bottom" | "left" | "right" | "top">,
     rotationAngle: Number,
     staggeringSpacing: Number,
     template: {},
-    textOverflow: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean,
-    wordWrap: {}
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -1225,11 +1227,11 @@ const DxCommonAxisSettingsTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: {},
+    alignment: String as PropType<"center" | "left" | "right">,
     font: Object,
     margin: Number,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -1344,14 +1346,14 @@ const DxCommonSeriesSettingsConfig = {
     closeValueField: String,
     color: [Object, String],
     cornerRadius: Number,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     fullstackedarea: {},
     fullstackedbar: {},
     fullstackedline: {},
     fullstackedspline: {},
     fullstackedsplinearea: {},
     highValueField: String,
-    hoverMode: {},
+    hoverMode: String as PropType<"allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint">,
     hoverStyle: Object,
     ignoreEmptyPoints: Boolean,
     innerColor: String,
@@ -1370,7 +1372,7 @@ const DxCommonSeriesSettingsConfig = {
     rangeValue2Field: String,
     reduction: Object,
     scatter: {},
-    selectionMode: {},
+    selectionMode: String as PropType<"allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint">,
     selectionStyle: Object,
     showInLegend: Boolean,
     sizeField: String,
@@ -1386,7 +1388,7 @@ const DxCommonSeriesSettingsConfig = {
     stepline: {},
     stock: {},
     tagField: String,
-    type: {},
+    type: String as PropType<"area" | "bar" | "bubble" | "candlestick" | "fullstackedarea" | "fullstackedbar" | "fullstackedline" | "fullstackedspline" | "fullstackedsplinearea" | "line" | "rangearea" | "rangebar" | "scatter" | "spline" | "splinearea" | "stackedarea" | "stackedbar" | "stackedline" | "stackedspline" | "stackedsplinearea" | "steparea" | "stepline" | "stock">,
     valueErrorBar: Object,
     valueField: String,
     visible: Boolean,
@@ -1429,7 +1431,7 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     hatching: Object,
     highlight: Boolean,
     width: Number
@@ -1469,17 +1471,17 @@ const DxCommonSeriesSettingsLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: {},
-    argumentFormat: {},
+    alignment: String as PropType<"center" | "left" | "right">,
+    argumentFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     backgroundColor: String,
     border: Object,
     connector: Object,
-    customizeText: Function,
+    customizeText: Function as PropType<(pointInfo: Object) => string>,
     displayFormat: String,
     font: Object,
-    format: {},
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     horizontalOffset: Number,
-    position: {},
+    position: String as PropType<"inside" | "outside">,
     rotationAngle: Number,
     showForZeroValues: Boolean,
     verticalOffset: Number,
@@ -1515,7 +1517,7 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     hatching: Object,
     highlight: Boolean,
     width: Number
@@ -1571,7 +1573,7 @@ const DxConstantLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     displayBehindSeries: Boolean,
     extendAxis: Boolean,
     label: Object,
@@ -1602,10 +1604,10 @@ const DxConstantLineLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
-    position: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    position: String as PropType<"inside" | "outside">,
     text: String,
-    verticalAlignment: {},
+    verticalAlignment: String as PropType<"bottom" | "center" | "top">,
     visible: Boolean
   }
 };
@@ -1629,7 +1631,7 @@ const DxConstantLineStyleConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -1658,7 +1660,7 @@ const DxCrosshairConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     enabled: Boolean,
     horizontalLine: [Boolean, Object],
     label: Object,
@@ -1691,7 +1693,7 @@ const DxDataPrepareSettingsConfig = {
   props: {
     checkTypeForAllData: Boolean,
     convertToAxisDataType: Boolean,
-    sortingMethod: [Boolean, Function]
+    sortingMethod: [Boolean, Function] as PropType<Boolean | ((a: Object, b: Object) => number)>
   }
 };
 
@@ -1736,10 +1738,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -1787,10 +1789,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -1834,7 +1836,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: {},
+    direction: String as PropType<"left" | "none" | "right">,
     opacity: Number,
     step: Number,
     width: Number
@@ -1879,7 +1881,7 @@ const DxHorizontalLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     label: Object,
     opacity: Number,
     visible: Boolean,
@@ -1909,9 +1911,9 @@ const DxHorizontalLineLabelConfig = {
   },
   props: {
     backgroundColor: String,
-    customizeText: Function,
+    customizeText: Function as PropType<(info: Object) => string>,
     font: Object,
-    format: {},
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     visible: Boolean
   }
 };
@@ -1937,7 +1939,7 @@ const DxHoverStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     hatching: Object,
     highlight: Boolean,
     size: Number,
@@ -2004,32 +2006,32 @@ const DxLabelConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: {},
-    argumentFormat: {},
+    alignment: String as PropType<"center" | "left" | "right">,
+    argumentFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     backgroundColor: String,
     border: Object,
     connector: Object,
-    customizeHint: Function,
-    customizeText: Function,
+    customizeHint: Function as PropType<(argument: Object) => string>,
+    customizeText: Function as PropType<(argument: Object) => string>,
     displayFormat: String,
-    displayMode: {},
+    displayMode: String as PropType<"rotate" | "stagger" | "standard">,
     font: Object,
-    format: {},
-    horizontalAlignment: {},
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     horizontalOffset: Number,
     indentFromAxis: Number,
-    overlappingBehavior: {},
-    position: {},
+    overlappingBehavior: String as PropType<"rotate" | "stagger" | "none" | "hide">,
+    position: String as PropType<"inside" | "outside" | "bottom" | "left" | "right" | "top">,
     rotationAngle: Number,
     showForZeroValues: Boolean,
     staggeringSpacing: Number,
     template: {},
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    verticalAlignment: String as PropType<"bottom" | "center" | "top">,
     verticalOffset: Number,
     visible: Boolean,
-    wordWrap: {}
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -2073,25 +2075,25 @@ const DxLegendConfig = {
     border: Object,
     columnCount: Number,
     columnItemSpacing: Number,
-    customizeHint: Function,
-    customizeItems: Function,
-    customizeText: Function,
+    customizeHint: Function as PropType<(seriesInfo: Object) => string>,
+    customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
+    customizeText: Function as PropType<(seriesInfo: Object) => string>,
     font: Object,
-    horizontalAlignment: {},
-    hoverMode: {},
-    itemsAlignment: {},
-    itemTextPosition: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    hoverMode: String as PropType<"excludePoints" | "includePoints" | "none">,
+    itemsAlignment: String as PropType<"center" | "left" | "right">,
+    itemTextPosition: String as PropType<"bottom" | "left" | "right" | "top">,
     margin: [Number, Object],
     markerSize: Number,
     markerTemplate: {},
-    orientation: {},
+    orientation: String as PropType<"horizontal" | "vertical">,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    position: {},
+    position: String as PropType<"inside" | "outside">,
     rowCount: Number,
     rowItemSpacing: Number,
     title: [Object, String],
-    verticalAlignment: {},
+    verticalAlignment: String as PropType<"bottom" | "top">,
     visible: Boolean
   }
 };
@@ -2124,12 +2126,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: {}
+    verticalAlignment: String as PropType<"bottom" | "top">
   }
 };
 
@@ -2410,7 +2412,7 @@ const DxPaneBorderConfig = {
   props: {
     bottom: Boolean,
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     left: Boolean,
     opacity: Number,
     right: Boolean,
@@ -2444,13 +2446,13 @@ const DxPointConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    hoverMode: {},
+    hoverMode: String as PropType<"allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint">,
     hoverStyle: Object,
     image: [Object, String],
-    selectionMode: {},
+    selectionMode: String as PropType<"allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint">,
     selectionStyle: Object,
     size: Number,
-    symbol: {},
+    symbol: String as PropType<"circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp">,
     visible: Boolean
   }
 };
@@ -2580,7 +2582,7 @@ const DxReductionConfig = {
   },
   props: {
     color: String,
-    level: {}
+    level: String as PropType<"close" | "high" | "low" | "open">
   }
 };
 
@@ -2605,7 +2607,7 @@ const DxScrollBarConfig = {
     color: String,
     offset: Number,
     opacity: Number,
-    position: {},
+    position: String as PropType<"bottom" | "left" | "right" | "top">,
     visible: Boolean,
     width: Number
   }
@@ -2632,7 +2634,7 @@ const DxSelectionStyleConfig = {
   props: {
     border: Object,
     color: [Object, String],
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     hatching: Object,
     highlight: Boolean,
     size: Number,
@@ -2702,9 +2704,9 @@ const DxSeriesConfig = {
     closeValueField: String,
     color: [Object, String],
     cornerRadius: Number,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     highValueField: String,
-    hoverMode: {},
+    hoverMode: String as PropType<"allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint">,
     hoverStyle: Object,
     ignoreEmptyPoints: Boolean,
     innerColor: String,
@@ -2720,14 +2722,14 @@ const DxSeriesConfig = {
     rangeValue1Field: String,
     rangeValue2Field: String,
     reduction: Object,
-    selectionMode: {},
+    selectionMode: String as PropType<"allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint">,
     selectionStyle: Object,
     showInLegend: Boolean,
     sizeField: String,
     stack: String,
     tag: {},
     tagField: String,
-    type: {},
+    type: String as PropType<"area" | "bar" | "bubble" | "candlestick" | "fullstackedarea" | "fullstackedbar" | "fullstackedline" | "fullstackedspline" | "fullstackedsplinearea" | "line" | "rangearea" | "rangebar" | "scatter" | "spline" | "splinearea" | "stackedarea" | "stackedbar" | "stackedline" | "stackedspline" | "stackedsplinearea" | "steparea" | "stepline" | "stock">,
     valueErrorBar: Object,
     valueField: String,
     visible: Boolean,
@@ -2753,7 +2755,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     visible: Boolean,
     width: Number
   }
@@ -2773,7 +2775,7 @@ const DxSeriesTemplateConfig = {
     "update:nameField": null,
   },
   props: {
-    customizeSeries: Function,
+    customizeSeries: Function as PropType<(seriesName: any) => Object>,
     nameField: String
   }
 };
@@ -2867,9 +2869,9 @@ const DxStripLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     text: String,
-    verticalAlignment: {}
+    verticalAlignment: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -2914,8 +2916,8 @@ const DxStripStyleLabelConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
-    verticalAlignment: {}
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    verticalAlignment: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -2939,8 +2941,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -3026,16 +3028,16 @@ const DxTitleConfig = {
     "update:wordWrap": null,
   },
   props: {
-    alignment: {},
+    alignment: String as PropType<"center" | "left" | "right">,
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    verticalAlignment: String as PropType<"bottom" | "top">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -3070,19 +3072,19 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: {},
+    argumentFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     arrowLength: Number,
     border: Object,
     color: String,
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<(pointInfo: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: {},
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     interactive: Boolean,
-    location: {},
+    location: String as PropType<"center" | "edge">,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -3118,7 +3120,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -3204,18 +3206,18 @@ const DxValueAxisConfig = {
     "update:width": null,
   },
   props: {
-    aggregatedPointsPosition: {},
+    aggregatedPointsPosition: String as PropType<"betweenTicks" | "crossTicks">,
     allowDecimals: Boolean,
     autoBreaksEnabled: Boolean,
     axisDivisionFactor: Number,
-    breaks: Array,
+    breaks: Array as PropType<Array<Object>>,
     breakStyle: Object,
-    categories: Array,
+    categories: Array as PropType<Array<Date> | Array<number> | Array<string>>,
     color: String,
-    constantLines: Array,
+    constantLines: Array as PropType<Array<Object>>,
     constantLineStyle: Object,
     customPosition: [Date, Number, String],
-    discreteAxisDivisionMode: {},
+    discreteAxisDivisionMode: String as PropType<"betweenLabels" | "crossLabels">,
     endOnTick: Boolean,
     grid: Object,
     inverted: Boolean,
@@ -3227,30 +3229,30 @@ const DxValueAxisConfig = {
     minorGrid: Object,
     minorTick: Object,
     minorTickCount: Number,
-    minorTickInterval: {},
+    minorTickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     minValueMargin: Number,
-    minVisualRangeLength: {},
+    minVisualRangeLength: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     multipleAxesSpacing: Number,
     name: String,
     offset: Number,
     opacity: Number,
     pane: String,
     placeholderSize: Number,
-    position: {},
+    position: String as PropType<"bottom" | "left" | "right" | "top">,
     showZero: Boolean,
-    strips: Array,
+    strips: Array as PropType<Array<Object>>,
     stripStyle: Object,
     synchronizedValue: Number,
     tick: Object,
-    tickInterval: {},
+    tickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     title: [Object, String],
-    type: {},
+    type: String as PropType<"continuous" | "discrete" | "logarithmic">,
     valueMarginsEnabled: Boolean,
-    valueType: {},
+    valueType: String as PropType<"datetime" | "numeric" | "string">,
     visible: Boolean,
-    visualRange: [Array, Object],
-    visualRangeUpdateMode: {},
-    wholeRange: [Array, Object],
+    visualRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
+    visualRangeUpdateMode: String as PropType<"auto" | "keep" | "reset" | "shift">,
+    wholeRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
     width: Number
   }
 };
@@ -3294,13 +3296,13 @@ const DxValueErrorBarConfig = {
   },
   props: {
     color: String,
-    displayMode: {},
+    displayMode: String as PropType<"auto" | "high" | "low" | "none">,
     edgeLength: Number,
     highValueField: String,
     lineWidth: Number,
     lowValueField: String,
     opacity: Number,
-    type: {},
+    type: String as PropType<"fixed" | "percent" | "stdDeviation" | "stdError" | "variance">,
     value: Number
   }
 };
@@ -3324,7 +3326,7 @@ const DxVerticalLineConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     label: Object,
     opacity: Number,
     visible: Boolean,
@@ -3352,7 +3354,7 @@ const DxVisualRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: {},
+    length: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     startValue: [Date, Number, String]
   }
 };
@@ -3373,7 +3375,7 @@ const DxWholeRangeConfig = {
   },
   props: {
     endValue: [Date, Number, String],
-    length: {},
+    length: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     startValue: [Date, Number, String]
   }
 };
@@ -3418,11 +3420,11 @@ const DxZoomAndPanConfig = {
   props: {
     allowMouseWheel: Boolean,
     allowTouchGestures: Boolean,
-    argumentAxis: {},
+    argumentAxis: String as PropType<"both" | "none" | "pan" | "zoom">,
     dragBoxStyle: Object,
     dragToZoom: Boolean,
-    panKey: {},
-    valueAxis: {}
+    panKey: String as PropType<"alt" | "ctrl" | "meta" | "shift">,
+    valueAxis: String as PropType<"both" | "none" | "pan" | "zoom">
   }
 };
 

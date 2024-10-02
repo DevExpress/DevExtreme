@@ -1,5 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/validation_summary";
+import { PropType } from "vue";
 import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , OptionChangedEvent ,} from "devextreme/ui/validation_summary";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -25,13 +27,13 @@ const componentConfig = {
   props: {
     elementAttr: Object,
     hoverStateEnabled: Boolean,
-    items: Array,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     validationGroup: String
   },
   emits: {

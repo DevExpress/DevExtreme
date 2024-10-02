@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Switch, { Properties } from "devextreme/ui/switch";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/switch";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -45,30 +47,30 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
     name: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     switchedOffText: String,
     switchedOnText: String,
     tabIndex: Number,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Map, { Properties } from "devextreme/ui/map";
+import {  ClickEvent , DisposingEvent , InitializedEvent , MarkerAddedEvent , MarkerRemovedEvent , OptionChangedEvent , ReadyEvent , RouteAddedEvent , RouteRemovedEvent ,} from "devextreme/ui/map";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -48,33 +50,33 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     apiKey: [Object, String],
     autoAdjust: Boolean,
-    center: [Array, Object, String],
+    center: [Array, Object, String] as PropType<Array<number> | Object | string>,
     controls: Boolean,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     markerIconSrc: String,
-    markers: Array,
-    onClick: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onMarkerAdded: Function,
-    onMarkerRemoved: Function,
-    onOptionChanged: Function,
-    onReady: Function,
-    onRouteAdded: Function,
-    onRouteRemoved: Function,
-    provider: {},
+    markers: Array as PropType<Array<Object>>,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onMarkerAdded: Function as PropType<(e: MarkerAddedEvent) => void>,
+    onMarkerRemoved: Function as PropType<(e: MarkerRemovedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onReady: Function as PropType<(e: ReadyEvent) => void>,
+    onRouteAdded: Function as PropType<(e: RouteAddedEvent) => void>,
+    onRouteRemoved: Function as PropType<(e: RouteRemovedEvent) => void>,
+    provider: String as PropType<"bing" | "google" | "googleStatic">,
     providerConfig: Object,
-    routes: Array,
+    routes: Array as PropType<Array<Object>>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    type: {},
+    type: String as PropType<"hybrid" | "roadmap" | "satellite">,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoom: Number
   },
   emits: {
@@ -206,8 +208,8 @@ const DxMarkerConfig = {
   },
   props: {
     iconSrc: String,
-    location: [Array, Object, String],
-    onClick: Function,
+    location: [Array, Object, String] as PropType<Array<number> | Object | string>,
+    onClick: Function as PropType<() => void>,
     tooltip: [Object, String]
   }
 };
@@ -254,8 +256,8 @@ const DxRouteConfig = {
   },
   props: {
     color: String,
-    locations: Array,
-    mode: {},
+    locations: Array as PropType<Array<Object>>,
+    mode: String as PropType<"driving" | "walking">,
     opacity: Number,
     weight: Number
   }

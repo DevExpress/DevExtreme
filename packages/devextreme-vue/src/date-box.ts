@@ -1,7 +1,22 @@
+import { PropType } from "vue";
 import DateBox, { Properties } from "devextreme/ui/date_box";
+import {  ChangeEvent , ClosedEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , KeyDownEvent , KeyUpEvent , OpenedEvent , OptionChangedEvent , PasteEvent , ValueChangedEvent ,} from "devextreme/ui/date_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
+import { 
+ DisposingEvent  as CalendarOptionsDisposingEvent,
+ InitializedEvent  as CalendarOptionsInitializedEvent,
+ OptionChangedEvent  as CalendarOptionsOptionChangedEvent,
+ ValueChangedEvent  as CalendarOptionsValueChangedEvent,
+} from "devextreme/ui/calendar";
+import { 
+ ClickEvent  as OptionsClickEvent,
+ ContentReadyEvent  as OptionsContentReadyEvent,
+ DisposingEvent  as OptionsDisposingEvent,
+ InitializedEvent  as OptionsInitializedEvent,
+ OptionChangedEvent  as OptionsOptionChangedEvent,
+} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "acceptCustomValue" |
@@ -92,21 +107,21 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     adaptivityEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: {},
-    buttons: Array,
+    applyValueMode: String as PropType<"instantly" | "useButtons">,
+    buttons: Array as PropType<Array<"clear" | "dropDown"> | Array<Object>>,
     calendarOptions: Object,
     cancelButtonText: String,
     dateOutOfRangeMessage: String,
     dateSerializationFormat: String,
     deferRendering: Boolean,
     disabled: Boolean,
-    disabledDates: [Array, Function],
-    displayFormat: {},
+    disabledDates: [Array, Function] as PropType<Array<Date> | ((data: Object) => Boolean)>,
+    displayFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     dropDownButtonTemplate: {},
     dropDownOptions: Object,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -115,31 +130,31 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: {},
+    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
     max: [Date, Number, String],
     maxLength: [Number, String],
     min: [Date, Number, String],
     name: String,
-    onChange: Function,
-    onClosed: Function,
-    onContentReady: Function,
-    onCopy: Function,
-    onCut: Function,
-    onDisposing: Function,
-    onEnterKey: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
-    onInitialized: Function,
-    onInput: Function,
-    onKeyDown: Function,
-    onKeyUp: Function,
-    onOpened: Function,
-    onOptionChanged: Function,
-    onPaste: Function,
-    onValueChanged: Function,
+    onChange: Function as PropType<(e: ChangeEvent) => void>,
+    onClosed: Function as PropType<(e: ClosedEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onCopy: Function as PropType<(e: CopyEvent) => void>,
+    onCut: Function as PropType<(e: CutEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onEnterKey: Function as PropType<(e: EnterKeyEvent) => void>,
+    onFocusIn: Function as PropType<(e: FocusInEvent) => void>,
+    onFocusOut: Function as PropType<(e: FocusOutEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onInput: Function as PropType<(e: InputEvent) => void>,
+    onKeyDown: Function as PropType<(e: KeyDownEvent) => void>,
+    onKeyUp: Function as PropType<(e: KeyUpEvent) => void>,
+    onOpened: Function as PropType<(e: OpenedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPaste: Function as PropType<(e: PasteEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     opened: Boolean,
     openOnFieldClick: Boolean,
-    pickerType: {},
+    pickerType: String as PropType<"calendar" | "list" | "native" | "rollers">,
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
@@ -147,21 +162,21 @@ const componentConfig = {
     showClearButton: Boolean,
     showDropDownButton: Boolean,
     spellcheck: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
     tabIndex: Number,
     text: String,
     todayButtonText: String,
-    type: {},
+    type: String as PropType<"date" | "datetime" | "time">,
     useMaskBehavior: Boolean,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: [Date, Number, String],
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -296,8 +311,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -335,7 +350,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: {},
+    location: String as PropType<"after" | "before">,
     name: String,
     options: Object
   }
@@ -404,41 +419,52 @@ const DxCalendarOptionsConfig = {
     cellTemplate: {},
     dateSerializationFormat: String,
     disabled: Boolean,
-    disabledDates: [Array, Function],
+    disabledDates: [Array, Function] as PropType<Array<Date> | ((data: Object) => Boolean)>,
     elementAttr: Object,
-    firstDayOfWeek: {},
+    firstDayOfWeek: {
+      type: Number,
+      validator: (v) => typeof(v) !== "number" || [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ].indexOf(v) !== -1
+    },
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
     max: [Date, Number, String],
-    maxZoomLevel: {},
+    maxZoomLevel: String as PropType<"century" | "decade" | "month" | "year">,
     min: [Date, Number, String],
-    minZoomLevel: {},
+    minZoomLevel: String as PropType<"century" | "decade" | "month" | "year">,
     name: String,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onDisposing: Function as PropType<(e: CalendarOptionsDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: CalendarOptionsInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: CalendarOptionsOptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: CalendarOptionsValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    selectionMode: {},
+    selectionMode: String as PropType<"single" | "multiple" | "range">,
     selectWeekOnClick: Boolean,
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
-    value: [Array, Date, Number, String],
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    value: [Array, Date, Number, String] as PropType<(Array<Date> | Array<number> | Array<string>) | Date | number | string>,
     visible: Boolean,
-    weekNumberRule: {},
-    width: [Function, Number, String],
-    zoomLevel: {}
+    weekNumberRule: String as PropType<"auto" | "firstDay" | "fullWeek" | "firstFourDays">,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    zoomLevel: String as PropType<"century" | "decade" | "month" | "year">
   }
 };
 
@@ -456,8 +482,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
+    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
   }
 };
 
@@ -480,10 +506,10 @@ const DxDisplayFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -553,7 +579,7 @@ const DxDropDownOptionsConfig = {
     accessKey: String,
     animation: Object,
     bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -564,28 +590,28 @@ const DxDropDownOptionsConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String],
-    hideOnOutsideClick: [Boolean, Function],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: {},
+    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    onContentReady: Function as PropType<(e: Object) => void>,
+    onDisposing: Function as PropType<(e: Object) => void>,
+    onHidden: Function as PropType<(e: Object) => void>,
+    onHiding: Function as PropType<(e: Object) => void>,
+    onInitialized: Function as PropType<(e: Object) => void>,
+    onOptionChanged: Function as PropType<(e: Object) => void>,
+    onResize: Function as PropType<(e: Object) => void>,
+    onResizeEnd: Function as PropType<(e: Object) => void>,
+    onResizeStart: Function as PropType<(e: Object) => void>,
+    onShowing: Function as PropType<(e: Object) => void>,
+    onShown: Function as PropType<(e: Object) => void>,
+    onTitleRendered: Function as PropType<(e: Object) => void>,
+    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -596,9 +622,9 @@ const DxDropDownOptionsConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<Object>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -658,16 +684,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -689,8 +715,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -756,25 +782,25 @@ const DxOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onClick: Function as PropType<(e: OptionsClickEvent) => void>,
+    onContentReady: Function as PropType<(e: OptionsContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: OptionsDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: OptionsInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionsOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<"text" | "outlined" | "contained">,
     tabIndex: Number,
     template: {},
     text: String,
-    type: {},
+    type: String as PropType<"danger" | "default" | "normal" | "success">,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -797,11 +823,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: {},
+    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: {},
-    my: {},
+    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
+    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     of: {},
     offset: [Object, String]
   }
@@ -829,16 +855,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -895,16 +921,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: {},
-    location: {},
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
     options: {},
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     template: {},
     text: String,
-    toolbar: {},
+    toolbar: String as PropType<"bottom" | "top">,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 

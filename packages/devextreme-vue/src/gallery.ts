@@ -1,5 +1,7 @@
 export { ExplicitTypes } from "devextreme/ui/gallery";
+import { PropType } from "vue";
 import Gallery, { Properties } from "devextreme/ui/gallery";
+import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent , SelectionChangedEvent ,} from "devextreme/ui/gallery";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -58,25 +60,25 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     indicatorEnabled: Boolean,
     initialItemWidth: Number,
     itemHoldTimeout: Number,
-    items: Array,
+    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     loop: Boolean,
     noDataText: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemHold: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onSelectionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
     rtlEnabled: Boolean,
     selectedIndex: Number,
     selectedItem: {},
@@ -87,7 +89,7 @@ const componentConfig = {
     swipeEnabled: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapAround: Boolean
   },
   emits: {

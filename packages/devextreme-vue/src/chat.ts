@@ -1,4 +1,6 @@
+import { PropType } from "vue";
 import Chat, { Properties } from "devextreme/ui/chat";
+import {  DisposingEvent , InitializedEvent , MessageSendEvent , OptionChangedEvent ,} from "devextreme/ui/chat";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -36,18 +38,18 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array,
-    onDisposing: Function,
-    onInitialized: Function,
-    onMessageSend: Function,
-    onOptionChanged: Function,
+    items: Array as PropType<Array<Object>>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onMessageSend: Function as PropType<(e: MessageSendEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     user: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
