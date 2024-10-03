@@ -89,8 +89,9 @@ const PLACEHOLDER_CLASS = 'dx-placeholder';
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
 const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
-
 const FOCUSED_CLASS = 'dx-state-focused';
+
+const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 
 const WINDOW_RATIO = 0.8;
 
@@ -2156,7 +2157,7 @@ QUnit.module('popup options', {
         assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
     });
 
-    QUnit.test('popup should not be hidden after outsideClick', function(assert) {
+    QUnit.test('popup should be hidden after outsideClick', function(assert) {
         const $lookup = $('#lookupOptions');
         const instance = $lookup.dxLookup({
             dataSource: [1, 2, 3]
@@ -2167,13 +2168,13 @@ QUnit.module('popup options', {
         const $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
 
         $(document).trigger('dxpointerdown');
-        assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
+        assert.equal($overlay.is(':visible'), false, 'overlay is hidden');
     });
 
-    QUnit.test('lookup popup should be hidden after click outside was present', function(assert) {
+    QUnit.test('lookup popup should not be hidden after click outside was present', function(assert) {
         const $lookup = $('#lookupOptions');
         const instance = $lookup.dxLookup({
-            'dropDownOptions.hideOnOutsideClick': true,
+            'dropDownOptions.hideOnOutsideClick': false,
             visible: true,
             usePopover: false
         }).dxLookup('instance');
@@ -2186,7 +2187,7 @@ QUnit.module('popup options', {
         assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
 
         $(document).trigger('dxpointerdown');
-        assert.equal($overlay.is(':visible'), false, 'overlay is hidden');
+        assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
     });
 
     QUnit.test('custom titleTemplate option', function(assert) {
@@ -2225,7 +2226,8 @@ QUnit.module('popup options', {
     QUnit.test('custom titleTemplate and onTitleRendered option is set correctly by options', function(assert) {
         assert.expect(2);
 
-        const $lookup = $('#lookupOptions').dxLookup(); const instance = $lookup.dxLookup('instance');
+        const $lookup = $('#lookupOptions').dxLookup();
+        const instance = $lookup.dxLookup('instance');
 
         instance.option('dropDownOptions.onTitleRendered', function(e) {
             assert.ok(true, 'option \'onTitleRendered\' successfully passed to the popup widget raised on titleTemplate');
@@ -2904,6 +2906,30 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
+    });
+
+    // testInActiveWindow
+    QUnit.test('focus from Popup should move to Lookup field while keeping Popup open when usePopover: true', function(assert) {
+        // if(devices.real().deviceType !== 'desktop') {
+        //     assert.ok(true, 'test does not actual for mobile devices');
+        //     return;
+        // }
+
+        const $element = $('#widget').dxLookup({
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            usePopover: true,
+        });
+        const instance = $element.dxLookup('instance');
+        const tabKeyDownEvent = $.Event('keydown', { key: 'Tab' });
+        const $overlayContent = $(instance.content()).parent();
+        const $cancelButton = $overlayContent.find(CANCEL_BUTTON_SELECTOR);
+
+        $cancelButton.trigger(tabKeyDownEvent);
+
+        assert.ok($element.hasClass(FOCUSED_CLASS), 'lookup field is focused');
+        assert.ok(instance.option('opened'), 'popup is opened');
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {

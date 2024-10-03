@@ -544,6 +544,8 @@ const Lookup = DropDownList.inherit({
   _popupTabHandler(e) {
     const { usePopover } = this.option();
 
+    // debugger;
+
     if (usePopover) {
       this.callBase(e);
     }
