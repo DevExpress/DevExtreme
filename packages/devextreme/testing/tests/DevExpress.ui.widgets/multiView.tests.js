@@ -1131,7 +1131,7 @@ QUnit.module('keyboard navigation', {
         assert.roughEqual(position($multiView), -position($firstItem), 1, 'container moved to proper position');
     });
 
-    QUnit.test('when only one item is visible, does not move the current visible item using left and right arrow key', function(assert) {
+    QUnit.test('when only one item is visible, does not move the current visible item using all supported kbn keys', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
                 { text: '1', visible: true },
@@ -1150,6 +1150,16 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
 
         keyboardMock($multiView).keyDown('right');
+
+        assert.strictEqual(position($itemContainer), 0, 'container did not move');
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+
+        keyboardMock($multiView).keyDown('home');
+
+        assert.strictEqual(position($itemContainer), 0, 'container did not move');
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+
+        keyboardMock($multiView).keyDown('end');
 
         assert.strictEqual(position($itemContainer), 0, 'container did not move');
         assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
