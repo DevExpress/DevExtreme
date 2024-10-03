@@ -25,6 +25,10 @@ export class GridPagerWrapper extends ComponentWrapper {
     super._optionChanged(args);
   }
 
+  public getPageCount(): number {
+    return this.option('pageCount') as number;
+  }
+
   _validateOptions(options: Record<string, unknown>): Record<string, unknown> {
     if (options._skipValidation || this.option('_skipValidation')) {
       return options;
@@ -34,7 +38,7 @@ export class GridPagerWrapper extends ComponentWrapper {
     let {
       pageSize,
       pageIndex,
-      totalCount,
+      itemCount,
       // eslint-disable-next-line prefer-const
       ...rest
     } = initialOptions;
@@ -47,14 +51,14 @@ export class GridPagerWrapper extends ComponentWrapper {
       pageIndex = this.option('pageIndex') as number;
     }
 
-    if (totalCount === undefined) {
-      totalCount = this.option('totalCount') as number;
+    if (itemCount === undefined) {
+      itemCount = this.option('itemCount') as number;
     }
 
     const validatedOptions = validateOptions(
       pageSize as number,
       pageIndex as number,
-      totalCount as number,
+      itemCount as number,
     );
 
     return {

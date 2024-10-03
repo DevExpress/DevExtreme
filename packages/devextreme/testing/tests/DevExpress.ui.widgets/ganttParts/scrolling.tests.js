@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import 'ui/gantt';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { tasks } from './taskData.js';
 
 const { test } = QUnit;

@@ -1,35 +1,36 @@
-import errors from '../errors';
+import errors from '@js/core/errors';
 
-const Locker = function() {
-    const info = {};
+const Locker = function () {
+  const info = {};
 
-    const currentCount = function(lockName) {
-        return info[lockName] || 0;
-    };
+  const currentCount = function (lockName) {
+    return info[lockName] || 0;
+  };
 
-    return {
-        obtain: function(lockName) {
-            info[lockName] = currentCount(lockName) + 1;
-        },
+  return {
+    obtain(lockName) {
+      info[lockName] = currentCount(lockName) + 1;
+    },
 
-        release: function(lockName) {
-            const count = currentCount(lockName);
+    release(lockName) {
+      const count = currentCount(lockName);
 
-            if(count < 1) {
-                throw errors.Error('E0014');
-            }
+      if (count < 1) {
+        throw errors.Error('E0014');
+      }
 
-            if(count === 1) {
-                delete info[lockName];
-            } else {
-                info[lockName] = count - 1;
-            }
-        },
+      if (count === 1) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete info[lockName];
+      } else {
+        info[lockName] = count - 1;
+      }
+    },
 
-        locked: function(lockName) {
-            return currentCount(lockName) > 0;
-        }
-    };
+    locked(lockName) {
+      return currentCount(lockName) > 0;
+    },
+  };
 };
 
-export default Locker;
+export { Locker };

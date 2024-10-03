@@ -1,7 +1,7 @@
 import $ from 'jquery';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 
-import 'ui/load_indicator';
+import '__internal/ui/m_load_indicator';
 
 import 'generic_light.css!';
 
@@ -21,7 +21,7 @@ const LOADINDICATOR_IMAGE = 'dx-loadindicator-image';
 
 const isIdenticalNamesInUrl = function(firstUrl, secondUrl) {
     let firstName = firstUrl.split('/');
-    firstName = firstName[firstName.length - 1].replace(')', '').replace('"', '');
+    firstName = firstName[firstName.length - 1].replace(/\)/g, '').replace(/"/g, '');
     let secondName = secondUrl.split('/');
     secondName = secondName[secondName.length - 1];
     return firstName === secondName;

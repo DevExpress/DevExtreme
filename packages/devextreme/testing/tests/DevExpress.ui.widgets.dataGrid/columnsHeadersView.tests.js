@@ -5,7 +5,7 @@ import dataUtils from 'core/element_data';
 import typeUtils from 'core/utils/type';
 import { format } from 'core/utils/string';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { DataSource } from 'data/data_source/data_source';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';

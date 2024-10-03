@@ -1,13 +1,16 @@
-import { TemplateBase } from './template_base';
-import { normalizeTemplateElement } from '../utils/dom';
+import { TemplateBase } from '@js/core/templates/template_base';
+import { normalizeTemplateElement } from '@js/core/utils/dom';
 
 export class FunctionTemplate extends TemplateBase {
-    constructor(render) {
-        super();
-        this._render = render;
-    }
+  _render: any;
 
-    _renderCore(options) {
-        return normalizeTemplateElement(this._render(options));
-    }
+  constructor(render) {
+    super();
+    this._render = render;
+  }
+
+  // @ts-expect-error need type overload
+  _renderCore(options) {
+    return normalizeTemplateElement(this._render(options));
+  }
 }

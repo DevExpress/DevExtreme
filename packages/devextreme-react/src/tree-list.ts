@@ -569,7 +569,7 @@ type IColumnFixingProps = React.PropsWithChildren<{
     fix?: string;
     leftPosition?: string;
     rightPosition?: string;
-    stickPosition?: string;
+    stickyPosition?: string;
     unfix?: string;
   };
 }>
@@ -594,7 +594,7 @@ type IColumnFixingTextsProps = React.PropsWithChildren<{
   fix?: string;
   leftPosition?: string;
   rightPosition?: string;
-  stickPosition?: string;
+  stickyPosition?: string;
   unfix?: string;
 }>
 const _componentColumnFixingTexts = memo(
@@ -2203,7 +2203,7 @@ type ITextsProps = React.PropsWithChildren<{
   fix?: string;
   leftPosition?: string;
   rightPosition?: string;
-  stickPosition?: string;
+  stickyPosition?: string;
   unfix?: string;
   clearFilter?: string;
   createFilter?: string;

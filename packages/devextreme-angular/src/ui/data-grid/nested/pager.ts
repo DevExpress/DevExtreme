@@ -14,8 +14,8 @@ import {
 
 
 
-import { Mode } from 'devextreme/common';
-import { PagerDisplayMode, PagerPageSize } from 'devextreme/common/grids';
+import { DisplayMode, Mode } from 'devextreme/common';
+import { PagerPageSize } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -39,10 +39,10 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get displayMode(): PagerDisplayMode {
+    get displayMode(): DisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: PagerDisplayMode) {
+    set displayMode(value: DisplayMode) {
         this._setOption('displayMode', value);
     }
 

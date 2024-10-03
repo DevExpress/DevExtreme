@@ -1,6 +1,5 @@
 import { getUniqueValues, removeDuplicates } from '@js/core/utils/array';
 import { isKeysEqual } from '@js/core/utils/array_compare';
-// @ts-expect-error
 import { getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -512,7 +511,7 @@ export default class StandardStrategy extends SelectionStrategy {
     const { selectedItems, selectedItemKeys, keyHashIndices } = this.options;
 
     this._storedSelectionState = {
-      keyHashIndices: { ...keyHashIndices },
+      keyHashIndices: JSON.stringify(keyHashIndices),
       selectedItems: [...selectedItems],
       selectedItemKeys: [...selectedItemKeys],
     };
@@ -524,7 +523,7 @@ export default class StandardStrategy extends SelectionStrategy {
     const { selectedItemKeys, selectedItems, keyHashIndices } = this._storedSelectionState!;
     this._setOption('selectedItemKeys', selectedItemKeys);
     this._setOption('selectedItems', selectedItems);
-    this._setOption('keyHashIndices', keyHashIndices);
+    this._setOption('keyHashIndices', JSON.parse(keyHashIndices));
   }
 
   _onePageSelectAll(isDeselect: boolean): DeferredObj<unknown> {

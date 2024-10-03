@@ -13,12 +13,12 @@ export interface InfoTextProps {
   rootElementRef?: RefObject<HTMLDivElement>;
 }
 
-export type InfoTextPropsType = InfoTextProps & Pick<PagerProps, 'infoText' | 'pageIndex' | 'pageCount' | 'totalCount'>;
+export type InfoTextPropsType = InfoTextProps & Pick<PagerProps, 'infoText' | 'pageIndex' | 'pageCount' | 'itemCount'>;
 
 const InfoTextDefaultProps: InfoTextPropsType = {
   pageCount: PagerDefaultProps.pageCount,
   pageIndex: PagerDefaultProps.pageIndex,
-  totalCount: PagerDefaultProps.totalCount,
+  itemCount: PagerDefaultProps.itemCount,
 };
 
 export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
@@ -37,13 +37,13 @@ export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
     const {
       pageCount,
       pageIndex,
-      totalCount,
+      itemCount,
     } = this.props;
     return format(
       this.getInfoText(),
       (pageIndex + 1).toString(),
       pageCount?.toString(),
-      totalCount?.toString(),
+      itemCount?.toString(),
     ) as string;
   }
 

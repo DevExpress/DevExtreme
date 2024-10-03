@@ -1,11 +1,11 @@
 import Class from '@js/core/class';
-import devices from '@js/core/devices';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import { contains } from '@js/core/utils/dom';
 import Emitter from '@js/events/core/emitter';
 import registerEmitter from '@js/events/core/emitter_registrator';
 import pointerEvents from '@js/events/pointer';
 import { isMouseEvent } from '@js/events/utils/index';
+import devices from '@ts/core/m_devices';
 
 const ACTIVE_EVENT_NAME = 'dxactive';
 const INACTIVE_EVENT_NAME = 'dxinactive';
@@ -158,7 +158,7 @@ const FeedbackEmitter = Emitter.inherit({
   },
 
 });
-// @ts-expect-error
+
 FeedbackEmitter.lock = function (deferred) {
   const lockInactive = activeFeedback ? activeFeedback.lockInactive() : noop;
 
@@ -173,7 +173,6 @@ registerEmitter({
   ],
 });
 
-// @ts-expect-error
 export const { lock } = FeedbackEmitter;
 export {
   ACTIVE_EVENT_NAME as active,

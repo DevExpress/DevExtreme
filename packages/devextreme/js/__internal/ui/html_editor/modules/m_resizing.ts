@@ -143,7 +143,6 @@ export default class ResizingModule extends BaseModule {
     const borderWidth = this._getBorderWidth();
 
     this._$resizeFrame
-      // @ts-expect-error
       .css({
         height,
         width,

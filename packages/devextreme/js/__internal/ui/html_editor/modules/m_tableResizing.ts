@@ -165,7 +165,6 @@ export default class TableResizingModule extends BaseModule {
     this._windowResizeTimeout = setTimeout(() => {
       const $tables = this._findTables();
       each($tables, (index, table) => {
-        // @ts-expect-error
         const $table = $(table);
         const frame = this._tableResizeFrames[index];
         const actualTableWidth = getOuterWidth($table);
@@ -257,7 +256,6 @@ export default class TableResizingModule extends BaseModule {
     } else {
       // @ts-expect-error
       each($tables, (index, table) => {
-        // @ts-expect-error
         const $table = $(table);
         const frame = this._tableResizeFrames[index];
         const isColumnsCountChanged = frame?.columnsCount !== this._getTableDeterminantElements($table, 'horizontal').length;
@@ -396,7 +394,6 @@ export default class TableResizingModule extends BaseModule {
       this._removeDraggable($currentLineSeparator, directionInfo.lineResizerClass);
 
       styleOptions[directionInfo.positionCoordinate] = currentPosition - DRAGGABLE_ELEMENT_OFFSET;
-      // @ts-expect-error
       $($currentLineSeparator).css(styleOptions);
 
       const attachSeparatorData = {
@@ -650,7 +647,7 @@ export default class TableResizingModule extends BaseModule {
   }
 
   _getColumnElementsSum(columnElements) {
-    const columnsWidths = [];
+    const columnsWidths: any[] = [];
     let columnsSum = 0;
 
     each(columnElements, (index, element) => {

@@ -28,13 +28,13 @@ describe('Validate utils', () => {
         const {
           pageSize,
           pageIndex,
-          totalCount,
+          itemCount,
           pageCount,
         } = result;
 
         expect(pageSize).toEqual(expectedPageSize);
         expect(pageIndex).toEqual(expectedPageIndex);
-        expect(totalCount).toEqual(expectedItemCount);
+        expect(itemCount).toEqual(expectedItemCount);
         expect(pageCount).toEqual(expectedPageCount);
       });
   });

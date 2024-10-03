@@ -150,10 +150,9 @@ export class Appointment extends DOMComponent {
     this._renderDragSourceClass();
     this._renderDirection();
 
-    (this.$element() as any).data('dxAppointmentStartDate', this.option('startDate'));
-
     const text = ExpressionUtils.getField(this.option('dataAccessors'), 'text', this.rawAppointment);
     (this.$element() as any).attr('title', text);
+    (this.$element() as any).data('dxAppointmentStartDate', this.option('startDate'));
     (this.$element() as any).attr('role', 'button');
 
     this._renderRecurrenceClass();
@@ -208,14 +207,13 @@ export class Appointment extends DOMComponent {
   _renderAriaLabel() {
     // @ts-expect-error
     const $element: dxElementWrapper = this.$element();
-
     const ariaLabel = [
       this._getDateText(),
       this._getGroupText(),
     ]
       .filter((label) => !!label)
       .join(', ');
-    $element.attr('aria-label', `${ariaLabel}, `);
+    $element.attr('aria-roledescription', `${ariaLabel}, `);
   }
 
   _renderAppointmentGeometry() {

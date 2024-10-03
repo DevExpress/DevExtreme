@@ -6,7 +6,6 @@ import Callbacks from '@js/core/utils/callbacks';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { captionize } from '@js/core/utils/inflector';
 import { each, map } from '@js/core/utils/iterator';
 import { orderEach } from '@js/core/utils/object';
 import {
@@ -21,6 +20,7 @@ import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
+import inflector from '@ts/core/utils/m_inflector';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
@@ -1605,7 +1605,7 @@ export class ColumnsController extends modules.Controller {
       if (isString(dataField)) {
         const getter = compileGetter(dataField);
         calculatedColumnOptions = {
-          caption: captionize(dataField),
+          caption: inflector.captionize(dataField),
           calculateCellValue(data, skipDeserialization) {
             // @ts-expect-error
             const value = getter(data);

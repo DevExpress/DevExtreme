@@ -126,7 +126,6 @@ export const Scroller = Class.inherit({
     this._scrollProp = options.direction === HORIZONTAL ? 'scrollLeft' : 'scrollTop';
 
     each(options, (optionName, optionValue) => {
-      // @ts-expect-error
       this[`_${optionName}`] = optionValue;
     });
   },

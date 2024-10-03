@@ -9,7 +9,7 @@ import {
 } from 'core/utils/size';
 
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import fx from 'animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -19,12 +19,12 @@ import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import windowUtils from 'core/utils/window';
+import windowUtils from '__internal/core/utils/m_window';
 import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import visibilityChangeUtils from 'events/visibility_change';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 
 import 'generic_light.css!';
 import 'ui/popup';

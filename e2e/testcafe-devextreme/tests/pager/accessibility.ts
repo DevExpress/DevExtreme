@@ -9,7 +9,7 @@ fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<any> = {
-  totalCount: [50],
+  itemCount: [50],
 
   displayMode: ['full', 'compact'],
   infoText: [undefined, 'Total {2} items. Page {0} of {1}'],
@@ -52,7 +52,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxPager',
+  component: 'dxPagination',
   a11yCheckConfig,
   options,
   created,

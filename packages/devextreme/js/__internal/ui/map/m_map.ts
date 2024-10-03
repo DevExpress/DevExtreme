@@ -15,12 +15,14 @@ import { addNamespace } from '@js/events/utils/index';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 
+import azure from './m_provider.dynamic.azure';
 import bing from './m_provider.dynamic.bing';
 import google from './m_provider.dynamic.google';
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 import googleStatic from './m_provider.google_static';
 
 const PROVIDERS = {
+  azure,
   googleStatic,
   google,
   bing,
@@ -84,6 +86,23 @@ const Map = Widget.inherit({
         },
       },
     ]);
+  },
+
+  ctor(element, options) {
+    this.callBase(element, options);
+
+    if (options) {
+      if ('provider' in options && options.provider === 'bing') {
+        this._logDeprecatedBingProvider();
+      }
+    }
+  },
+
+  _logDeprecatedBingProvider() {
+    this._logDeprecatedOptionWarning('provider: bing', {
+      since: '24.2',
+      message: 'Use other map providers, such as Azure, Google, or GoogleStatic.',
+    });
   },
 
   _setDeprecatedOptions() {
@@ -190,7 +209,7 @@ const Map = Widget.inherit({
   },
 
   _optionChanged(args) {
-    const { name } = args;
+    const { name, value } = args;
 
     const changeBag = this._optionChangeBag;
     this._optionChangeBag = null;
@@ -199,6 +218,7 @@ const Map = Widget.inherit({
       case 'disabled':
         this._renderShield();
         this.callBase(args);
+        this._queueAsyncAction('updateDisabled');
         break;
       case 'width':
       case 'height':
@@ -208,6 +228,9 @@ const Map = Widget.inherit({
       case 'provider':
         this._suppressAsyncAction = true;
         this._invalidate();
+        if (value === 'bing') {
+          this._logDeprecatedBingProvider();
+        }
         break;
       case 'apiKey':
         errors.log('W1001');

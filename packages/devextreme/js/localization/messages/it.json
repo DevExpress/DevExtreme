@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "Trascina qui i campi filtro",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Oggetto",
         "dxScheduler-editorLabelStartDate": "Data inizio",

@@ -166,7 +166,6 @@ class Chat extends Widget<Properties> {
       text,
     };
 
-    this.renderMessage(message);
     this._messageSendAction?.({ message, event });
   }
 

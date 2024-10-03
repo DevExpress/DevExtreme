@@ -53,7 +53,6 @@ class PopoverPositionController extends OverlayPositionController {
 
   positionWrapper(): void {
     if (this._props.shading) {
-      // @ts-expect-error
       this._$wrapper.css({ top: 0, left: 0 });
     }
   }
@@ -86,7 +85,6 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   _getContentBorderWidth(side) {
-    // @ts-expect-error
     const borderWidth = this._$content.css(borderWidthStyles[side]);
 
     // @ts-expect-error

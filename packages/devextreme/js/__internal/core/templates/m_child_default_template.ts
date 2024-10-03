@@ -1,8 +1,10 @@
-import { TemplateBase } from './template_base';
+import { TemplateBase } from '@js/core/templates/template_base';
 
 export class ChildDefaultTemplate extends TemplateBase {
-    constructor(name) {
-        super();
-        this.name = name;
-    }
+  name: any;
+
+  constructor(name) {
+    super();
+    this.name = name;
+  }
 }

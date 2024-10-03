@@ -18,7 +18,6 @@ declare let google: any;
 
 const window = getWindow();
 
-const MAP_MARKER_CLASS = 'dx-map-marker';
 const GOOGLE_MAP_READY = '_googleScriptReady';
 let GOOGLE_URL = `https://maps.googleapis.com/maps/api/js?callback=${GOOGLE_MAP_READY}&libraries=marker&loading=async`;
 const INFO_WINDOW_CLASS = 'gm-style-iw';
@@ -31,7 +30,6 @@ const initCustomMarkerClass = function () {
     this._offset = options.offset;
 
     this._$overlayContainer = $('<div>')
-      // @ts-expect-error
       .css({
         position: 'absolute',
         display: 'none',
@@ -350,16 +348,6 @@ const GoogleProvider = DynamicProvider.inherit({
     });
   },
 
-  _createIconTemplate(iconSrc: string) {
-    const $img = $('<img>');
-
-    $img.attr('src', iconSrc);
-    $img.attr('alt', 'Marker icon');
-    $img.addClass(MAP_MARKER_CLASS);
-
-    return $img[0];
-  },
-
   _renderTooltip(marker, options) {
     if (!options) {
       return;
@@ -484,7 +472,6 @@ const GoogleProvider = DynamicProvider.inherit({
 });
 
 /// #DEBUG
-// @ts-expect-error
 GoogleProvider.remapConstant = function (newValue) {
   GOOGLE_URL = newValue;
 };

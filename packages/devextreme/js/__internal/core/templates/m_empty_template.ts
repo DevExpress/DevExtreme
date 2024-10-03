@@ -1,8 +1,8 @@
-import $ from '../renderer';
-import { TemplateBase } from './template_base';
+import $ from '@js/core/renderer';
+import { TemplateBase } from '@js/core/templates/template_base';
 
 export class EmptyTemplate extends TemplateBase {
-    _renderCore() {
-        return $();
-    }
+  _renderCore() {
+    return $();
+  }
 }

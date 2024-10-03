@@ -39,6 +39,7 @@ export { DxMap } from "./map";
 export { DxMenu } from "./menu";
 export { DxMultiView } from "./multi-view";
 export { DxNumberBox } from "./number-box";
+export { DxPagination } from "./pagination";
 export { DxPieChart } from "./pie-chart";
 export { DxPivotGrid } from "./pivot-grid";
 export { DxPivotGridFieldChooser } from "./pivot-grid-field-chooser";

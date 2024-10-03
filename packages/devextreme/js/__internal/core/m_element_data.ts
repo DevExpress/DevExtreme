@@ -1,113 +1,115 @@
-import domAdapter from './dom_adapter';
-import eventsEngine from '../events/core/events_engine';
-import MemorizedCallbacks from './memorized_callbacks';
+/* eslint-disable object-shorthand */
+import domAdapter from '@js/core/dom_adapter';
+import MemorizedCallbacks from '@js/core/memorized_callbacks';
+import eventsEngine from '@js/events/core/events_engine';
 
 const dataMap = new WeakMap();
 let strategy;
 
 export const strategyChanging = new MemorizedCallbacks();
-let beforeCleanDataFunc = function() {};
-let afterCleanDataFunc = function() {};
+let beforeCleanDataFunc: any = function () {};
+let afterCleanDataFunc: any = function () {};
 
-export const setDataStrategy = function(value) {
-    strategyChanging.fire(value);
+export const setDataStrategy = function (value) {
+  strategyChanging.fire(value);
 
-    strategy = value;
+  strategy = value;
 
-    const cleanData = strategy.cleanData;
+  const { cleanData } = strategy;
 
-    strategy.cleanData = function(nodes) {
-        beforeCleanDataFunc(nodes);
+  strategy.cleanData = function (nodes) {
+    beforeCleanDataFunc(nodes);
 
-        const result = cleanData.call(this, nodes);
+    const result = cleanData.call(this, nodes);
 
-        afterCleanDataFunc(nodes);
+    afterCleanDataFunc(nodes);
 
-        return result;
-    };
+    return result;
+  };
 };
 
 setDataStrategy({
-    data: function() {
-        const element = arguments[0];
-        const key = arguments[1];
-        const value = arguments[2];
+  data: function (...args) {
+    const element = args[0];
+    const key = args[1];
+    const value = args[2];
 
-        if(!element) return;
+    if (!element) return;
 
-        let elementData = dataMap.get(element);
+    let elementData = dataMap.get(element);
 
-        if(!elementData) {
-            elementData = {};
-            dataMap.set(element, elementData);
-        }
-
-        if(key === undefined) {
-            return elementData;
-        }
-
-        if(arguments.length === 2) {
-            return elementData[key];
-        }
-
-        elementData[key] = value;
-        return value;
-    },
-
-    removeData: function(element, key) {
-        if(!element) return;
-        if(key === undefined) {
-            dataMap.delete(element);
-        } else {
-            const elementData = dataMap.get(element);
-            if(elementData) {
-                delete elementData[key];
-            }
-        }
-    },
-
-    cleanData: function(elements) {
-        for(let i = 0; i < elements.length; i++) {
-            eventsEngine.off(elements[i]);
-            dataMap.delete(elements[i]);
-        }
+    if (!elementData) {
+      elementData = {};
+      dataMap.set(element, elementData);
     }
+
+    if (key === undefined) {
+      return elementData;
+    }
+
+    if (args.length === 2) {
+      return elementData[key];
+    }
+
+    elementData[key] = value;
+    return value;
+  },
+
+  removeData: function (element, key) {
+    if (!element) return;
+    if (key === undefined) {
+      dataMap.delete(element);
+    } else {
+      const elementData = dataMap.get(element);
+      if (elementData) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete elementData[key];
+      }
+    }
+  },
+
+  cleanData: function (elements) {
+    for (let i = 0; i < elements.length; i++) {
+      eventsEngine.off(elements[i]);
+      dataMap.delete(elements[i]);
+    }
+  },
 });
 
 export function getDataStrategy() {
-    return strategy;
+  return strategy;
 }
 
-export function data() {
-    return strategy.data.apply(this, arguments);
+export function data(...args) {
+  return strategy.data.apply(this, args);
 }
 
 export function beforeCleanData(callback) {
-    beforeCleanDataFunc = callback;
+  beforeCleanDataFunc = callback;
 }
 
 export function afterCleanData(callback) {
-    afterCleanDataFunc = callback;
+  afterCleanDataFunc = callback;
 }
 
 export function cleanData(nodes) {
-    return strategy.cleanData.call(this, nodes);
+  return strategy.cleanData.call(this, nodes);
 }
 
 export function removeData(element, key) {
-    return strategy.removeData.call(this, element, key);
+  return strategy.removeData.call(this, element, key);
 }
 
-export function cleanDataRecursive(element, cleanSelf) {
-    if(!domAdapter.isElementNode(element)) {
-        return;
-    }
+export function cleanDataRecursive(element, cleanSelf?: boolean) {
+  if (!domAdapter.isElementNode(element)) {
+    return;
+  }
 
-    const childElements = element.getElementsByTagName('*');
+  const childElements = element.getElementsByTagName('*');
 
-    strategy.cleanData(childElements);
+  strategy.cleanData(childElements);
 
-    if(cleanSelf) {
-        strategy.cleanData([element]);
-    }
+  if (cleanSelf) {
+    strategy.cleanData([element]);
+  }
 }

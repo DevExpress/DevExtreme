@@ -3,7 +3,7 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
