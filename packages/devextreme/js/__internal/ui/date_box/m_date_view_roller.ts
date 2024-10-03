@@ -89,7 +89,6 @@ class DateViewRoller extends Scrollable {
 
   _renderItems() {
     const items = this.option('items') || [];
-    // @ts-expect-error
     let $items = $();
 
     $(this.content()).empty();

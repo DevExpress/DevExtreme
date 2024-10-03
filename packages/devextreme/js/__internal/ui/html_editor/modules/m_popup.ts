@@ -1,12 +1,12 @@
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
-import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils/index';
 import type ListType from '@js/ui/list';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup';
+import windowUtils from '@ts/core/utils/m_window';
 import Quill from 'devextreme-quill';
 
 import BaseModule from './m_base';
@@ -107,7 +107,7 @@ if (Quill) {
     }
 
     get maxHeight() {
-      const window = getWindow();
+      const window = windowUtils.getWindow();
       const windowHeight = window && getHeight(window) || 0;
       return Math.max(MIN_HEIGHT, windowHeight * 0.5);
     }

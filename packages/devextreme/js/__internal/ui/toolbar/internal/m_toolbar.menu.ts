@@ -278,7 +278,6 @@ export default class DropDownMenu extends Widget<Properties> {
   }
 
   _closeOutsideDropDownHandler(e): boolean {
-    // @ts-expect-error
     const isOutsideClick = !$(e.target).closest(this.$element()).length;
 
     return isOutsideClick;

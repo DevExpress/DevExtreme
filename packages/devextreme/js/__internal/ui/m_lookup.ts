@@ -11,7 +11,6 @@ import { each } from '@js/core/utils/iterator';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
-import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
@@ -20,6 +19,7 @@ import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
 import Popover from '@js/ui/popover/ui.popover';
 import TextBox from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
+import supportUtils from '@ts/core/utils/m_support';
 import { getElementWidth } from '@ts/ui/drop_down_editor/m_utils';
 
 const window = getWindow();
@@ -136,7 +136,7 @@ const Lookup = DropDownList.inherit({
     return this.callBase().concat([
       {
         device() {
-          return !nativeScrolling;
+          return !supportUtils.nativeScrolling;
         },
         options: {
           useNativeScrolling: false,

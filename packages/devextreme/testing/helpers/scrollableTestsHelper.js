@@ -1,4 +1,4 @@
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { calculateScrollbarWidth } from '__internal/grids/pivot_grid/m_widget_utils';
 
 const SCROLLABLE_CONTAINER = 'dx-scrollable-container';

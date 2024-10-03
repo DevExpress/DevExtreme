@@ -1,6 +1,6 @@
 import registerComponent from 'core/component_registrator';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import DOMComponent from 'core/dom_component';
 import dataUtils from 'core/element_data';
 import { TemplateManager } from 'core/template_manager';

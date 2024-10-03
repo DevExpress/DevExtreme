@@ -1,2 +1,5 @@
-import rendererBase from './renderer_base';
-export default rendererBase.get();
+import rendererBase from '@js/core/renderer_base';
+
+const renderer = rendererBase.get();
+export { renderer };
+export default renderer;

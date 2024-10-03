@@ -144,10 +144,8 @@ export class ColumnHeadersView extends ColumnsView {
       eventsEngine.on($link, 'click', this.createAction(() => columnChooserView.showColumnChooser()));
 
       $cellContent
-      // @ts-expect-error
         .append(domAdapter.createTextNode(leftPart))
         .append($link)
-      // @ts-expect-error
         .append(domAdapter.createTextNode(rightPart));
     } else {
       $cellContent.text(textEmpty);

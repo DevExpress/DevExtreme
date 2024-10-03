@@ -199,6 +199,28 @@ module.exports = {
                 '@typescript-eslint/explicit-function-return-type': 'warn'
             }
         },
+        // Rules for migrated core files.
+        {
+            files: [
+                '**/core/**/m_*.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                'guard-for-in': 'off',
+                'no-restricted-syntax': 'off',
+                'func-style': 'off',
+                'wrap-iife': 'off',
+                'prefer-arrow-callback': 'off',
+                '@typescript-eslint/prefer-optional-chain': 'off',
+                'radix': 'off',
+                'object-shorthand': 'off'
+            },
+        },
     ],
     settings: {
         'import/resolver': {

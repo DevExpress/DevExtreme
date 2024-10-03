@@ -25,11 +25,12 @@ export interface dxElementWrapper {
 
   clone(): this;
 
-  closest(selector: string | dxElementWrapper): this;
+  closest(selector: string | dxElementWrapper | Node): this;
 
   contents(): this;
 
   css(propertyName: string, value: string | number): this;
+  css(properties: Record<string, any>): this;
 
   data(key: string, value?: any): this;
 
@@ -53,7 +54,7 @@ export interface dxElementWrapper {
 
   hide(): this;
 
-  html(value: string): this;
+  html(value?: string): this;
 
   index(element?: Element | dxElementWrapper): number;
 
@@ -118,6 +119,8 @@ export interface dxElementWrapper {
 
   toggleClass(className: string, value?: boolean): this;
 
+  trim(): this;
+
   val(value?: string | string[] | number): this;
 
   wrap(wrappingElement: this | Element | string): this;
@@ -127,6 +130,6 @@ export interface dxElementWrapper {
   length: number;
 }
 
-declare function renderer(selector: string | Element | dxElementWrapper): dxElementWrapper;
+declare function renderer(selector?: string | Element | dxElementWrapper): dxElementWrapper;
 
 export default renderer;

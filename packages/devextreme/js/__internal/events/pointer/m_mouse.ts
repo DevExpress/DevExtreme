@@ -48,13 +48,10 @@ const MouseStrategy = BaseStrategy.inherit({
   },
 
 });
-// @ts-expect-error
+
 MouseStrategy.map = eventMap;
-// @ts-expect-error
 MouseStrategy.normalize = normalizeMouseEvent;
-// @ts-expect-error
 MouseStrategy.activate = activateStrategy;
-// @ts-expect-error
 MouseStrategy.resetObserver = function () {
   observer.reset();
 };
