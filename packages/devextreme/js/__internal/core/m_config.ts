@@ -1,15 +1,15 @@
 /* global DevExpress */
 
-import errors from './errors';
-import { extend } from './utils/extend';
+import errors from '@js/core/errors';
+import { extend } from '@js/core/utils/extend';
 
 const config = {
   rtlEnabled: false,
   defaultCurrency: 'USD',
   defaultUseCurrencyAccountingStyle: true,
   oDataFilterToLower: true,
-  serverDecimalSeparator: '.',
-  decimalSeparator: '.',
+  serverDecimalSeparator: '@js/core',
+  decimalSeparator: '@js/core',
   thousandsSeparator: ',',
   forceIsoDateParsing: true,
   wrapActionsBeforeExecute: true,

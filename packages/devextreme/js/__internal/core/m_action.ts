@@ -1,7 +1,7 @@
-import $ from './renderer';
-import { each } from './utils/iterator';
-import { isFunction, isPlainObject } from './utils/type';
-import { getWindow } from './utils/window';
+import $ from '@js/core/renderer';
+import { each } from '@js/core/utils/iterator';
+import { isFunction, isPlainObject } from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
 
 class Action {
   constructor(action, config) {
@@ -125,11 +125,11 @@ const createValidatorByTargetElement = (condition) => (e) => {
 
 Action.registerExecutor({
   disabled: {
-    validate: createValidatorByTargetElement(($target) => $target.is('.dx-state-disabled, .dx-state-disabled *')),
+    validate: createValidatorByTargetElement(($target) => $target.is('@js/coredx-state-disabled, .dx-state-disabled *')),
   },
 
   readOnly: {
-    validate: createValidatorByTargetElement(($target) => $target.is('.dx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)')),
+    validate: createValidatorByTargetElement(($target) => $target.is('@js/coredx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)')),
   },
   undefined: {
     execute: (e) => {

@@ -1,4 +1,4 @@
-import errors from '../errors';
+import errors from '@js/core/errors';
 
 const Locker = function () {
   const info = {};

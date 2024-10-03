@@ -1,7 +1,7 @@
-import domAdapter from '../dom_adapter';
-import callOnce from './call_once';
-import { camelize } from './inflector';
-import { isNumeric, isString } from './type';
+import domAdapter from '@js/core/dom_adapter';
+import callOnce from '@js/core/utils/call_once';
+import { camelize } from '@js/core/utils/inflector';
+import { isNumeric, isString } from '@js/core/utils/type';
 
 const jsPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
 const cssPrefixes = {

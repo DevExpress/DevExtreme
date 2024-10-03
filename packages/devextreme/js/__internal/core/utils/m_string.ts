@@ -1,4 +1,4 @@
-import { isFunction, isString } from './type';
+import { isFunction, isString } from '@js/core/utils/type';
 
 export const encodeHtml = (function () {
   const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];

@@ -1,6 +1,6 @@
-import Callbacks from '../utils/callbacks';
-import { extend } from '../utils/extend';
-import { isDeferred, isDefined, isPromise } from '../utils/type';
+import Callbacks from '@js/core/utils/callbacks';
+import { extend } from '@js/core/utils/extend';
+import { isDeferred, isDefined, isPromise } from '@js/core/utils/type';
 
 const deferredConfig = [{
   method: 'resolve',

@@ -1,4 +1,4 @@
-import { map } from './iterator';
+import { map } from '@js/core/utils/iterator';
 
 const _normalize = function (text) {
   if (text === undefined || text === null) {
@@ -55,7 +55,7 @@ export const captionize = function (name) {
   for (i = 0; i < name.length; i++) {
     char = name.charAt(i);
     isNewWord = (char === char.toUpperCase() && char !== '-' && char !== ')' && char !== '/') || (char in DIGIT_CHARS);
-    if (char === '_' || char === '.') {
+    if (char === '_' || char === '@js/core/utils') {
       char = ' ';
       isNewWord = true;
     } else if (i === 0) {

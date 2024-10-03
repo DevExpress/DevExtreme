@@ -1,5 +1,5 @@
-import { noop } from './utils/common';
-import { getWindow, hasWindow } from './utils/window';
+import { noop } from '@js/core/utils/common';
+import { getWindow, hasWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 

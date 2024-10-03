@@ -1,4 +1,4 @@
-import { isObject } from './type';
+import { isObject } from '@js/core/utils/type';
 
 const getKeyWrapper = function (item, getKey) {
   const key = getKey(item);

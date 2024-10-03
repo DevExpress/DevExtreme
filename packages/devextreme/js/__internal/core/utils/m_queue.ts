@@ -1,5 +1,5 @@
-import { when } from '../../core/utils/deferred';
-import errors from '../errors';
+import errors from '@js/core/errors';
+import { when } from '@js/core/utils/deferred';
 
 function createQueue(discardPendingTasks) {
   let _tasks = [];

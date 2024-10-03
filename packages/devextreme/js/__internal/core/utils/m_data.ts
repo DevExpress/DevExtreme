@@ -1,11 +1,11 @@
-import Class from '../class';
-import errors from '../errors';
-import { each } from './iterator';
-import { deepExtendArraySafe } from './object';
+import Class from '@js/core/class';
+import errors from '@js/core/errors';
+import { each } from '@js/core/utils/iterator';
+import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
   isDefined, isFunction, isObject, isPlainObject,
-} from './type';
-import variableWrapper from './variable_wrapper';
+} from '@js/core/utils/type';
+import variableWrapper from '@js/core/utils/variable_wrapper';
 
 const unwrapVariable = variableWrapper.unwrap;
 const { isWrapped } = variableWrapper;
@@ -13,12 +13,12 @@ const { assign } = variableWrapper;
 
 const bracketsToDots = function (expr) {
   return expr
-    .replace(/\[/g, '.')
+    .replace(/\[/g, '@js/core/utils')
     .replace(/\]/g, '');
 };
 
 export const getPathParts = function (name) {
-  return bracketsToDots(name).split('.');
+  return bracketsToDots(name).split('@js/core/utils');
 };
 
 const readPropValue = function (obj, propName, options) {
@@ -124,7 +124,7 @@ function combineGetters(getters) {
       }
 
       let current = result || (result = {});
-      const path = name.split('.');
+      const path = name.split('@js/core/utils');
       const last = path.length - 1;
 
       for (let i = 0; i < last; i++) {

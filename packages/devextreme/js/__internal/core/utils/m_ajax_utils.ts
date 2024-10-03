@@ -1,6 +1,6 @@
 import domAdapter from '@js/core/dom_adapter';
-import { extendFromObject } from '@js/core/extend';
-import { getWindow, hasWindow } from '@js/core/window';
+import { extendFromObject } from '@js/core/utils/extend';
+import { getWindow, hasWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 

@@ -1,7 +1,7 @@
-import callbacks from './component_registrator_callbacks';
-import errors from './errors';
-import $ from './renderer';
-import { name as publicComponentName } from './utils/public_component';
+import callbacks from '@js/core/component_registrator_callbacks';
+import errors from '@js/core/errors';
+import $ from '@js/core/renderer';
+import { name as publicComponentName } from '@js/core/utils/public_component';
 
 const registerComponent = function (name, namespace, componentClass) {
   if (!componentClass) {

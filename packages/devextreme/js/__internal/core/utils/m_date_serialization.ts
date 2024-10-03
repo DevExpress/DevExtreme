@@ -1,7 +1,7 @@
-import defaultDateNames from '../../localization/default_date_names';
-import { getFormatter as getLDMLFormatter } from '../../localization/ldml/date.formatter';
-import config from '../config';
-import { isDate, isNumeric as isNumber, isString } from './type';
+import config from '@js/core/config';
+import { isDate, isNumeric as isNumber, isString } from '@js/core/utils/type';
+import defaultDateNames from '@js/localization/default_date_names';
+import { getFormatter as getLDMLFormatter } from '@js/localization/ldml/date.formatter';
 
 const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
@@ -10,7 +10,7 @@ const DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
 const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 
-const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
+const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '@js/core/utilsSSS'];
 const DATE_SERIALIZATION_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
 const MILLISECOND_LENGHT = 3;
@@ -162,7 +162,7 @@ const getDateSerializationFormat = function (value) {
     }
     if (format) {
       return format;
-    } if (value.indexOf(':') >= 0) {
+    } if (value.includes(':')) {
       return DATETIME_SERIALIZATION_FORMAT;
     }
     return DATE_SERIALIZATION_FORMAT;

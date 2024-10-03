@@ -1,6 +1,6 @@
-import config from '../config';
-import { orderEach } from './object';
-import { isDefined } from './type';
+import config from '@js/core/config';
+import { orderEach } from '@js/core/utils/object';
+import { isDefined } from '@js/core/utils/type';
 
 function createOccurrenceMap(array) {
   return array.reduce((map, value) => {

@@ -1,4 +1,4 @@
-import { isPlainObject } from './type';
+import { isPlainObject } from '@js/core/utils/type';
 
 export const extendFromObject = function (target, source, overrideExistingValues) {
   target = target || {};

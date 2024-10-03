@@ -1,5 +1,5 @@
-import errors from './errors';
-import { isWindow } from './utils/type';
+import errors from '@js/core/errors';
+import { isWindow } from '@js/core/utils/type';
 
 const wrapOverridden = function (baseProto, methodName, method) {
   return function () {

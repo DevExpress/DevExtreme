@@ -1,10 +1,10 @@
-import domAdapter from '../../core/dom_adapter';
-import $ from '../../core/renderer';
-import { each } from './iterator';
+import domAdapter from '@js/core/dom_adapter';
+import $ from '@js/core/renderer';
+import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isRenderer, isString, isWindow,
-} from './type';
-import { getWindow } from './window';
+} from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 
@@ -70,7 +70,7 @@ export const extractTemplateMarkup = (element) => {
 
   const templateTag = element.length && element.filter(function isNotExecutableScript() {
     const $node = $(this);
-    return $node.is('script[type]') && ($node.attr('type').indexOf('script') < 0);
+    return $node.is('script[type]') && !$node.attr('type').includes('script');
   });
 
   if (templateTag.length) {

@@ -1,6 +1,6 @@
-import $ from '../renderer';
-import callbacks from './callbacks';
-import readyCallbacks from './ready_callbacks';
+import $ from '@js/core/renderer';
+import callbacks from '@js/core/utils/callbacks';
+import readyCallbacks from '@js/core/utils/ready_callbacks';
 
 const ready = readyCallbacks.add;
 const changeCallback = callbacks();
@@ -24,7 +24,7 @@ const value = (function () {
 }());
 
 ready(() => {
-  value('.dx-viewport');
+  value('@js/core/utilsdx-viewport');
 });
 
 export {

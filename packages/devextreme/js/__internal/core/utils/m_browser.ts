@@ -1,5 +1,5 @@
-import { extend } from './extend';
-import { getNavigator } from './window';
+import { extend } from '@js/core/utils/extend';
+import { getNavigator } from '@js/core/utils/window';
 
 const navigator = getNavigator();
 

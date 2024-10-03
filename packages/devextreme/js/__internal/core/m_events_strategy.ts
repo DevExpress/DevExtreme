@@ -1,6 +1,6 @@
-import Callbacks from './utils/callbacks';
-import { each } from './utils/iterator';
-import { isFunction, isPlainObject } from './utils/type';
+import Callbacks from '@js/core/utils/callbacks';
+import { each } from '@js/core/utils/iterator';
+import { isFunction, isPlainObject } from '@js/core/utils/type';
 
 export class EventsStrategy {
   constructor(owner, options = {}) {

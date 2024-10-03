@@ -1,4 +1,4 @@
-import $ from '../../core/renderer';
+import $ from '@js/core/renderer';
 
 const ICON_CLASS = 'dx-icon';
 const SVG_ICON_CLASS = 'dx-svg-icon';

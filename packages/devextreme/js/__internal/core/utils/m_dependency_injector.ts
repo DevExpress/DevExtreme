@@ -1,7 +1,7 @@
-import Class from '../class';
-import { extend } from './extend';
-import { each } from './iterator';
-import { isFunction } from './type';
+import Class from '@js/core/class';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isFunction } from '@js/core/utils/type';
 
 function injector(object) {
   const BaseClass = Class.inherit(object);

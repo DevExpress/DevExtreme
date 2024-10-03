@@ -3,15 +3,15 @@ import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import Errors from '@js/core/errors';
 import $ from '@js/core/renderer';
-import { ChildDefaultTemplate } from '../templates/child_default_template';
-import { EmptyTemplate } from '../templates/empty_template';
-import { Template } from '../templates/template';
-import { TemplateBase } from '../templates/template_base';
-import { groupBy } from './array';
-import { findBestMatches } from './common';
-import { normalizeTemplateElement } from './dom';
-import { extend } from './extend';
-import { isFunction, isRenderer } from './type';
+import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
+import { EmptyTemplate } from '@js/core/templates/empty_template';
+import { Template } from '@js/core/templates/template';
+import { TemplateBase } from '@js/core/templates/template_base';
+import { groupBy } from '@js/core/utils/array';
+import { findBestMatches } from '@js/core/utils/common';
+import { normalizeTemplateElement } from '@js/core/utils/dom';
+import { extend } from '@js/core/utils/extend';
+import { isFunction, isRenderer } from '@js/core/utils/type';
 
 export const findTemplates = (element, name) => {
     const optionsAttributeName = 'data-options';

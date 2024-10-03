@@ -1,9 +1,9 @@
-import { noop } from '../utils/common';
-import { equals } from '../utils/comparator';
-import { compileGetter, compileSetter, getPathParts } from '../utils/data';
-import { extend } from '../utils/extend';
-import { isDefined, isPlainObject } from '../utils/type';
-import { normalizeOptions } from './utils';
+import { normalizeOptions } from '@js/core/options/utils';
+import { noop } from '@js/core/utils/common';
+import { equals } from '@js/core/utils/comparator';
+import { compileGetter, compileSetter, getPathParts } from '@js/core/utils/data';
+import { extend } from '@js/core/utils/extend';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 
 const cachedGetters = {};
 const cachedSetters = {};

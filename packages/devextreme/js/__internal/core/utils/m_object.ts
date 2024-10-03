@@ -1,5 +1,5 @@
-import { isNumeric, isObject, isPlainObject } from './type';
-import variableWrapper from './variable_wrapper';
+import { isNumeric, isObject, isPlainObject } from '@js/core/utils/type';
+import variableWrapper from '@js/core/utils/variable_wrapper';
 
 const clone = (function () {
   function Clone() { }

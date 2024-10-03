@@ -1,7 +1,7 @@
 /* global console */
 /* eslint no-console: off */
 
-import { isFunction } from './type';
+import { isFunction } from '@js/core/utils/type';
 
 const noop = function () {};
 const getConsoleMethod = function (method) {

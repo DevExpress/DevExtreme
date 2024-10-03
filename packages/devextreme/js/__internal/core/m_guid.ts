@@ -1,4 +1,4 @@
-import Class from './class';
+import Class from '@js/core/class';
 
 const Guid = Class.inherit({
 

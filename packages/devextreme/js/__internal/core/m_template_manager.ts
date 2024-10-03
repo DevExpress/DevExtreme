@@ -1,4 +1,8 @@
 import $ from '@js/core/renderer';
+import { EmptyTemplate } from '@js/core/templates/empty_template';
+import { FunctionTemplate } from '@js/core/templates/function_template';
+import { noop } from '@js/core/utils/common';
+import { extend } from '@js/core/utils/extend';
 import {
   acquireTemplate,
   defaultCreateElement,
@@ -8,12 +12,7 @@ import {
   templateKey,
   validateTemplateSource,
 } from '@js/core/utils/template_manager';
-
-import { EmptyTemplate } from './templates/empty_template';
-import { FunctionTemplate } from './templates/function_template';
-import { noop } from './utils/common';
-import { extend } from './utils/extend';
-import { isDefined, isFunction, isRenderer } from './utils/type';
+import { isDefined, isFunction, isRenderer } from '@js/core/utils/type';
 
 const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';

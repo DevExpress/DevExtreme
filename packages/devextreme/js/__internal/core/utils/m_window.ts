@@ -1,6 +1,6 @@
 /* global window */
 
-import domAdapter from '../dom_adapter';
+import domAdapter from '@js/core/dom_adapter';
 
 let hasWindowValue = typeof window !== 'undefined';
 

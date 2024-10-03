@@ -1,5 +1,5 @@
-import { Deferred, when } from './utils/deferred';
-import { isDefined } from './utils/type';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { isDefined } from '@js/core/utils/type';
 
 export class PostponedOperations {
   constructor() {

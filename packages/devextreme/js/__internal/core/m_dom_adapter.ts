@@ -1,7 +1,7 @@
 /* global document */
-import { noop } from './utils/common';
-import injector from './utils/dependency_injector';
-import { getShadowElementsFromPoint } from './utils/shadow_dom';
+import { noop } from '@js/core/utils/common';
+import injector from '@js/core/utils/dependency_injector';
+import { getShadowElementsFromPoint } from '@js/core/utils/shadow_dom';
 
 const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;

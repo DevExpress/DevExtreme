@@ -1,8 +1,8 @@
-import domAdapter from '../dom_adapter';
-import callOnce from './call_once';
-import Callbacks from './callbacks';
-import readyCallbacks from './ready_callbacks';
-import { getWindow, hasWindow } from './window';
+import domAdapter from '@js/core/dom_adapter';
+import callOnce from '@js/core/utils/call_once';
+import Callbacks from '@js/core/utils/callbacks';
+import readyCallbacks from '@js/core/utils/ready_callbacks';
+import { getWindow, hasWindow } from '@js/core/utils/window';
 
 const resizeCallbacks = (function () {
   let prevSize;

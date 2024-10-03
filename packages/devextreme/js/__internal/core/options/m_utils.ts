@@ -1,8 +1,8 @@
-import devices from '../devices';
-import { findBestMatches } from '../utils/common';
-import { compileGetter } from '../utils/data';
-import { extend } from '../utils/extend';
-import { isEmptyObject, isFunction } from '../utils/type';
+import devices from '@js/core/devices';
+import { findBestMatches } from '@js/core/utils/common';
+import { compileGetter } from '@js/core/utils/data';
+import { extend } from '@js/core/utils/extend';
+import { isEmptyObject, isFunction } from '@js/core/utils/type';
 
 const cachedGetters = {};
 

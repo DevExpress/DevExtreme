@@ -1,4 +1,4 @@
-import { getWindow } from '../../core/utils/window';
+import { getWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 

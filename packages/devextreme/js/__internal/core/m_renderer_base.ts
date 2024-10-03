@@ -1,12 +1,12 @@
-import domAdapter from './dom_adapter';
-import { cleanDataRecursive, data as elementData, removeData } from './element_data';
-import { isTablePart, parseHTML } from './utils/html_parser';
-import { getOffset, getWindowByElement } from './utils/size';
-import { normalizeStyleProp, styleProp } from './utils/style';
+import domAdapter from '@js/core/dom_adapter';
+import { cleanDataRecursive, data as elementData, removeData } from '@js/core/element_data';
+import { isTablePart, parseHTML } from '@js/core/utils/html_parser';
+import { getOffset, getWindowByElement } from '@js/core/utils/size';
+import { normalizeStyleProp, styleProp } from '@js/core/utils/style';
 import {
   isDefined, isFunction, isNumeric, isObject, isPlainObject, isString, isWindow, type,
-} from './utils/type';
-import { getWindow } from './utils/window';
+} from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 

@@ -1,11 +1,11 @@
-import config from '../config';
-import Guid from '../guid';
-import { Deferred, when } from '../utils/deferred';
-import { toComparable } from './data';
-import { each } from './iterator';
+import config from '@js/core/config';
+import Guid from '@js/core/guid';
+import { toComparable } from '@js/core/utils/data';
+import { Deferred, when } from '@js/core/utils/deferred';
+import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isFunction, isObject, isString, type,
-} from './type';
+} from '@js/core/utils/type';
 
 export const ensureDefined = function (value, defaultValue) {
   return isDefined(value) ? value : defaultValue;
@@ -100,8 +100,12 @@ export const deferUpdater = function (func) {
   };
 };
 
-export const findBestMatches = function (targetFilter, items, mapFn) {
-  const bestMatches = [];
+export const findBestMatches = (
+  targetFilter: unknown,
+  items: unknown[],
+  mapFn?: (item: unknown) => unknown,
+): unknown[] => {
+  const bestMatches: unknown[] = [];
   let maxMatchCount = 0;
 
   each(items, (index, itemSrc) => {

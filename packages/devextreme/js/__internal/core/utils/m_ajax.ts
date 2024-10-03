@@ -1,5 +1,4 @@
-import httpRequest from '../../core/http_request';
-import { getWindow } from '../../core/utils/window';
+import httpRequest from '@js/core/http_request';
 import {
   evalCrossDomainScript,
   evalScript,
@@ -8,10 +7,11 @@ import {
   getRequestHeaders,
   getRequestOptions,
   isCrossDomain,
-} from './ajax_utils';
-import { Deferred } from './deferred';
-import injector from './dependency_injector';
-import { isDefined } from './type';
+} from '@js/core/utils/ajax_utils';
+import { Deferred } from '@js/core/utils/deferred';
+import injector from '@js/core/utils/dependency_injector';
+import { isDefined } from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 

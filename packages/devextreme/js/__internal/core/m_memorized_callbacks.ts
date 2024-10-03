@@ -1,5 +1,5 @@
-import { each } from '../core/utils/iterator';
-import Callbacks from './utils/callbacks';
+import Callbacks from '@js/core/utils/callbacks';
+import { each } from '@js/core/utils/iterator';
 
 class MemorizedCallbacks {
   constructor() {

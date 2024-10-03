@@ -1,4 +1,4 @@
-import domAdapter from '../dom_adapter';
+import domAdapter from '@js/core/dom_adapter';
 
 const isTagName = (/<([a-z][^/\0>\x20\t\r\n\f]+)/i);
 

@@ -1,11 +1,11 @@
-import { equalByValue, noop } from '../utils/common';
-import { getPathParts } from '../utils/data';
-import { extend } from '../utils/extend';
-import { isFunction, isObject, type } from '../utils/type';
-import { OptionManager } from './option_manager';
+import { OptionManager } from '@js/core/options/option_manager';
 import {
   convertRulesToOptions, getFieldName, getNestedOptionValue, getParentName,
-} from './utils';
+} from '@js/core/options/utils';
+import { equalByValue, noop } from '@js/core/utils/common';
+import { getPathParts } from '@js/core/utils/data';
+import { extend } from '@js/core/utils/extend';
+import { isFunction, isObject, type } from '@js/core/utils/type';
 
 export class Options {
   constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {

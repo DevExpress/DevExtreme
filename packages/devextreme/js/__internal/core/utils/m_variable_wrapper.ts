@@ -1,5 +1,5 @@
-import { logger } from './console';
-import dependencyInjector from './dependency_injector';
+import { logger } from '@js/core/utils/console';
+import dependencyInjector from '@js/core/utils/dependency_injector';
 
 const variableWrapper = dependencyInjector({
   isWrapped() {

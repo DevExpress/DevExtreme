@@ -1,7 +1,7 @@
-import domAdapter from '../../core/dom_adapter';
-import $ from '../../core/renderer';
-import { isRenderer, isString } from './type';
-import { getWindow } from './window';
+import domAdapter from '@js/core/dom_adapter';
+import $ from '@js/core/renderer';
+import { isRenderer, isString } from '@js/core/utils/type';
+import { getWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 

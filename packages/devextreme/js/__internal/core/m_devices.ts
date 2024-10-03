@@ -1,16 +1,16 @@
-import $ from '../core/renderer';
-import Config from './config';
-import errors from './errors';
-import { EventsStrategy } from './events_strategy';
-import Callbacks from './utils/callbacks';
-import { extend } from './utils/extend';
-import readyCallbacks from './utils/ready_callbacks';
-import resizeCallbacks from './utils/resize_callbacks';
-import { getHeight, getWidth } from './utils/size';
-import { sessionStorage as SessionStorage } from './utils/storage';
-import { isPlainObject } from './utils/type';
-import { changeCallback, value as viewPort } from './utils/view_port';
-import { getNavigator, getWindow, hasWindow } from './utils/window';
+import Config from '@js/core/config';
+import errors from '@js/core/errors';
+import { EventsStrategy } from '@js/core/events_strategy';
+import $ from '@js/core/renderer';
+import Callbacks from '@js/core/utils/callbacks';
+import { extend } from '@js/core/utils/extend';
+import readyCallbacks from '@js/core/utils/ready_callbacks';
+import resizeCallbacks from '@js/core/utils/resize_callbacks';
+import { getHeight, getWidth } from '@js/core/utils/size';
+import { sessionStorage as SessionStorage } from '@js/core/utils/storage';
+import { isPlainObject } from '@js/core/utils/type';
+import { changeCallback, value as viewPort } from '@js/core/utils/view_port';
+import { getNavigator, getWindow, hasWindow } from '@js/core/utils/window';
 
 const window = getWindow();
 

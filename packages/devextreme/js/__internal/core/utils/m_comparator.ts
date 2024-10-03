@@ -1,6 +1,6 @@
-import domAdapter from '../dom_adapter';
-import { toComparable } from './data';
-import { isRenderer } from './type';
+import domAdapter from '@js/core/dom_adapter';
+import { toComparable } from '@js/core/utils/data';
+import { isRenderer } from '@js/core/utils/type';
 
 const hasNegation = function (oldValue, newValue) {
   return (1 / oldValue) === (1 / newValue);

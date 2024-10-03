@@ -1,5 +1,5 @@
-import config from '../config';
-import { isWindow } from '../utils/type';
+import config from '@js/core/config';
+import { isWindow } from '@js/core/utils/type';
 
 const getDefaultAlignment = (isRtlEnabled) => {
   const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;

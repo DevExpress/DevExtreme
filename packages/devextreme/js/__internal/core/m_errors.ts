@@ -1,4 +1,4 @@
-import errorUtils from './utils/error';
+import errorUtils from '@js/core/utils/error';
 
 /**
 * @docid

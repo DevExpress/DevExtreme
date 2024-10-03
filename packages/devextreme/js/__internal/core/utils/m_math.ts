@@ -1,4 +1,4 @@
-import { isExponential } from './type';
+import { isExponential } from '@js/core/utils/type';
 
 const sign = function (value) {
   if (value === 0) {
@@ -54,7 +54,7 @@ function _isEdgeBug() {
 
 function adjust(value, interval) {
   let precision = getPrecision(interval || 0) + 2;
-  const separatedValue = value.toString().split('.');
+  const separatedValue = value.toString().split('@js/core/utils');
   const sourceValue = value;
   const absValue = Math.abs(value);
   let separatedAdjustedValue;
@@ -76,7 +76,7 @@ function adjust(value, interval) {
   precision = (_isEdgeBug() && (getExponent(value) > 6)) || precision > 7 ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
 
   if (!isExponentValue) {
-    separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('.');
+    separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('@js/core/utils');
     if (separatedAdjustedValue[0] === integerPart.toString()) {
       return parseFloat(`${separatedValue[0]}.${separatedAdjustedValue[1]}`);
     }
@@ -87,11 +87,11 @@ function adjust(value, interval) {
 function getPrecision(value) {
   const str = value.toString();
 
-  if (str.indexOf('.') < 0) {
+  if (str.indexOf('@js/core/utils') < 0) {
     return 0;
   }
 
-  const mantissa = str.split('.');
+  const mantissa = str.split('@js/core/utils');
   const positionOfDelimiter = mantissa[1].indexOf('e');
 
   return positionOfDelimiter >= 0 ? positionOfDelimiter : mantissa[1].length;
@@ -174,7 +174,7 @@ function getRemainderByDivision(dividend, divider, digitsCount) {
 function getExponentLength(value) {
   const valueString = value.toString();
 
-  return valueString.split('.')[1]?.length
+  return valueString.split('@js/core/utils')[1]?.length
         || parseInt(valueString.split('e-')[1])
         || 0;
 }

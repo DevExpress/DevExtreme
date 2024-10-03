@@ -1,6 +1,6 @@
-import { equalByValue, getKeyHash } from './common';
-import { compileGetter } from './data';
-import { isObject, isString } from './type';
+import { equalByValue, getKeyHash } from '@js/core/utils/common';
+import { compileGetter } from '@js/core/utils/data';
+import { isObject, isString } from '@js/core/utils/type';
 
 export const SelectionFilterCreator = function (selectedItemKeys, isSelectAll) {
   this.getLocalFilter = function (keyGetter, equalKeys, equalByReference, keyExpr) {
