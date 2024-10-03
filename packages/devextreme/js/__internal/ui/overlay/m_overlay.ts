@@ -164,6 +164,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       _checkParentVisibility: true,
       _hideOnParentScrollTarget: undefined,
       _fixWrapperPosition: false,
+      _loopFocus: false,
     });
   },
 
@@ -684,9 +685,12 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   },
 
   _toggleTabTerminator(enabled) {
-    // debugger
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _loopFocus } = this.option();
+
     const eventName = addNamespace('keydown', this.NAME);
-    if (enabled) {
+
+    if (_loopFocus || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
       eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
@@ -716,7 +720,6 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   },
 
   _tabKeyHandler(e) {
-    // debugger
     if (normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
       return;
     }
@@ -1159,6 +1162,9 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
 
     switch (name) {
       case 'animation':
+        break;
+      case '_loopFocus':
+        this._toggleTabTerminator();
         break;
       case 'shading':
         this._toggleShading(this.option('visible'));

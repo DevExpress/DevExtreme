@@ -541,17 +541,13 @@ const Lookup = DropDownList.inherit({
     return 'auto';
   },
 
-  // _popupTabHandler(e) {
-  //   const { usePopover } = this.option();
+  _popupTabHandler(e) {
+    const { usePopover } = this.option();
 
-  //   // debugger;
-
-  //   if (usePopover) {
-  //     this.callBase(e);
-  //   }
-  // },
-
-  _popupTabHandler: noop,
+    if (usePopover) {
+      this.callBase(e);
+    }
+  },
 
   _renderPopup() {
     if (this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
@@ -625,22 +621,24 @@ const Lookup = DropDownList.inherit({
   _preventFocusOnPopup: noop,
 
   _popupConfig() {
+    const {
+      usePopover,
+      dropDownOptions,
+    } = this.option();
+
     const result = extend(this.callBase(), {
-
       toolbarItems: this._getPopupToolbarItems(),
-
       hideOnParentScroll: false,
       onPositioned: null,
-
       maxHeight: '100vh',
-
-      showTitle: this.option('dropDownOptions.showTitle'),
-      title: this.option('dropDownOptions.title'),
+      showTitle: dropDownOptions.showTitle,
+      title: dropDownOptions.title,
       titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
-      onTitleRendered: this.option('dropDownOptions.onTitleRendered'),
-      fullScreen: this.option('dropDownOptions.fullScreen'),
-      shading: this.option('dropDownOptions.shading'),
-      hideOnOutsideClick: this.option('dropDownOptions.hideOnOutsideClick') || this.option('dropDownOptions.closeOnOutsideClick'),
+      onTitleRendered: dropDownOptions.onTitleRendered,
+      fullScreen: dropDownOptions.fullScreen,
+      shading: dropDownOptions.shading,
+      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick || dropDownOptions.closeOnOutsideClick,
+      _loopFocus: !usePopover,
     });
 
     delete result.animation;
@@ -661,7 +659,8 @@ const Lookup = DropDownList.inherit({
     }
 
     each(['position', 'animation', 'width', 'height'], (_, optionName) => {
-      const popupOptionValue = this.option(`dropDownOptions.${optionName}`);
+      const popupOptionValue = dropDownOptions[optionName];
+
       if (popupOptionValue !== undefined) {
         result[optionName] = popupOptionValue;
       }
