@@ -108,8 +108,7 @@ const Lookup = DropDownList.inherit({
           return getSize('height');
         },
         shading: true,
-        // debugger
-        hideOnOutsideClick: false,
+        hideOnOutsideClick: true,
         position: undefined,
         animation: {},
         title: '',
@@ -193,7 +192,6 @@ const Lookup = DropDownList.inherit({
           dropDownCentered: true,
           _scrollToSelectedItemEnabled: true,
           dropDownOptions: {
-            hideOnOutsideClick: true,
             _ignoreFunctionValueDeprecation: true,
 
             width: () => getElementWidth(this.$element()),
