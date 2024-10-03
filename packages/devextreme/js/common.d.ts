@@ -845,18 +845,6 @@ export type VerticalEdge = 'bottom' | 'top';
 export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
 
 /**
- * @public
- * @namespace DevExpress.common
- */
-export type PagerAllPagesMode = 'all';
-
-/**
- * @public
- * @namespace DevExpress.common
- */
-export type PagerPageSize = 'all' | 'auto';
-
-/**
  * @docid
  * @hidden
  * @namespace DevExpress.common

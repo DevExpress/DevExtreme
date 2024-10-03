@@ -14,7 +14,8 @@ import {
 
 
 
-import { Mode, PagerDisplayMode, PagerPageSize } from 'devextreme/common';
+import { Mode, PagerDisplayMode } from 'devextreme/common';
+import { PagerPageSize } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,

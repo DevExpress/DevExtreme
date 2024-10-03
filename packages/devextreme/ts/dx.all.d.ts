@@ -1341,6 +1341,7 @@ declare module DevExpress.common {
   };
   /**
    * [descr:BasePagerOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type BasePagerOptions = {
     /**
@@ -1686,9 +1687,7 @@ declare module DevExpress.common {
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
-  export type PagerAllPagesMode = 'all';
   export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
-  export type PagerPageSize = 'all' | 'auto';
   /**
    * [descr:PatternRule]
    */
@@ -4332,6 +4331,7 @@ declare module DevExpress.common.grids {
      */
     visible?: boolean | Mode;
   };
+  export type PagerPageSize = 'all' | 'auto';
   /**
    * [descr:PagingBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -21783,6 +21783,7 @@ declare module DevExpress.ui {
     getPageCount(): number;
   }
   module dxPager {
+    export type PageSize = 'all';
     export type Properties = dxPagerOptions;
   }
   /**
@@ -21810,7 +21811,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPagerOptions.allowedPageSizes]
      */
-    allowedPageSizes?: Array<number | DevExpress.common.PagerAllPagesMode>;
+    allowedPageSizes?: Array<number | DevExpress.ui.dxPager.PageSize>;
   }
   /**
    * [descr:dxPivotGrid]

@@ -12,7 +12,6 @@ import {
   Sortable,
   SortOrder,
   ValidationRule,
-  PagerPageSize,
   BasePagerOptions,
 } from '../common';
 
@@ -2513,6 +2512,12 @@ export type Pager = BasePagerOptions & {
    */
   visible?: boolean | Mode;
 };
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type PagerPageSize = 'all' | 'auto';
 
 /**
  * @hidden

@@ -1,1 +1,1 @@
-export { dxPagerOptions, Properties } from './pager';
+export { PageSize, dxPagerOptions, Properties } from './pager';
