@@ -16,6 +16,8 @@ export class PagerView extends View {
         gridCompatibility={false}
         pageSizes={[2, 6, 18]}
         pageCount={pageCount}
+        // @ts-expect-error
+        _skipValidation={true}
       ></Pager>
     </div>,
     [
