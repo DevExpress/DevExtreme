@@ -684,6 +684,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   },
 
   _toggleTabTerminator(enabled) {
+    // debugger
     const eventName = addNamespace('keydown', this.NAME);
     if (enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
@@ -715,6 +716,14 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   },
 
   _tabKeyHandler(e) {
+    /**
+     * 0. Завести BC + написать пост + позвать PM
+     * 1. Приватная пропа _loopFocus в Overlay
+     * 2. Для lookup эта опция всегда в true, если usePopover: false
+     * 3. Если usePopover: true, то используем _popupTabHandler уровня ddEditor
+     * 4. Меняем дефолт у hideOnOutsideClick: true
+     */
+    // debugger
     if (normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
       return;
     }

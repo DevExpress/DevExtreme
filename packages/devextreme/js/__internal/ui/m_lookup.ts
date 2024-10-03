@@ -109,6 +109,7 @@ const Lookup = DropDownList.inherit({
           return getSize('height');
         },
         shading: true,
+        // debugger
         hideOnOutsideClick: false,
         position: undefined,
         animation: {},
@@ -543,6 +544,16 @@ const Lookup = DropDownList.inherit({
     return 'auto';
   },
 
+  // _popupTabHandler(e) {
+  //   const { usePopover } = this.option();
+
+  //   // debugger;
+
+  //   if (usePopover) {
+  //     this.callBase(e);
+  //   }
+  // },
+
   _popupTabHandler: noop,
 
   _renderPopup() {
@@ -560,7 +571,7 @@ const Lookup = DropDownList.inherit({
     this._$popup.addClass(LOOKUP_POPUP_CLASS);
     this._popup.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
 
-    this._attachPopupFocusoutHandler();
+    // this._attachPopupFocusoutHandler();
   },
 
   _attachPopupFocusoutHandler(): void {

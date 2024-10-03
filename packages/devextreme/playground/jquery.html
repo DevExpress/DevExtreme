@@ -107,15 +107,19 @@
                     inputAttr: {
                         'aria-label': 'Simple lookup',
                     },
+                    // applyValueMode: 'useButtons',
                     dropDownOptions: {
-                        hideOnOutsideClick: false,
+                        // hideOnOutsideClick: false,
+                        shading: false,
+                        // toolbarItems: [],
                     },
                 });
 
-                // $('#products').dxSelectBox({
-                //     items: simpleProducts,
-                //     inputAttr: { 'aria-label': 'Simple Product' },
-                // });
+                $('#products').dxSelectBox({
+                    items: simpleProducts,
+                    inputAttr: { 'aria-label': 'Simple Product' },
+                    // applyValueMode: 'useButtons',
+                });
             });
         </script>
     </div>
