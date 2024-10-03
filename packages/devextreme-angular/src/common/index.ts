@@ -1,7 +1,6 @@
 export {
     ApplyValueMode,
     AsyncRule,
-    BasePagerOptions,
     ButtonStyle,
     ButtonType,
     CompareRule,
@@ -30,6 +29,7 @@ export {
     Orientation,
     PageLoadMode,
     PageOrientation,
+    PagerBaseOptions,
     PatternRule,
     Position,
     PositionAlignment,

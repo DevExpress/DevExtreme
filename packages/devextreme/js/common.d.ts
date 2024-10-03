@@ -849,7 +849,7 @@ export type DisplayMode = 'adaptive' | 'compact' | 'full';
  * @hidden
  * @namespace DevExpress.common
  */
-export type BasePagerOptions = {
+export type PagerBaseOptions = {
   /**
    * @docid
    * @public

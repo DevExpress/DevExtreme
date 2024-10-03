@@ -110,7 +110,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.displayMode]
+     * [descr:PagerBaseOptions.displayMode]
     
      */
     @Input()
@@ -188,7 +188,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.infoText]
+     * [descr:PagerBaseOptions.infoText]
     
      */
     @Input()
@@ -214,7 +214,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.label]
+     * [descr:PagerBaseOptions.label]
     
      */
     @Input()
@@ -266,7 +266,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.showInfo]
+     * [descr:PagerBaseOptions.showInfo]
     
      */
     @Input()
@@ -279,7 +279,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.showNavigationButtons]
+     * [descr:PagerBaseOptions.showNavigationButtons]
     
      */
     @Input()
@@ -292,7 +292,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:BasePagerOptions.showPageSizeSelector]
+     * [descr:PagerBaseOptions.showPageSizeSelector]
     
      */
     @Input()

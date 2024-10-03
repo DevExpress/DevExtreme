@@ -1339,36 +1339,6 @@ declare module DevExpress.common {
      */
     validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
   };
-  /**
-   * [descr:BasePagerOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type BasePagerOptions = {
-    /**
-     * [descr:BasePagerOptions.displayMode]
-     */
-    displayMode?: DisplayMode;
-    /**
-     * [descr:BasePagerOptions.infoText]
-     */
-    infoText?: string;
-    /**
-     * [descr:BasePagerOptions.showInfo]
-     */
-    showInfo?: boolean;
-    /**
-     * [descr:BasePagerOptions.showNavigationButtons]
-     */
-    showNavigationButtons?: boolean;
-    /**
-     * [descr:BasePagerOptions.showPageSizeSelector]
-     */
-    showPageSizeSelector?: boolean;
-    /**
-     * [descr:BasePagerOptions.label]
-     */
-    label?: string;
-  };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
   export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
   /**
@@ -1688,6 +1658,36 @@ declare module DevExpress.common {
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
+  /**
+   * [descr:PagerBaseOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type PagerBaseOptions = {
+    /**
+     * [descr:PagerBaseOptions.displayMode]
+     */
+    displayMode?: DisplayMode;
+    /**
+     * [descr:PagerBaseOptions.infoText]
+     */
+    infoText?: string;
+    /**
+     * [descr:PagerBaseOptions.showInfo]
+     */
+    showInfo?: boolean;
+    /**
+     * [descr:PagerBaseOptions.showNavigationButtons]
+     */
+    showNavigationButtons?: boolean;
+    /**
+     * [descr:PagerBaseOptions.showPageSizeSelector]
+     */
+    showPageSizeSelector?: boolean;
+    /**
+     * [descr:PagerBaseOptions.label]
+     */
+    label?: string;
+  };
   /**
    * [descr:PatternRule]
    */
@@ -4320,7 +4320,7 @@ declare module DevExpress.common.grids {
   /**
    * [descr:Pager]
    */
-  export type Pager = BasePagerOptions & {
+  export type Pager = PagerBaseOptions & {
     /**
      * [descr:Pager.allowedPageSizes]
      */
@@ -21791,7 +21791,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPagerOptions]
    */
   export interface dxPagerOptions
-    extends DevExpress.common.BasePagerOptions,
+    extends DevExpress.common.PagerBaseOptions,
       WidgetOptions<dxPager> {
     /**
      * [descr:dxPagerOptions.pageIndex]
