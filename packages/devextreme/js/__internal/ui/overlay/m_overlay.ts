@@ -9,7 +9,6 @@ import { EmptyTemplate } from '@js/core/templates/empty_template';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { contains, resetActiveElement } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
@@ -18,7 +17,6 @@ import {
   isFunction, isObject, isPromise, isWindow,
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
-import { getWindow, hasWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import {
   move as dragEventMove,
@@ -32,12 +30,14 @@ import type OverlayInstance from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import domUtils from '@ts/core/utils/m_dom';
 
+import windowUtils from '../../core/utils/m_window';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
 import * as zIndexPool from './m_z_index';
 
 const ready = readyCallbacks.add;
-const window = getWindow();
+const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
@@ -171,7 +171,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   _defaultOptionsRules() {
     return this.callBase().concat([{
       device() {
-        return !hasWindow();
+        return !windowUtils.hasWindow();
       },
       options: {
         width: null,
@@ -290,11 +290,10 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
-    // @ts-expect-error
-    const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
+    const isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target);
     const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
     const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
-            || contains(this._$content.get(0), e.target));
+            || domUtils.contains(this._$content.get(0), e.target));
 
     if (outsideClick && this._shouldHideOnOutsideClick(e)) {
       this._outsideClickHandler(e);
@@ -599,7 +598,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     const shouldResetActiveElement = !!this._$content.find(activeElement).length;
 
     if (shouldResetActiveElement) {
-      resetActiveElement();
+      domUtils.resetActiveElement();
     }
   },
 
@@ -732,7 +731,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
     const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
     const isEmptyTabList = tabbableElements.length === 0;
-    const isOutsideTarget = !contains(this._$wrapper.get(0), e.target);
+    const isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
 
     if (isTabOnLast || isShiftTabOnFirst
             || isEmptyTabList || isOutsideTarget) {
@@ -747,7 +746,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   },
 
   _toggleSubscriptions(enabled) {
-    if (hasWindow()) {
+    if (windowUtils.hasWindow()) {
       this._toggleHideTopOverlayCallback(enabled);
       this._toggleHideOnParentsScrollSubscription(enabled);
     }
@@ -990,7 +989,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   _renderGeometry(options) {
     const { visible } = this.option();
 
-    if (visible && hasWindow()) {
+    if (visible && windowUtils.hasWindow()) {
       this._stopAnimation();
       this._renderGeometryImpl();
     }

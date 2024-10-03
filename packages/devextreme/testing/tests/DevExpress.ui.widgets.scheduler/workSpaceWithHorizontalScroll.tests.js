@@ -1,5 +1,5 @@
 import { getOuterWidth } from 'core/utils/size';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';

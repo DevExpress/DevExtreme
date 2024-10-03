@@ -1,15 +1,15 @@
-const map = (values, callback) => {
-    if(Array.isArray(values)) {
-        return values.map(callback);
-    }
+const map = (values, callback): any[] => {
+  if (Array.isArray(values)) {
+    return values.map(callback);
+  }
 
-    const result = [];
+  const result: unknown[] = [];
 
-    for(const key in values) {
-        result.push(callback(values[key], key));
-    }
+  for (const key in values) {
+    result.push(callback(values[key], key));
+  }
 
-    return result;
+  return result;
 };
 
 /**
@@ -19,37 +19,38 @@ const map = (values, callback) => {
  * }}
  */
 const each = (values, callback) => {
-    if(!values) return;
+  if (!values) return;
 
-    if('length' in values) {
-        for(let i = 0; i < values.length; i++) {
-            if(callback.call(values[i], i, values[i]) === false) {
-                break;
-            }
-        }
-    } else {
-        for(const key in values) {
-            if(callback.call(values[key], key, values[key]) === false) {
-                break;
-            }
-        }
+  if ('length' in values) {
+    for (let i = 0; i < values.length; i++) {
+      if (callback.call(values[i], i, values[i]) === false) {
+        break;
+      }
     }
+  } else {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in values) {
+      if (callback.call(values[key], key, values[key]) === false) {
+        break;
+      }
+    }
+  }
 
-    return values;
+  return values;
 };
 
 const reverseEach = (array, callback) => {
-    if(!array || !('length' in array) || array.length === 0) return;
+  if (!array || !('length' in array) || array.length === 0) return;
 
-    for(let i = array.length - 1; i >= 0; i--) {
-        if(callback.call(array[i], i, array[i]) === false) {
-            break;
-        }
+  for (let i = array.length - 1; i >= 0; i--) {
+    if (callback.call(array[i], i, array[i]) === false) {
+      break;
     }
+  }
 };
 
 export {
-    map,
-    each,
-    reverseEach
+  each,
+  map,
+  reverseEach,
 };

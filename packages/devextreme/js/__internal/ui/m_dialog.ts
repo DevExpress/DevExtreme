@@ -5,7 +5,6 @@ import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { ensureDefined } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { resetActiveElement } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isPlainObject } from '@js/core/utils/type';
@@ -16,6 +15,7 @@ import messageLocalization from '@js/localization/message';
 import Popup from '@js/ui/popup/ui.popup';
 import { isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
+import domUtils from '@ts/core/utils/m_dom';
 
 const window = getWindow();
 
@@ -111,7 +111,7 @@ export const custom = function (options) {
         .find(`.${DX_BUTTON_CLASSNAME}`)
         .addClass(DX_DIALOG_BUTTON_CLASSNAME);
 
-      resetActiveElement();
+      domUtils.resetActiveElement();
     },
     onShown(e) {
       const $firstButton = e.component

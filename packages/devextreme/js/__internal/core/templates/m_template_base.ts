@@ -1,54 +1,57 @@
-import $ from '../renderer';
-import domAdapter from '../dom_adapter';
-import Callbacks from '../utils/callbacks';
-import { contains } from '../utils/dom';
-import { triggerShownEvent } from '../../events/visibility_change';
-import errors from '../errors';
+import domAdapter from '@js/core/dom_adapter';
+import errors from '@js/core/errors';
+import $ from '@js/core/renderer';
+import Callbacks from '@js/core/utils/callbacks';
+import { contains } from '@js/core/utils/dom';
+import { triggerShownEvent } from '@js/events/visibility_change';
 
 export const renderedCallbacks = Callbacks({ syncStrategy: true });
 
 export class TemplateBase {
-    render(options) {
-        options = options || {};
+  _element: any;
 
-        const onRendered = options.onRendered;
-        delete options.onRendered;
+  render(options) {
+    options = options || {};
 
-        let $result;
-        if(options.renovated && options.transclude && this._element) {
-            $result = $('<div>').append(this._element).contents();
-        } else {
-            $result = this._renderCore(options);
-        }
+    const { onRendered } = options;
+    delete options.onRendered;
 
-        this._ensureResultInContainer($result, options.container);
-        renderedCallbacks.fire($result, options.container);
-
-        onRendered && onRendered();
-        return $result;
+    let $result;
+    if (options.renovated && options.transclude && this._element) {
+      $result = $('<div>').append(this._element).contents();
+    } else {
+      // @ts-expect-error need type overload
+      $result = this._renderCore(options);
     }
 
-    _ensureResultInContainer($result, container) {
-        if(!container) {
-            return;
-        }
+    this._ensureResultInContainer($result, options.container);
+    renderedCallbacks.fire($result, options.container);
 
-        const $container = $(container);
-        const resultInContainer = contains($container.get(0), $result.get(0));
-        $container.append($result);
-        if(resultInContainer) {
-            return;
-        }
+    onRendered && onRendered();
+    return $result;
+  }
 
-        const resultInBody = contains(domAdapter.getBody(), $container.get(0));
-        if(!resultInBody) {
-            return;
-        }
-
-        triggerShownEvent($result);
+  _ensureResultInContainer($result, container) {
+    if (!container) {
+      return;
     }
 
-    _renderCore() {
-        throw errors.Error('E0001');
+    const $container = $(container);
+    const resultInContainer = contains($container.get(0), $result.get(0));
+    $container.append($result);
+    if (resultInContainer) {
+      return;
     }
+
+    const resultInBody = contains(domAdapter.getBody(), $container.get(0));
+    if (!resultInBody) {
+      return;
+    }
+
+    triggerShownEvent($result);
+  }
+
+  _renderCore() {
+    throw errors.Error('E0001');
+  }
 }

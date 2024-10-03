@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { EdmLiteral } from 'data/odata/utils';
 import commonUtils from 'core/utils/common';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import ArrayStore from 'data/array_store';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import fx from 'animation/fx';

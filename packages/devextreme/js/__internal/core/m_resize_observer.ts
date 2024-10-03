@@ -1,47 +1,56 @@
-import { noop } from './utils/common';
-import { getWindow, hasWindow } from './utils/window';
-const window = getWindow();
+import { noop } from '@js/core/utils/common';
+
+import windowUtils from './utils/m_window';
+
+const window = windowUtils.getWindow();
 
 const ResizeObserverMock = {
-    observe: noop,
-    unobserve: noop,
-    disconnect: noop
+  observe: noop,
+  unobserve: noop,
+  disconnect: noop,
 };
 
 class ResizeObserverSingleton {
-    constructor() {
-        if(!hasWindow() || !window.ResizeObserver) {
-            return ResizeObserverMock;
-        }
+  _callbacksMap?: any;
 
-        this._callbacksMap = new Map();
-        this._observer = new window.ResizeObserver((entries) => {
-            entries.forEach(entry => {
-                this._callbacksMap.get(entry.target)?.(entry);
-            });
-        });
+  _observer?: any;
+
+  constructor() {
+    // we need to make our own for extensions like this
+    if (!windowUtils.hasWindow() || !window.ResizeObserver) {
+      // eslint-disable-next-line no-constructor-return
+      return ResizeObserverMock;
     }
 
-    observe(element, callback) {
-        this._callbacksMap.set(element, callback);
-        this._observer.observe(element);
-    }
+    this._callbacksMap = new Map();
+    this._observer = new window.ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        this._callbacksMap.get(entry.target)?.(entry);
+      });
+    });
+  }
 
-    unobserve(element) {
-        this._callbacksMap.delete(element);
-        this._observer.unobserve(element);
-    }
+  observe(element, callback) {
+    this._callbacksMap.set(element, callback);
+    this._observer.observe(element);
+  }
 
-    disconnect() {
-        this._callbacksMap.clear();
-        this._observer.disconnect();
-    }
+  unobserve(element) {
+    this._callbacksMap.delete(element);
+    this._observer.unobserve(element);
+  }
+
+  disconnect() {
+    this._callbacksMap.clear();
+    this._observer.disconnect();
+  }
 }
 
 const resizeObserverSingleton = new ResizeObserverSingleton();
 
-///#DEBUG
+/// #DEBUG
+// @ts-expect-error singleton typing issue
 resizeObserverSingleton.ResizeObserverSingleton = ResizeObserverSingleton;
-///#ENDDEBUG
+/// #ENDDEBUG
 
-export default resizeObserverSingleton;
+export { resizeObserverSingleton };

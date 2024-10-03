@@ -284,9 +284,7 @@ const registerEmitter = function (emitterConfig) {
         });
 
         if (disposeEmitter) {
-          // @ts-expect-error
           if (eventManager.isActive(element)) {
-            // @ts-expect-error
             eventManager.resetEmitter(emitter);
           }
 

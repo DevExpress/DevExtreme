@@ -331,8 +331,6 @@ const setScrollPadding = (
   addWidgetPrefix,
 ): void => {
   const scrollPadding = getScrollPadding($cells, $container, addWidgetPrefix);
-
-  // @ts-expect-error
   $container.css({
     scrollPaddingLeft: scrollPadding.left,
     scrollPaddingRight: scrollPadding.right,

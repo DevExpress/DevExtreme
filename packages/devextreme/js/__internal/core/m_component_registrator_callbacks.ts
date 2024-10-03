@@ -1,3 +1,4 @@
-import MemorizedCallbacks from './memorized_callbacks';
+import MemorizedCallbacks from '@js/core/memorized_callbacks';
 
-export default new MemorizedCallbacks();
+const componentRegistratorCallbacks = new MemorizedCallbacks();
+export { componentRegistratorCallbacks };

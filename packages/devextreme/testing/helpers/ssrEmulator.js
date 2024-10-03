@@ -1,4 +1,4 @@
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 import windowUtils from 'core/utils/window';
 import serverSideDOMAdapter from './serverSideDOMAdapterPatch.js';
 

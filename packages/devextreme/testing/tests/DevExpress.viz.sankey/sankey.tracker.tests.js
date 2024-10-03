@@ -5,7 +5,7 @@ import tooltipModule from 'viz/core/tooltip';
 import { name as clickEventName } from 'events/click';
 import pointerEvents from 'events/pointer';
 import { setTooltipCustomOptions } from 'viz/sankey/tooltip';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 
 
 import dxSankey from 'viz/sankey/sankey';
