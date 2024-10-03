@@ -5,7 +5,7 @@ import dxSparkline, {
     Properties
 } from "devextreme/viz/sparkline";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/sparkline";
@@ -80,18 +80,15 @@ type IBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentBorder = (props: IBorderProps) => {
-  return React.createElement(NestedOption<IBorderProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "border",
-    },
-  });
-};
+const _componentBorder = memo(
+  (props: IBorderProps) => {
+    return React.createElement(NestedOption<IBorderProps>, { ...props });
+  }
+);
 
-const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_componentBorder, {
-  componentType: "option",
-});
+const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Tooltip
@@ -102,18 +99,15 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-const _componentFont = (props: IFontProps) => {
-  return React.createElement(NestedOption<IFontProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "font",
-    },
-  });
-};
+const _componentFont = memo(
+  (props: IFontProps) => {
+    return React.createElement(NestedOption<IFontProps>, { ...props });
+  }
+);
 
-const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componentFont, {
-  componentType: "option",
-});
+const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
+  OptionName: "font",
+})
 
 // owners:
 // Tooltip
@@ -125,18 +119,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = (props: IFormatProps) => {
-  return React.createElement(NestedOption<IFormatProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "format",
-    },
-  });
-};
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
 
-const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
-  componentType: "option",
-});
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // Sparkline
@@ -146,18 +137,15 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-const _componentMargin = (props: IMarginProps) => {
-  return React.createElement(NestedOption<IMarginProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "margin",
-    },
-  });
-};
+const _componentMargin = memo(
+  (props: IMarginProps) => {
+    return React.createElement(NestedOption<IMarginProps>, { ...props });
+  }
+);
 
-const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_componentMargin, {
-  componentType: "option",
-});
+const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
+  OptionName: "margin",
+})
 
 // owners:
 // Tooltip
@@ -168,18 +156,15 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-const _componentShadow = (props: IShadowProps) => {
-  return React.createElement(NestedOption<IShadowProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "shadow",
-    },
-  });
-};
+const _componentShadow = memo(
+  (props: IShadowProps) => {
+    return React.createElement(NestedOption<IShadowProps>, { ...props });
+  }
+);
 
-const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_componentShadow, {
-  componentType: "option",
-});
+const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
+  OptionName: "shadow",
+})
 
 // owners:
 // Sparkline
@@ -187,18 +172,15 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-const _componentSize = (props: ISizeProps) => {
-  return React.createElement(NestedOption<ISizeProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "size",
-    },
-  });
-};
+const _componentSize = memo(
+  (props: ISizeProps) => {
+    return React.createElement(NestedOption<ISizeProps>, { ...props });
+  }
+);
 
-const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componentSize, {
-  componentType: "option",
-});
+const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
+  OptionName: "size",
+})
 
 // owners:
 // Sparkline
@@ -234,29 +216,26 @@ type ITooltipProps = React.PropsWithChildren<{
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
-const _componentTooltip = (props: ITooltipProps) => {
-  return React.createElement(NestedOption<ITooltipProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "tooltip",
-      ExpectedChildren: {
-        border: { optionName: "border", isCollectionItem: false },
-        font: { optionName: "font", isCollectionItem: false },
-        format: { optionName: "format", isCollectionItem: false },
-        shadow: { optionName: "shadow", isCollectionItem: false }
-      },
-      TemplateProps: [{
-        tmplOption: "contentTemplate",
-        render: "contentRender",
-        component: "contentComponent"
-      }],
-    },
-  });
-};
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
 
-const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_componentTooltip, {
-  componentType: "option",
-});
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
+    border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
+    format: { optionName: "format", isCollectionItem: false },
+    shadow: { optionName: "shadow", isCollectionItem: false }
+  },
+  TemplateProps: [{
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }],
+})
 
 export default Sparkline;
 export {

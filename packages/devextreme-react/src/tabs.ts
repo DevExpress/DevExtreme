@@ -6,7 +6,7 @@ import dxTabs, {
     Properties
 } from "devextreme/ui/tabs";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxTabsItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangingEvent } from "devextreme/ui/tabs";
@@ -114,24 +114,21 @@ type IItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentItem = (props: IItemProps) => {
-  return React.createElement(NestedOption<IItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
 
-const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
-  componentType: "option",
-});
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
+})
 
 export default Tabs;
 export {

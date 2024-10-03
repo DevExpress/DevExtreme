@@ -5,7 +5,7 @@ import dxSlider, {
     Properties
 } from "devextreme/ui/slider";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/slider";
@@ -84,18 +84,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = (props: IFormatProps) => {
-  return React.createElement(NestedOption<IFormatProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "format",
-    },
-  });
-};
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
 
-const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
-  componentType: "option",
-});
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // Slider
@@ -104,21 +101,18 @@ type ILabelProps = React.PropsWithChildren<{
   position?: "bottom" | "top";
   visible?: boolean;
 }>
-const _componentLabel = (props: ILabelProps) => {
-  return React.createElement(NestedOption<ILabelProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "label",
-      ExpectedChildren: {
-        format: { optionName: "format", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
 
-const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_componentLabel, {
-  componentType: "option",
-});
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
+    format: { optionName: "format", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Slider
@@ -128,21 +122,18 @@ type ITooltipProps = React.PropsWithChildren<{
   position?: "bottom" | "top";
   showMode?: "always" | "onHover";
 }>
-const _componentTooltip = (props: ITooltipProps) => {
-  return React.createElement(NestedOption<ITooltipProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "tooltip",
-      ExpectedChildren: {
-        format: { optionName: "format", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
 
-const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_componentTooltip, {
-  componentType: "option",
-});
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
+    format: { optionName: "format", isCollectionItem: false }
+  },
+})
 
 export default Slider;
 export {

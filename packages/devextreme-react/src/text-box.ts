@@ -5,7 +5,7 @@ import dxTextBox, {
     Properties
 } from "devextreme/ui/text_box";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
@@ -89,22 +89,19 @@ type IButtonProps = React.PropsWithChildren<{
   name?: string;
   options?: dxButtonOptions;
 }>
-const _componentButton = (props: IButtonProps) => {
-  return React.createElement(NestedOption<IButtonProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "buttons",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        options: { optionName: "options", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentButton = memo(
+  (props: IButtonProps) => {
+    return React.createElement(NestedOption<IButtonProps>, { ...props });
+  }
+);
 
-const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_componentButton, {
-  componentType: "option",
-});
+const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
+  OptionName: "buttons",
+  IsCollectionItem: true,
+  ExpectedChildren: {
+    options: { optionName: "options", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Button
@@ -137,23 +134,20 @@ type IOptionsProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentOptions = (props: IOptionsProps) => {
-  return React.createElement(NestedOption<IOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "options",
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
+const _componentOptions = memo(
+  (props: IOptionsProps) => {
+    return React.createElement(NestedOption<IOptionsProps>, { ...props });
+  }
+);
 
-const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
-  componentType: "option",
-});
+const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
+  OptionName: "options",
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
+})
 
 export default TextBox;
 export {

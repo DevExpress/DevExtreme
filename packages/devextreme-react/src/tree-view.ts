@@ -6,7 +6,7 @@ import dxTreeView, {
     Properties
 } from "devextreme/ui/tree_view";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxTreeViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, SelectAllValueChangedEvent } from "devextreme/ui/tree_view";
@@ -102,22 +102,19 @@ type IButtonProps = React.PropsWithChildren<{
   name?: string;
   options?: dxButtonOptions;
 }>
-const _componentButton = (props: IButtonProps) => {
-  return React.createElement(NestedOption<IButtonProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "buttons",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        options: { optionName: "options", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentButton = memo(
+  (props: IButtonProps) => {
+    return React.createElement(NestedOption<IButtonProps>, { ...props });
+  }
+);
 
-const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_componentButton, {
-  componentType: "option",
-});
+const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
+  OptionName: "buttons",
+  IsCollectionItem: true,
+  ExpectedChildren: {
+    options: { optionName: "options", isCollectionItem: false }
+  },
+})
 
 // owners:
 // TreeView
@@ -137,24 +134,21 @@ type IItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentItem = (props: IItemProps) => {
-  return React.createElement(NestedOption<IItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
 
-const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
-  componentType: "option",
-});
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
+})
 
 // owners:
 // Button
@@ -187,23 +181,20 @@ type IOptionsProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentOptions = (props: IOptionsProps) => {
-  return React.createElement(NestedOption<IOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "options",
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
+const _componentOptions = memo(
+  (props: IOptionsProps) => {
+    return React.createElement(NestedOption<IOptionsProps>, { ...props });
+  }
+);
 
-const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
-  componentType: "option",
-});
+const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
+  OptionName: "options",
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
+})
 
 // owners:
 // TreeView
@@ -267,24 +258,21 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>
-const _componentSearchEditorOptions = (props: ISearchEditorOptionsProps) => {
-  return React.createElement(NestedOption<ISearchEditorOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "searchEditorOptions",
-      DefaultsProps: {
-        defaultValue: "value"
-      },
-      ExpectedChildren: {
-        button: { optionName: "buttons", isCollectionItem: true }
-      },
-    },
-  });
-};
+const _componentSearchEditorOptions = memo(
+  (props: ISearchEditorOptionsProps) => {
+    return React.createElement(NestedOption<ISearchEditorOptionsProps>, { ...props });
+  }
+);
 
-const SearchEditorOptions = Object.assign<typeof _componentSearchEditorOptions, NestedComponentMeta>(_componentSearchEditorOptions, {
-  componentType: "option",
-});
+const SearchEditorOptions: typeof _componentSearchEditorOptions & IElementDescriptor = Object.assign(_componentSearchEditorOptions, {
+  OptionName: "searchEditorOptions",
+  DefaultsProps: {
+    defaultValue: "value"
+  },
+  ExpectedChildren: {
+    button: { optionName: "buttons", isCollectionItem: true }
+  },
+})
 
 export default TreeView;
 export {

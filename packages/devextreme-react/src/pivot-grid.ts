@@ -5,7 +5,7 @@ import dxPivotGrid, {
     Properties
 } from "devextreme/ui/pivot_grid";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent } from "devextreme/ui/pivot_grid";
@@ -77,18 +77,15 @@ const PivotGrid = memo(
 type IExportProps = React.PropsWithChildren<{
   enabled?: boolean;
 }>
-const _componentExport = (props: IExportProps) => {
-  return React.createElement(NestedOption<IExportProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "export",
-    },
-  });
-};
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
 
-const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_componentExport, {
-  componentType: "option",
-});
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // PivotGrid
@@ -109,22 +106,19 @@ type IFieldChooserProps = React.PropsWithChildren<{
   title?: string;
   width?: number;
 }>
-const _componentFieldChooser = (props: IFieldChooserProps) => {
-  return React.createElement(NestedOption<IFieldChooserProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "fieldChooser",
-      ExpectedChildren: {
-        fieldChooserTexts: { optionName: "texts", isCollectionItem: false },
-        texts: { optionName: "texts", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentFieldChooser = memo(
+  (props: IFieldChooserProps) => {
+    return React.createElement(NestedOption<IFieldChooserProps>, { ...props });
+  }
+);
 
-const FieldChooser = Object.assign<typeof _componentFieldChooser, NestedComponentMeta>(_componentFieldChooser, {
-  componentType: "option",
-});
+const FieldChooser: typeof _componentFieldChooser & IElementDescriptor = Object.assign(_componentFieldChooser, {
+  OptionName: "fieldChooser",
+  ExpectedChildren: {
+    fieldChooserTexts: { optionName: "texts", isCollectionItem: false },
+    texts: { optionName: "texts", isCollectionItem: false }
+  },
+})
 
 // owners:
 // FieldChooser
@@ -135,18 +129,15 @@ type IFieldChooserTextsProps = React.PropsWithChildren<{
   filterFields?: string;
   rowFields?: string;
 }>
-const _componentFieldChooserTexts = (props: IFieldChooserTextsProps) => {
-  return React.createElement(NestedOption<IFieldChooserTextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
+const _componentFieldChooserTexts = memo(
+  (props: IFieldChooserTextsProps) => {
+    return React.createElement(NestedOption<IFieldChooserTextsProps>, { ...props });
+  }
+);
 
-const FieldChooserTexts = Object.assign<typeof _componentFieldChooserTexts, NestedComponentMeta>(_componentFieldChooserTexts, {
-  componentType: "option",
-});
+const FieldChooserTexts: typeof _componentFieldChooserTexts & IElementDescriptor = Object.assign(_componentFieldChooserTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -164,22 +155,19 @@ type IFieldPanelProps = React.PropsWithChildren<{
   };
   visible?: boolean;
 }>
-const _componentFieldPanel = (props: IFieldPanelProps) => {
-  return React.createElement(NestedOption<IFieldPanelProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "fieldPanel",
-      ExpectedChildren: {
-        fieldPanelTexts: { optionName: "texts", isCollectionItem: false },
-        texts: { optionName: "texts", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentFieldPanel = memo(
+  (props: IFieldPanelProps) => {
+    return React.createElement(NestedOption<IFieldPanelProps>, { ...props });
+  }
+);
 
-const FieldPanel = Object.assign<typeof _componentFieldPanel, NestedComponentMeta>(_componentFieldPanel, {
-  componentType: "option",
-});
+const FieldPanel: typeof _componentFieldPanel & IElementDescriptor = Object.assign(_componentFieldPanel, {
+  OptionName: "fieldPanel",
+  ExpectedChildren: {
+    fieldPanelTexts: { optionName: "texts", isCollectionItem: false },
+    texts: { optionName: "texts", isCollectionItem: false }
+  },
+})
 
 // owners:
 // FieldPanel
@@ -189,18 +177,15 @@ type IFieldPanelTextsProps = React.PropsWithChildren<{
   filterFieldArea?: string;
   rowFieldArea?: string;
 }>
-const _componentFieldPanelTexts = (props: IFieldPanelTextsProps) => {
-  return React.createElement(NestedOption<IFieldPanelTextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
+const _componentFieldPanelTexts = memo(
+  (props: IFieldPanelTextsProps) => {
+    return React.createElement(NestedOption<IFieldPanelTextsProps>, { ...props });
+  }
+);
 
-const FieldPanelTexts = Object.assign<typeof _componentFieldPanelTexts, NestedComponentMeta>(_componentFieldPanelTexts, {
-  componentType: "option",
-});
+const FieldPanelTexts: typeof _componentFieldPanelTexts & IElementDescriptor = Object.assign(_componentFieldPanelTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -218,23 +203,20 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   };
   width?: number;
 }>
-const _componentHeaderFilter = (props: IHeaderFilterProps) => {
-  return React.createElement(NestedOption<IHeaderFilterProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "headerFilter",
-      ExpectedChildren: {
-        headerFilterTexts: { optionName: "texts", isCollectionItem: false },
-        search: { optionName: "search", isCollectionItem: false },
-        texts: { optionName: "texts", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentHeaderFilter = memo(
+  (props: IHeaderFilterProps) => {
+    return React.createElement(NestedOption<IHeaderFilterProps>, { ...props });
+  }
+);
 
-const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponentMeta>(_componentHeaderFilter, {
-  componentType: "option",
-});
+const HeaderFilter: typeof _componentHeaderFilter & IElementDescriptor = Object.assign(_componentHeaderFilter, {
+  OptionName: "headerFilter",
+  ExpectedChildren: {
+    headerFilterTexts: { optionName: "texts", isCollectionItem: false },
+    search: { optionName: "search", isCollectionItem: false },
+    texts: { optionName: "texts", isCollectionItem: false }
+  },
+})
 
 // owners:
 // HeaderFilter
@@ -243,18 +225,15 @@ type IHeaderFilterTextsProps = React.PropsWithChildren<{
   emptyValue?: string;
   ok?: string;
 }>
-const _componentHeaderFilterTexts = (props: IHeaderFilterTextsProps) => {
-  return React.createElement(NestedOption<IHeaderFilterTextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
+const _componentHeaderFilterTexts = memo(
+  (props: IHeaderFilterTextsProps) => {
+    return React.createElement(NestedOption<IHeaderFilterTextsProps>, { ...props });
+  }
+);
 
-const HeaderFilterTexts = Object.assign<typeof _componentHeaderFilterTexts, NestedComponentMeta>(_componentHeaderFilterTexts, {
-  componentType: "option",
-});
+const HeaderFilterTexts: typeof _componentHeaderFilterTexts & IElementDescriptor = Object.assign(_componentHeaderFilterTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -269,18 +248,15 @@ type ILoadPanelProps = React.PropsWithChildren<{
   text?: string;
   width?: number;
 }>
-const _componentLoadPanel = (props: ILoadPanelProps) => {
-  return React.createElement(NestedOption<ILoadPanelProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "loadPanel",
-    },
-  });
-};
+const _componentLoadPanel = memo(
+  (props: ILoadPanelProps) => {
+    return React.createElement(NestedOption<ILoadPanelProps>, { ...props });
+  }
+);
 
-const LoadPanel = Object.assign<typeof _componentLoadPanel, NestedComponentMeta>(_componentLoadPanel, {
-  componentType: "option",
-});
+const LoadPanel: typeof _componentLoadPanel & IElementDescriptor = Object.assign(_componentLoadPanel, {
+  OptionName: "loadPanel",
+})
 
 // owners:
 // PivotGrid
@@ -297,18 +273,15 @@ type IPivotGridTextsProps = React.PropsWithChildren<{
   sortRowBySummary?: string;
   total?: string;
 }>
-const _componentPivotGridTexts = (props: IPivotGridTextsProps) => {
-  return React.createElement(NestedOption<IPivotGridTextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
+const _componentPivotGridTexts = memo(
+  (props: IPivotGridTextsProps) => {
+    return React.createElement(NestedOption<IPivotGridTextsProps>, { ...props });
+  }
+);
 
-const PivotGridTexts = Object.assign<typeof _componentPivotGridTexts, NestedComponentMeta>(_componentPivotGridTexts, {
-  componentType: "option",
-});
+const PivotGridTexts: typeof _componentPivotGridTexts & IElementDescriptor = Object.assign(_componentPivotGridTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -316,18 +289,15 @@ type IScrollingProps = React.PropsWithChildren<{
   mode?: "standard" | "virtual";
   useNative?: boolean | "auto";
 }>
-const _componentScrolling = (props: IScrollingProps) => {
-  return React.createElement(NestedOption<IScrollingProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "scrolling",
-    },
-  });
-};
+const _componentScrolling = memo(
+  (props: IScrollingProps) => {
+    return React.createElement(NestedOption<IScrollingProps>, { ...props });
+  }
+);
 
-const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>(_componentScrolling, {
-  componentType: "option",
-});
+const Scrolling: typeof _componentScrolling & IElementDescriptor = Object.assign(_componentScrolling, {
+  OptionName: "scrolling",
+})
 
 // owners:
 // HeaderFilter
@@ -337,18 +307,15 @@ type ISearchProps = React.PropsWithChildren<{
   mode?: "contains" | "startswith" | "equals";
   timeout?: number;
 }>
-const _componentSearch = (props: ISearchProps) => {
-  return React.createElement(NestedOption<ISearchProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "search",
-    },
-  });
-};
+const _componentSearch = memo(
+  (props: ISearchProps) => {
+    return React.createElement(NestedOption<ISearchProps>, { ...props });
+  }
+);
 
-const Search = Object.assign<typeof _componentSearch, NestedComponentMeta>(_componentSearch, {
-  componentType: "option",
-});
+const Search: typeof _componentSearch & IElementDescriptor = Object.assign(_componentSearch, {
+  OptionName: "search",
+})
 
 // owners:
 // PivotGrid
@@ -360,18 +327,15 @@ type IStateStoringProps = React.PropsWithChildren<{
   storageKey?: string;
   type?: "custom" | "localStorage" | "sessionStorage";
 }>
-const _componentStateStoring = (props: IStateStoringProps) => {
-  return React.createElement(NestedOption<IStateStoringProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "stateStoring",
-    },
-  });
-};
+const _componentStateStoring = memo(
+  (props: IStateStoringProps) => {
+    return React.createElement(NestedOption<IStateStoringProps>, { ...props });
+  }
+);
 
-const StateStoring = Object.assign<typeof _componentStateStoring, NestedComponentMeta>(_componentStateStoring, {
-  componentType: "option",
-});
+const StateStoring: typeof _componentStateStoring & IElementDescriptor = Object.assign(_componentStateStoring, {
+  OptionName: "stateStoring",
+})
 
 // owners:
 // FieldChooser
@@ -403,18 +367,15 @@ type ITextsProps = React.PropsWithChildren<{
   sortRowBySummary?: string;
   total?: string;
 }>
-const _componentTexts = (props: ITextsProps) => {
-  return React.createElement(NestedOption<ITextsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "texts",
-    },
-  });
-};
+const _componentTexts = memo(
+  (props: ITextsProps) => {
+    return React.createElement(NestedOption<ITextsProps>, { ...props });
+  }
+);
 
-const Texts = Object.assign<typeof _componentTexts, NestedComponentMeta>(_componentTexts, {
-  componentType: "option",
-});
+const Texts: typeof _componentTexts & IElementDescriptor = Object.assign(_componentTexts, {
+  OptionName: "texts",
+})
 
 export default PivotGrid;
 export {

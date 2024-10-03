@@ -5,7 +5,7 @@ import dxDateBox, {
     Properties
 } from "devextreme/ui/date_box";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/date_box";
@@ -119,22 +119,19 @@ type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
 }>
-const _componentAnimation = (props: IAnimationProps) => {
-  return React.createElement(NestedOption<IAnimationProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "animation",
-      ExpectedChildren: {
-        hide: { optionName: "hide", isCollectionItem: false },
-        show: { optionName: "show", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
 
-const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>(_componentAnimation, {
-  componentType: "option",
-});
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+  ExpectedChildren: {
+    hide: { optionName: "hide", isCollectionItem: false },
+    show: { optionName: "show", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Position
@@ -142,18 +139,15 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-const _componentAt = (props: IAtProps) => {
-  return React.createElement(NestedOption<IAtProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "at",
-    },
-  });
-};
+const _componentAt = memo(
+  (props: IAtProps) => {
+    return React.createElement(NestedOption<IAtProps>, { ...props });
+  }
+);
 
-const At = Object.assign<typeof _componentAt, NestedComponentMeta>(_componentAt, {
-  componentType: "option",
-});
+const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
+  OptionName: "at",
+})
 
 // owners:
 // Position
@@ -161,18 +155,15 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentBoundaryOffset = (props: IBoundaryOffsetProps) => {
-  return React.createElement(NestedOption<IBoundaryOffsetProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "boundaryOffset",
-    },
-  });
-};
+const _componentBoundaryOffset = memo(
+  (props: IBoundaryOffsetProps) => {
+    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
+  }
+);
 
-const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComponentMeta>(_componentBoundaryOffset, {
-  componentType: "option",
-});
+const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
+  OptionName: "boundaryOffset",
+})
 
 // owners:
 // DateBox
@@ -181,22 +172,19 @@ type IButtonProps = React.PropsWithChildren<{
   name?: string;
   options?: dxButtonOptions;
 }>
-const _componentButton = (props: IButtonProps) => {
-  return React.createElement(NestedOption<IButtonProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "buttons",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        options: { optionName: "options", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentButton = memo(
+  (props: IButtonProps) => {
+    return React.createElement(NestedOption<IButtonProps>, { ...props });
+  }
+);
 
-const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_componentButton, {
-  componentType: "option",
-});
+const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
+  OptionName: "buttons",
+  IsCollectionItem: true,
+  ExpectedChildren: {
+    options: { optionName: "options", isCollectionItem: false }
+  },
+})
 
 // owners:
 // DateBox
@@ -249,27 +237,24 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
 }>
-const _componentCalendarOptions = (props: ICalendarOptionsProps) => {
-  return React.createElement(NestedOption<ICalendarOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "calendarOptions",
-      DefaultsProps: {
-        defaultValue: "value",
-        defaultZoomLevel: "zoomLevel"
-      },
-      TemplateProps: [{
-        tmplOption: "cellTemplate",
-        render: "cellRender",
-        component: "cellComponent"
-      }],
-    },
-  });
-};
+const _componentCalendarOptions = memo(
+  (props: ICalendarOptionsProps) => {
+    return React.createElement(NestedOption<ICalendarOptionsProps>, { ...props });
+  }
+);
 
-const CalendarOptions = Object.assign<typeof _componentCalendarOptions, NestedComponentMeta>(_componentCalendarOptions, {
-  componentType: "option",
-});
+const CalendarOptions: typeof _componentCalendarOptions & IElementDescriptor = Object.assign(_componentCalendarOptions, {
+  OptionName: "calendarOptions",
+  DefaultsProps: {
+    defaultValue: "value",
+    defaultZoomLevel: "zoomLevel"
+  },
+  TemplateProps: [{
+    tmplOption: "cellTemplate",
+    render: "cellRender",
+    component: "cellComponent"
+  }],
+})
 
 // owners:
 // Position
@@ -277,18 +262,15 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-const _componentCollision = (props: ICollisionProps) => {
-  return React.createElement(NestedOption<ICollisionProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "collision",
-    },
-  });
-};
+const _componentCollision = memo(
+  (props: ICollisionProps) => {
+    return React.createElement(NestedOption<ICollisionProps>, { ...props });
+  }
+);
 
-const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>(_componentCollision, {
-  componentType: "option",
-});
+const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
+  OptionName: "collision",
+})
 
 // owners:
 // DateBox
@@ -300,18 +282,15 @@ type IDisplayFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentDisplayFormat = (props: IDisplayFormatProps) => {
-  return React.createElement(NestedOption<IDisplayFormatProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "displayFormat",
-    },
-  });
-};
+const _componentDisplayFormat = memo(
+  (props: IDisplayFormatProps) => {
+    return React.createElement(NestedOption<IDisplayFormatProps>, { ...props });
+  }
+);
 
-const DisplayFormat = Object.assign<typeof _componentDisplayFormat, NestedComponentMeta>(_componentDisplayFormat, {
-  componentType: "option",
-});
+const DisplayFormat: typeof _componentDisplayFormat & IElementDescriptor = Object.assign(_componentDisplayFormat, {
+  OptionName: "displayFormat",
+})
 
 // owners:
 // DateBox
@@ -382,38 +361,35 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
 }>
-const _componentDropDownOptions = (props: IDropDownOptionsProps) => {
-  return React.createElement(NestedOption<IDropDownOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "dropDownOptions",
-      DefaultsProps: {
-        defaultHeight: "height",
-        defaultPosition: "position",
-        defaultVisible: "visible",
-        defaultWidth: "width"
-      },
-      ExpectedChildren: {
-        animation: { optionName: "animation", isCollectionItem: false },
-        position: { optionName: "position", isCollectionItem: false },
-        toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
-      },
-      TemplateProps: [{
-        tmplOption: "contentTemplate",
-        render: "contentRender",
-        component: "contentComponent"
-      }, {
-        tmplOption: "titleTemplate",
-        render: "titleRender",
-        component: "titleComponent"
-      }],
-    },
-  });
-};
+const _componentDropDownOptions = memo(
+  (props: IDropDownOptionsProps) => {
+    return React.createElement(NestedOption<IDropDownOptionsProps>, { ...props });
+  }
+);
 
-const DropDownOptions = Object.assign<typeof _componentDropDownOptions, NestedComponentMeta>(_componentDropDownOptions, {
-  componentType: "option",
-});
+const DropDownOptions: typeof _componentDropDownOptions & IElementDescriptor = Object.assign(_componentDropDownOptions, {
+  OptionName: "dropDownOptions",
+  DefaultsProps: {
+    defaultHeight: "height",
+    defaultPosition: "position",
+    defaultVisible: "visible",
+    defaultWidth: "width"
+  },
+  ExpectedChildren: {
+    animation: { optionName: "animation", isCollectionItem: false },
+    position: { optionName: "position", isCollectionItem: false },
+    toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
+  },
+  TemplateProps: [{
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }, {
+    tmplOption: "titleTemplate",
+    render: "titleRender",
+    component: "titleComponent"
+  }],
+})
 
 // owners:
 // Hide
@@ -424,21 +400,18 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-const _componentFrom = (props: IFromProps) => {
-  return React.createElement(NestedOption<IFromProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "from",
-      ExpectedChildren: {
-        position: { optionName: "position", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentFrom = memo(
+  (props: IFromProps) => {
+    return React.createElement(NestedOption<IFromProps>, { ...props });
+  }
+);
 
-const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componentFrom, {
-  componentType: "option",
-});
+const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
+  OptionName: "from",
+  ExpectedChildren: {
+    position: { optionName: "position", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Animation
@@ -454,22 +427,19 @@ type IHideProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-const _componentHide = (props: IHideProps) => {
-  return React.createElement(NestedOption<IHideProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "hide",
-      ExpectedChildren: {
-        from: { optionName: "from", isCollectionItem: false },
-        to: { optionName: "to", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentHide = memo(
+  (props: IHideProps) => {
+    return React.createElement(NestedOption<IHideProps>, { ...props });
+  }
+);
 
-const Hide = Object.assign<typeof _componentHide, NestedComponentMeta>(_componentHide, {
-  componentType: "option",
-});
+const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componentHide, {
+  OptionName: "hide",
+  ExpectedChildren: {
+    from: { optionName: "from", isCollectionItem: false },
+    to: { optionName: "to", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Position
@@ -477,18 +447,15 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-const _componentMy = (props: IMyProps) => {
-  return React.createElement(NestedOption<IMyProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "my",
-    },
-  });
-};
+const _componentMy = memo(
+  (props: IMyProps) => {
+    return React.createElement(NestedOption<IMyProps>, { ...props });
+  }
+);
 
-const My = Object.assign<typeof _componentMy, NestedComponentMeta>(_componentMy, {
-  componentType: "option",
-});
+const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
+  OptionName: "my",
+})
 
 // owners:
 // Position
@@ -496,18 +463,15 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentOffset = (props: IOffsetProps) => {
-  return React.createElement(NestedOption<IOffsetProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "offset",
-    },
-  });
-};
+const _componentOffset = memo(
+  (props: IOffsetProps) => {
+    return React.createElement(NestedOption<IOffsetProps>, { ...props });
+  }
+);
 
-const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_componentOffset, {
-  componentType: "option",
-});
+const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
+  OptionName: "offset",
+})
 
 // owners:
 // Button
@@ -540,23 +504,20 @@ type IOptionsProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentOptions = (props: IOptionsProps) => {
-  return React.createElement(NestedOption<IOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "options",
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
+const _componentOptions = memo(
+  (props: IOptionsProps) => {
+    return React.createElement(NestedOption<IOptionsProps>, { ...props });
+  }
+);
 
-const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
-  componentType: "option",
-});
+const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
+  OptionName: "options",
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
+})
 
 // owners:
 // From
@@ -585,18 +546,15 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-const _componentPosition = (props: IPositionProps) => {
-  return React.createElement(NestedOption<IPositionProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "position",
-    },
-  });
-};
+const _componentPosition = memo(
+  (props: IPositionProps) => {
+    return React.createElement(NestedOption<IPositionProps>, { ...props });
+  }
+);
 
-const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_componentPosition, {
-  componentType: "option",
-});
+const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
+  OptionName: "position",
+})
 
 // owners:
 // Animation
@@ -612,18 +570,15 @@ type IShowProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-const _componentShow = (props: IShowProps) => {
-  return React.createElement(NestedOption<IShowProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "show",
-    },
-  });
-};
+const _componentShow = memo(
+  (props: IShowProps) => {
+    return React.createElement(NestedOption<IShowProps>, { ...props });
+  }
+);
 
-const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componentShow, {
-  componentType: "option",
-});
+const Show: typeof _componentShow & IElementDescriptor = Object.assign(_componentShow, {
+  OptionName: "show",
+})
 
 // owners:
 // Hide
@@ -634,18 +589,15 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-const _componentTo = (props: IToProps) => {
-  return React.createElement(NestedOption<IToProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "to",
-    },
-  });
-};
+const _componentTo = memo(
+  (props: IToProps) => {
+    return React.createElement(NestedOption<IToProps>, { ...props });
+  }
+);
 
-const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo, {
-  componentType: "option",
-});
+const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
+  OptionName: "to",
+})
 
 // owners:
 // DropDownOptions
@@ -668,28 +620,25 @@ type IToolbarItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentToolbarItem = (props: IToolbarItemProps) => {
-  return React.createElement(NestedOption<IToolbarItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "toolbarItems",
-      IsCollectionItem: true,
-      TemplateProps: [{
-        tmplOption: "menuItemTemplate",
-        render: "menuItemRender",
-        component: "menuItemComponent"
-      }, {
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
+const _componentToolbarItem = memo(
+  (props: IToolbarItemProps) => {
+    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
+  }
+);
 
-const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
-  componentType: "option",
-});
+const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
+  OptionName: "toolbarItems",
+  IsCollectionItem: true,
+  TemplateProps: [{
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
+})
 
 export default DateBox;
 export {

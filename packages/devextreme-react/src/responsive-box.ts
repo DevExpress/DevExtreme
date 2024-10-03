@@ -6,7 +6,7 @@ import dxResponsiveBox, {
     Properties
 } from "devextreme/ui/responsive_box";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxResponsiveBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/responsive_box";
@@ -98,19 +98,16 @@ type IColProps = React.PropsWithChildren<{
   screen?: string;
   shrink?: number;
 }>
-const _componentCol = (props: IColProps) => {
-  return React.createElement(NestedOption<IColProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "cols",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentCol = memo(
+  (props: IColProps) => {
+    return React.createElement(NestedOption<IColProps>, { ...props });
+  }
+);
 
-const Col = Object.assign<typeof _componentCol, NestedComponentMeta>(_componentCol, {
-  componentType: "option",
-});
+const Col: typeof _componentCol & IElementDescriptor = Object.assign(_componentCol, {
+  OptionName: "cols",
+  IsCollectionItem: true,
+})
 
 // owners:
 // ResponsiveBox
@@ -130,27 +127,24 @@ type IItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentItem = (props: IItemProps) => {
-  return React.createElement(NestedOption<IItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        location: { optionName: "location", isCollectionItem: true }
-      },
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
 
-const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
-  componentType: "option",
-});
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  ExpectedChildren: {
+    location: { optionName: "location", isCollectionItem: true }
+  },
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
+})
 
 // owners:
 // Item
@@ -161,19 +155,16 @@ type ILocationProps = React.PropsWithChildren<{
   rowspan?: number;
   screen?: string;
 }>
-const _componentLocation = (props: ILocationProps) => {
-  return React.createElement(NestedOption<ILocationProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "location",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentLocation = memo(
+  (props: ILocationProps) => {
+    return React.createElement(NestedOption<ILocationProps>, { ...props });
+  }
+);
 
-const Location = Object.assign<typeof _componentLocation, NestedComponentMeta>(_componentLocation, {
-  componentType: "option",
-});
+const Location: typeof _componentLocation & IElementDescriptor = Object.assign(_componentLocation, {
+  OptionName: "location",
+  IsCollectionItem: true,
+})
 
 // owners:
 // ResponsiveBox
@@ -183,19 +174,16 @@ type IRowProps = React.PropsWithChildren<{
   screen?: string;
   shrink?: number;
 }>
-const _componentRow = (props: IRowProps) => {
-  return React.createElement(NestedOption<IRowProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "rows",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentRow = memo(
+  (props: IRowProps) => {
+    return React.createElement(NestedOption<IRowProps>, { ...props });
+  }
+);
 
-const Row = Object.assign<typeof _componentRow, NestedComponentMeta>(_componentRow, {
-  componentType: "option",
-});
+const Row: typeof _componentRow & IElementDescriptor = Object.assign(_componentRow, {
+  OptionName: "rows",
+  IsCollectionItem: true,
+})
 
 export default ResponsiveBox;
 export {

@@ -5,7 +5,7 @@ import dxFileManager, {
     Properties
 } from "devextreme/ui/file_manager";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, ErrorOccurredEvent, FileUploadedEvent, FileUploadingEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, SelectedFileOpenedEvent, ToolbarItemClickEvent, dxFileManagerContextMenuItem, dxFileManagerDetailsColumn, dxFileManagerToolbarItem } from "devextreme/ui/file_manager";
@@ -97,41 +97,35 @@ type IColumnProps = React.PropsWithChildren<{
   visibleIndex?: number;
   width?: number | string;
 }>
-const _componentColumn = (props: IColumnProps) => {
-  return React.createElement(NestedOption<IColumnProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "columns",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentColumn = memo(
+  (props: IColumnProps) => {
+    return React.createElement(NestedOption<IColumnProps>, { ...props });
+  }
+);
 
-const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_componentColumn, {
-  componentType: "option",
-});
+const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_componentColumn, {
+  OptionName: "columns",
+  IsCollectionItem: true,
+})
 
 // owners:
 // FileManager
 type IContextMenuProps = React.PropsWithChildren<{
   items?: Array<dxFileManagerContextMenuItem | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">;
 }>
-const _componentContextMenu = (props: IContextMenuProps) => {
-  return React.createElement(NestedOption<IContextMenuProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "contextMenu",
-      ExpectedChildren: {
-        contextMenuItem: { optionName: "items", isCollectionItem: true },
-        item: { optionName: "items", isCollectionItem: true }
-      },
-    },
-  });
-};
+const _componentContextMenu = memo(
+  (props: IContextMenuProps) => {
+    return React.createElement(NestedOption<IContextMenuProps>, { ...props });
+  }
+);
 
-const ContextMenu = Object.assign<typeof _componentContextMenu, NestedComponentMeta>(_componentContextMenu, {
-  componentType: "option",
-});
+const ContextMenu: typeof _componentContextMenu & IElementDescriptor = Object.assign(_componentContextMenu, {
+  OptionName: "contextMenu",
+  ExpectedChildren: {
+    contextMenuItem: { optionName: "items", isCollectionItem: true },
+    item: { optionName: "items", isCollectionItem: true }
+  },
+})
 
 // owners:
 // ContextMenu
@@ -148,40 +142,34 @@ type IContextMenuItemProps = React.PropsWithChildren<{
   text?: string;
   visible?: boolean;
 }>
-const _componentContextMenuItem = (props: IContextMenuItemProps) => {
-  return React.createElement(NestedOption<IContextMenuItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentContextMenuItem = memo(
+  (props: IContextMenuItemProps) => {
+    return React.createElement(NestedOption<IContextMenuItemProps>, { ...props });
+  }
+);
 
-const ContextMenuItem = Object.assign<typeof _componentContextMenuItem, NestedComponentMeta>(_componentContextMenuItem, {
-  componentType: "option",
-});
+const ContextMenuItem: typeof _componentContextMenuItem & IElementDescriptor = Object.assign(_componentContextMenuItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+})
 
 // owners:
 // ItemView
 type IDetailsProps = React.PropsWithChildren<{
   columns?: Array<dxFileManagerDetailsColumn | string>;
 }>
-const _componentDetails = (props: IDetailsProps) => {
-  return React.createElement(NestedOption<IDetailsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "details",
-      ExpectedChildren: {
-        column: { optionName: "columns", isCollectionItem: true }
-      },
-    },
-  });
-};
+const _componentDetails = memo(
+  (props: IDetailsProps) => {
+    return React.createElement(NestedOption<IDetailsProps>, { ...props });
+  }
+);
 
-const Details = Object.assign<typeof _componentDetails, NestedComponentMeta>(_componentDetails, {
-  componentType: "option",
-});
+const Details: typeof _componentDetails & IElementDescriptor = Object.assign(_componentDetails, {
+  OptionName: "details",
+  ExpectedChildren: {
+    column: { optionName: "columns", isCollectionItem: true }
+  },
+})
 
 // owners:
 // Toolbar
@@ -198,19 +186,16 @@ type IFileSelectionItemProps = React.PropsWithChildren<{
   visible?: boolean;
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
 }>
-const _componentFileSelectionItem = (props: IFileSelectionItemProps) => {
-  return React.createElement(NestedOption<IFileSelectionItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "fileSelectionItems",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentFileSelectionItem = memo(
+  (props: IFileSelectionItemProps) => {
+    return React.createElement(NestedOption<IFileSelectionItemProps>, { ...props });
+  }
+);
 
-const FileSelectionItem = Object.assign<typeof _componentFileSelectionItem, NestedComponentMeta>(_componentFileSelectionItem, {
-  componentType: "option",
-});
+const FileSelectionItem: typeof _componentFileSelectionItem & IElementDescriptor = Object.assign(_componentFileSelectionItem, {
+  OptionName: "fileSelectionItems",
+  IsCollectionItem: true,
+})
 
 // owners:
 // ContextMenu
@@ -234,19 +219,16 @@ type IItemProps = React.PropsWithChildren<{
   showText?: "always" | "inMenu";
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
 }>
-const _componentItem = (props: IItemProps) => {
-  return React.createElement(NestedOption<IItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
 
-const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
-  componentType: "option",
-});
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+})
 
 // owners:
 // FileManager
@@ -258,21 +240,18 @@ type IItemViewProps = React.PropsWithChildren<{
   showFolders?: boolean;
   showParentFolder?: boolean;
 }>
-const _componentItemView = (props: IItemViewProps) => {
-  return React.createElement(NestedOption<IItemViewProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "itemView",
-      ExpectedChildren: {
-        details: { optionName: "details", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentItemView = memo(
+  (props: IItemViewProps) => {
+    return React.createElement(NestedOption<IItemViewProps>, { ...props });
+  }
+);
 
-const ItemView = Object.assign<typeof _componentItemView, NestedComponentMeta>(_componentItemView, {
-  componentType: "option",
-});
+const ItemView: typeof _componentItemView & IElementDescriptor = Object.assign(_componentItemView, {
+  OptionName: "itemView",
+  ExpectedChildren: {
+    details: { optionName: "details", isCollectionItem: false }
+  },
+})
 
 // owners:
 // FileManager
@@ -280,18 +259,15 @@ type INotificationsProps = React.PropsWithChildren<{
   showPanel?: boolean;
   showPopup?: boolean;
 }>
-const _componentNotifications = (props: INotificationsProps) => {
-  return React.createElement(NestedOption<INotificationsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "notifications",
-    },
-  });
-};
+const _componentNotifications = memo(
+  (props: INotificationsProps) => {
+    return React.createElement(NestedOption<INotificationsProps>, { ...props });
+  }
+);
 
-const Notifications = Object.assign<typeof _componentNotifications, NestedComponentMeta>(_componentNotifications, {
-  componentType: "option",
-});
+const Notifications: typeof _componentNotifications & IElementDescriptor = Object.assign(_componentNotifications, {
+  OptionName: "notifications",
+})
 
 // owners:
 // FileManager
@@ -304,18 +280,15 @@ type IPermissionsProps = React.PropsWithChildren<{
   rename?: boolean;
   upload?: boolean;
 }>
-const _componentPermissions = (props: IPermissionsProps) => {
-  return React.createElement(NestedOption<IPermissionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "permissions",
-    },
-  });
-};
+const _componentPermissions = memo(
+  (props: IPermissionsProps) => {
+    return React.createElement(NestedOption<IPermissionsProps>, { ...props });
+  }
+);
 
-const Permissions = Object.assign<typeof _componentPermissions, NestedComponentMeta>(_componentPermissions, {
-  componentType: "option",
-});
+const Permissions: typeof _componentPermissions & IElementDescriptor = Object.assign(_componentPermissions, {
+  OptionName: "permissions",
+})
 
 // owners:
 // FileManager
@@ -323,23 +296,20 @@ type IToolbarProps = React.PropsWithChildren<{
   fileSelectionItems?: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">;
   items?: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">;
 }>
-const _componentToolbar = (props: IToolbarProps) => {
-  return React.createElement(NestedOption<IToolbarProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "toolbar",
-      ExpectedChildren: {
-        fileSelectionItem: { optionName: "fileSelectionItems", isCollectionItem: true },
-        item: { optionName: "items", isCollectionItem: true },
-        toolbarItem: { optionName: "items", isCollectionItem: true }
-      },
-    },
-  });
-};
+const _componentToolbar = memo(
+  (props: IToolbarProps) => {
+    return React.createElement(NestedOption<IToolbarProps>, { ...props });
+  }
+);
 
-const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_componentToolbar, {
-  componentType: "option",
-});
+const Toolbar: typeof _componentToolbar & IElementDescriptor = Object.assign(_componentToolbar, {
+  OptionName: "toolbar",
+  ExpectedChildren: {
+    fileSelectionItem: { optionName: "fileSelectionItems", isCollectionItem: true },
+    item: { optionName: "items", isCollectionItem: true },
+    toolbarItem: { optionName: "items", isCollectionItem: true }
+  },
+})
 
 // owners:
 // Toolbar
@@ -356,19 +326,16 @@ type IToolbarItemProps = React.PropsWithChildren<{
   visible?: boolean;
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
 }>
-const _componentToolbarItem = (props: IToolbarItemProps) => {
-  return React.createElement(NestedOption<IToolbarItemProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "items",
-      IsCollectionItem: true,
-    },
-  });
-};
+const _componentToolbarItem = memo(
+  (props: IToolbarItemProps) => {
+    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
+  }
+);
 
-const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
-  componentType: "option",
-});
+const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+})
 
 // owners:
 // FileManager
@@ -376,18 +343,15 @@ type IUploadProps = React.PropsWithChildren<{
   chunkSize?: number;
   maxFileSize?: number;
 }>
-const _componentUpload = (props: IUploadProps) => {
-  return React.createElement(NestedOption<IUploadProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "upload",
-    },
-  });
-};
+const _componentUpload = memo(
+  (props: IUploadProps) => {
+    return React.createElement(NestedOption<IUploadProps>, { ...props });
+  }
+);
 
-const Upload = Object.assign<typeof _componentUpload, NestedComponentMeta>(_componentUpload, {
-  componentType: "option",
-});
+const Upload: typeof _componentUpload & IElementDescriptor = Object.assign(_componentUpload, {
+  OptionName: "upload",
+})
 
 export default FileManager;
 export {

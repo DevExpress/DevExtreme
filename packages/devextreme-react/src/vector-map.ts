@@ -5,7 +5,7 @@ import dxVectorMap, {
     Properties
 } from "devextreme/viz/vector_map";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, dxVectorMapAnnotationConfig, MapLayerElement, VectorMapLegendItem } from "devextreme/viz/vector_map";
@@ -148,35 +148,32 @@ type IAnnotationProps = React.PropsWithChildren<{
   tooltipRender?: (...params: any) => React.ReactNode;
   tooltipComponent?: React.ComponentType<any>;
 }>
-const _componentAnnotation = (props: IAnnotationProps) => {
-  return React.createElement(NestedOption<IAnnotationProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "annotations",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        annotationBorder: { optionName: "border", isCollectionItem: false },
-        border: { optionName: "border", isCollectionItem: false },
-        font: { optionName: "font", isCollectionItem: false },
-        image: { optionName: "image", isCollectionItem: false },
-        shadow: { optionName: "shadow", isCollectionItem: false }
-      },
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }, {
-        tmplOption: "tooltipTemplate",
-        render: "tooltipRender",
-        component: "tooltipComponent"
-      }],
-    },
-  });
-};
+const _componentAnnotation = memo(
+  (props: IAnnotationProps) => {
+    return React.createElement(NestedOption<IAnnotationProps>, { ...props });
+  }
+);
 
-const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMeta>(_componentAnnotation, {
-  componentType: "option",
-});
+const Annotation: typeof _componentAnnotation & IElementDescriptor = Object.assign(_componentAnnotation, {
+  OptionName: "annotations",
+  IsCollectionItem: true,
+  ExpectedChildren: {
+    annotationBorder: { optionName: "border", isCollectionItem: false },
+    border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
+    image: { optionName: "image", isCollectionItem: false },
+    shadow: { optionName: "shadow", isCollectionItem: false }
+  },
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "tooltipTemplate",
+    render: "tooltipRender",
+    component: "tooltipComponent"
+  }],
+})
 
 // owners:
 // Annotation
@@ -189,18 +186,15 @@ type IAnnotationBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentAnnotationBorder = (props: IAnnotationBorderProps) => {
-  return React.createElement(NestedOption<IAnnotationBorderProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "border",
-    },
-  });
-};
+const _componentAnnotationBorder = memo(
+  (props: IAnnotationBorderProps) => {
+    return React.createElement(NestedOption<IAnnotationBorderProps>, { ...props });
+  }
+);
 
-const AnnotationBorder = Object.assign<typeof _componentAnnotationBorder, NestedComponentMeta>(_componentAnnotationBorder, {
-  componentType: "option",
-});
+const AnnotationBorder: typeof _componentAnnotationBorder & IElementDescriptor = Object.assign(_componentAnnotationBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // VectorMap
@@ -208,18 +202,15 @@ type IBackgroundProps = React.PropsWithChildren<{
   borderColor?: string;
   color?: string;
 }>
-const _componentBackground = (props: IBackgroundProps) => {
-  return React.createElement(NestedOption<IBackgroundProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "background",
-    },
-  });
-};
+const _componentBackground = memo(
+  (props: IBackgroundProps) => {
+    return React.createElement(NestedOption<IBackgroundProps>, { ...props });
+  }
+);
 
-const Background = Object.assign<typeof _componentBackground, NestedComponentMeta>(_componentBackground, {
-  componentType: "option",
-});
+const Background: typeof _componentBackground & IElementDescriptor = Object.assign(_componentBackground, {
+  OptionName: "background",
+})
 
 // owners:
 // Annotation
@@ -233,18 +224,15 @@ type IBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentBorder = (props: IBorderProps) => {
-  return React.createElement(NestedOption<IBorderProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "border",
-    },
-  });
-};
+const _componentBorder = memo(
+  (props: IBorderProps) => {
+    return React.createElement(NestedOption<IBorderProps>, { ...props });
+  }
+);
 
-const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_componentBorder, {
-  componentType: "option",
-});
+const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // VectorMap
@@ -299,27 +287,24 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   tooltipRender?: (...params: any) => React.ReactNode;
   tooltipComponent?: React.ComponentType<any>;
 }>
-const _componentCommonAnnotationSettings = (props: ICommonAnnotationSettingsProps) => {
-  return React.createElement(NestedOption<ICommonAnnotationSettingsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "commonAnnotationSettings",
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }, {
-        tmplOption: "tooltipTemplate",
-        render: "tooltipRender",
-        component: "tooltipComponent"
-      }],
-    },
-  });
-};
+const _componentCommonAnnotationSettings = memo(
+  (props: ICommonAnnotationSettingsProps) => {
+    return React.createElement(NestedOption<ICommonAnnotationSettingsProps>, { ...props });
+  }
+);
 
-const CommonAnnotationSettings = Object.assign<typeof _componentCommonAnnotationSettings, NestedComponentMeta>(_componentCommonAnnotationSettings, {
-  componentType: "option",
-});
+const CommonAnnotationSettings: typeof _componentCommonAnnotationSettings & IElementDescriptor = Object.assign(_componentCommonAnnotationSettings, {
+  OptionName: "commonAnnotationSettings",
+  TemplateProps: [{
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "tooltipTemplate",
+    render: "tooltipRender",
+    component: "tooltipComponent"
+  }],
+})
 
 // owners:
 // VectorMap
@@ -334,18 +319,15 @@ type IControlBarProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   zoomVisible?: boolean;
 }>
-const _componentControlBar = (props: IControlBarProps) => {
-  return React.createElement(NestedOption<IControlBarProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "controlBar",
-    },
-  });
-};
+const _componentControlBar = memo(
+  (props: IControlBarProps) => {
+    return React.createElement(NestedOption<IControlBarProps>, { ...props });
+  }
+);
 
-const ControlBar = Object.assign<typeof _componentControlBar, NestedComponentMeta>(_componentControlBar, {
-  componentType: "option",
-});
+const ControlBar: typeof _componentControlBar & IElementDescriptor = Object.assign(_componentControlBar, {
+  OptionName: "controlBar",
+})
 
 // owners:
 // VectorMap
@@ -358,18 +340,15 @@ type IExportProps = React.PropsWithChildren<{
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-const _componentExport = (props: IExportProps) => {
-  return React.createElement(NestedOption<IExportProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "export",
-    },
-  });
-};
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
 
-const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_componentExport, {
-  componentType: "option",
-});
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // Annotation
@@ -388,18 +367,15 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-const _componentFont = (props: IFontProps) => {
-  return React.createElement(NestedOption<IFontProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "font",
-    },
-  });
-};
+const _componentFont = memo(
+  (props: IFontProps) => {
+    return React.createElement(NestedOption<IFontProps>, { ...props });
+  }
+);
 
-const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componentFont, {
-  componentType: "option",
-});
+const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
+  OptionName: "font",
+})
 
 // owners:
 // Annotation
@@ -408,18 +384,15 @@ type IImageProps = React.PropsWithChildren<{
   url?: string;
   width?: number;
 }>
-const _componentImage = (props: IImageProps) => {
-  return React.createElement(NestedOption<IImageProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "image",
-    },
-  });
-};
+const _componentImage = memo(
+  (props: IImageProps) => {
+    return React.createElement(NestedOption<IImageProps>, { ...props });
+  }
+);
 
-const Image = Object.assign<typeof _componentImage, NestedComponentMeta>(_componentImage, {
-  componentType: "option",
-});
+const Image: typeof _componentImage & IElementDescriptor = Object.assign(_componentImage, {
+  OptionName: "image",
+})
 
 // owners:
 // Layer
@@ -428,21 +401,18 @@ type ILabelProps = React.PropsWithChildren<{
   enabled?: boolean;
   font?: ChartsFont;
 }>
-const _componentLabel = (props: ILabelProps) => {
-  return React.createElement(NestedOption<ILabelProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "label",
-      ExpectedChildren: {
-        font: { optionName: "font", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
 
-const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_componentLabel, {
-  componentType: "option",
-});
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
+    font: { optionName: "font", isCollectionItem: false }
+  },
+})
 
 // owners:
 // VectorMap
@@ -481,22 +451,19 @@ type ILayerProps = React.PropsWithChildren<{
   sizeGroups?: Array<number>;
   type?: "area" | "line" | "marker";
 }>
-const _componentLayer = (props: ILayerProps) => {
-  return React.createElement(NestedOption<ILayerProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "layers",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        label: { optionName: "label", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentLayer = memo(
+  (props: ILayerProps) => {
+    return React.createElement(NestedOption<ILayerProps>, { ...props });
+  }
+);
 
-const Layer = Object.assign<typeof _componentLayer, NestedComponentMeta>(_componentLayer, {
-  componentType: "option",
-});
+const Layer: typeof _componentLayer & IElementDescriptor = Object.assign(_componentLayer, {
+  OptionName: "layers",
+  IsCollectionItem: true,
+  ExpectedChildren: {
+    label: { optionName: "label", isCollectionItem: false }
+  },
+})
 
 // owners:
 // VectorMap
@@ -561,33 +528,30 @@ type ILegendProps = React.PropsWithChildren<{
   markerRender?: (...params: any) => React.ReactNode;
   markerComponent?: React.ComponentType<any>;
 }>
-const _componentLegend = (props: ILegendProps) => {
-  return React.createElement(NestedOption<ILegendProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "legends",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        annotationBorder: { optionName: "border", isCollectionItem: false },
-        border: { optionName: "border", isCollectionItem: false },
-        font: { optionName: "font", isCollectionItem: false },
-        legendTitle: { optionName: "title", isCollectionItem: false },
-        margin: { optionName: "margin", isCollectionItem: false },
-        source: { optionName: "source", isCollectionItem: false },
-        title: { optionName: "title", isCollectionItem: false }
-      },
-      TemplateProps: [{
-        tmplOption: "markerTemplate",
-        render: "markerRender",
-        component: "markerComponent"
-      }],
-    },
-  });
-};
+const _componentLegend = memo(
+  (props: ILegendProps) => {
+    return React.createElement(NestedOption<ILegendProps>, { ...props });
+  }
+);
 
-const Legend = Object.assign<typeof _componentLegend, NestedComponentMeta>(_componentLegend, {
-  componentType: "option",
-});
+const Legend: typeof _componentLegend & IElementDescriptor = Object.assign(_componentLegend, {
+  OptionName: "legends",
+  IsCollectionItem: true,
+  ExpectedChildren: {
+    annotationBorder: { optionName: "border", isCollectionItem: false },
+    border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
+    legendTitle: { optionName: "title", isCollectionItem: false },
+    margin: { optionName: "margin", isCollectionItem: false },
+    source: { optionName: "source", isCollectionItem: false },
+    title: { optionName: "title", isCollectionItem: false }
+  },
+  TemplateProps: [{
+    tmplOption: "markerTemplate",
+    render: "markerRender",
+    component: "markerComponent"
+  }],
+})
 
 // owners:
 // Legend
@@ -609,24 +573,21 @@ type ILegendTitleProps = React.PropsWithChildren<{
   text?: string;
   verticalAlignment?: "bottom" | "top";
 }>
-const _componentLegendTitle = (props: ILegendTitleProps) => {
-  return React.createElement(NestedOption<ILegendTitleProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "title",
-      ExpectedChildren: {
-        font: { optionName: "font", isCollectionItem: false },
-        legendTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
-        margin: { optionName: "margin", isCollectionItem: false },
-        subtitle: { optionName: "subtitle", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentLegendTitle = memo(
+  (props: ILegendTitleProps) => {
+    return React.createElement(NestedOption<ILegendTitleProps>, { ...props });
+  }
+);
 
-const LegendTitle = Object.assign<typeof _componentLegendTitle, NestedComponentMeta>(_componentLegendTitle, {
-  componentType: "option",
-});
+const LegendTitle: typeof _componentLegendTitle & IElementDescriptor = Object.assign(_componentLegendTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
+    font: { optionName: "font", isCollectionItem: false },
+    legendTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
+    margin: { optionName: "margin", isCollectionItem: false },
+    subtitle: { optionName: "subtitle", isCollectionItem: false }
+  },
+})
 
 // owners:
 // LegendTitle
@@ -635,21 +596,18 @@ type ILegendTitleSubtitleProps = React.PropsWithChildren<{
   offset?: number;
   text?: string;
 }>
-const _componentLegendTitleSubtitle = (props: ILegendTitleSubtitleProps) => {
-  return React.createElement(NestedOption<ILegendTitleSubtitleProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "subtitle",
-      ExpectedChildren: {
-        font: { optionName: "font", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentLegendTitleSubtitle = memo(
+  (props: ILegendTitleSubtitleProps) => {
+    return React.createElement(NestedOption<ILegendTitleSubtitleProps>, { ...props });
+  }
+);
 
-const LegendTitleSubtitle = Object.assign<typeof _componentLegendTitleSubtitle, NestedComponentMeta>(_componentLegendTitleSubtitle, {
-  componentType: "option",
-});
+const LegendTitleSubtitle: typeof _componentLegendTitleSubtitle & IElementDescriptor = Object.assign(_componentLegendTitleSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
+    font: { optionName: "font", isCollectionItem: false }
+  },
+})
 
 // owners:
 // VectorMap
@@ -662,24 +620,21 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-const _componentLoadingIndicator = (props: ILoadingIndicatorProps) => {
-  return React.createElement(NestedOption<ILoadingIndicatorProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "loadingIndicator",
-      DefaultsProps: {
-        defaultShow: "show"
-      },
-      ExpectedChildren: {
-        font: { optionName: "font", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentLoadingIndicator = memo(
+  (props: ILoadingIndicatorProps) => {
+    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
+  }
+);
 
-const LoadingIndicator = Object.assign<typeof _componentLoadingIndicator, NestedComponentMeta>(_componentLoadingIndicator, {
-  componentType: "option",
-});
+const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
+  OptionName: "loadingIndicator",
+  DefaultsProps: {
+    defaultShow: "show"
+  },
+  ExpectedChildren: {
+    font: { optionName: "font", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Legend
@@ -691,18 +646,15 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-const _componentMargin = (props: IMarginProps) => {
-  return React.createElement(NestedOption<IMarginProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "margin",
-    },
-  });
-};
+const _componentMargin = memo(
+  (props: IMarginProps) => {
+    return React.createElement(NestedOption<IMarginProps>, { ...props });
+  }
+);
 
-const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_componentMargin, {
-  componentType: "option",
-});
+const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
+  OptionName: "margin",
+})
 
 // owners:
 // VectorMap
@@ -711,18 +663,15 @@ type IProjectionProps = React.PropsWithChildren<{
   from?: ((coordinates: Array<number>) => Array<number>);
   to?: ((coordinates: Array<number>) => Array<number>);
 }>
-const _componentProjection = (props: IProjectionProps) => {
-  return React.createElement(NestedOption<IProjectionProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "projection",
-    },
-  });
-};
+const _componentProjection = memo(
+  (props: IProjectionProps) => {
+    return React.createElement(NestedOption<IProjectionProps>, { ...props });
+  }
+);
 
-const Projection = Object.assign<typeof _componentProjection, NestedComponentMeta>(_componentProjection, {
-  componentType: "option",
-});
+const Projection: typeof _componentProjection & IElementDescriptor = Object.assign(_componentProjection, {
+  OptionName: "projection",
+})
 
 // owners:
 // Annotation
@@ -734,18 +683,15 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-const _componentShadow = (props: IShadowProps) => {
-  return React.createElement(NestedOption<IShadowProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "shadow",
-    },
-  });
-};
+const _componentShadow = memo(
+  (props: IShadowProps) => {
+    return React.createElement(NestedOption<IShadowProps>, { ...props });
+  }
+);
 
-const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_componentShadow, {
-  componentType: "option",
-});
+const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
+  OptionName: "shadow",
+})
 
 // owners:
 // VectorMap
@@ -753,18 +699,15 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-const _componentSize = (props: ISizeProps) => {
-  return React.createElement(NestedOption<ISizeProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "size",
-    },
-  });
-};
+const _componentSize = memo(
+  (props: ISizeProps) => {
+    return React.createElement(NestedOption<ISizeProps>, { ...props });
+  }
+);
 
-const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componentSize, {
-  componentType: "option",
-});
+const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
+  OptionName: "size",
+})
 
 // owners:
 // Legend
@@ -772,18 +715,15 @@ type ISourceProps = React.PropsWithChildren<{
   grouping?: string;
   layer?: string;
 }>
-const _componentSource = (props: ISourceProps) => {
-  return React.createElement(NestedOption<ISourceProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "source",
-    },
-  });
-};
+const _componentSource = memo(
+  (props: ISourceProps) => {
+    return React.createElement(NestedOption<ISourceProps>, { ...props });
+  }
+);
 
-const Source = Object.assign<typeof _componentSource, NestedComponentMeta>(_componentSource, {
-  componentType: "option",
-});
+const Source: typeof _componentSource & IElementDescriptor = Object.assign(_componentSource, {
+  OptionName: "source",
+})
 
 // owners:
 // LegendTitle
@@ -795,18 +735,15 @@ type ISubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentSubtitle = (props: ISubtitleProps) => {
-  return React.createElement(NestedOption<ISubtitleProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "subtitle",
-    },
-  });
-};
+const _componentSubtitle = memo(
+  (props: ISubtitleProps) => {
+    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
+  }
+);
 
-const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_componentSubtitle, {
-  componentType: "option",
-});
+const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
+  OptionName: "subtitle",
+})
 
 // owners:
 // Legend
@@ -833,18 +770,15 @@ type ITitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentTitle = (props: ITitleProps) => {
-  return React.createElement(NestedOption<ITitleProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "title",
-    },
-  });
-};
+const _componentTitle = memo(
+  (props: ITitleProps) => {
+    return React.createElement(NestedOption<ITitleProps>, { ...props });
+  }
+);
 
-const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_componentTitle, {
-  componentType: "option",
-});
+const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
+  OptionName: "title",
+})
 
 // owners:
 // VectorMap
@@ -878,29 +812,26 @@ type ITooltipProps = React.PropsWithChildren<{
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
-const _componentTooltip = (props: ITooltipProps) => {
-  return React.createElement(NestedOption<ITooltipProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "tooltip",
-      ExpectedChildren: {
-        border: { optionName: "border", isCollectionItem: false },
-        font: { optionName: "font", isCollectionItem: false },
-        shadow: { optionName: "shadow", isCollectionItem: false },
-        tooltipBorder: { optionName: "border", isCollectionItem: false }
-      },
-      TemplateProps: [{
-        tmplOption: "contentTemplate",
-        render: "contentRender",
-        component: "contentComponent"
-      }],
-    },
-  });
-};
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
 
-const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_componentTooltip, {
-  componentType: "option",
-});
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
+    border: { optionName: "border", isCollectionItem: false },
+    font: { optionName: "font", isCollectionItem: false },
+    shadow: { optionName: "shadow", isCollectionItem: false },
+    tooltipBorder: { optionName: "border", isCollectionItem: false }
+  },
+  TemplateProps: [{
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }],
+})
 
 // owners:
 // Tooltip
@@ -911,18 +842,15 @@ type ITooltipBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentTooltipBorder = (props: ITooltipBorderProps) => {
-  return React.createElement(NestedOption<ITooltipBorderProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "border",
-    },
-  });
-};
+const _componentTooltipBorder = memo(
+  (props: ITooltipBorderProps) => {
+    return React.createElement(NestedOption<ITooltipBorderProps>, { ...props });
+  }
+);
 
-const TooltipBorder = Object.assign<typeof _componentTooltipBorder, NestedComponentMeta>(_componentTooltipBorder, {
-  componentType: "option",
-});
+const TooltipBorder: typeof _componentTooltipBorder & IElementDescriptor = Object.assign(_componentTooltipBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // VectorMap
@@ -948,24 +876,21 @@ type IVectorMapTitleProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentVectorMapTitle = (props: IVectorMapTitleProps) => {
-  return React.createElement(NestedOption<IVectorMapTitleProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "title",
-      ExpectedChildren: {
-        font: { optionName: "font", isCollectionItem: false },
-        margin: { optionName: "margin", isCollectionItem: false },
-        subtitle: { optionName: "subtitle", isCollectionItem: false },
-        vectorMapTitleSubtitle: { optionName: "subtitle", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentVectorMapTitle = memo(
+  (props: IVectorMapTitleProps) => {
+    return React.createElement(NestedOption<IVectorMapTitleProps>, { ...props });
+  }
+);
 
-const VectorMapTitle = Object.assign<typeof _componentVectorMapTitle, NestedComponentMeta>(_componentVectorMapTitle, {
-  componentType: "option",
-});
+const VectorMapTitle: typeof _componentVectorMapTitle & IElementDescriptor = Object.assign(_componentVectorMapTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
+    font: { optionName: "font", isCollectionItem: false },
+    margin: { optionName: "margin", isCollectionItem: false },
+    subtitle: { optionName: "subtitle", isCollectionItem: false },
+    vectorMapTitleSubtitle: { optionName: "subtitle", isCollectionItem: false }
+  },
+})
 
 // owners:
 // VectorMapTitle
@@ -976,21 +901,18 @@ type IVectorMapTitleSubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentVectorMapTitleSubtitle = (props: IVectorMapTitleSubtitleProps) => {
-  return React.createElement(NestedOption<IVectorMapTitleSubtitleProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "subtitle",
-      ExpectedChildren: {
-        font: { optionName: "font", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentVectorMapTitleSubtitle = memo(
+  (props: IVectorMapTitleSubtitleProps) => {
+    return React.createElement(NestedOption<IVectorMapTitleSubtitleProps>, { ...props });
+  }
+);
 
-const VectorMapTitleSubtitle = Object.assign<typeof _componentVectorMapTitleSubtitle, NestedComponentMeta>(_componentVectorMapTitleSubtitle, {
-  componentType: "option",
-});
+const VectorMapTitleSubtitle: typeof _componentVectorMapTitleSubtitle & IElementDescriptor = Object.assign(_componentVectorMapTitleSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
+    font: { optionName: "font", isCollectionItem: false }
+  },
+})
 
 export default VectorMap;
 export {

@@ -5,7 +5,7 @@ import dxDeferRendering, {
     Properties
 } from "devextreme/ui/defer_rendering";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, RenderedEvent, ShownEvent } from "devextreme/ui/defer_rendering";
@@ -77,22 +77,19 @@ type IAnimationProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-const _componentAnimation = (props: IAnimationProps) => {
-  return React.createElement(NestedOption<IAnimationProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "animation",
-      ExpectedChildren: {
-        from: { optionName: "from", isCollectionItem: false },
-        to: { optionName: "to", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
 
-const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>(_componentAnimation, {
-  componentType: "option",
-});
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+  ExpectedChildren: {
+    from: { optionName: "from", isCollectionItem: false },
+    to: { optionName: "to", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Position
@@ -100,18 +97,15 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-const _componentAt = (props: IAtProps) => {
-  return React.createElement(NestedOption<IAtProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "at",
-    },
-  });
-};
+const _componentAt = memo(
+  (props: IAtProps) => {
+    return React.createElement(NestedOption<IAtProps>, { ...props });
+  }
+);
 
-const At = Object.assign<typeof _componentAt, NestedComponentMeta>(_componentAt, {
-  componentType: "option",
-});
+const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
+  OptionName: "at",
+})
 
 // owners:
 // Position
@@ -119,18 +113,15 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentBoundaryOffset = (props: IBoundaryOffsetProps) => {
-  return React.createElement(NestedOption<IBoundaryOffsetProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "boundaryOffset",
-    },
-  });
-};
+const _componentBoundaryOffset = memo(
+  (props: IBoundaryOffsetProps) => {
+    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
+  }
+);
 
-const BoundaryOffset = Object.assign<typeof _componentBoundaryOffset, NestedComponentMeta>(_componentBoundaryOffset, {
-  componentType: "option",
-});
+const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
+  OptionName: "boundaryOffset",
+})
 
 // owners:
 // Position
@@ -138,18 +129,15 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-const _componentCollision = (props: ICollisionProps) => {
-  return React.createElement(NestedOption<ICollisionProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "collision",
-    },
-  });
-};
+const _componentCollision = memo(
+  (props: ICollisionProps) => {
+    return React.createElement(NestedOption<ICollisionProps>, { ...props });
+  }
+);
 
-const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>(_componentCollision, {
-  componentType: "option",
-});
+const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
+  OptionName: "collision",
+})
 
 // owners:
 // Animation
@@ -160,21 +148,18 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-const _componentFrom = (props: IFromProps) => {
-  return React.createElement(NestedOption<IFromProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "from",
-      ExpectedChildren: {
-        position: { optionName: "position", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentFrom = memo(
+  (props: IFromProps) => {
+    return React.createElement(NestedOption<IFromProps>, { ...props });
+  }
+);
 
-const From = Object.assign<typeof _componentFrom, NestedComponentMeta>(_componentFrom, {
-  componentType: "option",
-});
+const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
+  OptionName: "from",
+  ExpectedChildren: {
+    position: { optionName: "position", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Position
@@ -182,18 +167,15 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-const _componentMy = (props: IMyProps) => {
-  return React.createElement(NestedOption<IMyProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "my",
-    },
-  });
-};
+const _componentMy = memo(
+  (props: IMyProps) => {
+    return React.createElement(NestedOption<IMyProps>, { ...props });
+  }
+);
 
-const My = Object.assign<typeof _componentMy, NestedComponentMeta>(_componentMy, {
-  componentType: "option",
-});
+const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
+  OptionName: "my",
+})
 
 // owners:
 // Position
@@ -201,18 +183,15 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentOffset = (props: IOffsetProps) => {
-  return React.createElement(NestedOption<IOffsetProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "offset",
-    },
-  });
-};
+const _componentOffset = memo(
+  (props: IOffsetProps) => {
+    return React.createElement(NestedOption<IOffsetProps>, { ...props });
+  }
+);
 
-const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_componentOffset, {
-  componentType: "option",
-});
+const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
+  OptionName: "offset",
+})
 
 // owners:
 // From
@@ -240,25 +219,22 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-const _componentPosition = (props: IPositionProps) => {
-  return React.createElement(NestedOption<IPositionProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "position",
-      ExpectedChildren: {
-        at: { optionName: "at", isCollectionItem: false },
-        boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
-        collision: { optionName: "collision", isCollectionItem: false },
-        my: { optionName: "my", isCollectionItem: false },
-        offset: { optionName: "offset", isCollectionItem: false }
-      },
-    },
-  });
-};
+const _componentPosition = memo(
+  (props: IPositionProps) => {
+    return React.createElement(NestedOption<IPositionProps>, { ...props });
+  }
+);
 
-const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_componentPosition, {
-  componentType: "option",
-});
+const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
+  OptionName: "position",
+  ExpectedChildren: {
+    at: { optionName: "at", isCollectionItem: false },
+    boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
+    collision: { optionName: "collision", isCollectionItem: false },
+    my: { optionName: "my", isCollectionItem: false },
+    offset: { optionName: "offset", isCollectionItem: false }
+  },
+})
 
 // owners:
 // Animation
@@ -269,18 +245,15 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-const _componentTo = (props: IToProps) => {
-  return React.createElement(NestedOption<IToProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "to",
-    },
-  });
-};
+const _componentTo = memo(
+  (props: IToProps) => {
+    return React.createElement(NestedOption<IToProps>, { ...props });
+  }
+);
 
-const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo, {
-  componentType: "option",
-});
+const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
+  OptionName: "to",
+})
 
 export default DeferRendering;
 export {
