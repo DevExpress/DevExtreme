@@ -56,7 +56,6 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     this.diContext.register(HeaderPanelView);
     this.diContext.register(EditingController);
     this.diContext.register(PagerView);
-    this.diContext.register(MainView);
     this.diContext.register(ColumnsChooserView);
     this.diContext.register(Search);
     this.diContext.register(StatusView);
