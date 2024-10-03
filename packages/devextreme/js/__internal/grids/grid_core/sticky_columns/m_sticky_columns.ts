@@ -80,13 +80,15 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const prevCellIsFixed = prevColumnIsFixed(columnsController, column, rowIndex);
     const isFirstColumn = columnsController?.isFirstColumn(column, rowIndex);
 
-    GridCoreStickyColumnsDom.toggleColumnNoBorderClass($cell, prevCellIsFixed, this.addWidgetPrefix.bind(this));
-    GridCoreStickyColumnsDom.toggleFirstHeaderClass($cell, isFirstColumn, this.addWidgetPrefix.bind(this));
+    GridCoreStickyColumnsDom
+      .toggleColumnNoBorderClass($cell, prevCellIsFixed, this.addWidgetPrefix.bind(this));
+    GridCoreStickyColumnsDom
+      .toggleFirstHeaderClass($cell, isFirstColumn, this.addWidgetPrefix.bind(this));
   }
 
   private _updateBorderClasses(): void {
     const isColumnHeadersView = this.name === 'columnHeadersView';
-    const $rows = this._getRowElements().not(`.${MASTER_DETAIL_CLASSES.detailRow}`).toArray();
+    const $rows = this._getRowElementsCore().not(`.${MASTER_DETAIL_CLASSES.detailRow}`).toArray();
 
     iteratorUtils.each($rows, (index: number, row: Element) => {
       const rowIndex = isColumnHeadersView ? index : null;
@@ -128,41 +130,45 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const { rowType } = options;
     const $cell = super._createCell(options);
     const isStickyColumns = this._isStickyColumns();
+    const rowIndex = rowType === 'header' ? options.rowIndex : null;
 
-    if (isStickyColumns && column.fixed) {
-      const rowIndex = rowType === 'header' ? options.rowIndex : null;
-      const fixedPosition = getColumnFixedPosition(this._columnsController, column);
+    if (isStickyColumns) {
+      this._updateBorderClassesCore($cell, column, rowIndex);
 
-      GridCoreStickyColumnsDom.addStickyColumnClass(
-        $cell,
-        fixedPosition,
-        this.addWidgetPrefix.bind(this),
-      );
+      if (column.fixed) {
+        const fixedPosition = getColumnFixedPosition(this._columnsController, column);
 
-      switch (fixedPosition) {
-        case StickyPosition.Right: {
-          this._addStickyColumnBorderLeftClass(
-            $cell,
-            column,
-            rowIndex,
-            false,
-            StickyPosition.Right,
-          );
-          break;
-        }
-        case StickyPosition.Sticky: {
-          this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
-          this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
-          break;
-        }
-        default: {
-          this._addStickyColumnBorderRightClass(
-            $cell,
-            column,
-            rowIndex,
-            false,
-            StickyPosition.Left,
-          );
+        GridCoreStickyColumnsDom.addStickyColumnClass(
+          $cell,
+          fixedPosition,
+          this.addWidgetPrefix.bind(this),
+        );
+
+        switch (fixedPosition) {
+          case StickyPosition.Right: {
+            this._addStickyColumnBorderLeftClass(
+              $cell,
+              column,
+              rowIndex,
+              false,
+              StickyPosition.Right,
+            );
+            break;
+          }
+          case StickyPosition.Sticky: {
+            this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
+            this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
+            break;
+          }
+          default: {
+            this._addStickyColumnBorderRightClass(
+              $cell,
+              column,
+              rowIndex,
+              false,
+              StickyPosition.Left,
+            );
+          }
         }
       }
     }
@@ -211,12 +217,16 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
   protected _resizeCore() {
     const isStickyColumns = this._isStickyColumns();
+    const columnHidingEnabled = this.option('columnHidingEnabled');
 
     super._resizeCore.apply(this, arguments as any);
 
     if (isStickyColumns) {
       this.setStickyOffsets();
-      this._updateBorderClasses();
+
+      if (columnHidingEnabled) {
+        this._updateBorderClasses();
+      }
     }
   }
 };
