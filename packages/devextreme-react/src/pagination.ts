@@ -1,26 +1,26 @@
 "use client"
 import * as React from "react";
 import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
-import dxPager, {
+import dxPagination, {
     Properties
 } from "devextreme/ui/pager";
 
 import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
-type IPagerOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
+type IPaginationOptions = React.PropsWithChildren<Properties & IHtmlOptions & {
   defaultPageIndex?: number;
   defaultPageSize?: number;
   onPageIndexChange?: (value: number) => void;
   onPageSizeChange?: (value: number) => void;
 }>
 
-interface PagerRef {
-  instance: () => dxPager;
+interface PaginationRef {
+  instance: () => dxPagination;
 }
 
-const Pager = memo(
+const Pagination = memo(
   forwardRef(
-    (props: React.PropsWithChildren<IPagerOptions>, ref: ForwardedRef<PagerRef>) => {
+    (props: React.PropsWithChildren<IPaginationOptions>, ref: ForwardedRef<PaginationRef>) => {
       const baseRef = useRef<ComponentRef>(null);
 
       useImperativeHandle(ref, () => (
@@ -40,8 +40,8 @@ const Pager = memo(
       }), []);
 
       return (
-        React.createElement(BaseComponent<React.PropsWithChildren<IPagerOptions>>, {
-          WidgetClass: dxPager,
+        React.createElement(BaseComponent<React.PropsWithChildren<IPaginationOptions>>, {
+          WidgetClass: dxPagination,
           ref: baseRef,
           subscribableOptions,
           independentEvents,
@@ -51,13 +51,13 @@ const Pager = memo(
       );
     },
   ),
-) as (props: React.PropsWithChildren<IPagerOptions> & { ref?: Ref<PagerRef> }) => ReactElement | null;
-export default Pager;
+) as (props: React.PropsWithChildren<IPaginationOptions> & { ref?: Ref<PaginationRef> }) => ReactElement | null;
+export default Pagination;
 export {
-  Pager,
-  IPagerOptions,
-  PagerRef
+  Pagination,
+  IPaginationOptions,
+  PaginationRef
 };
-import type * as PagerTypes from 'devextreme/ui/pager_types';
-export { PagerTypes };
+import type * as PaginationTypes from 'devextreme/ui/pager_types';
+export { PaginationTypes };
 

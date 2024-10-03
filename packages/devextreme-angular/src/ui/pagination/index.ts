@@ -22,7 +22,7 @@ import {
 
 import { DisplayMode } from 'devextreme/common';
 
-import DxPager from 'devextreme/ui/pager';
+import DxPagination from 'devextreme/ui/pager';
 
 
 import {
@@ -41,11 +41,11 @@ import {
 
 
 /**
- * [descr:dxPager]
+ * [descr:dxPagination]
 
  */
 @Component({
-    selector: 'dx-pager',
+    selector: 'dx-pagination',
     template: '',
     providers: [
         DxTemplateHost,
@@ -54,8 +54,8 @@ import {
         IterableDifferHelper
     ]
 })
-export class DxPagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxPager = null;
+export class DxPaginationComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxPagination = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -84,7 +84,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:dxPagerOptions.allowedPageSizes]
+     * [descr:dxPaginationOptions.allowedPageSizes]
     
      */
     @Input()
@@ -201,7 +201,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:dxPagerOptions.itemCount]
+     * [descr:dxPaginationOptions.itemCount]
     
      */
     @Input()
@@ -227,7 +227,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:dxPagerOptions.pageIndex]
+     * [descr:dxPaginationOptions.pageIndex]
     
      */
     @Input()
@@ -240,7 +240,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:dxPagerOptions.pageSize]
+     * [descr:dxPaginationOptions.pageSize]
     
      */
     @Input()
@@ -579,7 +579,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
 
     protected _createInstance(element, options) {
 
-        return new DxPager(element, options);
+        return new DxPagination(element, options);
     }
 
 
@@ -621,16 +621,16 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
     DxTemplateModule
   ],
   declarations: [
-    DxPagerComponent
+    DxPaginationComponent
   ],
   exports: [
-    DxPagerComponent,
+    DxPaginationComponent,
     DxTemplateModule
   ]
 })
-export class DxPagerModule { }
+export class DxPaginationModule { }
 
-import type * as DxPagerTypes from "devextreme/ui/pager_types";
-export { DxPagerTypes };
+import type * as DxPaginationTypes from "devextreme/ui/pager_types";
+export { DxPaginationTypes };
 
 

@@ -251,11 +251,11 @@ declare global {
     dxNumberBox(options: string): any;
     dxNumberBox(options: string, ...params: any[]): any;
 
-    dxPager(): JQuery;
-    dxPager(options: 'instance'): DevExpress.ui.dxPager;
-    dxPager(options: DevExpress.ui.dxPager.Properties): JQuery;
-    dxPager(options: string): any;
-    dxPager(options: string, ...params: any[]): any;
+    dxPagination(): JQuery;
+    dxPagination(options: 'instance'): DevExpress.ui.dxPagination;
+    dxPagination(options: DevExpress.ui.dxPagination.Properties): JQuery;
+    dxPagination(options: string): any;
+    dxPagination(options: string, ...params: any[]): any;
 
     dxPieChart(): JQuery;
     dxPieChart(options: 'instance'): DevExpress.viz.dxPieChart;
@@ -21774,44 +21774,44 @@ declare module DevExpress.ui {
     wrapperAttr?: any;
   }
   /**
-   * [descr:dxPager]
+   * [descr:dxPagination]
    */
-  export class dxPager extends Widget<DevExpress.ui.dxPager.Properties> {
+  export class dxPagination extends Widget<DevExpress.ui.dxPagination.Properties> {
     /**
-     * [descr:dxPager.getPageCount()]
+     * [descr:dxPagination.getPageCount()]
      */
     getPageCount(): number;
   }
-  module dxPager {
+  module dxPagination {
     export type PageSize = number | 'all';
-    export type Properties = dxPagerOptions;
+    export type Properties = dxPaginationOptions;
   }
   /**
-   * [descr:dxPagerOptions]
-   * @deprecated [depNote:dxPagerOptions]
+   * [descr:dxPaginationOptions]
+   * @deprecated [depNote:dxPaginationOptions]
    */
-  export interface dxPagerOptions
+  export interface dxPaginationOptions
     extends DevExpress.common.PagerBaseOptions,
-      WidgetOptions<dxPager> {
+      WidgetOptions<dxPagination> {
     /**
-     * [descr:dxPagerOptions.pageIndex]
+     * [descr:dxPaginationOptions.pageIndex]
      */
     pageIndex?: number;
 
     /**
-     * [descr:dxPagerOptions.pageSize]
+     * [descr:dxPaginationOptions.pageSize]
      */
     pageSize?: number;
 
     /**
-     * [descr:dxPagerOptions.itemCount]
+     * [descr:dxPaginationOptions.itemCount]
      */
     itemCount?: number;
 
     /**
-     * [descr:dxPagerOptions.allowedPageSizes]
+     * [descr:dxPaginationOptions.allowedPageSizes]
      */
-    allowedPageSizes?: Array<DevExpress.ui.dxPager.PageSize>;
+    allowedPageSizes?: Array<DevExpress.ui.dxPagination.PageSize>;
   }
   /**
    * [descr:dxPivotGrid]

@@ -19,7 +19,7 @@ export type PageSize = number | 'all';
  * @docid
  * @inherits PagerBaseOptions
  */
-export interface dxPagerOptions extends PagerBaseOptions, WidgetOptions<dxPager> {
+export interface dxPaginationOptions extends PagerBaseOptions, WidgetOptions<dxPagination> {
     /**
      * @docid
      * @fires Properties.onOptionChanged
@@ -53,9 +53,9 @@ export interface dxPagerOptions extends PagerBaseOptions, WidgetOptions<dxPager>
  * @namespace DevExpress.ui
  * @public
  * @inherits Widget
- * @options dxPagerOptions
+ * @options dxPaginationOptions
  */
-export default class dxPager extends Widget<Properties> {
+export default class dxPagination extends Widget<Properties> {
     /**
      * @docid
      * @publicName getPageCount()
@@ -67,4 +67,4 @@ export default class dxPager extends Widget<Properties> {
 /**
  * @public
  */
-export type Properties = dxPagerOptions;
+export type Properties = dxPaginationOptions;

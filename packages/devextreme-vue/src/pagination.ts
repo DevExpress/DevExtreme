@@ -1,4 +1,4 @@
-import Pager, { Properties } from "devextreme/ui/pager";
+import Pagination, { Properties } from "devextreme/ui/pager";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -31,8 +31,8 @@ type AccessibleOptions = Pick<Properties,
   "width"
 >;
 
-interface DxPager extends AccessibleOptions {
-  readonly instance?: Pager;
+interface DxPagination extends AccessibleOptions {
+  readonly instance?: Pagination;
 }
 
 const componentConfig = {
@@ -95,23 +95,23 @@ const componentConfig = {
     "update:width": null,
   },
   computed: {
-    instance(): Pager {
+    instance(): Pagination {
       return (this as any).$_instance;
     }
   },
   beforeCreate() {
-    (this as any).$_WidgetClass = Pager;
+    (this as any).$_WidgetClass = Pagination;
     (this as any).$_hasAsyncTemplate = true;
   }
 };
 
 prepareComponentConfig(componentConfig);
 
-const DxPager = defineComponent(componentConfig);
+const DxPagination = defineComponent(componentConfig);
 
-export default DxPager;
+export default DxPagination;
 export {
-  DxPager
+  DxPagination
 };
-import type * as DxPagerTypes from "devextreme/ui/pager_types";
-export { DxPagerTypes };
+import type * as DxPaginationTypes from "devextreme/ui/pager_types";
+export { DxPaginationTypes };

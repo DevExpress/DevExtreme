@@ -44,7 +44,7 @@ export { DxMapComponent, DxMapModule } from 'devextreme-angular/ui/map';
 export { DxMenuComponent, DxMenuModule } from 'devextreme-angular/ui/menu';
 export { DxMultiViewComponent, DxMultiViewModule } from 'devextreme-angular/ui/multi-view';
 export { DxNumberBoxComponent, DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
-export { DxPagerComponent, DxPagerModule } from 'devextreme-angular/ui/pager';
+export { DxPaginationComponent, DxPaginationModule } from 'devextreme-angular/ui/pagination';
 export { DxPieChartComponent, DxPieChartModule } from 'devextreme-angular/ui/pie-chart';
 export { DxPivotGridComponent, DxPivotGridModule } from 'devextreme-angular/ui/pivot-grid';
 export { DxPivotGridFieldChooserComponent, DxPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser';
