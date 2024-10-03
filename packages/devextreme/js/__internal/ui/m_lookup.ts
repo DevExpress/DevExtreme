@@ -15,7 +15,6 @@ import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
-import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
 import Popover from '@js/ui/popover/ui.popover';
@@ -570,36 +569,6 @@ const Lookup = DropDownList.inherit({
 
     this._$popup.addClass(LOOKUP_POPUP_CLASS);
     this._popup.$wrapper().addClass(LOOKUP_POPUP_WRAPPER_CLASS);
-
-    // this._attachPopupFocusoutHandler();
-  },
-
-  _attachPopupFocusoutHandler(): void {
-    const popupFocusoutEventName = addNamespace('focusout', this.NAME);
-    const $overlayContent = this._popup.$overlayContent();
-
-    eventsEngine.off($overlayContent, popupFocusoutEventName);
-    eventsEngine.on($overlayContent, popupFocusoutEventName, (e) => {
-      const { relatedTarget } = e;
-
-      if (!isDefined(relatedTarget)) {
-        /**
-         * Handling the case when a click is on an internal element, e.g. Toolbar,
-         * but relatedTarget === null because the Toolbar is unfocusable (to give a theory).
-         * We can do this because clicks outside the component are handled by Overlay itself.
-         * We don't need to handle these cases, nor do we need to
-         * worry about the overlay being closed.
-         */
-        return;
-      }
-
-      const isTargetLookupField = relatedTarget === this._$field.get(0);
-      const isTargetOutOfPopup = this._isTargetOutOfComponent(relatedTarget);
-
-      if (isTargetOutOfPopup && !isTargetLookupField) {
-        this.close();
-      }
-    });
   },
 
   _renderPopover() {
