@@ -3,6 +3,10 @@ import {
     BasePagerOptions,
 } from '../common';
 
+export {
+    DisplayMode,
+} from '../common';
+
 /**
  * @public
  */

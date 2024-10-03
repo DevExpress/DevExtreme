@@ -1,5 +1,6 @@
 import {
   DataType,
+  DisplayMode,
   DragDirection,
   Draggable,
   DragHighlight,
@@ -2512,6 +2513,12 @@ export type Pager = BasePagerOptions & {
    */
   visible?: boolean | Mode;
 };
+
+/**
+ * @deprecated Use DisplayMode from /common instead
+ * @namespace DevExpress.common.grids
+ */
+export type PagerDisplayMode = DisplayMode;
 
 /**
  * @public

@@ -109,6 +109,7 @@ export interface CellInfo<TRowData = any, TKey = any> {
 }
 
 export {
+    DisplayMode,
     SearchMode,
 } from '../common';
 
@@ -147,6 +148,7 @@ export {
     LoadPanel,
     NewRowPosition,
     Pager,
+    PagerPageSize,
     RowDraggingTemplateData,
     SearchPanel,
     SelectedFilterOperation,
