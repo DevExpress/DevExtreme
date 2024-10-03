@@ -1,14 +1,15 @@
 import { getWindow } from '../../core/utils/window';
+
 const window = getWindow();
 
-const getSessionStorage = function() {
-    let sessionStorage;
+const getSessionStorage = function () {
+  let sessionStorage;
 
-    try {
-        sessionStorage = window.sessionStorage;
-    } catch(e) { }
+  try {
+    sessionStorage = window.sessionStorage;
+  } catch (e) { }
 
-    return sessionStorage;
+  return sessionStorage;
 };
 
 export { getSessionStorage as sessionStorage };

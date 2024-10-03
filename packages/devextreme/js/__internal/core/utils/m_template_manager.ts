@@ -1,8 +1,8 @@
-import config from '../config';
-import devices from '../devices';
-import { getPublicElement } from '../element';
-import Errors from '../errors';
-import $ from '../renderer';
+import config from '@js/core/config';
+import devices from '@js/core/devices';
+import { getPublicElement } from '@js/core/element';
+import Errors from '@js/core/errors';
+import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '../templates/child_default_template';
 import { EmptyTemplate } from '../templates/empty_template';
 import { Template } from '../templates/template';

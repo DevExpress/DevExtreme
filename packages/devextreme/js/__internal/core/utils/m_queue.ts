@@ -1,57 +1,56 @@
-import errors from '../errors';
 import { when } from '../../core/utils/deferred';
+import errors from '../errors';
 
 function createQueue(discardPendingTasks) {
-    let _tasks = [];
-    let _busy = false;
+  let _tasks = [];
+  let _busy = false;
 
-    function exec() {
-        while(_tasks.length) {
-            _busy = true;
+  function exec() {
+    while (_tasks.length) {
+      _busy = true;
 
-            const task = _tasks.shift();
-            const result = task();
+      const task = _tasks.shift();
+      const result = task();
 
-            if(result === undefined) {
-                continue;
-            }
+      if (result === undefined) {
+        continue;
+      }
 
-            if(result.then) {
-                // NOTE: immediate "then" on the next line can reset it back to false
-                when(result).always(exec);
-                return;
-            }
+      if (result.then) {
+        // NOTE: immediate "then" on the next line can reset it back to false
+        when(result).always(exec);
+        return;
+      }
 
-            throw errors.Error('E0015');
-        }
-
-        _busy = false;
+      throw errors.Error('E0015');
     }
 
-    function add(task, removeTaskCallback) {
-        if(!discardPendingTasks) {
-            _tasks.push(task);
-        } else {
-            if(_tasks[0] && removeTaskCallback) {
-                removeTaskCallback(_tasks[0]);
-            }
-            _tasks = [task];
-        }
-        if(!_busy) {
-            exec();
-        }
-    }
+    _busy = false;
+  }
 
-    function busy() {
-        return _busy;
+  function add(task, removeTaskCallback) {
+    if (!discardPendingTasks) {
+      _tasks.push(task);
+    } else {
+      if (_tasks[0] && removeTaskCallback) {
+        removeTaskCallback(_tasks[0]);
+      }
+      _tasks = [task];
     }
+    if (!_busy) {
+      exec();
+    }
+  }
 
-    return {
-        add: add,
-        busy: busy
-    };
+  function busy() {
+    return _busy;
+  }
+
+  return {
+    add,
+    busy,
+  };
 }
-
 
 export { createQueue as create };
 export const enqueue = createQueue().add; // Default global queue for UI sync, consider renaming

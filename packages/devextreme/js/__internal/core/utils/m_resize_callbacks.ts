@@ -1,77 +1,77 @@
-import { hasWindow, getWindow } from './window';
 import domAdapter from '../dom_adapter';
+import callOnce from './call_once';
 import Callbacks from './callbacks';
 import readyCallbacks from './ready_callbacks';
-import callOnce from './call_once';
+import { getWindow, hasWindow } from './window';
 
-const resizeCallbacks = (function() {
-    let prevSize;
-    const callbacks = Callbacks();
-    const originalCallbacksAdd = callbacks.add;
-    const originalCallbacksRemove = callbacks.remove;
+const resizeCallbacks = (function () {
+  let prevSize;
+  const callbacks = Callbacks();
+  const originalCallbacksAdd = callbacks.add;
+  const originalCallbacksRemove = callbacks.remove;
 
-    if(!hasWindow()) {
-        return callbacks;
+  if (!hasWindow()) {
+    return callbacks;
+  }
+
+  const formatSize = function () {
+    const window = getWindow();
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+  };
+
+  const handleResize = function () {
+    const now = formatSize();
+    if (now.width === prevSize.width && now.height === prevSize.height) {
+      return;
     }
 
-    const formatSize = function() {
-        const window = getWindow();
-        return {
-            width: window.innerWidth,
-            height: window.innerHeight,
-        };
-    };
+    let changedDimension;
+    if (now.width === prevSize.width) {
+      changedDimension = 'height';
+    }
+    if (now.height === prevSize.height) {
+      changedDimension = 'width';
+    }
 
-    const handleResize = function() {
-        const now = formatSize();
-        if(now.width === prevSize.width && now.height === prevSize.height) {
-            return;
-        }
+    prevSize = now;
 
-        let changedDimension;
-        if(now.width === prevSize.width) {
-            changedDimension = 'height';
-        }
-        if(now.height === prevSize.height) {
-            changedDimension = 'width';
-        }
+    callbacks.fire(changedDimension);
+  };
 
-        prevSize = now;
+  const setPrevSize = callOnce(() => {
+    prevSize = formatSize();
+  });
 
-        callbacks.fire(changedDimension);
-    };
+  let removeListener;
 
-    const setPrevSize = callOnce(function() {
-        prevSize = formatSize();
+  callbacks.add = function () {
+    const result = originalCallbacksAdd.apply(callbacks, arguments);
+
+    setPrevSize();
+
+    readyCallbacks.add(() => {
+      if (!removeListener && callbacks.has()) {
+        removeListener = domAdapter.listen(getWindow(), 'resize', handleResize);
+      }
     });
 
-    let removeListener;
+    return result;
+  };
 
-    callbacks.add = function() {
-        const result = originalCallbacksAdd.apply(callbacks, arguments);
+  callbacks.remove = function () {
+    const result = originalCallbacksRemove.apply(callbacks, arguments);
 
-        setPrevSize();
+    if (!callbacks.has() && removeListener) {
+      removeListener();
+      removeListener = undefined;
+    }
+    return result;
+  };
 
-        readyCallbacks.add(function() {
-            if(!removeListener && callbacks.has()) {
-                removeListener = domAdapter.listen(getWindow(), 'resize', handleResize);
-            }
-        });
+  return callbacks;
+}());
 
-        return result;
-    };
-
-    callbacks.remove = function() {
-        const result = originalCallbacksRemove.apply(callbacks, arguments);
-
-        if(!callbacks.has() && removeListener) {
-            removeListener();
-            removeListener = undefined;
-        }
-        return result;
-    };
-
-    return callbacks;
-})();
-
-export default resizeCallbacks;
+export { resizeCallbacks };

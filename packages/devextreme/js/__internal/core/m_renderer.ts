@@ -1,2 +1,4 @@
 import rendererBase from './renderer_base';
-export default rendererBase.get();
+
+const renderer = rendererBase.get();
+export { renderer };

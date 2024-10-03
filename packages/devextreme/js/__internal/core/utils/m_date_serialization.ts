@@ -1,7 +1,7 @@
-import config from '../config';
-import { getFormatter as getLDMLFormatter } from '../../localization/ldml/date.formatter';
 import defaultDateNames from '../../localization/default_date_names';
-import { isString, isDate, isNumeric as isNumber } from './type';
+import { getFormatter as getLDMLFormatter } from '../../localization/ldml/date.formatter';
+import config from '../config';
+import { isDate, isNumeric as isNumber, isString } from './type';
 
 const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
@@ -15,167 +15,167 @@ const DATE_SERIALIZATION_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
 const MILLISECOND_LENGHT = 3;
 
-const dateParser = function(text, skipISO8601Parsing) {
-    let result;
+const dateParser = function (text, skipISO8601Parsing) {
+  let result;
 
-    if(isString(text) && !skipISO8601Parsing) {
-        result = parseISO8601String(text);
-    }
+  if (isString(text) && !skipISO8601Parsing) {
+    result = parseISO8601String(text);
+  }
 
-    return result || parseDate(text);
+  return result || parseDate(text);
 };
 
 function getTimePart(part) {
-    return +part || 0;
+  return +part || 0;
 }
 
 function parseDate(text) {
-    const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
-    const parsedValue = !isDate(text) && Date.parse(text);
-    if(!parsedValue && isDefaultSerializationFormat) {
-        const parts = text.match(DATE_SERIALIZATION_PATTERN);
-        if(parts) {
-            const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
-            newDate.setFullYear(getTimePart(parts[1]));
-            newDate.setMonth(getTimePart(parts[2]) - 1);
-            newDate.setDate(getTimePart(parts[3]));
-            return newDate;
-        }
+  const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
+  const parsedValue = !isDate(text) && Date.parse(text);
+  if (!parsedValue && isDefaultSerializationFormat) {
+    const parts = text.match(DATE_SERIALIZATION_PATTERN);
+    if (parts) {
+      const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
+      newDate.setFullYear(getTimePart(parts[1]));
+      newDate.setMonth(getTimePart(parts[2]) - 1);
+      newDate.setDate(getTimePart(parts[3]));
+      return newDate;
     }
+  }
 
-    return isNumber(parsedValue) ? new Date(parsedValue) : text;
+  return isNumber(parsedValue) ? new Date(parsedValue) : text;
 }
 
 function parseISO8601String(text) {
-    let parts = text.match(ISO8601_PATTERN);
+  let parts = text.match(ISO8601_PATTERN);
 
-    if(!parts) {
-        parts = text.match(ISO8601_TIME_PATTERN);
-        if(parts) {
-            return new Date(0, 0, 0, getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[4]));
-        }
-
-        return;
+  if (!parts) {
+    parts = text.match(ISO8601_TIME_PATTERN);
+    if (parts) {
+      return new Date(0, 0, 0, getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[4]));
     }
 
-    const year = getTimePart(parts[1]);
-    const month = --parts[3];
-    const day = parts[5];
-    let timeZoneHour = 0;
-    let timeZoneMinute = 0;
-    const correctYear = (d) => {
-        year < 100 && d.setFullYear(year);
-        return d;
-    };
+    return;
+  }
 
-    timeZoneHour = getTimePart(parts[14]);
-    timeZoneMinute = getTimePart(parts[16]);
+  const year = getTimePart(parts[1]);
+  const month = --parts[3];
+  const day = parts[5];
+  let timeZoneHour = 0;
+  let timeZoneMinute = 0;
+  const correctYear = (d) => {
+    year < 100 && d.setFullYear(year);
+    return d;
+  };
 
-    if(parts[13] === '-') {
-        timeZoneHour = -timeZoneHour;
-        timeZoneMinute = -timeZoneMinute;
-    }
+  timeZoneHour = getTimePart(parts[14]);
+  timeZoneMinute = getTimePart(parts[16]);
 
-    const hour = getTimePart(parts[6]) - timeZoneHour;
-    const minute = getTimePart(parts[8]) - timeZoneMinute;
-    const second = getTimePart(parts[10]);
-    const parseMilliseconds = function(part) {
-        part = part || '';
-        return getTimePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
-    };
-    const millisecond = parseMilliseconds(parts[11]);
+  if (parts[13] === '-') {
+    timeZoneHour = -timeZoneHour;
+    timeZoneMinute = -timeZoneMinute;
+  }
 
-    if(parts[12]) {
-        return correctYear(new Date(Date.UTC(year, month, day, hour, minute, second, millisecond)));
-    }
+  const hour = getTimePart(parts[6]) - timeZoneHour;
+  const minute = getTimePart(parts[8]) - timeZoneMinute;
+  const second = getTimePart(parts[10]);
+  const parseMilliseconds = function (part) {
+    part = part || '';
+    return getTimePart(part) * 10 ** (MILLISECOND_LENGHT - part.length);
+  };
+  const millisecond = parseMilliseconds(parts[11]);
 
-    return correctYear(new Date(year, month, day, hour, minute, second, millisecond));
+  if (parts[12]) {
+    return correctYear(new Date(Date.UTC(year, month, day, hour, minute, second, millisecond)));
+  }
+
+  return correctYear(new Date(year, month, day, hour, minute, second, millisecond));
 }
 
-const getIso8601Format = function(text, useUtc) {
-    let parts = text.match(ISO8601_PATTERN);
-    let result = '';
+const getIso8601Format = function (text, useUtc) {
+  let parts = text.match(ISO8601_PATTERN);
+  let result = '';
 
-    if(!parts) {
-        parts = text.match(ISO8601_TIME_PATTERN);
-        if(parts) {
-            return parts[3] ? 'HH:mm:ss' : 'HH:mm';
-        }
-        return;
+  if (!parts) {
+    parts = text.match(ISO8601_TIME_PATTERN);
+    if (parts) {
+      return parts[3] ? 'HH:mm:ss' : 'HH:mm';
     }
+    return;
+  }
 
-
-    for(let i = 1; i < ISO8601_PATTERN_PARTS.length; i++) {
-        if(parts[i]) {
-            result += ISO8601_PATTERN_PARTS[i] || parts[i];
-        }
+  for (let i = 1; i < ISO8601_PATTERN_PARTS.length; i++) {
+    if (parts[i]) {
+      result += ISO8601_PATTERN_PARTS[i] || parts[i];
     }
+  }
 
-    if(parts[12] === 'Z') {
-        result += '\'Z\'';
+  if (parts[12] === 'Z') {
+    result += '\'Z\'';
+  }
+
+  if (parts[14]) {
+    if (parts[15]) {
+      result += 'xxx';
+    } else if (parts[16]) {
+      result += 'xx';
+    } else {
+      result += 'x';
     }
+  }
 
-    if(parts[14]) {
-        if(parts[15]) {
-            result += 'xxx';
-        } else if(parts[16]) {
-            result += 'xx';
-        } else {
-            result += 'x';
-        }
-    }
-
-    return result;
+  return result;
 };
 
-const deserializeDate = function(value) {
-    if(typeof value === 'number') {
-        return new Date(value);
-    }
+const deserializeDate = function (value) {
+  if (typeof value === 'number') {
+    return new Date(value);
+  }
 
-    return dateParser(value, !config().forceIsoDateParsing);
+  return dateParser(value, !config().forceIsoDateParsing);
 };
 
-const serializeDate = function(value, serializationFormat) {
-    if(!serializationFormat) {
-        return value;
-    }
+const serializeDate = function (value, serializationFormat) {
+  if (!serializationFormat) {
+    return value;
+  }
 
-    if(!isDate(value)) {
-        return null;
-    }
+  if (!isDate(value)) {
+    return null;
+  }
 
-    if(serializationFormat === NUMBER_SERIALIZATION_FORMAT) {
-        return value && value.valueOf ? value.valueOf() : null;
-    }
+  if (serializationFormat === NUMBER_SERIALIZATION_FORMAT) {
+    return value && value.valueOf ? value.valueOf() : null;
+  }
 
-    return getLDMLFormatter(serializationFormat, defaultDateNames)(value);
+  return getLDMLFormatter(serializationFormat, defaultDateNames)(value);
 };
 
-const getDateSerializationFormat = function(value) {
-    if(typeof value === 'number') {
-        return NUMBER_SERIALIZATION_FORMAT;
-    } else if(isString(value)) {
-        let format;
+const getDateSerializationFormat = function (value) {
+  if (typeof value === 'number') {
+    return NUMBER_SERIALIZATION_FORMAT;
+  } if (isString(value)) {
+    let format;
 
-        if(config().forceIsoDateParsing) {
-            format = getIso8601Format(value);
-        }
-        if(format) {
-            return format;
-        } else if(value.indexOf(':') >= 0) {
-            return DATETIME_SERIALIZATION_FORMAT;
-        } else {
-            return DATE_SERIALIZATION_FORMAT;
-        }
-    } else if(value) {
-        return null;
+    if (config().forceIsoDateParsing) {
+      format = getIso8601Format(value);
     }
+    if (format) {
+      return format;
+    } if (value.indexOf(':') >= 0) {
+      return DATETIME_SERIALIZATION_FORMAT;
+    }
+    return DATE_SERIALIZATION_FORMAT;
+  } if (value) {
+    return null;
+  }
 };
 
-export default {
-    dateParser: dateParser,
-    deserializeDate: deserializeDate,
-    serializeDate: serializeDate,
-    getDateSerializationFormat: getDateSerializationFormat
+const dateSerialization = {
+  dateParser,
+  deserializeDate,
+  serializeDate,
+  getDateSerializationFormat,
 };
+
+export { dateSerialization };
