@@ -1,1 +1,1 @@
-export { Properties } from './card_view';
+export { dxCardViewOptions, Properties } from './card_view';

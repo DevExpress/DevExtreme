@@ -1,6 +1,7 @@
 import CardView, { Properties } from "devextreme/ui/card_view";
-import { createComponent } from "./core/index";
-import { createConfigurationComponent } from "./core/index";
+import { defineComponent } from "vue";
+import { prepareComponentConfig } from "./core/index";
+import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -26,7 +27,8 @@ type AccessibleOptions = Pick<Properties,
 interface DxCardView extends AccessibleOptions {
   readonly instance?: CardView;
 }
-const DxCardView = createComponent({
+
+const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
@@ -81,9 +83,14 @@ const DxCardView = createComponent({
       paging: { isCollectionItem: false, optionName: "paging" }
     };
   }
-});
+};
 
-const DxPaging = createConfigurationComponent({
+prepareComponentConfig(componentConfig);
+
+const DxCardView = defineComponent(componentConfig);
+
+
+const DxPagingConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -94,7 +101,12 @@ const DxPaging = createConfigurationComponent({
     pageIndex: Number,
     pageSize: Number
   }
-});
+};
+
+prepareConfigurationComponentConfig(DxPagingConfig);
+
+const DxPaging = defineComponent(DxPagingConfig);
+
 (DxPaging as any).$_optionName = "paging";
 
 export default DxCardView;
@@ -102,3 +114,5 @@ export {
   DxCardView,
   DxPaging
 };
+import type * as DxCardViewTypes from "devextreme/ui/card_view_types";
+export { DxCardViewTypes };

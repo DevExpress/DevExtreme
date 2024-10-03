@@ -87,7 +87,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
-     * [descr:Properties.dataSource]
+     * [descr:DataControllerProperties.dataSource]
     
      */
     @Input()
@@ -178,7 +178,7 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
 
 
     /**
-     * [descr:Properties.paging]
+     * [descr:DataControllerProperties.paging]
     
      */
     @Input()
@@ -468,5 +468,8 @@ export class DxCardViewComponent extends DxComponent implements OnDestroy, OnCha
   ]
 })
 export class DxCardViewModule { }
+
+import type * as DxCardViewTypes from "devextreme/ui/card_view_types";
+export { DxCardViewTypes };
 
 

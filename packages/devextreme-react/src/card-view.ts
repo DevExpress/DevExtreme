@@ -71,3 +71,6 @@ export {
   Paging,
   IPagingProps
 };
+import type * as CardViewTypes from 'devextreme/ui/card_view_types';
+export { CardViewTypes };
+

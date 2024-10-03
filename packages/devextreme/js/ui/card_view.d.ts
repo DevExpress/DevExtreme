@@ -1,36 +1,20 @@
+import { DataControllerProperties } from './card_view/data_controller';
 import Widget, { WidgetOptions } from './widget/ui.widget';
-import { DataSourceLike } from '../data/data_source';
 
 /**
  * @namespace DevExpress.ui
  * @public
  * @docid
+ * @deprecated use Properties instead
+ * @inherits DataControllerProperties
  */
-export interface Properties extends WidgetOptions<dxCardView> {
-    /**
-     * @docid
-     * @default undefined
-     * @type string | Array<any> | Store | DataSource | DataSourceOptions
-     * @public
-     */
-    dataSource?: DataSourceLike<any, any>;
-    /**
-     * @docid
-     * @public
-     */
-    paging?: {
-        /**
-         * @docid
-         * @public
-         */
-        pageSize?: number;
-        /**
-         * @docid
-         * @public
-         */
-        pageIndex?: number;
-    };
+export interface dxCardViewOptions extends WidgetOptions<dxCardView>,
+    DataControllerProperties {
+
 }
+
+/** @public */
+export type Properties = dxCardViewOptions;
 
 /**
  * @docid
