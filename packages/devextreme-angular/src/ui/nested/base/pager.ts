@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { Mode, PagerDisplayMode } from 'devextreme/common';
+import { DisplayMode, Mode } from 'devextreme/common';
 import { PagerPageSize } from 'devextreme/common/grids';
 
 @Component({
@@ -19,10 +19,10 @@ export abstract class DxoPager extends NestedOption {
         this._setOption('allowedPageSizes', value);
     }
 
-    get displayMode(): PagerDisplayMode {
+    get displayMode(): DisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: PagerDisplayMode) {
+    set displayMode(value: DisplayMode) {
         this._setOption('displayMode', value);
     }
 

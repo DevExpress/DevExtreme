@@ -14,7 +14,7 @@ import {
 
 
 
-import { Mode, PagerDisplayMode } from 'devextreme/common';
+import { DisplayMode, Mode } from 'devextreme/common';
 import { PagerPageSize } from 'devextreme/common/grids';
 
 import {
@@ -39,10 +39,10 @@ export class DxoTreeListPagerComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get displayMode(): PagerDisplayMode {
+    get displayMode(): DisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: PagerDisplayMode) {
+    set displayMode(value: DisplayMode) {
         this._setOption('displayMode', value);
     }
 

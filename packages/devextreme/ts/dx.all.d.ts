@@ -1347,7 +1347,7 @@ declare module DevExpress.common {
     /**
      * [descr:BasePagerOptions.displayMode]
      */
-    displayMode?: PagerDisplayMode;
+    displayMode?: DisplayMode;
     /**
      * [descr:BasePagerOptions.infoText]
      */
@@ -1439,6 +1439,7 @@ declare module DevExpress.common {
     | 'object'
     | 'datetime';
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
+  export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
   export type Draggable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxDraggable>;
@@ -1687,7 +1688,6 @@ declare module DevExpress.common {
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
-  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
   /**
    * [descr:PatternRule]
    */

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
-import type { PagerDisplayMode } from '@js/common';
+import type { DisplayMode } from '@js/common';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
@@ -118,7 +118,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     return this.props.pageSize !== 0;
   }
 
-  getNormalizedDisplayMode(): PagerDisplayMode {
+  getNormalizedDisplayMode(): DisplayMode {
     const {
       displayMode,
       lightModeEnabled,

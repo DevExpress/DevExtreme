@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 
 
-import { PagerDisplayMode } from 'devextreme/common';
+import { DisplayMode } from 'devextreme/common';
 
 import DxPager from 'devextreme/ui/pager';
 
@@ -114,10 +114,10 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get displayMode(): PagerDisplayMode {
+    get displayMode(): DisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: PagerDisplayMode) {
+    set displayMode(value: DisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -407,7 +407,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayModeChange: EventEmitter<PagerDisplayMode>;
+    @Output() displayModeChange: EventEmitter<DisplayMode>;
 
     /**
     

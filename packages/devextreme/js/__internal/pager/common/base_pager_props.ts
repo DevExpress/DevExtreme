@@ -1,4 +1,4 @@
-import type { PagerDisplayMode } from '@js/common';
+import type { DisplayMode } from '@js/common';
 import type { PageSize } from '@js/ui/pager_types';
 
 import messageLocalization from '../../../localization/message';
@@ -11,7 +11,7 @@ export interface BasePagerProps extends BaseWidgetProps {
   showInfo?: boolean;
   infoText?: string;
   lightModeEnabled?: boolean;
-  displayMode?: PagerDisplayMode;
+  displayMode?: DisplayMode;
   maxPagesCount: number;
   pageCount: number;
   pagesCountText?: string;

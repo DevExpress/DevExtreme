@@ -842,7 +842,7 @@ export type VerticalEdge = 'bottom' | 'top';
  * @public
  * @namespace DevExpress.common
  */
-export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
+export type DisplayMode = 'adaptive' | 'compact' | 'full';
 
 /**
  * @docid
@@ -855,7 +855,7 @@ export type BasePagerOptions = {
    * @public
    * @default "adaptive"
    */
-  displayMode?: PagerDisplayMode;
+  displayMode?: DisplayMode;
   /**
    * @docid
    * @public
