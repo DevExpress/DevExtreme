@@ -2,13 +2,14 @@
 import { computed, state } from '@ts/core/reactive/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
-import { View } from '../core/view';
+import { View } from '../core/view4';
 import { HeaderPanelController } from '../header_panel/controller';
-import { Popup } from '../inferno_wrappers/popup';
-import { Sortable } from '../inferno_wrappers/sortable';
-import { TreeView } from '../inferno_wrappers/tree_view';
+import type { ColumnChooserProps } from './column_chooser';
+import { ColumnChooser } from './column_chooser';
 
-export class ColumnsChooserView extends View {
+export class ColumnsChooserView extends View<ColumnChooserProps> {
+  protected component = ColumnChooser;
+
   private readonly visible = state(false);
 
   private readonly items = computed(
@@ -18,25 +19,8 @@ export class ColumnsChooserView extends View {
     [this.columns.nonVisibleColumns],
   );
 
-  public vdom = computed(
-    (visible, items) => visible && (
-      <Popup
-        visible={visible}
-        shading={false}
-        dragEnabled={true}
-        resizeEnabled={true}
-        width={250}
-        height={260}
-      >
-        <Sortable
-          group='cardview'
-        >
-          <TreeView
-            items={items}
-          />
-        </Sortable>
-      </Popup>
-    ),
+  protected props = computed(
+    (visible, items) => ({ visible, items }),
     [this.visible, this.items],
   );
 

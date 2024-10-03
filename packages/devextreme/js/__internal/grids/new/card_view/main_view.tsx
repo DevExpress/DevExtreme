@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import type { Subscribable } from '@ts/core/reactive/index';
-import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/columns_chooser';
+import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/view';
 import { ContentView } from '@ts/grids/new/grid_core/content_view/content_view';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/filter_panel';
@@ -40,6 +40,7 @@ export class MainView extends View {
       <Content/>
       <FilterPanel/>
       <Pager/>
+      {/* @ts-expect-error */}
       <ColumnsChooser/>
     </>;
   }
