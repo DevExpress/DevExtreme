@@ -1,6 +1,21 @@
 import { PropType } from "vue";
 import TreeMap, { Properties } from "devextreme/viz/tree_map";
-import {  ClickEvent , DisposingEvent , DrawnEvent , DrillEvent , ExportedEvent , ExportingEvent , FileSavingEvent , HoverChangedEvent , IncidentOccurredEvent , InitializedEvent , NodesInitializedEvent , NodesRenderingEvent , OptionChangedEvent , SelectionChangedEvent ,} from "devextreme/viz/tree_map";
+import { 
+ClickEvent,
+DisposingEvent,
+DrawnEvent,
+DrillEvent,
+ExportedEvent,
+ExportingEvent,
+FileSavingEvent,
+HoverChangedEvent,
+IncidentOccurredEvent,
+InitializedEvent,
+NodesInitializedEvent,
+NodesRenderingEvent,
+OptionChangedEvent,
+SelectionChangedEvent,
+ } from "devextreme/viz/tree_map";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

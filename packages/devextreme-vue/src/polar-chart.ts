@@ -1,6 +1,28 @@
 import { PropType } from "vue";
 import PolarChart, { Properties } from "devextreme/viz/polar_chart";
-import {  ArgumentAxisClickEvent , DisposingEvent , DoneEvent , DrawnEvent , ExportedEvent , ExportingEvent , FileSavingEvent , IncidentOccurredEvent , InitializedEvent , LegendClickEvent , OptionChangedEvent , PointClickEvent , PointHoverChangedEvent , PointSelectionChangedEvent , SeriesClickEvent , SeriesHoverChangedEvent , SeriesSelectionChangedEvent , TooltipHiddenEvent , TooltipShownEvent , ZoomEndEvent , ZoomStartEvent ,} from "devextreme/viz/polar_chart";
+import { 
+ArgumentAxisClickEvent,
+DisposingEvent,
+DoneEvent,
+DrawnEvent,
+ExportedEvent,
+ExportingEvent,
+FileSavingEvent,
+IncidentOccurredEvent,
+InitializedEvent,
+LegendClickEvent,
+OptionChangedEvent,
+PointClickEvent,
+PointHoverChangedEvent,
+PointSelectionChangedEvent,
+SeriesClickEvent,
+SeriesHoverChangedEvent,
+SeriesSelectionChangedEvent,
+TooltipHiddenEvent,
+TooltipShownEvent,
+ZoomEndEvent,
+ZoomStartEvent,
+ } from "devextreme/viz/polar_chart";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

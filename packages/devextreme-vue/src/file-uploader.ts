@@ -1,6 +1,21 @@
 import { PropType } from "vue";
 import FileUploader, { Properties } from "devextreme/ui/file_uploader";
-import {  BeforeSendEvent , ContentReadyEvent , DisposingEvent , DropZoneEnterEvent , DropZoneLeaveEvent , FilesUploadedEvent , InitializedEvent , OptionChangedEvent , ProgressEvent , UploadAbortedEvent , UploadedEvent , UploadErrorEvent , UploadStartedEvent , ValueChangedEvent ,} from "devextreme/ui/file_uploader";
+import { 
+BeforeSendEvent,
+ContentReadyEvent,
+DisposingEvent,
+DropZoneEnterEvent,
+DropZoneLeaveEvent,
+FilesUploadedEvent,
+InitializedEvent,
+OptionChangedEvent,
+ProgressEvent,
+UploadAbortedEvent,
+UploadedEvent,
+UploadErrorEvent,
+UploadStartedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/file_uploader";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

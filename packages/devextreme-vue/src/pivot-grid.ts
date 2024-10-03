@@ -1,6 +1,15 @@
 import { PropType } from "vue";
 import PivotGrid, { Properties } from "devextreme/ui/pivot_grid";
-import {  CellClickEvent , CellPreparedEvent , ContentReadyEvent , ContextMenuPreparingEvent , DisposingEvent , ExportingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/pivot_grid";
+import { 
+CellClickEvent,
+CellPreparedEvent,
+ContentReadyEvent,
+ContextMenuPreparingEvent,
+DisposingEvent,
+ExportingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/pivot_grid";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

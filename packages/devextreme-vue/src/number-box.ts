@@ -1,16 +1,32 @@
 import { PropType } from "vue";
 import NumberBox, { Properties } from "devextreme/ui/number_box";
-import {  ChangeEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , KeyDownEvent , KeyUpEvent , OptionChangedEvent , PasteEvent , ValueChangedEvent ,} from "devextreme/ui/number_box";
+import { 
+ChangeEvent,
+ContentReadyEvent,
+CopyEvent,
+CutEvent,
+DisposingEvent,
+EnterKeyEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+InputEvent,
+KeyDownEvent,
+KeyUpEvent,
+OptionChangedEvent,
+PasteEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/number_box";
+import { 
+ClickEvent as OptionsClickEvent,
+ContentReadyEvent as OptionsContentReadyEvent,
+DisposingEvent as OptionsDisposingEvent,
+InitializedEvent as OptionsInitializedEvent,
+OptionChangedEvent as OptionsOptionChangedEvent,
+ } from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

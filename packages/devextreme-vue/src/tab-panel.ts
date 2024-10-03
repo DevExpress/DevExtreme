@@ -1,7 +1,21 @@
 export { ExplicitTypes } from "devextreme/ui/tab_panel";
 import { PropType } from "vue";
 import TabPanel, { Properties } from "devextreme/ui/tab_panel";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent , SelectionChangedEvent , SelectionChangingEvent , TitleClickEvent , TitleHoldEvent , TitleRenderedEvent ,} from "devextreme/ui/tab_panel";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+TitleClickEvent,
+TitleHoldEvent,
+TitleRenderedEvent,
+ } from "devextreme/ui/tab_panel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

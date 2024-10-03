@@ -1,16 +1,37 @@
 import { PropType } from "vue";
 import TagBox, { Properties } from "devextreme/ui/tag_box";
-import {  ChangeEvent , ClosedEvent , ContentReadyEvent , CustomItemCreatingEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , ItemClickEvent , KeyDownEvent , KeyUpEvent , MultiTagPreparingEvent , OpenedEvent , OptionChangedEvent , SelectAllValueChangedEvent , SelectionChangedEvent , SelectionChangingEvent , ValueChangedEvent ,} from "devextreme/ui/tag_box";
+import { 
+ChangeEvent,
+ClosedEvent,
+ContentReadyEvent,
+CustomItemCreatingEvent,
+DisposingEvent,
+EnterKeyEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+InputEvent,
+ItemClickEvent,
+KeyDownEvent,
+KeyUpEvent,
+MultiTagPreparingEvent,
+OpenedEvent,
+OptionChangedEvent,
+SelectAllValueChangedEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/tag_box";
+import { 
+ClickEvent as OptionsClickEvent,
+ContentReadyEvent as OptionsContentReadyEvent,
+DisposingEvent as OptionsDisposingEvent,
+InitializedEvent as OptionsInitializedEvent,
+OptionChangedEvent as OptionsOptionChangedEvent,
+ } from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "acceptCustomValue" |

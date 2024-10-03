@@ -1,46 +1,66 @@
 export { ExplicitTypes } from "devextreme/ui/list";
 import { PropType } from "vue";
 import List, { Properties } from "devextreme/ui/list";
-import {  ContentReadyEvent , DisposingEvent , GroupRenderedEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemDeletedEvent , ItemDeletingEvent , ItemHoldEvent , ItemRenderedEvent , ItemReorderedEvent , ItemSwipeEvent , OptionChangedEvent , PageLoadingEvent , PullRefreshEvent , ScrollEvent , SelectAllValueChangedEvent , SelectionChangedEvent , SelectionChangingEvent ,} from "devextreme/ui/list";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+GroupRenderedEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemDeletedEvent,
+ItemDeletingEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+ItemReorderedEvent,
+ItemSwipeEvent,
+OptionChangedEvent,
+PageLoadingEvent,
+PullRefreshEvent,
+ScrollEvent,
+SelectAllValueChangedEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+ } from "devextreme/ui/list";
+import { 
+AddEvent as ItemDraggingAddEvent,
+DisposingEvent as ItemDraggingDisposingEvent,
+DragChangeEvent as ItemDraggingDragChangeEvent,
+DragEndEvent as ItemDraggingDragEndEvent,
+DragMoveEvent as ItemDraggingDragMoveEvent,
+DragStartEvent as ItemDraggingDragStartEvent,
+InitializedEvent as ItemDraggingInitializedEvent,
+OptionChangedEvent as ItemDraggingOptionChangedEvent,
+RemoveEvent as ItemDraggingRemoveEvent,
+ReorderEvent as ItemDraggingReorderEvent,
+ } from "devextreme/ui/sortable";
+import { 
+ClickEvent as OptionsClickEvent,
+ContentReadyEvent as OptionsContentReadyEvent,
+DisposingEvent as OptionsDisposingEvent,
+InitializedEvent as OptionsInitializedEvent,
+OptionChangedEvent as OptionsOptionChangedEvent,
+ } from "devextreme/ui/button";
+import { 
+ChangeEvent as SearchEditorOptionsChangeEvent,
+ContentReadyEvent as SearchEditorOptionsContentReadyEvent,
+CopyEvent as SearchEditorOptionsCopyEvent,
+CutEvent as SearchEditorOptionsCutEvent,
+DisposingEvent as SearchEditorOptionsDisposingEvent,
+EnterKeyEvent as SearchEditorOptionsEnterKeyEvent,
+FocusInEvent as SearchEditorOptionsFocusInEvent,
+FocusOutEvent as SearchEditorOptionsFocusOutEvent,
+InitializedEvent as SearchEditorOptionsInitializedEvent,
+InputEvent as SearchEditorOptionsInputEvent,
+KeyDownEvent as SearchEditorOptionsKeyDownEvent,
+KeyUpEvent as SearchEditorOptionsKeyUpEvent,
+OptionChangedEvent as SearchEditorOptionsOptionChangedEvent,
+PasteEvent as SearchEditorOptionsPasteEvent,
+ValueChangedEvent as SearchEditorOptionsValueChangedEvent,
+ } from "devextreme/ui/text_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- AddEvent  as ItemDraggingAddEvent,
- DisposingEvent  as ItemDraggingDisposingEvent,
- DragChangeEvent  as ItemDraggingDragChangeEvent,
- DragEndEvent  as ItemDraggingDragEndEvent,
- DragMoveEvent  as ItemDraggingDragMoveEvent,
- DragStartEvent  as ItemDraggingDragStartEvent,
- InitializedEvent  as ItemDraggingInitializedEvent,
- OptionChangedEvent  as ItemDraggingOptionChangedEvent,
- RemoveEvent  as ItemDraggingRemoveEvent,
- ReorderEvent  as ItemDraggingReorderEvent,
-} from "devextreme/ui/sortable";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
-import { 
- ChangeEvent  as SearchEditorOptionsChangeEvent,
- ContentReadyEvent  as SearchEditorOptionsContentReadyEvent,
- CopyEvent  as SearchEditorOptionsCopyEvent,
- CutEvent  as SearchEditorOptionsCutEvent,
- DisposingEvent  as SearchEditorOptionsDisposingEvent,
- EnterKeyEvent  as SearchEditorOptionsEnterKeyEvent,
- FocusInEvent  as SearchEditorOptionsFocusInEvent,
- FocusOutEvent  as SearchEditorOptionsFocusOutEvent,
- InitializedEvent  as SearchEditorOptionsInitializedEvent,
- InputEvent  as SearchEditorOptionsInputEvent,
- KeyDownEvent  as SearchEditorOptionsKeyDownEvent,
- KeyUpEvent  as SearchEditorOptionsKeyUpEvent,
- OptionChangedEvent  as SearchEditorOptionsOptionChangedEvent,
- PasteEvent  as SearchEditorOptionsPasteEvent,
- ValueChangedEvent  as SearchEditorOptionsValueChangedEvent,
-} from "devextreme/ui/text_box";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

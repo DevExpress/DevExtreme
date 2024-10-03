@@ -1,20 +1,34 @@
 import { PropType } from "vue";
 import Lookup, { Properties } from "devextreme/ui/lookup";
-import {  ClosedEvent , ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , OpenedEvent , OptionChangedEvent , PageLoadingEvent , PullRefreshEvent , ScrollEvent , SelectionChangedEvent , SelectionChangingEvent , ValueChangedEvent ,} from "devextreme/ui/lookup";
+import { 
+ClosedEvent,
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+OpenedEvent,
+OptionChangedEvent,
+PageLoadingEvent,
+PullRefreshEvent,
+ScrollEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/lookup";
+import { 
+ContentReadyEvent as DropDownOptionsContentReadyEvent,
+DisposingEvent as DropDownOptionsDisposingEvent,
+HiddenEvent as DropDownOptionsHiddenEvent,
+HidingEvent as DropDownOptionsHidingEvent,
+InitializedEvent as DropDownOptionsInitializedEvent,
+OptionChangedEvent as DropDownOptionsOptionChangedEvent,
+ShowingEvent as DropDownOptionsShowingEvent,
+ShownEvent as DropDownOptionsShownEvent,
+TitleRenderedEvent as DropDownOptionsTitleRenderedEvent,
+ } from "devextreme/ui/popover";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ContentReadyEvent  as DropDownOptionsContentReadyEvent,
- DisposingEvent  as DropDownOptionsDisposingEvent,
- HiddenEvent  as DropDownOptionsHiddenEvent,
- HidingEvent  as DropDownOptionsHidingEvent,
- InitializedEvent  as DropDownOptionsInitializedEvent,
- OptionChangedEvent  as DropDownOptionsOptionChangedEvent,
- ShowingEvent  as DropDownOptionsShowingEvent,
- ShownEvent  as DropDownOptionsShownEvent,
- TitleRenderedEvent  as DropDownOptionsTitleRenderedEvent,
-} from "devextreme/ui/popover";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

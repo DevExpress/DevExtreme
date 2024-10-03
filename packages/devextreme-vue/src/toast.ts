@@ -1,6 +1,15 @@
 import { PropType } from "vue";
 import Toast, { Properties } from "devextreme/ui/toast";
-import {  ContentReadyEvent , DisposingEvent , HiddenEvent , HidingEvent , InitializedEvent , OptionChangedEvent , ShowingEvent , ShownEvent ,} from "devextreme/ui/toast";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+HiddenEvent,
+HidingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ShowingEvent,
+ShownEvent,
+ } from "devextreme/ui/toast";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

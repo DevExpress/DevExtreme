@@ -1,6 +1,13 @@
 import { PropType } from "vue";
 import ProgressBar, { Properties } from "devextreme/ui/progress_bar";
-import {  CompleteEvent , ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/progress_bar";
+import { 
+CompleteEvent,
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/progress_bar";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

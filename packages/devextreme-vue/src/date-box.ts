@@ -1,22 +1,40 @@
 import { PropType } from "vue";
 import DateBox, { Properties } from "devextreme/ui/date_box";
-import {  ChangeEvent , ClosedEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , KeyDownEvent , KeyUpEvent , OpenedEvent , OptionChangedEvent , PasteEvent , ValueChangedEvent ,} from "devextreme/ui/date_box";
+import { 
+ChangeEvent,
+ClosedEvent,
+ContentReadyEvent,
+CopyEvent,
+CutEvent,
+DisposingEvent,
+EnterKeyEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+InputEvent,
+KeyDownEvent,
+KeyUpEvent,
+OpenedEvent,
+OptionChangedEvent,
+PasteEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/date_box";
+import { 
+DisposingEvent as CalendarOptionsDisposingEvent,
+InitializedEvent as CalendarOptionsInitializedEvent,
+OptionChangedEvent as CalendarOptionsOptionChangedEvent,
+ValueChangedEvent as CalendarOptionsValueChangedEvent,
+ } from "devextreme/ui/calendar";
+import { 
+ClickEvent as OptionsClickEvent,
+ContentReadyEvent as OptionsContentReadyEvent,
+DisposingEvent as OptionsDisposingEvent,
+InitializedEvent as OptionsInitializedEvent,
+OptionChangedEvent as OptionsOptionChangedEvent,
+ } from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- DisposingEvent  as CalendarOptionsDisposingEvent,
- InitializedEvent  as CalendarOptionsInitializedEvent,
- OptionChangedEvent  as CalendarOptionsOptionChangedEvent,
- ValueChangedEvent  as CalendarOptionsValueChangedEvent,
-} from "devextreme/ui/calendar";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "acceptCustomValue" |

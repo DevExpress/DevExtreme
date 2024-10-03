@@ -1,16 +1,37 @@
 import { PropType } from "vue";
 import Autocomplete, { Properties } from "devextreme/ui/autocomplete";
-import {  ChangeEvent , ClosedEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , ItemClickEvent , KeyDownEvent , KeyUpEvent , OpenedEvent , OptionChangedEvent , PasteEvent , SelectionChangedEvent , SelectionChangingEvent , ValueChangedEvent ,} from "devextreme/ui/autocomplete";
+import { 
+ChangeEvent,
+ClosedEvent,
+ContentReadyEvent,
+CopyEvent,
+CutEvent,
+DisposingEvent,
+EnterKeyEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+InputEvent,
+ItemClickEvent,
+KeyDownEvent,
+KeyUpEvent,
+OpenedEvent,
+OptionChangedEvent,
+PasteEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/autocomplete";
+import { 
+ClickEvent as OptionsClickEvent,
+ContentReadyEvent as OptionsContentReadyEvent,
+DisposingEvent as OptionsDisposingEvent,
+InitializedEvent as OptionsInitializedEvent,
+OptionChangedEvent as OptionsOptionChangedEvent,
+ } from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

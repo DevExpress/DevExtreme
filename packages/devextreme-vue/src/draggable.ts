@@ -1,6 +1,13 @@
 import { PropType } from "vue";
 import Draggable, { Properties } from "devextreme/ui/draggable";
-import {  DisposingEvent , DragEndEvent , DragMoveEvent , DragStartEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/draggable";
+import { 
+DisposingEvent,
+DragEndEvent,
+DragMoveEvent,
+DragStartEvent,
+InitializedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/draggable";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

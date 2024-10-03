@@ -1,6 +1,16 @@
 import { PropType } from "vue";
 import Map, { Properties } from "devextreme/ui/map";
-import {  ClickEvent , DisposingEvent , InitializedEvent , MarkerAddedEvent , MarkerRemovedEvent , OptionChangedEvent , ReadyEvent , RouteAddedEvent , RouteRemovedEvent ,} from "devextreme/ui/map";
+import { 
+ClickEvent,
+DisposingEvent,
+InitializedEvent,
+MarkerAddedEvent,
+MarkerRemovedEvent,
+OptionChangedEvent,
+ReadyEvent,
+RouteAddedEvent,
+RouteRemovedEvent,
+ } from "devextreme/ui/map";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

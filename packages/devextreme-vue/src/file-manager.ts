@@ -1,6 +1,32 @@
 import { PropType } from "vue";
 import FileManager, { Properties } from "devextreme/ui/file_manager";
-import {  ContentReadyEvent , ContextMenuItemClickEvent , ContextMenuShowingEvent , CurrentDirectoryChangedEvent , DirectoryCreatedEvent , DirectoryCreatingEvent , DisposingEvent , ErrorOccurredEvent , FileUploadedEvent , FileUploadingEvent , FocusedItemChangedEvent , InitializedEvent , ItemCopiedEvent , ItemCopyingEvent , ItemDeletedEvent , ItemDeletingEvent , ItemDownloadingEvent , ItemMovedEvent , ItemMovingEvent , ItemRenamedEvent , ItemRenamingEvent , OptionChangedEvent , SelectedFileOpenedEvent , SelectionChangedEvent , ToolbarItemClickEvent ,} from "devextreme/ui/file_manager";
+import { 
+ContentReadyEvent,
+ContextMenuItemClickEvent,
+ContextMenuShowingEvent,
+CurrentDirectoryChangedEvent,
+DirectoryCreatedEvent,
+DirectoryCreatingEvent,
+DisposingEvent,
+ErrorOccurredEvent,
+FileUploadedEvent,
+FileUploadingEvent,
+FocusedItemChangedEvent,
+InitializedEvent,
+ItemCopiedEvent,
+ItemCopyingEvent,
+ItemDeletedEvent,
+ItemDeletingEvent,
+ItemDownloadingEvent,
+ItemMovedEvent,
+ItemMovingEvent,
+ItemRenamedEvent,
+ItemRenamingEvent,
+OptionChangedEvent,
+SelectedFileOpenedEvent,
+SelectionChangedEvent,
+ToolbarItemClickEvent,
+ } from "devextreme/ui/file_manager";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

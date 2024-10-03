@@ -1,31 +1,38 @@
 import { PropType } from "vue";
 import Form, { Properties } from "devextreme/ui/form";
-import {  ContentReadyEvent , DisposingEvent , EditorEnterKeyEvent , FieldDataChangedEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/form";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+EditorEnterKeyEvent,
+FieldDataChangedEvent,
+InitializedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/form";
+import { 
+ClickEvent as ButtonOptionsClickEvent,
+ContentReadyEvent as ButtonOptionsContentReadyEvent,
+DisposingEvent as ButtonOptionsDisposingEvent,
+InitializedEvent as ButtonOptionsInitializedEvent,
+OptionChangedEvent as ButtonOptionsOptionChangedEvent,
+ } from "devextreme/ui/button";
+import { 
+ContentReadyEvent as TabPanelOptionsContentReadyEvent,
+DisposingEvent as TabPanelOptionsDisposingEvent,
+InitializedEvent as TabPanelOptionsInitializedEvent,
+ItemClickEvent as TabPanelOptionsItemClickEvent,
+ItemContextMenuEvent as TabPanelOptionsItemContextMenuEvent,
+ItemHoldEvent as TabPanelOptionsItemHoldEvent,
+ItemRenderedEvent as TabPanelOptionsItemRenderedEvent,
+OptionChangedEvent as TabPanelOptionsOptionChangedEvent,
+SelectionChangedEvent as TabPanelOptionsSelectionChangedEvent,
+SelectionChangingEvent as TabPanelOptionsSelectionChangingEvent,
+TitleClickEvent as TabPanelOptionsTitleClickEvent,
+TitleHoldEvent as TabPanelOptionsTitleHoldEvent,
+TitleRenderedEvent as TabPanelOptionsTitleRenderedEvent,
+ } from "devextreme/ui/tab_panel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ClickEvent  as ButtonOptionsClickEvent,
- ContentReadyEvent  as ButtonOptionsContentReadyEvent,
- DisposingEvent  as ButtonOptionsDisposingEvent,
- InitializedEvent  as ButtonOptionsInitializedEvent,
- OptionChangedEvent  as ButtonOptionsOptionChangedEvent,
-} from "devextreme/ui/button";
-import { 
- ContentReadyEvent  as TabPanelOptionsContentReadyEvent,
- DisposingEvent  as TabPanelOptionsDisposingEvent,
- InitializedEvent  as TabPanelOptionsInitializedEvent,
- ItemClickEvent  as TabPanelOptionsItemClickEvent,
- ItemContextMenuEvent  as TabPanelOptionsItemContextMenuEvent,
- ItemHoldEvent  as TabPanelOptionsItemHoldEvent,
- ItemRenderedEvent  as TabPanelOptionsItemRenderedEvent,
- OptionChangedEvent  as TabPanelOptionsOptionChangedEvent,
- SelectionChangedEvent  as TabPanelOptionsSelectionChangedEvent,
- SelectionChangingEvent  as TabPanelOptionsSelectionChangingEvent,
- TitleClickEvent  as TabPanelOptionsTitleClickEvent,
- TitleHoldEvent  as TabPanelOptionsTitleHoldEvent,
- TitleRenderedEvent  as TabPanelOptionsTitleRenderedEvent,
-} from "devextreme/ui/tab_panel";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

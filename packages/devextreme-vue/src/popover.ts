@@ -1,6 +1,16 @@
 import { PropType } from "vue";
 import Popover, { Properties } from "devextreme/ui/popover";
-import {  ContentReadyEvent , DisposingEvent , HiddenEvent , HidingEvent , InitializedEvent , OptionChangedEvent , ShowingEvent , ShownEvent , TitleRenderedEvent ,} from "devextreme/ui/popover";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+HiddenEvent,
+HidingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ShowingEvent,
+ShownEvent,
+TitleRenderedEvent,
+ } from "devextreme/ui/popover";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

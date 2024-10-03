@@ -1,6 +1,11 @@
 import { PropType } from "vue";
 import Calendar, { Properties } from "devextreme/ui/calendar";
-import {  DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/calendar";
+import { 
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/calendar";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

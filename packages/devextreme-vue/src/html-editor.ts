@@ -1,25 +1,33 @@
 import { PropType } from "vue";
 import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
-import {  ContentReadyEvent , DisposingEvent , FocusInEvent , FocusOutEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/html_editor";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/html_editor";
+import { 
+BeforeSendEvent as FileUploaderOptionsBeforeSendEvent,
+ContentReadyEvent as FileUploaderOptionsContentReadyEvent,
+DisposingEvent as FileUploaderOptionsDisposingEvent,
+DropZoneEnterEvent as FileUploaderOptionsDropZoneEnterEvent,
+DropZoneLeaveEvent as FileUploaderOptionsDropZoneLeaveEvent,
+FilesUploadedEvent as FileUploaderOptionsFilesUploadedEvent,
+InitializedEvent as FileUploaderOptionsInitializedEvent,
+OptionChangedEvent as FileUploaderOptionsOptionChangedEvent,
+ProgressEvent as FileUploaderOptionsProgressEvent,
+UploadAbortedEvent as FileUploaderOptionsUploadAbortedEvent,
+UploadedEvent as FileUploaderOptionsUploadedEvent,
+UploadErrorEvent as FileUploaderOptionsUploadErrorEvent,
+UploadStartedEvent as FileUploaderOptionsUploadStartedEvent,
+ValueChangedEvent as FileUploaderOptionsValueChangedEvent,
+ } from "devextreme/ui/file_uploader";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- BeforeSendEvent  as FileUploaderOptionsBeforeSendEvent,
- ContentReadyEvent  as FileUploaderOptionsContentReadyEvent,
- DisposingEvent  as FileUploaderOptionsDisposingEvent,
- DropZoneEnterEvent  as FileUploaderOptionsDropZoneEnterEvent,
- DropZoneLeaveEvent  as FileUploaderOptionsDropZoneLeaveEvent,
- FilesUploadedEvent  as FileUploaderOptionsFilesUploadedEvent,
- InitializedEvent  as FileUploaderOptionsInitializedEvent,
- OptionChangedEvent  as FileUploaderOptionsOptionChangedEvent,
- ProgressEvent  as FileUploaderOptionsProgressEvent,
- UploadAbortedEvent  as FileUploaderOptionsUploadAbortedEvent,
- UploadedEvent  as FileUploaderOptionsUploadedEvent,
- UploadErrorEvent  as FileUploaderOptionsUploadErrorEvent,
- UploadStartedEvent  as FileUploaderOptionsUploadStartedEvent,
- ValueChangedEvent  as FileUploaderOptionsValueChangedEvent,
-} from "devextreme/ui/file_uploader";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

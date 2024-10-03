@@ -1,30 +1,72 @@
 export { ExplicitTypes } from "devextreme/ui/data_grid";
 import { PropType } from "vue";
 import DataGrid, { Properties } from "devextreme/ui/data_grid";
-import {  AdaptiveDetailRowPreparingEvent , CellClickEvent , CellDblClickEvent , CellHoverChangedEvent , CellPreparedEvent , ContentReadyEvent , ContextMenuPreparingEvent , DataErrorOccurredEvent , DisposingEvent , EditCanceledEvent , EditCancelingEvent , EditingStartEvent , EditorPreparedEvent , EditorPreparingEvent , ExportingEvent , FocusedCellChangedEvent , FocusedCellChangingEvent , FocusedRowChangedEvent , FocusedRowChangingEvent , InitializedEvent , InitNewRowEvent , KeyDownEvent , OptionChangedEvent , RowClickEvent , RowCollapsedEvent , RowCollapsingEvent , RowDblClickEvent , RowExpandedEvent , RowExpandingEvent , RowInsertedEvent , RowInsertingEvent , RowPreparedEvent , RowRemovedEvent , RowRemovingEvent , RowUpdatedEvent , RowUpdatingEvent , RowValidatingEvent , SavedEvent , SavingEvent , SelectionChangedEvent , ToolbarPreparingEvent ,} from "devextreme/ui/data_grid";
+import { 
+AdaptiveDetailRowPreparingEvent,
+CellClickEvent,
+CellDblClickEvent,
+CellHoverChangedEvent,
+CellPreparedEvent,
+ContentReadyEvent,
+ContextMenuPreparingEvent,
+DataErrorOccurredEvent,
+DisposingEvent,
+EditCanceledEvent,
+EditCancelingEvent,
+EditingStartEvent,
+EditorPreparedEvent,
+EditorPreparingEvent,
+ExportingEvent,
+FocusedCellChangedEvent,
+FocusedCellChangingEvent,
+FocusedRowChangedEvent,
+FocusedRowChangingEvent,
+InitializedEvent,
+InitNewRowEvent,
+KeyDownEvent,
+OptionChangedEvent,
+RowClickEvent,
+RowCollapsedEvent,
+RowCollapsingEvent,
+RowDblClickEvent,
+RowExpandedEvent,
+RowExpandingEvent,
+RowInsertedEvent,
+RowInsertingEvent,
+RowPreparedEvent,
+RowRemovedEvent,
+RowRemovingEvent,
+RowUpdatedEvent,
+RowUpdatingEvent,
+RowValidatingEvent,
+SavedEvent,
+SavingEvent,
+SelectionChangedEvent,
+ToolbarPreparingEvent,
+ } from "devextreme/ui/data_grid";
+import { 
+ColumnButtonClickEvent as ButtonColumnButtonClickEvent,
+ } from "devextreme/ui/data_grid";
+import { 
+ContentReadyEvent as FilterBuilderContentReadyEvent,
+DisposingEvent as FilterBuilderDisposingEvent,
+EditorPreparedEvent as FilterBuilderEditorPreparedEvent,
+EditorPreparingEvent as FilterBuilderEditorPreparingEvent,
+InitializedEvent as FilterBuilderInitializedEvent,
+OptionChangedEvent as FilterBuilderOptionChangedEvent,
+ValueChangedEvent as FilterBuilderValueChangedEvent,
+ } from "devextreme/ui/filter_builder";
+import { 
+ContentReadyEvent as FormContentReadyEvent,
+DisposingEvent as FormDisposingEvent,
+EditorEnterKeyEvent as FormEditorEnterKeyEvent,
+FieldDataChangedEvent as FormFieldDataChangedEvent,
+InitializedEvent as FormInitializedEvent,
+OptionChangedEvent as FormOptionChangedEvent,
+ } from "devextreme/ui/form";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ColumnButtonClickEvent  as ButtonColumnButtonClickEvent,
-} from "devextreme/ui/data_grid";
-import { 
- ContentReadyEvent  as FilterBuilderContentReadyEvent,
- DisposingEvent  as FilterBuilderDisposingEvent,
- EditorPreparedEvent  as FilterBuilderEditorPreparedEvent,
- EditorPreparingEvent  as FilterBuilderEditorPreparingEvent,
- InitializedEvent  as FilterBuilderInitializedEvent,
- OptionChangedEvent  as FilterBuilderOptionChangedEvent,
- ValueChangedEvent  as FilterBuilderValueChangedEvent,
-} from "devextreme/ui/filter_builder";
-import { 
- ContentReadyEvent  as FormContentReadyEvent,
- DisposingEvent  as FormDisposingEvent,
- EditorEnterKeyEvent  as FormEditorEnterKeyEvent,
- FieldDataChangedEvent  as FormFieldDataChangedEvent,
- InitializedEvent  as FormInitializedEvent,
- OptionChangedEvent  as FormOptionChangedEvent,
-} from "devextreme/ui/form";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

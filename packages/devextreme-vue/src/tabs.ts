@@ -1,7 +1,18 @@
 export { ExplicitTypes } from "devextreme/ui/tabs";
 import { PropType } from "vue";
 import Tabs, { Properties } from "devextreme/ui/tabs";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent , SelectionChangedEvent , SelectionChangingEvent ,} from "devextreme/ui/tabs";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+ } from "devextreme/ui/tabs";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

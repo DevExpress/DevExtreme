@@ -1,27 +1,69 @@
 export { ExplicitTypes } from "devextreme/ui/tree_list";
 import { PropType } from "vue";
 import TreeList, { Properties } from "devextreme/ui/tree_list";
-import {  AdaptiveDetailRowPreparingEvent , CellClickEvent , CellDblClickEvent , CellHoverChangedEvent , CellPreparedEvent , ContentReadyEvent , ContextMenuPreparingEvent , DataErrorOccurredEvent , DisposingEvent , EditCanceledEvent , EditCancelingEvent , EditingStartEvent , EditorPreparedEvent , EditorPreparingEvent , FocusedCellChangedEvent , FocusedCellChangingEvent , FocusedRowChangedEvent , FocusedRowChangingEvent , InitializedEvent , InitNewRowEvent , KeyDownEvent , NodesInitializedEvent , OptionChangedEvent , RowClickEvent , RowCollapsedEvent , RowCollapsingEvent , RowDblClickEvent , RowExpandedEvent , RowExpandingEvent , RowInsertedEvent , RowInsertingEvent , RowPreparedEvent , RowRemovedEvent , RowRemovingEvent , RowUpdatedEvent , RowUpdatingEvent , RowValidatingEvent , SavedEvent , SavingEvent , SelectionChangedEvent , ToolbarPreparingEvent ,} from "devextreme/ui/tree_list";
+import { 
+AdaptiveDetailRowPreparingEvent,
+CellClickEvent,
+CellDblClickEvent,
+CellHoverChangedEvent,
+CellPreparedEvent,
+ContentReadyEvent,
+ContextMenuPreparingEvent,
+DataErrorOccurredEvent,
+DisposingEvent,
+EditCanceledEvent,
+EditCancelingEvent,
+EditingStartEvent,
+EditorPreparedEvent,
+EditorPreparingEvent,
+FocusedCellChangedEvent,
+FocusedCellChangingEvent,
+FocusedRowChangedEvent,
+FocusedRowChangingEvent,
+InitializedEvent,
+InitNewRowEvent,
+KeyDownEvent,
+NodesInitializedEvent,
+OptionChangedEvent,
+RowClickEvent,
+RowCollapsedEvent,
+RowCollapsingEvent,
+RowDblClickEvent,
+RowExpandedEvent,
+RowExpandingEvent,
+RowInsertedEvent,
+RowInsertingEvent,
+RowPreparedEvent,
+RowRemovedEvent,
+RowRemovingEvent,
+RowUpdatedEvent,
+RowUpdatingEvent,
+RowValidatingEvent,
+SavedEvent,
+SavingEvent,
+SelectionChangedEvent,
+ToolbarPreparingEvent,
+ } from "devextreme/ui/tree_list";
+import { 
+ContentReadyEvent as FilterBuilderContentReadyEvent,
+DisposingEvent as FilterBuilderDisposingEvent,
+EditorPreparedEvent as FilterBuilderEditorPreparedEvent,
+EditorPreparingEvent as FilterBuilderEditorPreparingEvent,
+InitializedEvent as FilterBuilderInitializedEvent,
+OptionChangedEvent as FilterBuilderOptionChangedEvent,
+ValueChangedEvent as FilterBuilderValueChangedEvent,
+ } from "devextreme/ui/filter_builder";
+import { 
+ContentReadyEvent as FormContentReadyEvent,
+DisposingEvent as FormDisposingEvent,
+EditorEnterKeyEvent as FormEditorEnterKeyEvent,
+FieldDataChangedEvent as FormFieldDataChangedEvent,
+InitializedEvent as FormInitializedEvent,
+OptionChangedEvent as FormOptionChangedEvent,
+ } from "devextreme/ui/form";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ContentReadyEvent  as FilterBuilderContentReadyEvent,
- DisposingEvent  as FilterBuilderDisposingEvent,
- EditorPreparedEvent  as FilterBuilderEditorPreparedEvent,
- EditorPreparingEvent  as FilterBuilderEditorPreparingEvent,
- InitializedEvent  as FilterBuilderInitializedEvent,
- OptionChangedEvent  as FilterBuilderOptionChangedEvent,
- ValueChangedEvent  as FilterBuilderValueChangedEvent,
-} from "devextreme/ui/filter_builder";
-import { 
- ContentReadyEvent  as FormContentReadyEvent,
- DisposingEvent  as FormDisposingEvent,
- EditorEnterKeyEvent  as FormEditorEnterKeyEvent,
- FieldDataChangedEvent  as FormFieldDataChangedEvent,
- InitializedEvent  as FormInitializedEvent,
- OptionChangedEvent  as FormOptionChangedEvent,
-} from "devextreme/ui/form";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

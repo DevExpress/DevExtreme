@@ -1,6 +1,12 @@
 import { PropType } from "vue";
 import Switch, { Properties } from "devextreme/ui/switch";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/switch";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/switch";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

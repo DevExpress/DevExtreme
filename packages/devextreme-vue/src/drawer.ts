@@ -1,6 +1,10 @@
 import { PropType } from "vue";
 import Drawer, { Properties } from "devextreme/ui/drawer";
-import {  DisposingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/drawer";
+import { 
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/drawer";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

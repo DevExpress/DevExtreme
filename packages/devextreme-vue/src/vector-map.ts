@@ -1,6 +1,21 @@
 import { PropType } from "vue";
 import VectorMap, { Properties } from "devextreme/viz/vector_map";
-import {  CenterChangedEvent , ClickEvent , DisposingEvent , DrawnEvent , ExportedEvent , ExportingEvent , FileSavingEvent , IncidentOccurredEvent , InitializedEvent , OptionChangedEvent , SelectionChangedEvent , TooltipHiddenEvent , TooltipShownEvent , ZoomFactorChangedEvent ,} from "devextreme/viz/vector_map";
+import { 
+CenterChangedEvent,
+ClickEvent,
+DisposingEvent,
+DrawnEvent,
+ExportedEvent,
+ExportingEvent,
+FileSavingEvent,
+IncidentOccurredEvent,
+InitializedEvent,
+OptionChangedEvent,
+SelectionChangedEvent,
+TooltipHiddenEvent,
+TooltipShownEvent,
+ZoomFactorChangedEvent,
+ } from "devextreme/viz/vector_map";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

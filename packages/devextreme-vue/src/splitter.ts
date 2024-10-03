@@ -1,7 +1,20 @@
 export { ExplicitTypes } from "devextreme/ui/splitter";
 import { PropType } from "vue";
 import Splitter, { Properties } from "devextreme/ui/splitter";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemCollapsedEvent , ItemContextMenuEvent , ItemExpandedEvent , ItemRenderedEvent , OptionChangedEvent , ResizeEvent , ResizeEndEvent , ResizeStartEvent ,} from "devextreme/ui/splitter";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemCollapsedEvent,
+ItemContextMenuEvent,
+ItemExpandedEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+ResizeEvent,
+ResizeEndEvent,
+ResizeStartEvent,
+ } from "devextreme/ui/splitter";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

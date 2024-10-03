@@ -1,34 +1,48 @@
 export { ExplicitTypes } from "devextreme/ui/tree_view";
 import { PropType } from "vue";
 import TreeView, { Properties } from "devextreme/ui/tree_view";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemCollapsedEvent , ItemContextMenuEvent , ItemExpandedEvent , ItemHoldEvent , ItemRenderedEvent , ItemSelectionChangedEvent , OptionChangedEvent , SelectAllValueChangedEvent , SelectionChangedEvent ,} from "devextreme/ui/tree_view";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemCollapsedEvent,
+ItemContextMenuEvent,
+ItemExpandedEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+ItemSelectionChangedEvent,
+OptionChangedEvent,
+SelectAllValueChangedEvent,
+SelectionChangedEvent,
+ } from "devextreme/ui/tree_view";
+import { 
+ClickEvent as OptionsClickEvent,
+ContentReadyEvent as OptionsContentReadyEvent,
+DisposingEvent as OptionsDisposingEvent,
+InitializedEvent as OptionsInitializedEvent,
+OptionChangedEvent as OptionsOptionChangedEvent,
+ } from "devextreme/ui/button";
+import { 
+ChangeEvent as SearchEditorOptionsChangeEvent,
+ContentReadyEvent as SearchEditorOptionsContentReadyEvent,
+CopyEvent as SearchEditorOptionsCopyEvent,
+CutEvent as SearchEditorOptionsCutEvent,
+DisposingEvent as SearchEditorOptionsDisposingEvent,
+EnterKeyEvent as SearchEditorOptionsEnterKeyEvent,
+FocusInEvent as SearchEditorOptionsFocusInEvent,
+FocusOutEvent as SearchEditorOptionsFocusOutEvent,
+InitializedEvent as SearchEditorOptionsInitializedEvent,
+InputEvent as SearchEditorOptionsInputEvent,
+KeyDownEvent as SearchEditorOptionsKeyDownEvent,
+KeyUpEvent as SearchEditorOptionsKeyUpEvent,
+OptionChangedEvent as SearchEditorOptionsOptionChangedEvent,
+PasteEvent as SearchEditorOptionsPasteEvent,
+ValueChangedEvent as SearchEditorOptionsValueChangedEvent,
+ } from "devextreme/ui/text_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
-import { 
- ChangeEvent  as SearchEditorOptionsChangeEvent,
- ContentReadyEvent  as SearchEditorOptionsContentReadyEvent,
- CopyEvent  as SearchEditorOptionsCopyEvent,
- CutEvent  as SearchEditorOptionsCutEvent,
- DisposingEvent  as SearchEditorOptionsDisposingEvent,
- EnterKeyEvent  as SearchEditorOptionsEnterKeyEvent,
- FocusInEvent  as SearchEditorOptionsFocusInEvent,
- FocusOutEvent  as SearchEditorOptionsFocusOutEvent,
- InitializedEvent  as SearchEditorOptionsInitializedEvent,
- InputEvent  as SearchEditorOptionsInputEvent,
- KeyDownEvent  as SearchEditorOptionsKeyDownEvent,
- KeyUpEvent  as SearchEditorOptionsKeyUpEvent,
- OptionChangedEvent  as SearchEditorOptionsOptionChangedEvent,
- PasteEvent  as SearchEditorOptionsPasteEvent,
- ValueChangedEvent  as SearchEditorOptionsValueChangedEvent,
-} from "devextreme/ui/text_box";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

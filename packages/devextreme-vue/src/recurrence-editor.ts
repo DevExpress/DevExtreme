@@ -1,6 +1,12 @@
 import { PropType } from "vue";
 import RecurrenceEditor, { Properties } from "devextreme/ui/recurrence_editor";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/recurrence_editor";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/recurrence_editor";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

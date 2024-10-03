@@ -1,6 +1,12 @@
 import { PropType } from "vue";
 import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
-import {  ContentReadyEvent , ContextMenuPreparingEvent , DisposingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/pivot_grid_field_chooser";
+import { 
+ContentReadyEvent,
+ContextMenuPreparingEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/pivot_grid_field_chooser";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

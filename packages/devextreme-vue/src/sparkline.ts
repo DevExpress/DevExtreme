@@ -1,6 +1,17 @@
 import { PropType } from "vue";
 import Sparkline, { Properties } from "devextreme/viz/sparkline";
-import {  DisposingEvent , DrawnEvent , ExportedEvent , ExportingEvent , FileSavingEvent , IncidentOccurredEvent , InitializedEvent , OptionChangedEvent , TooltipHiddenEvent , TooltipShownEvent ,} from "devextreme/viz/sparkline";
+import { 
+DisposingEvent,
+DrawnEvent,
+ExportedEvent,
+ExportingEvent,
+FileSavingEvent,
+IncidentOccurredEvent,
+InitializedEvent,
+OptionChangedEvent,
+TooltipHiddenEvent,
+TooltipShownEvent,
+ } from "devextreme/viz/sparkline";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
