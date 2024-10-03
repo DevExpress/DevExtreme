@@ -31,11 +31,11 @@ export abstract class DxoGanttHeaderFilterTexts extends NestedOption {
         this._setOption('rightPosition', value);
     }
 
-    get stickPosition(): string {
-        return this._getOption('stickPosition');
+    get stickyPosition(): string {
+        return this._getOption('stickyPosition');
     }
-    set stickPosition(value: string) {
-        this._setOption('stickPosition', value);
+    set stickyPosition(value: string) {
+        this._setOption('stickyPosition', value);
     }
 
     get unfix(): string {

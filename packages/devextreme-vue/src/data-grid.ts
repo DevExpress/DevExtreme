@@ -887,14 +887,14 @@ const DxColumnFixingTextsConfig = {
     "update:fix": null,
     "update:leftPosition": null,
     "update:rightPosition": null,
-    "update:stickPosition": null,
+    "update:stickyPosition": null,
     "update:unfix": null,
   },
   props: {
     fix: String,
     leftPosition: String,
     rightPosition: String,
-    stickPosition: String,
+    stickyPosition: String,
     unfix: String
   }
 };
@@ -3212,7 +3212,7 @@ const DxTextsConfig = {
     "update:rightPosition": null,
     "update:saveAllChanges": null,
     "update:saveRowChanges": null,
-    "update:stickPosition": null,
+    "update:stickyPosition": null,
     "update:sum": null,
     "update:sumOtherColumn": null,
     "update:undeleteRow": null,
@@ -3253,7 +3253,7 @@ const DxTextsConfig = {
     rightPosition: String,
     saveAllChanges: String,
     saveRowChanges: String,
-    stickPosition: String,
+    stickyPosition: String,
     sum: String,
     sumOtherColumn: String,
     undeleteRow: String,

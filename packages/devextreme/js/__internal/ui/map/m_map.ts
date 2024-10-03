@@ -86,6 +86,23 @@ const Map = Widget.inherit({
     ]);
   },
 
+  ctor(element, options) {
+    this.callBase(element, options);
+
+    if (options) {
+      if ('provider' in options && options.provider === 'bing') {
+        this._logDeprecatedBingProvider();
+      }
+    }
+  },
+
+  _logDeprecatedBingProvider() {
+    this._logDeprecatedOptionWarning('provider: bing', {
+      since: '24.2',
+      message: 'Use other map providers, such as Azure, Google, or GoogleStatic.',
+    });
+  },
+
   _setDeprecatedOptions() {
     this.callBase();
     extend(this._deprecatedOptions, {
@@ -190,7 +207,7 @@ const Map = Widget.inherit({
   },
 
   _optionChanged(args) {
-    const { name } = args;
+    const { name, value } = args;
 
     const changeBag = this._optionChangeBag;
     this._optionChangeBag = null;
@@ -208,6 +225,9 @@ const Map = Widget.inherit({
       case 'provider':
         this._suppressAsyncAction = true;
         this._invalidate();
+        if (value === 'bing') {
+          this._logDeprecatedBingProvider();
+        }
         break;
       case 'apiKey':
         errors.log('W1001');
