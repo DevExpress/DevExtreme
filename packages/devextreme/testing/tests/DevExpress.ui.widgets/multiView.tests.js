@@ -520,7 +520,7 @@ QUnit.module('interaction via swipe', {
         assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
     });
 
-    QUnit.test('swiping right should skip hidden items', function(assert) {
+    QUnit.test('swiping left should select first visible item to right', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
                 { text: '1', visible: true },
@@ -530,14 +530,15 @@ QUnit.module('interaction via swipe', {
         });
         const instance = $multiView.dxMultiView('instance');
         const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $thirdItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(2);
         const pointer = pointerMock($multiView);
 
-        pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
-        assert.strictEqual(position($itemContainer), $itemContainer.width() / 10, 'container did move');
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+        pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
+        assert.roughEqual(position($itemContainer), position($thirdItem), 1, 'container did move');
+        assert.strictEqual(instance.option('selectedIndex'), 2, 'first item visible to the right is selected');
     });
 
-    QUnit.test('swiping left should skip hidden items', function(assert) {
+    QUnit.test('swiping right should select first visible item to left', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
                 { text: '1', visible: true },
@@ -546,13 +547,15 @@ QUnit.module('interaction via swipe', {
             ],
             selectedIndex: 2
         });
+
         const instance = $multiView.dxMultiView('instance');
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+        const $firstItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
         const pointer = pointerMock($multiView);
 
-        pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
-        assert.strictEqual(position($itemContainer), -$itemContainer.width() / 10, 'container did move');
-        assert.strictEqual(instance.option('selectedIndex'), 2, 'selectedIndex is not changed');
+        pointer.start().swipeStart().swipe(0.9).swipeEnd(1);
+        assert.roughEqual(position($itemContainer), -position($firstItem), 1, 'container did move');
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'first item visible to the left is selected');
     });
 
     QUnit.test('item container should not be moved by swipe if items count less then 2', function(assert) {
