@@ -6,7 +6,7 @@ import {
 /**
  * @public
  */
-export type PageSize = 'all';
+export type PageSize = number | 'all';
 
 /**
  * @deprecated use Properties instead
@@ -39,8 +39,9 @@ export interface dxPagerOptions extends BasePagerOptions, WidgetOptions<dxPager>
     /**
      * @docid
      * @default [5, 10]
+     * @type Array<number | string>
      */
-    allowedPageSizes?: Array<(number | PageSize)>;
+    allowedPageSizes?: Array<PageSize>;
 }
 
 /**

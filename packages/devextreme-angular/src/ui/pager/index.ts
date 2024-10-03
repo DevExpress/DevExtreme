@@ -21,7 +21,6 @@ import {
 
 
 import { PagerDisplayMode } from 'devextreme/common';
-import { PageSize } from 'devextreme/ui/pager';
 
 import DxPager from 'devextreme/ui/pager';
 
@@ -89,10 +88,10 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get allowedPageSizes(): Array<PageSize | number> {
+    get allowedPageSizes(): Array<number | string> {
         return this._getOption('allowedPageSizes');
     }
-    set allowedPageSizes(value: Array<PageSize | number>) {
+    set allowedPageSizes(value: Array<number | string>) {
         this._setOption('allowedPageSizes', value);
     }
 
@@ -394,7 +393,7 @@ export class DxPagerComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() allowedPageSizesChange: EventEmitter<Array<PageSize | number>>;
+    @Output() allowedPageSizesChange: EventEmitter<Array<number | string>>;
 
     /**
     

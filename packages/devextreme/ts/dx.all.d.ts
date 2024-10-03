@@ -21783,7 +21783,7 @@ declare module DevExpress.ui {
     getPageCount(): number;
   }
   module dxPager {
-    export type PageSize = 'all';
+    export type PageSize = number | 'all';
     export type Properties = dxPagerOptions;
   }
   /**
@@ -21811,7 +21811,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPagerOptions.allowedPageSizes]
      */
-    allowedPageSizes?: Array<number | DevExpress.ui.dxPager.PageSize>;
+    allowedPageSizes?: Array<DevExpress.ui.dxPager.PageSize>;
   }
   /**
    * [descr:dxPivotGrid]
