@@ -1164,8 +1164,6 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       case 'animation':
         break;
       case '_loopFocus':
-        this._toggleTabTerminator();
-        break;
       case 'shading':
         this._toggleShading(this.option('visible'));
         this._toggleSafariScrolling();

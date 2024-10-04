@@ -3276,6 +3276,28 @@ testModule('focus policy', {
         assert.strictEqual(getActiveElement(), $firstTabbable.get(0), 'first item focused on press tab on last item (does not go under overlay)');
     });
 
+    test('focus in Overlay should be looped if _loopFocus: true and shading: false', function(assert) {
+        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
+            visible: true,
+            shading: false,
+            _loopFocus: true,
+            contentTemplate: $('#focusableTemplate')
+        });
+        const $content = overlay.$content();
+
+        const $firstFocusableElement = $content.find('.firstTabbable');
+        const $lastFocusableElement = $content.find('.lastTabbable');
+
+        $lastFocusableElement.get(0).focus();
+        $($lastFocusableElement).trigger(this.tabEvent);
+
+        assert.strictEqual(getActiveElement(), $firstFocusableElement.get(0), 'first item is focused');
+
+        $($firstFocusableElement).trigger(this.shiftTabEvent);
+
+        assert.strictEqual(getActiveElement(), $lastFocusableElement.get(0), 'last item is focused');
+    });
+
     test('elements under overlay with shader have not to get focus by tab when top overlay has no tabbable elements', function(assert) {
         const overlay1 = new Overlay($('<div>').appendTo('#qunit-fixture'), {
             shading: true,
