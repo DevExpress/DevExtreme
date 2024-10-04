@@ -1265,49 +1265,26 @@ QUnit.module('keyboard navigation', {
         });
     });
 
-    QUnit.test('when only one item is visible, no key press moves the current visible view', function(assert) {
-        const $multiView = $('#multiView').dxMultiView({
-            items: [
-                { text: '1', visible: true },
-                { text: '2', visible: false }
-            ],
-            loop: true,
-            focusStateEnabled: true
+    ['left', 'right', 'up', 'down', 'home', 'end'].forEach((key) => {
+        QUnit.test(`when only one item is visible, '${key}' key press doesnt moves the current visible view`, function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: true },
+                    { text: '2', visible: false }
+                ],
+                loop: true,
+                focusStateEnabled: true
+            });
+            const instance = $multiView.dxMultiView('instance');
+            const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+            const keyboard = keyboardMock($multiView);
+
+            $multiView.focusin();
+            keyboard.keyDown(key);
+
+            assert.strictEqual(position($itemContainer), 0, 'container did not move');
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
         });
-        const instance = $multiView.dxMultiView('instance');
-        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
-        const keyboard = keyboardMock($multiView);
-
-        $multiView.focusin();
-        keyboard.keyDown('left');
-
-        assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
-
-        keyboard.keyDown('right');
-
-        assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
-
-        keyboard.keyDown('up');
-
-        assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
-
-        keyboard.keyDown('down');
-
-        assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
-
-        keyboard.keyDown('home');
-
-        assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
-
-        keyboard.keyDown('end');
-
-        assert.strictEqual(position($itemContainer), 0, 'container did not move');
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
     });
 
     QUnit.test('item switching should go to first visible element when clicking home button', function(assert) {
