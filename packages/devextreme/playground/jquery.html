@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,23 +41,7 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <style>
-        body {
-            height: 100vh;
-        }
-
-        button {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        #lookup {
-            margin-left: 20px;
-        }
-    </style>
 </head>
-
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -66,67 +49,15 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <button>button</button>
-        <div id="lookup"></div>
-        <button>button</button>
-        <div id="products"></div>
-
+        <div id="button"></div>
         <script>
-            const employeesList = ['John Heart', 'Samantha Bright', 'Arthur Miller', 'Robert Reagan', 'Greta Sims', 'Brett Wade',
-                'Sandra Johnson', 'Ed Holmes', 'Barb Banks', 'Kevin Carter', 'Cindy Stanwick', 'Sammy Hill', 'Davey Jones', 'Victor Norris',
-                'Mary Stern', 'Robin Cosworth', 'Kelly Rodriguez', 'James Anderson', 'Antony Remmen', 'Olivia Peyton', 'Taylor Riley',
-                'Amelia Harper', 'Wally Hobbs', 'Brad Jameson', 'Karen Goodson', 'Marcus Orbison', 'Sandy Bright', 'Morgan Kennedy',
-                'Violet Bailey', 'Ken Samuelson', 'Nat Maguiree', 'Bart Arnaz', 'Leah Simpson', 'Arnie Schwartz', 'Billy Zimmer', 'Samantha Piper',
-                'Maggie Boxter', 'Terry Bradley', 'Gabe Jones', 'Lucy Ball', 'Jim Packard', 'Hannah Brookly', 'Harv Mudd', 'Clark Morgan',
-                'Todd Hoffman', 'Jackie Garmin', 'Lincoln Bartlett', 'Brad Farkus', 'Jenny Hobbs', 'Dallas Lou', 'Stu Pizaro'];
-
-            const simpleProducts = [
-                'HD Video Player',
-                'SuperHD Video Player',
-                'SuperPlasma 50',
-                'SuperLED 50',
-                'SuperLED 42',
-                'SuperLCD 55',
-                'SuperLCD 42',
-                'SuperPlasma 65',
-                'SuperLCD 70',
-                'Projector Plus',
-                'Projector PlusHT',
-                'ExcelRemote IR',
-                'ExcelRemote BT',
-                'ExcelRemote IP',
-            ];
-
-            $(() => {
-                $('#lookup').dxLookup({
-                    items: employeesList,
-                    value: employeesList[0],
-                    // usePopover: false,
-                    searchEnabled: false,
-                    inputAttr: {
-                        'aria-label': 'Simple lookup',
-                    },
-                    // applyValueMode: 'useButtons',
-                    dropDownOptions: {
-                        shading: false,
-                        // toolbarItems: [],
-                    },
-
-                    // opened: true,
-                    // items: [1, 2, 3],
-                    // focusStateEnabled: true,
-                    // searchEnabled: false,
-                    // usePopover: true,
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
-
-                // $('#products').dxSelectBox({
-                //     items: simpleProducts,
-                //     inputAttr: { 'aria-label': 'Simple Product' },
-                //     // applyValueMode: 'useButtons',
-                // });
             });
         </script>
     </div>
 </body>
-
 </html>

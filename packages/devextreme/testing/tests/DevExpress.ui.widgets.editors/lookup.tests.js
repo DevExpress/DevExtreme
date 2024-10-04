@@ -2942,7 +2942,6 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxLookup('instance');
         const tabKeyDownEvent = $.Event('keydown', { key: 'Tab' });
         const $overlayContent = $(instance.content()).parent();
-        // TODO: use getActiveElement
         const $cancelButton = $overlayContent.find(CANCEL_BUTTON_SELECTOR);
 
         $cancelButton.trigger(tabKeyDownEvent);
@@ -2965,7 +2964,6 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxLookup('instance');
         const tabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
         const $overlayContent = $(instance.content()).parent();
-        // TODO: use getActiveElement
         const $searchInput = $overlayContent.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
         $searchInput.trigger(tabKeyDownEvent);
