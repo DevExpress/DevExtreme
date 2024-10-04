@@ -11,12 +11,12 @@
   "dependencies": {
     "devextreme": "workspace:~24.2.0",
     "devextreme-react": "workspace:~24.2.0",
-    "react": "~18.0.0",
-    "react-dom": "~18.0.0"
+    "react": "~18.3.0",
+    "react-dom": "~18.3.0"
   },
   "devDependencies": {
-    "@types/react": "~18.0.0",
-    "@types/react-dom": "~18.0.0",
+    "@types/react": "18.0.38",
+    "@types/react-dom": "18.0.11",
     "css-loader": "6.10.0",
     "source-map-loader": "4.0.2",
     "style-loader": "3.3.4",
