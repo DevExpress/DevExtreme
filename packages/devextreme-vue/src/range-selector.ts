@@ -129,7 +129,7 @@ const componentConfig = {
     sliderMarker: Object,
     theme: Object as PropType<Theme>,
     title: [Object, String],
-    value: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>
+    value: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object>
   },
   emits: {
     "update:isActive": null,
@@ -449,7 +449,7 @@ const DxChartConfig = {
     negativesAsZeroes: Boolean,
     palette: [Array, Object] as PropType<Array<string> | Palette>,
     paletteExtensionMode: Object as PropType<PaletteExtensionMode>,
-    series: [Array, Object] as PropType<Array<Object> | Object | Object>,
+    series: [Array, Object] as PropType<Array<Object> | Object>,
     seriesTemplate: Object,
     topIndent: Number,
     valueAxis: Object
@@ -695,14 +695,14 @@ const DxCommonSeriesSettingsLabelConfig = {
   },
   props: {
     alignment: Object as PropType<HorizontalAlignment>,
-    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function as PropType<(pointInfo: Object) => string>,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     horizontalOffset: Number,
     position: Object as PropType<RelativePosition>,
     rotationAngle: Number,
@@ -1019,14 +1019,14 @@ const DxLabelConfig = {
   },
   props: {
     alignment: Object as PropType<HorizontalAlignment>,
-    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function as PropType<(pointInfo: Object) => string>,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     horizontalOffset: Number,
     overlappingBehavior: Object as PropType<LabelOverlap>,
     position: Object as PropType<RelativePosition>,
@@ -1168,7 +1168,7 @@ const DxMarkerLabelConfig = {
   },
   props: {
     customizeText: Function as PropType<(markerValue: Object) => string>,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>
   }
 };
 
@@ -1570,7 +1570,7 @@ const DxScaleLabelConfig = {
   props: {
     customizeText: Function as PropType<(scaleValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     overlappingBehavior: Object as PropType<LabelOverlap>,
     topIndent: Number,
     visible: Boolean
@@ -1831,7 +1831,7 @@ const DxSliderMarkerConfig = {
     color: String,
     customizeText: Function as PropType<(scaleValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     invalidRangeColor: String,
     paddingLeftRight: Number,
     paddingTopBottom: Number,

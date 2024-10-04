@@ -708,7 +708,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(info: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,

@@ -196,7 +196,7 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     position: Object as PropType<VerticalEdge>,
     visible: Boolean
   }
@@ -222,7 +222,7 @@ const DxTooltipConfig = {
   },
   props: {
     enabled: Boolean,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     position: Object as PropType<VerticalEdge>,
     showMode: Object as PropType<TooltipShowMode>
   }

@@ -383,7 +383,7 @@ const DxColumnConfig = {
     filterType: Object as PropType<FilterType>,
     filterValue: {},
     filterValues: Array as PropType<Array<any>>,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     headerCellTemplate: {},
     headerFilter: Object,
     minWidth: Number,

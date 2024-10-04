@@ -375,7 +375,7 @@ const DxLabelConfig = {
   props: {
     customizeText: Function as PropType<(scaleValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     hideFirstOrLast: Object as PropType<CircularGaugeLabelOverlap>,
     indentFromTick: Number,
     overlappingBehavior: Object as PropType<LabelOverlap>,
@@ -711,7 +711,7 @@ const DxTextConfig = {
   props: {
     customizeText: Function as PropType<(indicatedValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     indent: Number
   }
 };
@@ -820,7 +820,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(scaleValue: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,

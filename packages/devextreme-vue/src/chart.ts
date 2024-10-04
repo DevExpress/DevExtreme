@@ -215,7 +215,7 @@ const componentConfig = {
     rotated: Boolean,
     rtlEnabled: Boolean,
     scrollBar: Object,
-    series: [Array, Object] as PropType<Array<Object> | Object | Object>,
+    series: [Array, Object] as PropType<Array<Object> | Object>,
     seriesSelectionMode: Object as PropType<SingleOrMultiple>,
     seriesTemplate: Object,
     size: Object,
@@ -679,9 +679,9 @@ const DxArgumentAxisConfig = {
     type: Object as PropType<AxisScaleType>,
     valueMarginsEnabled: Boolean,
     visible: Boolean,
-    visualRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
+    visualRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object>,
     visualRangeUpdateMode: Object as PropType<VisualRangeUpdateMode>,
-    wholeRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
+    wholeRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object>,
     width: Number,
     workdaysOnly: Boolean,
     workWeek: Array as PropType<Array<number>>
@@ -822,7 +822,7 @@ const DxAxisLabelConfig = {
     customizeText: Function as PropType<(argument: Object) => string>,
     displayMode: Object as PropType<ChartLabelDisplayMode>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     indentFromAxis: Number,
     overlappingBehavior: Object as PropType<ChartsAxisLabelOverlap>,
     position: Object as PropType<Position | RelativePosition>,
@@ -1540,14 +1540,14 @@ const DxCommonSeriesSettingsLabelConfig = {
   },
   props: {
     alignment: Object as PropType<HorizontalAlignment>,
-    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     backgroundColor: String,
     border: Object,
     connector: Object,
     customizeText: Function as PropType<(pointInfo: Object) => string>,
     displayFormat: String,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     horizontalOffset: Number,
     position: Object as PropType<RelativePosition>,
     rotationAngle: Number,
@@ -1981,7 +1981,7 @@ const DxHorizontalLineLabelConfig = {
     backgroundColor: String,
     customizeText: Function as PropType<(info: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     visible: Boolean
   }
 };
@@ -2075,7 +2075,7 @@ const DxLabelConfig = {
   },
   props: {
     alignment: Object as PropType<HorizontalAlignment>,
-    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     backgroundColor: String,
     border: Object,
     connector: Object,
@@ -2084,7 +2084,7 @@ const DxLabelConfig = {
     displayFormat: String,
     displayMode: Object as PropType<ChartLabelDisplayMode>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     horizontalAlignment: Object as PropType<HorizontalAlignment>,
     horizontalOffset: Number,
     indentFromAxis: Number,
@@ -3140,7 +3140,7 @@ const DxTooltipConfig = {
     "update:zIndex": null,
   },
   props: {
-    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    argumentFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     arrowLength: Number,
     border: Object,
     color: String,
@@ -3150,7 +3150,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(pointInfo: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     interactive: Boolean,
     location: Object as PropType<ChartTooltipLocation>,
     opacity: Number,
@@ -3318,9 +3318,9 @@ const DxValueAxisConfig = {
     valueMarginsEnabled: Boolean,
     valueType: Object as PropType<ChartsDataType>,
     visible: Boolean,
-    visualRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
+    visualRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object>,
     visualRangeUpdateMode: Object as PropType<VisualRangeUpdateMode>,
-    wholeRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object | Object>,
+    wholeRange: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object>,
     width: Number
   }
 };

@@ -95,7 +95,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     onShowing: Function as PropType<(e: ShowingEvent) => void>,
     onShown: Function as PropType<(e: ShownEvent) => void>,
-    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object | Object>,
+    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,

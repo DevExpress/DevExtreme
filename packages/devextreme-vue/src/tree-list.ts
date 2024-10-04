@@ -817,7 +817,7 @@ const DxColumnConfig = {
     filterValues: Array as PropType<Array<any>>,
     fixed: Boolean,
     fixedPosition: Object as PropType<FixedPosition>,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     formItem: Object,
     headerCellTemplate: {},
     headerFilter: Object,
@@ -837,7 +837,7 @@ const DxColumnConfig = {
     sortOrder: Object as PropType<SortOrder>,
     trueText: String,
     type: Object as PropType<TreeListCommandColumnType>,
-    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    validationRules: Array as PropType<Array<Object>>,
     visible: Boolean,
     visibleIndex: Number,
     width: [Number, String]
@@ -1349,7 +1349,7 @@ const DxFieldConfig = {
     editorTemplate: {},
     falseText: String,
     filterOperations: Array as PropType<Array<FilterBuilderOperation> | Array<string>>,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     lookup: Object,
     name: String,
     trueText: String
@@ -1379,7 +1379,7 @@ const DxFieldLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object] as PropType<Array<any> | Object | Object>,
+    dataSource: [Array, Object] as PropType<Array<any> | Object>,
     displayExpr: [Function, String] as PropType<((data: Object) => string) | string>,
     valueExpr: [Function, String] as PropType<((data: Object) => (string | number | Boolean)) | string>
   }
@@ -1559,7 +1559,7 @@ const DxFilterBuilderPopupConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object | Object>,
+    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -1762,7 +1762,7 @@ const DxFormConfig = {
     bindingOptions: Object,
     colCount: [Object, Number] as PropType<Mode | number>,
     colCountByScreen: Object,
-    customizeItem: Function as PropType<(item: Object | Object | Object | Object | Object) => void>,
+    customizeItem: Function as PropType<(item: Object) => void>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -1771,7 +1771,7 @@ const DxFormConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
-    items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    items: Array as PropType<Array<Object>>,
     labelLocation: Object as PropType<LabelLocation>,
     labelMode: Object as PropType<FormLabelMode>,
     minColWidth: Number,
@@ -1866,7 +1866,7 @@ const DxFormItemConfig = {
     label: Object,
     name: String,
     template: {},
-    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    validationRules: Array as PropType<Array<Object>>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -2463,7 +2463,7 @@ const DxPopupConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object | Object>,
+    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,

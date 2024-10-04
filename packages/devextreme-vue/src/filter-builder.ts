@@ -196,7 +196,7 @@ const DxFieldConfig = {
     editorTemplate: {},
     falseText: String,
     filterOperations: Array as PropType<Array<FilterBuilderOperation> | Array<string>>,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     lookup: Object,
     name: String,
     trueText: String
@@ -316,7 +316,7 @@ const DxLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object] as PropType<Array<any> | Object | Object>,
+    dataSource: [Array, Object] as PropType<Array<any> | Object>,
     displayExpr: [Function, String] as PropType<((data: Object) => string) | string>,
     valueExpr: [Function, String] as PropType<((data: Object) => (string | number | Boolean)) | string>
   }

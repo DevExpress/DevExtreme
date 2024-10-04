@@ -447,7 +447,7 @@ const DxLabelConfig = {
     connectorWidth: Number,
     customizeText: Function as PropType<(barValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     indent: Number,
     visible: Boolean
   }
@@ -502,7 +502,7 @@ const DxLegendConfig = {
     font: Object,
     horizontalAlignment: Object as PropType<HorizontalAlignment>,
     itemsAlignment: Object as PropType<HorizontalAlignment>,
-    itemTextFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    itemTextFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     itemTextPosition: Object as PropType<Position>,
     margin: [Number, Object],
     markerSize: Number,
@@ -801,7 +801,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(scaleValue: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,

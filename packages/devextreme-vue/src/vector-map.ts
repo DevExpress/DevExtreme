@@ -122,7 +122,7 @@ const componentConfig = {
     onZoomFactorChanged: Function as PropType<(e: ZoomFactorChangedEvent) => void>,
     panningEnabled: Boolean,
     pathModified: Boolean,
-    projection: [Object, String] as PropType<Object | string | VectorMapProjection | Object | Object>,
+    projection: [Object, String] as PropType<Object | string | VectorMapProjection>,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
     size: Object,
