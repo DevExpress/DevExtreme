@@ -82,7 +82,7 @@ const newAssign = function (target, property, value, extendComplexObject, assign
 };
 
 // B239679, http://bugs.jquery.com/ticket/9477
-const deepExtendArraySafe = function (target, changes, extendComplexObject, assignByReference?, shouldCopyUndefined?, useNewAssign?) {
+const deepExtendArraySafe = function (target, changes, extendComplexObject?, assignByReference?, shouldCopyUndefined?, useNewAssign?) {
   let prevValue;
   let newValue;
   const assignFunc = useNewAssign ? newAssign : legacyAssign;

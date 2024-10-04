@@ -158,7 +158,7 @@ const FeedbackEmitter = Emitter.inherit({
   },
 
 });
-// @ts-expect-error
+
 FeedbackEmitter.lock = function (deferred) {
   const lockInactive = activeFeedback ? activeFeedback.lockInactive() : noop;
 
@@ -173,7 +173,6 @@ registerEmitter({
   ],
 });
 
-// @ts-expect-error
 export const { lock } = FeedbackEmitter;
 export {
   ACTIVE_EVENT_NAME as active,

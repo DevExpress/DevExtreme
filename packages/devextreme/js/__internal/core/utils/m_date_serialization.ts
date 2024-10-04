@@ -15,7 +15,7 @@ const DATE_SERIALIZATION_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
 const MILLISECOND_LENGHT = 3;
 
-const dateParser = function (text, skipISO8601Parsing) {
+const dateParser = function (text, skipISO8601Parsing?: boolean) {
   let result;
 
   if (isString(text) && !skipISO8601Parsing) {

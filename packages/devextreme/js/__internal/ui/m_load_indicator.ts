@@ -4,7 +4,6 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { animation } from '@js/core/utils/support';
-// @ts-expect-error
 import { getNavigator } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 // @ts-expect-error

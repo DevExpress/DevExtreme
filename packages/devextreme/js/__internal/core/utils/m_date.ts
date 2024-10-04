@@ -281,6 +281,7 @@ const getViewFirstCellDate = function (viewType, date) {
   if (viewType === 'year') { return createDateWithFullYear(date.getFullYear(), 0, date.getDate()); }
   if (viewType === 'decade') { return createDateWithFullYear(getFirstYearInDecade(date), date.getMonth(), date.getDate()); }
   if (viewType === 'century') { return createDateWithFullYear(getFirstDecadeInCentury(date), date.getMonth(), date.getDate()); }
+  return undefined;
 };
 
 const getViewLastCellDate = function (viewType, date) {
@@ -288,6 +289,7 @@ const getViewLastCellDate = function (viewType, date) {
   if (viewType === 'year') { return createDateWithFullYear(date.getFullYear(), 11, date.getDate()); }
   if (viewType === 'decade') { return createDateWithFullYear(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate()); }
   if (viewType === 'century') { return createDateWithFullYear(getFirstDecadeInCentury(date) + 90, date.getMonth(), date.getDate()); }
+  return undefined;
 };
 
 const getViewMinBoundaryDate = function (viewType, date) {
@@ -354,7 +356,7 @@ const getViewUp = function (typeView) {
     case 'decade':
       return 'century';
     default:
-      break;
+      return undefined;
   }
 };
 
@@ -367,7 +369,7 @@ const getViewDown = function (typeView) {
     case 'year':
       return 'month';
     default:
-      break;
+      return undefined;
   }
 };
 
@@ -613,7 +615,7 @@ const roundDateByStartDayHour = function (date, startDayHour) {
   return result;
 };
 
-function normalizeDate(date, min, max) {
+function normalizeDate(date, min?, max?) {
   let normalizedDate = date;
 
   if (!isDefined(date)) {

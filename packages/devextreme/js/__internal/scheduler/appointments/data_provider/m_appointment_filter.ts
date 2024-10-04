@@ -270,7 +270,7 @@ export class AppointmentFilterBaseStrategy {
       }
 
       const appointmentResourceValues = wrapToArray(resource);
-      const resourceData = map(
+      const resourceData: any[] = map(
         resources[resourceIndex].items,
         ({ id }) => id,
       );

@@ -193,7 +193,7 @@ export const compileSetter = function (expr) {
   };
 };
 
-export const toComparable = function (value, caseSensitive, options: any = {}) {
+export const toComparable = function (value, caseSensitive?, options: any = {}) {
   if (value instanceof Date) {
     return value.getTime();
   }

@@ -31,7 +31,6 @@ const initCustomMarkerClass = function () {
     this._offset = options.offset;
 
     this._$overlayContainer = $('<div>')
-      // @ts-expect-error
       .css({
         position: 'absolute',
         display: 'none',
@@ -484,7 +483,6 @@ const GoogleProvider = DynamicProvider.inherit({
 });
 
 /// #DEBUG
-// @ts-expect-error
 GoogleProvider.remapConstant = function (newValue) {
   GOOGLE_URL = newValue;
 };

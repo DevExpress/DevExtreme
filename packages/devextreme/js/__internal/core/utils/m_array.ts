@@ -36,7 +36,7 @@ export const removeDuplicates = function (from = [], toRemove = []) {
   });
 };
 
-export const normalizeIndexes = function (items, indexPropName, currentItem, needIndexCallback) {
+export const normalizeIndexes = function (items, indexPropName, currentItem?, needIndexCallback?) {
   const indexedItems = {};
   const { useLegacyVisibleIndex } = config();
   let currentIndex = 0;

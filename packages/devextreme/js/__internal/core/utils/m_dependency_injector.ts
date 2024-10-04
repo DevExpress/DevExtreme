@@ -6,7 +6,6 @@ import { isFunction } from '@js/core/utils/type';
 function injector(object) {
   const BaseClass = Class.inherit(object);
   let InjectedClass = BaseClass;
-  // @ts-expect-error typescript inheritance issue
   let instance = new InjectedClass(object);
   const initialFields = {};
 

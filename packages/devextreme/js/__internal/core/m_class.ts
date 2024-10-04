@@ -39,7 +39,7 @@ const redefine = function (members) {
   return that;
 };
 
-const include = function () {
+const include = function (...args) {
   const classObj = this;
   let argument;
   let name;
@@ -55,8 +55,8 @@ const include = function () {
     classObj._includedPostCtors = classObj._includedPostCtors.slice(0);
   }
 
-  for (i = 0; i < arguments.length; i++) {
-    argument = arguments[i];
+  for (i = 0; i < args.length; i++) {
+    argument = args[i];
     if (argument.ctor) {
       classObj._includedCtors.push(argument.ctor);
     }
@@ -108,7 +108,7 @@ const abstract = function () {
 const classImpl = function () { };
 
 classImpl.inherit = function (members) {
-  const inheritor = function () {
+  const inheritor = function (...args) {
     if (!this || isWindow(this) || typeof this.constructor !== 'function') {
       throw errors.Error('E0003');
     }
@@ -124,7 +124,7 @@ classImpl.inherit = function (members) {
     }
 
     if (ctor) {
-      ctor.apply(instance, arguments);
+      ctor.apply(instance, args);
     }
 
     for (i = 0; i < includedPostCtors.length; i++) {

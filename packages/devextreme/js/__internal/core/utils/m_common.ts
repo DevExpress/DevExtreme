@@ -146,6 +146,7 @@ const match = function (value, targetValue) {
   if (Array.isArray(value) && Array.isArray(targetValue)) {
     let mismatch = false;
 
+    // @ts-expect-error not all code paths return value
     each(value, (index, valueItem) => {
       if (valueItem !== targetValue[index]) {
         mismatch = true;

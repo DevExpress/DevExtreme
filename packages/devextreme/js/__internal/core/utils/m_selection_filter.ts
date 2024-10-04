@@ -2,7 +2,7 @@ import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import { isObject, isString } from '@js/core/utils/type';
 
-export const SelectionFilterCreator = function (selectedItemKeys, isSelectAll) {
+export const SelectionFilterCreator = function (selectedItemKeys, isSelectAll?: boolean) {
   this.getLocalFilter = function (keyGetter, equalKeys, equalByReference, keyExpr) {
     equalKeys = equalKeys === undefined ? equalByValue : equalKeys;
     return functionFilter.bind(this, equalKeys, keyGetter, equalByReference, keyExpr);

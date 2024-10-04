@@ -96,7 +96,7 @@ export const normalizeTemplateElement = (element) => {
   return $element;
 };
 
-export const clipboardText = (event, text) => {
+export const clipboardText = (event, text?) => {
   // @ts-expect-error clipboardData doesn't exist in window type
   const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
   if (!text) {
@@ -116,7 +116,7 @@ export const contains = (container, element) => {
   return container.contains(element) || contains(container, getRootNodeHost(element));
 };
 
-export const createTextElementHiddenCopy = (element, text, options) => {
+export const createTextElementHiddenCopy = (element, text, options?) => {
   const elementStyles = window.getComputedStyle($(element).get(0));
   const includePaddings = options && options.includePaddings;
 

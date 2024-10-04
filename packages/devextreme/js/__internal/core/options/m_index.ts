@@ -196,7 +196,7 @@ export class Options {
       : equalByValue(value, initialValue);
   }
 
-  initial(name) {
+  initial(name): any {
     return getNestedOptionValue(this._initial, name);
   }
 

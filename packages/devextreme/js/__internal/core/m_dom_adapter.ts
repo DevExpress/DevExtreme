@@ -62,11 +62,14 @@ const nativeDOMAdapterStrategy: DomAdapter = {
 
               const items = this.querySelectorAll(doc, selector);
 
-              for (let i = 0; i < items.length; i++) {
+              let i = 0;
+              while (i < items.length) {
                 if (items[i] === element) {
                   return true;
                 }
+                i += 1;
               }
+              return false;
             });
 
     return matches.call(element, selector);

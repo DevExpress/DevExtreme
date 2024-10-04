@@ -150,7 +150,6 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
           cache.$nodeByKey[key] = $node;
         });
       }
-      // @ts-expect-error
       return cache.$nodeByKey[key] || $();
     }
     const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}="${key}"]`);
@@ -500,7 +499,6 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
 
     each(items, (index, item) => {
       if (!item) {
-        // @ts-expect-error
         this.option('items').splice(index - counter, 1);
         counter++;
       }
@@ -523,7 +521,6 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
     if (scrollable) {
       return $(scrollable.content()).children();
     }
-    // @ts-expect-error
     return $();
   },
 

@@ -6,7 +6,6 @@ export default class TabPanelItem extends CollectionWidgetItem {
     // @ts-expect-error
     this._startWatcher('badge', noop);
 
-    // @ts-expect-error
     return super._renderWatchers();
   }
 }

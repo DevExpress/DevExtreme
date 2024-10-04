@@ -68,7 +68,7 @@ export class BindableTemplate extends TemplateBase {
 
   _watchMethod: any;
 
-  constructor(render, fields, watchMethod, fieldsMap) {
+  constructor(render, fields, watchMethod, fieldsMap?) {
     super();
     this._render = render;
     this._fields = fields;

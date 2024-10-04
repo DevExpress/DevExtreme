@@ -60,9 +60,7 @@ const TouchStrategy = BaseStrategy.inherit({
   },
 
 });
-// @ts-expect-error
 TouchStrategy.map = eventMap;
-// @ts-expect-error
 TouchStrategy.normalize = normalizeTouchEvent;
 
 export default TouchStrategy;

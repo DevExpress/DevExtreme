@@ -415,7 +415,6 @@ const CollectionWidget = Widget.inherit({
   },
 
   _findItemElementByItem(item) {
-    // @ts-expect-error
     let result = $();
     const that = this;
     // @ts-expect-error
@@ -743,7 +742,6 @@ const CollectionWidget = Widget.inherit({
       return $target;
     }
     $target = $target.parent();
-    // @ts-expect-error
     while ($target.length && !domAdapter.isDocument($target.get(0)) && !domAdapter.isDocumentFragment($target.get(0))) {
       if ($target.is(focusable)) {
         return $target;
@@ -821,7 +819,6 @@ const CollectionWidget = Widget.inherit({
   _renderItems(items) {
     if (items.length) {
       each(items, (index, itemData) => {
-        // @ts-expect-error
         this._renderItem(this._renderedItemsCount + index, itemData);
       });
     }

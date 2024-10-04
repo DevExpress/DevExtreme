@@ -168,6 +168,7 @@ function getRemainderByDivision(dividend, divider, digitsCount) {
   }
 
   const quotient = roundFloatPart(dividend / divider, digitsCount);
+  // @ts-expect-error probably remove parseInt here
   return (quotient - parseInt(quotient, 10)) * divider;
 }
 

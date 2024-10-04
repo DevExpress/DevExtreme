@@ -214,7 +214,7 @@ export const implementationsMap = {
   getInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args as [any, any]),
   setInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args as [any, any]),
 };
-function elementSizeHelper(sizeProperty, el, value) {
+function elementSizeHelper(sizeProperty, el, value?) {
   return arguments.length === 2 ? elementSize(el, sizeProperty) : elementSize(el, sizeProperty, value);
 }
 
@@ -222,9 +222,9 @@ export const getWidth = (el) => implementationsMap.getWidth(el);
 export const setWidth = (el, value) => implementationsMap.setWidth(el, value);
 export const getHeight = (el) => implementationsMap.getHeight(el);
 export const setHeight = (el, value) => implementationsMap.setHeight(el, value);
-export const getOuterWidth = (el, includeMargin) => implementationsMap.getOuterWidth(el, includeMargin || false);
+export const getOuterWidth = (el, includeMargin?) => implementationsMap.getOuterWidth(el, includeMargin || false);
 export const setOuterWidth = (el, value) => implementationsMap.setOuterWidth(el, value);
-export const getOuterHeight = (el, includeMargin) => implementationsMap.getOuterHeight(el, includeMargin || false);
+export const getOuterHeight = (el, includeMargin?) => implementationsMap.getOuterHeight(el, includeMargin || false);
 export const setOuterHeight = (el, value) => implementationsMap.setOuterHeight(el, value);
 export const getInnerWidth = (el) => implementationsMap.getInnerWidth(el);
 export const setInnerWidth = (el, value) => implementationsMap.setInnerWidth(el, value);

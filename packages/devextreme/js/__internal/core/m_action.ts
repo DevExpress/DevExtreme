@@ -37,10 +37,10 @@ class Action {
     }
   }
 
-  execute() {
+  execute(...args) {
     const e = {
       action: this._action,
-      args: Array.prototype.slice.call(arguments),
+      args: Array.prototype.slice.call(args),
       context: this._context,
       component: this._component,
       validatingTargetName: this._validatingTargetName,
@@ -78,7 +78,8 @@ class Action {
     const excludeValidators = this._excludeValidators;
     const { executors } = Action;
 
-    Object.keys(executors).forEach((name) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const name in executors) {
       if (!excludeValidators[name]) {
         const executor = executors[name];
         executor.validate?.(e);
@@ -87,7 +88,7 @@ class Action {
           return false;
         }
       }
-    });
+    }
 
     return true;
   }

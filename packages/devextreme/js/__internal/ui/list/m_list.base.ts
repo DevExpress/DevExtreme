@@ -85,7 +85,6 @@ export const ListBase = CollectionWidget.inherit({
       let isItemVisible = true;
 
       if (!$item.length) {
-        // @ts-expect-error
         return $();
       }
 
@@ -677,7 +676,6 @@ export const ListBase = CollectionWidget.inherit({
   },
 
   _initMarkup() {
-    // @ts-expect-error
     this._itemElementsCache = $();
 
     this.$element().addClass(LIST_CLASS);

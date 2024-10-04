@@ -6,21 +6,19 @@ const ready = readyCallbacks.add;
 const changeCallback = callbacks();
 let $originalViewPort = $();
 
-const value = (function () {
+const value = (function (...args) {
   let $current;
 
-  return function (element) {
-    if (!arguments.length) {
+  return function (element?) {
+    if (!args.length) {
       return $current;
     }
 
     const $element = $(element);
     $originalViewPort = $element;
     const isNewViewportFound = !!$element.length;
-    // @ts-expect-error smth with iife probably
     const prevViewPort = value();
     $current = isNewViewportFound ? $element : $('body');
-    // @ts-expect-error smth with iife probably
     changeCallback.fire(isNewViewportFound ? value() : $(), prevViewPort);
   };
 }());

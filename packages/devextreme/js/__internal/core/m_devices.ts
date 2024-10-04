@@ -2,6 +2,7 @@ import Config from '@js/core/config';
 import errors from '@js/core/errors';
 import { EventsStrategy } from '@js/core/events_strategy';
 import $ from '@js/core/renderer';
+import type { Callback } from '@js/core/utils/callbacks';
 import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
@@ -11,6 +12,18 @@ import { sessionStorage as SessionStorage } from '@js/core/utils/storage';
 import { isPlainObject } from '@js/core/utils/type';
 import { changeCallback, value as viewPort } from '@js/core/utils/view_port';
 import { getNavigator, getWindow, hasWindow } from '@js/core/utils/window';
+
+export interface Device {
+  android?: boolean;
+  deviceType?: 'phone' | 'tablet' | 'desktop';
+  generic?: boolean;
+  grade?: 'A' | 'B' | 'C';
+  ios?: boolean;
+  phone?: boolean;
+  platform?: 'android' | 'ios' | 'generic';
+  tablet?: boolean;
+  version?: number[];
+}
 
 const window = getWindow();
 
@@ -117,6 +130,26 @@ const UA_PARSERS_ARRAY = [
 ];
 
 class Devices {
+  _window: Window;
+
+  _realDevice: any;
+
+  _currentDevice: any;
+
+  _currentOrientation: any;
+
+  _eventsStrategy: EventsStrategy;
+
+  changed: Callback;
+
+  _forced?: boolean;
+
+  _deviceClasses?: string;
+
+  _isSimulator: any;
+
+  _currentWidth: any;
+
   /**
     * @name DevicesObject.ctor
     * @publicName ctor(options)
@@ -124,8 +157,8 @@ class Devices {
     * @param1_field1 window:Window
     * @hidden
     */
-  constructor(options) {
-    this._window = options?.window || window;
+  constructor(options?: { window?: Window }) {
+    this._window = options?.window ?? window;
 
     this._realDevice = this._getDevice();
     this._currentDevice = undefined;
@@ -139,7 +172,7 @@ class Devices {
     }
   }
 
-  current(deviceOrName) {
+  current(deviceOrName?: string | Device) {
     if (deviceOrName) {
       this._currentDevice = this._getDevice(deviceOrName);
       this._forced = true;
@@ -187,11 +220,12 @@ class Devices {
   }
 
   isRippleEmulator() {
+    // @ts-expect-error
     return !!this._window.tinyHippos;
   }
 
   _getCssClasses(device) {
-    const result = [];
+    const result: any[] = [];
     const realDevice = this._realDevice;
 
     device = device || this.current();
@@ -221,19 +255,19 @@ class Devices {
     return result;
   }
 
-  attachCssClasses(element, device) {
+  attachCssClasses(element, device?) {
     this._deviceClasses = this._getCssClasses(device).join(' ');
     $(element).addClass(this._deviceClasses);
   }
 
   detachCssClasses(element) {
-    $(element).removeClass(this._deviceClasses);
+    $(element).removeClass(this._deviceClasses!);
   }
 
   isSimulator() {
     // NOTE: error may happen due to same-origin policy
     try {
-      return this._isSimulator || hasWindow() && this._window.top !== this._window.self && this._window.top['dx-force-device'] || this.isRippleEmulator();
+      return this._isSimulator || hasWindow() && this._window.top !== this._window.self && this._window.top?.['dx-force-device'] || this.isRippleEmulator();
     } catch (e) {
       return false;
     }
@@ -243,7 +277,7 @@ class Devices {
     this._isSimulator = true;
   }
 
-  _getDevice(deviceName) {
+  _getDevice(deviceName?) {
     if (deviceName === 'genericPhone') {
       deviceName = {
         deviceType: 'phone',
@@ -271,8 +305,8 @@ class Devices {
   _getDeviceOrNameFromWindowScope() {
     let result;
 
-    if (hasWindow() && (this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'])) {
-      result = this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'];
+    if (hasWindow() && (this._window.top?.['dx-force-device-object'] || this._window.top?.['dx-force-device'])) {
+      result = this._window.top?.['dx-force-device-object'] || this._window.top?.['dx-force-device'];
     }
 
     return result;
@@ -321,6 +355,7 @@ class Devices {
   }
 
   _changeOrientation() {
+    // @ts-expect-error
     const $window = $(this._window);
     const orientation = getHeight($window) > getWidth($window) ? 'portrait' : 'landscape';
 
@@ -370,6 +405,7 @@ changeCallback.add((viewPort, prevViewport) => {
 });
 
 /// #DEBUG
+// @ts-expect-error
 devices.Devices = Devices;
 /// #ENDDEBUG
 

@@ -163,11 +163,9 @@ const TabPanel = MultiView.inherit({
 
     if (isDefined(title) && !isPlainObject(title)) {
       const $tabTextSpan = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_CLASS);
-      // @ts-expect-error
       $tabTextSpan.append(domAdapter.createTextNode(title));
 
       const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
-      // @ts-expect-error
       $tabTextSpanPseudo.append(domAdapter.createTextNode(title));
       $tabTextSpanPseudo.appendTo($tabTextSpan);
 

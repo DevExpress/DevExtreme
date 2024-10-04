@@ -229,9 +229,7 @@ const GestureEmitter = Emitter.inherit({
   _end: noop,
 
 });
-// @ts-expect-error
 GestureEmitter.initialTouchBoundary = TOUCH_BOUNDARY;
-// @ts-expect-error
 GestureEmitter.touchBoundary = function (newBoundary) {
   if (isDefined(newBoundary)) {
     TOUCH_BOUNDARY = newBoundary;

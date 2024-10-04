@@ -322,7 +322,6 @@ const ListEdit = ListBase.inherit({
     const $itemElements = this._itemElements();
 
     if (flatIndex < 0 || flatIndex >= $itemElements.length) {
-      // @ts-expect-error
       return $();
     }
 

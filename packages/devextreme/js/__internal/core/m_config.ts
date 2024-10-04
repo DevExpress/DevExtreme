@@ -64,6 +64,7 @@ const normalizeToJSONString = (optionsString) => optionsString
 
 const deprecatedFields = ['decimalSeparator', 'thousandsSeparator'];
 
+// @ts-expect-error not all code paths return value
 const configMethod = (...args) => {
   if (!args.length) {
     return config;

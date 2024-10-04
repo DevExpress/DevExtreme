@@ -563,7 +563,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const doc = domAdapter.getRootNode($(options.container).get(0));
       const needWaitAsyncTemplates = this.needWaitAsyncTemplates();
 
-      // @ts-expect-error
       if (!isAsync || $(options.container).closest(doc).length || needWaitAsyncTemplates) {
         if (change) {
           options.change = change;
@@ -998,7 +997,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: column_fixing
    */
   public getTableElements() {
-    // @ts-expect-error
     return this._tableElement || $();
   }
 
@@ -1325,7 +1323,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   private _getRowElement(rowIndex) {
     const that = this;
-    // @ts-expect-error
     let $rowElement = $();
     const $tableElements = that.getTableElements();
 
@@ -1420,7 +1417,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + `.${ROW_CLASS}, > .${ROW_CLASS}`);
     }
 
-    // @ts-expect-error
     return $();
   }
 
