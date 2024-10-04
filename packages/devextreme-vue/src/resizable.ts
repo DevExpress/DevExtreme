@@ -1,6 +1,14 @@
 import { PropType } from "vue";
 import Resizable, { Properties } from "devextreme/ui/resizable";
-import {  DisposingEvent , InitializedEvent , OptionChangedEvent , ResizeEvent , ResizeEndEvent , ResizeStartEvent ,} from "devextreme/ui/resizable";
+import { 
+ResizeHandle,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ResizeEvent,
+ResizeEndEvent,
+ResizeStartEvent,
+ } from "devextreme/ui/resizable";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -32,7 +40,7 @@ const componentConfig = {
   props: {
     area: {},
     elementAttr: Object,
-    handles: String as PropType<"bottom" | "left" | "right" | "top" | "all">,
+    handles: [Object, String] as PropType<ResizeHandle | string>,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     keepAspectRatio: Boolean,
     maxHeight: Number,

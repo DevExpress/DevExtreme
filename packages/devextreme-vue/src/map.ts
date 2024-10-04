@@ -1,6 +1,19 @@
 import { PropType } from "vue";
 import Map, { Properties } from "devextreme/ui/map";
-import {  ClickEvent , DisposingEvent , InitializedEvent , MarkerAddedEvent , MarkerRemovedEvent , OptionChangedEvent , ReadyEvent , RouteAddedEvent , RouteRemovedEvent ,} from "devextreme/ui/map";
+import { 
+ClickEvent,
+DisposingEvent,
+InitializedEvent,
+MarkerAddedEvent,
+MarkerRemovedEvent,
+OptionChangedEvent,
+ReadyEvent,
+RouteAddedEvent,
+RouteRemovedEvent,
+MapProvider,
+MapType,
+RouteMode,
+ } from "devextreme/ui/map";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -69,12 +82,12 @@ const componentConfig = {
     onReady: Function as PropType<(e: ReadyEvent) => void>,
     onRouteAdded: Function as PropType<(e: RouteAddedEvent) => void>,
     onRouteRemoved: Function as PropType<(e: RouteRemovedEvent) => void>,
-    provider: String as PropType<"bing" | "google" | "googleStatic">,
+    provider: Object as PropType<MapProvider>,
     providerConfig: Object,
     routes: Array as PropType<Array<Object>>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    type: String as PropType<"hybrid" | "roadmap" | "satellite">,
+    type: Object as PropType<MapType>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoom: Number
@@ -257,7 +270,7 @@ const DxRouteConfig = {
   props: {
     color: String,
     locations: Array as PropType<Array<Object>>,
-    mode: String as PropType<"driving" | "walking">,
+    mode: Object as PropType<RouteMode>,
     opacity: Number,
     weight: Number
   }

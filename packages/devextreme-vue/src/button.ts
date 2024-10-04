@@ -1,6 +1,16 @@
 import { PropType } from "vue";
 import Button, { Properties } from "devextreme/ui/button";
-import {  ClickEvent , ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/button";
+import { 
+ClickEvent,
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/button";
+import { 
+ButtonStyle,
+ButtonType,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -52,11 +62,11 @@ const componentConfig = {
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: Object as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: Object as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,

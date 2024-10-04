@@ -1,6 +1,17 @@
 import { PropType } from "vue";
 import ScrollView, { Properties } from "devextreme/ui/scroll_view";
-import {  DisposingEvent , InitializedEvent , OptionChangedEvent , PullDownEvent , ReachBottomEvent , ScrollEvent , UpdatedEvent ,} from "devextreme/ui/scroll_view";
+import { 
+ScrollDirection,
+ } from "devextreme/common";
+import { 
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+PullDownEvent,
+ReachBottomEvent,
+ScrollEvent,
+UpdatedEvent,
+ } from "devextreme/ui/scroll_view";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -36,7 +47,7 @@ interface DxScrollView extends AccessibleOptions {
 const componentConfig = {
   props: {
     bounceEnabled: Boolean,
-    direction: String as PropType<"both" | "horizontal" | "vertical">,
+    direction: Object as PropType<ScrollDirection>,
     disabled: Boolean,
     elementAttr: Object,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,

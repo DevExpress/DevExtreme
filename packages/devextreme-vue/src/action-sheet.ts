@@ -1,7 +1,21 @@
 export { ExplicitTypes } from "devextreme/ui/action_sheet";
 import { PropType } from "vue";
 import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
-import {  CancelClickEvent , ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent ,} from "devextreme/ui/action_sheet";
+import { 
+CancelClickEvent,
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/action_sheet";
+import { 
+ButtonStyle,
+ButtonType,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -136,10 +150,10 @@ const DxItemConfig = {
     disabled: Boolean,
     icon: String,
     onClick: Function as PropType<(e: Object) => void>,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: Object as PropType<ButtonStyle>,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">
+    type: Object as PropType<ButtonType>
   }
 };
 

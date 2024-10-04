@@ -1,6 +1,34 @@
 import { PropType } from "vue";
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
-import {  AppointmentAddedEvent , AppointmentAddingEvent , AppointmentClickEvent , AppointmentContextMenuEvent , AppointmentDblClickEvent , AppointmentDeletedEvent , AppointmentDeletingEvent , AppointmentFormOpeningEvent , AppointmentRenderedEvent , AppointmentTooltipShowingEvent , AppointmentUpdatedEvent , AppointmentUpdatingEvent , CellClickEvent , CellContextMenuEvent , ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/scheduler";
+import { 
+AllDayPanelMode,
+ViewType,
+CellAppointmentsLimit,
+AppointmentAddedEvent,
+AppointmentAddingEvent,
+AppointmentClickEvent,
+AppointmentContextMenuEvent,
+AppointmentDblClickEvent,
+AppointmentDeletedEvent,
+AppointmentDeletingEvent,
+AppointmentFormOpeningEvent,
+AppointmentRenderedEvent,
+AppointmentTooltipShowingEvent,
+AppointmentUpdatedEvent,
+AppointmentUpdatingEvent,
+CellClickEvent,
+CellContextMenuEvent,
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+RecurrenceEditMode,
+ } from "devextreme/ui/scheduler";
+import { 
+FirstDayOfWeek,
+ScrollMode,
+Orientation,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -95,7 +123,7 @@ const componentConfig = {
     accessKey: String,
     adaptivityEnabled: Boolean,
     allDayExpr: String,
-    allDayPanelMode: String as PropType<"all" | "allDay" | "hidden">,
+    allDayPanelMode: Object as PropType<AllDayPanelMode>,
     appointmentCollectorTemplate: {},
     appointmentDragging: Object,
     appointmentTemplate: {},
@@ -103,7 +131,7 @@ const componentConfig = {
     cellDuration: Number,
     crossScrollingEnabled: Boolean,
     currentDate: [Date, Number, String],
-    currentView: String as PropType<"agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek">,
+    currentView: Object as PropType<ViewType>,
     customizeDateNavigatorText: Function as PropType<(info: Object) => string>,
     dataCellTemplate: {},
     dataSource: {},
@@ -117,18 +145,7 @@ const componentConfig = {
     endDateExpr: String,
     endDateTimeZoneExpr: String,
     endDayHour: Number,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: Object as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
     groupByDate: Boolean,
     groups: Array as PropType<Array<string>>,
@@ -136,7 +153,7 @@ const componentConfig = {
     hint: String,
     indicatorUpdateInterval: Number,
     max: [Date, Number, String],
-    maxAppointmentsPerCell: [Number, String] as PropType<number | ("auto" | "unlimited")>,
+    maxAppointmentsPerCell: [Object, Number] as PropType<CellAppointmentsLimit | number>,
     min: [Date, Number, String],
     noDataText: String,
     offset: Number,
@@ -158,7 +175,7 @@ const componentConfig = {
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    recurrenceEditMode: String as PropType<"dialog" | "occurrence" | "series">,
+    recurrenceEditMode: Object as PropType<RecurrenceEditMode>,
     recurrenceExceptionExpr: String,
     recurrenceRuleExpr: String,
     remoteFiltering: Boolean,
@@ -388,7 +405,7 @@ const DxScrollingConfig = {
     "update:mode": null,
   },
   props: {
-    mode: String as PropType<"standard" | "virtual">
+    mode: Object as PropType<ScrollMode>
   }
 };
 
@@ -429,7 +446,7 @@ const DxViewConfig = {
   },
   props: {
     agendaDuration: Number,
-    allDayPanelMode: String as PropType<"all" | "allDay" | "hidden">,
+    allDayPanelMode: Object as PropType<AllDayPanelMode>,
     appointmentCollectorTemplate: {},
     appointmentTemplate: {},
     appointmentTooltipTemplate: {},
@@ -438,23 +455,12 @@ const DxViewConfig = {
     dateCellTemplate: {},
     dropDownAppointmentTemplate: {},
     endDayHour: Number,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: Object as PropType<FirstDayOfWeek>,
     groupByDate: Boolean,
-    groupOrientation: String as PropType<"horizontal" | "vertical">,
+    groupOrientation: Object as PropType<Orientation>,
     groups: Array as PropType<Array<string>>,
     intervalCount: Number,
-    maxAppointmentsPerCell: [Number, String] as PropType<number | ("auto" | "unlimited")>,
+    maxAppointmentsPerCell: [Object, Number] as PropType<CellAppointmentsLimit | number>,
     name: String,
     offset: Number,
     resourceCellTemplate: {},
@@ -462,7 +468,7 @@ const DxViewConfig = {
     startDate: [Date, Number, String],
     startDayHour: Number,
     timeCellTemplate: {},
-    type: String as PropType<"agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek">
+    type: Object as PropType<ViewType>
   }
 };
 

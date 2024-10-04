@@ -1,7 +1,23 @@
 export { ExplicitTypes } from "devextreme/ui/splitter";
 import { PropType } from "vue";
 import Splitter, { Properties } from "devextreme/ui/splitter";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemCollapsedEvent , ItemContextMenuEvent , ItemExpandedEvent , ItemRenderedEvent , OptionChangedEvent , ResizeEvent , ResizeEndEvent , ResizeStartEvent ,} from "devextreme/ui/splitter";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemCollapsedEvent,
+ItemContextMenuEvent,
+ItemExpandedEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+ResizeEvent,
+ResizeEndEvent,
+ResizeStartEvent,
+ } from "devextreme/ui/splitter";
+import { 
+Orientation,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -60,7 +76,7 @@ const componentConfig = {
     onResize: Function as PropType<(e: ResizeEvent) => void>,
     onResizeEnd: Function as PropType<(e: ResizeEndEvent) => void>,
     onResizeStart: Function as PropType<(e: ResizeStartEvent) => void>,
-    orientation: String as PropType<"horizontal" | "vertical">,
+    orientation: Object as PropType<Orientation>,
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,

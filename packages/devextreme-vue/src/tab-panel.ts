@@ -1,7 +1,26 @@
 export { ExplicitTypes } from "devextreme/ui/tab_panel";
 import { PropType } from "vue";
 import TabPanel, { Properties } from "devextreme/ui/tab_panel";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent , SelectionChangedEvent , SelectionChangingEvent , TitleClickEvent , TitleHoldEvent , TitleRenderedEvent ,} from "devextreme/ui/tab_panel";
+import { 
+TabsIconPosition,
+TabsStyle,
+Position,
+ } from "devextreme/common";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+TitleClickEvent,
+TitleHoldEvent,
+TitleRenderedEvent,
+ } from "devextreme/ui/tab_panel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -70,7 +89,7 @@ const componentConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
+    iconPosition: Object as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
@@ -97,10 +116,10 @@ const componentConfig = {
     selectedIndex: Number,
     selectedItem: {},
     showNavButtons: Boolean,
-    stylingMode: String as PropType<"primary" | "secondary">,
+    stylingMode: Object as PropType<TabsStyle>,
     swipeEnabled: Boolean,
     tabIndex: Number,
-    tabsPosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    tabsPosition: Object as PropType<Position>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },

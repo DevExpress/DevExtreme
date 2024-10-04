@@ -1,16 +1,45 @@
 import { PropType } from "vue";
 import NumberBox, { Properties } from "devextreme/ui/number_box";
-import {  ChangeEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , KeyDownEvent , KeyUpEvent , OptionChangedEvent , PasteEvent , ValueChangedEvent ,} from "devextreme/ui/number_box";
+import { 
+NumberBoxPredefinedButton,
+NumberBoxType,
+ChangeEvent,
+ContentReadyEvent,
+CopyEvent,
+CutEvent,
+DisposingEvent,
+EnterKeyEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+InputEvent,
+KeyDownEvent,
+KeyUpEvent,
+OptionChangedEvent,
+PasteEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/number_box";
+import { 
+Format,
+LabelMode,
+EditorStyle,
+ValidationMessageMode,
+Position,
+ValidationStatus,
+TextEditorButtonLocation,
+ButtonStyle,
+ButtonType,
+ } from "devextreme/common";
+import { 
+ClickEvent,
+ContentReadyEvent as ButtonContentReadyEvent,
+DisposingEvent as ButtonDisposingEvent,
+InitializedEvent as ButtonInitializedEvent,
+OptionChangedEvent as ButtonOptionChangedEvent,
+ } from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -77,11 +106,11 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<Array<"clear" | "spins"> | Array<Object>>,
+    buttons: Array as PropType<Array<NumberBoxPredefinedButton> | Array<Object>>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
@@ -90,10 +119,10 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: Object as PropType<LabelMode>,
     max: Number,
     min: Number,
-    mode: String as PropType<"number" | "text" | "tel">,
+    mode: Object as PropType<NumberBoxType>,
     name: String,
     onChange: Function as PropType<(e: ChangeEvent) => void>,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
@@ -116,15 +145,15 @@ const componentConfig = {
     showClearButton: Boolean,
     showSpinButtons: Boolean,
     step: Number,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: Object as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useLargeSpinButtons: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: Number,
     valueChangeEvent: String,
     visible: Boolean,
@@ -218,7 +247,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String as PropType<"after" | "before">,
+    location: Object as PropType<TextEditorButtonLocation>,
     name: String,
     options: Object
   }
@@ -250,7 +279,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: [Object, String] as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -302,17 +331,17 @@ const DxOptionsConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function as PropType<(e: OptionsClickEvent) => void>,
-    onContentReady: Function as PropType<(e: OptionsContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: OptionsDisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: OptionsInitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionsOptionChangedEvent) => void>,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ButtonContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: ButtonDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: Object as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: Object as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,

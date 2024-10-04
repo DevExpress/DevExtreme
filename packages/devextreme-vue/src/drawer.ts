@@ -1,6 +1,13 @@
 import { PropType } from "vue";
 import Drawer, { Properties } from "devextreme/ui/drawer";
-import {  DisposingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/drawer";
+import { 
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+OpenedStateMode,
+PanelLocation,
+RevealMode,
+ } from "devextreme/ui/drawer";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -51,9 +58,9 @@ const componentConfig = {
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     opened: Boolean,
-    openedStateMode: String as PropType<"overlap" | "shrink" | "push">,
-    position: String as PropType<"left" | "right" | "top" | "bottom" | "before" | "after">,
-    revealMode: String as PropType<"slide" | "expand">,
+    openedStateMode: Object as PropType<OpenedStateMode>,
+    position: Object as PropType<PanelLocation>,
+    revealMode: Object as PropType<RevealMode>,
     rtlEnabled: Boolean,
     shading: Boolean,
     template: {},

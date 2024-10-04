@@ -1,6 +1,11 @@
 import { PropType } from "vue";
 import Chat, { Properties } from "devextreme/ui/chat";
-import {  DisposingEvent , InitializedEvent , MessageSendEvent , OptionChangedEvent ,} from "devextreme/ui/chat";
+import { 
+DisposingEvent,
+InitializedEvent,
+MessageSendEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/chat";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

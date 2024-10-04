@@ -1,6 +1,18 @@
 import { PropType } from "vue";
 import ButtonGroup, { Properties } from "devextreme/ui/button_group";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , OptionChangedEvent , SelectionChangedEvent ,} from "devextreme/ui/button_group";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+OptionChangedEvent,
+SelectionChangedEvent,
+ } from "devextreme/ui/button_group";
+import { 
+SingleMultipleOrNone,
+ButtonStyle,
+ButtonType,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -59,8 +71,8 @@ const componentConfig = {
     rtlEnabled: Boolean,
     selectedItemKeys: Array as PropType<Array<any>>,
     selectedItems: Array as PropType<Array<any>>,
-    selectionMode: String as PropType<"single" | "multiple" | "none">,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    selectionMode: Object as PropType<SingleMultipleOrNone>,
+    stylingMode: Object as PropType<ButtonStyle>,
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -133,7 +145,7 @@ const DxItemConfig = {
     icon: String,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: Object as PropType<ButtonType>,
     visible: Boolean
   }
 };

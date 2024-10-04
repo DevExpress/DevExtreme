@@ -1,6 +1,17 @@
 import { PropType } from "vue";
 import Switch, { Properties } from "devextreme/ui/switch";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/switch";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/switch";
+import { 
+ValidationMessageMode,
+Position,
+ValidationStatus,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -65,9 +76,9 @@ const componentConfig = {
     tabIndex: Number,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: Boolean,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

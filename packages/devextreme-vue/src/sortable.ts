@@ -1,6 +1,22 @@
 import { PropType } from "vue";
 import Sortable, { Properties } from "devextreme/ui/sortable";
-import {  AddEvent , DisposingEvent , DragChangeEvent , DragEndEvent , DragMoveEvent , DragStartEvent , InitializedEvent , OptionChangedEvent , RemoveEvent , ReorderEvent ,} from "devextreme/ui/sortable";
+import { 
+DragDirection,
+DragHighlight,
+Orientation,
+ } from "devextreme/common";
+import { 
+AddEvent,
+DisposingEvent,
+DragChangeEvent,
+DragEndEvent,
+DragMoveEvent,
+DragStartEvent,
+InitializedEvent,
+OptionChangedEvent,
+RemoveEvent,
+ReorderEvent,
+ } from "devextreme/ui/sortable";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -52,15 +68,15 @@ const componentConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: String as PropType<"both" | "horizontal" | "vertical">,
+    dragDirection: Object as PropType<DragDirection>,
     dragTemplate: {},
-    dropFeedbackMode: String as PropType<"push" | "indicate">,
+    dropFeedbackMode: Object as PropType<DragHighlight>,
     elementAttr: Object,
     filter: String,
     group: String,
     handle: String,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    itemOrientation: String as PropType<"horizontal" | "vertical">,
+    itemOrientation: Object as PropType<Orientation>,
     moveItemOnDrop: Boolean,
     onAdd: Function as PropType<(e: AddEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,

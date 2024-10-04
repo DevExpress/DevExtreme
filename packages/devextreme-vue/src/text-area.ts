@@ -1,6 +1,29 @@
 import { PropType } from "vue";
 import TextArea, { Properties } from "devextreme/ui/text_area";
-import {  ChangeEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , KeyDownEvent , KeyUpEvent , OptionChangedEvent , PasteEvent , ValueChangedEvent ,} from "devextreme/ui/text_area";
+import { 
+LabelMode,
+EditorStyle,
+ValidationMessageMode,
+Position,
+ValidationStatus,
+ } from "devextreme/common";
+import { 
+ChangeEvent,
+ContentReadyEvent,
+CopyEvent,
+CutEvent,
+DisposingEvent,
+EnterKeyEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+InputEvent,
+KeyDownEvent,
+KeyUpEvent,
+OptionChangedEvent,
+PasteEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/text_area";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -75,7 +98,7 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: Object as PropType<LabelMode>,
     maxHeight: [Number, String],
     maxLength: [Number, String],
     minHeight: [Number, String],
@@ -99,14 +122,14 @@ const componentConfig = {
     readOnly: Boolean,
     rtlEnabled: Boolean,
     spellcheck: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: Object as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: String,
     valueChangeEvent: String,
     visible: Boolean,

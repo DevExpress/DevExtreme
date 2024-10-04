@@ -1,25 +1,52 @@
 import { PropType } from "vue";
 import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
-import {  ContentReadyEvent , DisposingEvent , FocusInEvent , FocusOutEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/html_editor";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+MarkupType,
+HtmlEditorImageUploadMode,
+HtmlEditorImageUploadTab,
+HtmlEditorPredefinedContextMenuItem,
+HtmlEditorPredefinedToolbarItem,
+ } from "devextreme/ui/html_editor";
+import { 
+EditorStyle,
+ValidationMessageMode,
+Position,
+ValidationStatus,
+ToolbarItemLocation,
+ToolbarItemComponent,
+ } from "devextreme/common";
+import { 
+BeforeSendEvent,
+ContentReadyEvent as FileUploaderContentReadyEvent,
+DisposingEvent as FileUploaderDisposingEvent,
+DropZoneEnterEvent,
+DropZoneLeaveEvent,
+FilesUploadedEvent,
+InitializedEvent as FileUploaderInitializedEvent,
+OptionChangedEvent as FileUploaderOptionChangedEvent,
+ProgressEvent,
+UploadAbortedEvent,
+UploadedEvent,
+UploadErrorEvent,
+UploadStartedEvent,
+ValueChangedEvent as FileUploaderValueChangedEvent,
+UploadHttpMethod,
+FileUploadMode,
+ } from "devextreme/ui/file_uploader";
+import { 
+LocateInMenuMode,
+ShowTextMode,
+ } from "devextreme/ui/toolbar";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- BeforeSendEvent  as FileUploaderOptionsBeforeSendEvent,
- ContentReadyEvent  as FileUploaderOptionsContentReadyEvent,
- DisposingEvent  as FileUploaderOptionsDisposingEvent,
- DropZoneEnterEvent  as FileUploaderOptionsDropZoneEnterEvent,
- DropZoneLeaveEvent  as FileUploaderOptionsDropZoneLeaveEvent,
- FilesUploadedEvent  as FileUploaderOptionsFilesUploadedEvent,
- InitializedEvent  as FileUploaderOptionsInitializedEvent,
- OptionChangedEvent  as FileUploaderOptionsOptionChangedEvent,
- ProgressEvent  as FileUploaderOptionsProgressEvent,
- UploadAbortedEvent  as FileUploaderOptionsUploadAbortedEvent,
- UploadedEvent  as FileUploaderOptionsUploadedEvent,
- UploadErrorEvent  as FileUploaderOptionsUploadErrorEvent,
- UploadStartedEvent  as FileUploaderOptionsUploadStartedEvent,
- ValueChangedEvent  as FileUploaderOptionsValueChangedEvent,
-} from "devextreme/ui/file_uploader";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -97,18 +124,18 @@ const componentConfig = {
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: Object as PropType<EditorStyle>,
     tabIndex: Number,
     tableContextMenu: Object,
     tableResizing: Object,
     toolbar: Object,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: {},
-    valueType: String as PropType<"html" | "markdown">,
+    valueType: Object as PropType<MarkupType>,
     variables: Object,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -282,20 +309,20 @@ const DxFileUploaderOptionsConfig = {
     minFileSize: Number,
     multiple: Boolean,
     name: String,
-    onBeforeSend: Function as PropType<(e: FileUploaderOptionsBeforeSendEvent) => void>,
-    onContentReady: Function as PropType<(e: FileUploaderOptionsContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: FileUploaderOptionsDisposingEvent) => void>,
-    onDropZoneEnter: Function as PropType<(e: FileUploaderOptionsDropZoneEnterEvent) => void>,
-    onDropZoneLeave: Function as PropType<(e: FileUploaderOptionsDropZoneLeaveEvent) => void>,
-    onFilesUploaded: Function as PropType<(e: FileUploaderOptionsFilesUploadedEvent) => void>,
-    onInitialized: Function as PropType<(e: FileUploaderOptionsInitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: FileUploaderOptionsOptionChangedEvent) => void>,
-    onProgress: Function as PropType<(e: FileUploaderOptionsProgressEvent) => void>,
-    onUploadAborted: Function as PropType<(e: FileUploaderOptionsUploadAbortedEvent) => void>,
-    onUploaded: Function as PropType<(e: FileUploaderOptionsUploadedEvent) => void>,
-    onUploadError: Function as PropType<(e: FileUploaderOptionsUploadErrorEvent) => void>,
-    onUploadStarted: Function as PropType<(e: FileUploaderOptionsUploadStartedEvent) => void>,
-    onValueChanged: Function as PropType<(e: FileUploaderOptionsValueChangedEvent) => void>,
+    onBeforeSend: Function as PropType<(e: BeforeSendEvent) => void>,
+    onContentReady: Function as PropType<(e: FileUploaderContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: FileUploaderDisposingEvent) => void>,
+    onDropZoneEnter: Function as PropType<(e: DropZoneEnterEvent) => void>,
+    onDropZoneLeave: Function as PropType<(e: DropZoneLeaveEvent) => void>,
+    onFilesUploaded: Function as PropType<(e: FilesUploadedEvent) => void>,
+    onInitialized: Function as PropType<(e: FileUploaderInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: FileUploaderOptionChangedEvent) => void>,
+    onProgress: Function as PropType<(e: ProgressEvent) => void>,
+    onUploadAborted: Function as PropType<(e: UploadAbortedEvent) => void>,
+    onUploaded: Function as PropType<(e: UploadedEvent) => void>,
+    onUploadError: Function as PropType<(e: UploadErrorEvent) => void>,
+    onUploadStarted: Function as PropType<(e: UploadStartedEvent) => void>,
+    onValueChanged: Function as PropType<(e: FileUploaderValueChangedEvent) => void>,
     progress: Number,
     readOnly: Boolean,
     readyToUploadMessage: String,
@@ -311,12 +338,12 @@ const DxFileUploaderOptionsConfig = {
     uploadFailedMessage: String,
     uploadFile: Function as PropType<(file: any, progressCallback: () => void) => any>,
     uploadHeaders: {},
-    uploadMethod: String as PropType<"POST" | "PUT">,
-    uploadMode: String as PropType<"instantly" | "useButtons" | "useForm">,
+    uploadMethod: Object as PropType<UploadHttpMethod>,
+    uploadMode: Object as PropType<FileUploadMode>,
     uploadUrl: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -341,8 +368,8 @@ const DxImageUploadConfig = {
   },
   props: {
     fileUploaderOptions: Object,
-    fileUploadMode: String as PropType<"base64" | "server" | "both">,
-    tabs: Array as PropType<Array<Object> | Array<"url" | "file">>,
+    fileUploadMode: Object as PropType<HtmlEditorImageUploadMode>,
+    tabs: Array as PropType<Array<Object> | Array<HtmlEditorImageUploadTab>>,
     uploadDirectory: String,
     uploadUrl: String
   }
@@ -391,23 +418,23 @@ const DxItemConfig = {
     closeMenuOnClick: Boolean,
     cssClass: String,
     disabled: Boolean,
-    formatName: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
+    formatName: [Object, String] as PropType<HtmlEditorPredefinedToolbarItem | string>,
     formatValues: Array as PropType<Array<Boolean> | Array<number> | Array<string>>,
     html: String,
     icon: String,
-    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    items: Array as PropType<Array<Object> | Array<HtmlEditorPredefinedContextMenuItem>>,
+    locateInMenu: Object as PropType<LocateInMenuMode>,
+    location: Object as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties" | "size" | "header" | "separator">,
+    name: [Object, String] as PropType<HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | string>,
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String as PropType<"always" | "inMenu">,
+    showText: Object as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: Object as PropType<ToolbarItemComponent>
   }
 };
 
@@ -478,7 +505,7 @@ const DxTabConfig = {
     "update:name": null,
   },
   props: {
-    name: String as PropType<"url" | "file">
+    name: Object as PropType<HtmlEditorImageUploadTab>
   }
 };
 
@@ -498,7 +525,7 @@ const DxTableContextMenuConfig = {
   },
   props: {
     enabled: Boolean,
-    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>
+    items: Array as PropType<Array<Object> | Array<HtmlEditorPredefinedContextMenuItem>>
   }
 };
 
@@ -533,8 +560,8 @@ const DxTableContextMenuItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>,
-    name: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">,
+    items: Array as PropType<Array<Object> | Array<HtmlEditorPredefinedContextMenuItem>>,
+    name: Object as PropType<HtmlEditorPredefinedContextMenuItem>,
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -581,7 +608,7 @@ const DxToolbarConfig = {
   },
   props: {
     container: {},
-    items: Array as PropType<Array<Object> | Array<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">>,
+    items: Array as PropType<Array<Object> | Array<HtmlEditorPredefinedToolbarItem>>,
     multiline: Boolean
   }
 };
@@ -621,19 +648,19 @@ const DxToolbarItemConfig = {
     acceptedValues: Array as PropType<Array<Boolean> | Array<number> | Array<string>>,
     cssClass: String,
     disabled: Boolean,
-    formatName: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
+    formatName: [Object, String] as PropType<HtmlEditorPredefinedToolbarItem | string>,
     formatValues: Array as PropType<Array<Boolean> | Array<number> | Array<string>>,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: Object as PropType<LocateInMenuMode>,
+    location: Object as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
+    name: [Object, String] as PropType<HtmlEditorPredefinedToolbarItem | string>,
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: Object as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: Object as PropType<ToolbarItemComponent>
   }
 };
 

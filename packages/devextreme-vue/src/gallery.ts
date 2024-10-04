@@ -1,7 +1,17 @@
 export { ExplicitTypes } from "devextreme/ui/gallery";
 import { PropType } from "vue";
 import Gallery, { Properties } from "devextreme/ui/gallery";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , ItemClickEvent , ItemContextMenuEvent , ItemHoldEvent , ItemRenderedEvent , OptionChangedEvent , SelectionChangedEvent ,} from "devextreme/ui/gallery";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+SelectionChangedEvent,
+ } from "devextreme/ui/gallery";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

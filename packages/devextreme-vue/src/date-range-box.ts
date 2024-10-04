@@ -1,22 +1,80 @@
 import { PropType } from "vue";
 import DateRangeBox, { Properties } from "devextreme/ui/date_range_box";
-import {  ChangeEvent , ClosedEvent , ContentReadyEvent , CopyEvent , CutEvent , DisposingEvent , EnterKeyEvent , FocusInEvent , FocusOutEvent , InitializedEvent , InputEvent , KeyDownEvent , KeyUpEvent , OpenedEvent , OptionChangedEvent , PasteEvent , ValueChangedEvent ,} from "devextreme/ui/date_range_box";
+import { 
+ApplyValueMode,
+Format,
+LabelMode,
+EditorStyle,
+ValidationMessageMode,
+Mode,
+Position,
+ValidationStatus,
+HorizontalAlignment,
+VerticalAlignment,
+TextEditorButtonLocation,
+FirstDayOfWeek,
+PositionAlignment,
+Direction,
+ButtonStyle,
+ButtonType,
+ToolbarItemLocation,
+ToolbarItemComponent,
+ } from "devextreme/common";
+import { 
+DropDownPredefinedButton,
+ } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
+import { 
+ChangeEvent,
+ClosedEvent,
+ContentReadyEvent,
+CopyEvent,
+CutEvent,
+DisposingEvent,
+EnterKeyEvent,
+FocusInEvent,
+FocusOutEvent,
+InitializedEvent,
+InputEvent,
+KeyDownEvent,
+KeyUpEvent,
+OpenedEvent,
+OptionChangedEvent,
+PasteEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/date_range_box";
+import { 
+CalendarZoomLevel,
+DisposingEvent as CalendarDisposingEvent,
+InitializedEvent as CalendarInitializedEvent,
+OptionChangedEvent as CalendarOptionChangedEvent,
+ValueChangedEvent as CalendarValueChangedEvent,
+CalendarSelectionMode,
+WeekNumberRule,
+ } from "devextreme/ui/calendar";
+import { 
+CollisionResolution,
+CollisionResolutionCombination,
+ } from "devextreme/animation/position";
+import { 
+AnimationType,
+ } from "devextreme/animation/fx";
+import { 
+ClickEvent,
+ContentReadyEvent as ButtonContentReadyEvent,
+DisposingEvent as ButtonDisposingEvent,
+InitializedEvent as ButtonInitializedEvent,
+OptionChangedEvent as ButtonOptionChangedEvent,
+ } from "devextreme/ui/button";
+import { 
+LocateInMenuMode,
+ShowTextMode,
+ } from "devextreme/ui/toolbar";
+import { 
+ToolbarLocation,
+ } from "devextreme/ui/popup";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- DisposingEvent  as CalendarOptionsDisposingEvent,
- InitializedEvent  as CalendarOptionsInitializedEvent,
- OptionChangedEvent  as CalendarOptionsOptionChangedEvent,
- ValueChangedEvent  as CalendarOptionsValueChangedEvent,
-} from "devextreme/ui/calendar";
-import { 
- ClickEvent  as OptionsClickEvent,
- ContentReadyEvent  as OptionsContentReadyEvent,
- DisposingEvent  as OptionsDisposingEvent,
- InitializedEvent  as OptionsInitializedEvent,
- OptionChangedEvent  as OptionsOptionChangedEvent,
-} from "devextreme/ui/button";
 
 type AccessibleOptions = Pick<Properties,
   "acceptCustomValue" |
@@ -110,15 +168,15 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: String as PropType<"instantly" | "useButtons">,
-    buttons: Array as PropType<Array<"clear" | "dropDown"> | Array<Object>>,
+    applyValueMode: Object as PropType<ApplyValueMode>,
+    buttons: Array as PropType<Array<DropDownPredefinedButton> | Array<Object>>,
     calendarOptions: Object,
     cancelButtonText: String,
     dateSerializationFormat: String,
     deferRendering: Boolean,
     disabled: Boolean,
     disableOutOfRangeSelection: Boolean,
-    displayFormat: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    displayFormat: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | Object | string>,
     dropDownButtonTemplate: {},
     dropDownOptions: Object,
     elementAttr: Object,
@@ -137,7 +195,7 @@ const componentConfig = {
     invalidStartDateMessage: String,
     isDirty: Boolean,
     isValid: Boolean,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: Object as PropType<LabelMode>,
     max: [Date, Number, String],
     min: [Date, Number, String],
     multiView: Boolean,
@@ -172,15 +230,15 @@ const componentConfig = {
     startDateOutOfRangeMessage: String,
     startDatePlaceholder: String,
     startDateText: String,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: Object as PropType<EditorStyle>,
     tabIndex: Number,
     todayButtonText: String,
     useMaskBehavior: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Mode | Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: Array as PropType<Array<Date> | Array<number> | Array<string>>,
     valueChangeEvent: String,
     visible: Boolean,
@@ -323,8 +381,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -362,7 +420,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String as PropType<"after" | "before">,
+    location: Object as PropType<TextEditorButtonLocation>,
     name: String,
     options: Object
   }
@@ -433,18 +491,7 @@ const DxCalendarOptionsConfig = {
     disabled: Boolean,
     disabledDates: [Array, Function] as PropType<Array<Date> | ((data: Object) => Boolean)>,
     elementAttr: Object,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: Object as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
@@ -452,31 +499,31 @@ const DxCalendarOptionsConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     max: [Date, Number, String],
-    maxZoomLevel: String as PropType<"century" | "decade" | "month" | "year">,
+    maxZoomLevel: Object as PropType<CalendarZoomLevel>,
     min: [Date, Number, String],
-    minZoomLevel: String as PropType<"century" | "decade" | "month" | "year">,
+    minZoomLevel: Object as PropType<CalendarZoomLevel>,
     name: String,
-    onDisposing: Function as PropType<(e: CalendarOptionsDisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: CalendarOptionsInitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: CalendarOptionsOptionChangedEvent) => void>,
-    onValueChanged: Function as PropType<(e: CalendarOptionsValueChangedEvent) => void>,
+    onDisposing: Function as PropType<(e: CalendarDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: CalendarInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: CalendarOptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: CalendarValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    selectionMode: String as PropType<"single" | "multiple" | "range">,
+    selectionMode: Object as PropType<CalendarSelectionMode>,
     selectWeekOnClick: Boolean,
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: [Array, Date, Number, String] as PropType<(Array<Date> | Array<number> | Array<string>) | Date | number | string>,
     visible: Boolean,
-    weekNumberRule: String as PropType<"auto" | "firstDay" | "fullWeek" | "firstFourDays">,
+    weekNumberRule: Object as PropType<WeekNumberRule>,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    zoomLevel: String as PropType<"century" | "decade" | "month" | "year">
+    zoomLevel: Object as PropType<CalendarZoomLevel>
   }
 };
 
@@ -494,8 +541,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
-    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
+    x: Object as PropType<CollisionResolution>,
+    y: Object as PropType<CollisionResolution>
   }
 };
 
@@ -521,7 +568,7 @@ const DxDisplayFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: [Object, String] as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -623,7 +670,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
+    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -698,14 +745,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -727,8 +774,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -798,17 +845,17 @@ const DxOptionsConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function as PropType<(e: OptionsClickEvent) => void>,
-    onContentReady: Function as PropType<(e: OptionsContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: OptionsDisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: OptionsInitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionsOptionChangedEvent) => void>,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ButtonContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: ButtonDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: Object as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: Object as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
@@ -835,11 +882,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    at: Object as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
-    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    collision: Object as PropType<CollisionResolutionCombination | Object>,
+    my: Object as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -869,14 +916,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -933,16 +980,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: Object as PropType<LocateInMenuMode>,
+    location: Object as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: Object as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: String as PropType<"bottom" | "top">,
+    toolbar: Object as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: Object as PropType<ToolbarItemComponent>
   }
 };
 

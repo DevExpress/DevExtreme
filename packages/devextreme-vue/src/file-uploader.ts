@@ -1,6 +1,26 @@
 import { PropType } from "vue";
 import FileUploader, { Properties } from "devextreme/ui/file_uploader";
-import {  BeforeSendEvent , ContentReadyEvent , DisposingEvent , DropZoneEnterEvent , DropZoneLeaveEvent , FilesUploadedEvent , InitializedEvent , OptionChangedEvent , ProgressEvent , UploadAbortedEvent , UploadedEvent , UploadErrorEvent , UploadStartedEvent , ValueChangedEvent ,} from "devextreme/ui/file_uploader";
+import { 
+BeforeSendEvent,
+ContentReadyEvent,
+DisposingEvent,
+DropZoneEnterEvent,
+DropZoneLeaveEvent,
+FilesUploadedEvent,
+InitializedEvent,
+OptionChangedEvent,
+ProgressEvent,
+UploadAbortedEvent,
+UploadedEvent,
+UploadErrorEvent,
+UploadStartedEvent,
+ValueChangedEvent,
+UploadHttpMethod,
+FileUploadMode,
+ } from "devextreme/ui/file_uploader";
+import { 
+ValidationStatus,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -132,12 +152,12 @@ const componentConfig = {
     uploadFailedMessage: String,
     uploadFile: Function as PropType<(file: any, progressCallback: () => void) => any>,
     uploadHeaders: {},
-    uploadMethod: String as PropType<"POST" | "PUT">,
-    uploadMode: String as PropType<"instantly" | "useButtons" | "useForm">,
+    uploadMethod: Object as PropType<UploadHttpMethod>,
+    uploadMode: Object as PropType<FileUploadMode>,
     uploadUrl: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

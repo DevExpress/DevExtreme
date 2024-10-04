@@ -1,6 +1,20 @@
 import { PropType } from "vue";
 import Calendar, { Properties } from "devextreme/ui/calendar";
-import {  DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/calendar";
+import { 
+FirstDayOfWeek,
+ValidationMessageMode,
+Position,
+ValidationStatus,
+ } from "devextreme/common";
+import { 
+CalendarZoomLevel,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+CalendarSelectionMode,
+WeekNumberRule,
+ } from "devextreme/ui/calendar";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -60,18 +74,7 @@ const componentConfig = {
     disabled: Boolean,
     disabledDates: [Array, Function] as PropType<Array<Date> | ((data: Object) => Boolean)>,
     elementAttr: Object,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: Object as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
@@ -79,9 +82,9 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     max: [Date, Number, String],
-    maxZoomLevel: String as PropType<"century" | "decade" | "month" | "year">,
+    maxZoomLevel: Object as PropType<CalendarZoomLevel>,
     min: [Date, Number, String],
-    minZoomLevel: String as PropType<"century" | "decade" | "month" | "year">,
+    minZoomLevel: Object as PropType<CalendarZoomLevel>,
     name: String,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
@@ -89,21 +92,21 @@ const componentConfig = {
     onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    selectionMode: String as PropType<"single" | "multiple" | "range">,
+    selectionMode: Object as PropType<CalendarSelectionMode>,
     selectWeekOnClick: Boolean,
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: [Array, Date, Number, String] as PropType<(Array<Date> | Array<number> | Array<string>) | Date | number | string>,
     visible: Boolean,
-    weekNumberRule: String as PropType<"auto" | "firstDay" | "fullWeek" | "firstFourDays">,
+    weekNumberRule: Object as PropType<WeekNumberRule>,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    zoomLevel: String as PropType<"century" | "decade" | "month" | "year">
+    zoomLevel: Object as PropType<CalendarZoomLevel>
   },
   emits: {
     "update:isActive": null,

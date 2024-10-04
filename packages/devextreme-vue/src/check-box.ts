@@ -1,6 +1,17 @@
 import { PropType } from "vue";
 import CheckBox, { Properties } from "devextreme/ui/check_box";
-import {  ContentReadyEvent , DisposingEvent , InitializedEvent , OptionChangedEvent , ValueChangedEvent ,} from "devextreme/ui/check_box";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/check_box";
+import { 
+ValidationMessageMode,
+Position,
+ValidationStatus,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -67,9 +78,9 @@ const componentConfig = {
     text: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: {},
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

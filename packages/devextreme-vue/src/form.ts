@@ -1,31 +1,54 @@
 import { PropType } from "vue";
 import Form, { Properties } from "devextreme/ui/form";
-import {  ContentReadyEvent , DisposingEvent , EditorEnterKeyEvent , FieldDataChangedEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/form";
+import { 
+Mode,
+ValidationRuleType,
+HorizontalAlignment,
+VerticalAlignment,
+ButtonStyle,
+ButtonType,
+ComparisonOperator,
+TabsIconPosition,
+TabsStyle,
+Position,
+ } from "devextreme/common";
+import { 
+LabelLocation,
+FormLabelMode,
+ContentReadyEvent,
+DisposingEvent,
+EditorEnterKeyEvent,
+FieldDataChangedEvent,
+InitializedEvent,
+OptionChangedEvent,
+FormItemType,
+FormItemComponent,
+ } from "devextreme/ui/form";
+import { 
+ClickEvent,
+ContentReadyEvent as ButtonContentReadyEvent,
+DisposingEvent as ButtonDisposingEvent,
+InitializedEvent as ButtonInitializedEvent,
+OptionChangedEvent as ButtonOptionChangedEvent,
+ } from "devextreme/ui/button";
+import { 
+ContentReadyEvent as TabPanelContentReadyEvent,
+DisposingEvent as TabPanelDisposingEvent,
+InitializedEvent as TabPanelInitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemHoldEvent,
+ItemRenderedEvent,
+OptionChangedEvent as TabPanelOptionChangedEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+TitleClickEvent,
+TitleHoldEvent,
+TitleRenderedEvent,
+ } from "devextreme/ui/tab_panel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
-import { 
- ClickEvent  as ButtonOptionsClickEvent,
- ContentReadyEvent  as ButtonOptionsContentReadyEvent,
- DisposingEvent  as ButtonOptionsDisposingEvent,
- InitializedEvent  as ButtonOptionsInitializedEvent,
- OptionChangedEvent  as ButtonOptionsOptionChangedEvent,
-} from "devextreme/ui/button";
-import { 
- ContentReadyEvent  as TabPanelOptionsContentReadyEvent,
- DisposingEvent  as TabPanelOptionsDisposingEvent,
- InitializedEvent  as TabPanelOptionsInitializedEvent,
- ItemClickEvent  as TabPanelOptionsItemClickEvent,
- ItemContextMenuEvent  as TabPanelOptionsItemContextMenuEvent,
- ItemHoldEvent  as TabPanelOptionsItemHoldEvent,
- ItemRenderedEvent  as TabPanelOptionsItemRenderedEvent,
- OptionChangedEvent  as TabPanelOptionsOptionChangedEvent,
- SelectionChangedEvent  as TabPanelOptionsSelectionChangedEvent,
- SelectionChangingEvent  as TabPanelOptionsSelectionChangingEvent,
- TitleClickEvent  as TabPanelOptionsTitleClickEvent,
- TitleHoldEvent  as TabPanelOptionsTitleHoldEvent,
- TitleRenderedEvent  as TabPanelOptionsTitleRenderedEvent,
-} from "devextreme/ui/tab_panel";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -80,7 +103,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    colCount: [Number, String] as PropType<number | "auto">,
+    colCount: [Object, Number] as PropType<Mode | number>,
     colCountByScreen: Object,
     customizeItem: Function as PropType<(item: Object | Object | Object | Object | Object) => void>,
     disabled: Boolean,
@@ -92,8 +115,8 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
-    labelLocation: String as PropType<"left" | "right" | "top">,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelLocation: Object as PropType<LabelLocation>,
+    labelMode: Object as PropType<FormLabelMode>,
     minColWidth: Number,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -200,7 +223,7 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: Object as PropType<ValidationRuleType>,
     validationCallback: Function as PropType<(options: Object) => any>
   }
 };
@@ -233,10 +256,10 @@ const DxButtonItemConfig = {
     buttonOptions: Object,
     colSpan: Number,
     cssClass: String,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    horizontalAlignment: Object as PropType<HorizontalAlignment>,
+    itemType: Object as PropType<FormItemType>,
     name: String,
-    verticalAlignment: String as PropType<"bottom" | "center" | "top">,
+    verticalAlignment: Object as PropType<VerticalAlignment>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -296,17 +319,17 @@ const DxButtonOptionsConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function as PropType<(e: ButtonOptionsClickEvent) => void>,
-    onContentReady: Function as PropType<(e: ButtonOptionsContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: ButtonOptionsDisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: ButtonOptionsInitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: ButtonOptionsOptionChangedEvent) => void>,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ButtonContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: ButtonDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: Object as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: Object as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
@@ -355,10 +378,10 @@ const DxCompareRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
+    comparisonType: Object as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -386,7 +409,7 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: Object as PropType<ValidationRuleType>,
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
@@ -412,7 +435,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -440,7 +463,7 @@ const DxEmptyItemConfig = {
   props: {
     colSpan: Number,
     cssClass: String,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: Object as PropType<FormItemType>,
     name: String,
     visible: Boolean,
     visibleIndex: Number
@@ -484,7 +507,7 @@ const DxGroupItemConfig = {
     colSpan: Number,
     cssClass: String,
     items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: Object as PropType<FormItemType>,
     name: String,
     template: {},
     visible: Boolean,
@@ -555,14 +578,14 @@ const DxItemConfig = {
     dataField: String,
     disabled: Boolean,
     editorOptions: {},
-    editorType: String as PropType<"dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox">,
+    editorType: Object as PropType<FormItemComponent>,
     helpText: String,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: Object as PropType<HorizontalAlignment>,
     html: String,
     icon: String,
     isRequired: Boolean,
     items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: Object as PropType<FormItemType>,
     label: Object,
     name: String,
     tabPanelOptions: Object,
@@ -572,7 +595,7 @@ const DxItemConfig = {
     text: String,
     title: String,
     validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
-    verticalAlignment: String as PropType<"bottom" | "center" | "top">,
+    verticalAlignment: Object as PropType<VerticalAlignment>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -597,8 +620,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: String as PropType<"center" | "left" | "right">,
-    location: String as PropType<"left" | "right" | "top">,
+    alignment: Object as PropType<HorizontalAlignment>,
+    location: Object as PropType<LabelLocation>,
     showColon: Boolean,
     template: {},
     text: String,
@@ -623,7 +646,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -650,7 +673,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -681,7 +704,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -706,7 +729,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -744,10 +767,10 @@ const DxSimpleItemConfig = {
     cssClass: String,
     dataField: String,
     editorOptions: {},
-    editorType: String as PropType<"dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox">,
+    editorType: Object as PropType<FormItemComponent>,
     helpText: String,
     isRequired: Boolean,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: Object as PropType<FormItemType>,
     label: Object,
     name: String,
     template: {},
@@ -797,7 +820,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -866,7 +889,7 @@ const DxTabbedItemConfig = {
   props: {
     colSpan: Number,
     cssClass: String,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: Object as PropType<FormItemType>,
     name: String,
     tabPanelOptions: Object,
     tabs: Array as PropType<Array<Object>>,
@@ -952,26 +975,26 @@ const DxTabPanelOptionsConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
+    iconPosition: Object as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
     itemTemplate: {},
     itemTitleTemplate: {},
     loop: Boolean,
     noDataText: String,
-    onContentReady: Function as PropType<(e: TabPanelOptionsContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: TabPanelOptionsDisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: TabPanelOptionsInitializedEvent) => void>,
-    onItemClick: Function as PropType<(e: TabPanelOptionsItemClickEvent) => void>,
-    onItemContextMenu: Function as PropType<(e: TabPanelOptionsItemContextMenuEvent) => void>,
-    onItemHold: Function as PropType<(e: TabPanelOptionsItemHoldEvent) => void>,
-    onItemRendered: Function as PropType<(e: TabPanelOptionsItemRenderedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: TabPanelOptionsOptionChangedEvent) => void>,
-    onSelectionChanged: Function as PropType<(e: TabPanelOptionsSelectionChangedEvent) => void>,
-    onSelectionChanging: Function as PropType<(e: TabPanelOptionsSelectionChangingEvent) => void>,
-    onTitleClick: Function as PropType<(e: TabPanelOptionsTitleClickEvent) => void>,
-    onTitleHold: Function as PropType<(e: TabPanelOptionsTitleHoldEvent) => void>,
-    onTitleRendered: Function as PropType<(e: TabPanelOptionsTitleRenderedEvent) => void>,
+    onContentReady: Function as PropType<(e: TabPanelContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: TabPanelDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: TabPanelInitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemHold: Function as PropType<(e: ItemHoldEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: TabPanelOptionChangedEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onSelectionChanging: Function as PropType<(e: SelectionChangingEvent) => void>,
+    onTitleClick: Function as PropType<(e: TitleClickEvent) => void>,
+    onTitleHold: Function as PropType<(e: TitleHoldEvent) => void>,
+    onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
     repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
     scrollByContent: Boolean,
@@ -979,10 +1002,10 @@ const DxTabPanelOptionsConfig = {
     selectedIndex: Number,
     selectedItem: {},
     showNavButtons: Boolean,
-    stylingMode: String as PropType<"primary" | "secondary">,
+    stylingMode: Object as PropType<TabsStyle>,
     swipeEnabled: Boolean,
     tabIndex: Number,
-    tabsPosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    tabsPosition: Object as PropType<Position>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
@@ -1050,7 +1073,7 @@ const DxValidationRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
+    comparisonType: Object as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -1058,7 +1081,7 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: Object as PropType<ValidationRuleType>,
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };

@@ -1,6 +1,28 @@
 import { PropType } from "vue";
 import PivotGrid, { Properties } from "devextreme/ui/pivot_grid";
-import {  CellClickEvent , CellPreparedEvent , ContentReadyEvent , ContextMenuPreparingEvent , DisposingEvent , ExportingEvent , InitializedEvent , OptionChangedEvent ,} from "devextreme/ui/pivot_grid";
+import { 
+PivotGridDataFieldArea,
+CellClickEvent,
+CellPreparedEvent,
+ContentReadyEvent,
+ContextMenuPreparingEvent,
+DisposingEvent,
+ExportingEvent,
+InitializedEvent,
+OptionChangedEvent,
+PivotGridRowHeaderLayout,
+PivotGridTotalDisplayMode,
+ } from "devextreme/ui/pivot_grid";
+import { 
+ApplyChangesMode,
+StateStoreType,
+ } from "devextreme/common/grids";
+import { 
+FieldChooserLayout,
+ScrollMode,
+Mode,
+SearchMode,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -58,7 +80,7 @@ const componentConfig = {
     allowFiltering: Boolean,
     allowSorting: Boolean,
     allowSortingBySummary: Boolean,
-    dataFieldArea: String as PropType<"column" | "row">,
+    dataFieldArea: Object as PropType<PivotGridDataFieldArea>,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -79,7 +101,7 @@ const componentConfig = {
     onExporting: Function as PropType<(e: ExportingEvent) => void>,
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    rowHeaderLayout: String as PropType<"standard" | "tree">,
+    rowHeaderLayout: Object as PropType<PivotGridRowHeaderLayout>,
     rtlEnabled: Boolean,
     scrolling: Object,
     showBorders: Boolean,
@@ -87,7 +109,7 @@ const componentConfig = {
     showColumnTotals: Boolean,
     showRowGrandTotals: Boolean,
     showRowTotals: Boolean,
-    showTotalsPrior: String as PropType<"both" | "columns" | "none" | "rows">,
+    showTotalsPrior: Object as PropType<PivotGridTotalDisplayMode>,
     stateStoring: Object,
     tabIndex: Number,
     texts: Object,
@@ -199,17 +221,10 @@ const DxFieldChooserConfig = {
   },
   props: {
     allowSearch: Boolean,
-    applyChangesMode: String as PropType<"instantly" | "onDemand">,
+    applyChangesMode: Object as PropType<ApplyChangesMode>,
     enabled: Boolean,
     height: Number,
-    layout: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2
-      ].indexOf(v) !== -1
-    },
+    layout: Object as PropType<FieldChooserLayout>,
     searchTimeout: Number,
     texts: Object,
     title: String,
@@ -443,8 +458,8 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    mode: String as PropType<"standard" | "virtual">,
-    useNative: [Boolean, String] as PropType<Boolean | "auto">
+    mode: Object as PropType<ScrollMode>,
+    useNative: [Boolean, Object] as PropType<Boolean | Mode>
   }
 };
 
@@ -466,7 +481,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String as PropType<"contains" | "startswith" | "equals">,
+    mode: Object as PropType<SearchMode>,
     timeout: Number
   }
 };
@@ -494,7 +509,7 @@ const DxStateStoringConfig = {
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: String as PropType<"custom" | "localStorage" | "sessionStorage">
+    type: Object as PropType<StateStoreType>
   }
 };
 
