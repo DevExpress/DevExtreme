@@ -85,11 +85,11 @@ const componentConfig = {
     onZoomFactorChanged: Function as PropType<(e: ZoomFactorChangedEvent) => void>,
     panningEnabled: Boolean,
     pathModified: Boolean,
-    projection: [Object, String] as PropType<Object | ("equirectangular" | "lambert" | "mercator" | "miller") | Object | Object>,
+    projection: {},
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
     size: Object,
-    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     touchEnabled: Boolean,
@@ -229,12 +229,12 @@ const DxAnnotationConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String as PropType<"text" | "image" | "custom">,
+    type: {},
     width: Number,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -268,7 +268,7 @@ const DxAnnotationBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -314,7 +314,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -381,12 +381,12 @@ const DxCommonAnnotationSettingsConfig = {
     shadow: Object,
     template: {},
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    textOverflow: {},
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
-    type: String as PropType<"text" | "image" | "custom">,
+    type: {},
     width: Number,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">,
+    wordWrap: {},
     x: Number,
     y: Number
   }
@@ -416,11 +416,11 @@ const DxControlBarConfig = {
     borderColor: String,
     color: String,
     enabled: Boolean,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: {},
     margin: Number,
     opacity: Number,
     panVisible: Boolean,
-    verticalAlignment: String as PropType<"bottom" | "top">,
+    verticalAlignment: {},
     zoomVisible: Boolean
   }
 };
@@ -447,7 +447,7 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array as PropType<Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">>,
+    formats: Array as PropType<Array<ExportExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
     svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
@@ -573,7 +573,7 @@ const DxLayerConfig = {
     customize: Function as PropType<(elements: Array<Object>) => void>,
     dataField: String,
     dataSource: {},
-    elementType: String as PropType<"bubble" | "dot" | "image" | "pie">,
+    elementType: {},
     hoveredBorderColor: String,
     hoveredBorderWidth: Number,
     hoveredColor: String,
@@ -583,17 +583,17 @@ const DxLayerConfig = {
     minSize: Number,
     name: String,
     opacity: Number,
-    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    palette: {},
     paletteIndex: Number,
     paletteSize: Number,
     selectedBorderColor: String,
     selectedBorderWidth: Number,
     selectedColor: String,
-    selectionMode: String as PropType<"single" | "multiple" | "none">,
+    selectionMode: {},
     size: Number,
     sizeGroupingField: String,
     sizeGroups: Array as PropType<Array<number>>,
-    type: String as PropType<"area" | "line" | "marker">
+    type: {}
   }
 };
 
@@ -646,22 +646,22 @@ const DxLegendConfig = {
     customizeItems: Function as PropType<(items: Array<Object>) => Array<Object>>,
     customizeText: Function as PropType<(itemInfo: Object) => string>,
     font: Object,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
-    itemsAlignment: String as PropType<"center" | "left" | "right">,
-    itemTextPosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    horizontalAlignment: {},
+    itemsAlignment: {},
+    itemTextPosition: {},
     margin: [Number, Object],
     markerColor: String,
-    markerShape: String as PropType<"circle" | "square">,
+    markerShape: {},
     markerSize: Number,
     markerTemplate: {},
-    orientation: String as PropType<"horizontal" | "vertical">,
+    orientation: {},
     paddingLeftRight: Number,
     paddingTopBottom: Number,
     rowCount: Number,
     rowItemSpacing: Number,
     source: Object,
     title: [Object, String],
-    verticalAlignment: String as PropType<"bottom" | "top">,
+    verticalAlignment: {},
     visible: Boolean
   }
 };
@@ -696,12 +696,12 @@ const DxLegendTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: {},
     margin: Object,
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    verticalAlignment: String as PropType<"bottom" | "top">
+    verticalAlignment: {}
   }
 };
 
@@ -890,8 +890,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -917,14 +917,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: {},
     margin: [Object, Number],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    verticalAlignment: String as PropType<"bottom" | "top">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -995,7 +995,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -1024,14 +1024,14 @@ const DxVectorMapTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    verticalAlignment: String as PropType<"bottom" | "top">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -1061,8 +1061,8 @@ const DxVectorMapTitleSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 

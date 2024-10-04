@@ -97,18 +97,7 @@ const componentConfig = {
     elementAttr: Object,
     endDateRange: Date,
     filterRow: Object,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: {},
     focusStateEnabled: Boolean,
     headerFilter: Object,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
@@ -148,7 +137,7 @@ const componentConfig = {
     resourceAssignments: Object,
     resources: Object,
     rootValue: {},
-    scaleType: String as PropType<"auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years">,
+    scaleType: {},
     scaleTypeRange: Object,
     selectedRowKey: {},
     showDependencies: Boolean,
@@ -163,7 +152,7 @@ const componentConfig = {
     taskProgressTooltipContentTemplate: {},
     tasks: Object,
     taskTimeTooltipContentTemplate: {},
-    taskTitlePosition: String as PropType<"inside" | "outside" | "none">,
+    taskTitlePosition: {},
     taskTooltipContentTemplate: {},
     toolbar: Object,
     validation: Object,
@@ -317,7 +306,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: String as PropType<"center" | "left" | "right">,
+    alignment: {},
     allowFiltering: Boolean,
     allowHeaderFiltering: Boolean,
     allowSorting: Boolean,
@@ -330,21 +319,21 @@ const DxColumnConfig = {
     cssClass: String,
     customizeText: Function as PropType<(cellInfo: Object) => string>,
     dataField: String,
-    dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
+    dataType: {},
     encodeHtml: Boolean,
     falseText: String,
-    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof"> | Array<string>>,
-    filterType: String as PropType<"exclude" | "include">,
+    filterOperations: Array as PropType<Array<ColumnFilterOperation> | Array<string>>,
+    filterType: {},
     filterValue: {},
     filterValues: Array as PropType<Array<any>>,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: {},
     headerCellTemplate: {},
     headerFilter: Object,
     minWidth: Number,
-    selectedFilterOperation: String as PropType<"<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith">,
+    selectedFilterOperation: {},
     sortIndex: Number,
     sortingMethod: Function as PropType<(value1: any, value2: any) => number>,
-    sortOrder: String as PropType<"asc" | "desc">,
+    sortOrder: {},
     trueText: String,
     visible: Boolean,
     visibleIndex: Number,
@@ -381,10 +370,10 @@ const DxColumnHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String] as PropType<number | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
+    groupInterval: {},
     height: [Number, String],
     search: Object,
-    searchMode: String as PropType<"contains" | "startswith" | "equals">,
+    searchMode: {},
     width: [Number, String]
   }
 };
@@ -412,7 +401,7 @@ const DxColumnHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String as PropType<"contains" | "startswith" | "equals">,
+    mode: {},
     searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     timeout: Number
   }
@@ -433,7 +422,7 @@ const DxContextMenuConfig = {
   },
   props: {
     enabled: Boolean,
-    items: Array as PropType<Array<Object> | Array<"undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">>
+    items: Array as PropType<Array<Object> | Array<ContextMenuGanttPredefinedContextMenuItem>>
   }
 };
 
@@ -469,7 +458,7 @@ const DxContextMenuItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array as PropType<Array<Object>>,
-    name: String as PropType<"undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">,
+    name: {},
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -593,7 +582,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -652,7 +641,7 @@ const DxGanttHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String as PropType<"contains" | "startswith" | "equals">,
+    mode: {},
     timeout: Number
   }
 };
@@ -683,10 +672,10 @@ const DxHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: [Number, String] as PropType<number | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
+    groupInterval: {},
     height: [Number, String],
     search: Object,
-    searchMode: String as PropType<"contains" | "startswith" | "equals">,
+    searchMode: {},
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
@@ -732,18 +721,18 @@ const DxItemConfig = {
     html: String,
     icon: String,
     items: Array as PropType<Array<Object>>,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String as PropType<"undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager" | "separator" | "fullScreen" | "showResources" | "showDependencies">,
+    name: {},
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String as PropType<"always" | "inMenu">,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: {}
   }
 };
 
@@ -845,8 +834,8 @@ const DxScaleTypeRangeConfig = {
     "update:min": null,
   },
   props: {
-    max: String as PropType<"auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years">,
-    min: String as PropType<"auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years">
+    max: {},
+    min: {}
   }
 };
 
@@ -869,7 +858,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String as PropType<"contains" | "startswith" | "equals">,
+    mode: {},
     searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     timeout: Number
   }
@@ -895,7 +884,7 @@ const DxSortingConfig = {
     ascendingText: String,
     clearText: String,
     descendingText: String,
-    mode: String as PropType<"single" | "multiple" | "none">,
+    mode: {},
     showSortIndexes: Boolean
   }
 };
@@ -989,7 +978,7 @@ const DxToolbarConfig = {
     "update:items": null,
   },
   props: {
-    items: Array as PropType<Array<Object> | Array<"separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">>
+    items: Array as PropType<Array<Object> | Array<ToolbarGanttPredefinedToolbarItem>>
   }
 };
 
@@ -1025,16 +1014,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
-    name: String as PropType<"separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">,
+    name: {},
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: {},
     template: {},
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: {}
   }
 };
 

@@ -87,15 +87,15 @@ const componentConfig = {
     onSubmenuHiding: Function as PropType<(e: SubmenuHidingEvent) => void>,
     onSubmenuShowing: Function as PropType<(e: SubmenuShowingEvent) => void>,
     onSubmenuShown: Function as PropType<(e: SubmenuShownEvent) => void>,
-    orientation: String as PropType<"horizontal" | "vertical">,
+    orientation: {},
     rtlEnabled: Boolean,
     selectByClick: Boolean,
     selectedExpr: [Function, String] as PropType<(() => void) | string>,
     selectedItem: {},
-    selectionMode: String as PropType<"single" | "none">,
-    showFirstSubmenuMode: [Object, String] as PropType<Object | ("onClick" | "onHover")>,
-    showSubmenuMode: [Object, String] as PropType<Object | ("onClick" | "onHover")>,
-    submenuDirection: String as PropType<"auto" | "leftOrTop" | "rightOrBottom">,
+    selectionMode: {},
+    showFirstSubmenuMode: {},
+    showSubmenuMode: {},
+    submenuDirection: {},
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -199,8 +199,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: {},
+    y: {}
   }
 };
 
@@ -237,8 +237,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
-    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
+    x: {},
+    y: {}
   }
 };
 
@@ -313,14 +313,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: {}
   }
 };
 
@@ -382,8 +382,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: {},
+    y: {}
   }
 };
 
@@ -425,11 +425,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
-    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -466,14 +466,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: {}
   }
 };
 
@@ -492,7 +492,7 @@ const DxShowFirstSubmenuModeConfig = {
   },
   props: {
     delay: [Number, Object],
-    name: String as PropType<"onClick" | "onHover">
+    name: {}
   }
 };
 
@@ -514,7 +514,7 @@ const DxShowSubmenuModeConfig = {
   },
   props: {
     delay: [Number, Object],
-    name: String as PropType<"onClick" | "onHover">
+    name: {}
   }
 };
 

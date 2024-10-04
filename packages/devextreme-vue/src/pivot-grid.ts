@@ -58,7 +58,7 @@ const componentConfig = {
     allowFiltering: Boolean,
     allowSorting: Boolean,
     allowSortingBySummary: Boolean,
-    dataFieldArea: String as PropType<"column" | "row">,
+    dataFieldArea: {},
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -79,7 +79,7 @@ const componentConfig = {
     onExporting: Function as PropType<(e: ExportingEvent) => void>,
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    rowHeaderLayout: String as PropType<"standard" | "tree">,
+    rowHeaderLayout: {},
     rtlEnabled: Boolean,
     scrolling: Object,
     showBorders: Boolean,
@@ -87,7 +87,7 @@ const componentConfig = {
     showColumnTotals: Boolean,
     showRowGrandTotals: Boolean,
     showRowTotals: Boolean,
-    showTotalsPrior: String as PropType<"both" | "columns" | "none" | "rows">,
+    showTotalsPrior: {},
     stateStoring: Object,
     tabIndex: Number,
     texts: Object,
@@ -199,17 +199,10 @@ const DxFieldChooserConfig = {
   },
   props: {
     allowSearch: Boolean,
-    applyChangesMode: String as PropType<"instantly" | "onDemand">,
+    applyChangesMode: {},
     enabled: Boolean,
     height: Number,
-    layout: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2
-      ].indexOf(v) !== -1
-    },
+    layout: {},
     searchTimeout: Number,
     texts: Object,
     title: String,
@@ -443,8 +436,8 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    mode: String as PropType<"standard" | "virtual">,
-    useNative: [Boolean, String] as PropType<Boolean | "auto">
+    mode: {},
+    useNative: {}
   }
 };
 
@@ -466,7 +459,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String as PropType<"contains" | "startswith" | "equals">,
+    mode: {},
     timeout: Number
   }
 };
@@ -494,7 +487,7 @@ const DxStateStoringConfig = {
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: String as PropType<"custom" | "localStorage" | "sessionStorage">
+    type: {}
   }
 };
 

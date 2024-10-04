@@ -121,7 +121,7 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: {},
     validationCallback: Function as PropType<(options: Object) => any>
   }
 };
@@ -148,10 +148,10 @@ const DxCompareRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
+    comparisonType: {},
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: {}
   }
 };
 
@@ -179,7 +179,7 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: {},
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
@@ -205,7 +205,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: {}
   }
 };
 
@@ -230,7 +230,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: {}
   }
 };
 
@@ -257,7 +257,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: {}
   }
 };
 
@@ -288,7 +288,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: {}
   }
 };
 
@@ -313,7 +313,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: {}
   }
 };
 
@@ -344,7 +344,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: {}
   }
 };
 
@@ -376,7 +376,7 @@ const DxValidationRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
+    comparisonType: {},
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -384,7 +384,7 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: {},
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };

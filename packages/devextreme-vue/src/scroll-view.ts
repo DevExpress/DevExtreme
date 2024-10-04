@@ -36,7 +36,7 @@ interface DxScrollView extends AccessibleOptions {
 const componentConfig = {
   props: {
     bounceEnabled: Boolean,
-    direction: String as PropType<"both" | "horizontal" | "vertical">,
+    direction: {},
     disabled: Boolean,
     elementAttr: Object,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,

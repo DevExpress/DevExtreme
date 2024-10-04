@@ -59,8 +59,8 @@ const componentConfig = {
     rtlEnabled: Boolean,
     selectedItemKeys: Array as PropType<Array<any>>,
     selectedItems: Array as PropType<Array<any>>,
-    selectionMode: String as PropType<"single" | "multiple" | "none">,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    selectionMode: {},
+    stylingMode: {},
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -133,7 +133,7 @@ const DxItemConfig = {
     icon: String,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: {},
     visible: Boolean
   }
 };

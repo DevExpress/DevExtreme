@@ -50,7 +50,7 @@ const componentConfig = {
     baseItemHeight: Number,
     baseItemWidth: Number,
     dataSource: {},
-    direction: String as PropType<"horizontal" | "vertical">,
+    direction: {},
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -71,7 +71,7 @@ const componentConfig = {
     onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    showScrollbar: String as PropType<"always" | "never" | "onHover" | "onScroll">,
+    showScrollbar: {},
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

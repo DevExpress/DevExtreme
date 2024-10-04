@@ -71,7 +71,7 @@ const componentConfig = {
     size: Object,
     subvalueIndicator: Object,
     subvalues: Array as PropType<Array<number>>,
-    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
+    theme: {},
     title: [Object, String],
     tooltip: Object,
     value: Number,
@@ -152,7 +152,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: String as PropType<"easeOutCubic" | "linear">,
+    easing: {},
     enabled: Boolean
   }
 };
@@ -194,7 +194,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
+    dashStyle: {},
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -242,7 +242,7 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array as PropType<Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">>,
+    formats: Array as PropType<Array<ExportExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
     svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
@@ -296,7 +296,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: {},
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -314,7 +314,7 @@ const DxGeometryConfig = {
     "update:orientation": null,
   },
   props: {
-    orientation: String as PropType<"horizontal" | "vertical">
+    orientation: {}
   }
 };
 
@@ -339,9 +339,9 @@ const DxLabelConfig = {
   props: {
     customizeText: Function as PropType<(scaleValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: {},
     indentFromTick: Number,
-    overlappingBehavior: String as PropType<"hide" | "none">,
+    overlappingBehavior: {},
     useRangeColors: Boolean,
     visible: Boolean
   }
@@ -471,12 +471,12 @@ const DxRangeContainerConfig = {
   },
   props: {
     backgroundColor: [Object, String],
-    horizontalOrientation: String as PropType<"center" | "left" | "right">,
+    horizontalOrientation: {},
     offset: Number,
-    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
-    paletteExtensionMode: String as PropType<"alternate" | "blend" | "extrapolate">,
+    palette: {},
+    paletteExtensionMode: {},
     ranges: Array as PropType<Array<Object>>,
-    verticalOrientation: String as PropType<"bottom" | "center" | "top">,
+    verticalOrientation: {},
     width: [Number, Object]
   }
 };
@@ -515,7 +515,7 @@ const DxScaleConfig = {
     customMinorTicks: Array as PropType<Array<number>>,
     customTicks: Array as PropType<Array<number>>,
     endValue: Number,
-    horizontalOrientation: String as PropType<"center" | "left" | "right">,
+    horizontalOrientation: {},
     label: Object,
     minorTick: Object,
     minorTickInterval: Number,
@@ -523,7 +523,7 @@ const DxScaleConfig = {
     startValue: Number,
     tick: Object,
     tickInterval: Number,
-    verticalOrientation: String as PropType<"bottom" | "center" | "top">
+    verticalOrientation: {}
   }
 };
 
@@ -596,8 +596,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: {},
+    wordWrap: {}
   }
 };
 
@@ -640,11 +640,11 @@ const DxSubvalueIndicatorConfig = {
     baseValue: Number,
     beginAdaptingAtRadius: Number,
     color: [Object, String],
-    horizontalOrientation: String as PropType<"left" | "right">,
+    horizontalOrientation: {},
     indentFromCenter: Number,
     length: Number,
     offset: Number,
-    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    palette: {},
     secondColor: String,
     secondFraction: Number,
     size: Number,
@@ -652,7 +652,7 @@ const DxSubvalueIndicatorConfig = {
     spindleSize: Number,
     text: Object,
     type: String as PropType<"circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle">,
-    verticalOrientation: String as PropType<"bottom" | "top">,
+    verticalOrientation: {},
     width: Number
   }
 };
@@ -679,7 +679,7 @@ const DxTextConfig = {
   props: {
     customizeText: Function as PropType<(indicatedValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: {},
     indent: Number
   }
 };
@@ -735,14 +735,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: {},
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    verticalAlignment: String as PropType<"bottom" | "top">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: {},
+    verticalAlignment: {},
+    wordWrap: {}
   }
 };
 
@@ -788,7 +788,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(scaleValue: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: {},
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
@@ -840,11 +840,11 @@ const DxValueIndicatorConfig = {
     baseValue: Number,
     beginAdaptingAtRadius: Number,
     color: [Object, String],
-    horizontalOrientation: String as PropType<"left" | "right">,
+    horizontalOrientation: {},
     indentFromCenter: Number,
     length: Number,
     offset: Number,
-    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    palette: {},
     secondColor: String,
     secondFraction: Number,
     size: Number,
@@ -852,7 +852,7 @@ const DxValueIndicatorConfig = {
     spindleSize: Number,
     text: Object,
     type: String as PropType<"circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle">,
-    verticalOrientation: String as PropType<"bottom" | "top">,
+    verticalOrientation: {},
     width: Number
   }
 };

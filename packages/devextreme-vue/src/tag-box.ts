@@ -112,8 +112,8 @@ const componentConfig = {
     acceptCustomValue: Boolean,
     accessKey: String,
     activeStateEnabled: Boolean,
-    applyValueMode: String as PropType<"instantly" | "useButtons">,
-    buttons: Array as PropType<Array<"clear" | "dropDown"> | Array<Object>>,
+    applyValueMode: {},
+    buttons: Array as PropType<Array<DropDownPredefinedButton> | Array<Object>>,
     customItemCreateEvent: String,
     dataSource: {},
     deferRendering: Boolean,
@@ -136,7 +136,7 @@ const componentConfig = {
     items: Array as PropType<Array<any> | Array<Object>>,
     itemTemplate: {},
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: {},
     maxDisplayedTags: Number,
     maxFilterQueryLength: Number,
     maxLength: [Number, String],
@@ -171,9 +171,9 @@ const componentConfig = {
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
-    searchMode: String as PropType<"contains" | "startswith">,
+    searchMode: {},
     searchTimeout: Number,
-    selectAllMode: String as PropType<"allPages" | "page">,
+    selectAllMode: {},
     selectAllText: String,
     selectedItems: Array as PropType<Array<any> | Array<number> | Array<string>>,
     showClearButton: Boolean,
@@ -181,16 +181,16 @@ const componentConfig = {
     showDropDownButton: Boolean,
     showMultiTagOnly: Boolean,
     showSelectionControls: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: {},
     tabIndex: Number,
     tagTemplate: {},
     text: String,
     useItemTextAsTitle: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: {},
+    validationMessagePosition: {},
+    validationStatus: {},
     value: Array as PropType<Array<any> | Array<number> | Array<string>>,
     valueChangeEvent: String,
     valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
@@ -343,8 +343,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: {},
+    y: {}
   }
 };
 
@@ -382,7 +382,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String as PropType<"after" | "before">,
+    location: {},
     name: String,
     options: Object
   }
@@ -406,8 +406,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
-    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
+    x: {},
+    y: {}
   }
 };
 
@@ -508,7 +508,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
+    position: {},
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -583,14 +583,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: {}
   }
 };
 
@@ -638,8 +638,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: {},
+    y: {}
   }
 };
 
@@ -715,11 +715,11 @@ const DxOptionsConfig = {
     onInitialized: Function as PropType<(e: OptionsInitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionsOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: {},
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: {},
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
@@ -746,11 +746,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    at: {},
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
-    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    collision: {},
+    my: {},
     of: {},
     offset: [Object, String]
   }
@@ -780,14 +780,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: {},
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: {}
   }
 };
 
@@ -844,16 +844,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: {},
+    location: {},
     menuItemTemplate: {},
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: {},
     template: {},
     text: String,
-    toolbar: String as PropType<"bottom" | "top">,
+    toolbar: {},
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: {}
   }
 };
 
