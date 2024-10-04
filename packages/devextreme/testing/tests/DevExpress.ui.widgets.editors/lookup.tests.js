@@ -2909,7 +2909,7 @@ QUnit.module('keyboard navigation', {
     });
 
     // testInActiveWindow
-    QUnit.test('focus from Popup should move to Lookup field while keeping Popup open when usePopover: true', function(assert) {
+    QUnit.test('focus from last Popover element should move to Lookup field while keeping Popup open when usePopover: true', function(assert) {
         // if(devices.real().deviceType !== 'desktop') {
         //     assert.ok(true, 'test does not actual for mobile devices');
         //     return;
@@ -2919,7 +2919,6 @@ QUnit.module('keyboard navigation', {
             opened: true,
             items: [1, 2, 3],
             focusStateEnabled: true,
-            usePopover: true,
         });
         const instance = $element.dxLookup('instance');
         const tabKeyDownEvent = $.Event('keydown', { key: 'Tab' });
@@ -2927,6 +2926,29 @@ QUnit.module('keyboard navigation', {
         const $cancelButton = $overlayContent.find(CANCEL_BUTTON_SELECTOR);
 
         $cancelButton.trigger(tabKeyDownEvent);
+
+        assert.ok($element.hasClass(FOCUSED_CLASS), 'lookup field is focused');
+        assert.ok(instance.option('opened'), 'popup is opened');
+    });
+
+    // testInActiveWindow
+    QUnit.test('focus from first Popup should move back to Lookup field while keeping Popup open when usePopover: true', function(assert) {
+        // if(devices.real().deviceType !== 'desktop') {
+        //     assert.ok(true, 'test does not actual for mobile devices');
+        //     return;
+        // }
+
+        const $element = $('#widget').dxLookup({
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+        });
+        const instance = $element.dxLookup('instance');
+        const tabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
+        const $overlayContent = $(instance.content()).parent();
+        const $searchInput = $overlayContent.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+        $searchInput.trigger(tabKeyDownEvent);
 
         assert.ok($element.hasClass(FOCUSED_CLASS), 'lookup field is focused');
         assert.ok(instance.option('opened'), 'popup is opened');
