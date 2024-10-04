@@ -1,5 +1,5 @@
-import { normalizeTemplateElement } from '../utils/dom';
-import { TemplateBase } from './template_base';
+import { TemplateBase } from '@js/core/templates/template_base';
+import { normalizeTemplateElement } from '@js/core/utils/dom';
 
 export class FunctionTemplate extends TemplateBase {
   constructor(render) {

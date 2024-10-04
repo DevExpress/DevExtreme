@@ -1,7 +1,7 @@
-import $ from '../renderer';
-import { normalizeTemplateElement } from '../utils/dom';
-import { TemplateBase } from './template_base';
-import { getCurrentTemplateEngine, registerTemplateEngine, setTemplateEngine } from './template_engine_registry';
+import $ from '@js/core/renderer';
+import { TemplateBase } from '@js/core/templates/template_base';
+import { getCurrentTemplateEngine, registerTemplateEngine, setTemplateEngine } from '@js/core/templates/template_engine_registry';
+import { normalizeTemplateElement } from '@js/core/utils/dom';
 
 registerTemplateEngine('default', {
   compile: (element) => normalizeTemplateElement(element),

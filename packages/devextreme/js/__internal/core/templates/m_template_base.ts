@@ -1,9 +1,9 @@
-import { triggerShownEvent } from '../../events/visibility_change';
-import domAdapter from '../dom_adapter';
-import errors from '../errors';
-import $ from '../renderer';
-import Callbacks from '../utils/callbacks';
-import { contains } from '../utils/dom';
+import domAdapter from '@js/core/dom_adapter';
+import errors from '@js/core/errors';
+import $ from '@js/core/renderer';
+import Callbacks from '@js/core/utils/callbacks';
+import { contains } from '@js/core/utils/dom';
+import { triggerShownEvent } from '@js/events/visibility_change';
 
 export const renderedCallbacks = Callbacks({ syncStrategy: true });
 

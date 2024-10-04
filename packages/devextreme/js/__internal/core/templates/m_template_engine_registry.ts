@@ -1,5 +1,5 @@
-import errors from '../errors';
-import { isString } from '../utils/type';
+import errors from '@js/core/errors';
+import { isString } from '@js/core/utils/type';
 
 const templateEngines = {};
 let currentTemplateEngine;
