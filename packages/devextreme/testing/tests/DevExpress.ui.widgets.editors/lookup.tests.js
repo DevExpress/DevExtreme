@@ -1035,11 +1035,14 @@ QUnit.module('Lookup', {
 
         openPopupWithList(firstLookup);
 
-        // NOTE: in ShadowDOM mode one selected item is inside ShadowDOM
-        // and other is in document
+        // NOTE: in ShadowDOM mode the two selected elements are inside the ShadowDOM
+        // because the overlays were closed and moved to the overlay container
         if(QUnit.isInShadowDomMode()) {
-            assert.strictEqual(document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
-            assert.strictEqual($('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
+            const listItemSelectedInDocument = document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
+            const listItemSelectedInShadowDOM = $('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
+
+            assert.strictEqual(listItemSelectedInDocument.length, 0);
+            assert.strictEqual(listItemSelectedInShadowDOM.length, 2);
         } else {
             assert.strictEqual($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
         }
@@ -2925,12 +2928,11 @@ QUnit.module('keyboard navigation', {
         assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
     });
 
-    // testInActiveWindow
     QUnit.test('focus from last Popover element should move to Lookup field while keeping Popup open when usePopover: true', function(assert) {
-        // if(devices.real().deviceType !== 'desktop') {
-        //     assert.ok(true, 'test does not actual for mobile devices');
-        //     return;
-        // }
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
 
         const $element = $('#widget').dxLookup({
             opened: true,
@@ -2948,12 +2950,11 @@ QUnit.module('keyboard navigation', {
         assert.ok(instance.option('opened'), 'popup is opened');
     });
 
-    // testInActiveWindow
-    QUnit.test('focus from first Popup should move back to Lookup field while keeping Popup open when usePopover: true', function(assert) {
-        // if(devices.real().deviceType !== 'desktop') {
-        //     assert.ok(true, 'test does not actual for mobile devices');
-        //     return;
-        // }
+    QUnit.test('focus from first Popover element should move back to Lookup field while keeping Popup open when usePopover: true', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
 
         const $element = $('#widget').dxLookup({
             opened: true,
