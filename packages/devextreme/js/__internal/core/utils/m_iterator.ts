@@ -1,4 +1,4 @@
-const map = (values, callback) => {
+const map = (values, callback): any[] => {
   if (Array.isArray(values)) {
     return values.map(callback);
   }

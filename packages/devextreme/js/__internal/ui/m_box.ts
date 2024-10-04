@@ -62,6 +62,7 @@ const setFlexProp = (element, prop, value) => {
   }
 };
 
+// @ts-expect-error dxClass inheritance issue
 class BoxItem extends CollectionWidgetItem {
   _renderVisible(value, oldValue) {
     super._renderVisible(value);

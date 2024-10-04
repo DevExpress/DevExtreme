@@ -43,7 +43,8 @@ OptionChangedEventInfo<TComponent>
 export class Component<
   TComponent extends Component<TComponent, TProperties>,
   TProperties extends Properties<TComponent>,
-// eslint-disable-next-line @typescript-eslint/ban-types
+  // @ts-expect-error dxClass inheritance issue
+  // eslint-disable-next-line @typescript-eslint/ban-types
 > extends (Class.inherit({}) as new() => {}) {
   _deprecatedOptions!: Partial<TProperties>;
 

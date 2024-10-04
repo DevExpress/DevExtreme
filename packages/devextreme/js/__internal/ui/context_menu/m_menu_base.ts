@@ -299,6 +299,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   _initEditStrategy() {
     const Strategy = MenuBaseEditStrategy;
+    // @ts-expect-error dxClass inheritance issue
     this._editStrategy = new Strategy(this);
   }
 

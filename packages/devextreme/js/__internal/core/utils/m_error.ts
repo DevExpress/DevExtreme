@@ -15,7 +15,8 @@ function error(baseErrors, errors?) {
       return makeError([].slice.call(args));
     },
 
-    log(id, ...args) {
+    log(...args) {
+      const id = args[0];
       let method = 'log';
 
       if (/^E\d+$/.test(id)) {
@@ -24,7 +25,7 @@ function error(baseErrors, errors?) {
         method = 'warn';
       }
 
-      logger[method](method === 'log' ? id : combineMessage([id, ...args]));
+      logger[method](method === 'log' ? id : combineMessage(args));
     },
   };
 
