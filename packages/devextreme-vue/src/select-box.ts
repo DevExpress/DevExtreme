@@ -24,11 +24,11 @@ SelectionChangingEvent,
 ValueChangedEvent,
  } from "devextreme/ui/select_box";
 import { 
-ClickEvent as OptionsClickEvent,
-ContentReadyEvent as OptionsContentReadyEvent,
-DisposingEvent as OptionsDisposingEvent,
-InitializedEvent as OptionsInitializedEvent,
-OptionChangedEvent as OptionsOptionChangedEvent,
+ClickEvent,
+ContentReadyEvent as ButtonContentReadyEvent,
+DisposingEvent as ButtonDisposingEvent,
+InitializedEvent as ButtonInitializedEvent,
+OptionChangedEvent as ButtonOptionChangedEvent,
  } from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
@@ -713,11 +713,11 @@ const DxOptionsConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
-    onClick: Function as PropType<(e: OptionsClickEvent) => void>,
-    onContentReady: Function as PropType<(e: OptionsContentReadyEvent) => void>,
-    onDisposing: Function as PropType<(e: OptionsDisposingEvent) => void>,
-    onInitialized: Function as PropType<(e: OptionsInitializedEvent) => void>,
-    onOptionChanged: Function as PropType<(e: OptionsOptionChangedEvent) => void>,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ButtonContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: ButtonDisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     stylingMode: String as PropType<"text" | "outlined" | "contained">,
     tabIndex: Number,

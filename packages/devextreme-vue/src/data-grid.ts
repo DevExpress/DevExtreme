@@ -43,9 +43,7 @@ SavedEvent,
 SavingEvent,
 SelectionChangedEvent,
 ToolbarPreparingEvent,
- } from "devextreme/ui/data_grid";
-import { 
-ColumnButtonClickEvent as ButtonColumnButtonClickEvent,
+ColumnButtonClickEvent,
  } from "devextreme/ui/data_grid";
 import { 
 ContentReadyEvent as FilterBuilderContentReadyEvent,
@@ -54,13 +52,13 @@ EditorPreparedEvent as FilterBuilderEditorPreparedEvent,
 EditorPreparingEvent as FilterBuilderEditorPreparingEvent,
 InitializedEvent as FilterBuilderInitializedEvent,
 OptionChangedEvent as FilterBuilderOptionChangedEvent,
-ValueChangedEvent as FilterBuilderValueChangedEvent,
+ValueChangedEvent,
  } from "devextreme/ui/filter_builder";
 import { 
 ContentReadyEvent as FormContentReadyEvent,
 DisposingEvent as FormDisposingEvent,
-EditorEnterKeyEvent as FormEditorEnterKeyEvent,
-FieldDataChangedEvent as FormFieldDataChangedEvent,
+EditorEnterKeyEvent,
+FieldDataChangedEvent,
 InitializedEvent as FormInitializedEvent,
 OptionChangedEvent as FormOptionChangedEvent,
  } from "devextreme/ui/form";
@@ -587,7 +585,7 @@ const DxButtonConfig = {
     hint: String,
     icon: String,
     name: String as PropType<"cancel" | "delete" | "edit" | "save" | "undelete">,
-    onClick: Function as PropType<(e: ButtonColumnButtonClickEvent) => void>,
+    onClick: Function as PropType<(e: ColumnButtonClickEvent) => void>,
     template: {},
     text: String,
     visible: [Boolean, Function] as PropType<Boolean | ((options: Object) => Boolean)>
@@ -1561,7 +1559,7 @@ const DxFilterBuilderConfig = {
     onEditorPreparing: Function as PropType<(e: FilterBuilderEditorPreparingEvent) => void>,
     onInitialized: Function as PropType<(e: FilterBuilderInitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: FilterBuilderOptionChangedEvent) => void>,
-    onValueChanged: Function as PropType<(e: FilterBuilderValueChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     rtlEnabled: Boolean,
     tabIndex: Number,
     value: [Array, Function, String] as PropType<Array<any> | Function | string>,
@@ -1891,8 +1889,8 @@ const DxFormConfig = {
     minColWidth: Number,
     onContentReady: Function as PropType<(e: FormContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: FormDisposingEvent) => void>,
-    onEditorEnterKey: Function as PropType<(e: FormEditorEnterKeyEvent) => void>,
-    onFieldDataChanged: Function as PropType<(e: FormFieldDataChangedEvent) => void>,
+    onEditorEnterKey: Function as PropType<(e: EditorEnterKeyEvent) => void>,
+    onFieldDataChanged: Function as PropType<(e: FieldDataChangedEvent) => void>,
     onInitialized: Function as PropType<(e: FormInitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: FormOptionChangedEvent) => void>,
     optionalMark: String,

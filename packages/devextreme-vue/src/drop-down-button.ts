@@ -9,9 +9,6 @@ ItemClickEvent,
 OptionChangedEvent,
 SelectionChangedEvent,
  } from "devextreme/ui/drop_down_button";
-import { 
-ItemClickEvent as ItemItemClickEvent,
- } from "devextreme/ui/drop_down_button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -458,7 +455,7 @@ const DxItemConfig = {
     disabled: Boolean,
     html: String,
     icon: String,
-    onClick: Function as PropType<(e: ItemItemClickEvent) => void>,
+    onClick: Function as PropType<(e: ItemClickEvent) => void>,
     template: {},
     text: String,
     visible: Boolean
