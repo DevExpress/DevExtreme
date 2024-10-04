@@ -1,6 +1,5 @@
 /* globals Intl */
 // TODO refactoring: Review all date utils functions and move useful to __internal/core/utils/date.ts
-import { toMilliseconds } from '@js/core/utils./../../renovation/ui/common/utils/date/index';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
@@ -8,6 +7,8 @@ import { adjust } from '@js/core/utils/math';
 import {
   isDate, isDefined, isNumeric, isObject, isString,
 } from '@js/core/utils/type';
+
+import { toMilliseconds } from '../../../renovation/ui/common/utils/date/index';
 
 const DAYS_IN_WEEK = 7;
 const THURSDAY_WEEK_NUMBER = 4;
