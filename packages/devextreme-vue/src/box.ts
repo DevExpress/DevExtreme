@@ -37,10 +37,10 @@ interface DxBox extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    align: {},
-    crossAlign: {},
+    align: String as PropType<"center" | "end" | "space-around" | "space-between" | "start">,
+    crossAlign: String as PropType<"center" | "end" | "start" | "stretch">,
     dataSource: {},
-    direction: {},
+    direction: String as PropType<"col" | "row">,
     disabled: Boolean,
     elementAttr: Object,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,

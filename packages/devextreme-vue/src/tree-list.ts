@@ -161,12 +161,12 @@ const componentConfig = {
     columnFixing: Object,
     columnHidingEnabled: Boolean,
     columnMinWidth: Number,
-    columnResizingMode: {},
+    columnResizingMode: String as PropType<"nextColumn" | "widget">,
     columns: Array as PropType<Array<Object> | Array<string>>,
-    columnWidth: {},
+    columnWidth: [Number, String] as PropType<number | "auto">,
     customizeColumns: Function as PropType<(columns: Array<Object>) => void>,
     dataSource: {},
-    dataStructure: {},
+    dataStructure: String as PropType<"plain" | "tree">,
     dateSerializationFormat: String,
     disabled: Boolean,
     editing: Object,
@@ -176,10 +176,10 @@ const componentConfig = {
     expandNodesOnFiltering: Boolean,
     filterBuilder: Object,
     filterBuilderPopup: Object,
-    filterMode: {},
+    filterMode: String as PropType<"fullBranch" | "withAncestors" | "matchOnly">,
     filterPanel: Object,
     filterRow: Object,
-    filterSyncEnabled: {},
+    filterSyncEnabled: [Boolean, String] as PropType<Boolean | "auto">,
     filterValue: [Array, Function, String] as PropType<Array<any> | Function | string>,
     focusedColumnIndex: Number,
     focusedRowEnabled: Boolean,
@@ -240,7 +240,7 @@ const componentConfig = {
     pager: Object,
     paging: Object,
     parentIdExpr: [Function, String] as PropType<(() => void) | string>,
-    remoteOperations: {},
+    remoteOperations: [Object, String] as PropType<Object | "auto">,
     renderAsync: Boolean,
     repaintChangesOnly: Boolean,
     rootValue: {},
@@ -463,7 +463,7 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: {},
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
     validationCallback: Function as PropType<(options: Object) => any>
   }
 };
@@ -486,8 +486,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -535,7 +535,7 @@ const DxButtonConfig = {
     disabled: [Boolean, Function] as PropType<Boolean | ((options: Object) => Boolean)>,
     hint: String,
     icon: String,
-    name: {},
+    name: String as PropType<"add" | "cancel" | "delete" | "edit" | "save" | "undelete">,
     onClick: Function as PropType<(e: Object) => void>,
     template: {},
     text: String,
@@ -563,7 +563,7 @@ const DxChangeConfig = {
     data: {},
     insertAfterKey: {},
     insertBeforeKey: {},
-    type: {}
+    type: String as PropType<"insert" | "update" | "remove">
   }
 };
 
@@ -605,8 +605,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
+    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
   }
 };
 
@@ -678,7 +678,7 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: {},
+    alignment: String as PropType<"center" | "left" | "right">,
     allowEditing: Boolean,
     allowFiltering: Boolean,
     allowFixing: Boolean,
@@ -688,7 +688,7 @@ const DxColumnConfig = {
     allowResizing: Boolean,
     allowSearch: Boolean,
     allowSorting: Boolean,
-    buttons: Array as PropType<Array<Object> | Array<ColumnTreeListPredefinedColumnButton>>,
+    buttons: Array as PropType<Array<Object> | Array<"add" | "cancel" | "delete" | "edit" | "save" | "undelete">>,
     calculateCellValue: Function as PropType<(rowData: Object) => any>,
     calculateDisplayValue: [Function, String] as PropType<((rowData: Object) => any) | string>,
     calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string | any, target: string) => (string | Function | Array<any>)>,
@@ -699,18 +699,18 @@ const DxColumnConfig = {
     cssClass: String,
     customizeText: Function as PropType<(cellInfo: Object) => string>,
     dataField: String,
-    dataType: {},
+    dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
     editCellTemplate: {},
     editorOptions: {},
     encodeHtml: Boolean,
     falseText: String,
-    filterOperations: Array as PropType<Array<ColumnFilterOperation> | Array<string>>,
-    filterType: {},
+    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof"> | Array<string>>,
+    filterType: String as PropType<"exclude" | "include">,
     filterValue: {},
     filterValues: Array as PropType<Array<any>>,
     fixed: Boolean,
-    fixedPosition: {},
-    format: {},
+    fixedPosition: String as PropType<"left" | "right" | "sticky">,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     formItem: Object,
     headerCellTemplate: {},
     headerFilter: Object,
@@ -721,15 +721,15 @@ const DxColumnConfig = {
     name: String,
     ownerBand: Number,
     renderAsync: Boolean,
-    selectedFilterOperation: {},
+    selectedFilterOperation: String as PropType<"<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith">,
     setCellValue: Function as PropType<(newData: Object, value: any, currentRowData: Object) => any>,
     showEditorAlways: Boolean,
     showInColumnChooser: Boolean,
     sortIndex: Number,
     sortingMethod: Function as PropType<(value1: any, value2: any) => number>,
-    sortOrder: {},
+    sortOrder: String as PropType<"asc" | "desc">,
     trueText: String,
-    type: {},
+    type: String as PropType<"adaptive" | "buttons" | "drag">,
     validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
     visible: Boolean,
     visibleIndex: Number,
@@ -787,12 +787,12 @@ const DxColumnChooserConfig = {
     emptyPanelText: String,
     enabled: Boolean,
     height: [Number, String],
-    mode: {},
+    mode: String as PropType<"dragAndDrop" | "select">,
     position: Object,
     search: Object,
     searchTimeout: Number,
     selection: Object,
-    sortOrder: {},
+    sortOrder: String as PropType<"asc" | "desc">,
     title: String,
     width: [Number, String]
   }
@@ -921,10 +921,10 @@ const DxColumnHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: {},
+    groupInterval: [Number, String] as PropType<number | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
     height: [Number, String],
     search: Object,
-    searchMode: {},
+    searchMode: String as PropType<"contains" | "startswith" | "equals">,
     width: [Number, String]
   }
 };
@@ -952,7 +952,7 @@ const DxColumnHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: {},
+    mode: String as PropType<"contains" | "startswith" | "equals">,
     searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     timeout: Number
   }
@@ -1001,10 +1001,10 @@ const DxCompareRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: {},
+    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
     ignoreEmptyValue: Boolean,
     message: String,
-    type: {}
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
   }
 };
 
@@ -1054,7 +1054,7 @@ const DxCustomOperationConfig = {
     calculateFilterExpression: Function as PropType<(filterValue: any, field: Object) => (string | Function | Array<any>)>,
     caption: String,
     customizeText: Function as PropType<(fieldInfo: Object) => string>,
-    dataTypes: Array as PropType<Array<CustomOperationDataType>>,
+    dataTypes: Array as PropType<Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">>,
     editorTemplate: {},
     hasValue: Boolean,
     icon: String,
@@ -1083,7 +1083,7 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: {},
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
@@ -1127,11 +1127,11 @@ const DxEditingConfig = {
     editColumnName: String,
     editRowKey: {},
     form: Object,
-    mode: {},
+    mode: String as PropType<"batch" | "cell" | "row" | "form" | "popup">,
     popup: Object,
-    refreshMode: {},
+    refreshMode: String as PropType<"full" | "reshape" | "repaint">,
     selectTextOnEditStart: Boolean,
-    startEditAction: {},
+    startEditAction: String as PropType<"click" | "dblClick">,
     texts: Object,
     useIcons: Boolean
   }
@@ -1200,7 +1200,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: {}
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
   }
 };
 
@@ -1237,12 +1237,12 @@ const DxFieldConfig = {
     caption: String,
     customizeText: Function as PropType<(fieldInfo: Object) => string>,
     dataField: String,
-    dataType: {},
+    dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
-    filterOperations: Array as PropType<Array<FieldFilterBuilderOperation> | Array<string>>,
-    format: {},
+    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between"> | Array<string>>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     lookup: Object,
     name: String,
     trueText: String
@@ -1329,7 +1329,7 @@ const DxFilterBuilderConfig = {
     filterOperationDescriptions: Object,
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object,
-    groupOperations: Array as PropType<Array<FilterBuilderGroupOperation>>,
+    groupOperations: Array as PropType<Array<"and" | "or" | "notAnd" | "notOr">>,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
@@ -1452,7 +1452,7 @@ const DxFilterBuilderPopupConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: {},
+    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -1580,7 +1580,7 @@ const DxFilterRowConfig = {
     "update:visible": null,
   },
   props: {
-    applyFilter: {},
+    applyFilter: String as PropType<"auto" | "onClick">,
     applyFilterText: String,
     betweenEndText: String,
     betweenStartText: String,
@@ -1653,7 +1653,7 @@ const DxFormConfig = {
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
     bindingOptions: Object,
-    colCount: {},
+    colCount: [Number, String] as PropType<number | "auto">,
     colCountByScreen: Object,
     customizeItem: Function as PropType<(item: Object | Object | Object | Object | Object) => void>,
     disabled: Boolean,
@@ -1665,8 +1665,8 @@ const DxFormConfig = {
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
-    labelLocation: {},
-    labelMode: {},
+    labelLocation: String as PropType<"left" | "right" | "top">,
+    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
     minColWidth: Number,
     onContentReady: Function as PropType<(e: FormContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: FormDisposingEvent) => void>,
@@ -1717,7 +1717,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -1752,10 +1752,10 @@ const DxFormItemConfig = {
     cssClass: String,
     dataField: String,
     editorOptions: {},
-    editorType: {},
+    editorType: String as PropType<"dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox">,
     helpText: String,
     isRequired: Boolean,
-    itemType: {},
+    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
     label: Object,
     name: String,
     template: {},
@@ -1855,10 +1855,10 @@ const DxHeaderFilterConfig = {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
-    groupInterval: {},
+    groupInterval: [Number, String] as PropType<number | ("day" | "hour" | "minute" | "month" | "quarter" | "second" | "year")>,
     height: [Number, String],
     search: Object,
-    searchMode: {},
+    searchMode: String as PropType<"contains" | "startswith" | "equals">,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
@@ -1890,14 +1890,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -1958,16 +1958,16 @@ const DxItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: {},
-    location: {},
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
-    name: {},
+    name: String as PropType<"addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel">,
     options: {},
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     template: {},
     text: String,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 
@@ -1990,8 +1990,8 @@ const DxKeyboardNavigationConfig = {
   props: {
     editOnKeyPress: Boolean,
     enabled: Boolean,
-    enterKeyAction: {},
-    enterKeyDirection: {}
+    enterKeyAction: String as PropType<"startEdit" | "moveFocus">,
+    enterKeyDirection: String as PropType<"none" | "column" | "row">
   }
 };
 
@@ -2013,8 +2013,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: {},
-    location: {},
+    alignment: String as PropType<"center" | "left" | "right">,
+    location: String as PropType<"left" | "right" | "top">,
     showColon: Boolean,
     template: {},
     text: String,
@@ -2043,7 +2043,7 @@ const DxLoadPanelConfig = {
     "update:width": null,
   },
   props: {
-    enabled: {},
+    enabled: [Boolean, String] as PropType<Boolean | "auto">,
     height: [Number, String],
     indicatorSrc: String,
     shading: Boolean,
@@ -2094,8 +2094,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -2116,7 +2116,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: {}
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
   }
 };
 
@@ -2200,14 +2200,14 @@ const DxPagerConfig = {
     "update:visible": null,
   },
   props: {
-    allowedPageSizes: {},
-    displayMode: {},
+    allowedPageSizes: [Array, String] as PropType<(Array<number> | Array<"all" | "auto">) | "auto">,
+    displayMode: String as PropType<"adaptive" | "compact" | "full">,
     infoText: String,
     label: String,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
     showPageSizeSelector: Boolean,
-    visible: {}
+    visible: [Boolean, String] as PropType<Boolean | "auto">
   }
 };
 
@@ -2251,7 +2251,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: {}
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
   }
 };
 
@@ -2356,7 +2356,7 @@ const DxPopupConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: {},
+    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -2398,11 +2398,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: {},
+    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: {},
-    my: {},
+    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
+    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     of: {},
     offset: [Object, String]
   }
@@ -2431,7 +2431,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: {}
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
   }
 };
 
@@ -2477,7 +2477,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: {}
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
   }
 };
 
@@ -2527,9 +2527,9 @@ const DxRowDraggingConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: {},
+    dragDirection: String as PropType<"both" | "horizontal" | "vertical">,
     dragTemplate: {},
-    dropFeedbackMode: {},
+    dropFeedbackMode: String as PropType<"push" | "indicate">,
     filter: String,
     group: String,
     handle: String,
@@ -2570,15 +2570,15 @@ const DxScrollingConfig = {
     "update:useNative": null,
   },
   props: {
-    columnRenderingMode: {},
-    mode: {},
+    columnRenderingMode: String as PropType<"standard" | "virtual">,
+    mode: String as PropType<"standard" | "virtual">,
     preloadEnabled: Boolean,
     renderAsync: Boolean,
-    rowRenderingMode: {},
+    rowRenderingMode: String as PropType<"standard" | "virtual">,
     scrollByContent: Boolean,
     scrollByThumb: Boolean,
-    showScrollbar: {},
-    useNative: {}
+    showScrollbar: String as PropType<"always" | "never" | "onHover" | "onScroll">,
+    useNative: [Boolean, String] as PropType<Boolean | "auto">
   }
 };
 
@@ -2601,7 +2601,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: {},
+    mode: String as PropType<"contains" | "startswith" | "equals">,
     searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
     timeout: Number
   }
@@ -2653,7 +2653,7 @@ const DxSelectionConfig = {
   },
   props: {
     allowSelectAll: Boolean,
-    mode: {},
+    mode: String as PropType<"single" | "multiple" | "none">,
     recursive: Boolean,
     selectByClick: Boolean
   }
@@ -2683,14 +2683,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -2714,7 +2714,7 @@ const DxSortingConfig = {
     ascendingText: String,
     clearText: String,
     descendingText: String,
-    mode: {},
+    mode: String as PropType<"single" | "multiple" | "none">,
     showSortIndexes: Boolean
   }
 };
@@ -2742,7 +2742,7 @@ const DxStateStoringConfig = {
     enabled: Boolean,
     savingTimeout: Number,
     storageKey: String,
-    type: {}
+    type: String as PropType<"custom" | "localStorage" | "sessionStorage">
   }
 };
 
@@ -2769,7 +2769,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: {}
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
   }
 };
 
@@ -2879,7 +2879,7 @@ const DxToolbarConfig = {
   },
   props: {
     disabled: Boolean,
-    items: Array as PropType<Array<Object> | Array<ToolbarTreeListPredefinedToolbarItem>>,
+    items: Array as PropType<Array<Object> | Array<"addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel">>,
     visible: Boolean
   }
 };
@@ -2915,16 +2915,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: {},
-    location: {},
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
     options: {},
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     template: {},
     text: String,
-    toolbar: {},
+    toolbar: String as PropType<"bottom" | "top">,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 
@@ -2984,7 +2984,7 @@ const DxTreeListHeaderFilterSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: {},
+    mode: String as PropType<"contains" | "startswith" | "equals">,
     timeout: Number
   }
 };
@@ -3026,7 +3026,7 @@ const DxTreeListSelectionConfig = {
   },
   props: {
     allowSelectAll: Boolean,
-    mode: {},
+    mode: String as PropType<"single" | "multiple" | "none">,
     recursive: Boolean
   }
 };
@@ -3055,7 +3055,7 @@ const DxValidationRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: {},
+    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -3063,7 +3063,7 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: {},
+    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };

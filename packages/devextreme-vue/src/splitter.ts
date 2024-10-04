@@ -60,7 +60,7 @@ const componentConfig = {
     onResize: Function as PropType<(e: ResizeEvent) => void>,
     onResizeEnd: Function as PropType<(e: ResizeEndEvent) => void>,
     onResizeStart: Function as PropType<(e: ResizeStartEvent) => void>,
-    orientation: {},
+    orientation: String as PropType<"horizontal" | "vertical">,
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,

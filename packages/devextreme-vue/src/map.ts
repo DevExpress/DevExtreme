@@ -69,12 +69,12 @@ const componentConfig = {
     onReady: Function as PropType<(e: ReadyEvent) => void>,
     onRouteAdded: Function as PropType<(e: RouteAddedEvent) => void>,
     onRouteRemoved: Function as PropType<(e: RouteRemovedEvent) => void>,
-    provider: {},
+    provider: String as PropType<"bing" | "google" | "googleStatic">,
     providerConfig: Object,
     routes: Array as PropType<Array<Object>>,
     rtlEnabled: Boolean,
     tabIndex: Number,
-    type: {},
+    type: String as PropType<"hybrid" | "roadmap" | "satellite">,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoom: Number
@@ -257,7 +257,7 @@ const DxRouteConfig = {
   props: {
     color: String,
     locations: Array as PropType<Array<Object>>,
-    mode: {},
+    mode: String as PropType<"driving" | "walking">,
     opacity: Number,
     weight: Number
   }

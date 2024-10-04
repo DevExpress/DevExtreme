@@ -136,10 +136,10 @@ const DxItemConfig = {
     disabled: Boolean,
     icon: String,
     onClick: Function as PropType<(e: Object) => void>,
-    stylingMode: {},
+    stylingMode: String as PropType<"text" | "outlined" | "contained">,
     template: {},
     text: String,
-    type: {}
+    type: String as PropType<"danger" | "default" | "normal" | "success">
   }
 };
 

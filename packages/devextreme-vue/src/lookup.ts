@@ -111,7 +111,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: {},
+    applyValueMode: String as PropType<"instantly" | "useButtons">,
     cancelButtonText: String,
     cleanSearchOnOpening: Boolean,
     clearButtonText: String,
@@ -137,7 +137,7 @@ const componentConfig = {
     items: Array as PropType<Array<any> | Array<Object>>,
     itemTemplate: {},
     label: String,
-    labelMode: {},
+    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
     minSearchLength: Number,
     name: String,
     nextButtonText: String,
@@ -157,7 +157,7 @@ const componentConfig = {
     onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     opened: Boolean,
     pageLoadingText: String,
-    pageLoadMode: {},
+    pageLoadMode: String as PropType<"nextButton" | "scrollBottom">,
     placeholder: String,
     pulledDownText: String,
     pullingDownText: String,
@@ -166,7 +166,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
-    searchMode: {},
+    searchMode: String as PropType<"contains" | "startswith">,
     searchPlaceholder: String,
     searchStartEvent: String,
     searchTimeout: Number,
@@ -174,7 +174,7 @@ const componentConfig = {
     showCancelButton: Boolean,
     showClearButton: Boolean,
     showDataBeforeSearch: Boolean,
-    stylingMode: {},
+    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
     tabIndex: Number,
     text: String,
     useItemTextAsTitle: Boolean,
@@ -182,9 +182,9 @@ const componentConfig = {
     usePopover: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: {},
     valueChangeEvent: String,
     valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
@@ -331,8 +331,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -369,8 +369,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
+    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
   }
 };
 
@@ -454,7 +454,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function as PropType<(e: DropDownOptionsShowingEvent) => void>,
     onShown: Function as PropType<(e: DropDownOptionsShownEvent) => void>,
     onTitleRendered: Function as PropType<(e: DropDownOptionsTitleRenderedEvent) => void>,
-    position: {},
+    position: [Object, String] as PropType<Object | ("bottom" | "left" | "right" | "top") | Object>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
@@ -530,14 +530,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -604,8 +604,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: {},
-    y: {}
+    x: String as PropType<"center" | "left" | "right">,
+    y: String as PropType<"bottom" | "center" | "top">
   }
 };
 
@@ -647,11 +647,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: {},
+    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: {},
-    my: {},
+    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
+    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     of: {},
     offset: [Object, String]
   }
@@ -681,14 +681,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: {},
+    direction: String as PropType<"bottom" | "left" | "right" | "top">,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: {}
+    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
   }
 };
 
@@ -764,16 +764,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: {},
-    location: {},
+    locateInMenu: String as PropType<"always" | "auto" | "never">,
+    location: String as PropType<"after" | "before" | "center">,
     menuItemTemplate: {},
     options: {},
-    showText: {},
+    showText: String as PropType<"always" | "inMenu">,
     template: {},
     text: String,
-    toolbar: {},
+    toolbar: String as PropType<"bottom" | "top">,
     visible: Boolean,
-    widget: {}
+    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
   }
 };
 

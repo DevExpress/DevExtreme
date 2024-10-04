@@ -67,8 +67,8 @@ const componentConfig = {
     idField: String,
     interactWithGroup: Boolean,
     labelField: String,
-    layoutAlgorithm: {},
-    layoutDirection: {},
+    layoutAlgorithm: [Function, String] as PropType<((e: Object) => void) | ("sliceanddice" | "squarified" | "strip")>,
+    layoutDirection: String as PropType<"leftBottomRightTop" | "leftTopRightBottom" | "rightBottomLeftTop" | "rightTopLeftBottom">,
     loadingIndicator: Object,
     maxDepth: Number,
     onClick: Function as PropType<(e: ClickEvent) => void>,
@@ -89,9 +89,9 @@ const componentConfig = {
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
-    selectionMode: {},
+    selectionMode: String as PropType<"single" | "multiple" | "none">,
     size: Object,
-    theme: {},
+    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
     tile: Object,
     title: [Object, String],
     tooltip: Object,
@@ -180,7 +180,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -207,10 +207,10 @@ const DxColorizerConfig = {
   props: {
     colorCodeField: String,
     colorizeGroups: Boolean,
-    palette: {},
-    paletteExtensionMode: {},
+    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
+    paletteExtensionMode: String as PropType<"alternate" | "blend" | "extrapolate">,
     range: Array as PropType<Array<number>>,
-    type: {}
+    type: String as PropType<"discrete" | "gradient" | "none" | "range">
   }
 };
 
@@ -236,7 +236,7 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array as PropType<Array<ExportExportFormat>>,
+    formats: Array as PropType<Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">>,
     margin: Number,
     printingEnabled: Boolean,
     svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
@@ -290,7 +290,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: {},
+    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -350,7 +350,7 @@ const DxGroupLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean
   }
 };
@@ -394,9 +394,9 @@ const DxLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean,
-    wordWrap: {}
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -534,8 +534,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -592,9 +592,9 @@ const DxTileLabelConfig = {
   },
   props: {
     font: Object,
-    textOverflow: {},
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
     visible: Boolean,
-    wordWrap: {}
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -623,14 +623,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: {},
+    horizontalAlignment: String as PropType<"center" | "left" | "right">,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: {},
-    verticalAlignment: {},
-    wordWrap: {}
+    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
+    verticalAlignment: String as PropType<"bottom" | "top">,
+    wordWrap: String as PropType<"normal" | "breakWord" | "none">
   }
 };
 
@@ -675,7 +675,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(info: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: {},
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     opacity: Number,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
@@ -709,7 +709,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: {},
+    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
     opacity: Number,
     visible: Boolean,
     width: Number

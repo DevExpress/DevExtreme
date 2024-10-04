@@ -43,7 +43,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSearch: Boolean,
-    applyChangesMode: {},
+    applyChangesMode: String as PropType<"instantly" | "onDemand">,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -53,7 +53,14 @@ const componentConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    layout: {},
+    layout: {
+      type: Number,
+      validator: (v) => typeof(v) !== "number" || [
+        0,
+        1,
+        2
+      ].indexOf(v) !== -1
+    },
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onContextMenuPreparing: Function as PropType<(e: ContextMenuPreparingEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -212,7 +219,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: {},
+    mode: String as PropType<"contains" | "startswith" | "equals">,
     timeout: Number
   }
 };

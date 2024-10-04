@@ -60,7 +60,7 @@ interface DxDiagram extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    autoZoomMode: {},
+    autoZoomMode: String as PropType<"fitContent" | "fitWidth" | "disabled">,
     contextMenu: Object,
     contextToolbox: Object,
     customShapes: Array as PropType<Array<Object>>,
@@ -90,7 +90,7 @@ const componentConfig = {
     onRequestLayoutUpdate: Function as PropType<(e: RequestLayoutUpdateEvent) => void>,
     onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
     pageColor: String,
-    pageOrientation: {},
+    pageOrientation: String as PropType<"portrait" | "landscape">,
     pageSize: Object,
     propertiesPanel: Object,
     readOnly: Boolean,
@@ -99,10 +99,10 @@ const componentConfig = {
     simpleView: Boolean,
     snapToGrid: Boolean,
     toolbox: Object,
-    units: {},
+    units: String as PropType<"in" | "cm" | "px">,
     useNativeScrolling: Boolean,
     viewToolbar: Object,
-    viewUnits: {},
+    viewUnits: String as PropType<"in" | "cm" | "px">,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     zoomLevel: [Number, Object]
@@ -199,8 +199,8 @@ const DxAutoLayoutConfig = {
     "update:type": null,
   },
   props: {
-    orientation: {},
-    type: {}
+    orientation: String as PropType<"horizontal" | "vertical">,
+    type: String as PropType<"auto" | "off" | "tree" | "layered">
   }
 };
 
@@ -222,9 +222,9 @@ const DxCommandConfig = {
   },
   props: {
     icon: String,
-    items: Array as PropType<Array<CommandCommand> | Array<Object>>,
-    location: {},
-    name: {},
+    items: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String
   }
 };
@@ -248,9 +248,9 @@ const DxCommandItemConfig = {
   },
   props: {
     icon: String,
-    items: Array as PropType<Array<CommandItemCommand> | Array<Object>>,
-    location: {},
-    name: {},
+    items: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String
   }
 };
@@ -290,7 +290,7 @@ const DxContextMenuConfig = {
     "update:enabled": null,
   },
   props: {
-    commands: Array as PropType<Array<ContextMenuCommand> | Array<Object>>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     enabled: Boolean
   }
 };
@@ -316,11 +316,11 @@ const DxContextToolboxConfig = {
     "update:width": null,
   },
   props: {
-    category: {},
-    displayMode: {},
+    category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
+    displayMode: String as PropType<"icons" | "texts">,
     enabled: Boolean,
     shapeIconsPerRow: Number,
-    shapes: Array as PropType<Array<ContextToolboxShapeType>>,
+    shapes: Array as PropType<Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">>,
     width: Number
   }
 };
@@ -384,7 +384,7 @@ const DxCustomShapeConfig = {
     backgroundImageTop: Number,
     backgroundImageUrl: String,
     backgroundImageWidth: Number,
-    baseType: {},
+    baseType: String as PropType<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">,
     category: String,
     connectionPoints: Array as PropType<Array<Object>>,
     defaultHeight: Number,
@@ -441,9 +441,9 @@ const DxDefaultItemPropertiesConfig = {
     "update:textStyle": null,
   },
   props: {
-    connectorLineEnd: {},
-    connectorLineStart: {},
-    connectorLineType: {},
+    connectorLineEnd: String as PropType<"none" | "arrow" | "outlinedTriangle" | "filledTriangle">,
+    connectorLineStart: String as PropType<"none" | "arrow" | "outlinedTriangle" | "filledTriangle">,
+    connectorLineType: String as PropType<"straight" | "orthogonal">,
     shapeMaxHeight: Number,
     shapeMaxWidth: Number,
     shapeMinHeight: Number,
@@ -587,11 +587,11 @@ const DxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: {},
-    commands: Array as PropType<Array<GroupCommand> | Array<Object>>,
-    displayMode: {},
+    category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
+    displayMode: String as PropType<"icons" | "texts">,
     expanded: Boolean,
-    shapes: Array as PropType<Array<GroupShapeType>>,
+    shapes: Array as PropType<Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">>,
     title: String
   }
 };
@@ -611,7 +611,7 @@ const DxHistoryToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array as PropType<Array<HistoryToolbarCommand> | Array<Object>>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     visible: Boolean
   }
 };
@@ -640,9 +640,9 @@ const DxItemConfig = {
   props: {
     height: Number,
     icon: String,
-    items: Array as PropType<Array<ItemCommand> | Array<Object>>,
-    location: {},
-    name: {},
+    items: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
+    location: String as PropType<"after" | "before" | "center">,
+    name: String as PropType<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">,
     text: String,
     width: Number
   }
@@ -663,7 +663,7 @@ const DxMainToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array as PropType<Array<MainToolbarCommand> | Array<Object>>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     visible: Boolean
   }
 };
@@ -703,7 +703,7 @@ const DxNodesConfig = {
     "update:zIndexExpr": null,
   },
   props: {
-    autoLayout: {},
+    autoLayout: [Object, String] as PropType<Object | ("auto" | "off" | "tree" | "layered")>,
     autoSizeEnabled: Boolean,
     containerChildrenExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
     containerKeyExpr: [Function, String] as PropType<((data: any, value: any) => any) | string>,
@@ -791,7 +791,7 @@ const DxPropertiesPanelConfig = {
   },
   props: {
     tabs: Array as PropType<Array<Object>>,
-    visibility: {}
+    visibility: String as PropType<"auto" | "visible" | "collapsed" | "disabled">
   }
 };
 
@@ -813,7 +813,7 @@ const DxTabConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array as PropType<Array<TabCommand> | Array<Object>>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     groups: Array as PropType<Array<Object>>,
     title: String
   }
@@ -839,7 +839,7 @@ const DxTabGroupConfig = {
     "update:title": null,
   },
   props: {
-    commands: Array as PropType<Array<TabGroupCommand> | Array<Object>>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     title: String
   }
 };
@@ -868,7 +868,7 @@ const DxToolboxConfig = {
     groups: Array as PropType<Array<Object>>,
     shapeIconsPerRow: Number,
     showSearch: Boolean,
-    visibility: {},
+    visibility: String as PropType<"auto" | "visible" | "collapsed" | "disabled">,
     width: Number
   }
 };
@@ -894,10 +894,10 @@ const DxToolboxGroupConfig = {
     "update:title": null,
   },
   props: {
-    category: {},
-    displayMode: {},
+    category: String as PropType<"general" | "flowchart" | "orgChart" | "containers" | "custom">,
+    displayMode: String as PropType<"icons" | "texts">,
     expanded: Boolean,
-    shapes: Array as PropType<Array<ToolboxGroupShapeType>>,
+    shapes: Array as PropType<Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">>,
     title: String
   }
 };
@@ -917,7 +917,7 @@ const DxViewToolbarConfig = {
     "update:visible": null,
   },
   props: {
-    commands: Array as PropType<Array<ViewToolbarCommand> | Array<Object>>,
+    commands: Array as PropType<Array<Object> | Array<"separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">>,
     visible: Boolean
   }
 };

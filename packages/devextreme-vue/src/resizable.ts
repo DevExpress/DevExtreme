@@ -32,7 +32,7 @@ const componentConfig = {
   props: {
     area: {},
     elementAttr: Object,
-    handles: {},
+    handles: String as PropType<"bottom" | "left" | "right" | "top" | "all">,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     keepAspectRatio: Boolean,
     maxHeight: Number,

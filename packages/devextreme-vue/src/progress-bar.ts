@@ -61,9 +61,9 @@ const componentConfig = {
     statusFormat: [Function, String] as PropType<((ratio: number, value: number) => string) | string>,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: {},
-    validationMessagePosition: {},
-    validationStatus: {},
+    validationMessageMode: String as PropType<"always" | "auto">,
+    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
     value: {},
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

@@ -42,7 +42,7 @@ const componentConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: {},
+    dragDirection: String as PropType<"both" | "horizontal" | "vertical">,
     dragTemplate: {},
     elementAttr: Object,
     group: String,
