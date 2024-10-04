@@ -63,6 +63,7 @@ QUnit.testStart(function() {
     $('#widthRootStyle').css('width', '300px');
 });
 
+const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
@@ -2188,6 +2189,22 @@ QUnit.module('popup options', {
 
         $(document).trigger('dxpointerdown');
         assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
+    });
+
+    [true, false].forEach(usePopover => {
+        QUnit.test(`Popup should have correct _loopFocus option value if usePopover=${usePopover}`, function(assert) {
+            const instance = $('#lookupOptions').dxLookup({
+                usePopover,
+            }).dxLookup('instance');
+
+            openPopupWithList(instance);
+
+            const $overlay = $(`.${OVERLAY_CLASS}.${POPUP_CLASS}`);
+            const popup = usePopover ? PopoverFull.getInstance($overlay) : PopupFull.getInstance($overlay);
+            const { _loopFocus } = popup.option();
+
+            assert.equal(_loopFocus, !usePopover);
+        });
     });
 
     QUnit.test('custom titleTemplate option', function(assert) {
