@@ -12,11 +12,14 @@ registerTemplateEngine('default', {
 setTemplateEngine('default');
 
 export class Template extends TemplateBase {
+  _compiledTemplate: any;
+
   constructor(element) {
     super();
     this._element = element;
   }
 
+  // @ts-expect-error need type overload
   _renderCore(options) {
     const { transclude } = options;
     if (!transclude && !this._compiledTemplate) {

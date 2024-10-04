@@ -225,7 +225,6 @@ class DOMComponent<
     const height = this._getOptionValue('height', element);
 
     if (this._isCssUpdateRequired(element, height, width)) {
-      // @ts-expect-error
       $element.css({
         width: width === null ? '' : width,
         height: height === null ? '' : height,

@@ -110,7 +110,7 @@ deferredConfig.forEach((config) => {
   };
 });
 
-export function fromPromise(promise, context) {
+export function fromPromise(promise, context?: any) {
   if (isDeferred(promise)) {
     return promise;
   } if (isPromise(promise)) {
@@ -131,8 +131,8 @@ let whenFunc = function () {
     return fromPromise(arguments[0]);
   }
 
-  const values = [].slice.call(arguments);
-  const contexts = [];
+  const values: any[] = [].slice.call(arguments);
+  const contexts: any[] = [];
   let resolvedCount = 0;
   const deferred = new DeferredObj();
 
@@ -174,5 +174,6 @@ export function Deferred() {
 }
 
 export function when() {
+  // @ts-expect-error
   return whenFunc.apply(this, arguments);
 }

@@ -1,3 +1,23 @@
+type CallbackType<TArgs extends any[], TContext>
+  = ((this: TContext, ...args: TArgs) => boolean)
+  | ((this: TContext, ...args: TArgs) => void);
+
+export interface CallbackInterface<TArgs extends any[] = any[], TContext = any> {
+  add: (fn: CallbackType<TArgs, TContext>) => this;
+
+  remove: (fn: CallbackType<TArgs, TContext>) => this;
+
+  has: (fn: CallbackType<TArgs, TContext>) => this;
+
+  empty: () => this;
+
+  fireWith: (context: TContext, args: TArgs) => this;
+
+  fire: (...args: TArgs) => this;
+
+  fired: () => boolean;
+}
+
 const Callback = function (options) {
   this._options = options || {};
   this._list = [];

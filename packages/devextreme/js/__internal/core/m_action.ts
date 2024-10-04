@@ -4,7 +4,23 @@ import { isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 
 class Action {
-  constructor(action, config) {
+  _action: any;
+
+  _context: any;
+
+  _beforeExecute: any;
+
+  _afterExecute: any;
+
+  _component: any;
+
+  _validatingTargetName: any;
+
+  _excludeValidators: any;
+
+  static executors: any;
+
+  constructor(action, config?) {
     config = config || {};
     this._action = action;
     this._context = config.context || getWindow();
@@ -124,7 +140,7 @@ const createValidatorByTargetElement = (condition) => (e) => {
     e.cancel = true;
   }
 };
-
+// @ts-expect-error expect name and executor
 Action.registerExecutor({
   disabled: {
     validate: createValidatorByTargetElement(($target) => $target.is('@js/coredx-state-disabled, .dx-state-disabled *')),

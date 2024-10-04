@@ -31,6 +31,7 @@ const readPropValue = function (obj, propName, options) {
 
 const assignPropValue = function (obj, propName, value, options) {
   if (propName === 'this') {
+    // @ts-expect-error only void function can be called with new
     throw new errors.Error('E4016');
   }
 
@@ -192,7 +193,7 @@ export const compileSetter = function (expr) {
   };
 };
 
-export const toComparable = function (value, caseSensitive, options = {}) {
+export const toComparable = function (value, caseSensitive, options: any = {}) {
   if (value instanceof Date) {
     return value.getTime();
   }

@@ -10,6 +10,7 @@ const callOnce = function (handler) {
   };
 
   return function () {
+    // @ts-expect-error Iarguments not assignable to []
     return wrappedHandler.apply(this, arguments);
   };
 };

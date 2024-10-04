@@ -47,12 +47,13 @@ const resizeCallbacks = (function () {
 
   let removeListener;
 
-  callbacks.add = function () {
-    const result = originalCallbacksAdd.apply(callbacks, arguments);
+  callbacks.add = function (...args) {
+    const result = originalCallbacksAdd.apply(callbacks, args);
 
     setPrevSize();
 
     readyCallbacks.add(() => {
+      // @ts-expect-error no args for has
       if (!removeListener && callbacks.has()) {
         removeListener = domAdapter.listen(getWindow(), 'resize', handleResize);
       }
@@ -62,8 +63,9 @@ const resizeCallbacks = (function () {
   };
 
   callbacks.remove = function () {
+    // @ts-expect-error args do not match with our d.ts type
     const result = originalCallbacksRemove.apply(callbacks, arguments);
-
+    // @ts-expect-error no args for has
     if (!callbacks.has() && removeListener) {
       removeListener();
       removeListener = undefined;

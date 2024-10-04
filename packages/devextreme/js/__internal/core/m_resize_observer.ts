@@ -10,13 +10,20 @@ const ResizeObserverMock = {
 };
 
 class ResizeObserverSingleton {
+  _callbacksMap?: any;
+
+  _observer?: any;
+
   constructor() {
+    // @ts-expect-error ResizeObserver doesn't exist on Window type
+    // we need to make our own for extensions like this
     if (!hasWindow() || !window.ResizeObserver) {
       // eslint-disable-next-line no-constructor-return
       return ResizeObserverMock;
     }
 
     this._callbacksMap = new Map();
+    // @ts-expect-error ResizeObserver doesn't exist on Window type
     this._observer = new window.ResizeObserver((entries) => {
       entries.forEach((entry) => {
         this._callbacksMap.get(entry.target)?.(entry);
@@ -43,6 +50,7 @@ class ResizeObserverSingleton {
 const resizeObserverSingleton = new ResizeObserverSingleton();
 
 /// #DEBUG
+// @ts-expect-error singleton typing issue
 resizeObserverSingleton.ResizeObserverSingleton = ResizeObserverSingleton;
 /// #ENDDEBUG
 

@@ -1,4 +1,4 @@
-export function compare(x, y, maxLevel) {
+export function compare(x, y, maxLevel?) {
   function normalizeArg(value) {
     if (typeof value === 'string') {
       return value.split('.');

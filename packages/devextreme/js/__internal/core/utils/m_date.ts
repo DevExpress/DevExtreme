@@ -135,7 +135,7 @@ const getFirstQuarterMonth = function (month) {
   return getQuarter(month) * 3;
 };
 
-function correctDateWithUnitBeginning(date, dateInterval, withCorrection, firstDayOfWeek) {
+function correctDateWithUnitBeginning(date, dateInterval, withCorrection?, firstDayOfWeek?) {
   date = new Date(date.getTime());
   const oldDate = new Date(date.getTime());
   let firstQuarterMonth;
@@ -199,7 +199,7 @@ const setToDayEnd = function (date) {
 const getDatesDifferences = function (date1, date2) {
   let counter = 0;
 
-  const differences = {
+  const differences: any = {
     year: date1.getFullYear() !== date2.getFullYear(),
     month: date1.getMonth() !== date2.getMonth(),
     day: date1.getDate() !== date2.getDate(),
@@ -258,13 +258,13 @@ function addDateInterval(value, interval, dir) {
   return result;
 }
 
-const addInterval = function (value, interval, isNegative) {
+const addInterval = function (value, interval, isNegative?: boolean) {
   const dir = isNegative ? -1 : +1;
   return isDate(value) ? addDateInterval(value, interval, dir) : adjust(value + interval * dir, interval);
 };
 
 const getSequenceByInterval = function (min, max, interval) {
-  const intervals = [];
+  const intervals: any[] = [];
   let cur;
 
   intervals.push(isDate(min) ? new Date(min.getTime()) : min);
@@ -391,7 +391,7 @@ const getDifferenceInMonthForCells = function (typeView) {
 };
 
 function getDateIntervalByString(intervalString) {
-  const result = {};
+  const result: any = {};
   switch (intervalString) {
     case 'year':
       result.years = 1;
@@ -569,7 +569,7 @@ const normalizeDateByWeek = function (date, currentDate) {
   return resultDate;
 };
 
-const dateInRange = function (date, min, max, format) {
+const dateInRange = function (date, min, max, format?) {
   if (format === 'date') {
     min = min && dateUtils.correctDateWithUnitBeginning(min, 'day');
     max = max && dateUtils.correctDateWithUnitBeginning(max, 'day');
@@ -670,7 +670,7 @@ const makeDate = function (date) {
 };
 
 const getDatesOfInterval = function (startDate, endDate, step) {
-  const result = [];
+  const result: any[] = [];
   let currentDate = new Date(startDate.getTime());
 
   while (currentDate < endDate) {
@@ -682,8 +682,9 @@ const getDatesOfInterval = function (startDate, endDate, step) {
   return result;
 };
 
-const createDateWithFullYear = function (year) {
-  const result = new Date(...arguments);
+const createDateWithFullYear = function (year, ...args) {
+  // @ts-expect-error spread should have tuple type
+  const result = new Date(year, ...args);
   result.setFullYear(year);
   return result;
 };
@@ -700,7 +701,7 @@ const getRangesByDates = (dates) => {
   const sortedDates = datesInMilliseconds.sort((a, b) => a - b);
 
   const msInDay = toMilliseconds('day');
-  const ranges = [];
+  const ranges: any[] = [];
 
   let startDate = sortedDates[0];
 
@@ -724,6 +725,10 @@ const getRangesByDates = (dates) => {
   }
 
   return ranges;
+};
+
+const sameView = function (view, date1, date2) {
+  return dateUtils[camelize(`same ${view}`)](date1, date2);
 };
 
 const dateUtils = {
@@ -753,6 +758,7 @@ const dateUtils = {
   sameYear,
   sameDecade,
   sameCentury,
+  sameView,
   getDifferenceInMonth,
   getDifferenceInMonthForCells,
   getFirstYearInDecade,
@@ -791,10 +797,6 @@ const dateUtils = {
   getMachineTimezoneName,
 
   getRangesByDates,
-};
-
-dateUtils.sameView = function (view, date1, date2) {
-  return dateUtils[camelize(`same ${view}`)](date1, date2);
 };
 
 export { dateUtils };

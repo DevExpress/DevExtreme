@@ -168,8 +168,8 @@ const isCrossDomain = function (url) {
   }
 
   let crossDomain = false;
-  const originAnchor = domAdapter.createElement('a');
-  const urlAnchor = domAdapter.createElement('a');
+  const originAnchor = domAdapter.createElement('a') as HTMLAnchorElement;
+  const urlAnchor = domAdapter.createElement('a') as HTMLAnchorElement;
 
   originAnchor.href = window.location.href;
 

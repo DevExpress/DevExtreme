@@ -19,6 +19,7 @@ const supportProp = function (prop) {
 };
 
 const isNativeScrollingSupported = function () {
+  // @ts-expect-error mac doesnt exist in public type
   const { platform, mac: isMac } = devices.real();
   const isNativeScrollDevice = platform === 'ios' || platform === 'android' || isMac;
 
@@ -33,7 +34,9 @@ const inputType = function (type) {
   const input = domAdapter.createElement('input');
   try {
     input.setAttribute('type', type);
+    // @ts-expect-error need smarter typing
     input.value = 'wrongValue';
+    // @ts-expect-error need smarter typing
     return !input.value;
   } catch (e) {
     return false;

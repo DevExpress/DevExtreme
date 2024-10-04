@@ -15,6 +15,7 @@ const registerComponent = function (name, namespace, ComponentClass) {
 };
 
 const registerRendererComponent = function (name, ComponentClass) {
+  // @ts-expect-error 'fn' does not exist on type '(selector?: string | Element | dxElementWrapper | undefined) => dxElementWrapper'
   $.fn[name] = function (options) {
     const isMemberInvoke = typeof options === 'string';
     let result;

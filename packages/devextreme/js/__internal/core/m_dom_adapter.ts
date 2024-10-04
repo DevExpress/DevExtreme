@@ -8,7 +8,44 @@ const TEXT_NODE = 3;
 const DOCUMENT_NODE = 9;
 const DOCUMENT_FRAGMENT_NODE = 11;
 
-const nativeDOMAdapterStrategy = {
+export interface DomAdapter {
+  querySelectorAll: (element, selector) => any;
+  elementMatches: (element, selector) => any;
+  getActiveElement: (element?: HTMLElement | null) => HTMLElement;
+  getDocument: () => Document;
+  getDocumentElement: () => HTMLDocument & {
+    scrollLeft: number;
+    scrollTop: number;
+    clientWidth: number;
+    scrollHeight: number;
+    offsetHeight: number;
+    clientHeight: number;
+  };
+  getHead: () => any;
+  listen: (element, event, callback, options?) => any;
+  getReadyState: () => DocumentReadyState;
+  isNode: (node: unknown) => boolean;
+  isDocument: (element: any) => boolean;
+  isDocumentFragment: (element: any) => boolean;
+  getBody: () => HTMLBodyElement;
+  getRootNode: (element: HTMLElement) => Document | DocumentFragment;
+  getAttribute: (element, name) => any;
+  setAttribute: (element, name, value) => void;
+  removeAttribute: (element, name) => void;
+  isElementNode: (element: any) => boolean;
+  createElement: (tagName: string, context?: Document) => HTMLElement;
+  createDocumentFragment: () => DocumentFragment;
+  createTextNode: (text: any, context?: any) => any;
+  setClass: (element: HTMLElement, className: string, isAdd: boolean) => void;
+  setText: (element, text) => void;
+  setProperty: (element, name, value) => void;
+  removeElement: (element: HTMLElement) => void;
+  inject: (obj: Record<string, unknown>) => void;
+  setStyle: (element: HTMLElement, name: string, value: string) => void;
+  insertElement: (parentElement: HTMLElement, newElement: HTMLElement, nextSiblingElement?: HTMLElement) => void;
+}
+
+const nativeDOMAdapterStrategy: DomAdapter = {
   querySelectorAll(element, selector) {
     return element.querySelectorAll(selector);
   },
@@ -36,8 +73,8 @@ const nativeDOMAdapterStrategy = {
   },
 
   createElement(tagName, context) {
-    context = context || this._document;
-    return context.createElement(tagName);
+    context = context ?? this._document;
+    return context!.createElement(tagName);
   },
 
   createElementNS(ns, tagName, context) {
@@ -56,11 +93,11 @@ const nativeDOMAdapterStrategy = {
   },
 
   isNode(element) {
-    return element && typeof element === 'object' && 'nodeType' in element && 'nodeName' in element;
+    return !!element && typeof element === 'object' && 'nodeType' in element && 'nodeName' in element;
   },
 
   isElementNode(element) {
-    return element && element.nodeType === ELEMENT_NODE;
+    return !!element && element.nodeType === ELEMENT_NODE;
   },
 
   isTextNode(element) {
@@ -141,7 +178,7 @@ const nativeDOMAdapterStrategy = {
 
     return activeElementHolder.activeElement;
   },
-
+  // @ts-expect-error return type is not assignable
   getRootNode(element) {
     return element?.getRootNode?.() ?? this._document;
   },
@@ -166,7 +203,7 @@ const nativeDOMAdapterStrategy = {
     return this._document.selection;
   },
 
-  getReadyState() {
+  getReadyState(): DocumentReadyState {
     return this._document.readyState;
   },
 
@@ -201,5 +238,5 @@ const nativeDOMAdapterStrategy = {
   },
 };
 
-const domAdapter = injector(nativeDOMAdapterStrategy);
+const domAdapter: DomAdapter = injector(nativeDOMAdapterStrategy);
 export { domAdapter };

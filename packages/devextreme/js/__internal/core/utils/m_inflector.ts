@@ -25,7 +25,7 @@ export const underscore = function (text) {
   return dasherize(text).replace(/-/g, '_');
 };
 
-export const camelize = function (text, upperFirst) {
+export const camelize = function (text, upperFirst?: boolean) {
   return map(chop(text), (p, i) => {
     p = p.toLowerCase();
     if (upperFirst || i > 0) {
@@ -46,7 +46,7 @@ export const titleize = function (text) {
 const DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 export const captionize = function (name) {
-  const captionList = [];
+  const captionList: any[] = [];
   let i;
   let char;
   let isPrevCharNewWord = false;

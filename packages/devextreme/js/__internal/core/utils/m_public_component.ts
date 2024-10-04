@@ -9,7 +9,7 @@ const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 const componentNames = new WeakMap();
 let nextAnonymousComponent = 0;
 
-const getName = function (componentClass, newName) {
+const getName = function (componentClass, newName?) {
   if (isDefined(newName)) {
     componentNames.set(componentClass, newName);
     return;

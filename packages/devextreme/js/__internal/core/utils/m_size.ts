@@ -33,7 +33,7 @@ const getElementComputedStyle = function (element) {
   const view = element?.ownerDocument?.defaultView || window;
   return view.getComputedStyle && view.getComputedStyle(element);
 };
-const getCSSProperty = function (element, styles, name, defaultValue) {
+const getCSSProperty = function (element, styles, name, defaultValue?) {
   return styles?.[name] || element.style?.[name] || defaultValue;
 };
 
@@ -81,10 +81,10 @@ export const getSize = function (element, dimension, box) {
   }
 
   const coeff = Math.sign(targetBoxIndex - currentBoxIndex);
-  let padding = false;
-  let border = false;
-  let margin = false;
-  let scrollThickness = false;
+  let padding: number | boolean = false;
+  let border: number | boolean = false;
+  let margin: number | boolean = false;
+  let scrollThickness: number | boolean = false;
 
   if (coeff === 1) {
     targetBoxIndex += 1;
@@ -127,7 +127,7 @@ const getContainerHeight = function (container) {
   return isWindow(container) ? container.innerHeight : container.offsetHeight;
 };
 
-export const parseHeight = function (value, container, element) {
+export const parseHeight = function (value, container, element?) {
   if (value.indexOf('px') > 0) {
     value = parseInt(value.replace('px', ''), 10);
   } else if (value.indexOf('%') > 0) {
@@ -201,18 +201,18 @@ export const getVisibleHeight = function (element) {
 
 // TODO: remove when we'll start mocking named exports
 export const implementationsMap = {
-  getWidth: (...args) => elementSizeHelper('width', ...args),
-  setWidth: (...args) => elementSizeHelper('width', ...args),
-  getHeight: (...args) => elementSizeHelper('height', ...args),
-  setHeight: (...args) => elementSizeHelper('height', ...args),
-  getOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args),
-  setOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args),
-  getOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args),
-  setOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args),
-  getInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args),
-  setInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args),
-  getInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args),
-  setInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args),
+  getWidth: (...args) => elementSizeHelper('width', ...args as [any, any]),
+  setWidth: (...args) => elementSizeHelper('width', ...args as [any, any]),
+  getHeight: (...args) => elementSizeHelper('height', ...args as [any, any]),
+  setHeight: (...args) => elementSizeHelper('height', ...args as [any, any]),
+  getOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args as [any, any]),
+  setOuterWidth: (...args) => elementSizeHelper('outerWidth', ...args as [any, any]),
+  getOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args as [any, any]),
+  setOuterHeight: (...args) => elementSizeHelper('outerHeight', ...args as [any, any]),
+  getInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args as [any, any]),
+  setInnerWidth: (...args) => elementSizeHelper('innerWidth', ...args as [any, any]),
+  getInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args as [any, any]),
+  setInnerHeight: (...args) => elementSizeHelper('innerHeight', ...args as [any, any]),
 };
 function elementSizeHelper(sizeProperty, el, value) {
   return arguments.length === 2 ? elementSize(el, sizeProperty) : elementSize(el, sizeProperty, value);
@@ -231,7 +231,7 @@ export const setInnerWidth = (el, value) => implementationsMap.setInnerWidth(el,
 export const getInnerHeight = (el) => implementationsMap.getInnerHeight(el);
 export const setInnerHeight = (el, value) => implementationsMap.setInnerHeight(el, value);
 
-const elementSize = function (el, sizeProperty, value) {
+const elementSize = function (el, sizeProperty, value?) {
   const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
   const propName = partialName.toLowerCase();
   const isOuter = sizeProperty.indexOf('outer') === 0;

@@ -13,20 +13,20 @@ export const extendFromObject = function (target, source, overrideExistingValues
   return target;
 };
 
-export const extend = function (target) {
+export const extend = function (target, ...args: any[]) {
   target = target || {};
 
-  let i = 1;
+  let i = 0;
   let deep = false;
 
   if (typeof target === 'boolean') {
     deep = target;
-    target = arguments[1] || {};
+    target = args[0] || {};
     i++;
   }
 
-  for (; i < arguments.length; i++) {
-    const source = arguments[i];
+  for (; i < args.length; i++) {
+    const source = args[i];
     if (source == null) {
       continue;
     }

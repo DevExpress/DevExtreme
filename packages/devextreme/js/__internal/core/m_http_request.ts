@@ -5,6 +5,7 @@ const window = getWindow();
 
 const nativeXMLHttpRequest = {
   getXhr() {
+    // @ts-expect-error no XMLHttpRequest on Window
     return new window.XMLHttpRequest();
   },
 };

@@ -18,6 +18,7 @@ const TEXT_NODE = 3;
 const ANONYMOUS_TEMPLATE_NAME = 'template';
 const TEMPLATE_OPTIONS_NAME = 'dxTemplate';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
+// @ts-expect-error need to add overloaded constructor type to templates
 const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) => {
   const widgetName = model.widget;
   if (!widgetName) return $();
@@ -35,6 +36,14 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
 });
 
 export class TemplateManager {
+  _tempTemplates: any[];
+
+  _defaultTemplates: any;
+
+  _anonymousTemplateName: any;
+
+  _createElement: any;
+
   constructor(createElement, anonymousTemplateName) {
     this._tempTemplates = [];
     this._defaultTemplates = {};
@@ -47,7 +56,7 @@ export class TemplateManager {
   static createDefaultOptions() {
     return {
       integrationOptions: {
-        watchMethod: (fn, callback, options = {}) => {
+        watchMethod: (fn, callback, options: any = {}) => {
           if (!options.skipImmediate) {
             callback(fn());
           }
@@ -68,7 +77,7 @@ export class TemplateManager {
   }
 
   dispose() {
-    this._tempTemplates.forEach((tempTemplate) => {
+    this._tempTemplates.forEach((tempTemplate: any) => {
       tempTemplate.template.dispose && tempTemplate.template.dispose();
     });
     this._tempTemplates = [];
@@ -114,7 +123,7 @@ export class TemplateManager {
   }
 
   _createTemplateIfNeeded(templateSource) {
-    const cachedTemplate = this._tempTemplates.filter((tempTemplate) => tempTemplate.source === templateKey(templateSource))[0];
+    const cachedTemplate: any = this._tempTemplates.filter((tempTemplate: any) => tempTemplate.source === templateKey(templateSource))[0];
     if (cachedTemplate) return cachedTemplate.template;
 
     const template = this._createTemplate(templateSource);
@@ -130,7 +139,7 @@ export class TemplateManager {
     if (!isFunction(templateSource)) {
       return acquireTemplate(templateSource, this._createTemplateIfNeeded, templates, isAsyncTemplate, skipTemplates, this._defaultTemplates);
     }
-
+    // @ts-expect-error need to add overloaded constructor type to templates
     return new FunctionTemplate((options) => {
       const templateSourceResult = templateSource.apply(context, getNormalizedTemplateArgs(options));
 
@@ -141,6 +150,7 @@ export class TemplateManager {
       let dispose = false;
       const template = acquireTemplate(templateSourceResult, (templateSource) => {
         if (templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
+          // @ts-expect-error need to add overloaded constructor type to templates
           return new FunctionTemplate(() => templateSource);
         }
         dispose = true;

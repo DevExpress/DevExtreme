@@ -6,8 +6,8 @@ const dataMap = new WeakMap();
 let strategy;
 
 export const strategyChanging = new MemorizedCallbacks();
-let beforeCleanDataFunc = function () {};
-let afterCleanDataFunc = function () {};
+let beforeCleanDataFunc: any = function () {};
+let afterCleanDataFunc: any = function () {};
 
 export const setDataStrategy = function (value) {
   strategyChanging.fire(value);
@@ -79,8 +79,8 @@ export function getDataStrategy() {
   return strategy;
 }
 
-export function data() {
-  return strategy.data.apply(this, arguments);
+export function data(...args) {
+  return strategy.data.apply(this, args);
 }
 
 export function beforeCleanData(callback) {
@@ -99,7 +99,7 @@ export function removeData(element, key) {
   return strategy.removeData.call(this, element, key);
 }
 
-export function cleanDataRecursive(element, cleanSelf) {
+export function cleanDataRecursive(element, cleanSelf?: boolean) {
   if (!domAdapter.isElementNode(element)) {
     return;
   }

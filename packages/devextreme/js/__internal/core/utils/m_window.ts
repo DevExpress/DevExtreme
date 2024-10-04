@@ -6,7 +6,7 @@ let hasWindowValue = typeof window !== 'undefined';
 
 const hasWindow = () => hasWindowValue;
 
-let windowObject = hasWindow() ? window : undefined;
+let windowObject: any = hasWindow() ? window : undefined;
 
 if (!windowObject) {
   windowObject = {};
@@ -44,7 +44,7 @@ const getCurrentScreenFactor = (screenFactorCallback) => {
   return screenFactorFunc(windowWidth);
 };
 
-const getNavigator = () => (hasWindow() ? windowObject.navigator : { userAgent: '' });
+const getNavigator = () => (hasWindow() ? windowObject?.navigator : { userAgent: '' });
 
 export {
   defaultScreenFactorFunc,

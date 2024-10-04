@@ -50,6 +50,7 @@ const infernoRenderer = injector({
         createElement(component, props),
         mountNode,
       );
+      // @ts-expect-error need to change type to inferno element
       container.$V = mountNode.$V;
       if (parentNode) {
         parentNode.insertBefore(container, nextNode);

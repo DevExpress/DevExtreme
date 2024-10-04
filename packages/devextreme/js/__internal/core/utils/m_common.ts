@@ -12,6 +12,7 @@ export const ensureDefined = function (value, defaultValue) {
 };
 
 export const executeAsync = function (action, context/* , internal */) {
+  // @ts-expect-error only void function can be called with new
   const deferred = new Deferred();
   const normalizedContext = context || this;
   const task = {
@@ -39,15 +40,16 @@ export const executeAsync = function (action, context/* , internal */) {
   return task;
 };
 
-const delayedFuncs = [];
-const delayedNames = [];
-const delayedDeferreds = [];
+const delayedFuncs: any[] = [];
+const delayedNames: any[] = [];
+const delayedDeferreds: any[] = [];
 let executingName;
 
-const deferExecute = function (name, func, deferred) {
+const deferExecute = function (name, func, deferred?) {
   if (executingName && executingName !== name) {
     delayedFuncs.push(func);
     delayedNames.push(name);
+    // @ts-expect-error only void function can be called with new
     deferred = deferred || new Deferred();
     delayedDeferreds.push(deferred);
     return deferred;
@@ -245,10 +247,11 @@ export const applyServerDecimalSeparator = function (value) {
 };
 
 export const noop = function () {};
+// @ts-expect-error only void function can be called with new
 export const asyncNoop = function () { return new Deferred().resolve().promise(); };
 
 export const grep = function (elements, checkFunction, invert) {
-  const result = [];
+  const result: any[] = [];
   let check;
   const expectedCheck = !invert;
 

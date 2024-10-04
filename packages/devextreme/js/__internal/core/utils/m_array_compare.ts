@@ -36,7 +36,7 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
   const newIndexByKey = {};
   let addedCount = 0;
   let removeCount = 0;
-  const result = [];
+  const result: any[] = [];
 
   oldItems.forEach((item, index) => {
     const key = getKeyWrapper(item, getKey);

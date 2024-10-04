@@ -60,6 +60,14 @@ const watchChanges = (function () {
 }());
 
 export class BindableTemplate extends TemplateBase {
+  _render: any;
+
+  _fields: any;
+
+  _fieldsMap: any;
+
+  _watchMethod: any;
+
   constructor(render, fields, watchMethod, fieldsMap) {
     super();
     this._render = render;
@@ -68,6 +76,7 @@ export class BindableTemplate extends TemplateBase {
     this._watchMethod = watchMethod;
   }
 
+  // @ts-expect-error renderCore differs from baseTemplate
   _renderCore(options) {
     const $container = $(options.container);
 

@@ -492,7 +492,7 @@ export class Component<
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   option(...args): TProperties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._options.option(...args);
+    return this._options.option(...args as [never, never]);
   }
 
   resetOption(name: string): void {

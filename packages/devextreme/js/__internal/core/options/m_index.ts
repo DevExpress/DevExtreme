@@ -8,6 +8,28 @@ import { extend } from '@js/core/utils/extend';
 import { isFunction, isObject, type } from '@js/core/utils/type';
 
 export class Options {
+  _deprecatedCallback: any;
+
+  _startChangeCallback: any;
+
+  _endChangeCallback: any;
+
+  _validateOptionsCallback: any;
+
+  _default: any;
+
+  _deprecated: any;
+
+  _deprecatedNames: any[];
+
+  _optionManager: OptionManager;
+
+  _cachedOptions: Record<string, any>;
+
+  _rules: any[];
+
+  _initialOptions: any;
+
   constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
     this._deprecatedCallback;
     this._startChangeCallback;
@@ -78,7 +100,7 @@ export class Options {
 
   _setField(options, fullName, value) {
     let fieldName = '';
-    let fieldObject = null;
+    let fieldObject: any = null;
 
     do {
       fieldName = fieldName ? `.${fieldName}` : '';
@@ -105,7 +127,7 @@ export class Options {
     }
   }
 
-  _normalizeName(name, silent) {
+  _normalizeName(name, silent?: boolean) {
     if (this._deprecatedNames.length && name) {
       for (let i = 0; i < this._deprecatedNames.length; i++) {
         if (this._deprecatedNames[i] === name) {
@@ -192,10 +214,11 @@ export class Options {
     }
   }
 
-  silent(options, value) {
+  silent(options, value?: unknown) {
     const isGetter = arguments.length < 2 && type(options) !== 'object';
 
     if (isGetter) {
+      // @ts-expect-error more args than needed
       return this._optionManager.get(undefined, options, undefined, true);
     }
     this._optionManager.set(options, value, undefined, true);
@@ -204,7 +227,7 @@ export class Options {
   reset(name) {
     if (name) {
       const fullPath = getPathParts(name);
-      const value = fullPath.reduce((value, field) => (value ? value[field] : this.initial(field)), null);
+      const value = fullPath.reduce((value: any, field) => (value ? value[field] : this.initial(field)), null);
 
       const defaultValue = isObject(value) ? { ...value } : value;
 

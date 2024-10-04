@@ -70,7 +70,7 @@ export const extractTemplateMarkup = (element) => {
 
   const templateTag = element.length && element.filter(function isNotExecutableScript() {
     const $node = $(this);
-    return $node.is('script[type]') && !$node.attr('type').includes('script');
+    return $node.is('script[type]') && !$node.attr('type')?.includes('script');
   });
 
   if (templateTag.length) {
@@ -97,6 +97,7 @@ export const normalizeTemplateElement = (element) => {
 };
 
 export const clipboardText = (event, text) => {
+  // @ts-expect-error clipboardData doesn't exist in window type
   const clipboard = (event.originalEvent && event.originalEvent.clipboardData) || window.clipboardData;
   if (!text) {
     return clipboard && clipboard.getData('Text');

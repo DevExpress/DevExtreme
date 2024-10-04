@@ -21,6 +21,7 @@ export const findTemplates = (element, name) => {
     const optionsString = $(element).attr(optionsAttributeName) ?? '';
     return {
       element,
+      // @ts-expect-error optionsParser do not exist in public type
       options: config().optionsParser(optionsString)[name],
     };
   }).filter((template) => !!template.options);
@@ -72,7 +73,7 @@ export const addPublicElementNormalization = (template) => {
 };
 
 export const getNormalizedTemplateArgs = (options) => {
-  const args = [];
+  const args: any[] = [];
 
   if ('model' in options) {
     args.push(options.model);
@@ -94,7 +95,7 @@ export const templateKey = (templateSource) => (isRenderer(templateSource) && te
 export const defaultCreateElement = (element) => new Template(element);
 
 export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTemplate, skipTemplates) => {
-  let integrationTemplate = null;
+  let integrationTemplate: any = null;
 
   if (!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
     integrationTemplate = templates[templateSource];

@@ -7,13 +7,15 @@ export interface EqualByValueOptions {
 
 export function noop(): void;
 
+export function getKeyHash(key: any): any;
+
 export function deferRender<T>(func: () => T, deferred?: DeferredObj<T>): T | Promise<T> | DeferredObj<T>;
 
 export function ensureDefined<T>(value: T, defaultValue: T): NonNullable<T>;
 
 export function equalByValue(value1: unknown, value2: unknown, options?: EqualByValueOptions): boolean;
 
-export function findBestMatches(targetFilter: unknown[], items: unknown[], mapFn: Function): unknown[];
+export function findBestMatches(targetFilter: any, items: unknown[], mapFn?: Function): any;
 
 export function deferUpdate<T>(func: () => T, deferred?: DeferredObj<T>): T | Promise<T> | DeferredObj<T>;
 

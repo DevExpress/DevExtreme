@@ -93,7 +93,7 @@ function parseISO8601String(text) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getIso8601Format = function (text, useUtc) {
+const getIso8601Format = function (text, useUtc?) {
   let parts = text.match(ISO8601_PATTERN);
   let result = '';
 

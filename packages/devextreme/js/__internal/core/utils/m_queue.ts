@@ -1,8 +1,8 @@
 import errors from '@js/core/errors';
 import { when } from '@js/core/utils/deferred';
 
-function createQueue(discardPendingTasks) {
-  let tasks = [];
+function createQueue(discardPendingTasks?: boolean) {
+  let tasks: any[] = [];
   // eslint-disable-next-line @typescript-eslint/naming-convention
   let _busy = false;
 

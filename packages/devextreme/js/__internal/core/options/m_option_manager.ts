@@ -9,6 +9,18 @@ const cachedGetters = {};
 const cachedSetters = {};
 
 export class OptionManager {
+  _options: any;
+
+  _optionsByReference: any;
+
+  _changingCallback: any;
+
+  _changedCallback: any;
+
+  _namePreparedCallbacks: any;
+
+  _validateOptionsCallback: any;
+
   constructor(options, optionsByReference) {
     this._options = options;
     this._optionsByReference = optionsByReference;
@@ -29,7 +41,7 @@ export class OptionManager {
     });
   }
 
-  _setPreparedValue(name, value, merge, silent) {
+  _setPreparedValue(name, value, merge?: any, silent?: boolean) {
     const previousValue = this.get(this._options, name, false);
 
     if (!equals(previousValue, value)) {
@@ -46,7 +58,7 @@ export class OptionManager {
     }
   }
 
-  _prepareRelevantNames(options, name, value, silent) {
+  _prepareRelevantNames(options, name, value, silent?: boolean) {
     if (isPlainObject(value)) {
       Object.keys(value).forEach((valueName) => {
         this._prepareRelevantNames(options, `${name}.${valueName}`, value[valueName]);
@@ -57,13 +69,13 @@ export class OptionManager {
   }
 
   // eslint-disable-next-line @typescript-eslint/default-param-last
-  get(options = this._options, name, unwrapObservables) {
+  get(options = this._options, name, unwrapObservables?: boolean) {
     cachedGetters[name] = cachedGetters[name] || compileGetter(name);
 
     return cachedGetters[name](options, { functionsAsIs: true, unwrapObservables });
   }
 
-  set(options, value, merge, silent) {
+  set(options, value, merge?: any, silent?: boolean) {
     options = normalizeOptions(options, value);
 
     Object.keys(options).forEach((name) => {

@@ -85,6 +85,7 @@ const parsePixelValue = function (value) {
 
 const normalizeStyleProp = function (prop, value) {
   if (isNumeric(value) && !pxExceptions.includes(prop)) {
+    // @ts-expect-error number + string
     value += 'px';
   }
 
@@ -93,6 +94,7 @@ const normalizeStyleProp = function (prop, value) {
 
 const setDimensionProperty = function (elements, propertyName, value) {
   if (elements) {
+    // @ts-expect-error number + string
     value = isNumeric(value) ? value += 'px' : value;
     for (let i = 0; i < elements.length; ++i) {
       elements[i].style[propertyName] = value;

@@ -52,6 +52,7 @@ export function getSvgMarkup(element, backgroundColor) {
 
 export function getSvgElement(markup) {
   if (isString(markup)) {
+    // @ts-expect-error DOMParser do not exist in std window type
     const parsedMarkup = new window.DOMParser()
       .parseFromString(markup, 'image/svg+xml')
       .childNodes[0];

@@ -72,7 +72,7 @@ function isPositionInElementRectangle(element, x, y) {
 
 function createQueue() {
   let shiftIndex = 0;
-  const items = [];
+  const items: any[] = [];
 
   return {
     push(item) {

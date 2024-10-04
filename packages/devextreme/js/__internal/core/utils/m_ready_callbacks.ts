@@ -3,7 +3,7 @@ import callOnce from '@js/core/utils/call_once';
 import injector from '@js/core/utils/dependency_injector';
 import { hasWindow } from '@js/core/utils/window';
 
-let callbacks = [];
+let callbacks: any[] = [];
 
 const subscribeReady = callOnce(() => {
   const removeListener = domAdapter.listen(domAdapter.getDocument(), 'DOMContentLoaded', () => {

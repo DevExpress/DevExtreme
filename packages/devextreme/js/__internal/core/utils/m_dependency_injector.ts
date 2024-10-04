@@ -6,10 +6,11 @@ import { isFunction } from '@js/core/utils/type';
 function injector(object) {
   const BaseClass = Class.inherit(object);
   let InjectedClass = BaseClass;
+  // @ts-expect-error typescript inheritance issue
   let instance = new InjectedClass(object);
   const initialFields = {};
 
-  const injectFields = function (injectionObject, initial) {
+  const injectFields = function (injectionObject, initial?) {
     each(injectionObject, (key) => {
       if (isFunction(instance[key])) {
         if (initial || !object[key]) {

@@ -17,8 +17,10 @@ const value = (function () {
     const $element = $(element);
     $originalViewPort = $element;
     const isNewViewportFound = !!$element.length;
+    // @ts-expect-error smth with iife probably
     const prevViewPort = value();
     $current = isNewViewportFound ? $element : $('body');
+    // @ts-expect-error smth with iife probably
     changeCallback.fire(isNewViewportFound ? value() : $(), prevViewPort);
   };
 }());

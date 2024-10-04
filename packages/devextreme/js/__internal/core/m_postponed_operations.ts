@@ -2,6 +2,8 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 
 export class PostponedOperations {
+  _postponedOperations: any;
+
   constructor() {
     this._postponedOperations = {};
   }
@@ -10,6 +12,7 @@ export class PostponedOperations {
     if (key in this._postponedOperations) {
       postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
     } else {
+      // @ts-expect-error only void function can be called with new
       const completePromise = new Deferred();
       this._postponedOperations[key] = {
         fn,

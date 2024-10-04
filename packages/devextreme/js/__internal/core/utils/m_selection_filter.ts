@@ -106,11 +106,12 @@ export const SelectionFilterCreator = function (selectedItemKeys, isSelectAll) {
   }
 
   function getFilterForCompositeKey(keyExpr, itemKeyValue) {
-    const filterExpr = [];
+    const filterExpr: any[] = [];
 
     for (let i = 0, { length } = keyExpr; i < length; i++) {
       const currentKeyExpr = keyExpr[i];
       const keyValueGetter = compileGetter(currentKeyExpr);
+      // @ts-expect-error keyValueGetter is unknown
       const currentKeyValue = itemKeyValue && keyValueGetter(itemKeyValue);
       const filterExprPart = getFilterForPlainKey(currentKeyExpr, currentKeyValue);
 

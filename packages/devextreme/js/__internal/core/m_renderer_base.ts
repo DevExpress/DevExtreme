@@ -38,7 +38,7 @@ const InitRender = function (selector, context) {
     this.length = 1;
     return this;
   } if (Array.isArray(selector)) {
-    [].push.apply(this, selector);
+    ([] as any[]).push.apply(this, selector);
     return this;
   }
 
@@ -46,6 +46,7 @@ const InitRender = function (selector, context) {
 };
 
 renderer = function (selector, context) {
+  // @ts-expect-error only void function can be called with new
   return new InitRender(selector, context);
 };
 renderer.fn = { dxRenderer: true };
@@ -181,7 +182,7 @@ InitRender.prototype.html = function (value) {
   return this.append(parseHTML(value));
 };
 
-const appendElements = function (element, nextSibling) {
+const appendElements = function (element, nextSibling?) {
   if (!this[0] || !element) return;
 
   if (typeof element === 'string') {
@@ -378,7 +379,7 @@ InitRender.prototype.empty = function () {
 };
 
 InitRender.prototype.clone = function () {
-  const result = [];
+  const result: any[] = [];
   for (let i = 0; i < this.length; i++) {
     result.push(this[i].cloneNode(true));
   }
@@ -425,7 +426,7 @@ InitRender.prototype.find = function (selector) {
     return result;
   }
 
-  const nodes = [];
+  const nodes: any[] = [];
   let i;
 
   if (typeof selector === 'string') {
@@ -477,7 +478,7 @@ InitRender.prototype.filter = function (selector) {
     return this.filter((_, element) => !isVisible(_, element));
   }
 
-  const result = [];
+  const result: any[] = [];
   for (let i = 0; i < this.length; i++) {
     const item = this[i];
     if (domAdapter.isElementNode(item) && type(selector) === 'string') {
@@ -497,7 +498,7 @@ InitRender.prototype.filter = function (selector) {
 };
 
 InitRender.prototype.not = function (selector) {
-  const result = [];
+  const result: any[] = [];
   const nodes = this.filter(selector).toArray();
 
   for (let i = 0; i < this.length; i++) {
@@ -514,7 +515,7 @@ InitRender.prototype.is = function (selector) {
 };
 
 InitRender.prototype.children = function (selector) {
-  let result = [];
+  let result: any[] = [];
   for (let i = 0; i < this.length; i++) {
     const nodes = this[i] ? this[i].childNodes : [];
     for (let j = 0; j < nodes.length; j++) {
@@ -535,7 +536,7 @@ InitRender.prototype.siblings = function () {
     return renderer();
   }
 
-  const result = [];
+  const result: any[] = [];
   const parentChildNodes = element.parentNode.childNodes || [];
 
   for (let i = 0; i < parentChildNodes.length; i++) {
@@ -597,7 +598,7 @@ InitRender.prototype.parent = function (selector) {
 };
 
 InitRender.prototype.parents = function (selector) {
-  const result = [];
+  const result: any[] = [];
   let parent = this.parent();
 
   while (parent && parent[0] && !domAdapter.isDocument(parent[0])) {
@@ -661,9 +662,11 @@ InitRender.prototype.add = function (selector) {
 
 const emptyArray = [];
 InitRender.prototype.splice = function () {
+  // @ts-expect-error get rid of arguments
   return renderer(emptyArray.splice.apply(this, arguments));
 };
 InitRender.prototype.slice = function () {
+  // @ts-expect-error get rid of arguments
   return renderer(emptyArray.slice.apply(this, arguments));
 };
 InitRender.prototype.toArray = function () {

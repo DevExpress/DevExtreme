@@ -8,6 +8,8 @@ import { triggerShownEvent } from '@js/events/visibility_change';
 export const renderedCallbacks = Callbacks({ syncStrategy: true });
 
 export class TemplateBase {
+  _element: any;
+
   render(options) {
     options = options || {};
 
@@ -18,6 +20,7 @@ export class TemplateBase {
     if (options.renovated && options.transclude && this._element) {
       $result = $('<div>').append(this._element).contents();
     } else {
+      // @ts-expect-error need type overload
       $result = this._renderCore(options);
     }
 

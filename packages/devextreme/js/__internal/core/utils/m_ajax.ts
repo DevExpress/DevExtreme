@@ -70,6 +70,7 @@ const setHttpTimeout = function (timeout, xhr) {
 
 const sendRequest = function (options) {
   const xhr = httpRequest.getXhr();
+  // @ts-expect-error only void function can be called with new
   const d = new Deferred();
   const result = d.promise();
   const async = isDefined(options.async) ? options.async : true;
@@ -91,6 +92,7 @@ const sendRequest = function (options) {
   const { parameters } = requestOptions;
 
   if (callbackName) {
+    // @ts-expect-error window[callback] is window type
     window[callbackName] = function (data) {
       d.resolve(data, SUCCESS, xhr);
     };

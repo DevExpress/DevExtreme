@@ -3,6 +3,12 @@ import { each } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
 
 export class EventsStrategy {
+  _events: any;
+
+  _owner: any;
+
+  _options: any;
+
   constructor(owner, options = {}) {
     this._events = {};
     this._owner = owner;

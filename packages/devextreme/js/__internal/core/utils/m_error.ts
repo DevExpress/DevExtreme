@@ -6,16 +6,16 @@ import { version } from '@js/core/version';
 
 const ERROR_URL = `https://js.devexpress.com/error/${version.split('@js/core/utils').slice(0, 2).join('_')}/`;
 
-function error(baseErrors, errors) {
+function error(baseErrors, errors?) {
   const exports = {
 
     ERROR_MESSAGES: extend(errors, baseErrors),
 
-    Error() {
-      return makeError([].slice.call(arguments));
+    Error(...args) {
+      return makeError([].slice.call(args));
     },
 
-    log(id) {
+    log(id, ...args) {
       let method = 'log';
 
       if (/^E\d+$/.test(id)) {
@@ -24,7 +24,7 @@ function error(baseErrors, errors) {
         method = 'warn';
       }
 
-      logger[method](method === 'log' ? id : combineMessage([].slice.call(arguments)));
+      logger[method](method === 'log' ? id : combineMessage([id, ...args]));
     },
   };
 

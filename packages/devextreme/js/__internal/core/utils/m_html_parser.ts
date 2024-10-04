@@ -2,7 +2,7 @@ import domAdapter from '@js/core/dom_adapter';
 
 const isTagName = (/<([a-z][^/\0>\x20\t\r\n\f]+)/i);
 
-const tagWrappers = {
+const tagWrappers: any = {
   default: {
     tagsCount: 0,
     startTags: '',
@@ -39,15 +39,15 @@ export const parseHTML = function (html) {
   }
 
   const fragment = domAdapter.createDocumentFragment();
-  let container = fragment.appendChild(domAdapter.createElement('div'));
+  let container: HTMLElement | ChildNode = fragment.appendChild(domAdapter.createElement('div'));
   const tags = isTagName.exec(html);
-  const firstRootTag = tags && tags[1].toLowerCase();
-  const tagWrapper = tagWrappers[firstRootTag] || tagWrappers.default;
+  const firstRootTag = tags?.[1].toLowerCase();
+  const tagWrapper = tagWrappers[firstRootTag!] || tagWrappers.default;
 
-  container.innerHTML = tagWrapper.startTags + html + tagWrapper.endTags;
+  (container as HTMLElement).innerHTML = tagWrapper.startTags + html + tagWrapper.endTags;
 
   for (let i = 0; i < tagWrapper.tagsCount; i++) {
-    container = container.lastChild;
+    container = container.lastChild!;
   }
 
   return [...container.childNodes];
