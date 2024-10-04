@@ -23,14 +23,14 @@ const inRange = function (value, minValue, maxValue) {
 };
 
 function getExponent(value) {
-  return Math.abs(parseInt(value.toExponential().split('e')[1]));
+  return Math.abs(parseInt(value.toExponential().split('e')[1], 10));
 }
 
 function getExponentialNotation(value) {
   const parts = value.toExponential().split('e');
 
   const mantissa = parseFloat(parts[0]);
-  const exponent = parseInt(parts[1]);
+  const exponent = parseInt(parts[1], 10);
 
   return {
     exponent,
@@ -45,7 +45,7 @@ function multiplyInExponentialForm(value, exponentShift) {
 }
 
 // T570217
-function _isEdgeBug() {
+function isEdgeBug() {
   const value = 0.0003;
   const correctValue = '0.000300';
   const precisionValue = 3;
@@ -73,7 +73,7 @@ function adjust(value, interval) {
     value = value - Math.floor(value) + integerPart;
   }
 
-  precision = (_isEdgeBug() && (getExponent(value) > 6)) || precision > 7 ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
+  precision = (isEdgeBug() && (getExponent(value) > 6)) || precision > 7 ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
 
   if (!isExponentValue) {
     separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('@js/core/utils');
@@ -163,19 +163,19 @@ function trunc(value) {
 }
 
 function getRemainderByDivision(dividend, divider, digitsCount) {
-  if (divider === parseInt(divider)) {
+  if (divider === parseInt(divider, 10)) {
     return dividend % divider;
   }
 
   const quotient = roundFloatPart(dividend / divider, digitsCount);
-  return (quotient - parseInt(quotient)) * divider;
+  return (quotient - parseInt(quotient, 10)) * divider;
 }
 
 function getExponentLength(value) {
   const valueString = value.toString();
 
   return valueString.split('@js/core/utils')[1]?.length
-        || parseInt(valueString.split('e-')[1])
+        || parseInt(valueString.split('e-')[1], 10)
         || 0;
 }
 

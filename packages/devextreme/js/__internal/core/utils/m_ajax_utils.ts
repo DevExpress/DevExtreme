@@ -6,9 +6,9 @@ const window = getWindow();
 
 const createScript = function (options) {
   const script = domAdapter.createElement('script');
-  for (const name in options) {
+  Object.keys(options).forEach((name) => {
     script[name] = options[name];
-  }
+  });
   return script;
 };
 
@@ -40,9 +40,9 @@ const evalCrossDomainScript = function (url) {
       removeScript(script);
     };
 
-    for (const event in events) {
+    Object.keys(events).forEach((event) => {
       domAdapter.listen(script, event, loadHandler);
-    }
+    });
 
     appendToHead(script);
   });
@@ -53,13 +53,13 @@ function getMethod(options) {
 }
 
 const paramsConvert = function (params) {
-  const result = [];
+  const result: string[] = [];
 
-  for (const name in params) {
+  Object.keys(params).forEach((name) => {
     let value = params[name];
 
     if (value === undefined) {
-      continue;
+      return;
     }
 
     if (value === null) {
@@ -71,7 +71,7 @@ const paramsConvert = function (params) {
     }
 
     result.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
-  }
+  });
 
   return result.join('&');
 };

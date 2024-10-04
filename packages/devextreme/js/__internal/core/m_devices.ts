@@ -98,6 +98,7 @@ const UA_PARSERS = {
     const isPhone = /mobile/i.test(userAgent);
     const matches = userAgent.match(/android (\d+)\.?(\d+)?\.?(\d+)?/i);
     const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2] || 0, 10), parseInt(matches[3] || 0, 10)] : [];
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     const worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4);
     const grade = worseThan4_4 ? 'B' : 'A';
 

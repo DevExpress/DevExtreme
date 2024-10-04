@@ -7,7 +7,7 @@ const getSessionStorage = function () {
 
   try {
     sessionStorage = window.sessionStorage;
-  } catch (e) { }
+  } catch (e) { /* empty */ }
 
   return sessionStorage;
 };

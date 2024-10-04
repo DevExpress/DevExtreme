@@ -46,9 +46,9 @@ export class Options {
   }
 
   _initDeprecatedNames() {
-    for (const optionName in this._deprecated) {
+    Object.keys(this._deprecated).forEach((optionName) => {
       this._deprecatedNames.push(optionName);
-    }
+    });
   }
 
   _getByRules(rules) {
@@ -91,6 +91,7 @@ export class Options {
   }
 
   _clearField(options, name) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete options[name];
 
     const previousFieldName = getParentName(name);
@@ -99,6 +100,7 @@ export class Options {
       : options;
 
     if (fieldObject) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete fieldObject[getFieldName(name)];
     }
   }

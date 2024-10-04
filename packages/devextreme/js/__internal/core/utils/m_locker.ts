@@ -20,6 +20,7 @@ const Locker = function () {
       }
 
       if (count === 1) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete info[lockName];
       } else {
         info[lockName] = count - 1;

@@ -61,6 +61,7 @@ setDataStrategy({
     } else {
       const elementData = dataMap.get(element);
       if (elementData) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete elementData[key];
       }
     }

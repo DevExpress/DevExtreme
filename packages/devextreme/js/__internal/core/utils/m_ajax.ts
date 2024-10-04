@@ -127,6 +127,7 @@ const sendRequest = function (options) {
     timeoutId = setHttpTimeout(timeout, xhr);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   xhr.onreadystatechange = function (e) {
     if (xhr.readyState === 4) {
       clearTimeout(timeoutId);
@@ -149,20 +150,20 @@ const sendRequest = function (options) {
   }
 
   if (options.xhrFields) {
-    for (const field in options.xhrFields) {
+    Object.keys(options.xhrFields).forEach((field) => {
       xhr[field] = options.xhrFields[field];
-    }
+    });
   }
 
   if (options.responseType === 'arraybuffer') {
     xhr.responseType = options.responseType;
   }
 
-  for (const name in headers) {
+  Object.keys(headers).forEach((name) => {
     if (Object.prototype.hasOwnProperty.call(headers, name) && isDefined(headers[name])) {
       xhr.setRequestHeader(name, headers[name]);
     }
-  }
+  });
 
   if (options.beforeSend) {
     options.beforeSend(xhr);

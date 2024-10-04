@@ -11,15 +11,15 @@ const clone = (function () {
 }());
 
 const orderEach = function (map, func) {
-  const keys = [];
+  const keys: string[] = [];
   let key;
   let i;
 
-  for (key in map) {
-    if (Object.prototype.hasOwnProperty.call(map, key)) {
-      keys.push(key);
+  Object.keys(map).forEach((mapKey) => {
+    if (Object.prototype.hasOwnProperty.call(map, mapKey)) {
+      keys.push(mapKey);
     }
-  }
+  });
 
   keys.sort((x, y) => {
     const isNumberX = isNumeric(x);
@@ -46,6 +46,7 @@ const getDeepCopyTarget = (item) => {
   return item;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const legacyAssign = function (target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
   if (!assignByReference && variableWrapper.isWrapped(target[property])) {
     variableWrapper.assign(target[property], value);
@@ -86,12 +87,12 @@ const deepExtendArraySafe = function (target, changes, extendComplexObject, assi
   let newValue;
   const assignFunc = useNewAssign ? newAssign : legacyAssign;
 
-  for (const name in changes) {
+  Object.keys(changes).forEach((name) => {
     prevValue = target[name];
     newValue = changes[name];
 
     if (name === '__proto__' || name === 'constructor' || target === newValue) {
-      continue;
+      return;
     }
 
     if (isPlainObject(newValue)) {
@@ -106,7 +107,7 @@ const deepExtendArraySafe = function (target, changes, extendComplexObject, assi
     if (isDeepCopyArray || hasDifferentNewValue) {
       assignFunc(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
     }
-  }
+  });
 
   return target;
 };

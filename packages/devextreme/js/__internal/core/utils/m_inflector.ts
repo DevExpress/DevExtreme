@@ -1,24 +1,24 @@
 import { map } from '@js/core/utils/iterator';
 
-const _normalize = function (text) {
+const normalize = function (text) {
   if (text === undefined || text === null) {
     return '';
   }
   return String(text);
 };
 
-const _upperCaseFirst = function (text) {
-  return _normalize(text).charAt(0).toUpperCase() + text.substr(1);
+const upperCaseFirst = function (text) {
+  return normalize(text).charAt(0).toUpperCase() + text.substr(1);
 };
 
-const _chop = function (text) {
-  return _normalize(text)
+const chop = function (text) {
+  return normalize(text)
     .replace(/([a-z\d])([A-Z])/g, '$1 $2')
     .split(/[\s_-]+/);
 };
 
 export const dasherize = function (text) {
-  return map(_chop(text), (p) => p.toLowerCase()).join('-');
+  return map(chop(text), (p) => p.toLowerCase()).join('-');
 };
 
 export const underscore = function (text) {
@@ -26,21 +26,21 @@ export const underscore = function (text) {
 };
 
 export const camelize = function (text, upperFirst) {
-  return map(_chop(text), (p, i) => {
+  return map(chop(text), (p, i) => {
     p = p.toLowerCase();
     if (upperFirst || i > 0) {
-      p = _upperCaseFirst(p);
+      p = upperCaseFirst(p);
     }
     return p;
   }).join('');
 };
 
 export const humanize = function (text) {
-  return _upperCaseFirst(dasherize(text).replace(/-/g, ' '));
+  return upperCaseFirst(dasherize(text).replace(/-/g, ' '));
 };
 
 export const titleize = function (text) {
-  return map(_chop(text), (p) => _upperCaseFirst(p.toLowerCase())).join(' ');
+  return map(chop(text), (p) => upperCaseFirst(p.toLowerCase())).join(' ');
 };
 
 const DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];

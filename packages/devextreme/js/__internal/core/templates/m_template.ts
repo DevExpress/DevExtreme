@@ -5,6 +5,7 @@ import { normalizeTemplateElement } from '@js/core/utils/dom';
 
 registerTemplateEngine('default', {
   compile: (element) => normalizeTemplateElement(element),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render: (template, model, index) => template.clone(),
 });
 

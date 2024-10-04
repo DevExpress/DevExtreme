@@ -92,6 +92,7 @@ function parseISO8601String(text) {
   return correctYear(new Date(year, month, day, hour, minute, second, millisecond));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getIso8601Format = function (text, useUtc) {
   let parts = text.match(ISO8601_PATTERN);
   let result = '';

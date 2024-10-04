@@ -34,7 +34,7 @@ export const SelectionFilterCreator = function (selectedItemKeys, isSelectAll) {
     });
 
     if (filterExpr && filterExpr.length === 1) {
-      filterExpr = filterExpr[0];
+      filterExpr = [filterExpr];
     }
 
     return filterExpr;

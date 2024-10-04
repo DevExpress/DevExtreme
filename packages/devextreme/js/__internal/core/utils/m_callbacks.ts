@@ -57,6 +57,7 @@ Callback.prototype.has = function (fn) {
   return fn ? list.indexOf(fn) > -1 : !!list.length;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 Callback.prototype.empty = function (fn) {
   this._list = [];
 

@@ -12,6 +12,7 @@ const ResizeObserverMock = {
 class ResizeObserverSingleton {
   constructor() {
     if (!hasWindow() || !window.ResizeObserver) {
+      // eslint-disable-next-line no-constructor-return
       return ResizeObserverMock;
     }
 

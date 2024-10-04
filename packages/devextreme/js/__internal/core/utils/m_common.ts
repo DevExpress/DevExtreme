@@ -193,8 +193,8 @@ export const normalizeKey = function (id) {
 export const denormalizeKey = function (key) {
   const arr = key.match(/__\d+__/g);
 
-  arr && arr.forEach((char) => {
-    const charCode = parseInt(char.replace('__', ''));
+  arr?.forEach((char) => {
+    const charCode = parseInt(char.replace('__', ''), 10);
 
     key = key.replace(char, String.fromCharCode(charCode));
   });

@@ -11,7 +11,7 @@ import { getWindow } from '@js/core/utils/window';
 const window = getWindow();
 
 let renderer;
-const initRender = function (selector, context) {
+const InitRender = function (selector, context) {
   if (!selector) {
     this.length = 0;
     return this;
@@ -46,10 +46,10 @@ const initRender = function (selector, context) {
 };
 
 renderer = function (selector, context) {
-  return new initRender(selector, context);
+  return new InitRender(selector, context);
 };
 renderer.fn = { dxRenderer: true };
-initRender.prototype = renderer.fn;
+InitRender.prototype = renderer.fn;
 
 const repeatMethod = function (methodName, args) {
   for (let i = 0; i < this.length; i++) {
@@ -67,15 +67,15 @@ const setAttributeValue = function (element, attrName, value) {
   }
 };
 
-initRender.prototype.show = function () {
+InitRender.prototype.show = function () {
   return this.toggle(true);
 };
 
-initRender.prototype.hide = function () {
+InitRender.prototype.hide = function () {
   return this.toggle(false);
 };
 
-initRender.prototype.toggle = function (value) {
+InitRender.prototype.toggle = function (value) {
   if (this[0]) {
     this.toggleClass('dx-state-invisible', !value);
   }
@@ -83,7 +83,7 @@ initRender.prototype.toggle = function (value) {
   return this;
 };
 
-initRender.prototype.attr = function (attrName, value) {
+InitRender.prototype.attr = function (attrName, value) {
   if (this.length > 1 && arguments.length > 1) return repeatMethod.call(this, 'attr', arguments);
   if (!this[0]) {
     if (isObject(attrName) || value !== undefined) {
@@ -98,28 +98,28 @@ initRender.prototype.attr = function (attrName, value) {
     const result = this[0].getAttribute(attrName);
     return result == null ? undefined : result;
   } if (isPlainObject(attrName)) {
-    for (const key in attrName) {
+    Object.keys(attrName).forEach((key) => {
       this.attr(key, attrName[key]);
-    }
+    });
   } else {
     setAttributeValue(this[0], attrName, value);
   }
   return this;
 };
 
-initRender.prototype.removeAttr = function (attrName) {
+InitRender.prototype.removeAttr = function (attrName) {
   this[0] && domAdapter.removeAttribute(this[0], attrName);
   return this;
 };
 
-initRender.prototype.prop = function (propName, value) {
+InitRender.prototype.prop = function (propName, value) {
   if (!this[0]) return this;
   if (typeof propName === 'string' && arguments.length === 1) {
     return this[0][propName];
   } if (isPlainObject(propName)) {
-    for (const key in propName) {
+    Object.keys(propName).forEach((key) => {
       this.prop(key, propName[key]);
-    }
+    });
   } else {
     domAdapter.setProperty(this[0], propName, value);
   }
@@ -127,15 +127,15 @@ initRender.prototype.prop = function (propName, value) {
   return this;
 };
 
-initRender.prototype.addClass = function (className) {
+InitRender.prototype.addClass = function (className) {
   return this.toggleClass(className, true);
 };
 
-initRender.prototype.removeClass = function (className) {
+InitRender.prototype.removeClass = function (className) {
   return this.toggleClass(className, false);
 };
 
-initRender.prototype.hasClass = function (className) {
+InitRender.prototype.hasClass = function (className) {
   if (!this[0] || this[0].className === undefined) return false;
 
   const classNames = className.split(' ');
@@ -150,7 +150,7 @@ initRender.prototype.hasClass = function (className) {
   return false;
 };
 
-initRender.prototype.toggleClass = function (className, value) {
+InitRender.prototype.toggleClass = function (className, value) {
   if (this.length > 1) {
     return repeatMethod.call(this, 'toggleClass', arguments);
   }
@@ -165,7 +165,7 @@ initRender.prototype.toggleClass = function (className, value) {
   return this;
 };
 
-initRender.prototype.html = function (value) {
+InitRender.prototype.html = function (value) {
   if (!arguments.length) {
     return this[0].innerHTML;
   }
@@ -192,16 +192,15 @@ const appendElements = function (element, nextSibling) {
     element = [domAdapter.createTextNode(element)];
   }
 
-  for (let i = 0; i < element.length; i++) {
-    const item = element[i];
+  element.forEach((item) => {
     let container = this[0];
     const wrapTR = container.tagName === 'TABLE' && item.tagName === 'TR';
 
     if (wrapTR && container.tBodies && container.tBodies.length) {
-      container = container.tBodies[0];
+      container = [container.tBodies];
     }
     domAdapter.insertElement(container, item.nodeType ? item : item[0], nextSibling);
-  }
+  });
 };
 
 const setCss = function (name, value) {
@@ -217,7 +216,7 @@ const setCss = function (name, value) {
   }
 };
 
-initRender.prototype.css = function (name, value) {
+InitRender.prototype.css = function (name, value) {
   if (isString(name)) {
     if (arguments.length === 2) {
       setCss.call(this, name, value);
@@ -230,15 +229,15 @@ initRender.prototype.css = function (name, value) {
       return isNumeric(result) ? result.toString() : result;
     }
   } else if (isPlainObject(name)) {
-    for (const key in name) {
+    Object.keys(name).forEach((key) => {
       setCss.call(this, key, name[key]);
-    }
+    });
   }
 
   return this;
 };
 
-initRender.prototype.prepend = function (element) {
+InitRender.prototype.prepend = function (element) {
   if (arguments.length > 1) {
     for (let i = 0; i < arguments.length; i++) {
       this.prepend(arguments[i]);
@@ -249,7 +248,7 @@ initRender.prototype.prepend = function (element) {
   return this;
 };
 
-initRender.prototype.append = function (element) {
+InitRender.prototype.append = function (element) {
   if (arguments.length > 1) {
     for (let i = 0; i < arguments.length; i++) {
       this.append(arguments[i]);
@@ -260,7 +259,7 @@ initRender.prototype.append = function (element) {
   return this;
 };
 
-initRender.prototype.prependTo = function (element) {
+InitRender.prototype.prependTo = function (element) {
   if (this.length > 1) {
     for (let i = this.length - 1; i >= 0; i--) {
       renderer(this[i]).prependTo(element);
@@ -276,7 +275,7 @@ initRender.prototype.prependTo = function (element) {
   return this;
 };
 
-initRender.prototype.appendTo = function (element) {
+InitRender.prototype.appendTo = function (element) {
   if (this.length > 1) {
     return repeatMethod.call(this, 'appendTo', arguments);
   }
@@ -285,35 +284,35 @@ initRender.prototype.appendTo = function (element) {
   return this;
 };
 
-initRender.prototype.insertBefore = function (element) {
+InitRender.prototype.insertBefore = function (element) {
   if (element && element[0]) {
     domAdapter.insertElement(element[0].parentNode, this[0], element[0]);
   }
   return this;
 };
 
-initRender.prototype.insertAfter = function (element) {
+InitRender.prototype.insertAfter = function (element) {
   if (element && element[0]) {
     domAdapter.insertElement(element[0].parentNode, this[0], element[0].nextSibling);
   }
   return this;
 };
 
-initRender.prototype.before = function (element) {
+InitRender.prototype.before = function (element) {
   if (this[0]) {
     domAdapter.insertElement(this[0].parentNode, element[0], this[0]);
   }
   return this;
 };
 
-initRender.prototype.after = function (element) {
+InitRender.prototype.after = function (element) {
   if (this[0]) {
     domAdapter.insertElement(this[0].parentNode, element[0], this[0].nextSibling);
   }
   return this;
 };
 
-initRender.prototype.wrap = function (wrapper) {
+InitRender.prototype.wrap = function (wrapper) {
   if (this[0]) {
     const wrap = renderer(wrapper);
 
@@ -324,7 +323,7 @@ initRender.prototype.wrap = function (wrapper) {
   return this;
 };
 
-initRender.prototype.wrapInner = function (wrapper) {
+InitRender.prototype.wrapInner = function (wrapper) {
   const contents = this.contents();
 
   if (contents.length) {
@@ -336,7 +335,7 @@ initRender.prototype.wrapInner = function (wrapper) {
   return this;
 };
 
-initRender.prototype.replaceWith = function (element) {
+InitRender.prototype.replaceWith = function (element) {
   if (!(element && element[0])) return;
   if (element.is(this)) return this;
 
@@ -346,7 +345,7 @@ initRender.prototype.replaceWith = function (element) {
   return element;
 };
 
-initRender.prototype.remove = function () {
+InitRender.prototype.remove = function () {
   if (this.length > 1) {
     return repeatMethod.call(this, 'remove', arguments);
   }
@@ -357,7 +356,7 @@ initRender.prototype.remove = function () {
   return this;
 };
 
-initRender.prototype.detach = function () {
+InitRender.prototype.detach = function () {
   if (this.length > 1) {
     return repeatMethod.call(this, 'detach', arguments);
   }
@@ -367,7 +366,7 @@ initRender.prototype.detach = function () {
   return this;
 };
 
-initRender.prototype.empty = function () {
+InitRender.prototype.empty = function () {
   if (this.length > 1) {
     return repeatMethod.call(this, 'empty', arguments);
   }
@@ -378,7 +377,7 @@ initRender.prototype.empty = function () {
   return this;
 };
 
-initRender.prototype.clone = function () {
+InitRender.prototype.clone = function () {
   const result = [];
   for (let i = 0; i < this.length; i++) {
     result.push(this[i].cloneNode(true));
@@ -386,7 +385,7 @@ initRender.prototype.clone = function () {
   return renderer(result);
 };
 
-initRender.prototype.text = function (value) {
+InitRender.prototype.text = function (value) {
   if (!arguments.length) {
     let result = '';
 
@@ -404,7 +403,7 @@ initRender.prototype.text = function (value) {
   return this;
 };
 
-initRender.prototype.val = function (value) {
+InitRender.prototype.val = function (value) {
   if (arguments.length === 1) {
     return this.prop('value', isDefined(value) ? value : '');
   }
@@ -412,7 +411,7 @@ initRender.prototype.val = function (value) {
   return this.prop('value');
 };
 
-initRender.prototype.contents = function () {
+InitRender.prototype.contents = function () {
   if (!this[0]) return renderer();
 
   const result = [];
@@ -420,7 +419,7 @@ initRender.prototype.contents = function () {
   return renderer(result);
 };
 
-initRender.prototype.find = function (selector) {
+InitRender.prototype.find = function (selector) {
   const result = renderer();
   if (!selector) {
     return result;
@@ -469,7 +468,7 @@ const isVisible = function (_, element) {
   return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 };
 
-initRender.prototype.filter = function (selector) {
+InitRender.prototype.filter = function (selector) {
   if (!selector) return renderer();
 
   if (selector === ':visible') {
@@ -497,7 +496,7 @@ initRender.prototype.filter = function (selector) {
   return renderer(result);
 };
 
-initRender.prototype.not = function (selector) {
+InitRender.prototype.not = function (selector) {
   const result = [];
   const nodes = this.filter(selector).toArray();
 
@@ -510,11 +509,11 @@ initRender.prototype.not = function (selector) {
   return renderer(result);
 };
 
-initRender.prototype.is = function (selector) {
+InitRender.prototype.is = function (selector) {
   return !!this.filter(selector).length;
 };
 
-initRender.prototype.children = function (selector) {
+InitRender.prototype.children = function (selector) {
   let result = [];
   for (let i = 0; i < this.length; i++) {
     const nodes = this[i] ? this[i].childNodes : [];
@@ -530,7 +529,7 @@ initRender.prototype.children = function (selector) {
   return selector ? result.filter(selector) : result;
 };
 
-initRender.prototype.siblings = function () {
+InitRender.prototype.siblings = function () {
   const element = this[0];
   if (!element || !element.parentNode) {
     return renderer();
@@ -549,7 +548,7 @@ initRender.prototype.siblings = function () {
   return renderer(result);
 };
 
-initRender.prototype.each = function (callback) {
+InitRender.prototype.each = function (callback) {
   for (let i = 0; i < this.length; i++) {
     if (callback.call(this[i], i, this[i]) === false) {
       break;
@@ -557,7 +556,7 @@ initRender.prototype.each = function (callback) {
   }
 };
 
-initRender.prototype.index = function (element) {
+InitRender.prototype.index = function (element) {
   if (!element) {
     return this.parent().children().index(this);
   }
@@ -566,24 +565,24 @@ initRender.prototype.index = function (element) {
   return this.toArray().indexOf(element[0]);
 };
 
-initRender.prototype.get = function (index) {
+InitRender.prototype.get = function (index) {
   return this[index < 0 ? this.length + index : index];
 };
 
-initRender.prototype.eq = function (index) {
+InitRender.prototype.eq = function (index) {
   index = index < 0 ? this.length + index : index;
   return renderer(this[index]);
 };
 
-initRender.prototype.first = function () {
+InitRender.prototype.first = function () {
   return this.eq(0);
 };
 
-initRender.prototype.last = function () {
+InitRender.prototype.last = function () {
   return this.eq(-1);
 };
 
-initRender.prototype.select = function () {
+InitRender.prototype.select = function () {
   for (let i = 0; i < this.length; i += 1) {
     this[i].select && this[i].select();
   }
@@ -591,13 +590,13 @@ initRender.prototype.select = function () {
   return this;
 };
 
-initRender.prototype.parent = function (selector) {
+InitRender.prototype.parent = function (selector) {
   if (!this[0]) return renderer();
   const result = renderer(this[0].parentNode);
   return !selector || result.is(selector) ? result : renderer();
 };
 
-initRender.prototype.parents = function (selector) {
+InitRender.prototype.parents = function (selector) {
   const result = [];
   let parent = this.parent();
 
@@ -612,7 +611,7 @@ initRender.prototype.parents = function (selector) {
   return renderer(result);
 };
 
-initRender.prototype.closest = function (selector) {
+InitRender.prototype.closest = function (selector) {
   if (this.is(selector)) {
     return this;
   }
@@ -628,7 +627,7 @@ initRender.prototype.closest = function (selector) {
   return renderer();
 };
 
-initRender.prototype.next = function (selector) {
+InitRender.prototype.next = function (selector) {
   if (!this[0]) return renderer();
   let next = renderer(this[0].nextSibling);
   if (!arguments.length) {
@@ -641,12 +640,12 @@ initRender.prototype.next = function (selector) {
   return renderer();
 };
 
-initRender.prototype.prev = function () {
+InitRender.prototype.prev = function () {
   if (!this[0]) return renderer();
   return renderer(this[0].previousSibling);
 };
 
-initRender.prototype.add = function (selector) {
+InitRender.prototype.add = function (selector) {
   const targets = renderer(selector);
   const result = this.toArray();
 
@@ -661,23 +660,23 @@ initRender.prototype.add = function (selector) {
 };
 
 const emptyArray = [];
-initRender.prototype.splice = function () {
+InitRender.prototype.splice = function () {
   return renderer(emptyArray.splice.apply(this, arguments));
 };
-initRender.prototype.slice = function () {
+InitRender.prototype.slice = function () {
   return renderer(emptyArray.slice.apply(this, arguments));
 };
-initRender.prototype.toArray = function () {
+InitRender.prototype.toArray = function () {
   return emptyArray.slice.call(this);
 };
 
-initRender.prototype.offset = function () {
+InitRender.prototype.offset = function () {
   if (!this[0]) return;
 
   return getOffset(this[0]);
 };
 
-initRender.prototype.offsetParent = function () {
+InitRender.prototype.offsetParent = function () {
   if (!this[0]) return renderer();
 
   let offsetParent = renderer(this[0].offsetParent);
@@ -691,7 +690,7 @@ initRender.prototype.offsetParent = function () {
   return offsetParent;
 };
 
-initRender.prototype.position = function () {
+InitRender.prototype.position = function () {
   if (!this[0]) return;
 
   let offset;
@@ -745,7 +744,7 @@ initRender.prototype.position = function () {
 }].forEach((directionStrategy) => {
   const propName = directionStrategy.name;
 
-  initRender.prototype[propName] = function (value) {
+  InitRender.prototype[propName] = function (value) {
     if (!this[0]) {
       return;
     }
@@ -765,7 +764,7 @@ initRender.prototype.position = function () {
   };
 });
 
-initRender.prototype.data = function (key, value) {
+InitRender.prototype.data = function (key, value) {
   if (!this[0]) return;
 
   if (arguments.length < 2) {
@@ -776,7 +775,7 @@ initRender.prototype.data = function (key, value) {
   return this;
 };
 
-initRender.prototype.removeData = function (key) {
+InitRender.prototype.removeData = function (key) {
   this[0] && removeData(this[0], key);
 
   return this;

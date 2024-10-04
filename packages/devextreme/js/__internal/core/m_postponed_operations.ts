@@ -22,7 +22,7 @@ export class PostponedOperations {
   }
 
   callPostponedOperations() {
-    for (const key in this._postponedOperations) {
+    Object.keys(this._postponedOperations).forEach((key) => {
       const operation = this._postponedOperations[key];
 
       if (isDefined(operation)) {
@@ -32,7 +32,7 @@ export class PostponedOperations {
           operation.fn().done(operation.completePromise.resolve);
         }
       }
-    }
+    });
     this._postponedOperations = {};
   }
 }

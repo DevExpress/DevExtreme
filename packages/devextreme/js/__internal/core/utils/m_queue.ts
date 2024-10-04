@@ -2,14 +2,15 @@ import errors from '@js/core/errors';
 import { when } from '@js/core/utils/deferred';
 
 function createQueue(discardPendingTasks) {
-  let _tasks = [];
+  let tasks = [];
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   let _busy = false;
 
   function exec() {
-    while (_tasks.length) {
+    while (tasks.length) {
       _busy = true;
 
-      const task = _tasks.shift();
+      const task = tasks.shift();
       const result = task();
 
       if (result === undefined) {
@@ -30,12 +31,12 @@ function createQueue(discardPendingTasks) {
 
   function add(task, removeTaskCallback) {
     if (!discardPendingTasks) {
-      _tasks.push(task);
+      tasks.push(task);
     } else {
-      if (_tasks[0] && removeTaskCallback) {
-        removeTaskCallback(_tasks[0]);
+      if (tasks[0] && removeTaskCallback) {
+        removeTaskCallback(tasks[0]);
       }
-      _tasks = [task];
+      tasks = [task];
     }
     if (!_busy) {
       exec();

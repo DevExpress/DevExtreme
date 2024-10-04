@@ -22,11 +22,11 @@ export class OptionManager {
   _setByReference(options, rulesOptions) {
     extend(true, options, rulesOptions);
 
-    for (const fieldName in this._optionsByReference) {
+    Object.keys(this._optionsByReference).forEach((fieldName) => {
       if (Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
         options[fieldName] = rulesOptions[fieldName];
       }
-    }
+    });
   }
 
   _setPreparedValue(name, value, merge, silent) {
@@ -48,14 +48,15 @@ export class OptionManager {
 
   _prepareRelevantNames(options, name, value, silent) {
     if (isPlainObject(value)) {
-      for (const valueName in value) {
+      Object.keys(value).forEach((valueName) => {
         this._prepareRelevantNames(options, `${name}.${valueName}`, value[valueName]);
-      }
+      });
     }
 
     this._namePreparedCallbacks(options, name, value, silent);
   }
 
+  // eslint-disable-next-line @typescript-eslint/default-param-last
   get(options = this._options, name, unwrapObservables) {
     cachedGetters[name] = cachedGetters[name] || compileGetter(name);
 
@@ -65,17 +66,17 @@ export class OptionManager {
   set(options, value, merge, silent) {
     options = normalizeOptions(options, value);
 
-    for (const name in options) {
+    Object.keys(options).forEach((name) => {
       this._prepareRelevantNames(options, name, options[name], silent);
-    }
+    });
 
     if (this._validateOptionsCallback) {
       options = this._validateOptionsCallback(options);
     }
 
-    for (const name in options) {
+    Object.keys(options).forEach((name) => {
       this._setPreparedValue(name, options[name], merge, silent);
-    }
+    });
   }
 
   onRelevantNamesPrepared(callBack) {

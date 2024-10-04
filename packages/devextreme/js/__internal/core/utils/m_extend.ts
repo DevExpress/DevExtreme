@@ -2,14 +2,14 @@ import { isPlainObject } from '@js/core/utils/type';
 
 export const extendFromObject = function (target, source, overrideExistingValues) {
   target = target || {};
-  for (const prop in source) {
+  Object.keys(source).forEach((prop) => {
     if (Object.prototype.hasOwnProperty.call(source, prop)) {
       const value = source[prop];
       if (!(prop in target) || overrideExistingValues) {
         target[prop] = value;
       }
     }
-  }
+  });
   return target;
 };
 
@@ -31,18 +31,19 @@ export const extend = function (target) {
       continue;
     }
 
-    for (const key in source) {
+    Object.keys(source).forEach((key) => {
       const targetValue = target[key];
       const sourceValue = source[key];
       let sourceValueIsArray = false;
       let clone;
 
       if (key === '__proto__' || key === 'constructor' || target === sourceValue) {
-        continue;
+        return;
       }
 
       if (deep && sourceValue && (isPlainObject(sourceValue)
-                || (sourceValueIsArray = Array.isArray(sourceValue)))) {
+          // eslint-disable-next-line no-cond-assign
+          || (sourceValueIsArray = Array.isArray(sourceValue)))) {
         if (sourceValueIsArray) {
           clone = targetValue && Array.isArray(targetValue) ? targetValue : [];
         } else {
@@ -53,7 +54,7 @@ export const extend = function (target) {
       } else if (sourceValue !== undefined) {
         target[key] = sourceValue;
       }
-    }
+    });
   }
 
   return target;

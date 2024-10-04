@@ -104,6 +104,8 @@ export const getSize = function (element, dimension, box) {
       case boxIndices.margin:
         margin = coeff * getComponentThickness(element, dimension, 'margin', styles);
         break;
+      default:
+        break;
     }
   }
 
@@ -127,13 +129,13 @@ const getContainerHeight = function (container) {
 
 export const parseHeight = function (value, container, element) {
   if (value.indexOf('px') > 0) {
-    value = parseInt(value.replace('px', ''));
+    value = parseInt(value.replace('px', ''), 10);
   } else if (value.indexOf('%') > 0) {
-    value = parseInt(value.replace('%', '')) * getContainerHeight(container) / 100;
+    value = parseInt(value.replace('%', ''), 10) * getContainerHeight(container) / 100;
   } else if (!isNaN(value)) {
-    value = parseInt(value);
+    value = parseInt(value, 10);
   } else if (value.indexOf('vh') > 0) {
-    value = window.innerHeight / 100 * parseInt(value.replace('vh', ''));
+    value = window.innerHeight / 100 * parseInt(value.replace('vh', ''), 10);
   } else if (element && value.indexOf('em') > 0) {
     value = parseFloat(value.replace('em', '')) * parseFloat(window.getComputedStyle(element).fontSize);
   }
@@ -243,6 +245,7 @@ const elementSize = function (el, sizeProperty, value) {
       }
       return;
     }
+    // eslint-disable-next-line prefer-destructuring
     el = el[0];
   }
 

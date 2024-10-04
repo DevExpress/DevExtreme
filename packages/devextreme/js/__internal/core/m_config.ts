@@ -60,8 +60,7 @@ const config = {
 const normalizeToJSONString = (optionsString) => optionsString
   .replace(/'/g, '"') // replace all ' to "
   .replace(/,\s*([\]}])/g, '$1') // remove trailing commas
-  .replace(/([{,])\s*([^":\s]+)\s*:/g, '$1"$2":') // add quotes for unquoted keys
-;
+  .replace(/([{,])\s*([^":\s]+)\s*:/g, '$1"$2":'); // add quotes for unquoted keys
 
 const deprecatedFields = ['decimalSeparator', 'thousandsSeparator'];
 

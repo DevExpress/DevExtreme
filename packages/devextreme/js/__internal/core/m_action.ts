@@ -62,7 +62,7 @@ class Action {
     const excludeValidators = this._excludeValidators;
     const { executors } = Action;
 
-    for (const name in executors) {
+    Object.keys(executors).forEach((name) => {
       if (!excludeValidators[name]) {
         const executor = executors[name];
         executor.validate?.(e);
@@ -71,7 +71,7 @@ class Action {
           return false;
         }
       }
-    }
+    });
 
     return true;
   }
@@ -80,15 +80,16 @@ class Action {
     let result;
     const { executors } = Action;
 
-    for (const name in executors) {
+    Object.keys(executors).some((name) => {
       const executor = executors[name];
       executor.execute?.(e);
 
       if (e.handled) {
         result = e.result;
-        break;
+        return true;
       }
-    }
+      return false;
+    });
 
     return result;
   }
@@ -103,6 +104,7 @@ class Action {
 
   static unregisterExecutor(...args) {
     each(args, function () {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete Action.executors[this];
     });
   }

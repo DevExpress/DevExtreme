@@ -175,6 +175,8 @@ function correctDateWithUnitBeginning(date, dateInterval, withCorrection, firstD
         date.setMonth(firstQuarterMonth);
       }
       break;
+    default:
+      break;
   }
 
   if (withCorrection && dateUnitInterval !== 'hour' && dateUnitInterval !== 'minute' && dateUnitInterval !== 'second') {
@@ -417,6 +419,8 @@ function getDateIntervalByString(intervalString) {
       break;
     case 'millisecond':
       result.milliseconds = 1;
+      break;
+    default:
       break;
   }
   return result;

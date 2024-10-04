@@ -42,7 +42,7 @@ export const clearSelection = () => {
     // T522811
     try {
       selection.removeAllRanges();
-    } catch (e) {}
+    } catch (e) { /* empty */ }
   }
 };
 

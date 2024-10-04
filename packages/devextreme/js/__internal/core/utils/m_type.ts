@@ -51,6 +51,7 @@ const isObject = function (object) {
 const isEmptyObject = function (object) {
   let property;
 
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in, no-unreachable-loop
   for (property in object) {
     return false;
   }

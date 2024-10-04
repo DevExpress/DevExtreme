@@ -3,11 +3,11 @@ const map = (values, callback) => {
     return values.map(callback);
   }
 
-  const result = [];
+  const result: unknown[] = [];
 
-  for (const key in values) {
+  Object.keys(values).forEach((key) => {
     result.push(callback(values[key], key));
-  }
+  });
 
   return result;
 };
@@ -28,6 +28,7 @@ const each = (values, callback) => {
       }
     }
   } else {
+    // eslint-disable-next-line no-restricted-syntax
     for (const key in values) {
       if (callback.call(values[key], key, values[key]) === false) {
         break;
