@@ -99,23 +99,24 @@
 
             $(() => {
                 $('#lookup').dxLookup({
-                    // items: employeesList,
-                    // value: employeesList[0],
-                    // usePopover: false,
-                    // searchEnabled: false,
-                    // inputAttr: {
-                    //     'aria-label': 'Simple lookup',
-                    // },
-                    // // applyValueMode: 'useButtons',
-                    // dropDownOptions: {
-                    // //     // shading: true,
-                    //     toolbarItems: [],
-                    // },
-                    opened: true,
-                    items: [1, 2, 3],
-                    focusStateEnabled: true,
+                    items: employeesList,
+                    value: employeesList[0],
+                    usePopover: false,
                     searchEnabled: false,
-                    usePopover: true,
+                    inputAttr: {
+                        'aria-label': 'Simple lookup',
+                    },
+                    // applyValueMode: 'useButtons',
+                    dropDownOptions: {
+                        shading: false,
+                        // toolbarItems: [],
+                    },
+
+                    // opened: true,
+                    // items: [1, 2, 3],
+                    // focusStateEnabled: true,
+                    // searchEnabled: false,
+                    // usePopover: true,
                 });
 
                 // $('#products').dxSelectBox({

@@ -541,15 +541,17 @@ const Lookup = DropDownList.inherit({
     return 'auto';
   },
 
-  _popupTabHandler(e) {
-    const { usePopover } = this.option();
+  // _popupTabHandler(e) {
+  //   const { usePopover } = this.option();
 
-    // debugger;
+  //   // debugger;
 
-    if (usePopover) {
-      this.callBase(e);
-    }
-  },
+  //   if (usePopover) {
+  //     this.callBase(e);
+  //   }
+  // },
+
+  _popupTabHandler: noop,
 
   _renderPopup() {
     if (this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
@@ -624,7 +626,7 @@ const Lookup = DropDownList.inherit({
 
   _popupConfig() {
     const {
-      usePopover,
+      // usePopover,
       dropDownOptions,
     } = this.option();
 
@@ -640,7 +642,7 @@ const Lookup = DropDownList.inherit({
       fullScreen: dropDownOptions.fullScreen,
       shading: dropDownOptions.shading,
       hideOnOutsideClick: dropDownOptions.hideOnOutsideClick || dropDownOptions.closeOnOutsideClick,
-      _loopFocus: !usePopover,
+      // _loopFocus: !usePopover,
     });
 
     delete result.animation;
