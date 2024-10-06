@@ -23,3 +23,6 @@ export interface Updatable<T> {
 export interface Gettable<T> {
   unreactive_get: () => T;
 }
+
+export type SubsGets<T> = Subscribable<T> & Gettable<T>;
+export type SubsGetsUpd<T> = Subscribable<T> & Gettable<T> & Updatable<T>;

@@ -4,7 +4,7 @@
 import { InterruptableComputed, Observable } from './core';
 import { type Subscription, SubscriptionBag } from './subscription';
 import type {
-  Gettable, MaybeSubscribable, Subscribable, Updatable,
+  Gettable, MaybeSubscribable, Subscribable, SubsGets, SubsGetsUpd, Updatable,
 } from './types';
 import { isSubscribable } from './types';
 
@@ -15,23 +15,46 @@ export function state<T>(value: T): Subscribable<T> & Updatable<T> & Gettable<T>
 export function computed<T1, TValue>(
   compute: (t1: T1) => TValue,
   deps: [Subscribable<T1>]
-): Subscribable<TValue> & Gettable<TValue>;
+): SubsGets<TValue>;
 export function computed<T1, T2, TValue>(
   compute: (t1: T1, t2: T2) => TValue,
   deps: [Subscribable<T1>, Subscribable<T2>]
-): Subscribable<TValue> & Gettable<TValue>;
+): SubsGets<TValue>;
 export function computed<T1, T2, T3, TValue>(
   compute: (t1: T1, t2: T2, t3: T3,) => TValue,
   deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>]
-): Subscribable<TValue> & Gettable<TValue>;
+): SubsGets<TValue>;
 export function computed<T1, T2, T3, T4, TValue>(
   compute: (t1: T1, t2: T2, t3: T3, t4: T4) => TValue,
   deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>, Subscribable<T4>]
-): Subscribable<TValue> & Gettable<TValue>;
+): SubsGets<TValue>;
 export function computed<TArgs extends readonly any[], TValue>(
   compute: (...args: TArgs) => TValue,
   deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
-): Subscribable<TValue> & Gettable<TValue> {
+): SubsGets<TValue> {
+  return new InterruptableComputed(compute, deps);
+}
+
+export function interruptableComputed<T1, TValue>(
+  compute: (t1: T1) => TValue,
+  deps: [Subscribable<T1>]
+): SubsGetsUpd<TValue>;
+export function interruptableComputed<T1, T2, TValue>(
+  compute: (t1: T1, t2: T2) => TValue,
+  deps: [Subscribable<T1>, Subscribable<T2>]
+): SubsGetsUpd<TValue>;
+export function interruptableComputed<T1, T2, T3, TValue>(
+  compute: (t1: T1, t2: T2, t3: T3,) => TValue,
+  deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>]
+): SubsGetsUpd<TValue>;
+export function interruptableComputed<T1, T2, T3, T4, TValue>(
+  compute: (t1: T1, t2: T2, t3: T3, t4: T4) => TValue,
+  deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>, Subscribable<T4>]
+): SubsGetsUpd<TValue>;
+export function interruptableComputed<TArgs extends readonly any[], TValue>(
+  compute: (...args: TArgs) => TValue,
+  deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
+): SubsGetsUpd<TValue> {
   return new InterruptableComputed(compute, deps);
 }
 
