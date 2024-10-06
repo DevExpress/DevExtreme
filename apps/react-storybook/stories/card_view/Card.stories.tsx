@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { Card as InfernoCard } from "devextreme/esm/__internal/grids/new/card_view/content_view/card";
-import { InfernoToReact } from "../utils";
+import { wrapInfernoWithReact } from "../utils";
 
 interface Props {
   row: {
@@ -17,7 +17,7 @@ interface Props {
   };
 }
 
-const Card = InfernoToReact<Props>(InfernoCard);
+const Card = wrapInfernoWithReact<Props>(InfernoCard);
 
 const meta: Meta<Props> = {
   title: "Grids/CardView/Card",
