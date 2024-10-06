@@ -16,6 +16,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          pnpm install
+
+      - name: Build npm packages
+        run: pnpm run all:build
+
       - name: Get head SHA
         id: get-head-sha
         run: echo "SHA=$(git rev-parse origin/${{ github.ref_name }})" >> "$GITHUB_OUTPUT"
