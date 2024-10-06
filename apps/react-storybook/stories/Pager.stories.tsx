@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import dxPager from "devextreme/ui/pager";
-import { DxToReact } from "./utils";
+import { wrapDxWithReact } from "./utils";
 
 interface Props {
   pageSize?: number;
@@ -11,7 +11,7 @@ interface Props {
   displayMode?: 'adaptive' | 'compact' | 'full';
 }
 
-const Pager = DxToReact<Props>(dxPager);
+const Pager = wrapDxWithReact<Props>(dxPager);
 
 const meta: Meta<Props> = {
   title: "Components/Pager",

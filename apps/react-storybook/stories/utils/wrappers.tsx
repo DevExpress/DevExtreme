@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import * as inferno from "inferno";
 
-export function InfernoToReact<TProps>(component) {
+export function wrapInfernoWithReact<TProps>(component) {
   return function WrappedInfernoComponent(props: TProps) {
     const ref = useRef();
     useEffect(() => {
@@ -15,7 +15,7 @@ export function InfernoToReact<TProps>(component) {
   }
 }
 
-export function DxToReact<TProps>(component) {
+export function wrapDxWithReact<TProps>(component) {
   return function WrappedDxComponent(props: TProps) {
     const ref = useRef();
     const componentRef = useRef();
