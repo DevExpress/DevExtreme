@@ -2,7 +2,6 @@ import Color from '@js/color';
 import $ from '@js/core/renderer';
 import ajax from '@js/core/utils/ajax';
 import { noop } from '@js/core/utils/common';
-import { Deferred } from '@js/core/utils/deferred';
 import { map } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
@@ -15,8 +14,9 @@ const window = getWindow();
 declare let atlas: any;
 
 const AZURE_LINK = 'https://atlas.microsoft.com/';
-const AZURE_JS_URL = `${AZURE_LINK}sdk/javascript/mapcontrol/3/atlas.min.js`;
-const AZURE_CSS_URL = `${AZURE_LINK}/sdk/javascript/mapcontrol/3/atlas.min.css`;
+let AZURE_JS_URL = `${AZURE_LINK}sdk/javascript/mapcontrol/3/atlas.min.js`;
+let AZURE_CSS_URL = `${AZURE_LINK}/sdk/javascript/mapcontrol/3/atlas.min.css`;
+let CUSTOM_URL;
 
 const MAP_MARKER_TOOLTIP_CLASS = 'dx-map-marker-tooltip';
 
@@ -69,10 +69,11 @@ const AzureProvider = DynamicProvider.inherit({
       const searchURL = `${AZURE_LINK}geocode?subscription-key=${this._keyOption('azure')}&api-version=2023-06-01&query=${location}&limit=1`;
 
       ajax.sendRequest({
-        url: searchURL,
+        url: CUSTOM_URL ?? searchURL,
         dataType: 'json',
       }).then((result) => {
         const coordinates = result?.features[0]?.geometry?.coordinates;
+
         if (coordinates) {
           resolve(new atlas.data.Position(coordinates[0], coordinates[1]));
         } else {
@@ -103,15 +104,24 @@ const AzureProvider = DynamicProvider.inherit({
   },
 
   _loadImpl() {
-    if (azureMapsLoaded()) {
-      return Promise.resolve();
-    }
+    return new Promise<void>((resolve) => {
+      if (azureMapsLoaded()) {
+        resolve();
+      }
 
-    if (!azureMapsLoader) {
-      azureMapsLoader = this._loadMapResources();
-    }
+      if (!azureMapsLoader) {
+        azureMapsLoader = this._loadMapResources();
+      }
 
-    return azureMapsLoader;
+      azureMapsLoader.then(() => {
+        if (azureMapsLoaded()) {
+          resolve();
+          return;
+        }
+
+        this._loadMapResources().then(resolve);
+      });
+    });
   },
 
   _loadMapResources() {
@@ -126,7 +136,9 @@ const AzureProvider = DynamicProvider.inherit({
       ajax.sendRequest({
         url: AZURE_JS_URL,
         dataType: 'script',
-      }).done(() => { resolve(); });
+      }).then(() => {
+        resolve();
+      });
     });
   },
 
@@ -135,7 +147,7 @@ const AzureProvider = DynamicProvider.inherit({
       ajax.sendRequest({
         url: AZURE_CSS_URL,
         dataType: 'text',
-      }).done((css) => {
+      }).then((css) => {
         $('<style>').html(css).appendTo($('head'));
         resolve();
       });
@@ -143,17 +155,12 @@ const AzureProvider = DynamicProvider.inherit({
   },
 
   _init() {
-    if (!azureMapsLoaded()) {
-      return this._loadMapResources();
-    }
     this._createMap();
 
     return Promise.resolve();
   },
 
   _createMap() {
-    //  @ts-expect-error
-    this._mapReady = new Deferred();
     this._map = new atlas.Map(this._$container[0], {
       authOptions: {
         authType: 'subscriptionKey',
@@ -161,13 +168,10 @@ const AzureProvider = DynamicProvider.inherit({
       },
       zoom: this._option('zoom'),
       style: this._mapType(this._option('type')),
+      interactive: !this._option('disabled'),
     });
 
-    this._map.events.add('ready', () => {
-      this.updateControls();
-
-      this._mapReady.resolve();
-    });
+    this.updateControls();
   },
 
   _attachHandlers() {
@@ -199,12 +203,25 @@ const AzureProvider = DynamicProvider.inherit({
     return Promise.resolve();
   },
 
-  updateMapType() {
-    const type = this._option('type');
+  updateDisabled() {
+    const disabled = this._option('disabled');
 
-    this._map.setStyle({
-      style: this._mapType(type),
+    this._map.setUserInteraction({
+      interactive: !disabled,
     });
+
+    return Promise.resolve();
+  },
+
+  updateMapType() {
+    const newType = this._mapType(this._option('type'));
+    const currentType = this._map.getStyle().style;
+
+    if (newType !== currentType) {
+      this._map.setStyle({
+        style: newType,
+      });
+    }
 
     return Promise.resolve();
   },
@@ -240,13 +257,15 @@ const AzureProvider = DynamicProvider.inherit({
   },
 
   updateControls() {
-    const controls = this._option('controls');
+    const { controls } = this._option();
 
     if (controls) {
       this._map.controls.add([
         new atlas.control.CompassControl(),
         new atlas.control.PitchControl(),
-        new atlas.control.StyleControl(),
+        new atlas.control.StyleControl({
+          mapStyles: ['road', 'satellite', 'satellite_road_labels'],
+        }),
         new atlas.control.ZoomControl(),
       ], {
         position: 'top-right',
@@ -334,42 +353,56 @@ const AzureProvider = DynamicProvider.inherit({
   },
 
   _renderRoute(options) {
-    return this._mapReady.promise().then(() => Promise.all(map(options.locations, (point) => this._resolveLocation(point))).then((locations) => new Promise((resolve) => {
+    return Promise.all(
+      map(options.locations, (point) => this._resolveLocation(point)),
+    ).then((locations) => new Promise((resolve) => {
       const routeColor = new Color(options.color || this._defaultRouteColor()).toHex();
       const routeOpacity = options.opacity || this._defaultRouteOpacity();
       const queryCoordinates = locations.map((location) => `${location[1]},${location[0]}`);
       const query = queryCoordinates.join(':');
       const routeType = this._movementMode(options.mode);
-
+      const isWalkingType = routeType === this._movementMode('walking');
       const searchUrl = `${AZURE_LINK}route/directions/json?subscription-key=${this._keyOption('azure')}&api-version=1.0&query=${query}&travelMode=${routeType}`;
 
       ajax.sendRequest({
-        url: searchUrl,
+        url: CUSTOM_URL ?? searchUrl,
         dataType: 'json',
       }).then((result) => {
         if (result?.routes && result.routes.length > 0) {
           const route = result.routes[0];
-          const routeCoordinates = route.legs.flatMap((leg) => leg.points.map((point) => [point.longitude, point.latitude]));
+          const routeCoordinates = route.legs
+            .flatMap((leg) => leg.points.map((point) => [point.longitude, point.latitude]));
           const dataSource = new atlas.source.DataSource();
-          dataSource.add(new atlas.data.Feature(new atlas.data.LineString(routeCoordinates), {
-            routeLength: route.summary.lengthInMeters,
-            routeDuration: route.summary.travelTimeInSeconds,
-          }));
 
-          const lineLayer = new atlas.layer.LineLayer(dataSource, null, {
+          dataSource.add(new atlas.data.Feature(new atlas.data.LineString(routeCoordinates), {}));
+
+          const lineLayerConfig: {
+            strokeColor: string;
+            strokeOpacity: number;
+            strokeWidth: number;
+            strokeDashArray?: number[];
+          } = {
             strokeColor: routeColor,
             strokeOpacity: routeOpacity,
             strokeWidth: options.weight || this._defaultRouteWeight(),
-          });
+          };
+
+          if (isWalkingType) {
+            lineLayerConfig.strokeDashArray = [1, 1];
+          }
+
+          const lineLayer = new atlas.layer.LineLayer(dataSource, null, lineLayerConfig);
 
           this._map.sources.add(dataSource);
           this._map.layers.add(lineLayer);
 
           const bounds = atlas.data.BoundingBox.fromPositions(routeCoordinates);
-          this._map.setCamera({
-            bounds,
-            padding: 50,
-          });
+          if (this._option('autoAdjust')) {
+            this._map.setCamera({
+              bounds,
+              padding: 50,
+            });
+          }
 
           resolve({
             instance: { dataSource, lineLayer },
@@ -388,7 +421,7 @@ const AzureProvider = DynamicProvider.inherit({
           instance: { dataSource, lineLayer },
         });
       });
-    })));
+    }));
   },
 
   _destroyRoute(routeObject) {
@@ -452,5 +485,15 @@ const AzureProvider = DynamicProvider.inherit({
     return Promise.resolve();
   },
 });
+
+/// #DEBUG
+// @ts-expect-error
+AzureProvider.remapConstant = (newValue: string): void => {
+  AZURE_JS_URL = newValue;
+  AZURE_CSS_URL = newValue;
+  CUSTOM_URL = newValue;
+};
+
+/// #ENDDEBUG
 
 export default AzureProvider;
