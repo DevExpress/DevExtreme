@@ -201,6 +201,7 @@ const Map = Widget.inherit({
       case 'disabled':
         this._renderShield();
         this.callBase(args);
+        this._queueAsyncAction('updateDisabled');
         break;
       case 'width':
       case 'height':
