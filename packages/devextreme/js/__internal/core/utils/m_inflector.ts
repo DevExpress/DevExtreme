@@ -55,7 +55,7 @@ export const captionize = function (name) {
   for (i = 0; i < name.length; i++) {
     char = name.charAt(i);
     isNewWord = (char === char.toUpperCase() && char !== '-' && char !== ')' && char !== '/') || (char in DIGIT_CHARS);
-    if (char === '_' || char === '@js/core/utils') {
+    if (char === '_' || char === '.') {
       char = ' ';
       isNewWord = true;
     } else if (i === 0) {

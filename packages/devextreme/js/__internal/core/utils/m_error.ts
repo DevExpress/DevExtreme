@@ -4,7 +4,7 @@ import { extend } from '@js/core/utils/extend';
 import { format } from '@js/core/utils/string';
 import { version } from '@js/core/version';
 
-const ERROR_URL = `https://js.devexpress.com/error/${version.split('@js/core/utils').slice(0, 2).join('_')}/`;
+const ERROR_URL = `https://js.devexpress.com/error/${version.split('.').slice(0, 2).join('_')}/`;
 
 function error(baseErrors, errors?) {
   const exports = {

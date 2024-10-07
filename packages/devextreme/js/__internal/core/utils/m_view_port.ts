@@ -24,7 +24,7 @@ const value = (function (...args) {
 }());
 
 ready(() => {
-  value('@js/core/utilsdx-viewport');
+  value('.dx-viewport');
 });
 
 export {

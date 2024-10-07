@@ -144,11 +144,11 @@ const createValidatorByTargetElement = (condition) => (e) => {
 // @ts-expect-error expect name and executor
 Action.registerExecutor({
   disabled: {
-    validate: createValidatorByTargetElement(($target) => $target.is('@js/coredx-state-disabled, .dx-state-disabled *')),
+    validate: createValidatorByTargetElement(($target) => $target.is('.dx-state-disabled, .dx-state-disabled *')),
   },
 
   readOnly: {
-    validate: createValidatorByTargetElement(($target) => $target.is('@js/coredx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)')),
+    validate: createValidatorByTargetElement(($target) => $target.is('.dx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)')),
   },
   undefined: {
     execute: (e) => {
