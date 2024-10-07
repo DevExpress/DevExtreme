@@ -1266,7 +1266,7 @@ QUnit.module('keyboard navigation', {
     });
 
     ['left', 'right', 'up', 'down', 'home', 'end'].forEach((key) => {
-        QUnit.test(`when only one item is visible, '${key}' key press doesnt moves the current visible view`, function(assert) {
+        QUnit.test(`when only one item is visible, '${key}' key press doesn't moves the current visible view`, function(assert) {
             const $multiView = $('#multiView').dxMultiView({
                 items: [
                     { text: '1', visible: true },
@@ -1298,13 +1298,13 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true
         });
         const instance = $multiView.dxMultiView('instance');
-        const $firstItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+        const $firstVisibleItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
 
         $multiView.focusin();
         keyboardMock($multiView).keyDown('home');
 
         assert.strictEqual(instance.option('selectedIndex'), 1, 'correct index is selected');
-        assert.roughEqual(position($multiView), -position($firstItem), 1, 'container moved to proper position');
+        assert.roughEqual(position($multiView), -position($firstVisibleItem), 1, 'container moved to proper position');
     });
 
     QUnit.test('item switching should go to last visible element when clicking end button', function(assert) {
@@ -1317,13 +1317,13 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true
         });
         const instance = $multiView.dxMultiView('instance');
-        const $lastItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+        const $lastVisibleItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
 
         $multiView.focusin();
         keyboardMock($multiView).keyDown('end');
 
         assert.strictEqual(instance.option('selectedIndex'), 1, 'correct index is selected');
-        assert.roughEqual(position($multiView), position($lastItem), 1, 'container moved to proper position');
+        assert.roughEqual(position($multiView), position($lastVisibleItem), 1, 'container moved to proper position');
     });
 
     QUnit.test('selected item should have focus after swipe', function(assert) {
