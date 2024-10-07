@@ -1659,3 +1659,112 @@ QUnit.module('swipeable disabled state', () => {
         assert.equal(multiView.option('swipeEnabled'), false, 'MultiView.swipeEnabled');
     });
 });
+
+QUnit.module('selectIndex changing', () => {
+    QUnit.test('selectIndex should update on initialization to the first item visible', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true },
+            ],
+            selectedIndex: 1
+        });
+        const instance = $multiView.dxMultiView('instance');
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
+
+    QUnit.test('selectIndex update on runtime should change to first item visible', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true },
+            ]
+        });
+        const instance = $multiView.dxMultiView('instance');
+        instance.option('selectedIndex', 1);
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
+
+    QUnit.test('selectedIndex should be zero when all items are not visible', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: false },
+                { text: '3', visible: false },
+            ]
+        });
+        const instance = $multiView.dxMultiView('instance');
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
+
+    QUnit.test('selectedIndex should remain to zero when all items is changed to visible on runtime', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true },
+            ],
+            selectedIndex: 2
+        });
+        const instance = $multiView.dxMultiView('instance');
+        instance.option({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: false },
+                { text: '3', visible: false },
+            ]
+        });
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
+
+    QUnit.test('when hiding non-selected item selectedIndex should change to first visible item', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: true },
+                { text: '3', visible: true },
+            ],
+            selectedIndex: 2
+        });
+        const instance = $multiView.dxMultiView('instance');
+        instance.option('items[1].visible', false);
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
+
+    QUnit.test('when hiding selected item selectedIndex should change to first visible item', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: true },
+                { text: '3', visible: true },
+            ],
+            selectedIndex: 1
+        });
+        const instance = $multiView.dxMultiView('instance');
+        instance.option('items[1].visible', false);
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
+
+    QUnit.test('when showing previous invisible items selectedIndex should change to first visible item', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: true },
+            ],
+            selectedIndex: 2
+        });
+        const instance = $multiView.dxMultiView('instance');
+        instance.option('items[1].visible', true);
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
+});
