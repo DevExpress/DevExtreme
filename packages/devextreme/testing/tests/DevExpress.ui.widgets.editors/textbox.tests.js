@@ -103,7 +103,7 @@ QUnit.module('common', {}, () => {
         const $input = $(`.${INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
-        keyboard.type('123').press('enter');
+        keyboard.type('123').change();
 
         assert.strictEqual($input.val(), '123', 'input value is pressent before reset');
 
