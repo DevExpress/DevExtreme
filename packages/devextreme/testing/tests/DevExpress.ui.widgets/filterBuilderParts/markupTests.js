@@ -13,10 +13,10 @@ QUnit.test('markup init', function(assert) {
     }
     const $etalon = $(
         '<div id="container" class="dx-filterbuilder dx-widget">'
-            + '<div class="dx-filterbuilder-group">'
-                + '<div class="dx-filterbuilder-group-item">'
-                    + '<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
-                    + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+            + '<div class="dx-filterbuilder-group" role="group" aria-label="Level 1">'
+                + '<div class="dx-filterbuilder-group-item" role="presentation" aria-label="Group Item">'
+                    + '<div role="button" title="Operation" aria-haspopup="true" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
+                    + '<div role="button" aria-label="Add" aria-haspopup="true" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
                 + '</div>'
                 + '<div class="dx-filterbuilder-group-content"></div>'
             + '</div>'
@@ -54,25 +54,7 @@ QUnit.test('filter Content init by one condition', function(assert) {
         return;
     }
     const $etalon = $('<div/>').html(
-        '<div class="dx-filterbuilder-group">'
-            + '<div class="dx-filterbuilder-group-item">'
-                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0"></div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>'
-                + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
-            + '</div>'
-            + '<div class="dx-filterbuilder-group-content">'
-                + '<div class="dx-filterbuilder-group">'
-                    + '<div class="dx-filterbuilder-group-item">'
-                        + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0"></div>'
-                        + '<div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0">Company Name</div>'
-                        + '<div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0">Equals</div>'
-                        + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
-                            + '<div class="dx-filterbuilder-item-value-text" tabindex="0">K&amp;S Music</div>'
-                        + '</div>'
-                    + '</div>'
-                + '</div>'
-            + '</div>'
-        + '</div>'
+        '<div class="dx-filterbuilder-group" role="group" aria-label="Level 2"><div class="dx-filterbuilder-group-item" role="presentation" aria-label="Group Item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove group"></div><div role="button" title="Operation" aria-haspopup="true" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div><div role="button" aria-label="Add" aria-haspopup="true" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div></div><div class="dx-filterbuilder-group-content"><div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="button" title="Item Field" aria-haspopup="true">Company Name</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="button" title="Item Operation" aria-haspopup="true">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div></div></div></div></div></div>'
     );
 
     const element = $('#container').dxFilterBuilder({
@@ -88,26 +70,7 @@ QUnit.test('filter Content init by several conditions', function(assert) {
         return;
     }
     const $etalon = $('<div/>').html(
-        '<div class="dx-filterbuilder-group">'
-            + '<div class="dx-filterbuilder-group-item">'
-                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0"></div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0">Company Name</div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0">Equals</div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
-                    + '<div class="dx-filterbuilder-item-value-text" tabindex="0">K&amp;S Music</div>'
-                + '</div>'
-            + '</div>'
-        + '</div>'
-        + '<div class="dx-filterbuilder-group">'
-            + '<div class="dx-filterbuilder-group-item">'
-                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0"></div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0">Zipcode</div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0">Equals</div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
-                    + '<div class="dx-filterbuilder-item-value-text" tabindex="0">98027</div>'
-                + '</div>'
-            + '</div>'
-        + '</div>'
+        '<div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="button" title="Item Field" aria-haspopup="true">Company Name</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="button" title="Item Operation" aria-haspopup="true">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div></div></div></div><div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="button" title="Item Field" aria-haspopup="true">Zipcode</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="button" title="Item Operation" aria-haspopup="true">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">98027</div></div></div></div>'
     );
 
     const element = $('#container').dxFilterBuilder({
