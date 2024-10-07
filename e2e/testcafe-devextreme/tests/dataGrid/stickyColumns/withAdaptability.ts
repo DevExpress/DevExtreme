@@ -18,11 +18,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
     await dataGrid.apiExpandAdaptiveDetailRow(1);
 
-    await takeScreenshot(`sticky_columns_with_adaptive_detail_row_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await takeScreenshot(`adaptability_sticky_columns_with_adaptive_detail_row_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
 
     await dataGrid.scrollTo(t, { x: scrollLeft });
 
-    await takeScreenshot(`sticky_columns_with_adaptive_detail_row_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await takeScreenshot(`adaptability_sticky_columns_with_adaptive_detail_row_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())
@@ -47,11 +47,11 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
-    await takeScreenshot(`sticky_columns_with_sticky_positions_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await takeScreenshot(`adaptability_sticky_columns_with_sticky_positions_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
 
     await dataGrid.scrollTo(t, { x: 10000 });
 
-    await takeScreenshot(`sticky_columns_with_sticky_positions_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
+    await takeScreenshot(`adaptability_sticky_columns_with_sticky_positions_2_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())
