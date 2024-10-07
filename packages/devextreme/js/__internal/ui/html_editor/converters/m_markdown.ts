@@ -1,6 +1,5 @@
 import { getWindow } from '@js/core/utils/window';
 import Errors from '@js/ui/widget/ui.errors';
-import TurnDown from 'turndown';
 
 import converterController from '../m_converterController';
 
@@ -12,7 +11,7 @@ class MarkdownConverter {
   constructor() {
     const window = getWindow();
     // @ts-expect-error
-    const turndown = window && window.TurndownService || TurnDown;
+    const turndown = window && window.TurndownService;
     // @ts-expect-error
     const showdown = window && window.showdown;
 

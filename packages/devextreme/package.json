@@ -36,8 +36,7 @@
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.10.1",
-    "rrule": "^2.7.1",
-    "turndown": "~7.1.0"
+    "rrule": "^2.7.1"
   },
   "devDependencies": {
     "@babel/core": "7.23.9",
