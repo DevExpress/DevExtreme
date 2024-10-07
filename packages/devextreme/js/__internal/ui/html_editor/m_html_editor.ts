@@ -9,7 +9,6 @@ import { EmptyTemplate } from '@js/core/templates/empty_template';
 import Callbacks from '@js/core/utils/callbacks';
 import {
   deferRender,
-  ensureDefined,
   // @ts-expect-error
   executeAsync,
   noop,
@@ -24,7 +23,6 @@ import { Event as dxEvent } from '@js/events/index';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
 import Editor from '@js/ui/editor/editor';
-import Errors from '@js/ui/widget/ui.errors';
 import { prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
 import ConverterController from './m_converterController';
@@ -38,8 +36,6 @@ const QUILL_CONTAINER_CLASS = 'dx-quill-container';
 const QUILL_CLIPBOARD_CLASS = 'ql-clipboard';
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = 'dx-htmleditor-submit-element';
 const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
-
-const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 
@@ -235,26 +231,11 @@ const HtmlEditor = Editor.inherit({
   },
 
   _updateContainerMarkup() {
-    let markup = this.option('value');
+    const { value } = this.option();
 
-    if (this._isMarkdownValue()) {
-      this._prepareMarkdownConverter();
-      markup = this._markdownConverter.toHtml(markup);
-    }
-
-    if (markup) {
-      const sanitizedMarkup = this._removeXSSVulnerableHtml(markup);
+    if (value) {
+      const sanitizedMarkup = this._removeXSSVulnerableHtml(value);
       this._$htmlContainer.html(sanitizedMarkup);
-    }
-  },
-
-  _prepareMarkdownConverter() {
-    const MarkdownConverter = ConverterController.getConverter('markdown');
-
-    if (MarkdownConverter) {
-      this._markdownConverter = new MarkdownConverter();
-    } else {
-      throw Errors.Error('E1051', 'markdown');
     }
   },
 
@@ -283,10 +264,6 @@ const HtmlEditor = Editor.inherit({
       if (DeltaConverter) {
         this._deltaConverter = new DeltaConverter();
       }
-    }
-
-    if (this.option('valueType') === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
-      this._prepareMarkdownConverter();
     }
   },
 
@@ -450,13 +427,14 @@ const HtmlEditor = Editor.inherit({
     return modules;
   },
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _textChangeHandler(newDelta, oldDelta, source) {
-    const htmlMarkup = this._deltaConverter.toHtml();
-    const convertedValue = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
-    const currentValue = this.option('value');
+  _textChangeHandler() {
+    const { value: currentValue } = this.option();
+    const convertedValue = this._deltaConverter.toHtml();
 
-    if (currentValue !== convertedValue && !this._isNullValueConverted(currentValue, convertedValue)) {
+    if (
+      currentValue !== convertedValue
+      && !this._isNullValueConverted(currentValue, convertedValue)
+    ) {
       this._isEditorUpdating = true;
       this.option('value', convertedValue);
     }
@@ -475,22 +453,6 @@ const HtmlEditor = Editor.inherit({
       this._contentRenderedDeferred.resolve();
       this._contentRenderedDeferred = undefined;
     }
-  },
-
-  _updateValueByType(valueType, value) {
-    const converter = this._markdownConverter;
-
-    if (!isDefined(converter)) {
-      return;
-    }
-
-    const currentValue = ensureDefined(value, this.option('value'));
-
-    return valueType === MARKDOWN_VALUE_TYPE ? converter.toMarkdown(currentValue) : converter.toHtml(currentValue);
-  },
-
-  _isMarkdownValue() {
-    return this.option('valueType') === MARKDOWN_VALUE_TYPE;
   },
 
   _resetEnabledState() {
@@ -549,10 +511,8 @@ const HtmlEditor = Editor.inherit({
           if (this._isEditorUpdating) {
             this._isEditorUpdating = false;
           } else {
-            const updatedValue = this._isMarkdownValue() ? this._updateValueByType('HTML', args.value) : args.value;
-
             this._suppressValueChangeAction();
-            this._updateHtmlContent(updatedValue);
+            this._updateHtmlContent(args.value);
             this._resumeValueChangeAction();
           }
         } else {
@@ -578,17 +538,6 @@ const HtmlEditor = Editor.inherit({
       case 'tableResizing':
         this._moduleOptionChanged('tableResizing', args);
         break;
-      case 'valueType': {
-        this._prepareConverters();
-        const newValue = this._updateValueByType(args.value);
-
-        if (args.value === 'html' && this._quillInstance) {
-          this._updateHtmlContent(newValue);
-        } else {
-          this.option('value', newValue);
-        }
-        break;
-      }
       case 'stylingMode':
         this._renderStylingMode();
         break;
