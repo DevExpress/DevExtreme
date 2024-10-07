@@ -1222,6 +1222,110 @@ QUnit.module('keyboard navigation', {
         delete this.animationStartAction;
     }
 }, () => {
+    ['right', 'down'].forEach((key) => {
+        QUnit.test(`selectedIndex should be correct when one item is not visible using '${key}' arrow key`, function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: true },
+                    { text: '2', visible: false },
+                    { text: '3', visible: true }
+                ],
+                focusStateEnabled: true
+            });
+            const instance = $multiView.dxMultiView('instance');
+            const $lastItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(2);
+
+            $multiView.focusin();
+            keyboardMock($multiView).keyDown(key);
+
+            assert.strictEqual(instance.option('selectedIndex'), 2, 'correct index is selected');
+            assert.roughEqual(position($multiView), position($lastItem), 1, 'container moved to proper position');
+        });
+    });
+
+    ['left', 'up'].forEach((key) => {
+        QUnit.test(`selectedIndex should be correct when one item is not visible using '${key}' arrow key`, function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: true },
+                    { text: '2', visible: false },
+                    { text: '3', visible: true }
+                ],
+                selectedIndex: 2,
+                focusStateEnabled: true
+            });
+            const instance = $multiView.dxMultiView('instance');
+            const $firstItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+
+            $multiView.focusin();
+            keyboardMock($multiView).keyDown(key);
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'correct index is selected');
+            assert.roughEqual(position($multiView), -position($firstItem), 1, 'container moved to proper position');
+        });
+    });
+
+    ['left', 'right', 'up', 'down', 'home', 'end'].forEach((key) => {
+        QUnit.test(`when only one item is visible, '${key}' key press doesn't moves the current visible view`, function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: true },
+                    { text: '2', visible: false }
+                ],
+                loop: true,
+                focusStateEnabled: true
+            });
+            const instance = $multiView.dxMultiView('instance');
+            const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+            const keyboard = keyboardMock($multiView);
+
+            $multiView.focusin();
+            keyboard.keyDown(key);
+
+            assert.strictEqual(position($itemContainer), 0, 'container did not move');
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+        });
+    });
+
+    QUnit.test('item switching should go to first visible element when clicking home button', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: true },
+                { text: '3', visible: true }
+            ],
+            selectedIndex: 2,
+            focusStateEnabled: true
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const $firstVisibleItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+
+        $multiView.focusin();
+        keyboardMock($multiView).keyDown('home');
+
+        assert.strictEqual(instance.option('selectedIndex'), 1, 'correct index is selected');
+        assert.roughEqual(position($multiView), -position($firstVisibleItem), 1, 'container moved to proper position');
+    });
+
+    QUnit.test('item switching should go to last visible element when clicking end button', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: true },
+                { text: '3', visible: false }
+            ],
+            focusStateEnabled: true
+        });
+        const instance = $multiView.dxMultiView('instance');
+        const $lastVisibleItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+
+        $multiView.focusin();
+        keyboardMock($multiView).keyDown('end');
+
+        assert.strictEqual(instance.option('selectedIndex'), 1, 'correct index is selected');
+        assert.roughEqual(position($multiView), position($lastVisibleItem), 1, 'container moved to proper position');
+    });
+
     QUnit.test('selected item should have focus after swipe', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [1, 2, 3, 4],
