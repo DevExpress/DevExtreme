@@ -101,6 +101,13 @@ testModule('Markdown converter', () => {
 
         assert.equal(markdownConverter.toMarkdown(html), expectedValue, 'It converts a HTML to Markdown');
     });
+
+    test('it convert a Markdown to the HTML', function(assert) {
+        const markdownConverter = new MarkdownConverter();
+        const markdown = 'Te**st**';
+
+        assert.equal(markdownConverter.toHtml(markdown), '<p>Te<strong>st</strong></p>', 'It converts a Markdown to HTML');
+    });
 });
 
 testModule('Custom list', {
