@@ -16,6 +16,9 @@ $(() => {
     headerFilter: {
       visible: true,
     },
+    pager: {
+      visible: true,
+    },
     columns: [{
       dataField: 'OrderNumber',
       caption: 'Invoice Number',

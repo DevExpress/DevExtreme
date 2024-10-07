@@ -6,6 +6,9 @@ $(() => {
     selection: {
       mode: 'single',
     },
+    pager: {
+      visible: true,
+    },
     columns: [{
       dataField: 'OrderNumber',
       width: 130,

@@ -14,7 +14,7 @@ export interface CustomTrialPanelStyles {
   buttonStyles?: StylesMap;
 }
 
-export const isClient = (): boolean => typeof HTMLElement !== 'undefined';
+export const isClient = (): boolean => typeof HTMLElement !== 'undefined' && typeof customElements !== 'undefined';
 
 const SafeHTMLElement = isClient()
   ? HTMLElement
@@ -185,7 +185,7 @@ class DxLicense extends SafeHTMLElement {
     const contentContainer = document.createElement('div');
     contentContainer.style.cssText = this._contentStyles;
     contentContainer.append(
-      this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
+      this._createSpan('For evaluation purposes only. Redistribution prohibited. Please '),
       this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
       this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
     );

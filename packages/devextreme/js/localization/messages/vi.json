@@ -3,6 +3,7 @@
         "Yes": "Có",
         "No": "Không",
         "Cancel": "Hủy",
+        "CheckState": "Check state",
         "Close": "Đóng",
         "Clear": "Làm sạch",
         "Done": "Hoàn tất",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Xóa",
         "dxListEditDecorator-more": "Thêm",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Kéo xuống để làm tươi...",
         "dxScrollView-pulledDownText": "Nhả ra để làm tươi...",

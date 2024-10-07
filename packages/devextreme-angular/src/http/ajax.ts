@@ -29,6 +29,9 @@ interface XHRSurrogate {
   type?: string;
   aborted: boolean;
   abort: () => void;
+  response?: HttpResponse<object>;
+  status?: number;
+  statusText?: string;
 }
 
 const PARSER_ERROR = 'parsererror';
@@ -179,7 +182,15 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
         total += event.loaded;
         options.upload.onprogress?.({ ...event, total });
       } else if (event.type === HttpEventType.Response) {
-        return deferred.resolve(xhrSurrogate, SUCCESS);
+        xhrSurrogate.status = event.status;
+        xhrSurrogate.statusText = event.statusText;
+        xhrSurrogate.response = event;
+
+        const result = options?.dataType === 'json' && typeof event.body === 'object'
+          ? event.body
+          : xhrSurrogate;
+
+        return deferred.resolve(result, SUCCESS);
       }
       return null;
     },

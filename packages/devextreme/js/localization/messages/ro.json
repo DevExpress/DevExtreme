@@ -3,6 +3,7 @@
         "Yes": "Da",
         "No": "Nu",
         "Cancel": "Anulare",
+        "CheckState": "Check state",
         "Close": "Închide",
         "Clear": "Curăță",
         "Done": "Gata",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Șterge",
         "dxListEditDecorator-more": "Mai mult",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Trageți în jos pentru a actualiza...",
         "dxScrollView-pulledDownText": "Eliberați pentru a actualiza...",

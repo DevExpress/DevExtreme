@@ -3,6 +3,7 @@
         "Yes": "Sí",
         "No": "No",
         "Cancel": "Cancelar",
+        "CheckState": "Check state",
         "Close": "Cerca",
         "Clear": "Limpiar",
         "Done": "Hecho",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Eliminar",
         "dxListEditDecorator-more": "Más",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Desliza hacia abajo para actualizar...",
         "dxScrollView-pulledDownText": "Suelta para actualizar...",

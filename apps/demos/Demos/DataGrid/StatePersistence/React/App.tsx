@@ -33,7 +33,7 @@ const App = () => {
         <FilterRow visible={true} />
         <GroupPanel visible={true} />
         <StateStoring enabled={true} type="localStorage" storageKey="storage" />
-        <Pager showPageSizeSelector={true} allowedPageSizes={allowedPageSizes} />
+        <Pager visible={true} showPageSizeSelector={true} allowedPageSizes={allowedPageSizes} />
         <Column dataField="OrderNumber" caption="Invoice Number" width={130} />
         <Column dataField="OrderDate" sortOrder="desc" dataType="date" />
         <Column dataField="SaleAmount" alignment="right" format="currency" />

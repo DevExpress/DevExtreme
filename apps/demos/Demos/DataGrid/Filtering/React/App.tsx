@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import DataGrid, {
-  Column, FilterRow, HeaderFilter, Search, SearchPanel,
+  Column, FilterRow, HeaderFilter, Search, SearchPanel, Pager,
 } from 'devextreme-react/data-grid';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
@@ -113,6 +113,7 @@ const App = () => {
           visible={true}
           width={240}
           placeholder="Search..." />
+        <Pager visible={true} />
         <Column
           dataField="OrderNumber"
           width={140}

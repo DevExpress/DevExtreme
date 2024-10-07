@@ -3,6 +3,7 @@
         "Yes": "Ναί",
         "No": "Όχι",
         "Cancel": "Ακύρωση",
+        "CheckState": "Check state",
         "Close": "Κλείσιμο",
         "Clear": "Εκκαθάριση",
         "Done": "Καταχώρηση",
@@ -48,6 +49,9 @@
         "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Διαγραφή",
         "dxListEditDecorator-more": "Περισσότερα",
+        "dxList-selectAll-indeterminate": "Half-checked",
+        "dxList-selectAll-checked": "Checked",
+        "dxList-selectAll-notChecked": "Not checked",
 
         "dxScrollView-pullingDownText": "Σύρετε απο πάνω προς τα κάτω για ανανέωση...",
         "dxScrollView-pulledDownText": "Απελευθερώστε για ανανέωση...",
