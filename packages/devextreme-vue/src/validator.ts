@@ -33,7 +33,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<(e: Object) => void>,
     onValidated: Function as PropType<(validatedInfo: Object) => void>,
     validationGroup: String,
-    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    validationRules: Array as PropType<Array<Object>>,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {

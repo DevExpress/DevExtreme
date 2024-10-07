@@ -468,7 +468,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function as PropType<(e: ShowingEvent) => void>,
     onShown: Function as PropType<(e: ShownEvent) => void>,
     onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
-    position: [Object, String] as PropType<Object | ("bottom" | "left" | "right" | "top") | Object>,
+    position: [Object, String] as PropType<Object | ("bottom" | "left" | "right" | "top")>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,

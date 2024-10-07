@@ -752,7 +752,7 @@ const DxColumnConfig = {
     filterValues: Array as PropType<Array<any>>,
     fixed: Boolean,
     fixedPosition: String as PropType<"left" | "right" | "sticky">,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     formItem: Object,
     headerCellTemplate: {},
     headerFilter: Object,
@@ -772,7 +772,7 @@ const DxColumnConfig = {
     sortOrder: String as PropType<"asc" | "desc">,
     trueText: String,
     type: String as PropType<"adaptive" | "buttons" | "drag">,
-    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    validationRules: Array as PropType<Array<Object>>,
     visible: Boolean,
     visibleIndex: Number,
     width: [Number, String]
@@ -1284,7 +1284,7 @@ const DxFieldConfig = {
     editorTemplate: {},
     falseText: String,
     filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between"> | Array<string>>,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | Object | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     lookup: Object,
     name: String,
     trueText: String
@@ -1314,7 +1314,7 @@ const DxFieldLookupConfig = {
   },
   props: {
     allowClearing: Boolean,
-    dataSource: [Array, Object] as PropType<Array<any> | Object | Object>,
+    dataSource: [Array, Object] as PropType<Array<any> | Object>,
     displayExpr: [Function, String] as PropType<((data: Object) => string) | string>,
     valueExpr: [Function, String] as PropType<((data: Object) => (string | number | Boolean)) | string>
   }
@@ -1494,7 +1494,7 @@ const DxFilterBuilderPopupConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
+    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -1697,7 +1697,7 @@ const DxFormConfig = {
     bindingOptions: Object,
     colCount: [Number, String] as PropType<number | "auto">,
     colCountByScreen: Object,
-    customizeItem: Function as PropType<(item: Object | Object | Object | Object | Object) => void>,
+    customizeItem: Function as PropType<(item: Object) => void>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -1706,7 +1706,7 @@ const DxFormConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
-    items: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    items: Array as PropType<Array<Object>>,
     labelLocation: String as PropType<"left" | "right" | "top">,
     labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
     minColWidth: Number,
@@ -1801,7 +1801,7 @@ const DxFormItemConfig = {
     label: Object,
     name: String,
     template: {},
-    validationRules: Array as PropType<Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object> | Array<Object>>,
+    validationRules: Array as PropType<Array<Object>>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -2398,7 +2398,7 @@ const DxPopupConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") | Object>,
+    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
