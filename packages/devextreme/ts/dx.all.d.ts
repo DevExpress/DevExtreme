@@ -19266,7 +19266,6 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxHtmlEditor>;
-    export type MarkupType = 'html' | 'markdown';
     export interface MentionTemplateData {
       readonly marker: string;
       readonly id?: string | number;
@@ -19451,10 +19450,6 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.toolbar]
      */
     toolbar?: dxHtmlEditorToolbar;
-    /**
-     * [descr:dxHtmlEditorOptions.valueType]
-     */
-    valueType?: DevExpress.ui.dxHtmlEditor.MarkupType;
     /**
      * [descr:dxHtmlEditorOptions.variables]
      */
