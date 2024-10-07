@@ -35,7 +35,7 @@ function getSelector(className) {
     return `.${className}`;
 }
 
-const { test, module: testModule, skip } = QUnit;
+const { test, module: testModule } = QUnit;
 
 const moduleConfig = {
     beforeEach: function() {
