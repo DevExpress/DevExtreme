@@ -193,15 +193,19 @@ const appendElements = function (element, nextSibling?) {
     element = [domAdapter.createTextNode(element)];
   }
 
-  element.forEach((item) => {
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
+  for (let i = 0; i < element.length; i++) {
+    const item = element[i];
     let container = this[0];
     const wrapTR = container.tagName === 'TABLE' && item.tagName === 'TR';
 
     if (wrapTR && container.tBodies && container.tBodies.length) {
-      container = [container.tBodies];
+      // HTML collection, not an array
+      // eslint-disable-next-line prefer-destructuring
+      container = container.tBodies[0];
     }
     domAdapter.insertElement(container, item.nodeType ? item : item[0], nextSibling);
-  });
+  }
 };
 
 const setCss = function (name, value) {
