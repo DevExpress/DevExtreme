@@ -1767,4 +1767,19 @@ QUnit.module('selectIndex changing', () => {
 
         assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
     });
+
+    QUnit.test('when hiding last visible item selectedIndex should return to 0 index', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: false },
+                { text: '3', visible: true },
+            ],
+            selectedIndex: 2
+        });
+        const instance = $multiView.dxMultiView('instance');
+        instance.option('items[2].visible', false);
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
 });
