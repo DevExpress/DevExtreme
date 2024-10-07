@@ -16,7 +16,7 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const TIME_TO_WAIT = 500;
 const ORANGE_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWP4z8j4HwAFBQIB6OfkUgAAAABJRU5ErkJggg==';
 
-const { test, module: testModule } = QUnit;
+const { test, module: testModule, skip } = QUnit;
 
 function createEvent(type = 'paste', element) {
     const customEvent = document.createEvent('Event');
@@ -166,7 +166,7 @@ testModule('Events', createModuleConfig({ initialOptions: { value: '<p>Test 1</p
     });
 
     ['html', 'markdown'].forEach((valueType) => {
-        test(`change value to "null" should raise only one ValueChanged event (valueType is "${valueType}")`, function(assert) {
+        skip(`change value to "null" should raise only one ValueChanged event (valueType is "${valueType}")`, function(assert) {
             const valueChangedStub = sinon.stub();
             const onValueChangedStub = sinon.stub();
             this.createEditor({

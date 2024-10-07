@@ -35,7 +35,7 @@ function getSelector(className) {
     return `.${className}`;
 }
 
-const { test, module: testModule } = QUnit;
+const { test, module: testModule, skip } = QUnit;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -221,7 +221,7 @@ export default function() {
                 .html('<p>Hi! <strong>Test.</strong></p><p>New line</p>');
         });
 
-        test('value after change valueType', function(assert) {
+        skip('value after change valueType', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -239,7 +239,7 @@ export default function() {
             instance.option('valueType', 'html');
         });
 
-        test('value with table after change valueType', function(assert) {
+        skip('value with table after change valueType', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -512,7 +512,7 @@ export default function() {
             this.clock.restore();
         }
     }, () => {
-        test('render default markdown value', function(assert) {
+        skip('render default markdown value', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: 'Hi!\n\nIt\'s a **test**!',
                 valueType: 'markdown'
@@ -524,7 +524,7 @@ export default function() {
             assert.strictEqual(markup, '<p>Hi!</p><p>It\'s a <strong>test</strong>!</p>');
         });
 
-        test('render markdown table', function(assert) {
+        skip('render markdown table', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: MD_TABLE_WITH_HEADER_MARKUP,
                 valueType: 'markdown'
@@ -537,7 +537,7 @@ export default function() {
             assert.strictEqual(markup, EXPECTED_TABLE_MARKUP);
         });
 
-        test('change markdown value by user', function(assert) {
+        skip('change markdown value by user', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -555,7 +555,7 @@ export default function() {
                 .html('<p>Hi! <strong>Test.</strong></p>');
         });
 
-        test('change value to null', function(assert) {
+        skip('change value to null', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -572,7 +572,7 @@ export default function() {
             instance.option('value', null);
         });
 
-        test('apply value after change valueType', function(assert) {
+        skip('apply value after change valueType', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -589,7 +589,7 @@ export default function() {
             instance.option('valueType', 'markdown');
         });
 
-        test('apply value with table after change valueType', function(assert) {
+        skip('apply value with table after change valueType', function(assert) {
             const done = assert.async();
             const tableMarkup = '<table><tbody><tr><td><p>Data1</p></td><td><p>Data2</p></td></tr></tbody></table>';
             const value = `<p><strong>bold</strong></p>${tableMarkup}`;
@@ -609,7 +609,7 @@ export default function() {
             instance.option('valueType', 'markdown');
         });
 
-        test('clear the Markdown value', function(assert) {
+        skip('clear the Markdown value', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({

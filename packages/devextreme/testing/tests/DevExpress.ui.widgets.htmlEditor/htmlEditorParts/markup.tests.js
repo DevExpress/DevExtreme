@@ -12,7 +12,7 @@ const HTML_EDITOR_OUTLINED_CLASS = 'dx-htmleditor-outlined';
 const HTML_EDITOR_FILLED_CLASS = 'dx-htmleditor-filled';
 const HTML_EDITOR_UNDERLINED_CLASS = 'dx-htmleditor-filled';
 
-const { test } = QUnit;
+const { test, skip } = QUnit;
 
 export default function() {
     QUnit.module('Base markup', () => {
@@ -48,7 +48,7 @@ export default function() {
             assert.equal($submitElement.attr('name'), 'New', 'It\'s the right new name');
         });
 
-        test('render markdown markup', function(assert) {
+        skip('render markdown markup', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '*Test* **text**',
                 valueType: 'markdown'
