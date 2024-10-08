@@ -76,7 +76,7 @@ const componentConfig = {
     indicatorEnabled: Boolean,
     initialItemWidth: Number,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     loop: Boolean,
     noDataText: String,

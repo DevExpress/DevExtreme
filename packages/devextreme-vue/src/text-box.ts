@@ -94,7 +94,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<Array<string> | Array<"clear"> | Array<Object>>,
+    buttons: Array as PropType<Array<string | "clear" | Object>>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,

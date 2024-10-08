@@ -197,7 +197,7 @@ const componentConfig = {
     timeCellTemplate: {},
     timeZone: String,
     useDropDownViewSwitcher: Boolean,
-    views: Array as PropType<Array<Object> | Array<string>>,
+    views: Array as PropType<Array<Object | string>>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },

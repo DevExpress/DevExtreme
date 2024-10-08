@@ -121,7 +121,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSelection: Boolean,
-    columns: Array as PropType<Array<Object> | Array<string>>,
+    columns: Array as PropType<Array<Object | string>>,
     contextMenu: Object,
     dependencies: Object,
     disabled: Boolean,
@@ -355,7 +355,7 @@ const DxColumnConfig = {
     allowSorting: Boolean,
     calculateCellValue: Function as PropType<(rowData: Object) => any>,
     calculateDisplayValue: [Function, String] as PropType<((rowData: Object) => any) | string>,
-    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string | any, target: string) => (string | Function | Array<any>)>,
+    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: any, target: string) => (string | Function | Array<any>)>,
     calculateSortValue: [Function, String] as PropType<((rowData: Object) => any) | string>,
     caption: String,
     cellTemplate: {},
@@ -365,7 +365,7 @@ const DxColumnConfig = {
     dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
     encodeHtml: Boolean,
     falseText: String,
-    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof"> | Array<string>>,
+    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string>>,
     filterType: String as PropType<"exclude" | "include">,
     filterValue: {},
     filterValues: Array as PropType<Array<any>>,
@@ -445,7 +445,7 @@ const DxColumnHeaderFilterSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: String as PropType<"contains" | "startswith" | "equals">,
-    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
     timeout: Number
   }
 };
@@ -465,7 +465,7 @@ const DxContextMenuConfig = {
   },
   props: {
     enabled: Boolean,
-    items: Array as PropType<Array<Object> | Array<"undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">>
+    items: Array as PropType<Array<Object | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">>
   }
 };
 
@@ -902,7 +902,7 @@ const DxSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: String as PropType<"contains" | "startswith" | "equals">,
-    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
     timeout: Number
   }
 };
@@ -1021,7 +1021,7 @@ const DxToolbarConfig = {
     "update:items": null,
   },
   props: {
-    items: Array as PropType<Array<Object> | Array<"separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">>
+    items: Array as PropType<Array<Object | "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">>
   }
 };
 

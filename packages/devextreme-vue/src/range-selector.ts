@@ -91,7 +91,7 @@ const componentConfig = {
     sliderMarker: Object,
     theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
     title: [Object, String],
-    value: [Array, Object] as PropType<(Array<Date> | Array<number> | Array<string>) | Object>
+    value: [Array, Object] as PropType<(Array<Date | number | string>) | Object>
   },
   emits: {
     "update:isActive": null,
@@ -1471,11 +1471,11 @@ const DxScaleConfig = {
     allowDecimals: Boolean,
     breaks: Array as PropType<Array<Object>>,
     breakStyle: Object,
-    categories: Array as PropType<Array<Date> | Array<number> | Array<string>>,
+    categories: Array as PropType<Array<Date | number | string>>,
     discreteAxisDivisionMode: String as PropType<"betweenLabels" | "crossLabels">,
     endOnTick: Boolean,
     endValue: [Date, Number, String],
-    holidays: Array as PropType<(Array<Date> | Array<string>) | Array<number>>,
+    holidays: Array as PropType<(Array<Date | string>) | Array<number>>,
     label: Object,
     linearThreshold: Number,
     logarithmBase: Number,
@@ -1487,7 +1487,7 @@ const DxScaleConfig = {
     minRange: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,
     placeholderHeight: Number,
     showCustomBoundaryTicks: Boolean,
-    singleWorkdays: Array as PropType<(Array<Date> | Array<string>) | Array<number>>,
+    singleWorkdays: Array as PropType<(Array<Date | string>) | Array<number>>,
     startValue: [Date, Number, String],
     tick: Object,
     tickInterval: [Number, Object, String] as PropType<number | Object | ("day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year")>,

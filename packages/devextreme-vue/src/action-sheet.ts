@@ -60,7 +60,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     onCancelClick: Function as PropType<(e: CancelClickEvent) => void>,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,

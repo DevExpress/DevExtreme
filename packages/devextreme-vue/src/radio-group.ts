@@ -65,7 +65,7 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array as PropType<Array<any> | Array<Object>>,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     layout: String as PropType<"horizontal" | "vertical">,
     name: String,

@@ -55,7 +55,7 @@ const componentConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,

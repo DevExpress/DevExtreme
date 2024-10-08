@@ -204,7 +204,7 @@ const componentConfig = {
     columnHidingEnabled: Boolean,
     columnMinWidth: Number,
     columnResizingMode: String as PropType<"nextColumn" | "widget">,
-    columns: Array as PropType<Array<Object> | Array<string>>,
+    columns: Array as PropType<Array<Object | string>>,
     columnWidth: [Number, String] as PropType<number | "auto">,
     customizeColumns: Function as PropType<(columns: Array<Object>) => void>,
     dataSource: {},
@@ -730,14 +730,14 @@ const DxColumnConfig = {
     allowResizing: Boolean,
     allowSearch: Boolean,
     allowSorting: Boolean,
-    buttons: Array as PropType<Array<Object> | Array<"add" | "cancel" | "delete" | "edit" | "save" | "undelete">>,
+    buttons: Array as PropType<Array<Object | "add" | "cancel" | "delete" | "edit" | "save" | "undelete">>,
     calculateCellValue: Function as PropType<(rowData: Object) => any>,
     calculateDisplayValue: [Function, String] as PropType<((rowData: Object) => any) | string>,
-    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: string | any, target: string) => (string | Function | Array<any>)>,
+    calculateFilterExpression: Function as PropType<(filterValue: any, selectedFilterOperation: any, target: string) => (string | Function | Array<any>)>,
     calculateSortValue: [Function, String] as PropType<((rowData: Object) => any) | string>,
     caption: String,
     cellTemplate: {},
-    columns: Array as PropType<Array<Object> | Array<string>>,
+    columns: Array as PropType<Array<Object | string>>,
     cssClass: String,
     customizeText: Function as PropType<(cellInfo: Object) => string>,
     dataField: String,
@@ -746,7 +746,7 @@ const DxColumnConfig = {
     editorOptions: {},
     encodeHtml: Boolean,
     falseText: String,
-    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof"> | Array<string>>,
+    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string>>,
     filterType: String as PropType<"exclude" | "include">,
     filterValue: {},
     filterValues: Array as PropType<Array<any>>,
@@ -995,7 +995,7 @@ const DxColumnHeaderFilterSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: String as PropType<"contains" | "startswith" | "equals">,
-    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
     timeout: Number
   }
 };
@@ -1283,7 +1283,7 @@ const DxFieldConfig = {
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
-    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between"> | Array<string>>,
+    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>>,
     format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
     lookup: Object,
     name: String,
@@ -2242,7 +2242,7 @@ const DxPagerConfig = {
     "update:visible": null,
   },
   props: {
-    allowedPageSizes: [Array, String] as PropType<(Array<number> | Array<"all" | "auto">) | "auto">,
+    allowedPageSizes: [Array, String] as PropType<(Array<number | "all" | "auto">) | "auto">,
     displayMode: String as PropType<"adaptive" | "compact" | "full">,
     infoText: String,
     label: String,
@@ -2644,7 +2644,7 @@ const DxSearchConfig = {
     editorOptions: {},
     enabled: Boolean,
     mode: String as PropType<"contains" | "startswith" | "equals">,
-    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
     timeout: Number
   }
 };
@@ -2921,7 +2921,7 @@ const DxToolbarConfig = {
   },
   props: {
     disabled: Boolean,
-    items: Array as PropType<Array<Object> | Array<"addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel">>,
+    items: Array as PropType<Array<Object | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel">>,
     visible: Boolean
   }
 };

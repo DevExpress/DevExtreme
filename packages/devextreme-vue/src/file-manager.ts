@@ -273,7 +273,7 @@ const DxContextMenuConfig = {
     "update:items": null,
   },
   props: {
-    items: Array as PropType<Array<Object> | Array<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">>
+    items: Array as PropType<Array<Object | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">>
   }
 };
 
@@ -330,7 +330,7 @@ const DxDetailsConfig = {
     "update:columns": null,
   },
   props: {
-    columns: Array as PropType<Array<Object> | Array<string>>
+    columns: Array as PropType<Array<Object | string>>
   }
 };
 
@@ -511,8 +511,8 @@ const DxToolbarConfig = {
     "update:items": null,
   },
   props: {
-    fileSelectionItems: Array as PropType<Array<Object> | Array<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>,
-    items: Array as PropType<Array<Object> | Array<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>
+    fileSelectionItems: Array as PropType<Array<Object | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>,
+    items: Array as PropType<Array<Object | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>
   }
 };
 

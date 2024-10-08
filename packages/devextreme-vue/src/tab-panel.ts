@@ -86,7 +86,7 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     itemTitleTemplate: {},
     loop: Boolean,

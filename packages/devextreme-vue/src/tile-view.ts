@@ -68,7 +68,7 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     itemMargin: Number,
-    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     noDataText: String,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,

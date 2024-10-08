@@ -103,7 +103,7 @@ const componentConfig = {
     acceptCustomValue: Boolean,
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<Array<"clear" | "dropDown"> | Array<Object>>,
+    buttons: Array as PropType<Array<"clear" | "dropDown" | Object>>,
     contentTemplate: {},
     dataSource: {},
     deferRendering: Boolean,

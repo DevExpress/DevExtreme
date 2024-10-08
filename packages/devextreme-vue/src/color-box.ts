@@ -102,7 +102,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     applyButtonText: String,
     applyValueMode: String as PropType<"instantly" | "useButtons">,
-    buttons: Array as PropType<Array<"clear" | "dropDown"> | Array<Object>>,
+    buttons: Array as PropType<Array<"clear" | "dropDown" | Object>>,
     cancelButtonText: String,
     deferRendering: Boolean,
     disabled: Boolean,

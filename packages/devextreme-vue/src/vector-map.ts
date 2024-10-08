@@ -70,13 +70,13 @@ interface DxVectorMap extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    annotations: Array as PropType<Array<any> | Array<Object>>,
+    annotations: Array as PropType<Array<any>>,
     background: Object,
     bounds: Array as PropType<Array<number>>,
     center: Array as PropType<Array<number>>,
     commonAnnotationSettings: Object,
     controlBar: Object,
-    customizeAnnotation: Function as PropType<(annotation: Object | any) => Object>,
+    customizeAnnotation: Function as PropType<(annotation: any) => Object>,
     disabled: Boolean,
     elementAttr: Object,
     export: Object,
@@ -229,7 +229,7 @@ const DxAnnotationConfig = {
     border: Object,
     color: String,
     coordinates: Array as PropType<Array<number>>,
-    customizeTooltip: Function as PropType<(annotation: Object | any) => Object>,
+    customizeTooltip: Function as PropType<(annotation: any) => Object>,
     data: {},
     description: String,
     font: Object,
@@ -382,7 +382,7 @@ const DxCommonAnnotationSettingsConfig = {
     border: Object,
     color: String,
     coordinates: Array as PropType<Array<number>>,
-    customizeTooltip: Function as PropType<(annotation: Object | any) => Object>,
+    customizeTooltip: Function as PropType<(annotation: any) => Object>,
     data: {},
     description: String,
     font: Object,

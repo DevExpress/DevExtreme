@@ -77,7 +77,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<any> | Array<Object> | Array<string>>,
+    items: Array as PropType<Array<any>>,
     itemTemplate: {},
     itemTitleTemplate: {},
     keyExpr: [Function, String] as PropType<(() => void) | string>,

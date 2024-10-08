@@ -104,7 +104,7 @@ const componentConfig = {
     validationMessageMode: String as PropType<"always" | "auto">,
     validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
     validationStatus: String as PropType<"valid" | "invalid" | "pending">,
-    value: [Array, Date, Number, String] as PropType<(Array<Date> | Array<number> | Array<string>) | Date | number | string>,
+    value: [Array, Date, Number, String] as PropType<(Array<Date | number | string>) | Date | number | string>,
     visible: Boolean,
     weekNumberRule: String as PropType<"auto" | "firstDay" | "fullWeek" | "firstFourDays">,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
