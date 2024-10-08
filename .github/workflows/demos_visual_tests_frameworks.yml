@@ -451,7 +451,7 @@ jobs:
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --disable-gpu --window-size=1200,800 --js-flags=--random-seed=2147483647
+        BROWSERS: chrome --headless=new --disable-gpu --window-size=1200,800 --js-flags=--random-seed=2147483647
         # DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true

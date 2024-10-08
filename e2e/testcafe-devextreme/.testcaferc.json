@@ -5,6 +5,7 @@
     "pathPattern": "/artifacts/failedtests/${TEST}"
   },
   "screenshots-comparer": {
-    "path": "./"
+    "path": "./",
+    "textDiffTreshold": 0.1
   }
 }

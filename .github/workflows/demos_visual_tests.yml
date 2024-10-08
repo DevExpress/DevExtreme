@@ -84,7 +84,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '121.0.6167.160'
+        chrome-version: '129.0.6668.58'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -132,7 +132,7 @@ jobs:
       env:
         STRATEGY: ${{ matrix.STRATEGY }}
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        BROWSERS: chrome --headless=new --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
         #DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true
