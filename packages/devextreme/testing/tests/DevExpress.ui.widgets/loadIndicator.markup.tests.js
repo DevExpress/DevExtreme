@@ -21,7 +21,7 @@ const LOADINDICATOR_IMAGE = 'dx-loadindicator-image';
 
 const isIdenticalNamesInUrl = function(firstUrl, secondUrl) {
     let firstName = firstUrl.split('/');
-    firstName = firstName[firstName.length - 1].replace(')', '').replace('"', '');
+    firstName = firstName[firstName.length - 1].replace(/\)/g, '').replace(/"/g, '');
     let secondName = secondUrl.split('/');
     secondName = secondName[secondName.length - 1];
     return firstName === secondName;

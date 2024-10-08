@@ -512,7 +512,7 @@ export default class StandardStrategy extends SelectionStrategy {
     const { selectedItems, selectedItemKeys, keyHashIndices } = this.options;
 
     this._storedSelectionState = {
-      keyHashIndices: { ...keyHashIndices },
+      keyHashIndices: JSON.stringify(keyHashIndices),
       selectedItems: [...selectedItems],
       selectedItemKeys: [...selectedItemKeys],
     };
@@ -524,7 +524,7 @@ export default class StandardStrategy extends SelectionStrategy {
     const { selectedItemKeys, selectedItems, keyHashIndices } = this._storedSelectionState!;
     this._setOption('selectedItemKeys', selectedItemKeys);
     this._setOption('selectedItems', selectedItems);
-    this._setOption('keyHashIndices', keyHashIndices);
+    this._setOption('keyHashIndices', JSON.parse(keyHashIndices));
   }
 
   _onePageSelectAll(isDeselect: boolean): DeferredObj<unknown> {

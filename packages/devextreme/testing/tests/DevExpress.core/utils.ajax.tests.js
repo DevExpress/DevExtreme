@@ -404,9 +404,9 @@ QUnit.test('Send data with request (cached resources)', function(assert) {
         // https://github.com/jquery/jquery/issues/2658
         if(compareVersion($.fn.jquery, [3], 1) < 0) {
             if(testData[i].requestBody) {
-                testData[i].requestBody = testData[i].requestBody.replace('%20', '+');
+                testData[i].requestBody = testData[i].requestBody.replace(/%20/g, '+');
             }
-            testData[i].url = testData[i].url.replace('%20', '+');
+            testData[i].url = testData[i].url.replace(/%20/g, '+');
         }
         assert.equal(this.requests[i].url, testData[i].url, 'url for element ' + i + ' from test data');
         assert.equal(this.requests[i].requestBody, testData[i].requestBody, 'requestBody for element ' + i + ' from test data');

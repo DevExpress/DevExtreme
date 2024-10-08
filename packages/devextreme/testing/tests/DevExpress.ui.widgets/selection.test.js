@@ -2560,6 +2560,54 @@ QUnit.module('onSelectionChanging', {
         assert.strictEqual(selectionChangingHandler.callCount, 2, 'selectionChanging is called once');
     });
 
+    QUnit.test('isItemSelected should work correctly after selection change is cancelled', function(assert) {
+        let cancelSelectionChange = false;
+        const selectionChangingHandler = sinon.spy((args) => {
+            args.cancel = cancelSelectionChange;
+        });
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            onSelectionChanging: selectionChangingHandler
+        });
+
+        this.dataSource.load();
+
+        const firstItem = this.data[0];
+
+        cancelSelectionChange = false;
+        selection.select(firstItem);
+
+        cancelSelectionChange = true;
+        selection.deselect(firstItem);
+
+        const isFirstItemSelected = selection.isItemSelected(firstItem);
+        assert.strictEqual(isFirstItemSelected, true, 'item is still selected after canceled deselect');
+    });
+
+    QUnit.test('getSelectAllState should work correctly after selection change is cancelled', function(assert) {
+        let cancelSelectionChange = false;
+        const selectionChangingHandler = sinon.spy((args) => {
+            args.cancel = cancelSelectionChange;
+        });
+
+        const selection = new Selection({
+            ...this.basicSelectionConfig,
+            onSelectionChanging: selectionChangingHandler
+        });
+
+        this.dataSource.load();
+
+        cancelSelectionChange = false;
+        selection.selectAll(true);
+
+        cancelSelectionChange = true;
+        selection.deselect(true);
+
+        const areAllItemsSelected = selection.getSelectAllState(true);
+        assert.strictEqual(areAllItemsSelected, true, 'items are still selected after canceled deselectAll');
+    });
+
     QUnit.module('select all by one page', {
         beforeEach: function() {
             this.dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });

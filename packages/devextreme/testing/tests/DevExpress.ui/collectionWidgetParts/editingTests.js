@@ -409,6 +409,50 @@ module('onSelectionChanging event', () => {
             assert.strictEqual(instance.option('selectedIndex'), 1, 'selectedIndex should be updated');
         });
 
+        QUnit.test('if e.cancel is false even if previous request was cancelled and dataSource.store.key is used', function(assert) {
+            let cancelSelectionChange = false;
+            const selectionChangingHandler = sinon.spy((e) => {
+                e.cancel = cancelSelectionChange;
+            });
+            const selectionChangedHandler = sinon.stub();
+
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                dataSource: new DataSource({
+                    store: new ArrayStore({
+                        key: 'id',
+                        data: [{ text: '1', id: 1 }, { text: '2', id: 2 }],
+                    }),
+                }),
+                selectionMode: 'multiple',
+                onSelectionChanging: selectionChangingHandler,
+                onSelectionChanged: selectionChangedHandler
+            });
+
+            assert.strictEqual(instance.option('selectedIndex'), -1, 'no item is selected initially');
+
+            const $items = $(instance.itemElements());
+            const $firstItem = $items.eq(0);
+
+            cancelSelectionChange = false;
+            $firstItem.trigger('dxclick');
+            assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging should be raised once');
+            assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged should be raised once');
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'item is selected');
+
+            cancelSelectionChange = true;
+            $firstItem.trigger('dxclick');
+            assert.strictEqual(selectionChangingHandler.callCount, 2, 'selectionChanging should be raised once');
+            assert.strictEqual(selectionChangedHandler.callCount, 1, 'selectionChanged is not raised');
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'item is still selected');
+
+            cancelSelectionChange = false;
+            $firstItem.trigger('dxclick');
+            assert.strictEqual(selectionChangingHandler.callCount, 3, 'selectionChanging should be raised once');
+            assert.strictEqual(selectionChangedHandler.callCount, 2, 'selectionChanged is raised');
+            assert.strictEqual(instance.option('selectedIndex'), -1, 'item is deselected');
+        });
+
         QUnit.test('if e.cancel is a promise resolved with false', function(assert) {
             const done = assert.async();
 
