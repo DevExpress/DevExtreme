@@ -31,15 +31,15 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     ...defaultConfig,
     width: 800,
     rtlEnabled,
-    columns: defaultConfig.columns.map((column, index) => {
-      if (index < 3) {
-        column.hidingPriority = index;
-      }
+    customizeColumns(columns) {
+      columns.forEach((column, index) => {
+        if (index < 3) {
+          column.hidingPriority = index;
+        }
 
-      column.width = 200;
-
-      return column;
-    }),
+        column.width = 200;
+      });
+    },
     columnHidingEnabled: true,
   }));
 
@@ -60,19 +60,21 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     ...defaultConfig,
     width: 800,
     rtlEnabled,
-    columns: defaultConfig.columns.map((column, index) => {
-      if (index === 1 || index === 4) {
-        column.fixed = true;
-        column.fixedPosition = 'sticky';
-      } else {
-        column.fixed = false;
-      }
+    customizeColumns(columns) {
+      columns.forEach((column, index) => {
+        if (index === 1 || index === 4) {
+          column.fixed = true;
+          column.fixedPosition = 'sticky';
+        } else {
+          column.fixed = false;
+        }
 
-      column.hidingPriority = index;
-      column.width = 200;
+        column.hidingPriority = index;
+        column.width = 200;
 
-      return column;
-    }),
+        return column;
+      });
+    },
     columnHidingEnabled: true,
   }));
 });
