@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Lookup, { Properties } from "devextreme/ui/lookup";
+import { prepareComponentConfig } from "./core/index";
 import {
  ClosedEvent,
  ContentReadyEvent,
@@ -26,8 +28,6 @@ import {
  ShownEvent,
  TitleRenderedEvent,
 } from "devextreme/ui/popover";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

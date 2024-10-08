@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import PieChart, { Properties } from "devextreme/viz/pie_chart";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  DoneEvent,
@@ -17,8 +19,6 @@ import {
  TooltipHiddenEvent,
  TooltipShownEvent,
 } from "devextreme/viz/pie_chart";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

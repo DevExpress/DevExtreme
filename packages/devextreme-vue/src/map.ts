@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Map, { Properties } from "devextreme/ui/map";
+import { prepareComponentConfig } from "./core/index";
 import {
  ClickEvent,
  DisposingEvent,
@@ -11,8 +13,6 @@ import {
  RouteAddedEvent,
  RouteRemovedEvent,
 } from "devextreme/ui/map";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

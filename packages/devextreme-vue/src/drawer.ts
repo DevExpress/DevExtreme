@@ -1,12 +1,12 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Drawer, { Properties } from "devextreme/ui/drawer";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  InitializedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/drawer";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "activeStateEnabled" |

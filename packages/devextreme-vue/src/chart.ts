@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Chart, { Properties } from "devextreme/viz/chart";
+import { prepareComponentConfig } from "./core/index";
 import {
  ArgumentAxisClickEvent,
  DisposingEvent,
@@ -23,8 +25,6 @@ import {
  ZoomEndEvent,
  ZoomStartEvent,
 } from "devextreme/viz/chart";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import TreeMap, { Properties } from "devextreme/viz/tree_map";
+import { prepareComponentConfig } from "./core/index";
 import {
  ClickEvent,
  DisposingEvent,
@@ -16,8 +18,6 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
 } from "devextreme/viz/tree_map";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

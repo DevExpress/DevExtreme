@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Draggable, { Properties } from "devextreme/ui/draggable";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  DragEndEvent,
@@ -8,8 +10,6 @@ import {
  InitializedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/draggable";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

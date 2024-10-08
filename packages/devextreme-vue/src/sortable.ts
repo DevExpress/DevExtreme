@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Sortable, { Properties } from "devextreme/ui/sortable";
+import { prepareComponentConfig } from "./core/index";
 import {
  AddEvent,
  DisposingEvent,
@@ -12,8 +14,6 @@ import {
  RemoveEvent,
  ReorderEvent,
 } from "devextreme/ui/sortable";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

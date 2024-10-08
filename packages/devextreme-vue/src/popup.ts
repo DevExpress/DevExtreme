@@ -1,6 +1,6 @@
 import { PropType } from "vue";
-import Popup, { Properties } from "devextreme/ui/popup";
 import { defineComponent } from "vue";
+import Popup, { Properties } from "devextreme/ui/popup";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 

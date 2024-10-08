@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import TileView, { Properties } from "devextreme/ui/tile_view";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -11,8 +13,6 @@ import {
  ItemRenderedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/tile_view";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

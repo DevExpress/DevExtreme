@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Funnel, { Properties } from "devextreme/viz/funnel";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  DrawnEvent,
@@ -14,8 +16,6 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
 } from "devextreme/viz/funnel";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

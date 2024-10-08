@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import NumberBox, { Properties } from "devextreme/ui/number_box";
+import { prepareComponentConfig } from "./core/index";
 import {
  ChangeEvent,
  ContentReadyEvent,
@@ -24,8 +26,6 @@ import {
  InitializedEvent as ButtonInitializedEvent,
  OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

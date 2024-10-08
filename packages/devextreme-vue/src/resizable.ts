@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Resizable, { Properties } from "devextreme/ui/resizable";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  InitializedEvent,
@@ -8,8 +10,6 @@ import {
  ResizeEndEvent,
  ResizeStartEvent,
 } from "devextreme/ui/resizable";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "area" |

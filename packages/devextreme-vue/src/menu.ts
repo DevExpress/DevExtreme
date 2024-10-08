@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/menu";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Menu, { Properties } from "devextreme/ui/menu";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -15,8 +17,6 @@ import {
  SubmenuShowingEvent,
  SubmenuShownEvent,
 } from "devextreme/ui/menu";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/action_sheet";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
+import { prepareComponentConfig } from "./core/index";
 import {
  CancelClickEvent,
  ContentReadyEvent,
@@ -12,8 +14,6 @@ import {
  ItemRenderedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/action_sheet";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

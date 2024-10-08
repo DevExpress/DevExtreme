@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tabs";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Tabs, { Properties } from "devextreme/ui/tabs";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -13,8 +15,6 @@ import {
  SelectionChangedEvent,
  SelectionChangingEvent,
 } from "devextreme/ui/tabs";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import ButtonGroup, { Properties } from "devextreme/ui/button_group";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -8,8 +10,6 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
 } from "devextreme/ui/button_group";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/list";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import List, { Properties } from "devextreme/ui/list";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -58,8 +60,6 @@ import {
  PasteEvent,
  ValueChangedEvent,
 } from "devextreme/ui/text_box";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

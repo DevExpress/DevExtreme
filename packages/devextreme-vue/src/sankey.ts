@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Sankey, { Properties } from "devextreme/viz/sankey";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  DrawnEvent,
@@ -14,8 +16,6 @@ import {
  NodeHoverEvent,
  OptionChangedEvent,
 } from "devextreme/viz/sankey";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

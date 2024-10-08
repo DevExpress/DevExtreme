@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Diagram, { Properties } from "devextreme/ui/diagram";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  CustomCommandEvent,
@@ -12,8 +14,6 @@ import {
  RequestLayoutUpdateEvent,
  SelectionChangedEvent,
 } from "devextreme/ui/diagram";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

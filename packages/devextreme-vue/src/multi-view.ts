@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/multi_view";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import MultiView, { Properties } from "devextreme/ui/multi_view";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -12,8 +14,6 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
 } from "devextreme/ui/multi_view";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import CheckBox, { Properties } from "devextreme/ui/check_box";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -7,8 +9,6 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/check_box";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

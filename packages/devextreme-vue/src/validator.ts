@@ -1,6 +1,6 @@
 import { PropType } from "vue";
-import Validator, { Properties } from "devextreme/ui/validator";
 import { defineComponent } from "vue";
+import Validator, { Properties } from "devextreme/ui/validator";
 import { prepareExtensionComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 

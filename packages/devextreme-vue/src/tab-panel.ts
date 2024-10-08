@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tab_panel";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import TabPanel, { Properties } from "devextreme/ui/tab_panel";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -16,8 +18,6 @@ import {
  TitleHoldEvent,
  TitleRenderedEvent,
 } from "devextreme/ui/tab_panel";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

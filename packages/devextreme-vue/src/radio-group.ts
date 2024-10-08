@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import RadioGroup, { Properties } from "devextreme/ui/radio_group";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -7,8 +9,6 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/radio_group";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

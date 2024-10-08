@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Autocomplete, { Properties } from "devextreme/ui/autocomplete";
+import { prepareComponentConfig } from "./core/index";
 import {
  ChangeEvent,
  ClosedEvent,
@@ -29,8 +31,6 @@ import {
  InitializedEvent as ButtonInitializedEvent,
  OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

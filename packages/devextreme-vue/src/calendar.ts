@@ -1,13 +1,13 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Calendar, { Properties } from "devextreme/ui/calendar";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  InitializedEvent,
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/calendar";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

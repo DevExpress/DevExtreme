@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import PivotGrid, { Properties } from "devextreme/ui/pivot_grid";
+import { prepareComponentConfig } from "./core/index";
 import {
  CellClickEvent,
  CellPreparedEvent,
@@ -10,8 +12,6 @@ import {
  InitializedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/pivot_grid";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

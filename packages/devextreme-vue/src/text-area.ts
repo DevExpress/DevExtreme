@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import TextArea, { Properties } from "devextreme/ui/text_area";
+import { prepareComponentConfig } from "./core/index";
 import {
  ChangeEvent,
  ContentReadyEvent,
@@ -17,8 +19,6 @@ import {
  PasteEvent,
  ValueChangedEvent,
 } from "devextreme/ui/text_area";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

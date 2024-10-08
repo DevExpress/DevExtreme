@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import ProgressBar, { Properties } from "devextreme/ui/progress_bar";
+import { prepareComponentConfig } from "./core/index";
 import {
  CompleteEvent,
  ContentReadyEvent,
@@ -8,8 +10,6 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/progress_bar";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "disabled" |

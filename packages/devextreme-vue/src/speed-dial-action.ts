@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import SpeedDialAction, { Properties } from "devextreme/ui/speed_dial_action";
+import { prepareComponentConfig } from "./core/index";
 import {
  ClickEvent,
  ContentReadyEvent,
@@ -7,8 +9,6 @@ import {
  InitializedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/speed_dial_action";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |

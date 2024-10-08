@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tree_list";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import TreeList, { Properties } from "devextreme/ui/tree_list";
+import { prepareComponentConfig } from "./core/index";
 import {
  AdaptiveDetailRowPreparingEvent,
  CellClickEvent,
@@ -61,8 +63,6 @@ import {
  InitializedEvent as FormInitializedEvent,
  OptionChangedEvent as FormOptionChangedEvent,
 } from "devextreme/ui/form";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

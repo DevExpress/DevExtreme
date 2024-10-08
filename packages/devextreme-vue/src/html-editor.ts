@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -25,8 +27,6 @@ import {
  UploadStartedEvent,
  ValueChangedEvent as FileUploaderValueChangedEvent,
 } from "devextreme/ui/file_uploader";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

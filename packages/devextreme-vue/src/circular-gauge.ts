@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import CircularGauge, { Properties } from "devextreme/viz/circular_gauge";
+import { prepareComponentConfig } from "./core/index";
 import {
  DisposingEvent,
  DrawnEvent,
@@ -12,8 +14,6 @@ import {
  TooltipHiddenEvent,
  TooltipShownEvent,
 } from "devextreme/viz/circular_gauge";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

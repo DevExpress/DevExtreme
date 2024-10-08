@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Gantt, { Properties } from "devextreme/ui/gantt";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  ContextMenuPreparingEvent,
@@ -33,8 +35,6 @@ import {
  TaskUpdatedEvent,
  TaskUpdatingEvent,
 } from "devextreme/ui/gantt";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

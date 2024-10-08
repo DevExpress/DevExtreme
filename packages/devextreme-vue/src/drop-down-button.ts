@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import DropDownButton, { Properties } from "devextreme/ui/drop_down_button";
+import { prepareComponentConfig } from "./core/index";
 import {
  ButtonClickEvent,
  ContentReadyEvent,
@@ -9,8 +11,6 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
 } from "devextreme/ui/drop_down_button";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

@@ -1,5 +1,7 @@
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
+import { prepareComponentConfig } from "./core/index";
 import {
  AppointmentAddedEvent,
  AppointmentAddingEvent,
@@ -20,8 +22,6 @@ import {
  InitializedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/scheduler";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,

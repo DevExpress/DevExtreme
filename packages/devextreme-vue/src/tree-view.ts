@@ -1,6 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/tree_view";
 import { PropType } from "vue";
+import { defineComponent } from "vue";
 import TreeView, { Properties } from "devextreme/ui/tree_view";
+import { prepareComponentConfig } from "./core/index";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -40,8 +42,6 @@ import {
  PasteEvent,
  ValueChangedEvent,
 } from "devextreme/ui/text_box";
-import { defineComponent } from "vue";
-import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
