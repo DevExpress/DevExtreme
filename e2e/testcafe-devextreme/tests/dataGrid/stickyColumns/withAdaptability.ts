@@ -61,15 +61,20 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     width: 800,
     rtlEnabled,
     customizeColumns(columns) {
+      let hidingPriority = 0;
+
       columns.forEach((column, index) => {
         if (index === 1 || index === 4) {
           column.fixed = true;
           column.fixedPosition = 'sticky';
         } else {
           column.fixed = false;
-        }
 
-        column.hidingPriority = index;
+          if (index < 3) {
+            column.hidingPriority = hidingPriority;
+            hidingPriority += 1;
+          }
+        }
         column.width = 200;
       });
     },
@@ -94,15 +99,20 @@ safeSizeTest('Sticky columns with sticky positions when columnHidingEnabled = fa
   ...defaultConfig,
   width: 800,
   customizeColumns(columns) {
+    let hidingPriority = 0;
+
     columns.forEach((column, index) => {
       if (index === 1 || index === 4) {
         column.fixed = true;
         column.fixedPosition = 'sticky';
       } else {
         column.fixed = false;
-      }
 
-      column.hidingPriority = index;
+        if (index < 3) {
+          column.hidingPriority = hidingPriority;
+          hidingPriority += 1;
+        }
+      }
       column.width = 200;
     });
   },
