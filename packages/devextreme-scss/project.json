@@ -32,6 +32,12 @@
         "{projectRoot}/widgets/**/*"
       ],
       "cache": true
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": ""
+      }
     }
   },
   "tags": []

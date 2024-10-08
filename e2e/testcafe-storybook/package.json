@@ -1,0 +1,21 @@
+{
+  "name": "devextreme-testcafe-tests-storybook",
+  "version": "24.2.0",
+  "scripts": {
+    "test": "node ./runner.js",
+    "lint": "eslint --ext .js,.ts .",
+    "update-failed-etalons": "node update_failed_etalons.mjs"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "7.19.6",
+    "@testcafe-community/axe": "3.5.0",
+    "@types/jquery": "3.5.29",
+    "axe-core": "4.10.0",
+    "devextreme": "workspace:~24.2.0",
+    "devextreme-screenshot-comparer": "2.0.17",
+    "devextreme-testcafe-models": "workspace:*",
+    "minimist": "1.2.8",
+    "nconf": "0.12.1",
+    "testcafe": "2.5.0"
+  }
+}

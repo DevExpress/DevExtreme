@@ -9,6 +9,7 @@ export type WidgetName =
   | 'dxButtonGroup'
   | 'dxCalendar'
   | 'dxCalendarView'
+  | 'dxCardView'
   | 'dxChart'
   | 'dxChat'
   | 'dxCheckBox'

@@ -12,3 +12,4 @@ node_modules
 /scss/bundles/*.scss
 RawLog.txt
 testing/CompletedSuites.txt
+/coverage

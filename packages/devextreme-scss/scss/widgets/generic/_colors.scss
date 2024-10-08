@@ -137,6 +137,8 @@ $base-webwidget-hover-background: null !default;
 $base-grid-selection-background: null !default;
 $base-grid-selectedrow-border-color: null !default;
 
+$colors-neutral-grey-0: null !default;
+
 @if $color == "carmine" {
   $generic-color-postfix: ".carmine" !default;
   $base-accent: #f05b41 !default;
@@ -199,6 +201,9 @@ $base-grid-selectedrow-border-color: null !default;
 }
 
 @if $color == "dark" {
+  // getFigmaVariable('colors/neutral/grey/0', 'Generic (Colors)', 'Dark')
+  $colors-neutral-grey-0: #2A2A2A !default;
+
   $generic-color-postfix: ".dark" !default;
   $base-accent: #1ca8dd !default;
   $base-text-color: #dedede !default;
@@ -335,6 +340,9 @@ $base-grid-selectedrow-border-color: null !default;
 }
 
 @if $color == "light" {
+  // getFigmaVariable('colors/neutral/grey/0', 'Generic (Colors)', 'Light')
+  $colors-neutral-grey-0: #FFFFFF !default;
+
   $generic-color-postfix: ".light" !default;
   $base-accent: #337ab7 !default;
   $base-text-color: #333 !default;

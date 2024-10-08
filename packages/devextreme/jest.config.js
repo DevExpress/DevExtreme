@@ -50,7 +50,7 @@ module.exports = {
     ],
     testMatch: [
         '<rootDir>/js/**/__tests__/**/*.test.[jt]s?(x)',
-        '<rootDir>/js/__internal/**/*.test.ts',
+        '!<rootDir>/js/__internal/**/*',
     ],
     transform: {
         'test_components.+\\.tsx$': path.resolve('./js/renovation/test_utils/transformers/declaration.js'),

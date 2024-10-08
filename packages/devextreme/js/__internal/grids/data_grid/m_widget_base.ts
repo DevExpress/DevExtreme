@@ -19,6 +19,7 @@ import { isMaterialBased } from '@js/ui/themes';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
+import { callModuleItemsMethod } from '../grid_core/m_modules';
 import gridCore from './m_core';
 
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
@@ -128,7 +129,7 @@ class DataGrid extends GridCoreWidget<Properties> {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     gridCore.processModules(that, gridCore as any);
 
-    gridCore.callModuleItemsMethod(that, 'init');
+    callModuleItemsMethod(that, 'init');
   }
 
   private _initMarkup() {

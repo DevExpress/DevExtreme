@@ -75,7 +75,7 @@
   "dependencies": {
     "@angular-devkit/schematics": "17.3.8",
     "devextreme-schematics": "*",
-    "inferno-server": "7.4.11"
+    "inferno-server": "8.2.3"
   },
   "schematics": "./schematics/collection.json",
   "publishConfig": {

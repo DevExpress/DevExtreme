@@ -232,7 +232,8 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
     super._dispose();
   }
 
-  get elementAttr(): HTMLAttributes<unknown> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get elementAttr(): any {
     const element = this.$element()[0];
     if (!this._elementAttr) {
       const { attributes } = element;

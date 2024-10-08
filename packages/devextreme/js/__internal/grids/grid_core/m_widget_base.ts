@@ -4,6 +4,8 @@ import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
 
+import { callModuleItemsMethod } from './m_modules';
+
 const GRID_CORE_ROW_SELECTOR = '.dx-row';
 
 export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
@@ -48,7 +50,7 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
   }
 
   private _optionChanged(args) {
-    this.getGridCoreHelper().callModuleItemsMethod(this, 'optionChanged', [args]);
+    callModuleItemsMethod(this, 'optionChanged', [args]);
     if (!args.handled) {
       // @ts-expect-error
       super._optionChanged(args);
@@ -83,7 +85,7 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
     // @ts-expect-error
     super._dispose();
 
-    this.getGridCoreHelper().callModuleItemsMethod(this, 'dispose');
+    callModuleItemsMethod(this, 'dispose');
   }
 
   private isReady() {
@@ -103,11 +105,11 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
 
   public beginUpdate() {
     super.beginUpdate();
-    this.getGridCoreHelper().callModuleItemsMethod(this, 'beginUpdate');
+    callModuleItemsMethod(this, 'beginUpdate');
   }
 
   public endUpdate() {
-    this.getGridCoreHelper().callModuleItemsMethod(this, 'endUpdate');
+    callModuleItemsMethod(this, 'endUpdate');
     super.endUpdate();
   }
 }

@@ -1,0 +1,7 @@
+{
+  "name": "devextreme-nx-plugin",
+  "generators": "./generators.json",
+  "devDependencies": {
+    "@nx/devkit": "18.3.4"
+  }
+}

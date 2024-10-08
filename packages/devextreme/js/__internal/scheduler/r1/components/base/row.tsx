@@ -49,6 +49,7 @@ export class Row extends BaseInfernoComponent<RowProps> {
           && splitNumber(leftVirtualCellCount, MAX_COL_SPAN).map(
             // @ts-ignore
             (colSpan, index) => <VirtualCell
+              // @ts-expect-error
               className={`left-virtual-cell-${index}`}
               width={leftVirtualCellWidth * (colSpan / leftVirtualCellCount)}
               colSpan={colSpan}
@@ -63,6 +64,7 @@ export class Row extends BaseInfernoComponent<RowProps> {
           && splitNumber(rightVirtualCellCount, MAX_COL_SPAN).map(
             // @ts-ignore
             (colSpan, index) => <VirtualCell
+              // @ts-expect-error
               className={`right-virtual-cell-${index}`}
               width={rightVirtualCellWidth * (colSpan / rightVirtualCellCount)}
               colSpan={colSpan}

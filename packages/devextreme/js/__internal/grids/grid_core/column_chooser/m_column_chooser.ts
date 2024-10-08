@@ -7,6 +7,7 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Button from '@js/ui/button';
 import Popup from '@js/ui/popup/ui.popup';
 // @ts-expect-error
@@ -71,37 +72,6 @@ export class ColumnChooserController extends modules.ViewController {
     this._rowsView = this.getView('rowsView');
   }
 
-  private renderShowColumnChooserButton($element) {
-    const that = this;
-    const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
-    const columnChooserEnabled = that.option('columnChooser.enabled');
-    const $showColumnChooserButton = $element.find(`.${columnChooserButtonClass}`);
-    let $columnChooserButton;
-
-    if (columnChooserEnabled) {
-      if (!$showColumnChooserButton.length) {
-        $columnChooserButton = $('<div>')
-          .addClass(columnChooserButtonClass)
-          .appendTo($element);
-
-        that._createComponent($columnChooserButton, Button, {
-          icon: COLUMN_CHOOSER_ICON_NAME,
-          onClick() {
-            // TODO getView
-            that.getView('columnChooserView').showColumnChooser();
-          },
-          hint: that.option('columnChooser.title'),
-          // @ts-expect-error
-          integrationOptions: {},
-        });
-      } else {
-        $showColumnChooserButton.show();
-      }
-    } else {
-      $showColumnChooserButton.hide();
-    }
-  }
-
   public getPosition() {
     const position = this.option('columnChooser.position');
 
@@ -161,27 +131,31 @@ export class ColumnChooserView extends ColumnsView {
     const isGenericTheme = isGeneric(themeName);
     const isMaterial = isMaterialTheme(themeName);
 
-    const dxPopupOptions = {
-      visible: false,
-      shading: false,
-      showCloseButton: false,
-      dragEnabled: true,
-      resizeEnabled: true,
-      wrapperAttr: { class: columnChooserClass },
-      toolbarItems: [
-        { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' },
-      ],
-      position: popupPosition,
-      width: columnChooserOptions.width,
-      height: columnChooserOptions.height,
-      rtlEnabled: that.option('rtlEnabled'),
-      onHidden() {
-        if (that._isWinDevice()) {
-          $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
-        }
-      },
-      container: columnChooserOptions.container,
-    };
+    function getPopupOptions() {
+      return {
+        visible: false,
+        shading: false,
+        showCloseButton: false,
+        dragEnabled: true,
+        resizeEnabled: true,
+        wrapperAttr: { class: columnChooserClass },
+        toolbarItems: [
+          { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' },
+        ],
+        position: popupPosition,
+        width: columnChooserOptions.width,
+        height: columnChooserOptions.height,
+        rtlEnabled: that.option('rtlEnabled'),
+        onHidden() {
+          if (that._isWinDevice()) {
+            $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
+          }
+        },
+        container: columnChooserOptions.container,
+      };
+    }
+
+    const dxPopupOptions = getPopupOptions();
 
     if (isGenericTheme || isMaterial) {
       extend(dxPopupOptions, { showCloseButton: true });

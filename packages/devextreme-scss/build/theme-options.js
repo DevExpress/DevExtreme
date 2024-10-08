@@ -1,11 +1,11 @@
 'use strict';
 
-const sizes = ['default', 'compact'];
-const materialColors = ['blue', 'lime', 'orange', 'purple', 'teal'];
-const materialModes = ['light', 'dark'];
-const fluentColors = ['blue', 'saas'];
-const fluentModes = ['light', 'dark'];
-const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
+const sizes = ['default'];
+const materialColors = ['blue',];
+const materialModes = ['light'];
+const fluentColors = ['blue'];
+const fluentModes = ['light'];
+const genericColors = ['light'];
 
 const getThemes = () => sizes.flatMap((size) => [
     ...materialModes.flatMap((mode) => materialColors.map((color) => ['material', size, color, mode])),

@@ -1,0 +1,10 @@
+@use '../../base/cardView/colors' as *;
+@use '../colors' as *;
+
+// getFigmaVariable('Header item/neutrals/background/1/rest', 'Components', 'Fluent')
+$cardview-header-item-background-color: $colors-grey-10 !default;
+$cardview-header-item-border-width: 1px !default;
+// getFigmaVariable('Header item/сorner-radius/Bubble M (true)', 'Components', 'Fluent')
+$cardview-header-item-border-radius: 6 !default;
+// getFigmaVariable('Header item/neutrals/strokes/1/rest', 'Components', 'Fluent')
+$cardview-header-item-border-color: #E0E0E0 !default;

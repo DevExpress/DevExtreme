@@ -282,9 +282,7 @@ export class ValidatingController extends modules.Controller {
         const validationResult = ValidationEngine.validateGroup(validationData);
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         when(validationResult.complete || validationResult).done((validationResult) => {
-          // @ts-expect-error
           validationData.isValid = validationResult.isValid;
-          // @ts-expect-error
           validationData.brokenRules = validationResult.brokenRules;
         });
       } else if (!validationData.brokenRules || !validationData.brokenRules.length) {

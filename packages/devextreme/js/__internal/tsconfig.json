@@ -39,7 +39,7 @@
         "./*"
       ],
     },
-    "types": [ "jest" ]
+    "types": ["jest"]
   },
   "tsc-alias": {
     "verbose": false,

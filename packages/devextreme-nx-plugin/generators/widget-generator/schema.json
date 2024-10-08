@@ -1,0 +1,20 @@
+{
+  "cli": "nx",
+  "id": "test",
+  "type": "object",
+  "properties": {
+    "name_snake": {
+      "type": "string",
+      "description": "Widget name in snake case (like card_view)"
+    },
+    "name_pascal": {
+      "type": "string",
+      "description": "Widget name in pascal case (like CardView)"
+    },
+    "name_camel": {
+      "type": "string",
+      "description": "Widget name in camel case (like cardView)"
+    }
+  },
+  "required": ["name_snake", "name_pascal", "name_camel"]
+}

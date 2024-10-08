@@ -31,14 +31,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPagingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get enabled(): boolean {
-        return this._getOption('enabled');
-    }
-    set enabled(value: boolean) {
-        this._setOption('enabled', value);
-    }
-
-    @Input()
     get pageIndex(): number {
         return this._getOption('pageIndex');
     }
@@ -52,6 +44,14 @@ export class DxoPagingComponent extends NestedOption implements OnDestroy, OnIni
     }
     set pageSize(value: number) {
         this._setOption('pageSize', value);
+    }
+
+    @Input()
+    get enabled(): boolean {
+        return this._getOption('enabled');
+    }
+    set enabled(value: boolean) {
+        this._setOption('enabled', value);
     }
 
 

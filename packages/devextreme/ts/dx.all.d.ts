@@ -9490,6 +9490,20 @@ declare module DevExpress.ui {
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
   }
   /**
+   * [descr:dxCardView]
+   */
+  export class dxCardView extends Widget<DevExpress.ui.dxCardView.Properties> {}
+  module dxCardView {
+    export type Properties = dxCardViewOptions;
+  }
+  /**
+   * [descr:dxCardViewOptions]
+   * @deprecated [depNote:dxCardViewOptions]
+   */
+  export interface dxCardViewOptions
+    extends WidgetOptions<dxCardView>,
+      DevExpress.ui.dxCardView.DataControllerProperties {}
+  /**
    * [descr:dxChat]
    */
   export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
@@ -30673,6 +30687,31 @@ declare module DevExpress.ui.dxBox {
 }
 declare module DevExpress.ui.dxButtonGroup {
   export type Item = dxButtonGroupItem;
+}
+declare module DevExpress.ui.dxCardView {
+  /**
+   * [descr:DataControllerProperties]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type DataControllerProperties = {
+    /**
+     * [descr:DataControllerProperties.dataSource]
+     */
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<any, any>;
+    /**
+     * [descr:DataControllerProperties.paging]
+     */
+    paging?: {
+      /**
+       * [descr:DataControllerProperties.paging.pageSize]
+       */
+      pageSize?: number;
+      /**
+       * [descr:DataControllerProperties.paging.pageIndex]
+       */
+      pageIndex?: number;
+    };
+  };
 }
 declare module DevExpress.ui.dxChat {
   /**

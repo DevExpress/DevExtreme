@@ -35,7 +35,7 @@ import type { SelectionController } from '@ts/grids/grid_core/selection/m_select
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
-import modules from '../m_modules';
+import modules, { View } from '../m_modules';
 import gridCoreUtils from '../m_utils';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
@@ -159,7 +159,7 @@ export const normalizeWidth = (width: string | number | undefined): string | und
   return width;
 };
 
-export class ColumnsView extends ColumnStateMixin(modules.View) {
+export class ColumnsView extends ColumnStateMixin(View) {
   protected _tableElement: any;
 
   protected _scrollLeft: any;

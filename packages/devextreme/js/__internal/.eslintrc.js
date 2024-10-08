@@ -75,7 +75,7 @@ module.exports = {
             files: [
                 '**/*.ts?(x)',
             ],
-            excludedFiles: '**/m_*.ts',
+            excludedFiles: '**/m_*.ts?(x)',
             parser: '@typescript-eslint/parser',
             parserOptions: {
                 createDefaultProgram: true,
@@ -90,8 +90,8 @@ module.exports = {
         // Rules for migrated from JS files.
         {
             files: [
-                '**/m_*.ts',
-                '**/module*/**.ts',
+                '**/m_*.ts?(x)',
+                '**/module*/**.ts?(x)',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -185,7 +185,7 @@ module.exports = {
         // Rules for Jest tests.
         {
             files: [
-                '**/*test.ts',
+                '**/*test.ts?(x)',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -196,7 +196,8 @@ module.exports = {
             rules: {
                 '@typescript-eslint/no-unsafe-return': 'warn',
                 '@typescript-eslint/no-explicit-any': 'warn',
-                '@typescript-eslint/explicit-function-return-type': 'warn'
+                '@typescript-eslint/explicit-function-return-type': 'warn',
+                'import/no-extraneous-dependencies': 'off'
             }
         },
     ],

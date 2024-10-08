@@ -190,6 +190,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
     } = this.props;
 
     return (
+      // @ts-expect-error
       <Fragment>
         {this.getRenderPrevButton() && (
           <LightButton

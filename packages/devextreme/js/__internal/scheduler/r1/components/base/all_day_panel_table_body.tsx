@@ -81,6 +81,7 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
               groups={groups}
               groupIndex={cellGroupIndex}
               index={cellIndex}
+              // @ts-expect-error
               dataCellTemplate={DataCellTemplateComponent}
               isSelected={isSelected ?? false}
               isFocused={isFocused ?? false}

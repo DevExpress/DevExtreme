@@ -44,7 +44,8 @@
     "axe-core": "4.10.0",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "6.0.2",
-    "devextreme-internal-tools": "16.0.0-beta.4",
+    "devextreme-internal-tools": "16.0.0-beta.5",
+    "devextreme-nx-plugin": "workspace:*",
     "http-server": "14.1.1",
     "husky": "8.0.3",
     "jest": "29.7.0",
@@ -65,5 +66,17 @@
     "lint-staged",
     "pre-commit"
   ],
-  "packageManager": "pnpm@9.9.0"
+  "packageManager": "pnpm@9.9.0",
+  "pnpm": {
+    "patchedDependencies": {
+      "@devextreme/runtime@3.0.13": "patches/@devextreme__runtime@3.0.13.patch"
+    },
+    "overrides": {
+      "inferno": "^8.2.3",
+      "inferno-create-element": "8.2.3",
+      "inferno-hydrate": "^8.2.3",
+      "inferno-test-utils": "8.2.3",
+      "inferno-server": "8.2.3"
+    }
+  }
 }

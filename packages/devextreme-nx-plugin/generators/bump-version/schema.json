@@ -1,0 +1,17 @@
+{
+  "cli": "nx",
+  "id": "test",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Version in format 24.1.2",
+      "pattern": "^\\d\\d\\.[12]\\.\\d\\d?$",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["version"]
+}

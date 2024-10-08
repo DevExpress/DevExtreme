@@ -33,8 +33,8 @@
     "devexpress-diagram": "2.2.11",
     "devexpress-gantt": "4.1.56",
     "devextreme-quill": "1.7.1",
-    "inferno": "^7.4.9",
-    "inferno-hydrate": "^7.4.9",
+    "inferno": "^8.2.3",
+    "inferno-hydrate": "^8.2.3",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1",
     "showdown": "^2.1.0",
@@ -54,6 +54,7 @@
     "@devextreme-generator/inferno": "3.0.12",
     "@devextreme-generator/react": "3.0.12",
     "@devextreme-generator/vue": "3.0.12",
+    "@jest/globals": "^29.7.0",
     "@testcafe-community/axe": "3.5.0",
     "@types/enzyme": "3.10.18",
     "@types/jquery": "3.5.29",
@@ -132,7 +133,8 @@
     "gulp-uglify-es": "3.0.0",
     "gulp-watch": "5.0.1",
     "ignore": "5.3.1",
-    "inferno-create-element": "7.4.11",
+    "inferno-create-element": "8.2.3",
+    "inferno-test-utils": "8.2.3",
     "intl": "1.2.5",
     "jest-each": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
@@ -173,6 +175,7 @@
     "through2": "2.0.5",
     "ts-jest": "29.1.2",
     "tsc-alias": "1.8.10",
+    "typedoc": "^0.26.6",
     "typescript": "4.9.5",
     "typescript-min": "npm:typescript@4.9.5",
     "uuid": "9.0.1",
@@ -184,6 +187,7 @@
     "yargs": "17.7.2"
   },
   "scripts": {
+    "jest-internal": "jest --config jest.config.internal.js",
     "clean": "gulp clean",
     "lint": "npm-run-all -p -c lint-js lint-ts lint-renovation lint-dts lint-texts",
     "lint-js": "eslint --quiet --ext .js .",
@@ -220,7 +224,8 @@
     "test-jest": "jest --no-coverage --runInBand",
     "test-jest:watch": "jest --watch",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
-    "tcd-update": "tcd-update"
+    "tcd-update": "tcd-update",
+    "gen-doc": "typedoc 'js/__internal/grids/new/**/*.ts' 'js/__internal/grids/new/**/*.tsx'  --tsconfig js/__internal/tsconfig.json --excludePrivate false"
   },
   "browserslist": [
     "last 2 versions",

@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "devextreme": "workspace:~24.2.0",
-    "devextreme-react": "workspace:~24.2.0"
+    "devextreme-react": "workspace:~24.2.0",
+    "inferno": "^8.2.3"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "7.6.19",

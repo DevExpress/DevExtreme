@@ -1,0 +1,297 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`common initial render should be successfull 1`] = `
+<div
+  class="dx-widget"
+>
+  <div
+    class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection"
+    role="toolbar"
+  >
+    <div
+      class="dx-toolbar-items-container"
+    >
+      <div
+        class="dx-toolbar-before"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-center"
+        role="presentation"
+      />
+      <div
+        class="dx-toolbar-after"
+        role="presentation"
+      >
+        <div
+          class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <input />
+          </div>
+        </div>
+        <div
+          class="dx-item dx-toolbar-item dx-toolbar-button dx-toolbar-item-auto-hide dx-toolbar-text-auto-hide"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <div
+              aria-haspopup="dialog"
+              aria-label="column-chooser"
+              class="dx-button dx-button-normal dx-button-mode-contained dx-widget dx-button-has-icon"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <i
+                  class="dx-icon dx-icon-column-chooser"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="dx-item dx-toolbar-item dx-toolbar-button"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <div
+              aria-label="edit"
+              class="dx-button dx-button-normal dx-button-mode-contained dx-widget dx-button-has-text"
+              role="button"
+              tabindex="0"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <span
+                  class="dx-button-text"
+                >
+                  edit
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-disabled="true"
+          class="dx-state-disabled dx-item dx-toolbar-item dx-toolbar-button"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <div
+              aria-label="revert"
+              class="dx-button dx-button-normal dx-button-mode-contained dx-widget dx-button-has-text"
+              role="button"
+              tabindex="-1"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <span
+                  class="dx-button-text"
+                >
+                  revert
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-disabled="true"
+          class="dx-state-disabled dx-item dx-toolbar-item dx-toolbar-button"
+        >
+          <div
+            class="dx-item-content dx-toolbar-item-content"
+          >
+            <div
+              aria-label="save"
+              class="dx-button dx-button-normal dx-button-mode-contained dx-widget dx-button-has-text"
+              role="button"
+              tabindex="-1"
+            >
+              <div
+                class="dx-button-content"
+              >
+                <span
+                  class="dx-button-text"
+                >
+                  save
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="dx-toolbar-button dx-toolbar-menu-container dx-state-invisible"
+        >
+          <div
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-label="overflow"
+            class="dx-dropdownmenu dx-dropdownmenu-button dx-button dx-button-normal dx-button-mode-contained dx-widget dx-button-has-icon"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="dx-button-content"
+            >
+              <i
+                class="dx-icon dx-icon-overflow"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="dx-gridcore-headers"
+  >
+    <div
+      class="dx-sortable"
+    >
+      <div
+        class="dx-gridcore-header-item"
+      >
+        a
+      </div>
+    </div>
+  </div>
+  <div
+    class="dx-scrollable dx-visibility-change-handler dx-scrollable-vertical dx-scrollable-simulated"
+  >
+    <div
+      class="dx-scrollable-wrapper"
+    >
+      <div
+        class="dx-scrollable-container"
+        tabindex="0"
+      >
+        <div
+          class="dx-scrollable-content"
+          style="left: 0px; top: 0px; transform: none;"
+        >
+          <div
+            class="dx-gridcore-content"
+            tabindex="0"
+          >
+            
+            <div
+              class="dx-cardview-card"
+              tabindex="0"
+            >
+              <div
+                class="dx-cardview-field"
+                tabindex="0"
+              >
+                <span
+                  class="dx-cardview-field-name"
+                >
+                  a
+                  : 
+                </span>
+                <span
+                  class="dx-cardview-field-name"
+                  style="text-align: left;"
+                >
+                  a
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="dx-scrollable-scrollbar dx-widget dx-scrollbar-vertical dx-scrollbar-hoverable"
+        >
+          <div
+            class="dx-scrollable-scroll dx-state-invisible"
+            style="height: 15px; transform: translate(0px, 0px);"
+          >
+            <div
+              class="dx-scrollable-scroll-content"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div>
+    <div
+      _feedbackhidetimeout="400"
+      _feedbackshowtimeout="30"
+      activestateenabled="false"
+      addwidgetclass="true"
+      aria="[object Object]"
+      aria-label="Page Navigation"
+      class="dx-widget dx-pager"
+      classes="dx-pager"
+      csstext=""
+      focusstateenabled="false"
+      hoverstateenabled="false"
+      name=""
+      role="navigation"
+      rootelementref="[object Object]"
+      rtlenabled="false"
+      visible="true"
+    >
+      <div
+        class="dx-page-sizes"
+      >
+        <div
+          aria-label="Items per page: 2"
+          class="dx-page-size dx-first-child"
+          role="button"
+          tabindex="0"
+        >
+          2
+        </div>
+        <div
+          aria-label="Items per page: 6"
+          class="dx-page-size dx-selection"
+          role="button"
+          tabindex="0"
+        >
+          6
+        </div>
+        <div
+          aria-label="Items per page: 18"
+          class="dx-page-size"
+          role="button"
+          tabindex="0"
+        >
+          18
+        </div>
+      </div>
+      <div
+        class="dx-pages"
+        style="visibility: hidden;"
+      >
+        <div
+          class="dx-page-indexes"
+        >
+          <div
+            aria-current="page"
+            aria-label="Page 1"
+            class="dx-page dx-selection"
+            role="button"
+            tabindex="0"
+          >
+            1
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+`;

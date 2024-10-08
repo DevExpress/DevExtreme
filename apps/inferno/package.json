@@ -1,0 +1,17 @@
+{
+  "name": "devextreme-inferno-playground",
+  "dependencies": {
+    "devextreme": "^24.2.0",
+    "inferno": "^7.4.9"
+  },
+  "devDependencies": {
+    "@babel/core": "7.23.9",
+    "@babel/preset-env": "7.23.9",
+    "@babel/preset-typescript": "^7.24.7",
+    "babel-loader": "^9.1.3",
+    "babel-plugin-inferno": "6.7.1",
+    "css-loader": "6.10.0",
+    "style-loader": "3.3.4",
+    "webpack": "5.94.0"
+  }
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,6 +43,7 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +51,86 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="cardview"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            function isNotEmpty(value) {
+                return value !== undefined && value !== null && value !== '';
+            }
+            const store = new DevExpress.data.CustomStore({
+                key: 'OrderNumber',
+                load(loadOptions) {
+                    const deferred = $.Deferred();
+
+                    const paramNames = [
+                        'skip', 'take', 'requireTotalCount', 'requireGroupCount',
+                        'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
+                    ];
+
+                    const args = {};
+
+                    paramNames
+                        .filter((paramName) => isNotEmpty(loadOptions[paramName]))
+                        .forEach((paramName) => { args[paramName] = JSON.stringify(loadOptions[paramName]); });
+
+                    $.ajax({
+                        url: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders',
+                        dataType: 'json',
+                        data: args,
+                        success(result) {
+                            deferred.resolve(result.data, {
+                                totalCount: result.totalCount,
+                                summary: result.summary,
+                                groupCount: result.groupCount,
+                            });
+                        },
+                        error() {
+                            deferred.reject('Data Loading Error');
+                        },
+                        timeout: 5000,
+                    });
+
+                    return deferred.promise();
+                },
+            });
+
+            $(function () {
+                $("#cardview").dxCardView({
+                    accessKey: 'q',
+                    dataSource: store,
+                    width: "70%",
+                    height: 300,
+                    keyExpr: 'OrderNumber',
+                    fieldTemplate({ defaultTemplate, ...props}, index) {
+                        const el = $('<div>')
+                        if (index % 2) {
+                            el.css({color: 'red'});
+                        }
+                        defaultTemplate.render(props, index, el);
+                        return el;
+                    },
+                    columns: [
+                        {
+                            dataField: 'OrderNumber',
+                            // alignment: 'right',
+                            dataType: 'number',
+                        },
+                        {
+                            dataField: 'OrderDate',
+                            visible: false,
+                        },
+                        'StoreCity',
+                        'StoreState',
+                        'Employee',
+                        'SaleAmount',
+                    ],
+                    filterPanelVisible: true,
+                    onInitialized(e) {
+                        window.cardView = e.component;
+                    }
                 });
             });
         </script>
     </div>
 </body>
+
 </html>
