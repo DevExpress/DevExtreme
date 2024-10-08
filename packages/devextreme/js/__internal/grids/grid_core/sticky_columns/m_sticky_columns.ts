@@ -217,14 +217,15 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
   protected _resizeCore() {
     const isStickyColumns = this._isStickyColumns();
-    const columnHidingEnabled = this.option('columnHidingEnabled');
+    const adaptiveColumns = this.getController('adaptiveColumns');
+    const hidingColumnsQueue = adaptiveColumns?.getHidingColumnsQueue();
 
     super._resizeCore.apply(this, arguments as any);
 
     if (isStickyColumns) {
       this.setStickyOffsets();
 
-      if (columnHidingEnabled) {
+      if (hidingColumnsQueue?.length) {
         this._updateBorderClasses();
       }
     }

@@ -71,10 +71,40 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 
         column.hidingPriority = index;
         column.width = 200;
-
-        return column;
       });
     },
     columnHidingEnabled: true,
   }));
 });
+
+safeSizeTest('Sticky columns with sticky positions when columnHidingEnabled = false and columns have hidingPriority', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await takeScreenshot('adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_1.png', dataGrid.element);
+
+  await dataGrid.scrollTo(t, { x: 10000 });
+
+  await takeScreenshot('adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_2.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [900, 800]).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  width: 800,
+  customizeColumns(columns) {
+    columns.forEach((column, index) => {
+      if (index === 1 || index === 4) {
+        column.fixed = true;
+        column.fixedPosition = 'sticky';
+      } else {
+        column.fixed = false;
+      }
+
+      column.hidingPriority = index;
+      column.width = 200;
+    });
+  },
+  columnHidingEnabled: false,
+}));
