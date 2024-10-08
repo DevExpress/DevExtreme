@@ -11,8 +11,9 @@ function error(baseErrors, errors?) {
 
     ERROR_MESSAGES: extend(errors, baseErrors),
 
-    Error(...args) {
-      return makeError([].slice.call(args));
+    // eslint-disable-next-line object-shorthand
+    Error: function (...args) {
+      return makeError(args);
     },
 
     log(...args) {
