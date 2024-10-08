@@ -24,7 +24,7 @@ const CLASS = {
 };
 
 export default class Pager extends Widget {
-  getName(): WidgetName { return 'dxPager'; }
+  getName(): WidgetName { return 'dxPagination'; }
 
   getPageSize(index: number): SelectableElement {
     return new SelectableElement(this.element
