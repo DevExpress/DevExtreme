@@ -17,7 +17,7 @@ test('Pager width and height property', async (t) => {
     .eql(null)
     .expect(pager.element.getAttribute('height'))
     .eql(null);
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   width: 270,
   height: '95px',
   itemCount: 50,
@@ -30,7 +30,7 @@ test('Pager elementAttr property', async (t) => {
     .eql('some description')
     .expect(pager.element.getAttribute('data-test'))
     .eql('custom data');
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   elementAttr: {
     'aria-label': 'some description',
     'data-test': 'custom data',
@@ -48,7 +48,7 @@ test('Pager hint, disabled and accessKey properties', async (t) => {
     .eql('F')
     .expect(pager.element.getAttribute('title'))
     .eql('Best Pager');
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   hint: 'Best Pager',
   disabled: true,
   accessKey: 'F',
@@ -80,7 +80,7 @@ test('Pager tabindex and state properties', async (t) => {
   await t
     .expect(pager.element.hasClass('dx-state-active'))
     .ok();
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   itemCount: 50,
   disabled: false,
   width: '100%',
@@ -103,7 +103,7 @@ test('Pager focus method without focusStateEnabled', async (t) => {
   await t
     .expect(pager.getPageSize(0).element.focused)
     .ok();
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   focusStateEnabled: false,
   itemCount: 50,
 }));
@@ -121,7 +121,7 @@ test('Pager focus method with focusStateEnabled', async (t) => {
   await t
     .expect(pager.element.focused)
     .ok();
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   focusStateEnabled: true,
   itemCount: 50,
 }));

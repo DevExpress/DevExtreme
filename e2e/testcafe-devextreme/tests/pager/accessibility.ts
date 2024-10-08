@@ -52,7 +52,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxPager',
+  component: 'dxPagination',
   a11yCheckConfig,
   options,
   created,

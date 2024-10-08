@@ -10,7 +10,7 @@ test('Pager visibile property', async (t) => {
   await t
     .expect(pager.element.hasClass('dx-state-invisible'))
     .ok();
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   itemCount: 50,
   visible: false,
 }));
@@ -22,7 +22,7 @@ test('PageSize selector test', async (t) => {
     .click(pager.getPageSize(1).element)
     .expect(pager.option('pageCount'))
     .eql(13);
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   itemCount: 50,
   pageIndex: 2,
   pageSize: 8, // pageCount: 7
@@ -38,7 +38,7 @@ test('PageIndex test', async (t) => {
     .click(pager.getNavPage('5').element)
     .expect(pager.option('pageIndex'))
     .eql(5);
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   itemCount: 50,
   pageIndex: 1,
   pageSize: 5, // pageCount: 10
@@ -53,7 +53,7 @@ test('PageIndex correction test', async (t) => {
     .click(pager.getPageSize(1).element)
     .expect(pager.option('pageIndex'))
     .eql(5);
-}).before(async () => createWidget('dxPager', {
+}).before(async () => createWidget('dxPagination', {
   itemCount: 50,
   pageIndex: 10,
   pageSize: 5, // pageCount: 10
