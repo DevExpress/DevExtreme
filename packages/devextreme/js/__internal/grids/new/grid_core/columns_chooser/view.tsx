@@ -8,7 +8,7 @@ import type { ColumnChooserProps } from './column_chooser';
 import { ColumnChooser } from './column_chooser';
 
 export class ColumnsChooserView extends View<ColumnChooserProps> {
-  protected component = ColumnChooser;
+  protected override component = ColumnChooser;
 
   private readonly visible = state(false);
 
@@ -19,7 +19,7 @@ export class ColumnsChooserView extends View<ColumnChooserProps> {
     [this.columns.nonVisibleColumns],
   );
 
-  protected props = computed(
+  protected override props = computed(
     (visible, items) => ({ visible, items }),
     [this.visible, this.items],
   );

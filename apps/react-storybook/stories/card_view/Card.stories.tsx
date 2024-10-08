@@ -11,7 +11,7 @@ interface Props {
       value: unknown;
       column: {
         alignment: "left" | "right" | "center";
-        name: string;
+        caption: string;
       };
     }[];
   };
@@ -36,35 +36,35 @@ export const DefaultMode: Story = {
           value: 1,
           column: {
             alignment: 'left',
-            name: 'asd',
+            caption: 'asd',
           },
         },
         {
           value: 1,
           column: {
             alignment: 'left',
-            name: 'asd',
+            caption: 'asd',
           },
         },
         {
           value: 1,
           column: {
             alignment: 'left',
-            name: 'asd',
+            caption: 'asd',
           },
         },
         {
           value: 1,
           column: {
             alignment: 'left',
-            name: 'asd',
+            caption: 'asd',
           },
         },
         {
           value: 1,
           column: {
             alignment: 'left',
-            name: 'asd',
+            caption: 'asd',
           },
         },
       ],
