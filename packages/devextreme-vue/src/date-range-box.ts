@@ -452,7 +452,7 @@ const DxCalendarOptionsConfig = {
     disabledDates: [Array, Function] as PropType<Array<Date> | ((data: Object) => Boolean)>,
     elementAttr: Object,
     firstDayOfWeek: {
-      type: Number,
+      type: Number as PropType<0 | 1 | 2 | 3 | 4 | 5 | 6>,
       validator: (v) => typeof(v) !== "number" || [
         0,
         1,

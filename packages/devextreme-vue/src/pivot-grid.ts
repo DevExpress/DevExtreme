@@ -212,7 +212,7 @@ const DxFieldChooserConfig = {
     enabled: Boolean,
     height: Number,
     layout: {
-      type: Number,
+      type: Number as PropType<0 | 1 | 2>,
       validator: (v) => typeof(v) !== "number" || [
         0,
         1,
