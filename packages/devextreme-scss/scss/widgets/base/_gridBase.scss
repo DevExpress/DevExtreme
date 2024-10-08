@@ -197,6 +197,11 @@
 
     .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
       position: sticky;
+      z-index: 2;
+
+      &.dx-#{$widget-name}-sticky-column-right {
+        z-index: 3;
+      }
     }
   }
 
