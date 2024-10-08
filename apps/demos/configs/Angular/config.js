@@ -45,7 +45,7 @@ const componentNames = [
   'multi-view',
   'nested',
   'number-box',
-  'pager',
+  'pagination',
   'pie-chart',
   'pivot-grid-field-chooser',
   'pivot-grid',
