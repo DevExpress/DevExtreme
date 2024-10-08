@@ -1,7 +1,6 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-import 'ui/html_editor/converters/markdown';
 import { getOuterHeight } from 'core/utils/size';
 
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
