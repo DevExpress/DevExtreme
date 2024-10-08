@@ -20,6 +20,7 @@ import {
 } from '@angular/core';
 
 
+import { DisplayMode } from 'devextreme/common';
 
 import DxPagination from 'devextreme/ui/pager';
 
@@ -109,6 +110,19 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
+     * [descr:PagerBaseOptions.displayMode]
+    
+     */
+    @Input()
+    get displayMode(): DisplayMode {
+        return this._getOption('displayMode');
+    }
+    set displayMode(value: DisplayMode) {
+        this._setOption('displayMode', value);
+    }
+
+
+    /**
      * [descr:DOMComponentOptions.elementAttr]
     
      */
@@ -174,6 +188,19 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
+     * [descr:PagerBaseOptions.infoText]
+    
+     */
+    @Input()
+    get infoText(): string {
+        return this._getOption('infoText');
+    }
+    set infoText(value: string) {
+        this._setOption('infoText', value);
+    }
+
+
+    /**
      * [descr:dxPaginationOptions.itemCount]
     
      */
@@ -183,6 +210,19 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     }
     set itemCount(value: number) {
         this._setOption('itemCount', value);
+    }
+
+
+    /**
+     * [descr:PagerBaseOptions.label]
+    
+     */
+    @Input()
+    get label(): string {
+        return this._getOption('label');
+    }
+    set label(value: string) {
+        this._setOption('label', value);
     }
 
 
@@ -222,6 +262,45 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
+    }
+
+
+    /**
+     * [descr:PagerBaseOptions.showInfo]
+    
+     */
+    @Input()
+    get showInfo(): boolean {
+        return this._getOption('showInfo');
+    }
+    set showInfo(value: boolean) {
+        this._setOption('showInfo', value);
+    }
+
+
+    /**
+     * [descr:PagerBaseOptions.showNavigationButtons]
+    
+     */
+    @Input()
+    get showNavigationButtons(): boolean {
+        return this._getOption('showNavigationButtons');
+    }
+    set showNavigationButtons(value: boolean) {
+        this._setOption('showNavigationButtons', value);
+    }
+
+
+    /**
+     * [descr:PagerBaseOptions.showPageSizeSelector]
+    
+     */
+    @Input()
+    get showPageSizeSelector(): boolean {
+        return this._getOption('showPageSizeSelector');
+    }
+    set showPageSizeSelector(value: boolean) {
+        this._setOption('showPageSizeSelector', value);
     }
 
 
@@ -328,6 +407,13 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() displayModeChange: EventEmitter<DisplayMode>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() elementAttrChange: EventEmitter<any>;
 
     /**
@@ -363,7 +449,21 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() infoTextChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() itemCountChange: EventEmitter<number>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() labelChange: EventEmitter<string>;
 
     /**
     
@@ -385,6 +485,27 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() showInfoChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() showNavigationButtonsChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() showPageSizeSelectorChange: EventEmitter<boolean>;
 
     /**
     
@@ -432,15 +553,21 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
             { emit: 'activeStateEnabledChange' },
             { emit: 'allowedPageSizesChange' },
             { emit: 'disabledChange' },
+            { emit: 'displayModeChange' },
             { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
+            { emit: 'infoTextChange' },
             { emit: 'itemCountChange' },
+            { emit: 'labelChange' },
             { emit: 'pageIndexChange' },
             { emit: 'pageSizeChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'showInfoChange' },
+            { emit: 'showNavigationButtonsChange' },
+            { emit: 'showPageSizeSelectorChange' },
             { emit: 'tabIndexChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
