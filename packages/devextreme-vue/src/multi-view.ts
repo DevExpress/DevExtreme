@@ -1,17 +1,17 @@
 export { ExplicitTypes } from "devextreme/ui/multi_view";
 import { PropType } from "vue";
 import MultiView, { Properties } from "devextreme/ui/multi_view";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-ItemContextMenuEvent,
-ItemHoldEvent,
-ItemRenderedEvent,
-OptionChangedEvent,
-SelectionChangedEvent,
- } from "devextreme/ui/multi_view";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+ SelectionChangedEvent,
+} from "devextreme/ui/multi_view";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

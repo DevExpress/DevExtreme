@@ -1,17 +1,17 @@
 import { PropType } from "vue";
 import Bullet, { Properties } from "devextreme/viz/bullet";
-import { 
-DisposingEvent,
-DrawnEvent,
-ExportedEvent,
-ExportingEvent,
-FileSavingEvent,
-IncidentOccurredEvent,
-InitializedEvent,
-OptionChangedEvent,
-TooltipHiddenEvent,
-TooltipShownEvent,
- } from "devextreme/viz/bullet";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+} from "devextreme/viz/bullet";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

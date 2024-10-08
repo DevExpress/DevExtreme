@@ -1,15 +1,15 @@
 import { PropType } from "vue";
 import LoadPanel, { Properties } from "devextreme/ui/load_panel";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-HiddenEvent,
-HidingEvent,
-InitializedEvent,
-OptionChangedEvent,
-ShowingEvent,
-ShownEvent,
- } from "devextreme/ui/load_panel";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ HiddenEvent,
+ HidingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ShowingEvent,
+ ShownEvent,
+} from "devextreme/ui/load_panel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

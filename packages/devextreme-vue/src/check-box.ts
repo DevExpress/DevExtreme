@@ -1,12 +1,12 @@
 import { PropType } from "vue";
 import CheckBox, { Properties } from "devextreme/ui/check_box";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
-ValueChangedEvent,
- } from "devextreme/ui/check_box";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/check_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

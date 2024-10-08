@@ -1,15 +1,15 @@
 import { PropType } from "vue";
 import Tooltip, { Properties } from "devextreme/ui/tooltip";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-HiddenEvent,
-HidingEvent,
-InitializedEvent,
-OptionChangedEvent,
-ShowingEvent,
-ShownEvent,
- } from "devextreme/ui/tooltip";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ HiddenEvent,
+ HidingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ShowingEvent,
+ ShownEvent,
+} from "devextreme/ui/tooltip";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

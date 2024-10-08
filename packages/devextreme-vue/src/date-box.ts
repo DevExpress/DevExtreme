@@ -1,37 +1,37 @@
 import { PropType } from "vue";
 import DateBox, { Properties } from "devextreme/ui/date_box";
-import { 
-ChangeEvent,
-ClosedEvent,
-ContentReadyEvent,
-CopyEvent,
-CutEvent,
-DisposingEvent,
-EnterKeyEvent,
-FocusInEvent,
-FocusOutEvent,
-InitializedEvent,
-InputEvent,
-KeyDownEvent,
-KeyUpEvent,
-OpenedEvent,
-OptionChangedEvent,
-PasteEvent,
-ValueChangedEvent,
- } from "devextreme/ui/date_box";
-import { 
-DisposingEvent as CalendarDisposingEvent,
-InitializedEvent as CalendarInitializedEvent,
-OptionChangedEvent as CalendarOptionChangedEvent,
-ValueChangedEvent as CalendarValueChangedEvent,
- } from "devextreme/ui/calendar";
-import { 
-ClickEvent,
-ContentReadyEvent as ButtonContentReadyEvent,
-DisposingEvent as ButtonDisposingEvent,
-InitializedEvent as ButtonInitializedEvent,
-OptionChangedEvent as ButtonOptionChangedEvent,
- } from "devextreme/ui/button";
+import {
+ ChangeEvent,
+ ClosedEvent,
+ ContentReadyEvent,
+ CopyEvent,
+ CutEvent,
+ DisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ InputEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ PasteEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/date_box";
+import {
+ DisposingEvent as CalendarDisposingEvent,
+ InitializedEvent as CalendarInitializedEvent,
+ OptionChangedEvent as CalendarOptionChangedEvent,
+ ValueChangedEvent as CalendarValueChangedEvent,
+} from "devextreme/ui/calendar";
+import {
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

@@ -1,31 +1,31 @@
 import { PropType } from "vue";
 import Lookup, { Properties } from "devextreme/ui/lookup";
-import { 
-ClosedEvent,
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-OpenedEvent,
-OptionChangedEvent,
-PageLoadingEvent,
-PullRefreshEvent,
-ScrollEvent,
-SelectionChangedEvent,
-SelectionChangingEvent,
-ValueChangedEvent,
- } from "devextreme/ui/lookup";
-import { 
-ContentReadyEvent as PopoverContentReadyEvent,
-DisposingEvent as PopoverDisposingEvent,
-HiddenEvent,
-HidingEvent,
-InitializedEvent as PopoverInitializedEvent,
-OptionChangedEvent as PopoverOptionChangedEvent,
-ShowingEvent,
-ShownEvent,
-TitleRenderedEvent,
- } from "devextreme/ui/popover";
+import {
+ ClosedEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ PageLoadingEvent,
+ PullRefreshEvent,
+ ScrollEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/lookup";
+import {
+ ContentReadyEvent as PopoverContentReadyEvent,
+ DisposingEvent as PopoverDisposingEvent,
+ HiddenEvent,
+ HidingEvent,
+ InitializedEvent as PopoverInitializedEvent,
+ OptionChangedEvent as PopoverOptionChangedEvent,
+ ShowingEvent,
+ ShownEvent,
+ TitleRenderedEvent,
+} from "devextreme/ui/popover";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

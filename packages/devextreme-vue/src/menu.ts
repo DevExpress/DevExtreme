@@ -1,20 +1,20 @@
 export { ExplicitTypes } from "devextreme/ui/menu";
 import { PropType } from "vue";
 import Menu, { Properties } from "devextreme/ui/menu";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-ItemContextMenuEvent,
-ItemRenderedEvent,
-OptionChangedEvent,
-SelectionChangedEvent,
-SubmenuHiddenEvent,
-SubmenuHidingEvent,
-SubmenuShowingEvent,
-SubmenuShownEvent,
- } from "devextreme/ui/menu";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+ SelectionChangedEvent,
+ SubmenuHiddenEvent,
+ SubmenuHidingEvent,
+ SubmenuShowingEvent,
+ SubmenuShownEvent,
+} from "devextreme/ui/menu";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

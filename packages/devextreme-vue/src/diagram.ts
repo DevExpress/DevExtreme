@@ -1,17 +1,17 @@
 import { PropType } from "vue";
 import Diagram, { Properties } from "devextreme/ui/diagram";
-import { 
-ContentReadyEvent,
-CustomCommandEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-ItemDblClickEvent,
-OptionChangedEvent,
-RequestEditOperationEvent,
-RequestLayoutUpdateEvent,
-SelectionChangedEvent,
- } from "devextreme/ui/diagram";
+import {
+ ContentReadyEvent,
+ CustomCommandEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemDblClickEvent,
+ OptionChangedEvent,
+ RequestEditOperationEvent,
+ RequestLayoutUpdateEvent,
+ SelectionChangedEvent,
+} from "devextreme/ui/diagram";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

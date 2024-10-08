@@ -1,17 +1,17 @@
 import { PropType } from "vue";
 import CircularGauge, { Properties } from "devextreme/viz/circular_gauge";
-import { 
-DisposingEvent,
-DrawnEvent,
-ExportedEvent,
-ExportingEvent,
-FileSavingEvent,
-IncidentOccurredEvent,
-InitializedEvent,
-OptionChangedEvent,
-TooltipHiddenEvent,
-TooltipShownEvent,
- } from "devextreme/viz/circular_gauge";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ TooltipHiddenEvent,
+ TooltipShownEvent,
+} from "devextreme/viz/circular_gauge";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

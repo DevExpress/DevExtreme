@@ -1,35 +1,35 @@
 import { PropType } from "vue";
 import Form, { Properties } from "devextreme/ui/form";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-EditorEnterKeyEvent,
-FieldDataChangedEvent,
-InitializedEvent,
-OptionChangedEvent,
- } from "devextreme/ui/form";
-import { 
-ClickEvent,
-ContentReadyEvent as ButtonContentReadyEvent,
-DisposingEvent as ButtonDisposingEvent,
-InitializedEvent as ButtonInitializedEvent,
-OptionChangedEvent as ButtonOptionChangedEvent,
- } from "devextreme/ui/button";
-import { 
-ContentReadyEvent as TabPanelContentReadyEvent,
-DisposingEvent as TabPanelDisposingEvent,
-InitializedEvent as TabPanelInitializedEvent,
-ItemClickEvent,
-ItemContextMenuEvent,
-ItemHoldEvent,
-ItemRenderedEvent,
-OptionChangedEvent as TabPanelOptionChangedEvent,
-SelectionChangedEvent,
-SelectionChangingEvent,
-TitleClickEvent,
-TitleHoldEvent,
-TitleRenderedEvent,
- } from "devextreme/ui/tab_panel";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ EditorEnterKeyEvent,
+ FieldDataChangedEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/form";
+import {
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
+import {
+ ContentReadyEvent as TabPanelContentReadyEvent,
+ DisposingEvent as TabPanelDisposingEvent,
+ InitializedEvent as TabPanelInitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent as TabPanelOptionChangedEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
+ TitleClickEvent,
+ TitleHoldEvent,
+ TitleRenderedEvent,
+} from "devextreme/ui/tab_panel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

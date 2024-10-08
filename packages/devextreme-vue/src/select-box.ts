@@ -1,35 +1,35 @@
 import { PropType } from "vue";
 import SelectBox, { Properties } from "devextreme/ui/select_box";
-import { 
-ChangeEvent,
-ClosedEvent,
-ContentReadyEvent,
-CopyEvent,
-CustomItemCreatingEvent,
-CutEvent,
-DisposingEvent,
-EnterKeyEvent,
-FocusInEvent,
-FocusOutEvent,
-InitializedEvent,
-InputEvent,
-ItemClickEvent,
-KeyDownEvent,
-KeyUpEvent,
-OpenedEvent,
-OptionChangedEvent,
-PasteEvent,
-SelectionChangedEvent,
-SelectionChangingEvent,
-ValueChangedEvent,
- } from "devextreme/ui/select_box";
-import { 
-ClickEvent,
-ContentReadyEvent as ButtonContentReadyEvent,
-DisposingEvent as ButtonDisposingEvent,
-InitializedEvent as ButtonInitializedEvent,
-OptionChangedEvent as ButtonOptionChangedEvent,
- } from "devextreme/ui/button";
+import {
+ ChangeEvent,
+ ClosedEvent,
+ ContentReadyEvent,
+ CopyEvent,
+ CustomItemCreatingEvent,
+ CutEvent,
+ DisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ InputEvent,
+ ItemClickEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ PasteEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/select_box";
+import {
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

@@ -1,16 +1,16 @@
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
 import { PropType } from "vue";
 import ResponsiveBox, { Properties } from "devextreme/ui/responsive_box";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-ItemContextMenuEvent,
-ItemHoldEvent,
-ItemRenderedEvent,
-OptionChangedEvent,
- } from "devextreme/ui/responsive_box";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/responsive_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

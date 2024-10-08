@@ -1,14 +1,14 @@
 import { PropType } from "vue";
 import ScrollView, { Properties } from "devextreme/ui/scroll_view";
-import { 
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
-PullDownEvent,
-ReachBottomEvent,
-ScrollEvent,
-UpdatedEvent,
- } from "devextreme/ui/scroll_view";
+import {
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ PullDownEvent,
+ ReachBottomEvent,
+ ScrollEvent,
+ UpdatedEvent,
+} from "devextreme/ui/scroll_view";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

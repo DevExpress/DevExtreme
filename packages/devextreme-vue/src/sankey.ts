@@ -1,19 +1,19 @@
 import { PropType } from "vue";
 import Sankey, { Properties } from "devextreme/viz/sankey";
-import { 
-DisposingEvent,
-DrawnEvent,
-ExportedEvent,
-ExportingEvent,
-FileSavingEvent,
-IncidentOccurredEvent,
-InitializedEvent,
-LinkClickEvent,
-LinkHoverEvent,
-NodeClickEvent,
-NodeHoverEvent,
-OptionChangedEvent,
- } from "devextreme/viz/sankey";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ LinkClickEvent,
+ LinkHoverEvent,
+ NodeClickEvent,
+ NodeHoverEvent,
+ OptionChangedEvent,
+} from "devextreme/viz/sankey";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

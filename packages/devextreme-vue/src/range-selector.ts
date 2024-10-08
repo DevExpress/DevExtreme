@@ -1,16 +1,16 @@
 import { PropType } from "vue";
 import RangeSelector, { Properties } from "devextreme/viz/range_selector";
-import { 
-DisposingEvent,
-DrawnEvent,
-ExportedEvent,
-ExportingEvent,
-FileSavingEvent,
-IncidentOccurredEvent,
-InitializedEvent,
-OptionChangedEvent,
-ValueChangedEvent,
- } from "devextreme/viz/range_selector";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValueChangedEvent,
+} from "devextreme/viz/range_selector";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

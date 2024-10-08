@@ -1,34 +1,34 @@
 import { PropType } from "vue";
 import Autocomplete, { Properties } from "devextreme/ui/autocomplete";
-import { 
-ChangeEvent,
-ClosedEvent,
-ContentReadyEvent,
-CopyEvent,
-CutEvent,
-DisposingEvent,
-EnterKeyEvent,
-FocusInEvent,
-FocusOutEvent,
-InitializedEvent,
-InputEvent,
-ItemClickEvent,
-KeyDownEvent,
-KeyUpEvent,
-OpenedEvent,
-OptionChangedEvent,
-PasteEvent,
-SelectionChangedEvent,
-SelectionChangingEvent,
-ValueChangedEvent,
- } from "devextreme/ui/autocomplete";
-import { 
-ClickEvent,
-ContentReadyEvent as ButtonContentReadyEvent,
-DisposingEvent as ButtonDisposingEvent,
-InitializedEvent as ButtonInitializedEvent,
-OptionChangedEvent as ButtonOptionChangedEvent,
- } from "devextreme/ui/button";
+import {
+ ChangeEvent,
+ ClosedEvent,
+ ContentReadyEvent,
+ CopyEvent,
+ CutEvent,
+ DisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ InputEvent,
+ ItemClickEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ PasteEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/autocomplete";
+import {
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

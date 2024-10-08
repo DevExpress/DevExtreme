@@ -1,17 +1,17 @@
 import { PropType } from "vue";
 import Sortable, { Properties } from "devextreme/ui/sortable";
-import { 
-AddEvent,
-DisposingEvent,
-DragChangeEvent,
-DragEndEvent,
-DragMoveEvent,
-DragStartEvent,
-InitializedEvent,
-OptionChangedEvent,
-RemoveEvent,
-ReorderEvent,
- } from "devextreme/ui/sortable";
+import {
+ AddEvent,
+ DisposingEvent,
+ DragChangeEvent,
+ DragEndEvent,
+ DragMoveEvent,
+ DragStartEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ RemoveEvent,
+ ReorderEvent,
+} from "devextreme/ui/sortable";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

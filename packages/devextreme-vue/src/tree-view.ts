@@ -1,45 +1,45 @@
 export { ExplicitTypes } from "devextreme/ui/tree_view";
 import { PropType } from "vue";
 import TreeView, { Properties } from "devextreme/ui/tree_view";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-ItemCollapsedEvent,
-ItemContextMenuEvent,
-ItemExpandedEvent,
-ItemHoldEvent,
-ItemRenderedEvent,
-ItemSelectionChangedEvent,
-OptionChangedEvent,
-SelectAllValueChangedEvent,
-SelectionChangedEvent,
- } from "devextreme/ui/tree_view";
-import { 
-ClickEvent,
-ContentReadyEvent as ButtonContentReadyEvent,
-DisposingEvent as ButtonDisposingEvent,
-InitializedEvent as ButtonInitializedEvent,
-OptionChangedEvent as ButtonOptionChangedEvent,
- } from "devextreme/ui/button";
-import { 
-ChangeEvent,
-ContentReadyEvent as TextBoxContentReadyEvent,
-CopyEvent,
-CutEvent,
-DisposingEvent as TextBoxDisposingEvent,
-EnterKeyEvent,
-FocusInEvent,
-FocusOutEvent,
-InitializedEvent as TextBoxInitializedEvent,
-InputEvent,
-KeyDownEvent,
-KeyUpEvent,
-OptionChangedEvent as TextBoxOptionChangedEvent,
-PasteEvent,
-ValueChangedEvent,
- } from "devextreme/ui/text_box";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemCollapsedEvent,
+ ItemContextMenuEvent,
+ ItemExpandedEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ ItemSelectionChangedEvent,
+ OptionChangedEvent,
+ SelectAllValueChangedEvent,
+ SelectionChangedEvent,
+} from "devextreme/ui/tree_view";
+import {
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
+import {
+ ChangeEvent,
+ ContentReadyEvent as TextBoxContentReadyEvent,
+ CopyEvent,
+ CutEvent,
+ DisposingEvent as TextBoxDisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent as TextBoxInitializedEvent,
+ InputEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ OptionChangedEvent as TextBoxOptionChangedEvent,
+ PasteEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/text_box";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

@@ -1,12 +1,12 @@
 import { PropType } from "vue";
 import RadioGroup, { Properties } from "devextreme/ui/radio_group";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
-ValueChangedEvent,
- } from "devextreme/ui/radio_group";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/radio_group";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

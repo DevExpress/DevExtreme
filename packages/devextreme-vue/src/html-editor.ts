@@ -1,30 +1,30 @@
 import { PropType } from "vue";
 import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-FocusInEvent,
-FocusOutEvent,
-InitializedEvent,
-OptionChangedEvent,
-ValueChangedEvent,
- } from "devextreme/ui/html_editor";
-import { 
-BeforeSendEvent,
-ContentReadyEvent as FileUploaderContentReadyEvent,
-DisposingEvent as FileUploaderDisposingEvent,
-DropZoneEnterEvent,
-DropZoneLeaveEvent,
-FilesUploadedEvent,
-InitializedEvent as FileUploaderInitializedEvent,
-OptionChangedEvent as FileUploaderOptionChangedEvent,
-ProgressEvent,
-UploadAbortedEvent,
-UploadedEvent,
-UploadErrorEvent,
-UploadStartedEvent,
-ValueChangedEvent as FileUploaderValueChangedEvent,
- } from "devextreme/ui/file_uploader";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/html_editor";
+import {
+ BeforeSendEvent,
+ ContentReadyEvent as FileUploaderContentReadyEvent,
+ DisposingEvent as FileUploaderDisposingEvent,
+ DropZoneEnterEvent,
+ DropZoneLeaveEvent,
+ FilesUploadedEvent,
+ InitializedEvent as FileUploaderInitializedEvent,
+ OptionChangedEvent as FileUploaderOptionChangedEvent,
+ ProgressEvent,
+ UploadAbortedEvent,
+ UploadedEvent,
+ UploadErrorEvent,
+ UploadStartedEvent,
+ ValueChangedEvent as FileUploaderValueChangedEvent,
+} from "devextreme/ui/file_uploader";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

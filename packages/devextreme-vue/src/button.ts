@@ -1,12 +1,12 @@
 import { PropType } from "vue";
 import Button, { Properties } from "devextreme/ui/button";
-import { 
-ClickEvent,
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
- } from "devextreme/ui/button";
+import {
+ ClickEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

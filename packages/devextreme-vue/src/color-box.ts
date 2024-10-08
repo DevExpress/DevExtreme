@@ -1,30 +1,30 @@
 import { PropType } from "vue";
 import ColorBox, { Properties } from "devextreme/ui/color_box";
-import { 
-ChangeEvent,
-ClosedEvent,
-CopyEvent,
-CutEvent,
-DisposingEvent,
-EnterKeyEvent,
-FocusInEvent,
-FocusOutEvent,
-InitializedEvent,
-InputEvent,
-KeyDownEvent,
-KeyUpEvent,
-OpenedEvent,
-OptionChangedEvent,
-PasteEvent,
-ValueChangedEvent,
- } from "devextreme/ui/color_box";
-import { 
-ClickEvent,
-ContentReadyEvent,
-DisposingEvent as ButtonDisposingEvent,
-InitializedEvent as ButtonInitializedEvent,
-OptionChangedEvent as ButtonOptionChangedEvent,
- } from "devextreme/ui/button";
+import {
+ ChangeEvent,
+ ClosedEvent,
+ CopyEvent,
+ CutEvent,
+ DisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ InputEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ PasteEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/color_box";
+import {
+ ClickEvent,
+ ContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

@@ -1,19 +1,19 @@
 import { PropType } from "vue";
 import Funnel, { Properties } from "devextreme/viz/funnel";
-import { 
-DisposingEvent,
-DrawnEvent,
-ExportedEvent,
-ExportingEvent,
-FileSavingEvent,
-HoverChangedEvent,
-IncidentOccurredEvent,
-InitializedEvent,
-ItemClickEvent,
-LegendClickEvent,
-OptionChangedEvent,
-SelectionChangedEvent,
- } from "devextreme/viz/funnel";
+import {
+ DisposingEvent,
+ DrawnEvent,
+ ExportedEvent,
+ ExportingEvent,
+ FileSavingEvent,
+ HoverChangedEvent,
+ IncidentOccurredEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ LegendClickEvent,
+ OptionChangedEvent,
+ SelectionChangedEvent,
+} from "devextreme/viz/funnel";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

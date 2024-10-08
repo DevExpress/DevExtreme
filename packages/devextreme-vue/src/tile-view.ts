@@ -1,16 +1,16 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
 import { PropType } from "vue";
 import TileView, { Properties } from "devextreme/ui/tile_view";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-ItemContextMenuEvent,
-ItemHoldEvent,
-ItemRenderedEvent,
-OptionChangedEvent,
- } from "devextreme/ui/tile_view";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/tile_view";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

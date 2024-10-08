@@ -1,13 +1,13 @@
 import { PropType } from "vue";
 import DeferRendering, { Properties } from "devextreme/ui/defer_rendering";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
-RenderedEvent,
-ShownEvent,
- } from "devextreme/ui/defer_rendering";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ RenderedEvent,
+ ShownEvent,
+} from "devextreme/ui/defer_rendering";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

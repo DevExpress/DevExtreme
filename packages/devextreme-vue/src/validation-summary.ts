@@ -1,13 +1,13 @@
 export { ExplicitTypes } from "devextreme/ui/validation_summary";
 import { PropType } from "vue";
 import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-OptionChangedEvent,
- } from "devextreme/ui/validation_summary";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/validation_summary";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

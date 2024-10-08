@@ -1,18 +1,18 @@
 export { ExplicitTypes } from "devextreme/ui/accordion";
 import { PropType } from "vue";
 import Accordion, { Properties } from "devextreme/ui/accordion";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-ItemClickEvent,
-ItemContextMenuEvent,
-ItemHoldEvent,
-ItemRenderedEvent,
-ItemTitleClickEvent,
-OptionChangedEvent,
-SelectionChangedEvent,
- } from "devextreme/ui/accordion";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ ItemClickEvent,
+ ItemContextMenuEvent,
+ ItemHoldEvent,
+ ItemRenderedEvent,
+ ItemTitleClickEvent,
+ OptionChangedEvent,
+ SelectionChangedEvent,
+} from "devextreme/ui/accordion";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

@@ -1,25 +1,25 @@
 import { PropType } from "vue";
 import Scheduler, { Properties } from "devextreme/ui/scheduler";
-import { 
-AppointmentAddedEvent,
-AppointmentAddingEvent,
-AppointmentClickEvent,
-AppointmentContextMenuEvent,
-AppointmentDblClickEvent,
-AppointmentDeletedEvent,
-AppointmentDeletingEvent,
-AppointmentFormOpeningEvent,
-AppointmentRenderedEvent,
-AppointmentTooltipShowingEvent,
-AppointmentUpdatedEvent,
-AppointmentUpdatingEvent,
-CellClickEvent,
-CellContextMenuEvent,
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
- } from "devextreme/ui/scheduler";
+import {
+ AppointmentAddedEvent,
+ AppointmentAddingEvent,
+ AppointmentClickEvent,
+ AppointmentContextMenuEvent,
+ AppointmentDblClickEvent,
+ AppointmentDeletedEvent,
+ AppointmentDeletingEvent,
+ AppointmentFormOpeningEvent,
+ AppointmentRenderedEvent,
+ AppointmentTooltipShowingEvent,
+ AppointmentUpdatedEvent,
+ AppointmentUpdatingEvent,
+ CellClickEvent,
+ CellContextMenuEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/scheduler";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";

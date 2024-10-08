@@ -1,11 +1,11 @@
 import { PropType } from "vue";
 import LoadIndicator, { Properties } from "devextreme/ui/load_indicator";
-import { 
-ContentReadyEvent,
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
- } from "devextreme/ui/load_indicator";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/load_indicator";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

@@ -1,13 +1,13 @@
 import { PropType } from "vue";
 import Resizable, { Properties } from "devextreme/ui/resizable";
-import { 
-DisposingEvent,
-InitializedEvent,
-OptionChangedEvent,
-ResizeEvent,
-ResizeEndEvent,
-ResizeStartEvent,
- } from "devextreme/ui/resizable";
+import {
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ResizeEvent,
+ ResizeEndEvent,
+ ResizeStartEvent,
+} from "devextreme/ui/resizable";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 

@@ -1,34 +1,34 @@
 import { PropType } from "vue";
 import TagBox, { Properties } from "devextreme/ui/tag_box";
-import { 
-ChangeEvent,
-ClosedEvent,
-ContentReadyEvent,
-CustomItemCreatingEvent,
-DisposingEvent,
-EnterKeyEvent,
-FocusInEvent,
-FocusOutEvent,
-InitializedEvent,
-InputEvent,
-ItemClickEvent,
-KeyDownEvent,
-KeyUpEvent,
-MultiTagPreparingEvent,
-OpenedEvent,
-OptionChangedEvent,
-SelectAllValueChangedEvent,
-SelectionChangedEvent,
-SelectionChangingEvent,
-ValueChangedEvent,
- } from "devextreme/ui/tag_box";
-import { 
-ClickEvent,
-ContentReadyEvent as ButtonContentReadyEvent,
-DisposingEvent as ButtonDisposingEvent,
-InitializedEvent as ButtonInitializedEvent,
-OptionChangedEvent as ButtonOptionChangedEvent,
- } from "devextreme/ui/button";
+import {
+ ChangeEvent,
+ ClosedEvent,
+ ContentReadyEvent,
+ CustomItemCreatingEvent,
+ DisposingEvent,
+ EnterKeyEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ InputEvent,
+ ItemClickEvent,
+ KeyDownEvent,
+ KeyUpEvent,
+ MultiTagPreparingEvent,
+ OpenedEvent,
+ OptionChangedEvent,
+ SelectAllValueChangedEvent,
+ SelectionChangedEvent,
+ SelectionChangingEvent,
+ ValueChangedEvent,
+} from "devextreme/ui/tag_box";
+import {
+ ClickEvent,
+ ContentReadyEvent as ButtonContentReadyEvent,
+ DisposingEvent as ButtonDisposingEvent,
+ InitializedEvent as ButtonInitializedEvent,
+ OptionChangedEvent as ButtonOptionChangedEvent,
+} from "devextreme/ui/button";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
