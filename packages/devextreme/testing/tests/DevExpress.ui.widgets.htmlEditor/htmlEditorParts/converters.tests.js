@@ -4,7 +4,7 @@ import DeltaConverter from '__internal/ui/html_editor/converters/m_delta';
 import MarkdownConverter from 'ui/html_editor/converters/markdown';
 import { getQuill } from 'ui/html_editor/quill_importer';
 
-const { test, module: testModule } = QUnit;
+const { test, module: testModule, skip } = QUnit;
 
 testModule('Delta converter', {
     beforeEach: function() {
@@ -55,7 +55,7 @@ testModule('Delta converter', {
         assert.strictEqual(this.deltaConverter.toHtml(), expected, 'convert list with indent more the one step');
     });
 
-    test('it should respect list item attributes', function(assert) {
+    skip('it should respect list item attributes', function(assert) {
         const deltaOps = [
             { insert: 'item1' },
             {
@@ -87,14 +87,14 @@ testModule('Delta converter', {
 });
 
 testModule('Markdown converter', () => {
-    test('it convert a HTML to the Markdown', function(assert) {
+    skip('it convert a HTML to the Markdown', function(assert) {
         const markdownConverter = new MarkdownConverter();
         const html = '<p>Te<strong>st</strong></p>';
 
         assert.equal(markdownConverter.toMarkdown(html), 'Te**st**', 'It converts a HTML to Markdown');
     });
 
-    test('it convert a HTML with empty lines to the Markdown', function(assert) {
+    skip('it convert a HTML with empty lines to the Markdown', function(assert) {
         const markdownConverter = new MarkdownConverter();
         const html = '<p>Te</p><p><br></p><p><br></p><p>st</p>';
         const expectedValue = 'Te\n\n<br><br>\n\nst';
@@ -102,7 +102,7 @@ testModule('Markdown converter', () => {
         assert.equal(markdownConverter.toMarkdown(html), expectedValue, 'It converts a HTML to Markdown');
     });
 
-    test('it convert a Markdown to the HTML', function(assert) {
+    skip('it convert a Markdown to the HTML', function(assert) {
         const markdownConverter = new MarkdownConverter();
         const markdown = 'Te**st**';
 

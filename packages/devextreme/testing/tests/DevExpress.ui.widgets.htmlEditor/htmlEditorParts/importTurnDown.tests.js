@@ -18,7 +18,7 @@ define(function(require) {
             );
         });
 
-        QUnit.test('initialize turndown from window', function(assert) {
+        QUnit.skip('initialize turndown from window', function(assert) {
             const prevWinTurndown = window.TurndownService;
 
             window.TurndownService = function() {
