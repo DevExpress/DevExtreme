@@ -13,12 +13,12 @@ const { assign } = variableWrapper;
 
 const bracketsToDots = function (expr) {
   return expr
-    .replace(/\[/g, '@js/core/utils')
+    .replace(/\[/g, '.')
     .replace(/\]/g, '');
 };
 
 export const getPathParts = function (name) {
-  return bracketsToDots(name).split('@js/core/utils');
+  return bracketsToDots(name).split('.');
 };
 
 const readPropValue = function (obj, propName, options) {
@@ -125,7 +125,7 @@ function combineGetters(getters) {
       }
 
       let current = result || (result = {});
-      const path = name.split('@js/core/utils');
+      const path = name.split('.');
       const last = path.length - 1;
 
       for (let i = 0; i < last; i++) {
