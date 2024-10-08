@@ -418,7 +418,7 @@ QUnit.module('Pager', {
         // assert
         assert.equal(this.dataController.pageCount(), 2);
         assert.ok(isVisible);
-        assert.equal(pagerView.element().dxPager('instance').option('pagesNavigatorVisible'), 'auto', 'pagesNavigatorVisible');
+        assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), 'auto', 'pagesNavigatorVisible');
     });
 
     QUnit.test('isVisible when pageCount == 1 and visible is auto', function(assert) {
@@ -466,7 +466,7 @@ QUnit.module('Pager', {
         // assert
         assert.equal(this.dataController.pageCount(), 1);
         assert.ok(isVisible);
-        assert.equal(pagerView.element().dxPager('instance').option('pagesNavigatorVisible'), true, 'pagesNavigatorVisible');
+        assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), true, 'pagesNavigatorVisible');
     });
 
     QUnit.test('isVisible when pageCount > 1 and visible is false', function(assert) {
