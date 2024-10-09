@@ -2,7 +2,7 @@
 import type { Subscribable } from '@ts/core/reactive/index';
 import { state } from '@ts/core/reactive/index';
 
-import { DataController } from '../data_controller/data_controller';
+import { DataController } from '../data_controller/index';
 
 export class ErrorController {
   private readonly _errors = state<string[]>([]);

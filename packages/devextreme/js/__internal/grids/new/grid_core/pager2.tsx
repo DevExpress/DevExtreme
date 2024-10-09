@@ -6,7 +6,7 @@
 import type { InfernoNode } from 'inferno';
 import { Component } from 'inferno';
 
-import { DataController } from './data_controller/data_controller';
+import { DataController } from './data_controller/index';
 import { Pager } from './inferno_wrappers/pager';
 
 interface State {

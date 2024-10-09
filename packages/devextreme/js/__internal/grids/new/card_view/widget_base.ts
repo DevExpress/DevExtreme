@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import registerComponent from '@js/core/component_registrator';
 import { Content as ContentBase } from '@ts/grids/new/grid_core/content_view/content';
-import { DataControllerPublicMethods } from '@ts/grids/new/grid_core/data_controller';
+import * as DataControllerModule from '@ts/grids/new/grid_core/data_controller';
 import { MainView as MainViewBase } from '@ts/grids/new/grid_core/main_view';
 import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_core/options_controller/options_controller';
 import { GridCoreNewBase } from '@ts/grids/new/grid_core/widget_base';
@@ -29,7 +29,7 @@ export class CardViewBase extends GridCoreNewBase<Properties> {
   }
 }
 
-export class CardView extends DataControllerPublicMethods(CardViewBase) {}
+export class CardView extends DataControllerModule.PublicMethods(CardViewBase) {}
 
 // @ts-expect-error
 registerComponent('dxCardView', CardView);

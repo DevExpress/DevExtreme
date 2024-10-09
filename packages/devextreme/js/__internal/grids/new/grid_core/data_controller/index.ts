@@ -1,3 +1,3 @@
 export { DataController } from './data_controller';
-export { type DataControllerProperties, defaultOptions } from './options';
-export { DataControllerPublicMethods } from './public_methods';
+export { defaultOptions, type Options } from './options';
+export { PublicMethods } from './public_methods';

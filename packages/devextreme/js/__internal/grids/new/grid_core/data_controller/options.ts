@@ -2,7 +2,7 @@ import type { DataSourceLike } from '@js/data/data_source';
 
 import type { Paging } from './types';
 
-export interface DataControllerProperties {
+export interface Options {
   paging?: Paging;
 
   dataSource?: DataSourceLike<unknown>;
@@ -15,4 +15,4 @@ export const defaultOptions = {
     pageSize: 6,
     pageIndex: 0,
   },
-} satisfies DataControllerProperties;
+} satisfies Options;

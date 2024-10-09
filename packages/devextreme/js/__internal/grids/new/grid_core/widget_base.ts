@@ -12,7 +12,7 @@ import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
 import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/view';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
-import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 import { EditingController } from '@ts/grids/new/grid_core/editing/controller';
 import { HeaderPanelController } from '@ts/grids/new/grid_core/header_panel/controller';
 import { HeaderPanelView } from '@ts/grids/new/grid_core/header_panel/view';
@@ -23,8 +23,7 @@ import { render } from 'inferno';
 
 import { ContentView } from './content_view/content_view';
 import { StatusView } from './content_view/status_view/status_view';
-import { defaultOptions as dataControllerDefaultOptions } from './data_controller/options';
-import { DataControllerPublicMethods } from './data_controller/public_methods';
+import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
 import type { Properties } from './types';
@@ -95,7 +94,7 @@ export class GridCoreNewBase<
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
-      ...dataControllerDefaultOptions,
+      ...DataControllerModule.defaultOptions,
       searchText: '',
       editingChanges: [],
       toolbar: {
@@ -166,4 +165,4 @@ export class GridCoreNewBase<
   }
 }
 
-export class GridCoreNew extends DataControllerPublicMethods(GridCoreNewBase) {}
+export class GridCoreNew extends DataControllerModule.PublicMethods(GridCoreNewBase) {}

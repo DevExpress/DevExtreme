@@ -3,7 +3,7 @@
 import type { SubsGets, SubsGetsUpd } from '@ts/core/reactive/index';
 import { computed, iif, interruptableComputed } from '@ts/core/reactive/index';
 
-import { DataController } from '../data_controller/data_controller';
+import { DataController } from '../data_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
 import type { Column, DataRow } from './types';
 import { normalizeColumn } from './utils';

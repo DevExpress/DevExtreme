@@ -2,7 +2,7 @@
 import { computed } from '@ts/core/reactive/index';
 
 import { View } from '../../core/view';
-import { DataController } from '../../data_controller/data_controller';
+import { DataController } from '../../data_controller/index';
 import { ErrorController } from '../../error_controller/error_controller';
 import { OptionsController } from '../../options_controller/options_controller';
 import { ErrorRow } from './error_row';

@@ -2,7 +2,7 @@
 import { computed } from '@ts/core/reactive/index';
 
 import { View } from './core/view';
-import { DataController } from './data_controller/data_controller';
+import { DataController } from './data_controller/index';
 import { Pager } from './inferno_wrappers/pager';
 
 export class PagerView extends View {

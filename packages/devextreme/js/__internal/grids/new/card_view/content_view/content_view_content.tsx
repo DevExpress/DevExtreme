@@ -4,7 +4,7 @@ import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/co
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { Content as BaseContent } from '@ts/grids/new/grid_core/content_view/content';
 import { View } from '@ts/grids/new/grid_core/core/view';
-import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 
 import { EditingController } from '../../grid_core/editing/controller';
 import { OptionsController } from '../options_controller';

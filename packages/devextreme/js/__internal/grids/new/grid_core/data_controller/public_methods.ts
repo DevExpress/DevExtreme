@@ -7,7 +7,7 @@ import type { Constructor } from '../types';
 import type { GridCoreNewBase } from '../widget_base';
 import { DataController } from './data_controller';
 
-export function DataControllerPublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
+export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
   return class GridCoreWithDataController extends GridCore {
     public getDataSource(): DataSource {
       return this.diContext.get(DataController).dataSource.unreactive_get();
