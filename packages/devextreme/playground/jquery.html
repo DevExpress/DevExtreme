@@ -95,15 +95,14 @@
 
             $(function() {
                 $('#lookup').dxLookup({
-                    items: employeesList,
-                    value: employeesList[0],
-                    searchEnabled: false,
+                    dropDownCentered: false,
+                    items: [1, 2, 3],
+                    opened: true,
                     usePopover: false,
-                    showCancelButton: true,
-                    dropDownOptions: {
-                        shading: false,
-                    },
-                    dropDownCentered: true,
+                    focusStateEnabled: true,
+                    _scrollToSelectedItemEnabled: false,
+                    searchEnabled: false,
+                    showCancelButton: false,
                 });
             });
         </script>

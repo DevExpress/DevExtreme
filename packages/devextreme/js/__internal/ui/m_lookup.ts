@@ -542,16 +542,9 @@ const Lookup = DropDownList.inherit({
   },
 
   _popupTabHandler(e) {
-    const {
-      usePopover,
-      dropDownCentered,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      _scrollToSelectedItemEnabled,
-    } = this.option();
+    const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
 
-    const isInputFocusable = usePopover ? !_scrollToSelectedItemEnabled : !dropDownCentered;
-
-    if (isInputFocusable) {
+    if (!shouldLoopFocusInsidePopup) {
       this.callBase(e);
     }
   },
@@ -627,18 +620,24 @@ const Lookup = DropDownList.inherit({
 
   _preventFocusOnPopup: noop,
 
-  _popupConfig() {
+  _shouldLoopFocusInsidePopup(): boolean {
     const {
       usePopover,
-      dropDownOptions,
       dropDownCentered,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _scrollToSelectedItemEnabled,
     } = this.option();
 
-    const shouldLoopFocusInsidePopup = _scrollToSelectedItemEnabled
+    const result: boolean = _scrollToSelectedItemEnabled
       ? dropDownCentered
       : !usePopover;
+
+    return result;
+  },
+
+  _popupConfig() {
+    const { dropDownOptions } = this.option();
+    const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
 
     const result = extend(this.callBase(), {
       toolbarItems: this._getPopupToolbarItems(),
