@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
+// eslint-disable-next-line max-classes-per-file
 import browser from '@js/core/utils/browser';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import { isMaterialBased } from '@js/ui/themes';
@@ -22,10 +23,15 @@ import { render } from 'inferno';
 
 import { ContentView } from './content_view/content_view';
 import { StatusView } from './content_view/status_view/status_view';
+import { defaultOptions as dataControllerDefaultOptions } from './data_controller/options';
+import { DataControllerPublicMethods } from './data_controller/public_methods';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
+import type { Properties } from './types';
 
-export class GridCoreNew<Properties> extends Widget<Properties> {
+export class GridCoreNewBase<
+  TProperties extends Properties = Properties,
+> extends Widget<TProperties> {
   protected renderSubscription?: Subscription;
 
   protected diContext!: DIContext;
@@ -89,10 +95,7 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     return {
       // @ts-expect-error
       ...super._getDefaultOptions() as {},
-      paging: {
-        pageSize: 6,
-        pageIndex: 0,
-      },
+      ...dataControllerDefaultOptions,
       searchText: '',
       editingChanges: [],
       toolbar: {
@@ -162,3 +165,5 @@ export class GridCoreNew<Properties> extends Widget<Properties> {
     return this.diContext.get(ContentView).scrollableRef.current!;
   }
 }
+
+export class GridCoreNew extends DataControllerPublicMethods(GridCoreNewBase) {}

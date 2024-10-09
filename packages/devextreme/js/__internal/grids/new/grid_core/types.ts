@@ -1,21 +1,11 @@
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+/* eslint-disable spellcheck/spell-checker */
+import type { DIContext } from '@ts/core/di';
 
-import type { ColumnsControllerProperties } from './columns_controller/types';
-import type { DataControllerProperties } from './data_controller/types';
-import type { EditingProperties } from './editing/types';
-import type { FilterPanelProperties } from './filtering/filter_panel/types';
-import type { HeaderPanelProperties } from './header_panel/types';
-import type { SearchProperties } from './search/types';
-import type { GridCoreNew } from './widget_base';
+export * from './options';
 
-export type Properties =
-  & WidgetOptions<GridCoreNew<Properties>>
-  & DataControllerProperties
-  & HeaderPanelProperties
-  & ColumnsControllerProperties
-  & FilterPanelProperties
-  & SearchProperties
-  & EditingProperties
-  & {
-    noDataText?: string;
-  };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Constructor<T, TDeps extends readonly any[] = any[]> = new(...deps: TDeps) => T;
+
+export interface WithDIContext {
+  diContext: DIContext;
+}

@@ -40,7 +40,7 @@ export class DataController {
 
   private readonly keyExpr = this.options.oneWay('keyExpr');
 
-  private readonly dataSource = computed(
+  public readonly dataSource = computed(
     (dataSourceLike, keyExpr) => normalizeDataSource(dataSourceLike, keyExpr),
     [this.dataSourceConfiguration, this.keyExpr],
   );
