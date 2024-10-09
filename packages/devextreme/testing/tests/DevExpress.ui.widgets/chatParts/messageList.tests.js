@@ -182,14 +182,24 @@ QUnit.module('MessageList', moduleConfig, () => {
             {
                 date: undefined,
                 scenario: 'date is undefined',
+                showDateHeaders: true,
             },
             {
                 date: new Date('invalid'),
                 scenario: 'date is invalid',
+                showDateHeaders: true,
             },
-        ].forEach(({ date, scenario }) => {
+            {
+                date: new Date(),
+                scenario: 'showDateHeaders=false',
+                showDateHeaders: false,
+            },
+        ].forEach(({ date, scenario, showDateHeaders }) => {
             QUnit.test(`Date header should not be rendered when ${scenario}`, function(assert) {
-                this.reinit({ items: [{ timestamp: date, text: 'ABC' }] });
+                this.reinit({
+                    items: [{ timestamp: date, text: 'ABC' }],
+                    showDateHeaders,
+                });
 
                 const scrollableContent = this.getScrollable().content();
                 const $dateHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DATE_HEADER_CLASS}`);

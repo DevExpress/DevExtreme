@@ -32,6 +32,7 @@ export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
+  showDateHeaders: boolean;
 }
 
 class MessageList extends Widget<Properties> {
@@ -48,6 +49,7 @@ class MessageList extends Widget<Properties> {
       ...super._getDefaultOptions(),
       items: [],
       currentUserId: '',
+      showDateHeaders: true,
     };
   }
 
@@ -175,7 +177,8 @@ class MessageList extends Widget<Properties> {
   }
 
   _shouldAddDateHeader(timestamp: undefined | string | number | Date): boolean {
-    if (timestamp === undefined) {
+    const { showDateHeaders } = this.option();
+    if (timestamp === undefined || !showDateHeaders) {
       return false;
     }
 
