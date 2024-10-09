@@ -12,6 +12,8 @@
         "Search": "検索",
         "Back": "戻る",
         "OK": "OK",
+        "Today": "Today",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "表示するデータがありません。",
 
