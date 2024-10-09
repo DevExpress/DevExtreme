@@ -1,1 +1,3 @@
 Our next major release (v24.2) will include a new sticky columns option. Sticky columns remain static initially but start scrolling when they reach their position. Once scrolling moves past this point, they reattach to a different side of the table. This feature improves usability by displaying important columns in a specific view (ensuring continuous access to critical information).
+
+We published the DevExtreme v24.2 EAP build with an early preview of this feature. For more information, refer to [our blog post](https://community.devexpress.com/blogs/javascript/archive/2024/09/19/devextreme-early-access-preview-v24-2.aspx).
