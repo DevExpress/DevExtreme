@@ -549,10 +549,9 @@ const Lookup = DropDownList.inherit({
       _scrollToSelectedItemEnabled,
     } = this.option();
 
-    const shouldInputBeIncludedInFocusOrder = (usePopover && !_scrollToSelectedItemEnabled)
-      || !dropDownCentered;
+    const isInputFocusable = (usePopover && !_scrollToSelectedItemEnabled) || !dropDownCentered;
 
-    if (shouldInputBeIncludedInFocusOrder) {
+    if (isInputFocusable) {
       this.callBase(e);
     }
   },
@@ -637,9 +636,9 @@ const Lookup = DropDownList.inherit({
       _scrollToSelectedItemEnabled,
     } = this.option();
 
-    const shouldLoopFocusInsidePopup = (!usePopover && !_scrollToSelectedItemEnabled)
-      || (_scrollToSelectedItemEnabled && dropDownCentered);
-      // || dropDownCentered;
+    const shouldLoopFocusInsidePopup = _scrollToSelectedItemEnabled
+      ? dropDownCentered
+      : !usePopover;
 
     const result = extend(this.callBase(), {
       toolbarItems: this._getPopupToolbarItems(),
