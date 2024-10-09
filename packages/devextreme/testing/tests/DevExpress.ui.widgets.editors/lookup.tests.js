@@ -2175,7 +2175,7 @@ QUnit.module('popup options', {
         assert.equal($overlay.is(':visible'), false, 'overlay is hidden');
     });
 
-    QUnit.test('lookup popup should not be hidden after click outside was present', function(assert) {
+    QUnit.test('lookup popup should not be hidden after click outside was present if dropDownOptions.hideOnOutsideClick is set to false', function(assert) {
         const $lookup = $('#lookupOptions');
         const instance = $lookup.dxLookup({
             'dropDownOptions.hideOnOutsideClick': false,
@@ -2206,7 +2206,7 @@ QUnit.module('popup options', {
             const popup = usePopover ? PopoverFull.getInstance($overlay) : PopupFull.getInstance($overlay);
             const { _loopFocus } = popup.option();
 
-            assert.equal(_loopFocus, !usePopover);
+            assert.strictEqual(_loopFocus, !usePopover, '_loopFocus is correct');
         });
     });
 
@@ -2950,7 +2950,7 @@ QUnit.module('keyboard navigation', {
         assert.ok(instance.option('opened'), 'popup is opened');
     });
 
-    QUnit.test('focus from first Popover element should move back to Lookup field while keeping Popup open when usePopover: true', function(assert) {
+    QUnit.test('focus from first Popover element should move back to Lookup field while keeping Popup open when usePopover: true and shift+Tab is pressed', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
             return;
@@ -2962,11 +2962,11 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true,
         });
         const instance = $element.dxLookup('instance');
-        const tabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
+        const shiftTabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
         const $overlayContent = $(instance.content()).parent();
         const $searchInput = $overlayContent.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
 
-        $searchInput.trigger(tabKeyDownEvent);
+        $searchInput.trigger(shiftTabKeyDownEvent);
 
         assert.ok($element.hasClass(FOCUSED_CLASS), 'lookup field is focused');
         assert.ok(instance.option('opened'), 'popup is opened');
