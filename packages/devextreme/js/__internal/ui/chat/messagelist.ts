@@ -204,11 +204,11 @@ class MessageList extends Widget<Properties> {
     }).replace(/[/-]/g, '.');
 
     if (dateUtils.sameDate(deserializedDate, today)) {
-      headerDate = `Today ${headerDate}`;
+      headerDate = `${messageLocalization.format('Today')} ${headerDate}`;
     }
 
     if (dateUtils.sameDate(deserializedDate, yesterday)) {
-      headerDate = `Yesterday ${headerDate}`;
+      headerDate = `${messageLocalization.format('Yesterday')} ${headerDate}`;
     }
 
     $('<div>')
