@@ -1,6 +1,6 @@
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
-    PagerBaseProperties,
+    PagerBase,
 } from '../common';
 
 export {
@@ -17,9 +17,9 @@ export type PageSize = number | 'all';
  * @namespace DevExpress.ui
  * @public
  * @docid
- * @inherits PagerBaseProperties
+ * @inherits PagerBase
  */
-export interface dxPaginationOptions extends PagerBaseProperties, WidgetOptions<dxPagination> {
+export interface dxPaginationOptions extends PagerBase, WidgetOptions<dxPagination> {
     /**
      * @docid
      * @fires Properties.onOptionChanged
