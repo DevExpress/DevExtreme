@@ -104,7 +104,7 @@ test('Messagelist appearance with scrollbar', async (t) => {
     user: userSecond,
     width: 400,
     height: 600,
-    showDateHeaders: false,
+    showDayHeaders: false,
   });
 });
 

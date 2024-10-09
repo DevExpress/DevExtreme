@@ -24,7 +24,7 @@ const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
-const CHAT_MESSAGELIST_DATE_HEADER_CLASS = 'dx-chat-messagelist-date-header';
+const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
 const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
 export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
@@ -32,13 +32,13 @@ export const MESSAGEGROUP_TIMEOUT = 5 * 1000 * 60;
 export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
-  showDateHeaders: boolean;
+  showDayHeaders: boolean;
 }
 
 class MessageList extends Widget<Properties> {
   private _messageGroups?: MessageGroup[];
 
-  private _messageDate?: null | string | number | Date;
+  private _lastMessageDate?: null | string | number | Date;
 
   private _containerClientHeight!: number;
 
@@ -49,7 +49,7 @@ class MessageList extends Widget<Properties> {
       ...super._getDefaultOptions(),
       items: [],
       currentUserId: '',
-      showDateHeaders: true,
+      showDayHeaders: true,
     };
   }
 
@@ -57,7 +57,7 @@ class MessageList extends Widget<Properties> {
     super._init();
 
     this._messageGroups = [];
-    this._messageDate = null;
+    this._lastMessageDate = null;
   }
 
   _initMarkup(): void {
@@ -176,9 +176,9 @@ class MessageList extends Widget<Properties> {
     });
   }
 
-  _shouldAddDateHeader(timestamp: undefined | string | number | Date): boolean {
-    const { showDateHeaders } = this.option();
-    if (timestamp === undefined || !showDateHeaders) {
+  _shouldAddDayHeader(timestamp: undefined | string | number | Date): boolean {
+    const { showDayHeaders } = this.option();
+    if (timestamp === undefined || !showDayHeaders) {
       return false;
     }
 
@@ -188,18 +188,14 @@ class MessageList extends Widget<Properties> {
       return false;
     }
 
-    return !dateUtils.sameDate(this._messageDate, deserializedDate);
+    return !dateUtils.sameDate(this._lastMessageDate, deserializedDate);
   }
 
-  _createMessageDateHeader(timestamp: string | number | Date | undefined): void {
-    if (timestamp === undefined) {
-      return;
-    }
-
+  _createDayHeader(timestamp: string | number | Date | undefined): void {
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
     const today = new Date();
     const yesterday = new Date(new Date().setDate(today.getDate() - 1));
-    this._messageDate = deserializedDate;
+    this._lastMessageDate = deserializedDate;
 
     let headerDate = deserializedDate.toLocaleDateString(undefined, {
       day: '2-digit',
@@ -216,7 +212,7 @@ class MessageList extends Widget<Properties> {
     }
 
     $('<div>')
-      .addClass(CHAT_MESSAGELIST_DATE_HEADER_CLASS)
+      .addClass(CHAT_MESSAGELIST_DAY_HEADER_CLASS)
       .text(headerDate)
       .appendTo(this._$content());
   }
@@ -236,12 +232,12 @@ class MessageList extends Widget<Properties> {
     items.forEach((item, index) => {
       const newMessageGroupItem = item ?? {};
       const id = newMessageGroupItem.author?.id;
-      const shouldCreateDateHeader = this._shouldAddDateHeader(item?.timestamp);
+      const shouldCreateDayHeader = this._shouldAddDayHeader(item?.timestamp);
       const isTimeoutExceeded = this._isTimeoutExceeded(
         currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
         item,
       );
-      const shouldCreateMessageGroup = (shouldCreateDateHeader && currentMessageGroupItems.length)
+      const shouldCreateMessageGroup = (shouldCreateDayHeader && currentMessageGroupItems.length)
         || isTimeoutExceeded
         || id !== currentMessageGroupUserId;
 
@@ -255,8 +251,8 @@ class MessageList extends Widget<Properties> {
         currentMessageGroupItems.push(newMessageGroupItem);
       }
 
-      if (shouldCreateDateHeader) {
-        this._createMessageDateHeader(item?.timestamp);
+      if (shouldCreateDayHeader) {
+        this._createDayHeader(item?.timestamp);
       }
 
       if (items.length - 1 === index) {
@@ -269,7 +265,7 @@ class MessageList extends Widget<Properties> {
     const { author, timestamp } = message;
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
-    const shouldCreateDateHeader = this._shouldAddDateHeader(timestamp);
+    const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
 
     if (lastMessageGroup) {
       const { items } = lastMessageGroup.option();
@@ -277,7 +273,7 @@ class MessageList extends Widget<Properties> {
       const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
       const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupItem, message);
 
-      if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded && !shouldCreateDateHeader) {
+      if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded && !shouldCreateDayHeader) {
         lastMessageGroup.renderMessage(message);
         this._scrollContentToLastMessage();
 
@@ -285,8 +281,8 @@ class MessageList extends Widget<Properties> {
       }
     }
 
-    if (shouldCreateDateHeader) {
-      this._createMessageDateHeader(timestamp);
+    if (shouldCreateDayHeader) {
+      this._createDayHeader(timestamp);
     }
 
     this._createMessageGroupComponent([message], author?.id);
@@ -389,7 +385,8 @@ class MessageList extends Widget<Properties> {
       case 'items':
         this._processItemsUpdating(value ?? [], previousValue ?? []);
         break;
-      case 'showDateHeaders':
+      case 'showDayHeaders':
+        this._invalidate();
         break;
       default:
         super._optionChanged(args);

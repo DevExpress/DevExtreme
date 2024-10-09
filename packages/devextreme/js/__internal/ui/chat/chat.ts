@@ -21,7 +21,7 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type Properties = ChatProperties & { title: string; showDateHeaders: boolean };
+type Properties = ChatProperties & { title: string; showDayHeaders: boolean };
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
@@ -43,7 +43,7 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
-      showDateHeaders: true,
+      showDayHeaders: true,
     };
   }
 
@@ -99,7 +99,7 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDateHeaders } = this.option();
+    const { items = [], user, showDayHeaders } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>');
@@ -109,7 +109,7 @@ class Chat extends Widget<Properties> {
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
       currentUserId,
-      showDateHeaders,
+      showDayHeaders,
     });
   }
 
@@ -217,7 +217,8 @@ class Chat extends Widget<Properties> {
       case 'onMessageSend':
         this._createMessageSendAction();
         break;
-      case 'showDateHeaders':
+      case 'showDayHeaders':
+        this._messageList.option(name, value);
         break;
       default:
         super._optionChanged(args);
