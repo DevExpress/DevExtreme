@@ -1,0 +1,6 @@
+@use '../../base/cardView/sizes' as *;
+@use '../_sizes' as *;
+
+$cardview-header-item-border-width: 1px !default;
+// getFigmaVariable('Header item/сorner-radius/Bubble M (true)', 'Components', 'Generic')
+$cardview-header-item-border-radius: 4 !default;
