@@ -175,11 +175,15 @@ class MessageList extends Widget<Properties> {
   }
 
   _shouldAddDateHeader(timestamp: undefined | string | number | Date): boolean {
-    if (timestamp === null) {
+    if (timestamp === undefined) {
       return false;
     }
 
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
+
+    if (isNaN(deserializedDate.getTime())) {
+      return false;
+    }
 
     return !dateUtils.sameDate(this._messageDate, deserializedDate);
   }
@@ -262,17 +266,13 @@ class MessageList extends Widget<Properties> {
     const { author, timestamp } = message;
 
     const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
+    const shouldCreateDateHeader = this._shouldAddDateHeader(timestamp);
 
     if (lastMessageGroup) {
       const { items } = lastMessageGroup.option();
       const lastMessageGroupItem = items[items.length - 1];
       const lastMessageGroupUserId = lastMessageGroupItem.author?.id;
-      const shouldCreateDateHeader = this._shouldAddDateHeader(timestamp);
       const isTimeoutExceeded = this._isTimeoutExceeded(lastMessageGroupItem, message);
-
-      if (shouldCreateDateHeader) {
-        this._createMessageDateHeader(timestamp);
-      }
 
       if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded && !shouldCreateDateHeader) {
         lastMessageGroup.renderMessage(message);
@@ -280,6 +280,10 @@ class MessageList extends Widget<Properties> {
 
         return;
       }
+    }
+
+    if (shouldCreateDateHeader) {
+      this._createMessageDateHeader(timestamp);
     }
 
     this._createMessageGroupComponent([message], author?.id);

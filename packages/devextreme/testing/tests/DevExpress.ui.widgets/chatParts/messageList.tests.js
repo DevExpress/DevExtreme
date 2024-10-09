@@ -17,9 +17,19 @@ const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
+const CHAT_MESSAGELIST_DATE_HEADER_CLASS = 'dx-chat-messagelist-date-header';
 
 const SCROLLABLE_CLASS = 'dx-scrollable';
 
+const MS_IN_DAY = 86400000;
+
+const getStringDate = (date) => {
+    return date.toLocaleDateString(undefined, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    }).replace(/[/-]/g, '.');
+};
 
 const moduleConfig = {
     beforeEach: function() {
@@ -124,6 +134,68 @@ QUnit.module('MessageList', moduleConfig, () => {
             const $messageGroups = $(scrollableContent).find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 26);
+        });
+
+        [
+            {
+                date: new Date(),
+                scenario: 'today\'s date',
+                text: 'Today ',
+            },
+            {
+                date: new Date(Date.now() - MS_IN_DAY),
+                scenario: 'yesterday\'s date',
+                text: 'Yesterday ',
+            },
+            {
+                date: new Date(Date.now() - 2 * MS_IN_DAY),
+                scenario: 'some older date',
+                text: '',
+            },
+        ].forEach(({ date, scenario, text }) => {
+            QUnit.test(`Date header should be rendered (message date is ${scenario}, on init)`, function(assert) {
+                const expectedText = `${text}${getStringDate(date)}`;
+
+                this.reinit({ items: [{ timestamp: date, text: 'ABC' }] });
+
+                const scrollableContent = this.getScrollable().content();
+                const $dateHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DATE_HEADER_CLASS}`);
+
+                assert.strictEqual($dateHeader.length, 1, 'date header was added');
+                assert.strictEqual($dateHeader.text(), expectedText, 'date header text is correct');
+            });
+
+            QUnit.test(`Date header should be rendered (message date is ${scenario}, on runtime)`, function(assert) {
+                const expectedText = `${text}${getStringDate(date)}`;
+
+                this.instance.option({ items: [{ timestamp: date, text: 'ABC' }] });
+
+                const scrollableContent = this.getScrollable().content();
+                const $dateHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DATE_HEADER_CLASS}`);
+
+                assert.strictEqual($dateHeader.length, 1, 'date header was added');
+                assert.strictEqual($dateHeader.text(), expectedText, 'date header text is correct');
+            });
+        });
+
+        [
+            {
+                date: undefined,
+                scenario: 'date is undefined',
+            },
+            {
+                date: new Date('invalid'),
+                scenario: 'date is invalid',
+            },
+        ].forEach(({ date, scenario }) => {
+            QUnit.test(`Date header should not be rendered when ${scenario}`, function(assert) {
+                this.reinit({ items: [{ timestamp: date, text: 'ABC' }] });
+
+                const scrollableContent = this.getScrollable().content();
+                const $dateHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DATE_HEADER_CLASS}`);
+
+                assert.strictEqual($dateHeader.length, 0, 'date header was not added');
+            });
         });
     });
 
