@@ -5,7 +5,7 @@ require('../../content/orders.js');
 
 require('generic_light.css!');
 const DataGrid = require('ui/data_grid');
-const Pager = require('ui/pager');
+const Pager = require('ui/pagination');
 const Scrollable = require('ui/scroll_view/ui.scrollable');
 
 const createDataGridMeasureFunction = function(options) {

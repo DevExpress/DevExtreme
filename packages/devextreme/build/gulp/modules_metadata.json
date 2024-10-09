@@ -501,7 +501,7 @@
     }
   },
   {
-    "name": "ui/pager",
+    "name": "ui/pagination",
     "exports": {
       "default": { "path": "ui.dxPagination", "isWidget": true }
     }
