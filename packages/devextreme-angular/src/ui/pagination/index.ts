@@ -110,7 +110,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBaseOptions.displayMode]
+     * [descr:PagerBaseProperties.displayMode]
     
      */
     @Input()
@@ -188,7 +188,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBaseOptions.infoText]
+     * [descr:PagerBaseProperties.infoText]
     
      */
     @Input()
@@ -214,7 +214,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBaseOptions.label]
+     * [descr:PagerBaseProperties.label]
     
      */
     @Input()
@@ -266,7 +266,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBaseOptions.showInfo]
+     * [descr:PagerBaseProperties.showInfo]
     
      */
     @Input()
@@ -279,7 +279,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBaseOptions.showNavigationButtons]
+     * [descr:PagerBaseProperties.showNavigationButtons]
     
      */
     @Input()
@@ -292,7 +292,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBaseOptions.showPageSizeSelector]
+     * [descr:PagerBaseProperties.showPageSizeSelector]
     
      */
     @Input()

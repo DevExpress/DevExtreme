@@ -29,7 +29,7 @@ export {
     Orientation,
     PageLoadMode,
     PageOrientation,
-    PagerBaseOptions,
+    PagerBaseProperties,
     PatternRule,
     Position,
     PositionAlignment,

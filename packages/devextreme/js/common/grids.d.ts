@@ -13,7 +13,7 @@ import {
   Sortable,
   SortOrder,
   ValidationRule,
-  PagerBaseOptions,
+  PagerBaseProperties,
 } from '../common';
 
 import {
@@ -2495,10 +2495,10 @@ export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'view
 /**
  * @docid
  * @public
- * @inherits PagerBaseOptions
+ * @inherits PagerBaseProperties
  * @namespace DevExpress.common.grids
  */
-export type Pager = PagerBaseOptions & {
+export type Pager = PagerBaseProperties & {
   /**
    * @docid
    * @public

@@ -1659,32 +1659,32 @@ declare module DevExpress.common {
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
   /**
-   * [descr:PagerBaseOptions]
+   * [descr:PagerBaseProperties]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type PagerBaseOptions = {
+  export type PagerBaseProperties = {
     /**
-     * [descr:PagerBaseOptions.displayMode]
+     * [descr:PagerBaseProperties.displayMode]
      */
     displayMode?: DisplayMode;
     /**
-     * [descr:PagerBaseOptions.infoText]
+     * [descr:PagerBaseProperties.infoText]
      */
     infoText?: string;
     /**
-     * [descr:PagerBaseOptions.showInfo]
+     * [descr:PagerBaseProperties.showInfo]
      */
     showInfo?: boolean;
     /**
-     * [descr:PagerBaseOptions.showNavigationButtons]
+     * [descr:PagerBaseProperties.showNavigationButtons]
      */
     showNavigationButtons?: boolean;
     /**
-     * [descr:PagerBaseOptions.showPageSizeSelector]
+     * [descr:PagerBaseProperties.showPageSizeSelector]
      */
     showPageSizeSelector?: boolean;
     /**
-     * [descr:PagerBaseOptions.label]
+     * [descr:PagerBaseProperties.label]
      */
     label?: string;
   };
@@ -4320,7 +4320,7 @@ declare module DevExpress.common.grids {
   /**
    * [descr:Pager]
    */
-  export type Pager = PagerBaseOptions & {
+  export type Pager = PagerBaseProperties & {
     /**
      * [descr:Pager.allowedPageSizes]
      */
@@ -21791,7 +21791,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxPaginationOptions]
    */
   export interface dxPaginationOptions
-    extends DevExpress.common.PagerBaseOptions,
+    extends DevExpress.common.PagerBaseProperties,
       WidgetOptions<dxPagination> {
     /**
      * [descr:dxPaginationOptions.pageIndex]
