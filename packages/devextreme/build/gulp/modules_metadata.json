@@ -501,6 +501,12 @@
     }
   },
   {
+    "name": "ui/pager",
+    "exports": {
+      "default": { "path": "ui.dxPagination", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/pivot_grid",
     "exports": {
       "default": { "path": "ui.dxPivotGrid", "isWidget": true }

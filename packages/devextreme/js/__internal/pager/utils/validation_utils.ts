@@ -41,7 +41,7 @@ export function validateOptions(
   return {
     pageSize,
     pageIndex,
-    totalCount: itemCount,
+    itemCount,
     pageCount,
   };
 }

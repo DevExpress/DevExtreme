@@ -25,7 +25,7 @@ export { ExplicitTypes } from 'devextreme/ui/data_grid';
 
 import { PositionConfig } from 'devextreme/animation/position';
 import { DragDirection, DragHighlight, HorizontalAlignment, Mode, ScrollbarMode, SelectAllMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
-import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, GroupExpandMode, HeaderFilterSearchConfig, NewRowPosition, PagerDisplayMode, PagerPageSize, SelectionColumnDisplayMode, StartEditAction, StateStoreType, SummaryType } from 'devextreme/common/grids';
+import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, GroupExpandMode, HeaderFilterSearchConfig, NewRowPosition, Pager, SelectionColumnDisplayMode, StartEditAction, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
@@ -806,10 +806,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get pager(): { allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean } {
+    get pager(): Pager {
         return this._getOption('pager');
     }
-    set pager(value: { allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean }) {
+    set pager(value: Pager) {
         this._setOption('pager', value);
     }
 
@@ -1834,7 +1834,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pagerChange: EventEmitter<{ allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean }>;
+    @Output() pagerChange: EventEmitter<Pager>;
 
     /**
     

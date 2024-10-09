@@ -251,6 +251,12 @@ declare global {
     dxNumberBox(options: string): any;
     dxNumberBox(options: string, ...params: any[]): any;
 
+    dxPagination(): JQuery;
+    dxPagination(options: 'instance'): DevExpress.ui.dxPagination;
+    dxPagination(options: DevExpress.ui.dxPagination.Properties): JQuery;
+    dxPagination(options: string): any;
+    dxPagination(options: string, ...params: any[]): any;
+
     dxPieChart(): JQuery;
     dxPieChart(options: 'instance'): DevExpress.viz.dxPieChart;
     dxPieChart(options: DevExpress.viz.dxPieChart.Properties): JQuery;
@@ -1403,6 +1409,7 @@ declare module DevExpress.common {
     | 'object'
     | 'datetime';
   export type Direction = 'bottom' | 'left' | 'right' | 'top';
+  export type DisplayMode = 'adaptive' | 'compact' | 'full';
   export type DragDirection = 'both' | 'horizontal' | 'vertical';
   export type Draggable =
     DevExpress.core.OmitInternal<DevExpress.ui.dxDraggable>;
@@ -1651,6 +1658,36 @@ declare module DevExpress.common {
   export type Orientation = 'horizontal' | 'vertical';
   export type PageLoadMode = 'nextButton' | 'scrollBottom';
   export type PageOrientation = 'portrait' | 'landscape';
+  /**
+   * [descr:PagerBase]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type PagerBase = {
+    /**
+     * [descr:PagerBase.displayMode]
+     */
+    displayMode?: DisplayMode;
+    /**
+     * [descr:PagerBase.infoText]
+     */
+    infoText?: string;
+    /**
+     * [descr:PagerBase.showInfo]
+     */
+    showInfo?: boolean;
+    /**
+     * [descr:PagerBase.showNavigationButtons]
+     */
+    showNavigationButtons?: boolean;
+    /**
+     * [descr:PagerBase.showPageSizeSelector]
+     */
+    showPageSizeSelector?: boolean;
+    /**
+     * [descr:PagerBase.label]
+     */
+    label?: string;
+  };
   /**
    * [descr:PatternRule]
    */
@@ -4283,41 +4320,17 @@ declare module DevExpress.common.grids {
   /**
    * [descr:Pager]
    */
-  export type Pager = {
+  export type Pager = PagerBase & {
     /**
-     * [descr:GridBaseOptions.pager.allowedPageSizes]
+     * [descr:Pager.allowedPageSizes]
      */
     allowedPageSizes?: Array<number | PagerPageSize> | Mode;
+
     /**
-     * [descr:GridBaseOptions.pager.displayMode]
-     */
-    displayMode?: PagerDisplayMode;
-    /**
-     * [descr:GridBaseOptions.pager.infoText]
-     */
-    infoText?: string;
-    /**
-     * [descr:GridBaseOptions.pager.showInfo]
-     */
-    showInfo?: boolean;
-    /**
-     * [descr:GridBaseOptions.pager.showNavigationButtons]
-     */
-    showNavigationButtons?: boolean;
-    /**
-     * [descr:GridBaseOptions.pager.showPageSizeSelector]
-     */
-    showPageSizeSelector?: boolean;
-    /**
-     * [descr:GridBaseOptions.pager.visible]
+     * [descr:Pager.visible]
      */
     visible?: boolean | Mode;
-    /**
-     * [descr:GridBaseOptions.pager.label]
-     */
-    label?: string;
   };
-  export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
   export type PagerPageSize = 'all' | 'auto';
   /**
    * [descr:PagingBase]
@@ -21759,6 +21772,46 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
+  }
+  /**
+   * [descr:dxPagination]
+   */
+  export class dxPagination extends Widget<DevExpress.ui.dxPagination.Properties> {
+    /**
+     * [descr:dxPagination.getPageCount()]
+     */
+    getPageCount(): number;
+  }
+  module dxPagination {
+    export type PageSize = number | 'all';
+    export type Properties = dxPaginationOptions;
+  }
+  /**
+   * [descr:dxPaginationOptions]
+   * @deprecated [depNote:dxPaginationOptions]
+   */
+  export interface dxPaginationOptions
+    extends DevExpress.common.PagerBase,
+      WidgetOptions<dxPagination> {
+    /**
+     * [descr:dxPaginationOptions.pageIndex]
+     */
+    pageIndex?: number;
+
+    /**
+     * [descr:dxPaginationOptions.pageSize]
+     */
+    pageSize?: number;
+
+    /**
+     * [descr:dxPaginationOptions.itemCount]
+     */
+    itemCount?: number;
+
+    /**
+     * [descr:dxPaginationOptions.allowedPageSizes]
+     */
+    allowedPageSizes?: Array<DevExpress.ui.dxPagination.PageSize>;
   }
   /**
    * [descr:dxPivotGrid]

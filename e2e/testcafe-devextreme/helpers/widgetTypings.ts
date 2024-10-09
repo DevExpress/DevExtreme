@@ -23,7 +23,7 @@ export type WidgetName =
   | 'dxPivotGridFieldChooser'
   | 'dxDataGrid'
   | 'dxTreeList'
-  | 'dxPager'
+  | 'dxPagination'
   | 'dxRadioGroup'
   | 'dxScheduler'
   | 'dxTabs'

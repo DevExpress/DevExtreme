@@ -46,7 +46,7 @@ type PageIndexSelectorPropsType = Pick<PagerProps, 'hasKnownLastPage'
 | 'pageIndexChangedInternal'
 | 'pagesCountText'
 | 'showNavigationButtons'
-| 'totalCount'
+| 'itemCount'
 >
 & PageIndexSelectorProps;
 
@@ -57,7 +57,7 @@ const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   pageIndex: PagerDefaultProps.pageIndex,
   pageIndexChangedInternal: PagerDefaultProps.pageIndexChangedInternal,
   showNavigationButtons: PagerDefaultProps.showNavigationButtons,
-  totalCount: PagerDefaultProps.totalCount,
+  itemCount: PagerDefaultProps.itemCount,
 };
 
 interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > {navigate: LightButtonProps['onClick']}

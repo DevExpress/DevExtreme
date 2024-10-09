@@ -39,7 +39,7 @@ QUnit.module('Pager', {
             pageSize: 7,
             pageCount: 21,
             pageIndex: 1,
-            totalCount: 143
+            totalCount: 143,
         };
         this.dataController = new MockDataController(this.dataControllerOptions);
         setupDataGridModules(this, ['data', 'pager'], {
@@ -285,7 +285,7 @@ QUnit.module('Pager', {
         assert.equal(pagerView.getPager().option.callCount, 2, 'pager option call count after partial update');
         assert.deepEqual(pagerView.getPager().option.getCall(0).args, [{
             hasKnownLastPage: true, // T697587
-            totalCount: 143, // #7259
+            itemCount: 143, // #7259
             pageCount: 21,
             pageIndex: 2, // T886628
             pageSize: 7 // T886628
@@ -418,7 +418,7 @@ QUnit.module('Pager', {
         // assert
         assert.equal(this.dataController.pageCount(), 2);
         assert.ok(isVisible);
-        assert.equal(pagerView.element().dxPager('instance').option('pagesNavigatorVisible'), 'auto', 'pagesNavigatorVisible');
+        assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), 'auto', 'pagesNavigatorVisible');
     });
 
     QUnit.test('isVisible when pageCount == 1 and visible is auto', function(assert) {
@@ -466,7 +466,7 @@ QUnit.module('Pager', {
         // assert
         assert.equal(this.dataController.pageCount(), 1);
         assert.ok(isVisible);
-        assert.equal(pagerView.element().dxPager('instance').option('pagesNavigatorVisible'), true, 'pagesNavigatorVisible');
+        assert.equal(pagerView.element().dxPagination('instance').option('pagesNavigatorVisible'), true, 'pagesNavigatorVisible');
     });
 
     QUnit.test('isVisible when pageCount > 1 and visible is false', function(assert) {
@@ -661,7 +661,7 @@ QUnit.module('Pager', {
         assert.equal(renderCounter, 1, 'count of rendering');
     });
 
-    QUnit.test('Pager should be visible when set the pageSize equal to totalCount', function(assert) {
+    QUnit.test('Pager should be visible when set the pageSize equal to itemCount', function(assert) {
     // arrange
         const $testElement = $('#container');
 
@@ -670,7 +670,7 @@ QUnit.module('Pager', {
             pageSize: 4,
             pageCount: 2,
             pageIndex: 0,
-            totalCount: 6
+            itemCount: 6
         };
         this.pagerView.render($testElement);
         sinon.spy(this.pagerView, '_invalidate');
@@ -695,7 +695,7 @@ QUnit.module('Pager', {
             pageSize: 4,
             pageCount: 2,
             pageIndex: 0,
-            totalCount: 6
+            itemCount: 6
         };
         this.pagerView.render($testElement);
         // act
@@ -722,7 +722,7 @@ QUnit.module('Pager', {
             pageSize: 4,
             pageCount: 2,
             pageIndex: 0,
-            totalCount: 6
+            itemCount: 6
         };
         this.pagerView.render($testElement);
 

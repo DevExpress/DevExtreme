@@ -1,36 +1,17 @@
 /* tslint:disable:max-line-length */
 
-
+import { NestedOption } from 'devextreme-angular/core';
 import {
     Component,
-    OnInit,
-    OnDestroy,
-    NgModule,
-    Host,
-    SkipSelf,
-    Input
 } from '@angular/core';
-
-
-
 
 import { DisplayMode, Mode } from 'devextreme/common';
 import { PagerPageSize } from 'devextreme/common/grids';
 
-import {
-    NestedOptionHost,
-} from 'devextreme-angular/core';
-import { NestedOption } from 'devextreme-angular/core';
-
-
 @Component({
-    selector: 'dxo-data-grid-pager',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: ''
 })
-export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
+export abstract class DxoPager extends NestedOption {
     get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
         return this._getOption('allowedPageSizes');
     }
@@ -38,7 +19,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('allowedPageSizes', value);
     }
 
-    @Input()
     get displayMode(): DisplayMode {
         return this._getOption('displayMode');
     }
@@ -46,7 +26,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('displayMode', value);
     }
 
-    @Input()
     get infoText(): string {
         return this._getOption('infoText');
     }
@@ -54,7 +33,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('infoText', value);
     }
 
-    @Input()
     get label(): string {
         return this._getOption('label');
     }
@@ -62,7 +40,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('label', value);
     }
 
-    @Input()
     get showInfo(): boolean {
         return this._getOption('showInfo');
     }
@@ -70,7 +47,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('showInfo', value);
     }
 
-    @Input()
     get showNavigationButtons(): boolean {
         return this._getOption('showNavigationButtons');
     }
@@ -78,7 +54,6 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('showNavigationButtons', value);
     }
 
-    @Input()
     get showPageSizeSelector(): boolean {
         return this._getOption('showPageSizeSelector');
     }
@@ -86,45 +61,10 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
         this._setOption('showPageSizeSelector', value);
     }
 
-    @Input()
     get visible(): Mode | boolean {
         return this._getOption('visible');
     }
     set visible(value: Mode | boolean) {
         this._setOption('visible', value);
     }
-
-
-    protected get _optionPath() {
-        return 'pager';
-    }
-
-
-    constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
-        super();
-        parentOptionHost.setNestedOption(this);
-        optionHost.setHost(this, this._fullOptionPath.bind(this));
-    }
-
-
-    ngOnInit() {
-        this._addRecreatedComponent();
-    }
-
-    ngOnDestroy() {
-        this._addRemovedOption(this._getOptionPath());
-    }
-
-
 }
-
-@NgModule({
-  declarations: [
-    DxoDataGridPagerComponent
-  ],
-  exports: [
-    DxoDataGridPagerComponent
-  ],
-})
-export class DxoDataGridPagerModule { }
