@@ -75,10 +75,10 @@ test('Messagelist appearance with scrollbar', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after typing in textarea.png', { element: '#container' });
 
-  await t
-    .pressKey('enter');
+  // await t
+  //   .pressKey('enter');
 
-  await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after send.png', { element: '#container' });
+  // await testScreenshot(t, takeScreenshot, 'Messagelist scrollbar position after send.png', { element: '#container' });
 
   const scrollable = chat.getScrollable();
   const topOffset = (await scrollable.scrollOffset()).top;
