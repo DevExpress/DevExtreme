@@ -542,9 +542,17 @@ const Lookup = DropDownList.inherit({
   },
 
   _popupTabHandler(e) {
-    const { usePopover } = this.option();
+    const {
+      usePopover,
+      dropDownCentered,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _scrollToSelectedItemEnabled,
+    } = this.option();
 
-    if (usePopover) {
+    const shouldInputBeIncludedInFocusOrder = (usePopover && !_scrollToSelectedItemEnabled)
+      || !dropDownCentered;
+
+    if (shouldInputBeIncludedInFocusOrder) {
       this.callBase(e);
     }
   },
@@ -624,7 +632,14 @@ const Lookup = DropDownList.inherit({
     const {
       usePopover,
       dropDownOptions,
+      dropDownCentered,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _scrollToSelectedItemEnabled,
     } = this.option();
+
+    const shouldLoopFocusInsidePopup = (!usePopover && !_scrollToSelectedItemEnabled)
+      || (_scrollToSelectedItemEnabled && dropDownCentered);
+      // || dropDownCentered;
 
     const result = extend(this.callBase(), {
       toolbarItems: this._getPopupToolbarItems(),
@@ -638,7 +653,7 @@ const Lookup = DropDownList.inherit({
       fullScreen: dropDownOptions.fullScreen,
       shading: dropDownOptions.shading,
       hideOnOutsideClick: dropDownOptions.hideOnOutsideClick || dropDownOptions.closeOnOutsideClick,
-      _loopFocus: !usePopover,
+      _loopFocus: shouldLoopFocusInsidePopup,
     });
 
     delete result.animation;
