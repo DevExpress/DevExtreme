@@ -549,7 +549,7 @@ const Lookup = DropDownList.inherit({
       _scrollToSelectedItemEnabled,
     } = this.option();
 
-    const isInputFocusable = (usePopover && !_scrollToSelectedItemEnabled) || !dropDownCentered;
+    const isInputFocusable = usePopover ? !_scrollToSelectedItemEnabled : !dropDownCentered;
 
     if (isInputFocusable) {
       this.callBase(e);
