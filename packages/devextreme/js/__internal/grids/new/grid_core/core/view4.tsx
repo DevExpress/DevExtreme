@@ -15,11 +15,11 @@ export abstract class View<T extends {}> {
 
   protected abstract component: ComponentType<T>;
 
-  protected abstract props: Subscribable<T>;
+  protected abstract getProps(): Subscribable<T>;
 
   public render(root: Element): Subscription {
     const ViewComponent = this.component;
-    return toSubscribable(this.props).subscribe((props: T) => {
+    return toSubscribable(this.getProps()).subscribe((props: T) => {
       // @ts-expect-error
       render(<ViewComponent {...props}/>, root);
     });
@@ -42,7 +42,7 @@ export abstract class View<T extends {}> {
 
       constructor() {
         super();
-        this.subscription = toSubscribable(view.props).subscribe((props) => {
+        this.subscription = toSubscribable(view.getProps()).subscribe((props) => {
           this.state ??= {
             props,
           };

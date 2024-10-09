@@ -2,13 +2,13 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import registerComponent from '@js/core/component_registrator';
-import { Content as ContentBase } from '@ts/grids/new/grid_core/content_view/content';
+import { ContentView as ContentViewBase } from '@ts/grids/new/grid_core/content_view2/view';
 import * as DataControllerModule from '@ts/grids/new/grid_core/data_controller';
 import { MainView as MainViewBase } from '@ts/grids/new/grid_core/main_view';
 import { OptionsController as OptionsControllerBase } from '@ts/grids/new/grid_core/options_controller/options_controller';
 import { GridCoreNewBase } from '@ts/grids/new/grid_core/widget_base';
 
-import { Content } from './content_view/content_view_content';
+import { ContentView } from './content_view2/view';
 import { HeadersView } from './headers/view';
 import { MainView } from './main_view';
 import { OptionsController } from './options_controller';
@@ -19,7 +19,7 @@ export class CardViewBase extends GridCoreNewBase<Properties> {
     super._registerDIContext();
     this.diContext.register(HeadersView);
 
-    this.diContext.register(ContentBase, Content);
+    this.diContext.register(ContentViewBase, ContentView);
     this.diContext.register(MainViewBase, MainView);
 
     const optionsController = new OptionsController(this);

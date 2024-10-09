@@ -21,8 +21,8 @@ import { PagerView } from '@ts/grids/new/grid_core/pager';
 import { Search } from '@ts/grids/new/grid_core/search/controller';
 import { render } from 'inferno';
 
-import { ContentView } from './content_view/content_view';
 import { StatusView } from './content_view/status_view/status_view';
+import { ContentView } from './content_view2/view';
 import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';

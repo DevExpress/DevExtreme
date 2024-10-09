@@ -15,16 +15,6 @@ export const CLASSES = {
 };
 
 export class Content extends View implements BaseContent {
-  private readonly items = computed(
-    (dataItems, columns: Column[]) => dataItems.map(
-      (item) => this.columnsController.createDataRow(
-        item,
-        columns,
-      ),
-    ),
-    [this.dataController.items, this.columnsController.visibleColumns],
-  );
-
   public vdom = computed(
     (items, isEditing, fieldTemplate) => (
       <div className={CLASSES.content}>
