@@ -1,10 +1,18 @@
 @use "sass:math";
 
-@mixin chat-messagelist($padding) {
+@mixin chat-messagelist(
+  $padding,
+  $date-header-color,
+) {
   .dx-chat-messagelist {
     .dx-scrollable-content {
       padding-inline: $padding;
     }
+  }
+
+  .dx-chat-messagelist-date-header {
+    padding: $padding;
+    color: $date-header-color;
   }
 }
 

@@ -145,3 +145,45 @@ test('Messagelist should scrolled to the latest messages after being rendered in
     }],
   });
 });
+
+test('Messagelist with date headers', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Messagelist with date headers.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const userFirst = createUser(1, 'First');
+  const userSecond = createUser(2, 'Second');
+
+  const items = [{
+    timestamp: new Date('05.01.2024'),
+    author: userFirst,
+    text: 'AAA',
+  }, {
+    timestamp: new Date('06.01.2024'),
+    author: userFirst,
+    text: 'BBB',
+  }, {
+    timestamp: new Date('06.01.2024'),
+    author: userSecond,
+    text: 'CCC',
+  }, {
+    timestamp: new Date('06.01.2024'),
+    author: userSecond,
+    text: 'DDD',
+  }, {
+    timestamp: new Date('10.01.2024'),
+    author: userFirst,
+    text: 'EEE',
+  }];
+
+  return createWidget('dxChat', {
+    items,
+    user: userSecond,
+    width: 400,
+    height: 600,
+  });
+});
