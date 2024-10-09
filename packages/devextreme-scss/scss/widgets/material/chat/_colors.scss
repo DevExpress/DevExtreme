@@ -16,6 +16,7 @@ $chat-messagelist-empty-icon-color: rgba($base-inverted-bg, 0.38) !default;
 $chat-messagelist-empty-icon-background-color: rgba($base-inverted-bg, 0.08) !default;
 $chat-messagelist-empty-message-color: rgba($base-inverted-bg, 0.87) !default;
 $chat-messagelist-empty-prompt-color: rgba($base-inverted-bg, 0.6) !default;
+$chat-messagelist-day-header-color: rgba($base-inverted-bg, 0.38) !default;
 
 @if $mode == "light" {
   $chat-avatar-background-color: darken($base-bg, 12.16) !default; // #E0E0E0

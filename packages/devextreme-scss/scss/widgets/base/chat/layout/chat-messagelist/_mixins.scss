@@ -2,17 +2,23 @@
 
 @mixin chat-messagelist(
   $padding,
-  $date-header-color,
+  $day-header-color,
+  $day-header-padding-bottom,
+  $first-day-header-padding-top,
 ) {
   .dx-chat-messagelist {
     .dx-scrollable-content {
       padding-inline: $padding;
     }
-  }
 
-  .dx-chat-messagelist-date-header {
-    padding: $padding;
-    color: $date-header-color;
+    .dx-chat-messagelist-day-header {
+      padding-bottom: $day-header-padding-bottom;
+      color: $day-header-color;
+    }
+
+    .dx-chat-messagelist-day-header:first-child {
+      padding-top: $first-day-header-padding-top;
+    }
   }
 }
 
