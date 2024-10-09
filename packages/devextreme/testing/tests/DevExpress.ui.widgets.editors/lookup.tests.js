@@ -2202,8 +2202,9 @@ QUnit.module('popup options', {
 
             openPopupWithList(instance);
 
-            const $overlay = $(`.${OVERLAY_CLASS}.${POPUP_CLASS}`);
-            const popup = usePopover ? PopoverFull.getInstance($overlay) : PopupFull.getInstance($overlay);
+            const $popup = $(`.${POPUP_CLASS}`);
+            const popup = usePopover ? PopoverFull.getInstance($popup) : PopupFull.getInstance($popup);
+
             const { _loopFocus } = popup.option();
 
             assert.strictEqual(_loopFocus, !usePopover, '_loopFocus is correct');
