@@ -389,6 +389,8 @@ class MessageList extends Widget<Properties> {
       case 'items':
         this._processItemsUpdating(value ?? [], previousValue ?? []);
         break;
+      case 'showDateHeaders':
+        break;
       default:
         super._optionChanged(args);
     }
