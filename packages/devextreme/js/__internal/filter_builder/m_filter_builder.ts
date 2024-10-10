@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -262,7 +263,7 @@ class FilterBuilder extends Widget<any> {
       .appendTo(this.$element());
   }
 
-  _addAriaAttributes($element, ariaLabel, role, hasPopup?) {
+  _addAriaAttributes($element, ariaLabel, role, hasPopup?, hasExpanded?) {
     if (!$element || !$element.length) return;
 
     const attributes = { role };
@@ -276,8 +277,12 @@ class FilterBuilder extends Widget<any> {
       }
     }
 
-    if (hasPopup) {
-      attributes['aria-haspopup'] = hasPopup;
+    if (isDefined(hasPopup)) {
+      attributes['aria-haspopup'] = `${hasPopup}`;
+    }
+
+    if (isDefined(hasExpanded)) {
+      attributes['aria-expanded'] = `${hasExpanded}`;
     }
 
     $element.attr(attributes);
@@ -308,8 +313,9 @@ class FilterBuilder extends Widget<any> {
   }
 
   _createGroupElement(criteria, parent, groupLevel) {
+    const $guid = new Guid();
     const $groupItem = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
-    const $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS);
+    const $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS).attr('id', `${$guid}`);
     const $group = $('<div>').addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
     const groupLevelAria = (messageLocalization.format as any)('dxFilterBuilder-filterAriaGroupLevel', groupLevel + 1);
 
@@ -322,7 +328,9 @@ class FilterBuilder extends Widget<any> {
     }
 
     this._addAriaAttributes($group, groupLevelAria, 'group');
-    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'presentation');
+    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem');
+    this._addAriaAttributes($groupContent, '', 'group');
+    $groupItem.attr('aria-owns', `${$guid}`);
 
     this._createGroupOperationButton(criteria).appendTo($groupItem);
 
@@ -384,7 +392,7 @@ class FilterBuilder extends Widget<any> {
     const that = this;
     const removeMenu = function () {
       // @ts-expect-error
-      that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS);
+      that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
       // @ts-expect-error
       that.$element().find('.dx-overlay .dx-treeview').remove();
       // @ts-expect-error
@@ -407,7 +415,7 @@ class FilterBuilder extends Widget<any> {
       selectionMode: 'single',
       onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
       onHiding() {
-        $button.removeClass(ACTIVE_CLASS);
+        $button.removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
       },
       position: {
         my: `${position} top`, at: `${position} bottom`, offset: '0 1', of: $button, collision: 'flip',
@@ -444,7 +452,7 @@ class FilterBuilder extends Widget<any> {
     this._subscribeOnClickAndEnterKey($button, () => {
       removeMenu();
       that._createPopupWithTreeView(options, that.$element());
-      $button.addClass(ACTIVE_CLASS);
+      $button.addClass(ACTIVE_CLASS).attr('aria-expanded', 'true');
     });
     return $button;
   }
@@ -493,7 +501,7 @@ class FilterBuilder extends Widget<any> {
     }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
       .attr('tabindex', 0);
-    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaItemOperation'), 'button', true);
+    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaItemOperation'), 'combobox', true, false);
 
     return $operationButton;
   }
@@ -548,7 +556,7 @@ class FilterBuilder extends Widget<any> {
       .addClass(FILTER_BUILDER_ITEM_FIELD_CLASS)
       .attr('tabindex', 0);
 
-    this._addAriaAttributes($fieldButton, messageLocalization.format('dxFilterBuilder-filterAriaItemField'), 'button', true);
+    this._addAriaAttributes($fieldButton, messageLocalization.format('dxFilterBuilder-filterAriaItemField'), 'combobox', true, false);
 
     return $fieldButton;
   }
@@ -557,6 +565,8 @@ class FilterBuilder extends Widget<any> {
     const $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
     const fields = this._getNormalizedFields();
     const field = getField(condition[0], fields);
+
+    this._addAriaAttributes($item, '', 'treeitem');
 
     this._createRemoveButton(() => {
       removeItem(parent, condition);

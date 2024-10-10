@@ -24,7 +24,7 @@ const elements = [
   },
   {
     name: 'Group Item',
-    role: 'presentation',
+    role: 'treeitem',
     label: 'Group Item',
     selector: (filterBuilder) => filterBuilder.getGroupItem(),
   },
@@ -54,13 +54,13 @@ const elements = [
   },
   {
     name: 'Item Field',
-    role: 'button',
+    role: 'combobox',
     label: 'Item Field',
     selector: (filterBuilder) => filterBuilder.getItem('field', 2),
   },
   {
     name: 'Item Operation',
-    role: 'button',
+    role: 'combobox',
     label: 'Item Operation',
     selector: (filterBuilder) => filterBuilder.getItem('operation', 2),
   },
@@ -78,7 +78,7 @@ elements.forEach(({
   test(`Filter Builder - ${name} has correct ARIA attributes`, async (t) => {
     const filterBuilder = new FilterBuilder('#parentContainer');
     const elementSelector = selector(filterBuilder);
-    const labelValue = role === 'button' && await elementSelector.innerText ? 'title' : 'aria-label';
+    const labelValue = ['button', 'combobox'].includes(role) && await elementSelector.innerText ? 'title' : 'aria-label';
 
     await t
       .expect(elementSelector.getAttribute('role'))
