@@ -1035,8 +1035,8 @@ QUnit.module('Lookup', {
 
         openPopupWithList(firstLookup);
 
-        // NOTE: in ShadowDOM mode the two selected elements are inside the ShadowDOM
-        // because the overlays were closed and moved to the overlay container
+        // NOTE: In ShadowDom mode, the two selected elements are inside ShadowDom.
+        // This happens because the overlays were closed and moved to the overlay container.
         if(QUnit.isInShadowDomMode()) {
             const listItemSelectedInDocument = document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
             const listItemSelectedInShadowDOM = $('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
