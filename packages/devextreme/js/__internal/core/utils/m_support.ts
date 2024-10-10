@@ -75,3 +75,17 @@ export const transition = callOnce(function() { return supportProp('transition')
 export const transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleProp('transition')]; });
 export const animation = callOnce(function() { return supportProp('animation'); });
 export const nativeScrolling = isNativeScrollingSupported();
+
+export default {
+    animation,
+    inputType,
+    nativeScrolling,
+    pointerEvents,
+    styleProp,
+    stylePropPrefix,
+    supportProp,
+    touch,
+    touchEvents,
+    transition,
+    transitionEndEventName
+};

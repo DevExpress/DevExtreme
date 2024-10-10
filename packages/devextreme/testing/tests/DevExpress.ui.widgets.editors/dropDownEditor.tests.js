@@ -5,7 +5,7 @@ import eventsEngine from 'events/core/events_engine';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 import errors from 'core/errors';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay/ui.overlay';

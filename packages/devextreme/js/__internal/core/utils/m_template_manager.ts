@@ -9,9 +9,9 @@ import { Template } from '@js/core/templates/template';
 import { TemplateBase } from '@js/core/templates/template_base';
 import { groupBy } from '@js/core/utils/array';
 import { findBestMatches } from '@js/core/utils/common';
-import { normalizeTemplateElement } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
-import { isFunction, isRenderer } from '@js/core/utils/type';
+import domUtils from './m_dom';
+import typeUtils from './m_type';
 
 export const findTemplates = (element, name) => {
   const optionsAttributeName = 'data-options';
@@ -88,12 +88,12 @@ export const getNormalizedTemplateArgs = (options) => {
 
 export const validateTemplateSource = (templateSource) => {
   return typeof templateSource === 'string'
-      ? normalizeTemplateElement(templateSource)
+      ? domUtils.normalizeTemplateElement(templateSource)
       : templateSource;
 };
 
 export const templateKey = (templateSource) => {
-  return (isRenderer(templateSource) && templateSource[0]) || templateSource;
+  return (typeUtils.isRenderer(templateSource) && templateSource[0]) || templateSource;
 };
 
 export const defaultCreateElement = element => new Template(element);
@@ -104,7 +104,7 @@ export const acquireIntegrationTemplate = (templateSource, templates, isAsyncTem
   if(!skipTemplates || skipTemplates.indexOf(templateSource) === -1) {
       integrationTemplate = templates[templateSource];
       if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-          if(isFunction(integrationTemplate.render)) {
+          if(typeUtils.isFunction(integrationTemplate.render)) {
               integrationTemplate = addPublicElementNormalization(integrationTemplate);
           }
 
@@ -131,11 +131,11 @@ export const acquireTemplate = (templateSource, createTemplate, templates, isAsy
   }
 
   // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
-  if(isFunction(templateSource.render) && !isRenderer(templateSource)) {
+  if(typeUtils.isFunction(templateSource.render) && !typeUtils.isRenderer(templateSource)) {
       return isAsyncTemplate ? templateSource : addOneRenderedCall(templateSource);
   }
 
-  if(templateSource.nodeType || isRenderer(templateSource)) {
+  if(templateSource.nodeType || typeUtils.isRenderer(templateSource)) {
       return createTemplate($(templateSource));
   }
 
@@ -143,3 +143,16 @@ export const acquireTemplate = (templateSource, createTemplate, templates, isAsy
       || defaultTemplates[templateSource]
       || createTemplate(templateSource);
 };
+
+export default {
+    findTemplates,
+    suitableTemplatesByName,
+    addOneRenderedCall,
+    addPublicElementNormalization,
+    getNormalizedTemplateArgs,
+    validateTemplateSource,
+    templateKey,
+    defaultCreateElement,
+    acquireIntegrationTemplate,
+    acquireTemplate
+}

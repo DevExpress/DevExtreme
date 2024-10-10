@@ -32,3 +32,5 @@ export const debug = (function () {
     assertParam,
   };
 }());
+
+export default { logger, debug }

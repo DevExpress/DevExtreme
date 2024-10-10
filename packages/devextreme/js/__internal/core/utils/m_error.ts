@@ -1,5 +1,5 @@
 /* eslint-disable import/no-commonjs */
-import { logger } from '@js/core/utils/console';
+import consoleUtils from './m_console';
 import { extend } from '@js/core/utils/extend';
 import { format } from '@js/core/utils/string';
 import { version } from '@js/core/version';
@@ -26,7 +26,7 @@ function error(baseErrors, errors?) {
         method = 'warn';
       }
 
-      logger[method](method === 'log' ? id : combineMessage(args));
+      consoleUtils.logger[method](method === 'log' ? id : combineMessage(args));
     },
   };
 
@@ -67,3 +67,4 @@ function error(baseErrors, errors?) {
   return exports;
 }
 export { error };
+export default error;

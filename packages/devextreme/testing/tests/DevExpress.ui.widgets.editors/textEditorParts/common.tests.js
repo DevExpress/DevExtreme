@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import eventsEngine from 'events/core/events_engine';
-import domUtils from 'core/utils/dom';
+import domUtils from '__internal/core/utils/m_dom';
 import devices from 'core/devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';

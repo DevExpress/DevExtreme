@@ -117,3 +117,23 @@ export {
   isWindow,
   type,
 };
+
+export default {
+  isBoolean,
+  isDate,
+  isDeferred,
+  isDefined,
+  isEmptyObject,
+  isEvent,
+  isExponential,
+  isFunction,
+  isNumeric,
+  isObject,
+  isPlainObject,
+  isPrimitive,
+  isPromise,
+  isRenderer,
+  isString,
+  isWindow,
+  type,
+};

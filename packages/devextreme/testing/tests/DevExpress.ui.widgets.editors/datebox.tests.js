@@ -15,7 +15,7 @@ import messageLocalization from 'localization/message';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 import typeUtils from 'core/utils/type';
 import uiDateUtils from '__internal/ui/date_box/m_date_utils';
 import { noop } from 'core/utils/common';

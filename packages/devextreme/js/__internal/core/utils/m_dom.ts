@@ -166,3 +166,17 @@ export const isElementInDom = $element => {
 
     return !!$(shadowHost || element).closest(getWindow().document).length;
 };
+
+export default {
+    resetActiveElement,
+    clearSelection,
+    closestCommonParent,
+    extractTemplateMarkup,
+    normalizeTemplateElement,
+    clipboardText,
+    contains,
+    createTextElementHiddenCopy,
+    insertBefore,
+    replaceWith,
+    isElementInDom,
+}
