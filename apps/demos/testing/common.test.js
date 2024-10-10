@@ -59,6 +59,10 @@ const getTestSpecificSkipRules = (testName) => {
 
 const SKIPPED_TESTS = {
   jQuery: {
+    DataGrid: [
+       // TypeError: Cannot read properties of undefined (reading 'length')
+      'ExcelJSExportMultipleGrids'
+    ],
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],

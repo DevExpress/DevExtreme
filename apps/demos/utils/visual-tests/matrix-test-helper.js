@@ -170,6 +170,10 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: {
+    DataGrid: [
+      // TypeError: Cannot read properties of undefined (reading 'length')
+     'ExcelJSExportMultipleGrids'
+    ],
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
