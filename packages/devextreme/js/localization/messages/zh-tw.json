@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "拖動篩選欄位到此處",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring Appointment",
 
         "dxScheduler-editorLabelTitle": "標題",
         "dxScheduler-editorLabelStartDate": "開始日期",

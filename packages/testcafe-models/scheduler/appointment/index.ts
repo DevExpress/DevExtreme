@@ -4,6 +4,7 @@ const CLASS = {
   appointment: 'dx-scheduler-appointment',
   appointmentContentDate: 'dx-scheduler-appointment-content-date',
   dateTableCell: 'dx-scheduler-date-table-cell',
+  appoinmentRecurrenceIcon: 'dx-scheduler-appointment-recurrence-icon',
   resizableHandleBottom: 'dx-resizable-handle-bottom',
   resizableHandleLeft: 'dx-resizable-handle-left',
   resizableHandleRight: 'dx-resizable-handle-right',
@@ -108,5 +109,9 @@ export default class Appointment {
       .find('div').withText(label)
       .parent(0).find(`.${CLASS.resources.value}`)
       .innerText;
+  }
+
+  getRecurrenceElement(): Selector {
+    return this.element.find(`.${CLASS.appoinmentRecurrenceIcon}`);
   }
 }

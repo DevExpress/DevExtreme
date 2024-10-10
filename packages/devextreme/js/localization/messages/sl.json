@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "Povleci filtre tukaj",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring Appointment",
 
         "dxScheduler-editorLabelTitle": "Predmet",
         "dxScheduler-editorLabelStartDate": "Datum začetka",

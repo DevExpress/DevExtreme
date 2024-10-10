@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "Sleep Filtervelden Hier",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring Appointment",
 
         "dxScheduler-editorLabelTitle": "Onderwerp",
         "dxScheduler-editorLabelStartDate": "Startdatum",

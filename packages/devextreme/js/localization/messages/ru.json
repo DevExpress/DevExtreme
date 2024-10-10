@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "Перетащите поля фильтров cюда",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring Appointment",
 
         "dxScheduler-editorLabelTitle": "Название",
         "dxScheduler-editorLabelStartDate": "Дата начала",

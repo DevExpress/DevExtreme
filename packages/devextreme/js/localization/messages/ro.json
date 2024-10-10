@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "Plasați câmpurile de filtrare aici",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring Appointment",
 
         "dxScheduler-editorLabelTitle": "Subiect",
         "dxScheduler-editorLabelStartDate": "Data de început",

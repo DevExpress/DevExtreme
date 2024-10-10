@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "إفلات حقول التصفية هنا",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring Appointment",
 
         "dxScheduler-editorLabelTitle": "الموضوع",
         "dxScheduler-editorLabelStartDate": "تاريخ البدء",
