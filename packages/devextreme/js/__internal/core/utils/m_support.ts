@@ -8,13 +8,13 @@ const {
   maxTouchPoints,
 } = getNavigator();
 const transitionEndEventNames = {
-  webkitTransition: 'webkitTransitionEnd',
-  MozTransition: 'transitionend',
-  OTransition: 'oTransitionEnd',
-  transition: 'transitionend',
+  'webkitTransition': 'webkitTransitionEnd',
+  'MozTransition': 'transitionend',
+  'OTransition': 'oTransitionEnd',
+  'transition': 'transitionend'
 };
 
-const supportProp = function (prop) {
+const supportProp = function(prop) {
   return !!styleProp(prop);
 };
 
@@ -26,9 +26,9 @@ const isNativeScrollingSupported = function () {
   return isNativeScrollDevice;
 };
 
-const inputType = function (type) {
-  if (type === 'text') {
-    return true;
+const inputType = function(type) {
+  if(type === 'text') {
+      return true;
   }
 
   const input = domAdapter.createElement('input');
@@ -43,11 +43,11 @@ const inputType = function (type) {
   }
 };
 
-const detectTouchEvents = function (hasWindowProperty, maxTouchPoints) {
+const detectTouchEvents = function(hasWindowProperty, maxTouchPoints) {
   return (hasWindowProperty('ontouchstart') || !!maxTouchPoints) && !hasWindowProperty('callPhantom');
 };
 
-const detectPointerEvent = function (hasWindowProperty) {
+const detectPointerEvent = function(hasWindowProperty) {
   return hasWindowProperty('PointerEvent');
 };
 
@@ -55,23 +55,23 @@ const touchEvents = detectTouchEvents(hasProperty, maxTouchPoints);
 const pointerEvents = detectPointerEvent(hasProperty);
 const touchPointersPresent = !!maxTouchPoints;
 
-/// #DEBUG
+///#DEBUG
 export {
-  detectPointerEvent,
   detectTouchEvents,
+  detectPointerEvent
 };
-/// #ENDDEBUG
+///#ENDDEBUG
 export {
-  inputType,
+  touchEvents,
   pointerEvents,
   styleProp,
   stylePropPrefix,
   supportProp,
-  touchEvents,
+  inputType
 };
 
 export const touch = touchEvents || pointerEvents && touchPointersPresent;
-export const transition = callOnce(() => supportProp('transition'));
-export const transitionEndEventName = callOnce(() => transitionEndEventNames[styleProp('transition')]);
-export const animation = callOnce(() => supportProp('animation'));
+export const transition = callOnce(function() { return supportProp('transition'); });
+export const transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleProp('transition')]; });
+export const animation = callOnce(function() { return supportProp('animation'); });
 export const nativeScrolling = isNativeScrollingSupported();

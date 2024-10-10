@@ -2,49 +2,49 @@ import errors from '@js/core/errors';
 import { when } from '@js/core/utils/deferred';
 
 function createQueue(discardPendingTasks?: boolean) {
-  let tasks: any[] = [];
+  let _tasks: any[] = [];
   // eslint-disable-next-line @typescript-eslint/naming-convention
   let _busy = false;
 
   function exec() {
-    while (tasks.length) {
-      _busy = true;
+      while(_tasks.length) {
+          _busy = true;
 
-      const task = tasks.shift();
-      const result = task();
+          const task = _tasks.shift();
+          const result = task();
 
-      if (result === undefined) {
-        continue;
+          if(result === undefined) {
+              continue;
+          }
+
+          if(result.then) {
+              // NOTE: immediate "then" on the next line can reset it back to false
+              when(result).always(exec);
+              return;
+          }
+
+          throw errors.Error('E0015');
       }
 
-      if (result.then) {
-        // NOTE: immediate "then" on the next line can reset it back to false
-        when(result).always(exec);
-        return;
-      }
-
-      throw errors.Error('E0015');
-    }
-
-    _busy = false;
+      _busy = false;
   }
 
   function add(task, removeTaskCallback) {
-    if (!discardPendingTasks) {
-      tasks.push(task);
-    } else {
-      if (tasks[0] && removeTaskCallback) {
-        removeTaskCallback(tasks[0]);
+      if(!discardPendingTasks) {
+          _tasks.push(task);
+      } else {
+          if(_tasks[0] && removeTaskCallback) {
+              removeTaskCallback(_tasks[0]);
+          }
+          _tasks = [task];
       }
-      tasks = [task];
-    }
-    if (!_busy) {
-      exec();
-    }
+      if(!_busy) {
+          exec();
+      }
   }
 
   function busy() {
-    return _busy;
+      return _busy;
   }
 
   return {
