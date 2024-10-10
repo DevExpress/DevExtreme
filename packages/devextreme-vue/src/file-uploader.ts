@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import FileUploader, { Properties } from "devextreme/ui/file_uploader";
 import { prepareComponentConfig } from "./core/index";
+import FileUploader, { Properties } from "devextreme/ui/file_uploader";
 import {
  BeforeSendEvent,
  ContentReadyEvent,
@@ -17,7 +17,12 @@ import {
  UploadErrorEvent,
  UploadStartedEvent,
  ValueChangedEvent,
+ UploadHttpMethod,
+ FileUploadMode,
 } from "devextreme/ui/file_uploader";
+import {
+ ValidationStatus,
+} from "devextreme/common";
 
 type AccessibleOptions = Pick<Properties,
   "abortUpload" |
@@ -147,12 +152,12 @@ const componentConfig = {
     uploadFailedMessage: String,
     uploadFile: Function as PropType<(file: any, progressCallback: () => void) => any>,
     uploadHeaders: {},
-    uploadMethod: String as PropType<"POST" | "PUT">,
-    uploadMode: String as PropType<"instantly" | "useButtons" | "useForm">,
+    uploadMethod: String as PropType<UploadHttpMethod>,
+    uploadMode: String as PropType<FileUploadMode>,
     uploadUrl: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationStatus: String as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

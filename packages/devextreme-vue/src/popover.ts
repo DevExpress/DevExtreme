@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Popover, { Properties } from "devextreme/ui/popover";
 import { prepareComponentConfig } from "./core/index";
+import Popover, { Properties } from "devextreme/ui/popover";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -13,6 +13,29 @@ import {
  ShownEvent,
  TitleRenderedEvent,
 } from "devextreme/ui/popover";
+import {
+ Position,
+ HorizontalAlignment,
+ VerticalAlignment,
+ Direction,
+ PositionAlignment,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
+import {
+ CollisionResolution,
+ CollisionResolutionCombination,
+} from "devextreme/animation/position";
+import {
+ AnimationType,
+} from "devextreme/animation/fx";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
+import {
+ ToolbarLocation,
+} from "devextreme/ui/popup";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -90,7 +113,7 @@ const componentConfig = {
     onShowing: Function as PropType<(e: ShowingEvent) => void>,
     onShown: Function as PropType<(e: ShownEvent) => void>,
     onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
-    position: [Object, String] as PropType<Object | ("bottom" | "left" | "right" | "top")>,
+    position: [String, Object] as PropType<Position | Object>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
@@ -203,8 +226,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -241,8 +264,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
-    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
+    x: String as PropType<CollisionResolution>,
+    y: String as PropType<CollisionResolution>
   }
 };
 
@@ -298,14 +321,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -346,8 +369,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -389,11 +412,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    at: [Object, String] as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
-    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Object>,
+    my: [Object, String] as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -423,14 +446,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -506,16 +529,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: String as PropType<"bottom" | "top">,
+    toolbar: String as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

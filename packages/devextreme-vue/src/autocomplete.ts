@@ -1,7 +1,28 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Autocomplete, { Properties } from "devextreme/ui/autocomplete";
 import { prepareComponentConfig } from "./core/index";
+import Autocomplete, { Properties } from "devextreme/ui/autocomplete";
+import {
+ DropDownPredefinedButton,
+} from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
+import {
+ LabelMode,
+ SimplifiedSearchMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Mode,
+ Position,
+ ValidationStatus,
+ HorizontalAlignment,
+ VerticalAlignment,
+ TextEditorButtonLocation,
+ PositionAlignment,
+ Direction,
+ ButtonStyle,
+ ButtonType,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
 import {
  ChangeEvent,
  ClosedEvent,
@@ -25,12 +46,26 @@ import {
  ValueChangedEvent,
 } from "devextreme/ui/autocomplete";
 import {
+ CollisionResolution,
+ CollisionResolutionCombination,
+} from "devextreme/animation/position";
+import {
+ AnimationType,
+} from "devextreme/animation/fx";
+import {
  ClickEvent,
  ContentReadyEvent as ButtonContentReadyEvent,
  DisposingEvent as ButtonDisposingEvent,
  InitializedEvent as ButtonInitializedEvent,
  OptionChangedEvent as ButtonOptionChangedEvent,
 } from "devextreme/ui/button";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
+import {
+ ToolbarLocation,
+} from "devextreme/ui/popup";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -118,7 +153,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<Array<"clear" | "dropDown" | Object>>,
+    buttons: Array as PropType<Array<DropDownPredefinedButton | Object>>,
     dataSource: {},
     deferRendering: Boolean,
     disabled: Boolean,
@@ -138,7 +173,7 @@ const componentConfig = {
     items: Array as PropType<Array<any>>,
     itemTemplate: {},
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: String as PropType<LabelMode>,
     maxItemCount: Number,
     maxLength: [Number, String],
     minSearchLength: Number,
@@ -169,21 +204,21 @@ const componentConfig = {
     readOnly: Boolean,
     rtlEnabled: Boolean,
     searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
-    searchMode: String as PropType<"contains" | "startswith">,
+    searchMode: String as PropType<SimplifiedSearchMode>,
     searchTimeout: Number,
     selectedItem: {},
     showClearButton: Boolean,
     showDropDownButton: Boolean,
     spellcheck: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useItemTextAsTitle: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Mode | Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: String,
     valueChangeEvent: String,
     valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
@@ -322,8 +357,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -361,7 +396,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String as PropType<"after" | "before">,
+    location: String as PropType<TextEditorButtonLocation>,
     name: String,
     options: Object
   }
@@ -385,8 +420,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
-    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
+    x: String as PropType<CollisionResolution>,
+    y: String as PropType<CollisionResolution>
   }
 };
 
@@ -487,7 +522,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function as PropType<(e: Object) => void>,
     onShown: Function as PropType<(e: Object) => void>,
     onTitleRendered: Function as PropType<(e: Object) => void>,
-    position: [Function, Object, String] as PropType<(() => void) | Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    position: [Function, String, Object] as PropType<(() => void) | PositionAlignment | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -562,14 +597,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -617,8 +652,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -694,11 +729,11 @@ const DxOptionsConfig = {
     onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: String as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
@@ -725,11 +760,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    at: [Object, String] as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
-    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Object>,
+    my: [Object, String] as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -759,14 +794,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -823,16 +858,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: String as PropType<"bottom" | "top">,
+    toolbar: String as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

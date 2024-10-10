@@ -1,8 +1,14 @@
 export { ExplicitTypes } from "devextreme/ui/tabs";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Tabs, { Properties } from "devextreme/ui/tabs";
 import { prepareComponentConfig } from "./core/index";
+import Tabs, { Properties } from "devextreme/ui/tabs";
+import {
+ TabsIconPosition,
+ Orientation,
+ SingleOrMultiple,
+ TabsStyle,
+} from "devextreme/common";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -73,7 +79,7 @@ const componentConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
+    iconPosition: String as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any>>,
     itemTemplate: {},
@@ -89,7 +95,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
     onSelectionChanging: Function as PropType<(e: SelectionChangingEvent) => void>,
-    orientation: String as PropType<"horizontal" | "vertical">,
+    orientation: String as PropType<Orientation>,
     repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
     scrollByContent: Boolean,
@@ -98,9 +104,9 @@ const componentConfig = {
     selectedItem: {},
     selectedItemKeys: Array as PropType<Array<any>>,
     selectedItems: Array as PropType<Array<any>>,
-    selectionMode: String as PropType<"single" | "multiple">,
+    selectionMode: String as PropType<SingleOrMultiple>,
     showNavButtons: Boolean,
-    stylingMode: String as PropType<"primary" | "secondary">,
+    stylingMode: String as PropType<TabsStyle>,
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

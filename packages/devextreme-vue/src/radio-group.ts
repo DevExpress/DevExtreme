@@ -1,7 +1,13 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import RadioGroup, { Properties } from "devextreme/ui/radio_group";
 import { prepareComponentConfig } from "./core/index";
+import RadioGroup, { Properties } from "devextreme/ui/radio_group";
+import {
+ Orientation,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+} from "devextreme/common";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -67,7 +73,7 @@ const componentConfig = {
     isValid: Boolean,
     items: Array as PropType<Array<any>>,
     itemTemplate: {},
-    layout: String as PropType<"horizontal" | "vertical">,
+    layout: String as PropType<Orientation>,
     name: String,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -79,9 +85,9 @@ const componentConfig = {
     tabIndex: Number,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: {},
     valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
     visible: Boolean,

@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import ValidationGroup, { Properties } from "devextreme/ui/validation_group";
 import { prepareComponentConfig } from "./core/index";
+import ValidationGroup, { Properties } from "devextreme/ui/validation_group";
 import {
  DisposingEvent,
  InitializedEvent,

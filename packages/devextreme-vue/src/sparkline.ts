@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Sparkline, { Properties } from "devextreme/viz/sparkline";
 import { prepareComponentConfig } from "./core/index";
+import Sparkline, { Properties } from "devextreme/viz/sparkline";
 import {
  DisposingEvent,
  DrawnEvent,
@@ -13,7 +13,16 @@ import {
  OptionChangedEvent,
  TooltipHiddenEvent,
  TooltipShownEvent,
+ SparklineType,
 } from "devextreme/viz/sparkline";
+import {
+ PointSymbol,
+ Theme,
+ DashStyle,
+} from "devextreme/common/charts";
+import {
+ Format,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -94,14 +103,14 @@ const componentConfig = {
     pathModified: Boolean,
     pointColor: String,
     pointSize: Number,
-    pointSymbol: String as PropType<"circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp">,
+    pointSymbol: String as PropType<PointSymbol>,
     rtlEnabled: Boolean,
     showFirstLast: Boolean,
     showMinMax: Boolean,
     size: Object,
-    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
+    theme: String as PropType<Theme>,
     tooltip: Object,
-    type: String as PropType<"area" | "bar" | "line" | "spline" | "splinearea" | "steparea" | "stepline" | "winloss">,
+    type: String as PropType<SparklineType>,
     valueField: String,
     winColor: String,
     winlossThreshold: Number
@@ -183,7 +192,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
+    dashStyle: String as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -237,7 +246,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -346,7 +355,7 @@ const DxTooltipConfig = {
     customizeTooltip: Function as PropType<(pointsInfo: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,

@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import FileManager, { Properties } from "devextreme/ui/file_manager";
 import { prepareComponentConfig } from "./core/index";
+import FileManager, { Properties } from "devextreme/ui/file_manager";
 import {
  ContentReadyEvent,
  ContextMenuItemClickEvent,
@@ -28,7 +28,22 @@ import {
  SelectedFileOpenedEvent,
  SelectionChangedEvent,
  ToolbarItemClickEvent,
+ FileManagerPredefinedContextMenuItem,
+ FileManagerPredefinedToolbarItem,
+ FileManagerItemViewMode,
 } from "devextreme/ui/file_manager";
+import {
+ SingleOrMultiple,
+ HorizontalAlignment,
+ DataType,
+ SortOrder,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -140,7 +155,7 @@ const componentConfig = {
     rootFolderName: String,
     rtlEnabled: Boolean,
     selectedItemKeys: Array as PropType<Array<string>>,
-    selectionMode: String as PropType<"single" | "multiple">,
+    selectionMode: String as PropType<SingleOrMultiple>,
     tabIndex: Number,
     toolbar: Object,
     upload: Object,
@@ -245,14 +260,14 @@ const DxColumnConfig = {
     "update:width": null,
   },
   props: {
-    alignment: String as PropType<"center" | "left" | "right">,
+    alignment: String as PropType<HorizontalAlignment>,
     caption: String,
     cssClass: String,
     dataField: String,
-    dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
+    dataType: String as PropType<DataType>,
     hidingPriority: Number,
     sortIndex: Number,
-    sortOrder: String as PropType<"asc" | "desc">,
+    sortOrder: String as PropType<SortOrder>,
     visible: Boolean,
     visibleIndex: Number,
     width: [Number, String]
@@ -273,7 +288,7 @@ const DxContextMenuConfig = {
     "update:items": null,
   },
   props: {
-    items: Array as PropType<Array<Object | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">>
+    items: Array as PropType<Array<Object | FileManagerPredefinedContextMenuItem>>
   }
 };
 
@@ -308,7 +323,7 @@ const DxContextMenuItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array as PropType<Array<Object>>,
-    name: String as PropType<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">,
+    name: String as PropType<FileManagerPredefinedContextMenuItem | string>,
     selectable: Boolean,
     selected: Boolean,
     text: String,
@@ -363,14 +378,14 @@ const DxFileSelectionItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
-    name: String as PropType<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
+    name: String as PropType<FileManagerPredefinedToolbarItem | string>,
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 
@@ -409,16 +424,16 @@ const DxItemConfig = {
     disabled: Boolean,
     icon: String,
     items: Array as PropType<Array<Object>>,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
-    name: String as PropType<"create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete" | "showNavPane" | "switchView" | "clearSelection" | "separator">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
+    name: String as PropType<FileManagerPredefinedContextMenuItem | string | FileManagerPredefinedToolbarItem>,
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 
@@ -440,7 +455,7 @@ const DxItemViewConfig = {
   },
   props: {
     details: Object,
-    mode: String as PropType<"details" | "thumbnails">,
+    mode: String as PropType<FileManagerItemViewMode>,
     showFolders: Boolean,
     showParentFolder: Boolean
   }
@@ -511,8 +526,8 @@ const DxToolbarConfig = {
     "update:items": null,
   },
   props: {
-    fileSelectionItems: Array as PropType<Array<Object | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>,
-    items: Array as PropType<Array<Object | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">>
+    fileSelectionItems: Array as PropType<Array<Object | FileManagerPredefinedToolbarItem>>,
+    items: Array as PropType<Array<Object | FileManagerPredefinedToolbarItem>>
   }
 };
 
@@ -547,14 +562,14 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     icon: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
-    name: String as PropType<"showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
+    name: String as PropType<FileManagerPredefinedToolbarItem | string>,
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

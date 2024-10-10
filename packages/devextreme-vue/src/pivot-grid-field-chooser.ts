@@ -1,7 +1,14 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
 import { prepareComponentConfig } from "./core/index";
+import PivotGridFieldChooser, { Properties } from "devextreme/ui/pivot_grid_field_chooser";
+import {
+ ApplyChangesMode,
+} from "devextreme/common/grids";
+import {
+ FieldChooserLayout,
+ SearchMode,
+} from "devextreme/common";
 import {
  ContentReadyEvent,
  ContextMenuPreparingEvent,
@@ -49,7 +56,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSearch: Boolean,
-    applyChangesMode: String as PropType<"instantly" | "onDemand">,
+    applyChangesMode: String as PropType<ApplyChangesMode>,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -59,14 +66,7 @@ const componentConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    layout: {
-      type: Number as PropType<0 | 1 | 2>,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2
-      ].indexOf(v) !== -1
-    },
+    layout: Number as PropType<FieldChooserLayout>,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onContextMenuPreparing: Function as PropType<(e: ContextMenuPreparingEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -225,7 +225,7 @@ const DxSearchConfig = {
   props: {
     editorOptions: {},
     enabled: Boolean,
-    mode: String as PropType<"contains" | "startswith" | "equals">,
+    mode: String as PropType<SearchMode>,
     timeout: Number
   }
 };

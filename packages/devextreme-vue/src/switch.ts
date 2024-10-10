@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Switch, { Properties } from "devextreme/ui/switch";
 import { prepareComponentConfig } from "./core/index";
+import Switch, { Properties } from "devextreme/ui/switch";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -9,6 +9,11 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/switch";
+import {
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+} from "devextreme/common";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -71,9 +76,9 @@ const componentConfig = {
     tabIndex: Number,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: Boolean,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

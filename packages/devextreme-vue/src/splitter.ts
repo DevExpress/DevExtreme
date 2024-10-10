@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/splitter";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Splitter, { Properties } from "devextreme/ui/splitter";
 import { prepareComponentConfig } from "./core/index";
+import Splitter, { Properties } from "devextreme/ui/splitter";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -17,6 +17,9 @@ import {
  ResizeEndEvent,
  ResizeStartEvent,
 } from "devextreme/ui/splitter";
+import {
+ Orientation,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -73,7 +76,7 @@ const componentConfig = {
     onResize: Function as PropType<(e: ResizeEvent) => void>,
     onResizeEnd: Function as PropType<(e: ResizeEndEvent) => void>,
     onResizeStart: Function as PropType<(e: ResizeStartEvent) => void>,
-    orientation: String as PropType<"horizontal" | "vertical">,
+    orientation: String as PropType<Orientation>,
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,

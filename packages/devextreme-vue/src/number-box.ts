@@ -1,8 +1,10 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import NumberBox, { Properties } from "devextreme/ui/number_box";
 import { prepareComponentConfig } from "./core/index";
+import NumberBox, { Properties } from "devextreme/ui/number_box";
 import {
+ NumberBoxPredefinedButton,
+ NumberBoxType,
  ChangeEvent,
  ContentReadyEvent,
  CopyEvent,
@@ -19,6 +21,17 @@ import {
  PasteEvent,
  ValueChangedEvent,
 } from "devextreme/ui/number_box";
+import {
+ Format,
+ LabelMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+ TextEditorButtonLocation,
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
 import {
  ClickEvent,
  ContentReadyEvent as ButtonContentReadyEvent,
@@ -93,11 +106,11 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<Array<"clear" | "spins" | Object>>,
+    buttons: Array as PropType<Array<NumberBoxPredefinedButton | Object>>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
@@ -106,10 +119,10 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: String as PropType<LabelMode>,
     max: Number,
     min: Number,
-    mode: String as PropType<"number" | "text" | "tel">,
+    mode: String as PropType<NumberBoxType>,
     name: String,
     onChange: Function as PropType<(e: ChangeEvent) => void>,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
@@ -132,15 +145,15 @@ const componentConfig = {
     showClearButton: Boolean,
     showSpinButtons: Boolean,
     step: Number,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useLargeSpinButtons: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: Number,
     valueChangeEvent: String,
     visible: Boolean,
@@ -234,7 +247,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String as PropType<"after" | "before">,
+    location: String as PropType<TextEditorButtonLocation>,
     name: String,
     options: Object
   }
@@ -266,7 +279,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -324,11 +337,11 @@ const DxOptionsConfig = {
     onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: String as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,

@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Button, { Properties } from "devextreme/ui/button";
 import { prepareComponentConfig } from "./core/index";
+import Button, { Properties } from "devextreme/ui/button";
 import {
  ClickEvent,
  ContentReadyEvent,
@@ -9,6 +9,10 @@ import {
  InitializedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/button";
+import {
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -58,11 +62,11 @@ const componentConfig = {
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: String as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,

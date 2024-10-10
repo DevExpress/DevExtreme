@@ -1,8 +1,9 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import FilterBuilder, { Properties } from "devextreme/ui/filter_builder";
 import { prepareComponentConfig } from "./core/index";
+import FilterBuilder, { Properties } from "devextreme/ui/filter_builder";
 import {
+ GroupOperation,
  ContentReadyEvent,
  DisposingEvent,
  EditorPreparedEvent,
@@ -10,7 +11,12 @@ import {
  InitializedEvent,
  OptionChangedEvent,
  ValueChangedEvent,
+ FilterBuilderOperation,
 } from "devextreme/ui/filter_builder";
+import {
+ DataType,
+ Format,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -59,7 +65,7 @@ const componentConfig = {
     filterOperationDescriptions: Object,
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object,
-    groupOperations: Array as PropType<Array<"and" | "or" | "notAnd" | "notOr">>,
+    groupOperations: Array as PropType<Array<GroupOperation>>,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
@@ -147,7 +153,7 @@ const DxCustomOperationConfig = {
     calculateFilterExpression: Function as PropType<(filterValue: any, field: Object) => (string | Function | Array<any>)>,
     caption: String,
     customizeText: Function as PropType<(fieldInfo: Object) => string>,
-    dataTypes: Array as PropType<Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">>,
+    dataTypes: Array as PropType<Array<DataType>>,
     editorTemplate: {},
     hasValue: Boolean,
     icon: String,
@@ -185,12 +191,12 @@ const DxFieldConfig = {
     caption: String,
     customizeText: Function as PropType<(fieldInfo: Object) => string>,
     dataField: String,
-    dataType: String as PropType<"string" | "number" | "date" | "boolean" | "object" | "datetime">,
+    dataType: String as PropType<DataType>,
     editorOptions: {},
     editorTemplate: {},
     falseText: String,
-    filterOperations: Array as PropType<Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>>,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    filterOperations: Array as PropType<Array<FilterBuilderOperation | string>>,
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     lookup: Object,
     name: String,
     trueText: String
@@ -265,7 +271,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };

@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import RangeSlider, { Properties } from "devextreme/ui/range_slider";
 import { prepareComponentConfig } from "./core/index";
+import RangeSlider, { Properties } from "devextreme/ui/range_slider";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -9,6 +9,15 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/range_slider";
+import {
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+ SliderValueChangeMode,
+ Format,
+ VerticalEdge,
+ TooltipShowMode,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -89,11 +98,11 @@ const componentConfig = {
     tooltip: Object,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: Array as PropType<Array<number>>,
-    valueChangeMode: String as PropType<"onHandleMove" | "onHandleRelease">,
+    valueChangeMode: String as PropType<SliderValueChangeMode>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
@@ -176,7 +185,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -196,8 +205,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
-    position: String as PropType<"bottom" | "top">,
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    position: String as PropType<VerticalEdge>,
     visible: Boolean
   }
 };
@@ -222,9 +231,9 @@ const DxTooltipConfig = {
   },
   props: {
     enabled: Boolean,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
-    position: String as PropType<"bottom" | "top">,
-    showMode: String as PropType<"always" | "onHover">
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    position: String as PropType<VerticalEdge>,
+    showMode: String as PropType<TooltipShowMode>
   }
 };
 

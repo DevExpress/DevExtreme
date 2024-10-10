@@ -1,7 +1,14 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Sankey, { Properties } from "devextreme/viz/sankey";
 import { prepareComponentConfig } from "./core/index";
+import Sankey, { Properties } from "devextreme/viz/sankey";
+import {
+ VerticalAlignment,
+ ExportFormat,
+ Format,
+ HorizontalAlignment,
+ VerticalEdge,
+} from "devextreme/common";
 import {
  DisposingEvent,
  DrawnEvent,
@@ -15,7 +22,17 @@ import {
  NodeClickEvent,
  NodeHoverEvent,
  OptionChangedEvent,
+ SankeyColorMode,
 } from "devextreme/viz/sankey";
+import {
+ Palette,
+ PaletteExtensionMode,
+ Theme,
+ DashStyle,
+ HatchDirection,
+ TextOverflow,
+ WordWrap,
+} from "devextreme/common/charts";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -65,7 +82,7 @@ interface DxSankey extends AccessibleOptions {
 const componentConfig = {
   props: {
     adaptiveLayout: Object,
-    alignment: [Array, String] as PropType<(Array<"bottom" | "center" | "top">) | ("bottom" | "center" | "top")>,
+    alignment: [Array, String] as PropType<Array<VerticalAlignment> | VerticalAlignment>,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -88,8 +105,8 @@ const componentConfig = {
     onNodeClick: Function as PropType<(e: NodeClickEvent) => void>,
     onNodeHoverChanged: Function as PropType<(e: NodeHoverEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
-    palette: [Array, String] as PropType<Array<string> | ("Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office")>,
-    paletteExtensionMode: String as PropType<"alternate" | "blend" | "extrapolate">,
+    palette: [Array, String] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: String as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
@@ -97,7 +114,7 @@ const componentConfig = {
     sortData: {},
     sourceField: String,
     targetField: String,
-    theme: String as PropType<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">,
+    theme: String as PropType<Theme>,
     title: [Object, String],
     tooltip: Object,
     weightField: String
@@ -204,7 +221,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
+    dashStyle: String as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -233,7 +250,7 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array as PropType<Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">>,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
     svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
@@ -287,7 +304,7 @@ const DxFormatConfig = {
     formatter: Function as PropType<(value: number | Date) => string>,
     parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String as PropType<"billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime">,
+    type: String as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -308,7 +325,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String as PropType<"left" | "none" | "right">,
+    direction: String as PropType<HatchDirection>,
     opacity: Number,
     step: Number,
     width: Number
@@ -363,7 +380,7 @@ const DxLabelConfig = {
     customizeText: Function as PropType<(itemInfo: Object) => string>,
     font: Object,
     horizontalOffset: Number,
-    overlappingBehavior: String as PropType<"ellipsis" | "hide" | "none">,
+    overlappingBehavior: String as PropType<TextOverflow>,
     shadow: Object,
     useNodeColors: Boolean,
     verticalOffset: Number,
@@ -396,7 +413,7 @@ const DxLinkConfig = {
   props: {
     border: Object,
     color: String,
-    colorMode: String as PropType<"none" | "source" | "target" | "gradient">,
+    colorMode: String as PropType<SankeyColorMode>,
     hoverStyle: Object,
     opacity: Number
   }
@@ -575,8 +592,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: String as PropType<TextOverflow>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -605,14 +622,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String as PropType<"ellipsis" | "hide" | "none">,
-    verticalAlignment: String as PropType<"bottom" | "top">,
-    wordWrap: String as PropType<"normal" | "breakWord" | "none">
+    textOverflow: String as PropType<TextOverflow>,
+    verticalAlignment: String as PropType<VerticalEdge>,
+    wordWrap: String as PropType<WordWrap>
   }
 };
 
@@ -659,7 +676,7 @@ const DxTooltipConfig = {
     customizeNodeTooltip: Function as PropType<(info: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String] as PropType<Object | ((value: number | Date) => string) | ("billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime")>,
+    format: [Object, String, Function] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     linkTooltipTemplate: {},
     nodeTooltipTemplate: {},
     opacity: Number,
@@ -695,7 +712,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<"dash" | "dot" | "longDash" | "solid">,
+    dashStyle: String as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number

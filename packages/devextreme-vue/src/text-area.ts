@@ -1,7 +1,14 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import TextArea, { Properties } from "devextreme/ui/text_area";
 import { prepareComponentConfig } from "./core/index";
+import TextArea, { Properties } from "devextreme/ui/text_area";
+import {
+ LabelMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+} from "devextreme/common";
 import {
  ChangeEvent,
  ContentReadyEvent,
@@ -91,7 +98,7 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: String as PropType<LabelMode>,
     maxHeight: [Number, String],
     maxLength: [Number, String],
     minHeight: [Number, String],
@@ -115,14 +122,14 @@ const componentConfig = {
     readOnly: Boolean,
     rtlEnabled: Boolean,
     spellcheck: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: String,
     valueChangeEvent: String,
     visible: Boolean,

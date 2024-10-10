@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/gallery";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Gallery, { Properties } from "devextreme/ui/gallery";
 import { prepareComponentConfig } from "./core/index";
+import Gallery, { Properties } from "devextreme/ui/gallery";
 import {
  ContentReadyEvent,
  DisposingEvent,

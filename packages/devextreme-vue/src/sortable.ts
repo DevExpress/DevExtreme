@@ -1,7 +1,12 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Sortable, { Properties } from "devextreme/ui/sortable";
 import { prepareComponentConfig } from "./core/index";
+import Sortable, { Properties } from "devextreme/ui/sortable";
+import {
+ DragDirection,
+ DragHighlight,
+ Orientation,
+} from "devextreme/common";
 import {
  AddEvent,
  DisposingEvent,
@@ -63,15 +68,15 @@ const componentConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: String as PropType<"both" | "horizontal" | "vertical">,
+    dragDirection: String as PropType<DragDirection>,
     dragTemplate: {},
-    dropFeedbackMode: String as PropType<"push" | "indicate">,
+    dropFeedbackMode: String as PropType<DragHighlight>,
     elementAttr: Object,
     filter: String,
     group: String,
     handle: String,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
-    itemOrientation: String as PropType<"horizontal" | "vertical">,
+    itemOrientation: String as PropType<Orientation>,
     moveItemOnDrop: Boolean,
     onAdd: Function as PropType<(e: AddEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,

@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import ResponsiveBox, { Properties } from "devextreme/ui/responsive_box";
 import { prepareComponentConfig } from "./core/index";
+import ResponsiveBox, { Properties } from "devextreme/ui/responsive_box";
 import {
  ContentReadyEvent,
  DisposingEvent,

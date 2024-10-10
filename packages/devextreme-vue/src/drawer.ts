@@ -1,11 +1,14 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Drawer, { Properties } from "devextreme/ui/drawer";
 import { prepareComponentConfig } from "./core/index";
+import Drawer, { Properties } from "devextreme/ui/drawer";
 import {
  DisposingEvent,
  InitializedEvent,
  OptionChangedEvent,
+ OpenedStateMode,
+ PanelLocation,
+ RevealMode,
 } from "devextreme/ui/drawer";
 
 type AccessibleOptions = Pick<Properties,
@@ -55,9 +58,9 @@ const componentConfig = {
     onInitialized: Function as PropType<(e: InitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     opened: Boolean,
-    openedStateMode: String as PropType<"overlap" | "shrink" | "push">,
-    position: String as PropType<"left" | "right" | "top" | "bottom" | "before" | "after">,
-    revealMode: String as PropType<"slide" | "expand">,
+    openedStateMode: String as PropType<OpenedStateMode>,
+    position: String as PropType<PanelLocation>,
+    revealMode: String as PropType<RevealMode>,
     rtlEnabled: Boolean,
     shading: Boolean,
     template: {},

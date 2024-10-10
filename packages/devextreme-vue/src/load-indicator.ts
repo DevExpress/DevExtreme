@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import LoadIndicator, { Properties } from "devextreme/ui/load_indicator";
 import { prepareComponentConfig } from "./core/index";
+import LoadIndicator, { Properties } from "devextreme/ui/load_indicator";
 import {
  ContentReadyEvent,
  DisposingEvent,

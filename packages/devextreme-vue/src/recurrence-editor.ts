@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import RecurrenceEditor, { Properties } from "devextreme/ui/recurrence_editor";
 import { prepareComponentConfig } from "./core/index";
+import RecurrenceEditor, { Properties } from "devextreme/ui/recurrence_editor";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -9,6 +9,11 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/recurrence_editor";
+import {
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+} from "devextreme/common";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -65,9 +70,9 @@ const componentConfig = {
     tabIndex: Number,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: String,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

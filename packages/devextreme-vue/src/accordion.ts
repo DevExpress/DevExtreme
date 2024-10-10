@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/accordion";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Accordion, { Properties } from "devextreme/ui/accordion";
 import { prepareComponentConfig } from "./core/index";
+import Accordion, { Properties } from "devextreme/ui/accordion";
 import {
  ContentReadyEvent,
  DisposingEvent,

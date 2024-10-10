@@ -1,8 +1,21 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import TextBox, { Properties } from "devextreme/ui/text_box";
 import { prepareComponentConfig } from "./core/index";
+import TextBox, { Properties } from "devextreme/ui/text_box";
 import {
+ TextBoxPredefinedButton,
+ LabelMode,
+ MaskMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+ TextEditorButtonLocation,
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
+import {
+ TextBoxType,
  ChangeEvent,
  ContentReadyEvent,
  CopyEvent,
@@ -94,7 +107,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    buttons: Array as PropType<Array<string | "clear" | Object>>,
+    buttons: Array as PropType<Array<string | TextBoxPredefinedButton | Object>>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -105,13 +118,13 @@ const componentConfig = {
     isDirty: Boolean,
     isValid: Boolean,
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: String as PropType<LabelMode>,
     mask: String,
     maskChar: String,
     maskInvalidMessage: String,
     maskRules: {},
     maxLength: [Number, String],
-    mode: String as PropType<"email" | "password" | "search" | "tel" | "text" | "url">,
+    mode: String as PropType<TextBoxType>,
     name: String,
     onChange: Function as PropType<(e: ChangeEvent) => void>,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
@@ -132,17 +145,17 @@ const componentConfig = {
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showClearButton: Boolean,
-    showMaskMode: String as PropType<"always" | "onFocus">,
+    showMaskMode: String as PropType<MaskMode>,
     spellcheck: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useMaskedValue: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: String,
     valueChangeEvent: String,
     visible: Boolean,
@@ -236,7 +249,7 @@ const DxButtonConfig = {
     "update:options": null,
   },
   props: {
-    location: String as PropType<"after" | "before">,
+    location: String as PropType<TextEditorButtonLocation>,
     name: String,
     options: Object
   }
@@ -299,11 +312,11 @@ const DxOptionsConfig = {
     onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: String as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,

@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
 import { prepareComponentConfig } from "./core/index";
+import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -10,7 +10,20 @@ import {
  InitializedEvent,
  OptionChangedEvent,
  ValueChangedEvent,
+ MarkupType,
+ HtmlEditorImageUploadMode,
+ HtmlEditorImageUploadTab,
+ HtmlEditorPredefinedContextMenuItem,
+ HtmlEditorPredefinedToolbarItem,
 } from "devextreme/ui/html_editor";
+import {
+ EditorStyle,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
 import {
  BeforeSendEvent,
  ContentReadyEvent as FileUploaderContentReadyEvent,
@@ -26,7 +39,13 @@ import {
  UploadErrorEvent,
  UploadStartedEvent,
  ValueChangedEvent as FileUploaderValueChangedEvent,
+ UploadHttpMethod,
+ FileUploadMode,
 } from "devextreme/ui/file_uploader";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -105,18 +124,18 @@ const componentConfig = {
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     tableContextMenu: Object,
     tableResizing: Object,
     toolbar: Object,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: {},
-    valueType: String as PropType<"html" | "markdown">,
+    valueType: String as PropType<MarkupType>,
     variables: Object,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -319,12 +338,12 @@ const DxFileUploaderOptionsConfig = {
     uploadFailedMessage: String,
     uploadFile: Function as PropType<(file: any, progressCallback: () => void) => any>,
     uploadHeaders: {},
-    uploadMethod: String as PropType<"POST" | "PUT">,
-    uploadMode: String as PropType<"instantly" | "useButtons" | "useForm">,
+    uploadMethod: String as PropType<UploadHttpMethod>,
+    uploadMode: String as PropType<FileUploadMode>,
     uploadUrl: String,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationStatus: String as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -349,8 +368,8 @@ const DxImageUploadConfig = {
   },
   props: {
     fileUploaderOptions: Object,
-    fileUploadMode: String as PropType<"base64" | "server" | "both">,
-    tabs: Array as PropType<Array<Object | "url" | "file">>,
+    fileUploadMode: String as PropType<HtmlEditorImageUploadMode>,
+    tabs: Array as PropType<Array<Object | HtmlEditorImageUploadTab>>,
     uploadDirectory: String,
     uploadUrl: String
   }
@@ -399,23 +418,23 @@ const DxItemConfig = {
     closeMenuOnClick: Boolean,
     cssClass: String,
     disabled: Boolean,
-    formatName: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
+    formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
     formatValues: Array as PropType<Array<Boolean | number | string>>,
     html: String,
     icon: String,
-    items: Array as PropType<Array<Object | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedContextMenuItem>>,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties" | "size" | "header" | "separator">,
+    name: String as PropType<HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | string>,
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 
@@ -486,7 +505,7 @@ const DxTabConfig = {
     "update:name": null,
   },
   props: {
-    name: String as PropType<"url" | "file">
+    name: String as PropType<HtmlEditorImageUploadTab>
   }
 };
 
@@ -506,7 +525,7 @@ const DxTableContextMenuConfig = {
   },
   props: {
     enabled: Boolean,
-    items: Array as PropType<Array<Object | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedContextMenuItem>>
   }
 };
 
@@ -541,8 +560,8 @@ const DxTableContextMenuItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array as PropType<Array<Object | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">>,
-    name: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">,
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedContextMenuItem>>,
+    name: String as PropType<HtmlEditorPredefinedContextMenuItem>,
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -589,7 +608,7 @@ const DxToolbarConfig = {
   },
   props: {
     container: {},
-    items: Array as PropType<Array<Object | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">>,
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedToolbarItem>>,
     multiline: Boolean
   }
 };
@@ -629,19 +648,19 @@ const DxToolbarItemConfig = {
     acceptedValues: Array as PropType<Array<Boolean | number | string>>,
     cssClass: String,
     disabled: Boolean,
-    formatName: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
+    formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
     formatValues: Array as PropType<Array<Boolean | number | string>>,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<"background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">,
+    name: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

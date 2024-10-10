@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/toolbar";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Toolbar, { Properties } from "devextreme/ui/toolbar";
 import { prepareComponentConfig } from "./core/index";
+import Toolbar, { Properties } from "devextreme/ui/toolbar";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -12,7 +12,13 @@ import {
  ItemHoldEvent,
  ItemRenderedEvent,
  OptionChangedEvent,
+ LocateInMenuMode,
+ ShowTextMode,
 } from "devextreme/ui/toolbar";
+import {
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -135,15 +141,15 @@ const DxItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

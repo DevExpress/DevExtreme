@@ -1,7 +1,24 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Lookup, { Properties } from "devextreme/ui/lookup";
 import { prepareComponentConfig } from "./core/index";
+import Lookup, { Properties } from "devextreme/ui/lookup";
+import {
+ ApplyValueMode,
+ LabelMode,
+ PageLoadMode,
+ SimplifiedSearchMode,
+ EditorStyle,
+ ValidationMessageMode,
+ Mode,
+ Position,
+ ValidationStatus,
+ HorizontalAlignment,
+ VerticalAlignment,
+ Direction,
+ PositionAlignment,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
 import {
  ClosedEvent,
  ContentReadyEvent,
@@ -18,6 +35,10 @@ import {
  ValueChangedEvent,
 } from "devextreme/ui/lookup";
 import {
+ CollisionResolution,
+ CollisionResolutionCombination,
+} from "devextreme/animation/position";
+import {
  ContentReadyEvent as PopoverContentReadyEvent,
  DisposingEvent as PopoverDisposingEvent,
  HiddenEvent,
@@ -28,6 +49,16 @@ import {
  ShownEvent,
  TitleRenderedEvent,
 } from "devextreme/ui/popover";
+import {
+ AnimationType,
+} from "devextreme/animation/fx";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
+import {
+ ToolbarLocation,
+} from "devextreme/ui/popup";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -125,7 +156,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: String as PropType<"instantly" | "useButtons">,
+    applyValueMode: String as PropType<ApplyValueMode>,
     cancelButtonText: String,
     cleanSearchOnOpening: Boolean,
     clearButtonText: String,
@@ -151,7 +182,7 @@ const componentConfig = {
     items: Array as PropType<Array<any>>,
     itemTemplate: {},
     label: String,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelMode: String as PropType<LabelMode>,
     minSearchLength: Number,
     name: String,
     nextButtonText: String,
@@ -171,7 +202,7 @@ const componentConfig = {
     onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     opened: Boolean,
     pageLoadingText: String,
-    pageLoadMode: String as PropType<"nextButton" | "scrollBottom">,
+    pageLoadMode: String as PropType<PageLoadMode>,
     placeholder: String,
     pulledDownText: String,
     pullingDownText: String,
@@ -180,7 +211,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
     searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
-    searchMode: String as PropType<"contains" | "startswith">,
+    searchMode: String as PropType<SimplifiedSearchMode>,
     searchPlaceholder: String,
     searchStartEvent: String,
     searchTimeout: Number,
@@ -188,7 +219,7 @@ const componentConfig = {
     showCancelButton: Boolean,
     showClearButton: Boolean,
     showDataBeforeSearch: Boolean,
-    stylingMode: String as PropType<"outlined" | "underlined" | "filled">,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useItemTextAsTitle: Boolean,
@@ -196,9 +227,9 @@ const componentConfig = {
     usePopover: Boolean,
     validationError: {},
     validationErrors: Array as PropType<Array<any>>,
-    validationMessageMode: String as PropType<"always" | "auto">,
-    validationMessagePosition: String as PropType<"bottom" | "left" | "right" | "top" | "auto">,
-    validationStatus: String as PropType<"valid" | "invalid" | "pending">,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Mode | Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: {},
     valueChangeEvent: String,
     valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
@@ -345,8 +376,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -383,8 +414,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"fit" | "flip" | "flipfit" | "none">,
-    y: String as PropType<"fit" | "flip" | "flipfit" | "none">
+    x: String as PropType<CollisionResolution>,
+    y: String as PropType<CollisionResolution>
   }
 };
 
@@ -468,7 +499,7 @@ const DxDropDownOptionsConfig = {
     onShowing: Function as PropType<(e: ShowingEvent) => void>,
     onShown: Function as PropType<(e: ShownEvent) => void>,
     onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
-    position: [Object, String] as PropType<Object | ("bottom" | "left" | "right" | "top")>,
+    position: [String, Object] as PropType<Position | Object>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
@@ -544,14 +575,14 @@ const DxHideConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -618,8 +649,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String as PropType<"center" | "left" | "right">,
-    y: String as PropType<"bottom" | "center" | "top">
+    x: String as PropType<HorizontalAlignment>,
+    y: String as PropType<VerticalAlignment>
   }
 };
 
@@ -661,11 +692,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    at: [Object, String] as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String] as PropType<Object | ("fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit")>,
-    my: [Object, String] as PropType<Object | ("bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top")>,
+    collision: [String, Object] as PropType<CollisionResolutionCombination | Object>,
+    my: [Object, String] as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -695,14 +726,14 @@ const DxShowConfig = {
   props: {
     complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String as PropType<"bottom" | "left" | "right" | "top">,
+    direction: String as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
     start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String as PropType<"css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut">
+    type: String as PropType<AnimationType>
   }
 };
 
@@ -778,16 +809,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String as PropType<"always" | "auto" | "never">,
-    location: String as PropType<"after" | "before" | "center">,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String as PropType<"always" | "inMenu">,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: String as PropType<"bottom" | "top">,
+    toolbar: String as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: String as PropType<"dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox">
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 

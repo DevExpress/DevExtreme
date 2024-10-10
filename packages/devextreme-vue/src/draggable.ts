@@ -1,7 +1,10 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Draggable, { Properties } from "devextreme/ui/draggable";
 import { prepareComponentConfig } from "./core/index";
+import Draggable, { Properties } from "devextreme/ui/draggable";
+import {
+ DragDirection,
+} from "devextreme/common";
 import {
  DisposingEvent,
  DragEndEvent,
@@ -49,7 +52,7 @@ const componentConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: String as PropType<"both" | "horizontal" | "vertical">,
+    dragDirection: String as PropType<DragDirection>,
     dragTemplate: {},
     elementAttr: Object,
     group: String,

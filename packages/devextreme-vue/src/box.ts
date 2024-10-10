@@ -1,9 +1,12 @@
 export { ExplicitTypes } from "devextreme/ui/box";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Box, { Properties } from "devextreme/ui/box";
 import { prepareComponentConfig } from "./core/index";
+import Box, { Properties } from "devextreme/ui/box";
 import {
+ Distribution,
+ CrosswiseDistribution,
+ BoxDirection,
  ContentReadyEvent,
  DisposingEvent,
  InitializedEvent,
@@ -46,10 +49,10 @@ interface DxBox extends AccessibleOptions {
 
 const componentConfig = {
   props: {
-    align: String as PropType<"center" | "end" | "space-around" | "space-between" | "start">,
-    crossAlign: String as PropType<"center" | "end" | "start" | "stretch">,
+    align: String as PropType<Distribution>,
+    crossAlign: String as PropType<CrosswiseDistribution>,
     dataSource: {},
-    direction: String as PropType<"col" | "row">,
+    direction: String as PropType<BoxDirection>,
     disabled: Boolean,
     elementAttr: Object,
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,

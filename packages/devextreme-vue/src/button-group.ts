@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import ButtonGroup, { Properties } from "devextreme/ui/button_group";
 import { prepareComponentConfig } from "./core/index";
+import ButtonGroup, { Properties } from "devextreme/ui/button_group";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -10,6 +10,11 @@ import {
  OptionChangedEvent,
  SelectionChangedEvent,
 } from "devextreme/ui/button_group";
+import {
+ SingleMultipleOrNone,
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -66,8 +71,8 @@ const componentConfig = {
     rtlEnabled: Boolean,
     selectedItemKeys: Array as PropType<Array<any>>,
     selectedItems: Array as PropType<Array<any>>,
-    selectionMode: String as PropType<"single" | "multiple" | "none">,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    selectionMode: String as PropType<SingleMultipleOrNone>,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
@@ -140,7 +145,7 @@ const DxItemConfig = {
     icon: String,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: String as PropType<ButtonType>,
     visible: Boolean
   }
 };

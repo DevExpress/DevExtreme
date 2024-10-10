@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/validation_summary";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
 import { prepareComponentConfig } from "./core/index";
+import ValidationSummary, { Properties } from "devextreme/ui/validation_summary";
 import {
  ContentReadyEvent,
  DisposingEvent,

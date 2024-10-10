@@ -1,14 +1,30 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Form, { Properties } from "devextreme/ui/form";
 import { prepareComponentConfig } from "./core/index";
+import Form, { Properties } from "devextreme/ui/form";
 import {
+ Mode,
+ ValidationRuleType,
+ HorizontalAlignment,
+ VerticalAlignment,
+ ButtonStyle,
+ ButtonType,
+ ComparisonOperator,
+ TabsIconPosition,
+ TabsStyle,
+ Position,
+} from "devextreme/common";
+import {
+ LabelLocation,
+ FormLabelMode,
  ContentReadyEvent,
  DisposingEvent,
  EditorEnterKeyEvent,
  FieldDataChangedEvent,
  InitializedEvent,
  OptionChangedEvent,
+ FormItemType,
+ FormItemComponent,
 } from "devextreme/ui/form";
 import {
  ClickEvent,
@@ -87,7 +103,7 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    colCount: [Number, String] as PropType<number | "auto">,
+    colCount: [String, Number] as PropType<Mode | number>,
     colCountByScreen: Object,
     customizeItem: Function as PropType<(item: Object) => void>,
     disabled: Boolean,
@@ -99,8 +115,8 @@ const componentConfig = {
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     items: Array as PropType<Array<Object>>,
-    labelLocation: String as PropType<"left" | "right" | "top">,
-    labelMode: String as PropType<"static" | "floating" | "hidden" | "outside">,
+    labelLocation: String as PropType<LabelLocation>,
+    labelMode: String as PropType<FormLabelMode>,
     minColWidth: Number,
     onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
     onDisposing: Function as PropType<(e: DisposingEvent) => void>,
@@ -207,7 +223,7 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: String as PropType<ValidationRuleType>,
     validationCallback: Function as PropType<(options: Object) => any>
   }
 };
@@ -240,10 +256,10 @@ const DxButtonItemConfig = {
     buttonOptions: Object,
     colSpan: Number,
     cssClass: String,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
+    itemType: String as PropType<FormItemType>,
     name: String,
-    verticalAlignment: String as PropType<"bottom" | "center" | "top">,
+    verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -309,11 +325,11 @@ const DxButtonOptionsConfig = {
     onInitialized: Function as PropType<(e: ButtonInitializedEvent) => void>,
     onOptionChanged: Function as PropType<(e: ButtonOptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">,
+    type: String as PropType<ButtonType>,
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
@@ -362,10 +378,10 @@ const DxCompareRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -393,7 +409,7 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: String as PropType<ValidationRuleType>,
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
@@ -419,7 +435,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -447,7 +463,7 @@ const DxEmptyItemConfig = {
   props: {
     colSpan: Number,
     cssClass: String,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: String as PropType<FormItemType>,
     name: String,
     visible: Boolean,
     visibleIndex: Number
@@ -491,7 +507,7 @@ const DxGroupItemConfig = {
     colSpan: Number,
     cssClass: String,
     items: Array as PropType<Array<Object>>,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: String as PropType<FormItemType>,
     name: String,
     template: {},
     visible: Boolean,
@@ -562,14 +578,14 @@ const DxItemConfig = {
     dataField: String,
     disabled: Boolean,
     editorOptions: {},
-    editorType: String as PropType<"dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox">,
+    editorType: String as PropType<FormItemComponent>,
     helpText: String,
-    horizontalAlignment: String as PropType<"center" | "left" | "right">,
+    horizontalAlignment: String as PropType<HorizontalAlignment>,
     html: String,
     icon: String,
     isRequired: Boolean,
     items: Array as PropType<Array<Object>>,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: String as PropType<FormItemType>,
     label: Object,
     name: String,
     tabPanelOptions: Object,
@@ -579,7 +595,7 @@ const DxItemConfig = {
     text: String,
     title: String,
     validationRules: Array as PropType<Array<Object>>,
-    verticalAlignment: String as PropType<"bottom" | "center" | "top">,
+    verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
     visibleIndex: Number
   }
@@ -604,8 +620,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    alignment: String as PropType<"center" | "left" | "right">,
-    location: String as PropType<"left" | "right" | "top">,
+    alignment: String as PropType<HorizontalAlignment>,
+    location: String as PropType<LabelLocation>,
     showColon: Boolean,
     template: {},
     text: String,
@@ -630,7 +646,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -657,7 +673,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -688,7 +704,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -713,7 +729,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -751,10 +767,10 @@ const DxSimpleItemConfig = {
     cssClass: String,
     dataField: String,
     editorOptions: {},
-    editorType: String as PropType<"dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox">,
+    editorType: String as PropType<FormItemComponent>,
     helpText: String,
     isRequired: Boolean,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: String as PropType<FormItemType>,
     label: Object,
     name: String,
     template: {},
@@ -804,7 +820,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">
+    type: String as PropType<ValidationRuleType>
   }
 };
 
@@ -873,7 +889,7 @@ const DxTabbedItemConfig = {
   props: {
     colSpan: Number,
     cssClass: String,
-    itemType: String as PropType<"empty" | "group" | "simple" | "tabbed" | "button">,
+    itemType: String as PropType<FormItemType>,
     name: String,
     tabPanelOptions: Object,
     tabs: Array as PropType<Array<Object>>,
@@ -959,7 +975,7 @@ const DxTabPanelOptionsConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
+    iconPosition: String as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any>>,
     itemTemplate: {},
@@ -986,10 +1002,10 @@ const DxTabPanelOptionsConfig = {
     selectedIndex: Number,
     selectedItem: {},
     showNavButtons: Boolean,
-    stylingMode: String as PropType<"primary" | "secondary">,
+    stylingMode: String as PropType<TabsStyle>,
     swipeEnabled: Boolean,
     tabIndex: Number,
-    tabsPosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    tabsPosition: String as PropType<Position>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
@@ -1057,7 +1073,7 @@ const DxValidationRuleConfig = {
   },
   props: {
     comparisonTarget: Function as PropType<() => any>,
-    comparisonType: String as PropType<"!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=">,
+    comparisonType: String as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -1065,7 +1081,7 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String as PropType<"required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async">,
+    type: String as PropType<ValidationRuleType>,
     validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };

@@ -1,8 +1,12 @@
 export { ExplicitTypes } from "devextreme/ui/tile_view";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import TileView, { Properties } from "devextreme/ui/tile_view";
 import { prepareComponentConfig } from "./core/index";
+import TileView, { Properties } from "devextreme/ui/tile_view";
+import {
+ Orientation,
+ ScrollbarMode,
+} from "devextreme/common";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -59,7 +63,7 @@ const componentConfig = {
     baseItemHeight: Number,
     baseItemWidth: Number,
     dataSource: {},
-    direction: String as PropType<"horizontal" | "vertical">,
+    direction: String as PropType<Orientation>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
@@ -80,7 +84,7 @@ const componentConfig = {
     onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
     onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
-    showScrollbar: String as PropType<"always" | "never" | "onHover" | "onScroll">,
+    showScrollbar: String as PropType<ScrollbarMode>,
     tabIndex: Number,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>

@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import SpeedDialAction, { Properties } from "devextreme/ui/speed_dial_action";
 import { prepareComponentConfig } from "./core/index";
+import SpeedDialAction, { Properties } from "devextreme/ui/speed_dial_action";
 import {
  ClickEvent,
  ContentReadyEvent,

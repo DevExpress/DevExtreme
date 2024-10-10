@@ -1,8 +1,13 @@
 export { ExplicitTypes } from "devextreme/ui/tab_panel";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import TabPanel, { Properties } from "devextreme/ui/tab_panel";
 import { prepareComponentConfig } from "./core/index";
+import TabPanel, { Properties } from "devextreme/ui/tab_panel";
+import {
+ TabsIconPosition,
+ TabsStyle,
+ Position,
+} from "devextreme/common";
 import {
  ContentReadyEvent,
  DisposingEvent,
@@ -84,7 +89,7 @@ const componentConfig = {
     height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
-    iconPosition: String as PropType<"top" | "end" | "bottom" | "start">,
+    iconPosition: String as PropType<TabsIconPosition>,
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any>>,
     itemTemplate: {},
@@ -111,10 +116,10 @@ const componentConfig = {
     selectedIndex: Number,
     selectedItem: {},
     showNavButtons: Boolean,
-    stylingMode: String as PropType<"primary" | "secondary">,
+    stylingMode: String as PropType<TabsStyle>,
     swipeEnabled: Boolean,
     tabIndex: Number,
-    tabsPosition: String as PropType<"bottom" | "left" | "right" | "top">,
+    tabsPosition: String as PropType<Position>,
     visible: Boolean,
     width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },

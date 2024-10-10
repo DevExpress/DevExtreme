@@ -1,7 +1,7 @@
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import Chat, { Properties } from "devextreme/ui/chat";
 import { prepareComponentConfig } from "./core/index";
+import Chat, { Properties } from "devextreme/ui/chat";
 import {
  DisposingEvent,
  InitializedEvent,

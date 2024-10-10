@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/action_sheet";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
 import { prepareComponentConfig } from "./core/index";
+import ActionSheet, { Properties } from "devextreme/ui/action_sheet";
 import {
  CancelClickEvent,
  ContentReadyEvent,
@@ -14,6 +14,10 @@ import {
  ItemRenderedEvent,
  OptionChangedEvent,
 } from "devextreme/ui/action_sheet";
+import {
+ ButtonStyle,
+ ButtonType,
+} from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -146,10 +150,10 @@ const DxItemConfig = {
     disabled: Boolean,
     icon: String,
     onClick: Function as PropType<(e: Object) => void>,
-    stylingMode: String as PropType<"text" | "outlined" | "contained">,
+    stylingMode: String as PropType<ButtonStyle>,
     template: {},
     text: String,
-    type: String as PropType<"danger" | "default" | "normal" | "success">
+    type: String as PropType<ButtonType>
   }
 };
 

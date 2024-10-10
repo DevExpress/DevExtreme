@@ -1,8 +1,8 @@
 export { ExplicitTypes } from "devextreme/ui/multi_view";
 import { PropType } from "vue";
 import { defineComponent } from "vue";
-import MultiView, { Properties } from "devextreme/ui/multi_view";
 import { prepareComponentConfig } from "./core/index";
+import MultiView, { Properties } from "devextreme/ui/multi_view";
 import {
  ContentReadyEvent,
  DisposingEvent,
