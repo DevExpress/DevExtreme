@@ -24,7 +24,7 @@ export const createAppointmentLayout = (formatText, config) => {
   $('<div>').addClass(APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_DATE).text(formatText.formatDate).appendTo($contentDetails);
 
   config.isRecurrence
-        && $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('role', 'presentation').attr('aria-label', recurringText)
+        && $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('aria-label', recurringText)
           .appendTo(result);
 
   config.isAllDay
@@ -53,7 +53,7 @@ export const createAgendaAppointmentLayout = (formatText, config) => {
     .appendTo(leftLayoutContainer);
 
   config.isRecurrence
-        && $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('role', 'presentation').attr('aria-label', recurringText)
+        && $('<span>').addClass(`${APPOINTMENT_CONTENT_CLASSES.RECURRING_ICON} dx-icon-repeat`).attr('aria-label', recurringText)
           .appendTo(marker);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
