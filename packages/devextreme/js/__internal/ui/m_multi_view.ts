@@ -142,7 +142,7 @@ const MultiView = CollectionWidget.inherit({
     this._initSwipeable();
   },
 
-  _getVisibleSelectedItemIndices(indices) {
+  _setVisibleSelectedItemIndices(indices) {
     const items = this.option('items');
     const startingIndex = this.option('selectedIndex');
     const allHidden = items.every((item) => item.visible === false);
@@ -176,7 +176,7 @@ const MultiView = CollectionWidget.inherit({
     this.callBase();
 
     const selectedItemIndices = this._getSelectedItemIndices();
-    this._getVisibleSelectedItemIndices(selectedItemIndices);
+    this._setVisibleSelectedItemIndices(selectedItemIndices);
     this._updateItemsVisibility(this.option('selectedIndex'));
 
     this._setElementAria();
@@ -543,7 +543,7 @@ const MultiView = CollectionWidget.inherit({
   },
 
   _updateSelectedIndex() {
-    this._getVisibleSelectedItemIndices([this.option('selectedIndex')]);
+    this._setVisibleSelectedItemIndices([this.option('selectedIndex')]);
     this._updateItemsVisibility(this.option('selectedIndex'));
   },
 
