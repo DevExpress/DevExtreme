@@ -8,6 +8,7 @@ module.exports = {
     plugins: [
         'simple-import-sort',
     ],
+    ignorePatterns: ['core/utils/m_view_port.ts'],
     overrides: [
         // General TS rules.
         {

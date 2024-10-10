@@ -6,26 +6,27 @@ const ready = readyCallbacks.add;
 const changeCallback = callbacks();
 let $originalViewPort = $();
 
-const value = (function (...args) {
+const value: any = (function () {
   let $current;
 
-  return function (element?) {
-    if (!args.length) {
-      return $current;
-    }
+  return function(element) {
+      if(!arguments.length) {
+          return $current;
+      }
 
-    const $element = $(element);
-    $originalViewPort = $element;
-    const isNewViewportFound = !!$element.length;
-    const prevViewPort = value();
-    $current = isNewViewportFound ? $element : $('body');
-    changeCallback.fire(isNewViewportFound ? value() : $(), prevViewPort);
+      const $element = $(element);
+      $originalViewPort = $element;
+      const isNewViewportFound = !!$element.length;
+      const prevViewPort = value();
+      $current = isNewViewportFound ? $element : $('body');
+      changeCallback.fire(isNewViewportFound ? value() : $(), prevViewPort);
   };
-}());
+})();
 
-ready(() => {
+ready(function() {
   value('.dx-viewport');
 });
+
 
 export {
   changeCallback,
