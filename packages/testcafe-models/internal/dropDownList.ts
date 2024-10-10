@@ -69,4 +69,14 @@ export default abstract class DropDownList extends TextBox {
       dependencies: { getInstance },
     })();
   }
+
+  close(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(() => {
+      (getInstance() as any).close();
+    }, {
+      dependencies: { getInstance },
+    })();
+  }
 }

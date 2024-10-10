@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Splitter from 'devextreme-testcafe-models/splitter';
 import url from '../../../helpers/getPageUrl';
@@ -36,8 +35,6 @@ fixture.disablePageReloads`Splitter_common`
   test(`ResizeHandle appearance in different states, allowKeyboardNavigation: ${allowKeyboardNavigation}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const splitter = new Splitter('#container');
-
-    await t.click(Selector('body'), { offsetX: -50 });
 
     await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
     await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });

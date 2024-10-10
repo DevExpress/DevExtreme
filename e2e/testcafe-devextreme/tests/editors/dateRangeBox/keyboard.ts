@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { appendElementTo } from '../../../helpers/domUtils';
+import { appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateRangeBox keyboard navigation`
   .page(url(__dirname, '../../container.html'));
@@ -1250,10 +1250,10 @@ test('DateRangeBox keyboard navigation via `shift+tab` key if applyValueMode is 
 });
 
 test('DateRangeBox should not be closed by press shift+tab key on endDate input', async (t) => {
-  const dateRangeBox = new DateRangeBox('#container');
+  const dateRangeBox = new DateRangeBox('#dateRangeBox');
 
   await t
-    .click(Selector('body'), { offsetX: -50 })
+    .click(Selector('#nextFocusableElement'))
     .pressKey('shift+tab');
 
   await t
@@ -1279,18 +1279,29 @@ test('DateRangeBox should not be closed by press shift+tab key on endDate input'
     .eql(false)
     .expect(dateRangeBox.isFocused)
     .notOk();
-}).before(async () => createWidget('dxDateRangeBox', {
-  value: ['2021/09/17', '2021/10/24'],
-  openOnFieldClick: true,
-  opened: true,
-  width: 500,
-  dropDownOptions: {
-    hideOnOutsideClick: false,
-  },
-  calendarOptions: {
-    focusStateEnabled: false,
-  },
-}));
+}).before(async () => {
+  await insertStylesheetRulesToPage('#container { display: flex; }');
+
+  await appendElementTo('#container', 'div', 'dateRangeBox');
+  await appendElementTo('#container', 'div', 'nextFocusableElement');
+
+  await createWidget('dxDateRangeBox', {
+    value: ['2021/09/17', '2021/10/24'],
+    openOnFieldClick: true,
+    opened: true,
+    width: 500,
+    dropDownOptions: {
+      hideOnOutsideClick: false,
+    },
+    calendarOptions: {
+      focusStateEnabled: false,
+    },
+  }, '#dateRangeBox');
+
+  await createWidget('dxButton', {
+    text: 'Next Focusable Element',
+  }, '#nextFocusableElement');
+});
 
 [
   { key: 'left', offsetInDays: -1 },
