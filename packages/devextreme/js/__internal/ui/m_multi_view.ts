@@ -142,14 +142,43 @@ const MultiView = CollectionWidget.inherit({
     this._initSwipeable();
   },
 
+  _getVisibleSelectedItemIndices(indices) {
+    const items = this.option('items');
+    const startingIndex = this.option('selectedIndex');
+    const allHidden = items.every((item) => item.visible === false);
+    let visibleIndex = indices.find((index) => items[index]?.visible) ?? null;
+
+    if (visibleIndex === null) {
+      const firstVisibleItemIndex = items.slice(startingIndex).findIndex((item) => (typeof item === 'object' ? item.visible || !('visible' in item) : true));
+
+      if (firstVisibleItemIndex !== -1 && !allHidden) {
+        visibleIndex = firstVisibleItemIndex + startingIndex;
+      } else if (!allHidden) {
+        for (let i = startingIndex; i >= 0; i--) {
+          if (items[i]?.visible || !('visible' in items[i])) {
+            visibleIndex = i;
+            break;
+          }
+        }
+      } else {
+        visibleIndex = 0;
+      }
+    }
+
+    this.selectItem(visibleIndex)
+      .fail(() => this._animateItemContainer(0, noop))
+      .done(() => this._postprocessSwipe({ swipedTabsIndex: visibleIndex }));
+  },
+
   _initMarkup() {
     this._deferredItems = [];
 
     this.callBase();
 
     const selectedItemIndices = this._getSelectedItemIndices();
+    this._getVisibleSelectedItemIndices(selectedItemIndices);
+    this._updateItemsVisibility(this.option('selectedIndex'));
 
-    this._updateItemsVisibility(selectedItemIndices[0]);
     this._setElementAria();
     this._setItemsAria();
   },
@@ -513,6 +542,11 @@ const MultiView = CollectionWidget.inherit({
     this.callBase();
   },
 
+  _updateSelectedIndex() {
+    this._getVisibleSelectedItemIndices([this.option('selectedIndex')]);
+    this._updateItemsVisibility(this.option('selectedIndex'));
+  },
+
   _optionChanged(args) {
     const { value } = args;
 
@@ -529,9 +563,13 @@ const MultiView = CollectionWidget.inherit({
         this._invalidate();
         break;
       case 'items':
+        this._updateSelectedIndex();
         this._updateSwipeDisabledState();
         this._findBoundaryIndices();
         this.callBase(args);
+        break;
+      case 'selectedIndex':
+        this._updateSelectedIndex();
         break;
       default:
         this.callBase(args);
