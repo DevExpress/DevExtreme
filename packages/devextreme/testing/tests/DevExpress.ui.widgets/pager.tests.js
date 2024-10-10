@@ -5,7 +5,7 @@ import typeUtils from 'core/utils/type';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
 import 'generic_light.css!';
-import Pager from 'ui/pager';
+import Pager from 'ui/pagination';
 import localization from 'localization';
 
 const PAGER_LIGHT_MODE_WIDTH = 200;
