@@ -272,5 +272,34 @@ testModule('converter option', () => {
                 assert.ok(true, 'there is no error');
             }
         });
+
+        test('coverter should be replaced in runtime', function(assert) {
+            const toHtmlFirstStub = sinon.stub();
+            const fromHtmlFirstStub = sinon.stub();
+            const toHtmlSecondStub = sinon.stub();
+            const fromHtmlSecondStub = sinon.stub();
+
+            const firstConverter = {
+                toHtml: toHtmlFirstStub,
+                fromHtml: fromHtmlFirstStub,
+            };
+
+            const secondConverter = {
+                toHtml: toHtmlSecondStub,
+                fromHtml: fromHtmlSecondStub,
+            };
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter: firstConverter,
+            }).dxHtmlEditor('instance');
+
+            instance.option('converter', secondConverter);
+            instance.option('value', 'new value');
+
+            assert.strictEqual(toHtmlFirstStub.callCount, 0);
+            assert.strictEqual(fromHtmlFirstStub.callCount, 0);
+            assert.strictEqual(toHtmlSecondStub.callCount, 1);
+            assert.strictEqual(fromHtmlSecondStub.callCount, 1);
+        });
     });
 });
