@@ -1,7 +1,6 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-import 'ui/html_editor/converters/markdown';
 import config from 'core/config';
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
@@ -12,7 +11,7 @@ const HTML_EDITOR_OUTLINED_CLASS = 'dx-htmleditor-outlined';
 const HTML_EDITOR_FILLED_CLASS = 'dx-htmleditor-filled';
 const HTML_EDITOR_UNDERLINED_CLASS = 'dx-htmleditor-filled';
 
-const { test, skip } = QUnit;
+const { test } = QUnit;
 
 export default function() {
     QUnit.module('Base markup', () => {
@@ -46,25 +45,6 @@ export default function() {
             instance.option('name', 'New');
 
             assert.equal($submitElement.attr('name'), 'New', 'It\'s the right new name');
-        });
-
-        skip('render markdown markup', function(assert) {
-            const instance = $('#htmlEditor').dxHtmlEditor({
-                value: '*Test* **text**',
-                valueType: 'markdown'
-            }).dxHtmlEditor('instance');
-            const $element = instance.$element();
-
-            const $htmlEditorContent = $element.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
-            const isQuillRendered = !!$htmlEditorContent.length;
-            const $content = isQuillRendered ? $htmlEditorContent : $element.find(`.${QUILL_CONTAINER_CLASS}`);
-
-            assert.ok($element.hasClass(HTML_EDITOR_CLASS), 'Widget has a specific class on the root level');
-            assert.ok($element.children().hasClass(QUILL_CONTAINER_CLASS), 'Widget has a child marked as quill container');
-            assert.equal($content.html(), '<p><em>Test</em> <strong>text</strong></p>');
-
-            assert.equal(!!instance._deltaConverter, isQuillRendered, 'Delta converter isn\'t initialized at SSR');
-            assert.equal(!!instance._quillRegistrator, isQuillRendered, 'Quill registrator isn\'t initialized at SSR');
         });
 
         test('change value', function(assert) {
