@@ -11,19 +11,21 @@ QUnit.test('markup init', function(assert) {
         assert.ok(true, 'This test is not actual for mobile devices, dxclick add onclick=\'void(0)\' to every button in mobile');
         return;
     }
+    const element = $('#container').dxFilterBuilder();
+    const guid = element.find('.dx-filterbuilder-group-item').attr('aria-owns');
+
     const $etalon = $(
         '<div id="container" class="dx-filterbuilder dx-widget">'
             + '<div class="dx-filterbuilder-group" role="group" aria-label="Level 1">'
-                + '<div class="dx-filterbuilder-group-item" role="presentation" aria-label="Group Item">'
+                + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group Item" aria-level="1" aria-owns="' + guid + '">'
                     + '<div role="button" title="Operation" aria-haspopup="true" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
                     + '<div role="button" aria-label="Add" aria-haspopup="true" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
                 + '</div>'
-                + '<div class="dx-filterbuilder-group-content"></div>'
+                + '<div class="dx-filterbuilder-group-content" id="' + guid + '" role="group"></div>'
             + '</div>'
         + '</div>'
     );
 
-    const element = $('#container').dxFilterBuilder();
     assert.equal(element.html(), $etalon.html());
 });
 
@@ -53,14 +55,35 @@ QUnit.test('filter Content init by one condition', function(assert) {
         assert.ok(true, 'This test is not actual for mobile devices, dxclick add onclick=\'void(0)\' to every button in mobile');
         return;
     }
-    const $etalon = $('<div/>').html(
-        '<div class="dx-filterbuilder-group" role="group" aria-label="Level 2"><div class="dx-filterbuilder-group-item" role="presentation" aria-label="Group Item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove group"></div><div role="button" title="Operation" aria-haspopup="true" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div><div role="button" aria-label="Add" aria-haspopup="true" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div></div><div class="dx-filterbuilder-group-content"><div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="button" title="Item Field" aria-haspopup="true">Company Name</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="button" title="Item Operation" aria-haspopup="true">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div></div></div></div></div></div>'
-    );
 
     const element = $('#container').dxFilterBuilder({
         fields: fields,
         value: [[['CompanyName', '=', 'K&S Music'], 'Or'], 'And']
     });
+    const guid = element.find('.dx-filterbuilder-group[aria-label="Level 2"] .dx-filterbuilder-group-item').attr('aria-owns');
+
+    const $etalon = $('<div/>').html(
+        '<div class="dx-filterbuilder-group" role="group" aria-label="Level 2">'
+            + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group Item" aria-level="2" aria-owns="' + guid + '">'
+                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove group"></div>'
+                + '<div role="button" title="Operation" aria-haspopup="true" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>'
+                + '<div role="button" aria-label="Add" aria-haspopup="true" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+            + '</div>'
+            + '<div class="dx-filterbuilder-group-content" id="' + guid + '" role="group">'
+                + '<div class="dx-filterbuilder-group">'
+                    + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="2">'
+                        + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
+                        + '<div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item Field" aria-haspopup="true" aria-expanded="false">Company Name</div>'
+                        + '<div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item Operation" aria-haspopup="true" aria-expanded="false">Equals</div>'
+                        + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
+                            + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>'
+            + '</div>'
+        + '</div>'
+    );
+
     assert.equal(element.find('.' + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());
 });
 
@@ -70,7 +93,7 @@ QUnit.test('filter Content init by several conditions', function(assert) {
         return;
     }
     const $etalon = $('<div/>').html(
-        '<div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="button" title="Item Field" aria-haspopup="true">Company Name</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="button" title="Item Operation" aria-haspopup="true">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div></div></div></div><div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="button" title="Item Field" aria-haspopup="true">Zipcode</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="button" title="Item Operation" aria-haspopup="true">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">98027</div></div></div></div>'
+        '<div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item Field" aria-haspopup="true" aria-expanded="false">Company Name</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item Operation" aria-haspopup="true" aria-expanded="false">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div></div></div></div><div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item Field" aria-haspopup="true" aria-expanded="false">Zipcode</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item Operation" aria-haspopup="true" aria-expanded="false">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">98027</div></div></div></div>'
     );
 
     const element = $('#container').dxFilterBuilder({

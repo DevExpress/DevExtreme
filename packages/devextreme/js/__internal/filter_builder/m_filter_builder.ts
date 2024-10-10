@@ -263,7 +263,7 @@ class FilterBuilder extends Widget<any> {
       .appendTo(this.$element());
   }
 
-  _addAriaAttributes($element, ariaLabel, role, hasPopup?, hasExpanded?) {
+  _addAriaAttributes($element, ariaLabel, role, hasPopup?, hasExpanded?, ariaLevel?) {
     if (!$element || !$element.length) return;
 
     const attributes = { role };
@@ -285,13 +285,17 @@ class FilterBuilder extends Widget<any> {
       attributes['aria-expanded'] = `${hasExpanded}`;
     }
 
+    if (isDefined(ariaLevel)) {
+      attributes['aria-level'] = `${ariaLevel}`;
+    }
+
     $element.attr(attributes);
   }
 
-  _createConditionElement(condition, parent) {
+  _createConditionElement(condition, parent, groupLevel?) {
     return $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
-      .append(this._createConditionItem(condition, parent));
+      .append(this._createConditionItem(condition, parent, groupLevel));
   }
 
   _createGroupElementByCriteria(criteria, parent?, groupLevel = 0) {
@@ -305,7 +309,7 @@ class FilterBuilder extends Widget<any> {
         this._createGroupElementByCriteria(innerCriteria, criteria, groupLevel + 1)
           .appendTo($groupContent);
       } else if (isCondition(innerCriteria)) {
-        this._createConditionElement(innerCriteria, criteria)
+        this._createConditionElement(innerCriteria, criteria, `${groupLevel + 1}`)
           .appendTo($groupContent);
       }
     }
@@ -328,7 +332,7 @@ class FilterBuilder extends Widget<any> {
     }
 
     this._addAriaAttributes($group, groupLevelAria, 'group');
-    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem');
+    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel + 1}`);
     this._addAriaAttributes($groupContent, '', 'group');
     $groupItem.attr('aria-owns', `${$guid}`);
 
@@ -561,12 +565,12 @@ class FilterBuilder extends Widget<any> {
     return $fieldButton;
   }
 
-  _createConditionItem(condition, parent) {
+  _createConditionItem(condition, parent, groupLevel?) {
     const $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
     const fields = this._getNormalizedFields();
     const field = getField(condition[0], fields);
 
-    this._addAriaAttributes($item, '', 'treeitem');
+    this._addAriaAttributes($item, '', 'treeitem', null, null, groupLevel);
 
     this._createRemoveButton(() => {
       removeItem(parent, condition);
