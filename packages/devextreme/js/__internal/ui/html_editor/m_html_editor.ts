@@ -435,7 +435,7 @@ const HtmlEditor = Editor.inherit({
 
     const htmlMarkup = this._deltaConverter.toHtml();
     const convertedValue = this._htmlConverter
-      ? this._htmlConverter.fromHtml(htmlMarkup)
+      ? String(this._htmlConverter.fromHtml(htmlMarkup))
       : htmlMarkup;
 
     if (
@@ -523,7 +523,7 @@ const HtmlEditor = Editor.inherit({
             this._isEditorUpdating = false;
           } else {
             const updatedValue = this._htmlConverter
-              ? this._htmlConverter.toHtml(args.value)
+              ? String(this._htmlConverter.toHtml(args.value))
               : args.value;
 
             this._suppressValueChangeAction();
