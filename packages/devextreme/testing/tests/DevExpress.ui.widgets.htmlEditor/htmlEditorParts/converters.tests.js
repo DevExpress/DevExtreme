@@ -1,7 +1,11 @@
 import $ from 'jquery';
 
+import 'ui/html_editor';
 import DeltaConverter from '__internal/ui/html_editor/converters/m_delta';
 import { getQuill } from 'ui/html_editor/quill_importer';
+import keyboardMock from '../../../helpers/keyboardMock.js';
+
+const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
 const { test, module: testModule } = QUnit;
 
@@ -159,6 +163,114 @@ testModule('Custom list', {
 
             this.quillInstance.setContents(deltaOps);
             assert.strictEqual(this.deltaConverter.toHtml(), expected, `attributes of the ${type} list are correct`);
+        });
+    });
+});
+
+testModule('converter option', () => {
+    test('toHtml and fromHtml should be called once after value option changed', function(assert) {
+        const toHtmlStub = sinon.stub();
+        const fromHtmlStub = sinon.stub();
+
+        const converter = {
+            toHtml: toHtmlStub,
+            fromHtml: fromHtmlStub,
+        };
+
+        const instance = $('#htmlEditor').dxHtmlEditor({
+            converter,
+        }).dxHtmlEditor('instance');
+
+        instance.option('value', 'new value');
+
+        assert.strictEqual(toHtmlStub.callCount, 1);
+        assert.strictEqual(fromHtmlStub.callCount, 1);
+    });
+
+    test('toHtml and fromHtml must be called the correct number of times after the character has been entered', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const toHtmlStub = sinon.stub();
+        const fromHtmlStub = sinon.stub();
+        const done = assert.async();
+
+        try {
+            const converter = {
+                toHtml: toHtmlStub,
+                fromHtml: fromHtmlStub,
+            };
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter,
+                onValueChanged: () => {
+                    assert.strictEqual(toHtmlStub.callCount, 0);
+                    assert.strictEqual(fromHtmlStub.callCount, 1);
+
+                    done();
+                },
+            }).dxHtmlEditor('instance');
+
+            instance.focus();
+
+            clock.tick(500);
+
+            const input = instance.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
+
+            keyboardMock(input).type('t').change();
+            input.textContent = 't';
+        } finally {
+            clock.restore();
+        }
+    });
+
+    [
+        '',
+        'string',
+        true,
+        false,
+        null,
+        undefined,
+        NaN,
+        4,
+        Infinity,
+        -Infinity,
+        {},
+    ].forEach(returnedValue => {
+        test(`There is no error here if the toHtml return value is ${returnedValue}`, function(assert) {
+            const converter = {
+                toHtml: () => returnedValue,
+                fromHtml: (value) => value,
+            };
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter,
+            }).dxHtmlEditor('instance');
+
+            try {
+                instance.option('value', '');
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                assert.ok(true, 'there is no error');
+            }
+        });
+
+        test(`There is no error here if the fromHtml return value is ${returnedValue}`, function(assert) {
+            const converter = {
+                toHtml: (value) => value,
+                fromHtml: () => returnedValue,
+            };
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter,
+            }).dxHtmlEditor('instance');
+
+            try {
+                instance.option('value', '');
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                assert.ok(true, 'there is no error');
+            }
         });
     });
 });

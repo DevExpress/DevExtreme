@@ -706,5 +706,3 @@ QUnit.module('Chat', moduleConfig, () => {
         });
     });
 });
-
-
