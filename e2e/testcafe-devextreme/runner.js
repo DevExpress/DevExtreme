@@ -113,24 +113,28 @@ createTestCafe({
             quarantineMode: { successThreshold: 1, attemptLimit: 5 },
         };
 
-        if(args.componentFolder.trim() !== 'renovation') {
-            runOptions.hooks = {
-                test: {
-                    before: async() => {
-                        if(args.shadowDom) {
-                            await addShadowRootTree();
-                        }
+        runOptions.hooks = {
+            test: {
+                before: async() => {
+                    if(args.shadowDom) {
+                        await addShadowRootTree();
+                    }
 
-                        if(args.theme) {
-                            await changeTheme(args.theme);
-                        }
-                    },
-                    after: async() => {
-                        await testPageUtils.clearTestPage();
+                    if(args.theme) {
+                        await changeTheme(args.theme);
                     }
                 },
-            };
-        }
+                after: async(t) => {
+                    await testPageUtils.clearTestPage(t);
+
+                    await createTestCafe.ClientFunction(() => {
+                        document.body.style.minHeight = '100px';
+                    }).with({ boundTestRun: t })();
+
+                    await t.click(createTestCafe.Selector('body'), { offsetX: -1, offsetY: 1 });
+                }
+            },
+        };
 
         if(args.browsers === 'chrome:docker') {
             runOptions.disableScreenshots = true;

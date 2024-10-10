@@ -2,7 +2,7 @@
 const testCafe = require('testcafe');
 
 module.exports = {
-    clearTestPage: async function() {
+    clearTestPage: async function(t) {
         const shadowDom = process.env.shadowDom === 'true';
 
         await testCafe.ClientFunction(() => {
@@ -46,6 +46,6 @@ module.exports = {
             dependencies: {
                 shadowDom,
             }
-        })();
+        }).with({ boundTestRun: t })();
     }
 };

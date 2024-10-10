@@ -35,6 +35,8 @@ test('Popup should not be closed if lookup is placed at the page bottom (T101803
   await t
     .expect(await lookup.isOpened())
     .ok();
+
+  await lookup.close();
 }).before(async () => createWidget('dxLookup', {
   items: [1, 2, 3],
   usePopover: false,
