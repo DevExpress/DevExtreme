@@ -145,11 +145,13 @@ const MultiView = CollectionWidget.inherit({
   _setVisibleSelectedItemIndices(indices) {
     const items = this.option('items');
     const startingIndex = this.option('selectedIndex');
-    const allHidden = items.every((item) => item.visible === false);
+    const allHidden = items.every((item) => item?.visible === false);
     let visibleIndex = indices.find((index) => items[index]?.visible) ?? null;
 
     if (visibleIndex === null) {
-      const firstVisibleItemIndex = items.slice(startingIndex).findIndex((item) => (typeof item === 'object' ? item.visible || !('visible' in item) : true));
+      const firstVisibleItemIndex = items.slice(startingIndex).findIndex((item) => (typeof item === 'object' && item !== null
+        ? item.visible || !('visible' in item)
+        : true));
 
       if (firstVisibleItemIndex !== -1 && !allHidden) {
         visibleIndex = firstVisibleItemIndex + startingIndex;
