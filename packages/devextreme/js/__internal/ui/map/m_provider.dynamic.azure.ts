@@ -13,12 +13,14 @@ const window = getWindow();
 
 declare let atlas: any;
 
-const AZURE_LINK = 'https://atlas.microsoft.com/';
-let AZURE_JS_URL = `${AZURE_LINK}sdk/javascript/mapcontrol/3/atlas.min.js`;
-let AZURE_CSS_URL = `${AZURE_LINK}/sdk/javascript/mapcontrol/3/atlas.min.css`;
+const AZURE_BASE_LINK = 'https://atlas.microsoft.com/';
+let AZURE_JS_URL = `${AZURE_BASE_LINK}sdk/javascript/mapcontrol/3/atlas.min.js`;
+let AZURE_CSS_URL = `${AZURE_BASE_LINK}/sdk/javascript/mapcontrol/3/atlas.min.css`;
 let CUSTOM_URL;
 
 const MAP_MARKER_TOOLTIP_CLASS = 'dx-map-marker-tooltip';
+
+const CAMERA_PADDING = 50;
 
 const azureMapsLoaded = function () {
   // @ts-expect-error
@@ -66,7 +68,7 @@ const AzureProvider = DynamicProvider.inherit({
         return;
       }
 
-      const searchURL = `${AZURE_LINK}geocode?subscription-key=${this._keyOption('azure')}&api-version=2023-06-01&query=${location}&limit=1`;
+      const searchURL = `${AZURE_BASE_LINK}geocode?subscription-key=${this._keyOption('azure')}&api-version=2023-06-01&query=${location}&limit=1`;
 
       ajax.sendRequest({
         url: CUSTOM_URL ?? searchURL,
@@ -361,8 +363,7 @@ const AzureProvider = DynamicProvider.inherit({
       const queryCoordinates = locations.map((location) => `${location[1]},${location[0]}`);
       const query = queryCoordinates.join(':');
       const routeType = this._movementMode(options.mode);
-      const isWalkingType = routeType === this._movementMode('walking');
-      const searchUrl = `${AZURE_LINK}route/directions/json?subscription-key=${this._keyOption('azure')}&api-version=1.0&query=${query}&travelMode=${routeType}`;
+      const searchUrl = `${AZURE_BASE_LINK}route/directions/json?subscription-key=${this._keyOption('azure')}&api-version=1.0&query=${query}&travelMode=${routeType}`;
 
       ajax.sendRequest({
         url: CUSTOM_URL ?? searchUrl,
@@ -376,22 +377,11 @@ const AzureProvider = DynamicProvider.inherit({
 
           dataSource.add(new atlas.data.Feature(new atlas.data.LineString(routeCoordinates), {}));
 
-          const lineLayerConfig: {
-            strokeColor: string;
-            strokeOpacity: number;
-            strokeWidth: number;
-            strokeDashArray?: number[];
-          } = {
+          const lineLayer = new atlas.layer.LineLayer(dataSource, null, {
             strokeColor: routeColor,
             strokeOpacity: routeOpacity,
             strokeWidth: options.weight || this._defaultRouteWeight(),
-          };
-
-          if (isWalkingType) {
-            lineLayerConfig.strokeDashArray = [1, 1];
-          }
-
-          const lineLayer = new atlas.layer.LineLayer(dataSource, null, lineLayerConfig);
+          });
 
           this._map.sources.add(dataSource);
           this._map.layers.add(lineLayer);
@@ -438,7 +428,7 @@ const AzureProvider = DynamicProvider.inherit({
 
       this._map.setCamera({
         bounds: this._bounds,
-        padding: 50,
+        padding: CAMERA_PADDING,
       });
 
       const zoomAfterFitting = this._map.getCamera().zoom;

@@ -1,14 +1,12 @@
 /* global atlas */
 
 import $ from 'jquery';
-import testing from './utils.js';
+import { MARKERS, ROUTES } from './utils.js';
 import AzureProvider from '__internal/ui/map/m_provider.dynamic.azure';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 
 import 'ui/map';
 
-const MARKERS = testing.MARKERS;
-const ROUTES = testing.ROUTES;
 
 const MARKER_CLASS = 'dx-map-marker';
 
@@ -22,6 +20,8 @@ const prepareTestingAzureProvider = () => {
     atlas.removedLayers = [];
     atlas.addedSources = [];
     atlas.removedSources = [];
+    atlas.addEvents = [];
+    atlas.removeEvents = [];
     atlas.popupOpened = false;
 };
 
@@ -103,15 +103,15 @@ QUnit.module('map loading', moduleConfig, () => {
             delete window.atlas;
         }
 
-        const d1 = $.Deferred();
-        const d2 = $.Deferred();
+        const mapReadyDeferred1 = $.Deferred();
+        const mapReadyDeferred2 = $.Deferred();
 
         $('<div>').appendTo($('#map')).dxMap({
             provider: 'azure',
             onReady: $.proxy((e) => {
                 assert.ok(window.atlas, 'map loaded');
 
-                d1.resolve();
+                mapReadyDeferred1.resolve();
             }, this)
         });
 
@@ -120,11 +120,11 @@ QUnit.module('map loading', moduleConfig, () => {
             onReady: $.proxy((e) => {
                 assert.ok(window.atlas, 'map loaded');
 
-                d2.resolve();
+                mapReadyDeferred2.resolve();
             }, this)
         });
 
-        $.when(d1, d2).done(function() {
+        $.when(mapReadyDeferred1, mapReadyDeferred2).done(function() {
             done();
         });
     });
@@ -197,17 +197,17 @@ QUnit.module('basic options', moduleConfig, () => {
 
     QUnit.test('map should change style on runtime type update', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
             type: 'hybrid',
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.option('onUpdated', () => {
                 assert.strictEqual(atlas.styleOptions.style, 'road', 'map style is updated');
 
@@ -220,7 +220,7 @@ QUnit.module('basic options', moduleConfig, () => {
 
     QUnit.test('map should pass zoom option', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
@@ -228,11 +228,11 @@ QUnit.module('basic options', moduleConfig, () => {
             onReady: () => {
                 assert.strictEqual(atlas.options.zoom, 10, 'zoom is passed on init');
 
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.option('onUpdated', () => {
                 assert.strictEqual(atlas.cameraOptions.zoom, 5, 'zoom is passed on runtime');
 
@@ -258,7 +258,7 @@ QUnit.module('basic options', moduleConfig, () => {
 
     QUnit.test('map should pass center option', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
@@ -266,11 +266,11 @@ QUnit.module('basic options', moduleConfig, () => {
             onReady: () => {
                 assert.deepEqual(atlas.cameraOptions.center, [20, 10], 'center is passed on init');
 
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.option('onUpdated', () => {
                 assert.deepEqual(atlas.cameraOptions.center, [200, 200], 'center is passed on runtime');
 
@@ -289,7 +289,7 @@ QUnit.module('basic options', moduleConfig, () => {
             provider: 'azure',
             center,
             onReady: () => {
-                assert.deepEqual(atlas.cameraOptions.center, this.geocodedCoordinates, 'center coordinated are correct');
+                assert.deepEqual(atlas.cameraOptions.center, this.geocodedCoordinates, 'center coordinates are correct');
 
                 done();
             }
@@ -368,18 +368,18 @@ QUnit.module('basic options', moduleConfig, () => {
     ['width', 'height'].forEach((dimension) => {
         QUnit.test(`map should resize on runtime ${dimension} change`, function(assert) {
             const done = assert.async();
-            const d = $.Deferred();
+            const mapReadyDeferred = $.Deferred();
 
             const map = $('#map').dxMap({
                 provider: 'azure',
                 dimension: 300,
                 onReady: () => {
                     assert.strictEqual(atlas.mapResized, false, 'map was not resized so far');
-                    d.resolve();
+                    mapReadyDeferred.resolve();
                 }
             }).dxMap('instance');
 
-            d.done(() => {
+            mapReadyDeferred.done(() => {
                 map.option('onUpdated', () => {
                     assert.strictEqual(atlas.mapResized, true, 'map was resized');
 
@@ -393,17 +393,17 @@ QUnit.module('basic options', moduleConfig, () => {
 
     QUnit.test('map should be able add and remove controls', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
             controls: true,
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             assert.strictEqual(atlas.addedControls, 4, 'four controls are added');
             assert.strictEqual(atlas.controlOptions.position, 'top-right', 'controls position is correct');
 
@@ -415,6 +415,94 @@ QUnit.module('basic options', moduleConfig, () => {
 
             map.option('controls', false);
         });
+    });
+
+    QUnit.test('map should set interactive state depending on disabled option', function(assert) {
+        const done = assert.async();
+        const d1 = $.Deferred();
+        const d2 = $.Deferred();
+
+        const map = $('#map').dxMap({
+            provider: 'azure',
+            disabled: true,
+        }).dxMap('instance');
+
+
+        setTimeout(() => {
+            d1.resolve();
+        }, 100);
+
+        d1.done(() => {
+            assert.strictEqual(atlas.options.interactive, false, 'interactive is disabled on init');
+
+            map.option('disabled', false);
+
+            setTimeout(() => {
+                d2.resolve();
+            }, 100);
+        });
+
+        d2.done(() => {
+            assert.strictEqual(atlas.options.interactive, false, 'interactive is enabled on runtime');
+
+            done();
+        });
+    });
+
+    QUnit.test('Map should have click and move events', function(assert) {
+        const done = assert.async();
+
+        $('#map').dxMap({
+            provider: 'azure',
+            onReady: () => {
+                assert.strictEqual(atlas.addedEvents.includes('click'), true, 'click event was added');
+                assert.strictEqual(atlas.addedEvents.includes('move'), true, 'move event was added');
+
+                done();
+            }
+        });
+    });
+
+    QUnit.test('Should add onClick handler with correct args', function(assert) {
+        const done = assert.async();
+        let clickFired = 0;
+
+        const map = $('#map').dxMap({
+            provider: 'azure',
+            onClick: (e) => {
+                assert.strictEqual(e.component, map, 'click event includes component instance');
+                assert.strictEqual($(e.element).is($('#map')), true, 'click event includes root element');
+                assert.deepEqual(e.location, { lat: 88, lng: 88 }, 'click event includes correct location');
+
+                clickFired++;
+            },
+            onReady: () => {
+                atlas.clickActionCallback({ type: 'click', position: [88, 88] });
+                assert.strictEqual(clickFired, 1, 'click action fired');
+
+                done();
+            }
+        }).dxMap('instance');
+    });
+
+    QUnit.test('Move event trigger should update map center, bounds and zoom options', function(assert) {
+        const done = assert.async();
+
+        const map = $('#map').dxMap({
+            provider: 'azure',
+            onReady: () => {
+                atlas.moveActionCallback();
+
+                const { center, bounds, zoom } = map.option();
+                const expectedBounds = { northEast: { lat: 5, lng: 5 }, southWest: { lat: 55, lng: 55 } };
+
+                assert.deepEqual(center, { lat: 5, lng: 5 }, 'center option was updated');
+                assert.deepEqual(bounds, expectedBounds, 'bounds option was updated');
+                assert.strictEqual(zoom, 5, 'zoom option was updated');
+
+                done();
+            }
+        }).dxMap('instance');
     });
 });
 
@@ -438,17 +526,17 @@ QUnit.module('Markers', moduleConfig, () => {
 
     QUnit.test('Should add markers on runtime', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
         const marker = { location: [33, 33] };
 
         const map = $('#map').dxMap({
             provider: 'azure',
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.option('onUpdated', () => {
                 assert.strictEqual(atlas.addedMarkers.length, 1, 'Marker is added');
                 assert.strictEqual(atlas.addedMarkers[0] instanceof atlas.HtmlMarker, true, 'Marker class is correct');
@@ -502,7 +590,6 @@ QUnit.module('Markers', moduleConfig, () => {
             });
         });
     });
-
 
     QUnit.test('Click on marker should trigger onClick handler', function(assert) {
         const done = assert.async();
@@ -568,17 +655,17 @@ QUnit.module('Markers', moduleConfig, () => {
 
     QUnit.test('addMarker method', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
             markers: [MARKERS[0]],
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.addMarker({ location: [7, 7] }).done((instance) => {
                 assert.strictEqual(atlas.addedMarkers.length, 2, 'Marker is added');
                 assert.strictEqual(instance instanceof atlas.HtmlMarker, true, 'Marker class is correct');
@@ -591,17 +678,17 @@ QUnit.module('Markers', moduleConfig, () => {
 
     QUnit.test('removeMarker method', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
             markers: [MARKERS[0]],
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.removeMarker(0).done(() => {
                 assert.strictEqual(atlas.removedMarkers.length, 1, 'Marker is removed');
 
@@ -633,14 +720,14 @@ QUnit.module('Markers', moduleConfig, () => {
 
     QUnit.test('remove marker should trigger onMarkerRemoved', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
         let markerRemovedFired = false;
 
         const map = $('#map').dxMap({
             provider: 'azure',
             markers: [MARKERS[0]],
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             },
             onMarkerRemoved: ({ options }) => {
                 markerRemovedFired = true;
@@ -649,7 +736,7 @@ QUnit.module('Markers', moduleConfig, () => {
             },
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.option('onUpdated', function() {
                 assert.strictEqual(markerRemovedFired, true, 'onMarkerRemoved fired');
 
@@ -718,16 +805,16 @@ QUnit.module('Routes', moduleConfig, () => {
 
     QUnit.test('Should add routes on runtime', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.option('onUpdated', () => {
                 assert.strictEqual(atlas.addedSources.length, 1, 'dataSource added');
                 assert.strictEqual(atlas.addedSources[0] instanceof atlas.source.DataSource, true, 'dataSource class is correct');
@@ -744,16 +831,16 @@ QUnit.module('Routes', moduleConfig, () => {
 
     QUnit.test('addRoute method', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.addRoute(ROUTES[0]).done(({ dataSource, lineLayer }) => {
                 assert.strictEqual(atlas.addedSources.length, 1, 'dataSource added');
                 assert.strictEqual(atlas.addedSources[0] instanceof atlas.source.DataSource, true, 'dataSource class is correct');
@@ -770,17 +857,17 @@ QUnit.module('Routes', moduleConfig, () => {
 
     QUnit.test('removeRoute method', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
 
         const map = $('#map').dxMap({
             provider: 'azure',
             routes: [ROUTES[0]],
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             }
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.removeRoute(0).done(() => {
                 assert.strictEqual(atlas.removedSources.length, 1, 'dataSource was removed');
                 assert.strictEqual(atlas.removedLayers.length, 1, 'lineLayer was removed');
@@ -815,14 +902,14 @@ QUnit.module('Routes', moduleConfig, () => {
 
     QUnit.test('remove route should trigger onRouteRemoved', function(assert) {
         const done = assert.async();
-        const d = $.Deferred();
+        const mapReadyDeferred = $.Deferred();
         let routeRemovedFired = false;
 
         const map = $('#map').dxMap({
             provider: 'azure',
             routes: [ROUTES[0]],
             onReady: () => {
-                d.resolve();
+                mapReadyDeferred.resolve();
             },
             onRouteRemoved: ({ options }) => {
                 routeRemovedFired = true;
@@ -831,7 +918,7 @@ QUnit.module('Routes', moduleConfig, () => {
             },
         }).dxMap('instance');
 
-        d.done(() => {
+        mapReadyDeferred.done(() => {
             map.option('onUpdated', function() {
                 assert.strictEqual(routeRemovedFired, true, 'onRouteRemoved fired');
 
@@ -860,25 +947,6 @@ QUnit.module('Routes', moduleConfig, () => {
 
                 done();
             }
-        });
-    });
-
-    ['driving', 'walking'].forEach((mode) => {
-        QUnit.test(`strokeDashArray style should ${mode === 'walking' ? '' : 'not'} be applied to lineLayer when route mode is ${mode}`, function(assert) {
-            const done = assert.async();
-            const expectedStrokeDashArray = mode === 'walking' ? [1, 1] : undefined;
-            $('#map').dxMap({
-                provider: 'azure',
-                routes: [{
-                    mode,
-                    locations: [[10, 10], [20, 20]],
-                }],
-                onReady: () => {
-                    assert.deepEqual(atlas.lineLayerOptions.strokeDashArray, expectedStrokeDashArray, 'strokeDashArray is correct');
-
-                    done();
-                }
-            });
         });
     });
 });

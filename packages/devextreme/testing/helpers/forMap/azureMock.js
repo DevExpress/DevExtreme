@@ -7,17 +7,22 @@
             }
 
             this.events = {
-                add: (eventName, _, callback) => {
-                    atlas.addedEvents = atlas.addedEvents || {};
-                    atlas.addedEvents[eventName] = callback;
+                add: (eventName, targetOrCallback, callback) => {
+                    atlas.addedEvents = atlas.addedEvents || [];
+                    const callbackFun = callback ?? targetOrCallback;
+                    atlas.addedEvents.push(eventName);
 
                     if(eventName === 'click') {
-                        atlas.clickActionCallback = callback;
+                        atlas.clickActionCallback = callbackFun;
+                    }
+
+                    if(eventName === 'move') {
+                        atlas.moveActionCallback = callbackFun;
                     }
                 },
                 remove: (eventName) => {
-                    atlas.removedEvents = atlas.removedEvents || {};
-                    atlas.removedEvents[eventName] = true;
+                    atlas.removedEvents = atlas.removedEvents || [];
+                    atlas.removedEvents.push(eventName);
                 },
                 addOnce: () => {},
             };
@@ -41,9 +46,9 @@
             };
             this.getCamera = () => {
                 return {
-                    bounds: [0, 0, 1, 1],
-                    center: [0, 0],
-                    zoom: 10
+                    bounds: [55, 5, 5, 55],
+                    center: [5, 5],
+                    zoom: 5
                 };
             };
             this.controls = {
