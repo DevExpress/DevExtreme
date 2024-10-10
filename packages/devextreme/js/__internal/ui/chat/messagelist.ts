@@ -5,7 +5,7 @@ import resizeObserverSingleton from '@js/core/resize_observer';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isElementInDom } from '@js/core/utils/dom';
-import { isDefined } from '@js/core/utils/type';
+import { isDate, isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
 import type { Message } from '@js/ui/chat';
@@ -178,13 +178,14 @@ class MessageList extends Widget<Properties> {
 
   _shouldAddDayHeader(timestamp: undefined | string | number | Date): boolean {
     const { showDayHeaders } = this.option();
+
     if (timestamp === undefined || !showDayHeaders) {
       return false;
     }
 
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
 
-    if (isNaN(deserializedDate.getTime())) {
+    if (!isDate(deserializedDate) || isNaN(deserializedDate.getTime())) {
       return false;
     }
 

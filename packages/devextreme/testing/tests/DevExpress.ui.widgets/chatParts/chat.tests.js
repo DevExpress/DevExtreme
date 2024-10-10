@@ -181,6 +181,28 @@ QUnit.module('Chat', moduleConfig, () => {
 
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
         });
+
+        QUnit.test('Chat should pass showDayHeaders to messageList on init', function(assert) {
+            this.reinit({
+                showDayHeaders: false
+            });
+
+            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+
+            assert.strictEqual(messageList.option('showDayHeaders'), false, 'showDayHeaders is passed on init');
+        });
+
+        QUnit.test('Chat should pass showDayHeaders to messageList on runtime', function(assert) {
+            this.reinit({
+                showDayHeaders: true,
+            });
+
+            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+
+            this.instance.option('showDayHeaders', false);
+
+            assert.strictEqual(messageList.option('showDayHeaders'), false, 'showDayHeaders is passed on runtime');
+        });
     });
 
     QUnit.module('Events', () => {

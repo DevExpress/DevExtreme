@@ -17,7 +17,7 @@ const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
-const CHAT_MESSAGELIST_DATE_HEADER_CLASS = 'dx-chat-messagelist-date-header';
+const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
 const SCROLLABLE_CLASS = 'dx-scrollable';
 
@@ -153,28 +153,28 @@ QUnit.module('MessageList', moduleConfig, () => {
                 text: '',
             },
         ].forEach(({ date, scenario, text }) => {
-            QUnit.test(`Date header should be rendered (message date is ${scenario}, on init)`, function(assert) {
+            QUnit.test(`Day header should be rendered (message date is ${scenario}, on init)`, function(assert) {
                 const expectedText = `${text}${getStringDate(date)}`;
 
                 this.reinit({ items: [{ timestamp: date, text: 'ABC' }] });
 
                 const scrollableContent = this.getScrollable().content();
-                const $dateHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DATE_HEADER_CLASS}`);
+                const $dayHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
 
-                assert.strictEqual($dateHeader.length, 1, 'date header was added');
-                assert.strictEqual($dateHeader.text(), expectedText, 'date header text is correct');
+                assert.strictEqual($dayHeader.length, 1, 'day header was added');
+                assert.strictEqual($dayHeader.text(), expectedText, 'day header text is correct');
             });
 
-            QUnit.test(`Date header should be rendered (message date is ${scenario}, on runtime)`, function(assert) {
+            QUnit.test(`Day header should be rendered (message date is ${scenario}, on runtime)`, function(assert) {
                 const expectedText = `${text}${getStringDate(date)}`;
 
                 this.instance.option({ items: [{ timestamp: date, text: 'ABC' }] });
 
                 const scrollableContent = this.getScrollable().content();
-                const $dateHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DATE_HEADER_CLASS}`);
+                const $dayHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
 
-                assert.strictEqual($dateHeader.length, 1, 'date header was added');
-                assert.strictEqual($dateHeader.text(), expectedText, 'date header text is correct');
+                assert.strictEqual($dayHeader.length, 1, 'day header was added');
+                assert.strictEqual($dayHeader.text(), expectedText, 'day header text is correct');
             });
         });
 
@@ -182,29 +182,104 @@ QUnit.module('MessageList', moduleConfig, () => {
             {
                 date: undefined,
                 scenario: 'date is undefined',
-                showDateHeaders: true,
+                showDayHeaders: true,
             },
             {
                 date: new Date('invalid'),
                 scenario: 'date is invalid',
-                showDateHeaders: true,
+                showDayHeaders: true,
             },
             {
                 date: new Date(),
-                scenario: 'showDateHeaders=false',
-                showDateHeaders: false,
+                scenario: 'showDayHeaders=false',
+                showDayHeaders: false,
             },
-        ].forEach(({ date, scenario, showDateHeaders }) => {
-            QUnit.test(`Date header should not be rendered when ${scenario}`, function(assert) {
+        ].forEach(({ date, scenario, showDayHeaders }) => {
+            QUnit.test(`Day header should not be rendered when ${scenario}`, function(assert) {
                 this.reinit({
                     items: [{ timestamp: date, text: 'ABC' }],
-                    showDateHeaders,
+                    showDayHeaders,
                 });
 
                 const scrollableContent = this.getScrollable().content();
-                const $dateHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DATE_HEADER_CLASS}`);
+                const $dayHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
 
-                assert.strictEqual($dateHeader.length, 0, 'date header was not added');
+                assert.strictEqual($dayHeader.length, 0, 'day header was not added');
+            });
+        });
+
+        [true, false].forEach((showDayHeaders) => {
+            QUnit.test(`Day headers should be ${showDayHeaders ? 'removed' : 'added'} on runtime showDayHeaders ${showDayHeaders ? 'disable' : 'enable'}`, function(assert) {
+                const now = new Date().getTime();
+
+                this.reinit({
+                    items: [{ timestamp: now - MS_IN_DAY, text: 'ABC' }, { timestamp: now, text: 'CBA' }],
+                    showDayHeaders,
+                });
+
+                this.instance.option({ showDayHeaders: !showDayHeaders });
+
+                const scrollableContent = this.getScrollable().content();
+                const $dayHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
+                const expectedHeadersCount = showDayHeaders ? 0 : 2;
+
+                assert.strictEqual($dayHeader.length, expectedHeadersCount, `day headers were ${showDayHeaders ? 'removed' : 'added'}`);
+            });
+        });
+
+        [
+            {
+                oldItemTimestamp: new Date().getTime() - MS_IN_DAY,
+                newItemTimestamp: new Date().getTime(),
+                scenario: 'items have different date',
+                expectedDayHeaders: 2,
+            },
+            {
+                oldItemTimestamp: new Date().getTime(),
+                newItemTimestamp: new Date().getTime(),
+                scenario: 'items have the same date',
+                expectedDayHeaders: 1,
+            },
+            {
+                oldItemTimestamp: undefined,
+                newItemTimestamp: new Date().getTime(),
+                scenario: 'first item has undefined date',
+                expectedDayHeaders: 1,
+            },
+            {
+                oldItemTimestamp: new Date().getTime(),
+                newItemTimestamp: 'invalid',
+                scenario: 'second item has an invalid date',
+                expectedDayHeaders: 1,
+            },
+            {
+                oldItemTimestamp: undefined,
+                newItemTimestamp: undefined,
+                scenario: 'dates are not defined for both items',
+                expectedDayHeaders: 0,
+            },
+        ].forEach(({ oldItemTimestamp, newItemTimestamp, scenario, expectedDayHeaders }) => {
+            QUnit.test(`It should be ${expectedDayHeaders} day headers when add second item on runtime (${scenario})`, function(assert) {
+                const items = [{
+                    timestamp: oldItemTimestamp,
+                    text: 'ABC'
+                }];
+
+                this.reinit({
+                    items,
+                });
+
+                const newMessage = {
+                    timestamp: newItemTimestamp,
+                    text: 'EFG',
+                };
+
+                this.instance.option({ items: [...items, newMessage] });
+
+                const scrollableContent = this.getScrollable().content();
+                const $dayHeader = $(scrollableContent).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
+
+                assert.strictEqual($dayHeader.length, expectedDayHeaders, 'day headers count is correct');
             });
         });
     });
