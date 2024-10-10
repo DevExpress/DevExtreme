@@ -25,17 +25,17 @@ export class PostponedOperations {
   }
 
   callPostponedOperations() {
-    Object.keys(this._postponedOperations).forEach((key) => {
-      const operation = this._postponedOperations[key];
+      for(const key in this._postponedOperations) {
+          const operation = this._postponedOperations[key];
 
-      if (isDefined(operation)) {
-        if (operation.promises && operation.promises.length) {
-          when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
-        } else {
-          operation.fn().done(operation.completePromise.resolve);
-        }
+          if (isDefined(operation)) {
+              if (operation.promises && operation.promises.length) {
+                  when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
+              } else {
+                  operation.fn().done(operation.completePromise.resolve);
+              }
+          }
       }
-    });
-    this._postponedOperations = {};
+      this._postponedOperations = {};
   }
 }

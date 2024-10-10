@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 import domAdapter from '@js/core/dom_adapter';
 import MemorizedCallbacks from '@js/core/memorized_callbacks';
 import eventsEngine from '@js/events/core/events_engine';
@@ -28,10 +29,10 @@ export const setDataStrategy = function (value) {
 };
 
 setDataStrategy({
-  data() {
-    const element = arguments[0];
-    const key = arguments[1];
-    const value = arguments[2];
+  data: function (...args) {
+    const element = args[0];
+    const key = args[1];
+    const value = args[2];
 
     if (!element) return;
 
@@ -46,7 +47,7 @@ setDataStrategy({
       return elementData;
     }
 
-    if (arguments.length === 2) {
+    if (args.length === 2) {
       return elementData[key];
     }
 
@@ -54,7 +55,7 @@ setDataStrategy({
     return value;
   },
 
-  removeData(element, key) {
+  removeData: function (element, key) {
     if (!element) return;
     if (key === undefined) {
       dataMap.delete(element);
@@ -67,7 +68,7 @@ setDataStrategy({
     }
   },
 
-  cleanData(elements) {
+  cleanData: function (elements) {
     for (let i = 0; i < elements.length; i++) {
       eventsEngine.off(elements[i]);
       dataMap.delete(elements[i]);

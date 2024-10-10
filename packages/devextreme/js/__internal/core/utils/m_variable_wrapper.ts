@@ -1,20 +1,21 @@
+/* eslint-disable object-shorthand */
 import { logger } from '@js/core/utils/console';
 import dependencyInjector from '@js/core/utils/dependency_injector';
 
 const variableWrapper = dependencyInjector({
-  isWrapped() {
+  isWrapped: function () {
     return false;
   },
-  isWritableWrapped() {
+  isWritableWrapped: function () {
     return false;
   },
-  wrap(value) {
+  wrap: function (value) {
     return value;
   },
-  unwrap(value) {
+  unwrap: function (value) {
     return value;
   },
-  assign() {
+  assign: function () {
     logger.error('Method \'assign\' should not be used for not wrapped variables. Use \'isWrapped\' method for ensuring.');
   },
 });

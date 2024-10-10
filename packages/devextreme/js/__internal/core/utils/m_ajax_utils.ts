@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import domAdapter from '@js/core/dom_adapter';
 import { extendFromObject } from '@js/core/utils/extend';
 import { getWindow, hasWindow } from '@js/core/utils/window';
@@ -6,9 +8,9 @@ const window = getWindow();
 
 const createScript = function (options) {
   const script = domAdapter.createElement('script');
-  Object.keys(options).forEach((name) => {
+  for (const name in options) {
     script[name] = options[name];
-  });
+  }
   return script;
 };
 
@@ -40,9 +42,9 @@ const evalCrossDomainScript = function (url) {
       removeScript(script);
     };
 
-    Object.keys(events).forEach((event) => {
+    for (const event in events) {
       domAdapter.listen(script, event, loadHandler);
-    });
+    }
 
     appendToHead(script);
   });
@@ -55,11 +57,11 @@ function getMethod(options) {
 const paramsConvert = function (params) {
   const result: string[] = [];
 
-  Object.keys(params).forEach((name) => {
+  for (const name in params) {
     let value = params[name];
 
     if (value === undefined) {
-      return;
+      continue;
     }
 
     if (value === null) {
@@ -71,7 +73,7 @@ const paramsConvert = function (params) {
     }
 
     result.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
-  });
+  }
 
   return result.join('&');
 };

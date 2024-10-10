@@ -50,30 +50,28 @@ const nativeDOMAdapterStrategy: DomAdapter = {
     return element.querySelectorAll(selector);
   },
 
-  elementMatches(element, selector) {
-    const matches = element.matches || element.matchesSelector || element.mozMatchesSelector
-            || element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector
-            || ((selector) => {
-              const doc = element.document || element.ownerDocument;
+    elementMatches(element, selector) {
+        const matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
+            element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector ||
+            // @ts-expect-error not all code paths return value
+            (selector => {
+                const doc = element.document || element.ownerDocument;
 
-              if (!doc) {
-                return false;
-              }
-
-              const items = this.querySelectorAll(doc, selector);
-
-              let i = 0;
-              while (i < items.length) {
-                if (items[i] === element) {
-                  return true;
+                if(!doc) {
+                    return false;
                 }
-                i += 1;
-              }
-              return false;
+
+                const items = this.querySelectorAll(doc, selector);
+
+                for(let i = 0; i < items.length; i++) {
+                    if(items[i] === element) {
+                        return true;
+                    }
+                }
             });
 
-    return matches.call(element, selector);
-  },
+        return matches.call(element, selector);
+    },
 
   createElement(tagName, context) {
     context = context ?? this._document;

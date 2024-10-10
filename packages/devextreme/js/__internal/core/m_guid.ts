@@ -11,14 +11,14 @@ const Guid = Class.inherit({
     * @publicName ctor(value)
     * @param1 value:string
     */
-  ctor(value) {
+  ctor: function (value) {
     if (value) {
       value = String(value);
     }
     this._value = this._normalize(value || this._generate());
   },
 
-  _normalize(value) {
+  _normalize: function (value) {
     value = value.replace(/[^a-f0-9]/ig, '').toLowerCase();
     while (value.length < 32) {
       value += '0';
@@ -32,7 +32,7 @@ const Guid = Class.inherit({
     ].join('-');
   },
 
-  _generate() {
+  _generate: function () {
     let value = '';
     for (let i = 0; i < 32; i++) {
       value += Math.round(Math.random() * 15).toString(16);
@@ -40,15 +40,15 @@ const Guid = Class.inherit({
     return value;
   },
 
-  toString() {
+  toString: function () {
     return this._value;
   },
 
-  valueOf() {
+  valueOf: function () {
     return this._value;
   },
 
-  toJSON() {
+  toJSON: function () {
     return this._value;
   },
 

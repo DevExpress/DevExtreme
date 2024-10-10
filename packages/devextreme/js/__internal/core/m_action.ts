@@ -1,3 +1,6 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable @typescript-eslint/prefer-for-of */
+/* eslint-disable no-restricted-syntax */
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
@@ -97,16 +100,15 @@ class Action {
     let result;
     const { executors } = Action;
 
-    Object.keys(executors).some((name) => {
+    for (const name in executors) {
       const executor = executors[name];
       executor.execute?.(e);
 
       if (e.handled) {
         result = e.result;
-        return true;
+        break;
       }
-      return false;
-    });
+    }
 
     return result;
   }

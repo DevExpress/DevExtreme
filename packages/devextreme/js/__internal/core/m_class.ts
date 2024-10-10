@@ -13,28 +13,27 @@ const wrapOverridden = function (baseProto, methodName, method) {
   };
 };
 
-const clonePrototype = function (obj) {
-  const Func = function () { };
-  Func.prototype = obj.prototype;
-  return new Func();
+const clonePrototype = function(obj) {
+  const func = function() { };
+  func.prototype = obj.prototype;
+  return new func();
 };
 
-const redefine = function (members) {
+const redefine = function(members) {
   const that = this;
   let overridden;
+  let memberName;
   let member;
 
-  if (!members) {
-    return that;
+  if(!members) {
+      return that;
   }
 
-  Object.keys(members).forEach((memberName) => {
-    member = members[memberName];
-    overridden = typeof that.prototype[memberName] === 'function' && typeof member === 'function';
-    that.prototype[memberName] = overridden
-      ? wrapOverridden(that.parent.prototype, memberName, member)
-      : member;
-  });
+  for(memberName in members) {
+      member = members[memberName];
+      overridden = typeof that.prototype[memberName] === 'function' && typeof member === 'function';
+      that.prototype[memberName] = overridden ? wrapOverridden(that.parent.prototype, memberName, member) : member;
+  }
 
   return that;
 };

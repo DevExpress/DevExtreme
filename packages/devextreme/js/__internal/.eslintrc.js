@@ -8,7 +8,15 @@ module.exports = {
     plugins: [
         'simple-import-sort',
     ],
-    ignorePatterns: ['core/utils/m_view_port.ts'],
+    ignorePatterns: [
+        // for test
+        'core/**',
+        // files, that have significant changes from lint (IIFE or function lose context)
+        'core/utils/deferred.ts',
+        'core/utils/m_resize_callbacks.ts',
+        'core/utils/m_string.ts',
+        'core/utils/m_view_port.ts',
+    ],
     overrides: [
         // General TS rules.
         {

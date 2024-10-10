@@ -1,3 +1,7 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable object-shorthand */
 import domAdapter from '@js/core/dom_adapter';
 import { cleanDataRecursive, data as elementData, removeData } from '@js/core/element_data';
 import { isTablePart, parseHTML } from '@js/core/utils/html_parser';
@@ -11,7 +15,7 @@ import { getWindow } from '@js/core/utils/window';
 const window = getWindow();
 
 let renderer;
-const InitRender = function (selector, context) {
+const initRender = function (selector, context) {
   if (!selector) {
     this.length = 0;
     return this;
@@ -38,7 +42,8 @@ const InitRender = function (selector, context) {
     this.length = 1;
     return this;
   } if (Array.isArray(selector)) {
-    ([] as any[]).push.apply(this, selector);
+    // @ts-expect-error
+    [].push.apply(this, selector);
     return this;
   }
 
@@ -46,11 +51,12 @@ const InitRender = function (selector, context) {
 };
 
 renderer = function (selector, context) {
-  // @ts-expect-error only void function can be called with new
-  return new InitRender(selector, context);
+  // @ts-expect-error void constructor
+  // eslint-disable-next-line new-cap
+  return new initRender(selector, context);
 };
 renderer.fn = { dxRenderer: true };
-InitRender.prototype = renderer.fn;
+initRender.prototype = renderer.fn;
 
 const repeatMethod = function (methodName, args) {
   for (let i = 0; i < this.length; i++) {
@@ -68,15 +74,15 @@ const setAttributeValue = function (element, attrName, value) {
   }
 };
 
-InitRender.prototype.show = function () {
+initRender.prototype.show = function () {
   return this.toggle(true);
 };
 
-InitRender.prototype.hide = function () {
+initRender.prototype.hide = function () {
   return this.toggle(false);
 };
 
-InitRender.prototype.toggle = function (value) {
+initRender.prototype.toggle = function (value) {
   if (this[0]) {
     this.toggleClass('dx-state-invisible', !value);
   }
@@ -84,7 +90,7 @@ InitRender.prototype.toggle = function (value) {
   return this;
 };
 
-InitRender.prototype.attr = function (attrName, value) {
+initRender.prototype.attr = function (attrName, value) {
   if (this.length > 1 && arguments.length > 1) return repeatMethod.call(this, 'attr', arguments);
   if (!this[0]) {
     if (isObject(attrName) || value !== undefined) {
@@ -99,28 +105,28 @@ InitRender.prototype.attr = function (attrName, value) {
     const result = this[0].getAttribute(attrName);
     return result == null ? undefined : result;
   } if (isPlainObject(attrName)) {
-    Object.keys(attrName).forEach((key) => {
+    for (const key in attrName) {
       this.attr(key, attrName[key]);
-    });
+    }
   } else {
     setAttributeValue(this[0], attrName, value);
   }
   return this;
 };
 
-InitRender.prototype.removeAttr = function (attrName) {
+initRender.prototype.removeAttr = function (attrName) {
   this[0] && domAdapter.removeAttribute(this[0], attrName);
   return this;
 };
 
-InitRender.prototype.prop = function (propName, value) {
+initRender.prototype.prop = function (propName, value) {
   if (!this[0]) return this;
   if (typeof propName === 'string' && arguments.length === 1) {
     return this[0][propName];
   } if (isPlainObject(propName)) {
-    Object.keys(propName).forEach((key) => {
+    for (const key in propName) {
       this.prop(key, propName[key]);
-    });
+    }
   } else {
     domAdapter.setProperty(this[0], propName, value);
   }
@@ -128,15 +134,15 @@ InitRender.prototype.prop = function (propName, value) {
   return this;
 };
 
-InitRender.prototype.addClass = function (className) {
+initRender.prototype.addClass = function (className) {
   return this.toggleClass(className, true);
 };
 
-InitRender.prototype.removeClass = function (className) {
+initRender.prototype.removeClass = function (className) {
   return this.toggleClass(className, false);
 };
 
-InitRender.prototype.hasClass = function (className) {
+initRender.prototype.hasClass = function (className) {
   if (!this[0] || this[0].className === undefined) return false;
 
   const classNames = className.split(' ');
@@ -151,7 +157,7 @@ InitRender.prototype.hasClass = function (className) {
   return false;
 };
 
-InitRender.prototype.toggleClass = function (className, value) {
+initRender.prototype.toggleClass = function (className, value) {
   if (this.length > 1) {
     return repeatMethod.call(this, 'toggleClass', arguments);
   }
@@ -166,7 +172,7 @@ InitRender.prototype.toggleClass = function (className, value) {
   return this;
 };
 
-InitRender.prototype.html = function (value) {
+initRender.prototype.html = function (value) {
   if (!arguments.length) {
     return this[0].innerHTML;
   }
@@ -182,7 +188,7 @@ InitRender.prototype.html = function (value) {
   return this.append(parseHTML(value));
 };
 
-const appendElements = function (element, nextSibling?) {
+const appendElements = function (element, nextSibling) {
   if (!this[0] || !element) return;
 
   if (typeof element === 'string') {
@@ -193,7 +199,6 @@ const appendElements = function (element, nextSibling?) {
     element = [domAdapter.createTextNode(element)];
   }
 
-  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < element.length; i++) {
     const item = element[i];
     let container = this[0];
@@ -221,7 +226,7 @@ const setCss = function (name, value) {
   }
 };
 
-InitRender.prototype.css = function (name, value) {
+initRender.prototype.css = function (name, value) {
   if (isString(name)) {
     if (arguments.length === 2) {
       setCss.call(this, name, value);
@@ -234,15 +239,15 @@ InitRender.prototype.css = function (name, value) {
       return isNumeric(result) ? result.toString() : result;
     }
   } else if (isPlainObject(name)) {
-    Object.keys(name).forEach((key) => {
+    for (const key in name) {
       setCss.call(this, key, name[key]);
-    });
+    }
   }
 
   return this;
 };
 
-InitRender.prototype.prepend = function (element) {
+initRender.prototype.prepend = function (element) {
   if (arguments.length > 1) {
     for (let i = 0; i < arguments.length; i++) {
       this.prepend(arguments[i]);
@@ -253,18 +258,19 @@ InitRender.prototype.prepend = function (element) {
   return this;
 };
 
-InitRender.prototype.append = function (element) {
+initRender.prototype.append = function (element) {
   if (arguments.length > 1) {
     for (let i = 0; i < arguments.length; i++) {
       this.append(arguments[i]);
     }
     return this;
   }
+  // @ts-expect-error
   appendElements.apply(this, [element]);
   return this;
 };
 
-InitRender.prototype.prependTo = function (element) {
+initRender.prototype.prependTo = function (element) {
   if (this.length > 1) {
     for (let i = this.length - 1; i >= 0; i--) {
       renderer(this[i]).prependTo(element);
@@ -280,7 +286,7 @@ InitRender.prototype.prependTo = function (element) {
   return this;
 };
 
-InitRender.prototype.appendTo = function (element) {
+initRender.prototype.appendTo = function (element) {
   if (this.length > 1) {
     return repeatMethod.call(this, 'appendTo', arguments);
   }
@@ -289,35 +295,35 @@ InitRender.prototype.appendTo = function (element) {
   return this;
 };
 
-InitRender.prototype.insertBefore = function (element) {
+initRender.prototype.insertBefore = function (element) {
   if (element && element[0]) {
     domAdapter.insertElement(element[0].parentNode, this[0], element[0]);
   }
   return this;
 };
 
-InitRender.prototype.insertAfter = function (element) {
+initRender.prototype.insertAfter = function (element) {
   if (element && element[0]) {
     domAdapter.insertElement(element[0].parentNode, this[0], element[0].nextSibling);
   }
   return this;
 };
 
-InitRender.prototype.before = function (element) {
+initRender.prototype.before = function (element) {
   if (this[0]) {
     domAdapter.insertElement(this[0].parentNode, element[0], this[0]);
   }
   return this;
 };
 
-InitRender.prototype.after = function (element) {
+initRender.prototype.after = function (element) {
   if (this[0]) {
     domAdapter.insertElement(this[0].parentNode, element[0], this[0].nextSibling);
   }
   return this;
 };
 
-InitRender.prototype.wrap = function (wrapper) {
+initRender.prototype.wrap = function (wrapper) {
   if (this[0]) {
     const wrap = renderer(wrapper);
 
@@ -328,7 +334,7 @@ InitRender.prototype.wrap = function (wrapper) {
   return this;
 };
 
-InitRender.prototype.wrapInner = function (wrapper) {
+initRender.prototype.wrapInner = function (wrapper) {
   const contents = this.contents();
 
   if (contents.length) {
@@ -340,7 +346,7 @@ InitRender.prototype.wrapInner = function (wrapper) {
   return this;
 };
 
-InitRender.prototype.replaceWith = function (element) {
+initRender.prototype.replaceWith = function (element) {
   if (!(element && element[0])) return;
   if (element.is(this)) return this;
 
@@ -350,7 +356,7 @@ InitRender.prototype.replaceWith = function (element) {
   return element;
 };
 
-InitRender.prototype.remove = function () {
+initRender.prototype.remove = function () {
   if (this.length > 1) {
     return repeatMethod.call(this, 'remove', arguments);
   }
@@ -361,7 +367,7 @@ InitRender.prototype.remove = function () {
   return this;
 };
 
-InitRender.prototype.detach = function () {
+initRender.prototype.detach = function () {
   if (this.length > 1) {
     return repeatMethod.call(this, 'detach', arguments);
   }
@@ -371,7 +377,7 @@ InitRender.prototype.detach = function () {
   return this;
 };
 
-InitRender.prototype.empty = function () {
+initRender.prototype.empty = function () {
   if (this.length > 1) {
     return repeatMethod.call(this, 'empty', arguments);
   }
@@ -382,7 +388,7 @@ InitRender.prototype.empty = function () {
   return this;
 };
 
-InitRender.prototype.clone = function () {
+initRender.prototype.clone = function () {
   const result: any[] = [];
   for (let i = 0; i < this.length; i++) {
     result.push(this[i].cloneNode(true));
@@ -390,7 +396,7 @@ InitRender.prototype.clone = function () {
   return renderer(result);
 };
 
-InitRender.prototype.text = function (value) {
+initRender.prototype.text = function (value) {
   if (!arguments.length) {
     let result = '';
 
@@ -408,7 +414,7 @@ InitRender.prototype.text = function (value) {
   return this;
 };
 
-InitRender.prototype.val = function (value) {
+initRender.prototype.val = function (value) {
   if (arguments.length === 1) {
     return this.prop('value', isDefined(value) ? value : '');
   }
@@ -416,7 +422,7 @@ InitRender.prototype.val = function (value) {
   return this.prop('value');
 };
 
-InitRender.prototype.contents = function () {
+initRender.prototype.contents = function () {
   if (!this[0]) return renderer();
 
   const result = [];
@@ -424,13 +430,13 @@ InitRender.prototype.contents = function () {
   return renderer(result);
 };
 
-InitRender.prototype.find = function (selector) {
+initRender.prototype.find = function (selector) {
   const result = renderer();
   if (!selector) {
     return result;
   }
 
-  const nodes: any[] = [];
+  const nodes: any = [];
   let i;
 
   if (typeof selector === 'string') {
@@ -473,13 +479,15 @@ const isVisible = function (_, element) {
   return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
 };
 
-InitRender.prototype.filter = function (selector) {
+initRender.prototype.filter = function (selector) {
   if (!selector) return renderer();
 
   if (selector === ':visible') {
     return this.filter(isVisible);
   } if (selector === ':hidden') {
-    return this.filter((_, element) => !isVisible(_, element));
+    return this.filter(function (_, element) {
+      return !isVisible(_, element);
+    });
   }
 
   const result: any[] = [];
@@ -501,7 +509,7 @@ InitRender.prototype.filter = function (selector) {
   return renderer(result);
 };
 
-InitRender.prototype.not = function (selector) {
+initRender.prototype.not = function (selector) {
   const result: any[] = [];
   const nodes = this.filter(selector).toArray();
 
@@ -514,11 +522,11 @@ InitRender.prototype.not = function (selector) {
   return renderer(result);
 };
 
-InitRender.prototype.is = function (selector) {
+initRender.prototype.is = function (selector) {
   return !!this.filter(selector).length;
 };
 
-InitRender.prototype.children = function (selector) {
+initRender.prototype.children = function (selector) {
   let result: any[] = [];
   for (let i = 0; i < this.length; i++) {
     const nodes = this[i] ? this[i].childNodes : [];
@@ -534,7 +542,7 @@ InitRender.prototype.children = function (selector) {
   return selector ? result.filter(selector) : result;
 };
 
-InitRender.prototype.siblings = function () {
+initRender.prototype.siblings = function () {
   const element = this[0];
   if (!element || !element.parentNode) {
     return renderer();
@@ -553,7 +561,7 @@ InitRender.prototype.siblings = function () {
   return renderer(result);
 };
 
-InitRender.prototype.each = function (callback) {
+initRender.prototype.each = function (callback) {
   for (let i = 0; i < this.length; i++) {
     if (callback.call(this[i], i, this[i]) === false) {
       break;
@@ -561,7 +569,7 @@ InitRender.prototype.each = function (callback) {
   }
 };
 
-InitRender.prototype.index = function (element) {
+initRender.prototype.index = function (element) {
   if (!element) {
     return this.parent().children().index(this);
   }
@@ -570,24 +578,24 @@ InitRender.prototype.index = function (element) {
   return this.toArray().indexOf(element[0]);
 };
 
-InitRender.prototype.get = function (index) {
+initRender.prototype.get = function (index) {
   return this[index < 0 ? this.length + index : index];
 };
 
-InitRender.prototype.eq = function (index) {
+initRender.prototype.eq = function (index) {
   index = index < 0 ? this.length + index : index;
   return renderer(this[index]);
 };
 
-InitRender.prototype.first = function () {
+initRender.prototype.first = function () {
   return this.eq(0);
 };
 
-InitRender.prototype.last = function () {
+initRender.prototype.last = function () {
   return this.eq(-1);
 };
 
-InitRender.prototype.select = function () {
+initRender.prototype.select = function () {
   for (let i = 0; i < this.length; i += 1) {
     this[i].select && this[i].select();
   }
@@ -595,13 +603,13 @@ InitRender.prototype.select = function () {
   return this;
 };
 
-InitRender.prototype.parent = function (selector) {
+initRender.prototype.parent = function (selector) {
   if (!this[0]) return renderer();
   const result = renderer(this[0].parentNode);
   return !selector || result.is(selector) ? result : renderer();
 };
 
-InitRender.prototype.parents = function (selector) {
+initRender.prototype.parents = function (selector) {
   const result: any[] = [];
   let parent = this.parent();
 
@@ -616,7 +624,7 @@ InitRender.prototype.parents = function (selector) {
   return renderer(result);
 };
 
-InitRender.prototype.closest = function (selector) {
+initRender.prototype.closest = function (selector) {
   if (this.is(selector)) {
     return this;
   }
@@ -632,7 +640,7 @@ InitRender.prototype.closest = function (selector) {
   return renderer();
 };
 
-InitRender.prototype.next = function (selector) {
+initRender.prototype.next = function (selector) {
   if (!this[0]) return renderer();
   let next = renderer(this[0].nextSibling);
   if (!arguments.length) {
@@ -645,12 +653,12 @@ InitRender.prototype.next = function (selector) {
   return renderer();
 };
 
-InitRender.prototype.prev = function () {
+initRender.prototype.prev = function () {
   if (!this[0]) return renderer();
   return renderer(this[0].previousSibling);
 };
 
-InitRender.prototype.add = function (selector) {
+initRender.prototype.add = function (selector) {
   const targets = renderer(selector);
   const result = this.toArray();
 
@@ -664,26 +672,28 @@ InitRender.prototype.add = function (selector) {
   return renderer(result);
 };
 
-const emptyArray = [];
-InitRender.prototype.splice = function () {
+const emptyArray: any[] = [];
+initRender.prototype.splice = function () {
   // @ts-expect-error get rid of arguments
+  // eslint-disable-next-line prefer-rest-params
   return renderer(emptyArray.splice.apply(this, arguments));
 };
-InitRender.prototype.slice = function () {
+initRender.prototype.slice = function () {
   // @ts-expect-error get rid of arguments
+  // eslint-disable-next-line prefer-rest-params
   return renderer(emptyArray.slice.apply(this, arguments));
 };
-InitRender.prototype.toArray = function () {
+initRender.prototype.toArray = function () {
   return emptyArray.slice.call(this);
 };
 
-InitRender.prototype.offset = function () {
+initRender.prototype.offset = function () {
   if (!this[0]) return;
 
   return getOffset(this[0]);
 };
 
-InitRender.prototype.offsetParent = function () {
+initRender.prototype.offsetParent = function () {
   if (!this[0]) return renderer();
 
   let offsetParent = renderer(this[0].offsetParent);
@@ -697,7 +707,7 @@ InitRender.prototype.offsetParent = function () {
   return offsetParent;
 };
 
-InitRender.prototype.position = function () {
+initRender.prototype.position = function () {
   if (!this[0]) return;
 
   let offset;
@@ -739,19 +749,19 @@ InitRender.prototype.position = function () {
 [{
   name: 'scrollLeft',
   offsetProp: 'pageXOffset',
-  scrollWindow(win, value) {
+  scrollWindow: function (win, value) {
     win.scrollTo(value, win.pageYOffset);
   },
 }, {
   name: 'scrollTop',
   offsetProp: 'pageYOffset',
-  scrollWindow(win, value) {
+  scrollWindow: function (win, value) {
     win.scrollTo(win.pageXOffset, value);
   },
-}].forEach((directionStrategy) => {
+}].forEach(function (directionStrategy) {
   const propName = directionStrategy.name;
 
-  InitRender.prototype[propName] = function (value) {
+  initRender.prototype[propName] = function (value) {
     if (!this[0]) {
       return;
     }
@@ -771,18 +781,17 @@ InitRender.prototype.position = function () {
   };
 });
 
-InitRender.prototype.data = function (key, value) {
+initRender.prototype.data = function (key, value) {
   if (!this[0]) return;
 
   if (arguments.length < 2) {
     return elementData.call(renderer, this[0], key);
   }
-
   elementData.call(renderer, this[0], key, value);
   return this;
 };
 
-InitRender.prototype.removeData = function (key) {
+initRender.prototype.removeData = function (key) {
   this[0] && removeData(this[0], key);
 
   return this;
@@ -796,22 +805,20 @@ Object.defineProperty(rendererWrapper, 'fn', {
   enumerable: true,
   configurable: true,
 
-  get() {
+  get: function () {
     return renderer.fn;
   },
 
-  set(value) {
+  set: function (value) {
     renderer.fn = value;
   },
 });
 
-const rendererBase = {
-  set(strategy) {
+export default {
+  set: function (strategy) {
     renderer = strategy;
   },
-  get() {
+  get: function () {
     return rendererWrapper;
   },
 };
-
-export { rendererBase };

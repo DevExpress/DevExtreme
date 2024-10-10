@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import { normalizeOptions } from '@js/core/options/utils';
 import { noop } from '@js/core/utils/common';
 import { equals } from '@js/core/utils/comparator';
@@ -34,11 +36,11 @@ export class OptionManager {
   _setByReference(options, rulesOptions) {
     extend(true, options, rulesOptions);
 
-    Object.keys(this._optionsByReference).forEach((fieldName) => {
+    for (const fieldName in this._optionsByReference) {
       if (Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
         options[fieldName] = rulesOptions[fieldName];
       }
-    });
+    }
   }
 
   _setPreparedValue(name, value, merge?: any, silent?: boolean) {
@@ -60,9 +62,9 @@ export class OptionManager {
 
   _prepareRelevantNames(options, name, value, silent?: boolean) {
     if (isPlainObject(value)) {
-      Object.keys(value).forEach((valueName) => {
+      for (const valueName in value) {
         this._prepareRelevantNames(options, `${name}.${valueName}`, value[valueName]);
-      });
+      }
     }
 
     this._namePreparedCallbacks(options, name, value, silent);
@@ -78,17 +80,17 @@ export class OptionManager {
   set(options, value, merge?: any, silent?: boolean) {
     options = normalizeOptions(options, value);
 
-    Object.keys(options).forEach((name) => {
+    for (const name in options) {
       this._prepareRelevantNames(options, name, options[name], silent);
-    });
+    }
 
     if (this._validateOptionsCallback) {
       options = this._validateOptionsCallback(options);
     }
 
-    Object.keys(options).forEach((name) => {
+    for (const name in options) {
       this._setPreparedValue(name, options[name], merge, silent);
-    });
+    }
   }
 
   onRelevantNamesPrepared(callBack) {

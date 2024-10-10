@@ -68,9 +68,9 @@ export class Options {
   }
 
   _initDeprecatedNames() {
-    Object.keys(this._deprecated).forEach((optionName) => {
+    for (const optionName in this._deprecated) {
       this._deprecatedNames.push(optionName);
-    });
+    }
   }
 
   _getByRules(rules) {
