@@ -1840,4 +1840,19 @@ QUnit.module('selectedIndex vs item.visible', () => {
 
         assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
     });
+
+    QUnit.test('previous visible item should be selected if currently selected item is hidden and multiple hidden item is in between them | loop = true', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: false },
+                { text: '3', visible: false }
+            ],
+            selectedIndex: 2,
+            loop: true
+        });
+        const instance = $multiView.dxMultiView('instance');
+
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+    });
 });
