@@ -32,7 +32,7 @@ fixture.disablePageReloads`a11y - appointment`
     const attrs = await scheduler.getAppointment('App 1').element.attributes;
 
     await t
-      .expect(attrs['aria-label'])
+      .expect(attrs['aria-roledescription'])
       .eql('February 1, 2021, Group: resource1, ');
   }).before(async () => {
     await createWidget('dxScheduler', {
@@ -63,7 +63,7 @@ fixture.disablePageReloads`a11y - appointment`
     const attrs = await scheduler.getAppointment('App 1').element.attributes;
 
     await t
-      .expect(attrs['aria-label'])
+      .expect(attrs['aria-roledescription'])
       .eql('February 1, 2021, Group: resource11, resource21, ');
   }).before(async () => {
     await createWidget('dxScheduler', {
@@ -128,7 +128,7 @@ fixture.disablePageReloads`a11y - appointment`
       async (i) => {
         const appt = scheduler.getAppointment('App 1', i);
         const attrs = await appt.element.attributes;
-        return attrs['aria-label'];
+        return attrs['aria-roledescription'];
       },
     ));
 
