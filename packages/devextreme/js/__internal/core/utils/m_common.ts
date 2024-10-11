@@ -328,3 +328,24 @@ export const equalByValue = (value1, value2, options = DEFAULT_EQUAL_BY_VALUE_OP
   const compareOptions = { ...DEFAULT_EQUAL_BY_VALUE_OPTS, ...options };
   return compareByValue(value1, value2, 0, compareOptions);
 };
+
+export default {
+    ensureDefined,
+    executeAsync,
+    deferRender,
+    deferUpdate,
+    deferRenderer,
+    deferUpdater,
+    findBestMatches,
+    splitPair,
+    normalizeKey,
+    denormalizeKey,
+    pairToObject,
+    getKeyHash,
+    escapeRegExp,
+    applyServerDecimalSeparator,
+    noop,
+    asyncNoop,
+    grep,
+    equalByValue
+}

@@ -7,7 +7,7 @@
             root.DevExpress.testing.executeAsyncMock = module.exports = factory(require('__internal/core/utils/m_common').default);
         });
     } else {
-        root.DevExpress.testing.executeAsyncMock = factory(DevExpress.require('__internal/core/utils/m_common'));
+        root.DevExpress.testing.executeAsyncMock = factory(DevExpress.utils.common);
     }
 }(window, function(commonUtils) {
     const originalExecuteAsync = commonUtils.executeAsync;
