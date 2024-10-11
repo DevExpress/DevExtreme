@@ -16,7 +16,6 @@ import { name as wheelEventName } from '@js/events/core/wheel';
 import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import { validatingEditorFactoryExtender } from '@ts/grids/grid_core/validating/m_validating';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type {
@@ -1160,7 +1159,7 @@ const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => c
   }
 };
 
-const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryFixedColumnsExtender extends validatingEditorFactoryExtender(Base) {
+const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryFixedColumnsExtender extends Base {
   protected getValidationOverlayContainer($cell: dxElementWrapper): dxElementWrapper {
     const rowsViewModule = this.getView('rowsView');
     // @ts-expect-error RowsView's method
@@ -1170,6 +1169,7 @@ const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryFi
       return rowsViewModule.element() as dxElementWrapper;
     }
 
+    // @ts-expect-error EditorFactory's method
     return super.getValidationOverlayContainer($cell);
   }
 };

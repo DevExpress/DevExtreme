@@ -2,6 +2,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { setWidth } from '@js/core/utils/size';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -242,10 +243,12 @@ const columnHeadersView = (
 ) => class ColumnHeadersViewStickyColumnsExtender extends baseStickyColumns(Base) {
   protected setStickyOffsets() {
     const offsets: Record<number, Record<string, number>> = {};
-    const rowCount = this.getRowCount();
+    const rows = this._getRows();
 
-    for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-      super.setStickyOffsets(rowIndex, offsets);
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+      const isFilterRow = rows?.[rowIndex]?.rowType === 'filter';
+
+      super.setStickyOffsets(rowIndex, isFilterRow ? undefined : offsets);
     }
   }
 
@@ -400,6 +403,26 @@ const rowsView = (
         .addStickyColumnBorderRightClass($groupCell, this.addWidgetPrefix.bind(this));
     }
   }
+
+  protected _handleScroll(e): void {
+    const editorFactoryController = this.getController('editorFactory');
+    const $focusOverlay = editorFactoryController.getFocusOverlay();
+
+    super._handleScroll(e);
+
+    if (!$focusOverlay.hasClass(CLASSES.hidden)
+      && $focusOverlay?.hasClass(CLASSES.focusedFixedCell)) {
+      const $element = this.component.$element();
+      // @ts-expect-error
+      const $focusedCell = $element.find(`.${CLASSES.focused}`);
+      const isStickyCell = GridCoreStickyColumnsDom
+        .isStickyCell($focusedCell, this.addWidgetPrefix.bind(this));
+
+      if (isStickyCell) {
+        editorFactoryController.updateFocusOverlay($focusedCell);
+      }
+    }
+  }
 };
 
 const footerView = (
@@ -540,6 +563,32 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
   }
 };
 
+const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryStickyColumnsExtender extends Base {
+  public updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
+    if (!isHideBorder) {
+      const scrollable = this._rowsView.getScrollable();
+      const $container = $(scrollable?.container());
+      const isFixedCell = GridCoreStickyColumnsDom
+        .isFixedCell($element, this.addWidgetPrefix.bind(this));
+      const isStickyCell = GridCoreStickyColumnsDom
+        .isStickyCell($element, this.addWidgetPrefix.bind(this));
+      const isStickyCellPinned = isStickyCell && $container.length
+        && GridCoreStickyColumnsDom
+          .isStickyCellPinned($element, $container, this.addWidgetPrefix.bind(this));
+
+      this._$focusOverlay.toggleClass(CLASSES.focusedFixedCell, isFixedCell);
+
+      if (isFixedCell && (!isStickyCell || isStickyCellPinned)) {
+        this._$focusOverlay.css('position', 'fixed');
+      } else {
+        this._$focusOverlay.css('position', '');
+      }
+    }
+
+    super.updateFocusOverlay($element, isHideBorder);
+  }
+};
+
 export const stickyColumnsModule = {
   extenders: {
     views: {
@@ -550,6 +599,7 @@ export const stickyColumnsModule = {
     controllers: {
       columnsResizer,
       draggingHeader,
+      editorFactory,
     },
   },
 };

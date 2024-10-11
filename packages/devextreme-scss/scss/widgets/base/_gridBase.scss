@@ -282,7 +282,7 @@
 
   .dx-#{$widget-name}-columns-separator {
     position: absolute;
-    z-index: 3;
+    z-index: 4;
     width: 3px;
   }
 
@@ -295,7 +295,7 @@
     width: 100%;
     position: absolute;
     top: 0;
-    z-index: 3;
+    z-index: 4;
     cursor: col-resize;
   }
 
@@ -1066,8 +1066,18 @@
     }
   }
 
-  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-table {
-    border-collapse: separate;
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-columns {
+    .dx-#{$widget-name}-table {
+      border-collapse: separate;
+    }
+
+    .dx-focused-fixed-cell {
+      z-index: 3;
+    }
+
+    .dx-scrollable-scrollbar {
+      z-index: 4;
+    }
   }
 
   .dx-rtl .dx-#{$widget-name},
