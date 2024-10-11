@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
 import { firstAuthor, secondAuthor, initialMessages } from './data';
@@ -44,6 +44,7 @@ export const Overview: Story = {
                 [firstAuthor.name]: firstAuthor,
                 [secondAuthor.name]: secondAuthor,
             },
+            defaultValue: firstAuthor.name,
         },
         hint: {
             control: 'text',
@@ -65,8 +66,14 @@ export const Overview: Story = {
         const [messages, setMessages] = useState(items);
         
         const onMessageSend = useCallback(({ message }) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
-        }, []);
+            const updatedMessages = [...messages, message];
+
+            setMessages(updatedMessages);
+        }, [messages]);
+
+        useEffect(() => {
+            setMessages(items);
+        }, [items]);
         
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -74,6 +81,76 @@ export const Overview: Story = {
                     width={width}
                     height={height}
                     items={messages}
+                    disabled={disabled}
+                    rtlEnabled={rtlEnabled}
+                    user={user}
+                    onMessageSend={onMessageSend}
+                    visible={visible}
+                    hint={hint}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
+                >
+                </Chat>
+            </div>
+        );
+    }
+}
+
+export const EmptyView: Story = {
+    args: {
+        items: [],
+        user: firstAuthor,
+        ...commonArgs,
+    },
+    argTypes: {
+        user: {
+            control: 'select',
+            options: [firstAuthor.name, secondAuthor.name],
+            mapping: {
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
+            },
+            defaultValue: firstAuthor.name,
+        },
+        hint: {
+            control: 'text',
+        }
+    },
+    render: ({
+        width,
+        height,
+        disabled,
+        rtlEnabled,
+        user,
+        items,
+        onItemsChange,
+        visible,
+        hint,
+        activeStateEnabled,
+        hoverStateEnabled,
+        focusStateEnabled,
+    }) => {
+        const [messages, setMessages] = useState(items);
+        
+        const onMessageSend = useCallback(({ message }) => {
+            const updatedMessages = [...messages, message];
+
+            setMessages(updatedMessages);
+        }, [messages]);
+
+        useEffect(() => {
+            console.log(2);
+            setMessages(items);
+        }, [items]);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    items={messages}
+                    onItemsChange={onItemsChange}
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
@@ -106,6 +183,7 @@ export const PopupIntegration: Story = {
                 [firstAuthor.name]: firstAuthor,
                 [secondAuthor.name]: secondAuthor,
             },
+            defaultValue: firstAuthor.name,
         },
         hint: {
             control: 'text',
@@ -130,6 +208,10 @@ export const PopupIntegration: Story = {
             setMessages((prevMessages) => [...prevMessages, message]);
         }, []);
         
+        useEffect(() => {
+            setMessages(items);
+        }, [items]);
+
         return (
             <Popup
                 width={300}
