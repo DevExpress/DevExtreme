@@ -6,8 +6,10 @@
 
 $chat-background-color: $base-bg !default;
 $chat-border-color: $base-border-color !default;
+$chat-avatar-color: $base-text-color !default;
 $chat-messagebox-border-color: $base-border-color !default;
 $chat-avatar-background-color: null !default;
+$chat-bubble-color-primary: null !default;
 $chat-bubble-background-color-primary: null !default;
 $chat-bubble-background-color-secondary: null !default;
 $chat-information-color: null !default;
@@ -17,10 +19,18 @@ $chat-messagelist-empty-icon-background-color: null !default;
 $chat-messagelist-empty-message-color: null !default;
 $chat-messagelist-empty-prompt-color: null !default;
 
+$button-default-border-color: darken($base-accent, 5%) !default;
+$button-default-text-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
+
+$chat-avatar-background-color: $base-border-color !default; // #DDDDDD
+
 @if $color == "light" {
-  $chat-avatar-background-color: darken($base-bg, 13.33) !default; // #DDDDDD
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default; // #2D6DA31A
-  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default; // #F5F5F5
+  $chat-avatar-color: $base-text-color !default;
+  $button-normal-contained-bg-hover: darken($base-element-bg, 4%) !default;
+
+  $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-background-color-primary: $button-default-text-bg-hover !default; // #2D6DA31A
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #F5F5F5
   $chat-information-color: darken($base-bg, 41.57) !default; // #959595
 
   $chat-messagelist-empty-icon-color: lighten($base-icon-color, 46.67) !default; // #AAAAAA
@@ -30,9 +40,12 @@ $chat-messagelist-empty-prompt-color: null !default;
 }
 
 @if $color == "dark" {
-  $chat-avatar-background-color: lighten($base-bg, 13.73) !default; // #4D4D4D
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.07), 5.10), 0.1) !default; // #1997C61A
-  $chat-bubble-background-color-secondary: lighten($base-bg, 3.92) !default; // #343434
+  $chat-avatar-color: $base-text-color !default;
+  $button-normal-contained-bg-hover: lighten($base-element-bg, 4%) !default;
+
+  $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-background-color-primary: $button-default-text-bg-hover !default; // #1997C61A
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #343434
   $chat-information-color: lighten($base-bg, 32.55) !default; // #7D7D7D
 
   $chat-messagelist-empty-icon-color: darken(#dedede, 37.25) !default; // #7F7F7F
@@ -42,9 +55,12 @@ $chat-messagelist-empty-prompt-color: null !default;
 }
 
 @if $color == "carmine" {
-  $chat-avatar-background-color: darken($base-bg, 13.33) !default; // #DDDDDD
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default; // #2D6DA31A
-  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default; // #F5F5F5
+  $chat-avatar-color: $base-text-color !default;
+  $button-normal-contained-bg-hover: darken($base-element-bg, 4%) !default;
+
+  $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-background-color-primary: $button-default-text-bg-hover !default; // #2D6DA31A
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #F5F5F5
   $chat-information-color: darken($base-bg, 41.57) !default; // #959595
 
   $chat-messagelist-empty-icon-color: lighten($base-icon-color, 46.67) !default; // #AAAAAA
@@ -54,10 +70,13 @@ $chat-messagelist-empty-prompt-color: null !default;
 }
 
 @if $color == "contrast" {
-  $chat-avatar-background-color: lighten($base-bg, 13.73) !default; // #4D4D4D
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.07), 5.10), 0.1) !default; // #1997C61A
-  $chat-bubble-background-color-secondary: lighten($base-bg, 3.92) !default; // #343434
-  $chat-information-color: lighten($base-bg, 32.55) !default; // #7D7D7D
+  $chat-avatar-color: $base-inverted-color !default;
+  $button-normal-contained-bg-hover: $base-hover-color !default;
+
+  $chat-bubble-color-primary: $base-inverted-text-color !default;
+  $chat-bubble-background-color-primary: $base-inverted-bg !default;
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #343434
+  $chat-information-color: $base-inverted-color !default;
 
   $chat-messagelist-empty-icon-color: darken(#dedede, 37.25) !default; // #7F7F7F
   $chat-messagelist-empty-icon-background-color: lighten($base-bg, 7.84) !default; // #3E3E3E
@@ -66,9 +85,12 @@ $chat-messagelist-empty-prompt-color: null !default;
 }
 
 @if $color == "darkmoon" {
-  $chat-avatar-background-color: lighten($base-bg, 13.73) !default; // #4D4D4D
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.07), 5.10), 0.1) !default; // #1997C61A
-  $chat-bubble-background-color-secondary: lighten($base-bg, 3.92) !default; // #343434
+  $chat-avatar-color: $base-text-color !default;
+  $button-normal-contained-bg-hover: lighten($base-element-bg, 4%) !default;
+
+  $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-background-color-primary: $button-default-text-bg-hover !default; // #1997C61A
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #343434
   $chat-information-color: lighten($base-bg, 32.55) !default; // #7D7D7D
 
   $chat-messagelist-empty-icon-color: darken(#dedede, 37.25) !default; // #7F7F7F
@@ -78,9 +100,12 @@ $chat-messagelist-empty-prompt-color: null !default;
 }
 
 @if $color == "darkviolet" {
-  $chat-avatar-background-color: lighten($base-bg, 13.73) !default; // #4D4D4D
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.07), 5.10), 0.1) !default; // #1997C61A
-  $chat-bubble-background-color-secondary: lighten($base-bg, 3.92) !default; // #343434
+  $chat-avatar-color: $base-text-color !default;
+  $button-normal-contained-bg-hover: lighten($base-element-bg, 4%) !default;
+
+  $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-background-color-primary: $button-default-text-bg-hover !default; // #1997C61A
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #343434
   $chat-information-color: lighten($base-bg, 32.55) !default; // #7D7D7D
 
   $chat-messagelist-empty-icon-color: darken(#dedede, 37.25) !default; // #7F7F7F
@@ -90,9 +115,11 @@ $chat-messagelist-empty-prompt-color: null !default;
 }
 
 @if $color == "greenmist" {
-  $chat-avatar-background-color: darken($base-bg, 13.33) !default; // #DDDDDD
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default; // #2D6DA31A
-  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default; // #F5F5F5
+  $chat-avatar-color: $base-text-color !default;
+  $button-normal-contained-bg-hover: darken($base-element-bg, 4%) !default;
+
+  $chat-bubble-background-color-primary: $button-default-text-bg-hover !default; // #2D6DA31A
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #F5F5F5
   $chat-information-color: darken($base-bg, 41.57) !default; // #959595
 
   $chat-messagelist-empty-icon-color: lighten($base-icon-color, 46.67) !default; // #AAAAAA
@@ -102,9 +129,12 @@ $chat-messagelist-empty-prompt-color: null !default;
 }
 
 @if $color == "softblue" {
-  $chat-avatar-background-color: darken($base-bg, 13.33) !default; // #DDDDDD
-  $chat-bubble-background-color-primary: rgba(darken(saturate($base-accent, 0.32), 5.10), 0.1) !default; // #2D6DA31A
-  $chat-bubble-background-color-secondary: darken($base-bg, 3.92) !default; // #F5F5F5
+  $chat-avatar-color: $base-text-color !default;
+  $button-normal-contained-bg-hover: darken($base-element-bg, 4%) !default;
+
+  $chat-bubble-color-primary: $base-text-color !default;
+  $chat-bubble-background-color-primary: $button-default-text-bg-hover !default; // #2D6DA31A
+  $chat-bubble-background-color-secondary: $button-normal-contained-bg-hover !default; // #F5F5F5
   $chat-information-color: darken($base-bg, 41.57) !default; // #959595
 
   $chat-messagelist-empty-icon-color: lighten($base-icon-color, 46.67) !default; // #AAAAAA

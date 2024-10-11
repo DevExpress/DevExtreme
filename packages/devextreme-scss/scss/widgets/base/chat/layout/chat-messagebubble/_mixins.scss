@@ -2,6 +2,7 @@
   $padding,
   $border-radius,
   $background-color-secondary,
+  $color-primary,
   $background-color-primary,
   $bubble-container-gap
 ) {
@@ -30,6 +31,7 @@
   
   .dx-chat-messagegroup-alignment-end {
     .dx-chat-messagebubble {
+      color: $color-primary;
       background-color: $background-color-primary;
 
       &:first-child {
