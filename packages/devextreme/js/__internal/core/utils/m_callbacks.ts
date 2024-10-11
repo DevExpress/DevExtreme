@@ -122,8 +122,9 @@ Callback.prototype.fired = function() {
   return this._fired;
 };
 
-const Callbacks = function(options) {
+const Callbacks = function(options?) {
   return new Callback(options);
 };
 
 export { Callbacks };
+export default Callbacks;

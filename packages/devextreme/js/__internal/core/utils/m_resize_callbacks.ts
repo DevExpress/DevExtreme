@@ -1,8 +1,8 @@
 import domAdapter from '@js/core/dom_adapter';
 import callOnce from '@js/core/utils/call_once';
-import Callbacks from '@js/core/utils/callbacks';
-import readyCallbacks from '@js/core/utils/ready_callbacks';
-import { getWindow, hasWindow } from '@js/core/utils/window';
+import Callbacks from './m_callbacks';
+import readyCallbacks from './m_ready_callbacks';
+import windowModule from './m_window';
 
 const resizeCallbacks = (function() {
   let prevSize;
@@ -10,12 +10,12 @@ const resizeCallbacks = (function() {
   const originalCallbacksAdd = callbacks.add;
   const originalCallbacksRemove = callbacks.remove;
 
-  if(!hasWindow()) {
+  if(!windowModule.hasWindow()) {
       return callbacks;
   }
 
   const formatSize = function() {
-      const window = getWindow();
+      const window = windowModule.getWindow();
       return {
           width: window.innerWidth,
           height: window.innerHeight,
@@ -48,15 +48,13 @@ const resizeCallbacks = (function() {
   let removeListener;
 
   callbacks.add = function() {
-      //@ts-expect-error
       const result = originalCallbacksAdd.apply(callbacks, arguments);
 
       setPrevSize();
 
       readyCallbacks.add(function() {
-      //@ts-expect-error
           if(!removeListener && callbacks.has()) {
-              removeListener = domAdapter.listen(getWindow(), 'resize', handleResize);
+              removeListener = domAdapter.listen(windowModule.getWindow(), 'resize', handleResize);
           }
       });
 
@@ -64,9 +62,7 @@ const resizeCallbacks = (function() {
   };
 
   callbacks.remove = function() {
-      //@ts-expect-error
       const result = originalCallbacksRemove.apply(callbacks, arguments);
-      //@ts-expect-error
       if(!callbacks.has() && removeListener) {
           removeListener();
           removeListener = undefined;
@@ -78,3 +74,4 @@ const resizeCallbacks = (function() {
 })();
 
 export { resizeCallbacks };
+export default resizeCallbacks;

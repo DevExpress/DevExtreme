@@ -31,3 +31,4 @@ const readyCallbacks = {
 const readyCallbacksModule = injector(readyCallbacks);
 
 export { readyCallbacksModule };
+export default readyCallbacksModule;

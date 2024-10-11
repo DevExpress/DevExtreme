@@ -241,3 +241,4 @@ const nativeDOMAdapterStrategy: DomAdapter = {
 
 const domAdapter: DomAdapter = injector(nativeDOMAdapterStrategy);
 export { domAdapter };
+export default domAdapter;

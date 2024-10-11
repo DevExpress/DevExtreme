@@ -4,10 +4,10 @@
 
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.DevExpress.testing.executeAsyncMock = module.exports = factory(require('core/utils/common'));
+            root.DevExpress.testing.executeAsyncMock = module.exports = factory(require('__internal/core/utils/m_common').default);
         });
     } else {
-        root.DevExpress.testing.executeAsyncMock = factory(DevExpress.utils.common);
+        root.DevExpress.testing.executeAsyncMock = factory(DevExpress.require('__internal/core/utils/m_common'));
     }
 }(window, function(commonUtils) {
     const originalExecuteAsync = commonUtils.executeAsync;

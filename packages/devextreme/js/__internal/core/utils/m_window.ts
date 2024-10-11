@@ -55,3 +55,13 @@ export {
   hasWindow,
   setWindow,
 };
+
+export default {
+  defaultScreenFactorFunc,
+  getCurrentScreenFactor,
+  getNavigator,
+  getWindow,
+  hasProperty,
+  hasWindow,
+  setWindow,
+};

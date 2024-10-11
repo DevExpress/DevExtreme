@@ -3,12 +3,13 @@ import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
-import { animation } from '@js/core/utils/support';
 import { getNavigator } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 // @ts-expect-error
 import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
+
+import supportUtils from '../core/utils/m_support';
 
 const navigator = getNavigator();
 
@@ -105,7 +106,7 @@ const LoadIndicator = Widget.inherit({
   _renderMarkup() {
     const { viaImage, indicatorSrc } = this.option();
 
-    if (animation() && !viaImage && !indicatorSrc) { // B236922
+    if (supportUtils.animation() && !viaImage && !indicatorSrc) { // B236922
       this._renderMarkupForAnimation();
     } else {
       this._renderMarkupForImage();
@@ -138,7 +139,7 @@ const LoadIndicator = Widget.inherit({
     if (indicatorSrc) {
       this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
       this._$wrapper.css('backgroundImage', `url(${indicatorSrc})`);
-    } else if (animation()) {
+    } else if (supportUtils.animation()) {
       this._renderMarkupForAnimation();
     }
   },
