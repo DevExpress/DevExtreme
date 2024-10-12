@@ -3,4 +3,4 @@ export {
   PageSize,
   dxPaginationOptions,
   Properties,
-} from './pager';
+} from './pagination';

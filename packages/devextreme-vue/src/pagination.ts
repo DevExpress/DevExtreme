@@ -1,4 +1,4 @@
-import Pagination, { Properties } from "devextreme/ui/pager";
+import Pagination, { Properties } from "devextreme/ui/pagination";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -113,5 +113,5 @@ export default DxPagination;
 export {
   DxPagination
 };
-import type * as DxPaginationTypes from "devextreme/ui/pager_types";
+import type * as DxPaginationTypes from "devextreme/ui/pagination_types";
 export { DxPaginationTypes };

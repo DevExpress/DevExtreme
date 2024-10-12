@@ -140,11 +140,13 @@ const DxApiKeyConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:azure": null,
     "update:bing": null,
     "update:google": null,
     "update:googleStatic": null,
   },
   props: {
+    azure: String,
     bing: String,
     google: String,
     googleStatic: String

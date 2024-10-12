@@ -33,7 +33,7 @@ import dxMap, { Properties as MapProperties } from '../ui/map';
 import dxMenu, { Properties as MenuProperties } from '../ui/menu';
 import dxMultiView, { Properties as MultiViewProperties } from '../ui/multi_view';
 import dxNumberBox, { Properties as NumberBoxProperties } from '../ui/number_box';
-import dxPagination, { Properties as PagerProperties } from '../ui/pager';
+import dxPagination, { Properties as PaginationProperties } from '../ui/pagination';
 import dxPivotGrid, { Properties as PivotGridProperties } from '../ui/pivot_grid';
 import dxPivotGridFieldChooser, { Properties as PivotGridFieldChooserProperties } from '../ui/pivot_grid_field_chooser';
 import dxPopover, { Properties as PopoverProperties } from '../ui/popover';
@@ -356,7 +356,7 @@ declare global {
 
         dxPagination(): JQuery;
         dxPagination(options: 'instance'): dxPagination;
-        dxPagination(options: PagerProperties): JQuery;
+        dxPagination(options: PaginationProperties): JQuery;
         dxPagination(options: string): any;
         dxPagination(options: string, ...params: any[]): any;
 

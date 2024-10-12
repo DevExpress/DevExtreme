@@ -29,6 +29,14 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoMapApiKeyComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get azure(): string {
+        return this._getOption('azure');
+    }
+    set azure(value: string) {
+        this._setOption('azure', value);
+    }
+
+    @Input()
     get bing(): string {
         return this._getOption('bing');
     }

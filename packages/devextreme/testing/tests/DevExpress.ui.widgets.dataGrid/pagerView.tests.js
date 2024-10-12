@@ -8,7 +8,7 @@ import dataUtils from 'core/element_data';
 import { createEvent } from 'events/utils/index';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
-import Pager from 'ui/pager';
+import Pager from 'ui/pagination';
 
 QUnit.testStart(function() {
     const markup =

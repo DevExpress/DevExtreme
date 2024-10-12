@@ -30,14 +30,13 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.13",
-    "devexpress-diagram": "2.2.11",
+    "devexpress-diagram": "2.2.12",
     "devexpress-gantt": "4.1.56",
     "devextreme-quill": "1.7.1",
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.10.1",
-    "rrule": "^2.7.1",
-    "turndown": "~7.1.0"
+    "rrule": "^2.7.1"
   },
   "devDependencies": {
     "@babel/core": "7.23.9",

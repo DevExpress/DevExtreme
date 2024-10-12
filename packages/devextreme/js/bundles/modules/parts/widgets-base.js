@@ -47,7 +47,7 @@ ui.dxMap = require('../../../ui/map');
 ui.dxMultiView = require('../../../ui/multi_view');
 ui.dxNumberBox = require('../../../ui/number_box');
 ui.dxOverlay = require('../../../ui/overlay/ui.overlay');
-ui.dxPagination = require('../../../ui/pager');
+ui.dxPagination = require('../../../ui/pagination');
 ui.dxPopover = require('../../../ui/popover');
 ui.dxPopup = require('../../../ui/popup');
 ui.dxProgressBar = require('../../../ui/progress_bar');
@@ -80,9 +80,6 @@ DevExpress.validationEngine = require('../../../ui/validation_engine');
 ui.dxValidationSummary = require('../../../ui/validation_summary');
 ui.dxValidationGroup = require('../../../ui/validation_group');
 ui.dxValidator = require('../../../ui/validator');
-
-/* Widget parts */
-require('../../../ui/html_editor/converters/markdown');
 /// BUNDLER_PARTS_END
 
 // Dashboards

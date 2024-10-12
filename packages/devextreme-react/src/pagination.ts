@@ -3,7 +3,7 @@ import * as React from "react";
 import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxPagination, {
     Properties
-} from "devextreme/ui/pager";
+} from "devextreme/ui/pagination";
 
 import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
@@ -58,6 +58,6 @@ export {
   IPaginationOptions,
   PaginationRef
 };
-import type * as PaginationTypes from 'devextreme/ui/pager_types';
+import type * as PaginationTypes from 'devextreme/ui/pagination_types';
 export { PaginationTypes };
 

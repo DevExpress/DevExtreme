@@ -90,6 +90,7 @@ const Map = memo(
 // owners:
 // Map
 type IApiKeyProps = React.PropsWithChildren<{
+  azure?: string;
   bing?: string;
   google?: string;
   googleStatic?: string;

@@ -1,5 +1,5 @@
 import type { DisplayMode } from '@js/common';
-import type { PageSize } from '@js/ui/pager_types';
+import type { PageSize } from '@js/ui/pagination_types';
 
 import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';

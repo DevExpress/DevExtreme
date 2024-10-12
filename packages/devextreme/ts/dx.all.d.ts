@@ -20662,7 +20662,7 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxMap>;
-    export type MapProvider = 'bing' | 'google' | 'googleStatic';
+    export type MapProvider = 'azure' | 'bing' | 'google' | 'googleStatic';
     export type MapType = 'hybrid' | 'roadmap' | 'satellite';
     /**
      * [descr:_ui_map_MarkerAddedEvent]
@@ -20738,7 +20738,12 @@ declare module DevExpress.ui {
       | string
       | {
           /**
+           * [descr:dxMapOptions.apiKey.azure]
+           */
+          azure?: string;
+          /**
            * [descr:dxMapOptions.apiKey.bing]
+           * @deprecated [depNote:dxMapOptions.apiKey.bing]
            */
           bing?: string;
           /**
