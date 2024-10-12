@@ -187,10 +187,10 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 360px;');
+  await setAttribute('#container', 'style', 'padding-top: 300px;');
 
   await t
-    .click(menu.getItem(1), { offsetX: 5, offsetY: 5 })
+    .click(menu.getItem(1))
     .pressKey('down')
     .pressKey('down');
 
@@ -203,11 +203,11 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, right collision.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 350px; padding-left: 300px;');
+  await setAttribute('#container', 'style', 'padding-top: 300px; padding-left: 300px;');
 
   await t
     .click(menu.getItem(0))
-    .click(menu.getItem(1), { offsetX: 5, offsetY: 5 });
+    .click(menu.getItem(1));
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom right collision.png');
 
@@ -228,6 +228,15 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
     }, {
       id: '2_3',
       text: 'SuperLED 60',
+    }, {
+      id: '2_4',
+      text: 'SuperLED 72',
+    }, {
+      id: '2_5',
+      text: 'SuperLED 80',
+    }, {
+      id: '2_6',
+      text: 'SuperLED 91',
     }],
   }, {
     text: 'Monitors',
