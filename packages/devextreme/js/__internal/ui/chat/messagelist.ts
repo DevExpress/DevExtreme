@@ -179,7 +179,7 @@ class MessageList extends Widget<Properties> {
   _shouldAddDayHeader(timestamp: undefined | string | number | Date): boolean {
     const { showDayHeaders } = this.option();
 
-    if (timestamp === undefined || !showDayHeaders) {
+    if (!showDayHeaders) {
       return false;
     }
 
@@ -233,11 +233,12 @@ class MessageList extends Widget<Properties> {
     items.forEach((item, index) => {
       const newMessageGroupItem = item ?? {};
       const id = newMessageGroupItem.author?.id;
-      const shouldCreateDayHeader = this._shouldAddDayHeader(item?.timestamp);
+      const shouldCreateDayHeader = this._shouldAddDayHeader(newMessageGroupItem.timestamp);
       const isTimeoutExceeded = this._isTimeoutExceeded(
         currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
         item,
       );
+
       const shouldCreateMessageGroup = (shouldCreateDayHeader && currentMessageGroupItems.length)
         || isTimeoutExceeded
         || id !== currentMessageGroupUserId;

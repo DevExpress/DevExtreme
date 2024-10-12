@@ -4,20 +4,20 @@
   $padding,
   $day-header-color,
   $day-header-padding-bottom,
-  $first-day-header-padding-top,
+  $day-header-first-padding-top,
 ) {
   .dx-chat-messagelist {
     .dx-scrollable-content {
       padding-inline: $padding;
     }
+  }
 
-    .dx-chat-messagelist-day-header {
-      padding-bottom: $day-header-padding-bottom;
-      color: $day-header-color;
-    }
+  .dx-chat-messagelist-day-header {
+    padding-bottom: $day-header-padding-bottom;
+    color: $day-header-color;
 
-    .dx-chat-messagelist-day-header:first-child {
-      padding-top: $first-day-header-padding-top;
+    &:first-child {
+      padding-top: $day-header-first-padding-top;
     }
   }
 }

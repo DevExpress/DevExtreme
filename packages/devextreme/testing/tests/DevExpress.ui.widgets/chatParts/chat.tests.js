@@ -126,7 +126,11 @@ QUnit.module('Chat', moduleConfig, () => {
         });
     });
 
-    QUnit.module('MessageList integration', () => {
+    QUnit.module('MessageList integration', {
+        beforeEach: function() {
+            this.getMessageList = () => MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+        }
+    }, () => {
         QUnit.test('passed currentUserId should be equal generated chat.user.id', function(assert) {
             const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
 
@@ -150,7 +154,7 @@ QUnit.module('Chat', moduleConfig, () => {
                 items: messages
             });
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+            const messageList = this.getMessageList();
 
             const expectedOptions = {
                 items: messages,
@@ -167,7 +171,7 @@ QUnit.module('Chat', moduleConfig, () => {
 
             this.instance.option({ user: { id: newUserID } });
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+            const messageList = this.getMessageList();
 
             assert.deepEqual(messageList.option('currentUserId'), newUserID, 'currentUserId value is updated');
         });
@@ -177,27 +181,27 @@ QUnit.module('Chat', moduleConfig, () => {
 
             this.instance.option('items', newItems);
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+            const messageList = this.getMessageList();
 
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
         });
 
         QUnit.test('Chat should pass showDayHeaders to messageList on init', function(assert) {
             this.reinit({
-                showDayHeaders: false
+                showDayHeaders: false,
             });
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+            const messageList = this.getMessageList();
 
             assert.strictEqual(messageList.option('showDayHeaders'), false, 'showDayHeaders is passed on init');
         });
 
-        QUnit.test('Chat should pass showDayHeaders to messageList on runtime', function(assert) {
+        QUnit.test('Chat should pass showDayHeaders to messageList at runtime', function(assert) {
             this.reinit({
                 showDayHeaders: true,
             });
 
-            const messageList = MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
+            const messageList = this.getMessageList();
 
             this.instance.option('showDayHeaders', false);
 

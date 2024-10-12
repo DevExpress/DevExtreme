@@ -27,7 +27,7 @@ $chat-messagelist-empty-row-gap: null !default;
 $chat-messagelist-empty-message-font-size: null !default;
 $chat-messagelist-empty-prompt-font-size: null !default;
 $chat-messagelist-day-header-padding-bottom: 12px !default;
-$chat-messagelist-first-day-header-padding-top: 20px !default;
+$chat-messagelist-day-header-first-padding-top: 20px !default;
 
 @if $size == "default" {
   $chat-messagebox-buton-gap: 10px !default;

@@ -158,6 +158,9 @@ test('Messagelist with date headers', async (t) => {
 }).before(async () => {
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
+  const msInDay = 86400000;
+  const today = new Date().setHours(7, 22, 0, 0);
+  const yesterday = today - msInDay;
 
   const items = [{
     timestamp: new Date('05.01.2024'),
@@ -172,11 +175,11 @@ test('Messagelist with date headers', async (t) => {
     author: userSecond,
     text: 'CCC',
   }, {
-    timestamp: new Date('06.01.2024'),
+    timestamp: yesterday,
     author: userSecond,
     text: 'DDD',
   }, {
-    timestamp: new Date('10.01.2024'),
+    timestamp: today,
     author: userFirst,
     text: 'EEE',
   }];
