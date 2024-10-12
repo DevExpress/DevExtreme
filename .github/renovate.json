@@ -45,7 +45,8 @@
                 "devexpress-diagram",
                 "rrule",
                 "sass-embedded",
-                "systemjs"
+                "systemjs",
+                "vuex"
             ],
             "enabled": false
         },
