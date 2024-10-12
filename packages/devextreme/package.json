@@ -30,15 +30,13 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.13",
-    "devexpress-diagram": "2.2.11",
+    "devexpress-diagram": "2.2.12",
     "devexpress-gantt": "4.1.56",
     "devextreme-quill": "1.7.1",
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.10.1",
-    "rrule": "^2.7.1",
-    "showdown": "^2.1.0",
-    "turndown": "~7.1.0"
+    "rrule": "^2.7.1"
   },
   "devDependencies": {
     "@babel/core": "7.23.9",
@@ -211,7 +209,7 @@
     "dev-inprogress": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true BUILD_INPROGRESS_RENOVATION=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
-    "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|pager|palette|set_template_engine|splitter_control|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
+    "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|palette|set_template_engine|splitter_control|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])|(js/renovation/)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "update-ts-bundle": "dx-tools generate-ts-bundle --sources ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "regenerate": "pnpm run update-ts-bundle && pnpm run update-ts-reexports",
     "validate-ts": "gulp validate-ts",

@@ -1,5 +1,6 @@
 import {
   DataType,
+  DisplayMode,
   DragDirection,
   Draggable,
   DragHighlight,
@@ -12,6 +13,7 @@ import {
   Sortable,
   SortOrder,
   ValidationRule,
+  PagerBase,
 } from '../common';
 
 import {
@@ -2239,7 +2241,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   onToolbarPreparing?: ((e: EventInfo<TComponent> & ToolbarPreparingInfo) => void);
   /**
    * @docid
-   * @type object
    * @public
    */
   pager?: Pager;
@@ -2494,56 +2495,30 @@ export type NewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'view
 /**
  * @docid
  * @public
+ * @inherits PagerBase
  * @namespace DevExpress.common.grids
  */
-export type Pager = {
+export type Pager = PagerBase & {
   /**
-   * @docid GridBaseOptions.pager.allowedPageSizes
+   * @docid
+   * @public
    * @default "auto"
    */
   allowedPageSizes?: Array<(number | PagerPageSize)> | Mode;
+
   /**
-   * @docid GridBaseOptions.pager.displayMode
-   * @default "adaptive"
-   */
-  displayMode?: PagerDisplayMode;
-  /**
-   * @docid GridBaseOptions.pager.infoText
-   * @default "Page {0} of {1} ({2} items)"
-   */
-  infoText?: string;
-  /**
-   * @docid GridBaseOptions.pager.showInfo
-   * @default false
-   */
-  showInfo?: boolean;
-  /**
-   * @docid GridBaseOptions.pager.showNavigationButtons
-   * @default false
-   */
-  showNavigationButtons?: boolean;
-  /**
-   * @docid GridBaseOptions.pager.showPageSizeSelector
-   * @default false
-   */
-  showPageSizeSelector?: boolean;
-  /**
-   * @docid GridBaseOptions.pager.visible
+   * @docid
+   * @public
    * @default "auto"
    */
   visible?: boolean | Mode;
-  /**
-   * @docid GridBaseOptions.pager.label
-   * @default "Page Navigation"
-   */
-  label?: string;
 };
 
 /**
- * @public
+ * @deprecated Use DisplayMode from /common instead
  * @namespace DevExpress.common.grids
  */
-export type PagerDisplayMode = 'adaptive' | 'compact' | 'full';
+export type PagerDisplayMode = DisplayMode;
 
 /**
  * @public

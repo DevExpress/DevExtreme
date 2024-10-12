@@ -3,4 +3,4 @@ import registerComponent from '../core/component_registrator';
 
 export default Pager;
 
-registerComponent('dxPager', Pager);
+registerComponent('dxPagination', Pager);

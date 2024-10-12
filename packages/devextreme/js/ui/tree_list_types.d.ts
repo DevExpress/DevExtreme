@@ -1,4 +1,5 @@
 export {
+  DisplayMode,
   SearchMode,
   ApplyFilterMode,
   ColumnChooser,
@@ -34,7 +35,6 @@ export {
   LoadPanel,
   NewRowPosition,
   Pager,
-  PagerDisplayMode,
   PagerPageSize,
   RowDraggingTemplateData,
   SearchPanel,

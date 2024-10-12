@@ -262,19 +262,20 @@ QUnit.module('Chat', moduleConfig, () => {
                 assert.strictEqual(onMessageSend.callCount, 1);
             });
 
-            QUnit.test('new message should be created after clicking the send button', function(assert) {
+            QUnit.test('new message should not be created after clicking the send button', function(assert) {
                 const text = 'new text message';
 
                 keyboardMock(this.$input)
                     .focus()
                     .type(text);
 
+                const numberOfMessagesBefore = this.getBubbles().length;
+
                 this.$sendButton.trigger('dxclick');
 
-                const $bubbles = this.getBubbles();
-                const bubble = $bubbles[$bubbles.length - 1];
+                const numberOfMessagesAfter = this.getBubbles().length;
 
-                assert.strictEqual($(bubble).text(), text);
+                assert.strictEqual(numberOfMessagesAfter, numberOfMessagesBefore);
             });
 
             QUnit.test('New message should be correct after clicking the send button', function(assert) {

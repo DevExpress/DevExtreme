@@ -3,7 +3,7 @@ import widgetsMeta from './widgets.json!';
 import publicWidgets from 'renovation/components';
 import Button from 'ui/button';
 import 'ui/check_box';
-import 'ui/pager';
+import 'ui/pagination';
 import 'ui/data_grid';
 
 /**

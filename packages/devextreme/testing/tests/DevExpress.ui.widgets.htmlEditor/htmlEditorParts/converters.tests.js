@@ -1,7 +1,6 @@
 import $ from 'jquery';
 
 import DeltaConverter from '__internal/ui/html_editor/converters/m_delta';
-import MarkdownConverter from 'ui/html_editor/converters/markdown';
 import { getQuill } from 'ui/html_editor/quill_importer';
 
 const { test, module: testModule } = QUnit;
@@ -83,30 +82,6 @@ testModule('Delta converter', {
 
     test('it should return an empty string when editor is empty', function(assert) {
         assert.strictEqual(this.deltaConverter.toHtml(), '', 'editor is empty and converter return an empty string');
-    });
-});
-
-testModule('Markdown converter', () => {
-    test('it convert a HTML to the Markdown', function(assert) {
-        const markdownConverter = new MarkdownConverter();
-        const html = '<p>Te<strong>st</strong></p>';
-
-        assert.equal(markdownConverter.toMarkdown(html), 'Te**st**', 'It converts a HTML to Markdown');
-    });
-
-    test('it convert a HTML with empty lines to the Markdown', function(assert) {
-        const markdownConverter = new MarkdownConverter();
-        const html = '<p>Te</p><p><br></p><p><br></p><p>st</p>';
-        const expectedValue = 'Te\n\n<br><br>\n\nst';
-
-        assert.equal(markdownConverter.toMarkdown(html), expectedValue, 'It converts a HTML to Markdown');
-    });
-
-    test('it convert a Markdown to the HTML', function(assert) {
-        const markdownConverter = new MarkdownConverter();
-        const markdown = 'Te**st**';
-
-        assert.equal(markdownConverter.toHtml(markdown), '<p>Te<strong>st</strong></p>', 'It converts a Markdown to HTML');
     });
 });
 

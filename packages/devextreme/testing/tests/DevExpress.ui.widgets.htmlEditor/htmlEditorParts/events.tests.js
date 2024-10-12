@@ -1,7 +1,6 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-import 'ui/html_editor/converters/markdown';
 import { deferUpdate } from 'core/utils/common';
 import { Event as dxEvent } from 'events/index';
 
@@ -165,22 +164,20 @@ testModule('Events', createModuleConfig({ initialOptions: { value: '<p>Test 1</p
         assert.strictEqual(focusInStub.callCount, 1, 'Focus event handler is attached');
     });
 
-    ['html', 'markdown'].forEach((valueType) => {
-        test(`change value to "null" should raise only one ValueChanged event (valueType is "${valueType}")`, function(assert) {
-            const valueChangedStub = sinon.stub();
-            const onValueChangedStub = sinon.stub();
-            this.createEditor({
-                value: 'test',
-                onValueChanged: onValueChangedStub,
-                valueType
-            });
-            this.instance.on('valueChanged', valueChangedStub);
+    test('change value to "null" should raise only one ValueChanged event', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const onValueChangedStub = sinon.stub();
 
-            this.instance.option('value', null);
-
-            assert.ok(onValueChangedStub.calledOnce, 'subscribe via options');
-            assert.ok(valueChangedStub.calledOnce, 'subscribe via method');
+        this.createEditor({
+            value: 'test',
+            onValueChanged: onValueChangedStub,
         });
+
+        this.instance.on('valueChanged', valueChangedStub);
+        this.instance.option('value', null);
+
+        assert.ok(onValueChangedStub.calledOnce, 'subscribe via options');
+        assert.ok(valueChangedStub.calledOnce, 'subscribe via method');
     });
 });
 

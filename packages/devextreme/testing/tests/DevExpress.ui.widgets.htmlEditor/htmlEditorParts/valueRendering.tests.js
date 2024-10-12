@@ -1,7 +1,6 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
-import 'ui/html_editor/converters/markdown';
 import { getOuterHeight } from 'core/utils/size';
 
 import { checkLink, prepareEmbedValue, prepareTableValue } from './utils.js';
@@ -25,11 +24,6 @@ const TABLE_WITH_HEADER_MARKUP = `
         </tr>
     </tbody>
 </table>`;
-const MD_TABLE_WITH_HEADER_MARKUP = `| Header1  | Header2 |
-| ---------| --------|
-|Data1    | Data2   |`;
-
-const EXPECTED_TABLE_MARKUP = '<table><thead><tr><th><p>Header1</p></th><th><p>Header2</p></th></tr></thead><tbody><tr><td><p>Data1</p></td><td><p>Data2</p></td></tr></tbody></table>';
 
 function getSelector(className) {
     return `.${className}`;
@@ -219,42 +213,6 @@ export default function() {
                 .$element()
                 .find(getSelector(CONTENT_CLASS))
                 .html('<p>Hi! <strong>Test.</strong></p><p>New line</p>');
-        });
-
-        test('value after change valueType', function(assert) {
-            const done = assert.async();
-            const instance = $('#htmlEditor')
-                .dxHtmlEditor({
-                    valueType: 'markdown',
-                    value: 'Hi! **Test. 123**\n\nNew line',
-                    onValueChanged: (e) => {
-                        if(e.component.option('valueType') === 'html') {
-                            assert.equal(e.value, '<p>Hi! <strong>Test. 123</strong></p><p>New line</p>', 'value is OK');
-                            done();
-                        }
-                    }
-                })
-                .dxHtmlEditor('instance');
-
-            instance.option('valueType', 'html');
-        });
-
-        test('value with table after change valueType', function(assert) {
-            const done = assert.async();
-            const instance = $('#htmlEditor')
-                .dxHtmlEditor({
-                    valueType: 'markdown',
-                    value: MD_TABLE_WITH_HEADER_MARKUP,
-                    onValueChanged: (e) => {
-                        if(e.component.option('valueType') === 'html') {
-                            assert.equal(prepareTableValue(e.value), EXPECTED_TABLE_MARKUP, 'value is OK');
-                            done();
-                        }
-                    }
-                })
-                .dxHtmlEditor('instance');
-
-            instance.option('valueType', 'html');
         });
 
         test('render markup with a font-size style', function(assert) {
@@ -501,132 +459,6 @@ export default function() {
                 assert.strictEqual(window._isInlineHandlerExecuted, false, 'inline handler was not executed');
                 done();
             }, 100);
-        });
-    });
-
-    testModule('Value as Markdown markup', {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-        },
-        afterEach: function() {
-            this.clock.restore();
-        }
-    }, () => {
-        test('render default markdown value', function(assert) {
-            const instance = $('#htmlEditor').dxHtmlEditor({
-                value: 'Hi!\n\nIt\'s a **test**!',
-                valueType: 'markdown'
-            }).dxHtmlEditor('instance');
-            const $element = instance.$element();
-            const markup = $element.find(getSelector(CONTENT_CLASS)).html();
-
-            assert.strictEqual(instance.option('value'), 'Hi!\n\nIt\'s a **test**!');
-            assert.strictEqual(markup, '<p>Hi!</p><p>It\'s a <strong>test</strong>!</p>');
-        });
-
-        test('render markdown table', function(assert) {
-            const instance = $('#htmlEditor').dxHtmlEditor({
-                value: MD_TABLE_WITH_HEADER_MARKUP,
-                valueType: 'markdown'
-            }).dxHtmlEditor('instance');
-
-            const $element = instance.$element();
-            const markup = prepareTableValue($element.find(getSelector(CONTENT_CLASS)).html());
-
-            assert.strictEqual(instance.option('value'), MD_TABLE_WITH_HEADER_MARKUP);
-            assert.strictEqual(markup, EXPECTED_TABLE_MARKUP);
-        });
-
-        test('change markdown value by user', function(assert) {
-            const done = assert.async();
-            const instance = $('#htmlEditor')
-                .dxHtmlEditor({
-                    valueType: 'markdown',
-                    onValueChanged: (e) => {
-                        assert.equal(e.value, 'Hi! **Test.**');
-                        done();
-                    }
-                })
-                .dxHtmlEditor('instance');
-
-            instance
-                .$element()
-                .find(getSelector(CONTENT_CLASS))
-                .html('<p>Hi! <strong>Test.</strong></p>');
-        });
-
-        test('change value to null', function(assert) {
-            const done = assert.async();
-            const instance = $('#htmlEditor')
-                .dxHtmlEditor({
-                    value: 'test',
-                    valueType: 'markdown',
-                    onValueChanged: ({ value }) => {
-                        assert.strictEqual(value, null);
-
-                        done();
-                    }
-                })
-                .dxHtmlEditor('instance');
-
-            instance.option('value', null);
-        });
-
-        test('apply value after change valueType', function(assert) {
-            const done = assert.async();
-            const instance = $('#htmlEditor')
-                .dxHtmlEditor({
-                    value: '<p>Hi! <strong>Test.</strong></p>',
-                    onValueChanged: (e) => {
-                        if(e.component.option('valueType') === 'markdown') {
-                            assert.equal(e.value, 'Hi! **Test.**');
-                            done();
-                        }
-                    }
-                })
-                .dxHtmlEditor('instance');
-
-            instance.option('valueType', 'markdown');
-        });
-
-        test('apply value with table after change valueType', function(assert) {
-            const done = assert.async();
-            const tableMarkup = '<table><tbody><tr><td><p>Data1</p></td><td><p>Data2</p></td></tr></tbody></table>';
-            const value = `<p><strong>bold</strong></p>${tableMarkup}`;
-            const expectedMd = `**bold**\n\n${tableMarkup}`;
-            const instance = $('#htmlEditor')
-                .dxHtmlEditor({
-                    value,
-                    onValueChanged: (e) => {
-                        if(e.component.option('valueType') === 'markdown') {
-                            assert.equal(prepareTableValue(e.value), expectedMd);
-                            done();
-                        }
-                    }
-                })
-                .dxHtmlEditor('instance');
-
-            instance.option('valueType', 'markdown');
-        });
-
-        test('clear the Markdown value', function(assert) {
-            const done = assert.async();
-            const instance = $('#htmlEditor')
-                .dxHtmlEditor({
-                    value: 'test',
-                    valueType: 'markdown',
-                    onValueChanged: ({ value, previousValue }) => {
-                        assert.strictEqual(value, '');
-                        assert.strictEqual(previousValue, 'test');
-                        done();
-                    }
-                })
-                .dxHtmlEditor('instance');
-
-            instance
-                .$element()
-                .find(getSelector(CONTENT_CLASS))
-                .html('');
         });
     });
 

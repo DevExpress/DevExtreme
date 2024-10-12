@@ -1,7 +1,7 @@
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
-import Pager from '@js/ui/pager';
+import Pager from '@ts/pager/wrappers/pager';
 
 import modules from '../m_modules';
 
@@ -30,7 +30,7 @@ export class PagerView extends modules.View {
             pageIndex: getPageIndex(dataController),
             pageSize: dataController.pageSize(),
             pageCount: dataController.pageCount(),
-            totalCount: dataController.totalCount(),
+            itemCount: dataController.totalCount(),
             hasKnownLastPage: dataController.hasKnownLastPage(),
           });
         } else {
@@ -95,7 +95,7 @@ export class PagerView extends modules.View {
       showNavigationButtons: pagerOptions.showNavigationButtons,
       label: pagerOptions.label,
       allowedPageSizes: that.getPageSizes(),
-      totalCount: dataController.totalCount(),
+      itemCount: dataController.totalCount(),
       hasKnownLastPage: dataController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
       _skipValidation: true,
