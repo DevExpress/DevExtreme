@@ -1,4 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
+import type { SubsGets } from '@ts/core/reactive/index';
 import { computed, state } from '@ts/core/reactive/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -17,11 +18,6 @@ export class ColumnsChooserView extends View<ColumnChooserProps> {
       text: c.name,
     })),
     [this.columns.nonVisibleColumns],
-  );
-
-  protected override props = computed(
-    (visible, items) => ({ visible, items }),
-    [this.visible, this.items],
   );
 
   public static dependencies = [HeaderPanelController, ColumnsController] as const;
@@ -43,5 +39,12 @@ export class ColumnsChooserView extends View<ColumnChooserProps> {
       location: 'after',
       locateInMenu: 'auto',
     });
+  }
+
+  protected override getProps(): SubsGets<ColumnChooserProps> {
+    return computed(
+      (visible, items) => ({ visible, items }),
+      [this.visible, this.items],
+    );
   }
 }

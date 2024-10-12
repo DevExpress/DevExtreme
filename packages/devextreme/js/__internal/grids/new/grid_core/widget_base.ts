@@ -5,7 +5,6 @@
 /* eslint-disable spellcheck/spell-checker */
 // eslint-disable-next-line max-classes-per-file
 import browser from '@js/core/utils/browser';
-import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
@@ -22,7 +21,6 @@ import { Search } from '@ts/grids/new/grid_core/search/controller';
 import { render } from 'inferno';
 
 import { StatusView } from './content_view/status_view/status_view';
-import { ContentView } from './content_view2/view';
 import * as DataControllerModule from './data_controller/index';
 import { ErrorController } from './error_controller/error_controller';
 import { FilterPanelView } from './filtering/filter_panel/filter_panel';
@@ -65,7 +63,6 @@ export class GridCoreNewBase<
     this.diContext.register(Search);
     this.diContext.register(StatusView);
     this.diContext.register(FilterPanelView);
-    this.diContext.register(ContentView);
     this.diContext.register(ErrorController);
   }
 
@@ -158,10 +155,6 @@ export class GridCoreNewBase<
     render(null, this.$element().get(0));
     // @ts-expect-error
     super._clean();
-  }
-
-  public getScrollable(): dxScrollable {
-    return this.diContext.get(ContentView).scrollableRef.current!;
   }
 }
 

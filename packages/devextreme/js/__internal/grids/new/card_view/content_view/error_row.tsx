@@ -1,4 +1,4 @@
-import { Button } from '../inferno_wrappers/button';
+import { Button } from '@ts/grids/new/grid_core/inferno_wrappers/button';
 
 export const CLASSES = {
   errorRow: 'dx-gridcore-error-row',

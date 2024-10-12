@@ -4,6 +4,9 @@ import { Card } from './card/card';
 
 export interface ContentProps {
   items: DataRow[];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fieldTemplate?: any;
 }
 
 export const CLASSES = {
@@ -16,11 +19,7 @@ export function Content(props: ContentProps): JSX.Element {
       {props.items.map((item) => (
         <Card
           row={item}
-          // isEditing={isEditing}
-          // onChange={
-          //   (columnName, value): void => this.editing.onChanged(item.key, columnName, value)
-          // }
-          // fieldTemplate={fieldTemplate}
+          fieldTemplate={props.fieldTemplate}
         />
       ))}
     </div>

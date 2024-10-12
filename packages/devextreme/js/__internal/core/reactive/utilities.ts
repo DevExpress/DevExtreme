@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable spellcheck/spell-checker */
@@ -27,6 +28,14 @@ export function computed<T1, T2, T3, TValue>(
 export function computed<T1, T2, T3, T4, TValue>(
   compute: (t1: T1, t2: T2, t3: T3, t4: T4) => TValue,
   deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>, Subscribable<T4>]
+): SubsGets<TValue>;
+export function computed<T1, T2, T3, T4, T5, TValue>(
+  compute: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => TValue,
+  deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>, Subscribable<T4>, Subscribable<T5>]
+): SubsGets<TValue>;
+export function computed<T1, T2, T3, T4, T5, T6, TValue>(
+  compute: (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => TValue,
+  deps: [Subscribable<T1>, Subscribable<T2>, Subscribable<T3>, Subscribable<T4>, Subscribable<T5>, Subscribable<T6>]
 ): SubsGets<TValue>;
 export function computed<TArgs extends readonly any[], TValue>(
   compute: (...args: TArgs) => TValue,

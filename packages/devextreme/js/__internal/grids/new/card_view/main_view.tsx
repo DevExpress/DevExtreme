@@ -2,13 +2,13 @@
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import type { Subscribable } from '@ts/core/reactive/index';
 import { ColumnsChooserView } from '@ts/grids/new/grid_core/columns_chooser/view';
-import { ContentView } from '@ts/grids/new/grid_core/content_view2/view';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/filter_panel';
 import { HeaderPanelView } from '@ts/grids/new/grid_core/header_panel/view';
 import { PagerView } from '@ts/grids/new/grid_core/pager';
 import type { InfernoNode } from 'inferno';
 
+import { ContentView } from './content_view/view';
 import { HeadersView } from './headers/view';
 
 export class MainView extends View {
