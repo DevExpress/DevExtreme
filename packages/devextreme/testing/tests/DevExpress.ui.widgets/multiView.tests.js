@@ -1816,24 +1816,11 @@ QUnit.module('selectedIndex vs item.visible', () => {
     QUnit.test('next visible item should be selected if currently selected item is hidden and loop=true', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
-                { text: '1', visible: false },
-                { text: '2', visible: false },
-                { text: '3', visible: true },
-            ],
-            loop: true
-        });
-        const instance = $multiView.dxMultiView('instance');
-
-        assert.strictEqual(instance.option('selectedIndex'), 2, 'selectedIndex is updated on proper index');
-    });
-
-    QUnit.test('next visible item should be selected if currently selected item is hidden and loop=true | items=[{ visible: true }, { visible: false }], selectedIndex = 1', function(assert) {
-        const $multiView = $('#multiView').dxMultiView({
-            items: [
                 { text: '1', visible: true },
-                { text: '2', visible: false }
+                { text: '2', visible: false },
+                { text: '3', visible: false }
             ],
-            selectedIndex: 1,
+            selectedIndex: 2,
             loop: true
         });
         const instance = $multiView.dxMultiView('instance');
@@ -1841,11 +1828,11 @@ QUnit.module('selectedIndex vs item.visible', () => {
         assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
     });
 
-    QUnit.test('previous visible item should be selected if currently selected item is hidden and multiple hidden item is in between them | loop = true', function(assert) {
+    QUnit.test('first visible item should be selected if current selected item is hidden and it is in the end and loop = true', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
                 { text: '1', visible: true },
-                { text: '2', visible: false },
+                { text: '2', visible: true },
                 { text: '3', visible: false }
             ],
             selectedIndex: 2,
