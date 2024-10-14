@@ -143,20 +143,39 @@ const MultiView = CollectionWidget.inherit({
   },
 
   _ensureSelectedItemIsVisible(): void {
-    const currentSelectedIndex = this.option('selectedIndex');
+    const { items } = this.option();
+    let currentSelectedIndex = this.option('selectedIndex');
+
+    if (currentSelectedIndex >= items.length) {
+      currentSelectedIndex = items.length - 1;
+      this.option('selectedIndex', currentSelectedIndex);
+    }
 
     if (this._isItemVisible(currentSelectedIndex)) {
       return;
     }
 
-    const allItemsHidden = this.option('items').every((item, index) => !this._isItemVisible(index));
-
+    const allItemsHidden = items.every((_, index) => !this._isItemVisible(index));
+    const isIndexOverflowed = (this._itemsCount() - 1) < currentSelectedIndex;
+    const canCheckItemsAhead = items.slice(currentSelectedIndex + 1)
+      .some((_, index) => this._isItemVisible(currentSelectedIndex + 1 + index));
     if (allItemsHidden) {
       this.option('selectedIndex', 0);
       return;
     }
-    // to be removed
-    this.option('selectedIndex', this.option('selectedIndex'));
+
+    if (isIndexOverflowed) {
+      this.option('selectedIndex', this._normalizeIndex(currentSelectedIndex, 1));
+      return;
+    }
+
+    if (canCheckItemsAhead) {
+      const direction = this.option('loop') ? 1 : -1;
+      this.option('selectedIndex', this._normalizeIndex(currentSelectedIndex, direction));
+    } else {
+      const direction = this.option('loop') ? -1 : 1;
+      this.option('selectedIndex', this._normalizeIndex(currentSelectedIndex, direction));
+    }
   },
 
   _initMarkup() {
@@ -164,8 +183,8 @@ const MultiView = CollectionWidget.inherit({
 
     this.callBase();
 
-    const selectedItemIndices = this._getSelectedItemIndices();
     this._ensureSelectedItemIsVisible();
+    const selectedItemIndices = this._getSelectedItemIndices();
     this._updateItemsVisibility(selectedItemIndices[0]);
 
     this._setElementAria();
@@ -546,13 +565,17 @@ const MultiView = CollectionWidget.inherit({
         this._invalidate();
         break;
       case 'items':
-        this._updateSelectedIndex();
+        this._ensureSelectedItemIsVisible();
         this._updateSwipeDisabledState();
         this._findBoundaryIndices();
         this.callBase(args);
         break;
       case 'selectedIndex':
-        this._updateSelectedIndex();
+        if (this._isItemVisible(value)) {
+          this.callBase(args);
+        } else {
+          this._ensureSelectedItemIsVisible();
+        }
         break;
       default:
         this.callBase(args);

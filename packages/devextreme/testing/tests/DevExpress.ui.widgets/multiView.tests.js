@@ -1682,7 +1682,8 @@ QUnit.module('selectedIndex vs item.visible', () => {
                     { text: '1', visible: false },
                     { text: '2', visible: false },
                     { text: '3', visible: false },
-                ]
+                ],
+                selectedIndex: 1
             });
             const instance = $multiView.dxMultiView('instance');
 
@@ -1844,6 +1845,24 @@ QUnit.module('selectedIndex vs item.visible', () => {
             instance.option('items[2].visible', false);
 
             assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+        });
+
+        QUnit.test('when removing items selectedIndex should be on last visible item', function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: true },
+                    { text: '2', visible: true },
+                    { text: '3', visible: true },
+                ],
+                selectedIndex: 2
+            });
+            const instance = $multiView.dxMultiView('instance');
+            instance.option('items', [
+                { text: '1', visible: true },
+                { text: '2', visible: true },
+            ]);
+
+            assert.strictEqual(instance.option('selectedIndex'), 1, 'selectedIndex is updated on proper index');
         });
     });
 });
