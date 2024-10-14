@@ -2,7 +2,7 @@ import '../../helpers/noIntl.js';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 import devices from 'core/devices';
 import uiDateUtils from '__internal/ui/date_box/m_date_utils';
 import dateLocalization from 'localization/date';
