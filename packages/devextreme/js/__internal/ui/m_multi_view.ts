@@ -110,9 +110,9 @@ const MultiView = CollectionWidget.inherit({
       index -= count;
     }
 
-    const step = direction > 0 ? 1 : -1;
-    const isLastNotLoopedIndex = direction > 0 ? count - 1 : 0;
-    while (!this._isItemVisible(index) && (loop || index !== isLastNotLoopedIndex)) {
+    const step = direction > 0 ? -1 : 1;
+    const lastNotLoopedIndex = step === -1 ? 0 : count - 1;
+    while (!this._isItemVisible(index) && (loop || index !== lastNotLoopedIndex)) {
       index = (index + step) % count;
     }
 
@@ -161,7 +161,7 @@ const MultiView = CollectionWidget.inherit({
       currentSelectedIndex = items.length - 1;
     }
 
-    const direction = this._getRTLSignCorrection();
+    const direction = -1 * this._getRTLSignCorrection();
     let newSelectedIndex = this._normalizeIndex(currentSelectedIndex, direction, loop);
     if (newSelectedIndex === currentSelectedIndex) {
       newSelectedIndex = this._normalizeIndex(currentSelectedIndex, -direction, loop);
@@ -424,7 +424,7 @@ const MultiView = CollectionWidget.inherit({
 
   _swipeUpdateHandler(e) {
     const { offset } = e;
-    const swipeDirection = -sign(offset) * this._getRTLSignCorrection();
+    const swipeDirection = sign(offset) * this._getRTLSignCorrection();
 
     const selectedIndex = this.option('selectedIndex');
     const newIndex = this._normalizeIndex(selectedIndex - swipeDirection, swipeDirection);
