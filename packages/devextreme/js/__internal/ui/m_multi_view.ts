@@ -142,34 +142,21 @@ const MultiView = CollectionWidget.inherit({
     this._initSwipeable();
   },
 
-  _setVisibleSelectedItemIndices(indices) {
-    const items = this.option('items');
-    const startingIndex = this.option('selectedIndex');
-    const allHidden = items.every((item) => item?.visible === false);
-    let visibleIndex = indices.find((index) => items[index]?.visible) ?? null;
+  _ensureSelectedItemIsVisible(): void {
+    const currentSelectedIndex = this.option('selectedIndex');
 
-    if (visibleIndex === null) {
-      const firstVisibleItemIndex = items.slice(startingIndex).findIndex((item) => (typeof item === 'object' && item !== null
-        ? item.visible || !('visible' in item)
-        : true));
-
-      if (firstVisibleItemIndex !== -1 && !allHidden) {
-        visibleIndex = firstVisibleItemIndex + startingIndex;
-      } else if (!allHidden) {
-        for (let i = startingIndex; i >= 0; i--) {
-          if (items[i]?.visible || !('visible' in items[i])) {
-            visibleIndex = i;
-            break;
-          }
-        }
-      } else {
-        visibleIndex = 0;
-      }
+    if (this._isItemVisible(currentSelectedIndex)) {
+      return;
     }
 
-    this.selectItem(visibleIndex)
-      .fail(() => this._animateItemContainer(0, noop))
-      .done(() => this._postprocessSwipe({ swipedTabsIndex: visibleIndex }));
+    const allItemsHidden = this.option('items').every((item, index) => !this._isItemVisible(index));
+
+    if (allItemsHidden) {
+      this.option('selectedIndex', 0);
+      return;
+    }
+    // to be removed
+    this.option('selectedIndex', this.option('selectedIndex'));
   },
 
   _initMarkup() {
@@ -178,8 +165,8 @@ const MultiView = CollectionWidget.inherit({
     this.callBase();
 
     const selectedItemIndices = this._getSelectedItemIndices();
-    this._setVisibleSelectedItemIndices(selectedItemIndices);
-    this._updateItemsVisibility(this.option('selectedIndex'));
+    this._ensureSelectedItemIsVisible();
+    this._updateItemsVisibility(selectedItemIndices[0]);
 
     this._setElementAria();
     this._setItemsAria();
