@@ -143,11 +143,9 @@ const MultiView = CollectionWidget.inherit({
   },
 
   _ensureSelectedItemIsVisible(): void {
-    const { items, selectedIndex, loop } = this.option();
-    let currentSelectedIndex = selectedIndex;
+    const { items, loop, selectedIndex: currentSelectedIndex } = this.option();
 
-    const indexOverflowed = currentSelectedIndex >= items.length;
-    if (!indexOverflowed && this._isItemVisible(currentSelectedIndex)) {
+    if (this._isItemVisible(currentSelectedIndex)) {
       return;
     }
 
@@ -155,10 +153,6 @@ const MultiView = CollectionWidget.inherit({
     if (allItemsHidden) {
       this.option('selectedIndex', 0);
       return;
-    }
-
-    if (indexOverflowed) {
-      currentSelectedIndex = items.length - 1;
     }
 
     const direction = -1 * this._getRTLSignCorrection();
@@ -536,6 +530,15 @@ const MultiView = CollectionWidget.inherit({
     this.callBase();
   },
 
+  _itemOptionChanged(item, property) {
+    this.callBase(arguments);
+
+    const { selectedItem } = this.option();
+    if (property === 'visible' && item === selectedItem) {
+      this._ensureSelectedItemIsVisible();
+    }
+  },
+
   _optionChanged(args) {
     const { value } = args;
 
@@ -552,7 +555,6 @@ const MultiView = CollectionWidget.inherit({
         this._invalidate();
         break;
       case 'items':
-        this._ensureSelectedItemIsVisible();
         this._updateSwipeDisabledState();
         this._findBoundaryIndices();
         this.callBase(args);
