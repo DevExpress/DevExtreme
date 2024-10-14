@@ -100,7 +100,7 @@ const MultiView = CollectionWidget.inherit({
     return this.option('items').length;
   },
 
-  _normalizeIndex(index) {
+  _normalizeIndex(index, direction) {
     const count = this._itemsCount();
 
     if (index < 0) {
@@ -110,7 +110,7 @@ const MultiView = CollectionWidget.inherit({
       index -= count;
     }
 
-    const step = this._swipeDirection > 0 ? -1 : 1;
+    const step = direction > 0 ? -1 : 1;
 
     while (!this._isItemVisible(index)) {
       index = (index + step) % count;
@@ -422,20 +422,14 @@ const MultiView = CollectionWidget.inherit({
 
     e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > firstAvailableIndex : selectedIndex < lastAvailableIndex));
     e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastAvailableIndex : selectedIndex > firstAvailableIndex));
-
-    this._swipeDirection = null;
   },
 
   _swipeUpdateHandler(e) {
     const { offset } = e;
     const swipeDirection = sign(offset) * this._getRTLSignCorrection();
 
-    if (swipeDirection !== this._swipeDirection) {
-      this._swipeDirection = swipeDirection;
-    }
-
     const selectedIndex = this.option('selectedIndex');
-    const newIndex = this._normalizeIndex(selectedIndex - swipeDirection);
+    const newIndex = this._normalizeIndex(selectedIndex - swipeDirection, swipeDirection);
 
     if (selectedIndex === newIndex) {
       return;
