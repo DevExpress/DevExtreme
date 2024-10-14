@@ -32,7 +32,7 @@ fixture.disablePageReloads`a11y - appointment`
     const attrs = await scheduler.getAppointment('App 1').element.attributes;
 
     await t
-      .expect(attrs['aria-label'])
+      .expect(attrs['aria-roledescription'])
       .eql('February 1, 2021, Group: resource1, ');
   }).before(async () => {
     await createWidget('dxScheduler', {
@@ -63,7 +63,7 @@ fixture.disablePageReloads`a11y - appointment`
     const attrs = await scheduler.getAppointment('App 1').element.attributes;
 
     await t
-      .expect(attrs['aria-label'])
+      .expect(attrs['aria-roledescription'])
       .eql('February 1, 2021, Group: resource11, resource21, ');
   }).before(async () => {
     await createWidget('dxScheduler', {
@@ -128,7 +128,7 @@ fixture.disablePageReloads`a11y - appointment`
       async (i) => {
         const appt = scheduler.getAppointment('App 1', i);
         const attrs = await appt.element.attributes;
-        return attrs['aria-label'];
+        return attrs['aria-roledescription'];
       },
     ));
 
@@ -229,5 +229,30 @@ test('appointments & collector buttons can be navigated', async (t) => {
     currentView: 'month',
     maxAppointmentsPerCell: 1,
     currentDate: new Date(2021, 1, 1),
+  });
+});
+
+test('Scheduler a11y: appointments does not have info about reccurence', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const recurrenceIcon = scheduler.getAppointment('Website Re-Design Plan').getRecurrenceElement();
+
+  await t
+    .expect(recurrenceIcon.getAttribute('aria-label'))
+    .eql('Recurring appointment');
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    timeZone: 'America/Los_Angeles',
+    dataSource: [
+      {
+        text: 'Website Re-Design Plan',
+        startDate: new Date('2021-04-26T16:30:00.000Z'),
+        endDate: new Date('2021-04-26T18:30:00.000Z'),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
+      },
+    ],
+    views: ['day', 'week', 'workWeek', 'month'],
+    currentView: 'day',
+    currentDate: new Date(2021, 3, 29),
+    startDayHour: 9,
   });
 });
