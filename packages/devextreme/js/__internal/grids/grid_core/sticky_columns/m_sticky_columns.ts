@@ -77,7 +77,13 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     rowIndex: number | null,
   ): void {
     const columnsController = this._columnsController;
-    const prevCellIsFixed = prevColumnIsFixed(columnsController, column, rowIndex);
+    const isRowsView = this.name === 'rowsView';
+    const prevCellIsFixed = prevColumnIsFixed(
+      columnsController,
+      column,
+      rowIndex,
+      isRowsView,
+    );
     const isFirstColumn = columnsController?.isFirstColumn(column, rowIndex);
 
     GridCoreStickyColumnsDom

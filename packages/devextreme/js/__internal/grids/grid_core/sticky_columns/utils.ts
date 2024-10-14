@@ -100,9 +100,10 @@ const getPrevColumn = function (
   that: ColumnsController,
   column,
   visibleColumns,
+  rowIndex: number | null,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any {
-  const visibleColumnIndex = that.getVisibleIndex(column.index, 0);
+  const visibleColumnIndex = that.getVisibleIndex(column.index, rowIndex);
 
   return visibleColumns?.slice(0, visibleColumnIndex)
     .reverse()
@@ -113,13 +114,15 @@ const prevColumnIsFixedCore = function (
   that: ColumnsController,
   column,
   visibleColumns,
+  rowIndex: number | null,
 ): boolean {
-  const prevColumn = getPrevColumn(that, column, visibleColumns);
+  const prevColumn = getPrevColumn(that, column, visibleColumns, rowIndex);
+  const fixedPosition = getColumnFixedPosition(that, column);
 
   return !!prevColumn?.fixed
     && (!column.fixed
-      || column.fixedPosition === StickyPosition.Sticky
-      || column.fixedPosition !== prevColumn?.fixedPosition
+      || fixedPosition === StickyPosition.Sticky
+      || fixedPosition !== getColumnFixedPosition(that, prevColumn)
     );
 };
 
@@ -195,18 +198,18 @@ export const prevColumnIsFixed = function (
   rowIndex: number | null,
   isDataColumn = false,
 ): boolean {
-  const visibleColumns = that.getVisibleColumns(isDataColumn ? null : 0);
+  const visibleColumns = that.getVisibleColumns(isDataColumn ? null : rowIndex);
   const parentColumn = !isDataColumn && that.getParentColumn(column);
 
   if (parentColumn) {
     const isFirstColumn = that.isFirstColumn(column, rowIndex, true);
 
     if (isFirstColumn) {
-      return prevColumnIsFixedCore(that, parentColumn, visibleColumns);
+      return prevColumnIsFixedCore(that, parentColumn, that.getVisibleColumns(0), 0);
     }
   }
 
-  return prevColumnIsFixedCore(that, column, visibleColumns);
+  return prevColumnIsFixedCore(that, column, visibleColumns, rowIndex);
 };
 
 export const normalizeOffset = function (offset: Record<string, number>): CSSStyleDeclaration {
