@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import * as iteratorUtils from '@js/core/utils/iterator';
 import { setWidth } from '@js/core/utils/size';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
@@ -71,7 +70,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     }
   }
 
-  private _updateBorderClassesCore(
+  private updateBorderCellClasses(
     $cell: dxElementWrapper,
     column,
     rowIndex: number | null,
@@ -96,17 +95,17 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const isColumnHeadersView = this.name === 'columnHeadersView';
     const $rows = this._getRowElementsCore().not(`.${MASTER_DETAIL_CLASSES.detailRow}`).toArray();
 
-    iteratorUtils.each($rows, (index: number, row: Element) => {
+    $rows.forEach((row: Element, index: number) => {
       const rowIndex = isColumnHeadersView ? index : null;
       const columns = this.getColumns(rowIndex);
       const $cells = $(row).children('td').toArray();
 
-      iteratorUtils.each($cells, (cellIndex: number, cell: Element) => {
+      $cells.forEach((cell: Element, cellIndex: number) => {
         const $cell = $(cell);
         const column = columns[cellIndex];
 
         if (column.visibleWidth !== HIDDEN_COLUMNS_WIDTH) {
-          this._updateBorderClassesCore($cell, column, rowIndex);
+          this.updateBorderCellClasses($cell, column, rowIndex);
         }
       });
     });
@@ -139,7 +138,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const rowIndex = rowType === 'header' ? options.rowIndex : null;
 
     if (isStickyColumns) {
-      this._updateBorderClassesCore($cell, column, rowIndex);
+      this.updateBorderCellClasses($cell, column, rowIndex);
 
       if (column.fixed) {
         const fixedPosition = getColumnFixedPosition(this._columnsController, column);
