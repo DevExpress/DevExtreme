@@ -531,7 +531,7 @@ const MultiView = CollectionWidget.inherit({
   },
 
   _itemOptionChanged(item, property) {
-    this.callBase(arguments);
+    this.callBase(...arguments);
 
     const { selectedItem } = this.option();
     if (property === 'visible' && item === selectedItem) {
