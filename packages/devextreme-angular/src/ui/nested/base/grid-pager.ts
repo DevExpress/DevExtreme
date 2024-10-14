@@ -11,7 +11,7 @@ import { PagerPageSize } from 'devextreme/common/grids';
 @Component({
     template: ''
 })
-export abstract class DxoPager extends NestedOption {
+export abstract class DxoGridPager extends NestedOption {
     get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
         return this._getOption('allowedPageSizes');
     }

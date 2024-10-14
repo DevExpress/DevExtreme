@@ -18,7 +18,7 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoPager } from './base/pager';
+import { DxoGridPager } from './base/grid-pager';
 
 
 @Component({
@@ -37,7 +37,7 @@ import { DxoPager } from './base/pager';
         'visible'
     ]
 })
-export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
+export class DxoPagerComponent extends DxoGridPager implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'pager';
