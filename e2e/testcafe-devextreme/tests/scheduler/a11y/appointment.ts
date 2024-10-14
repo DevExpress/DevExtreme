@@ -238,7 +238,7 @@ test('Scheduler a11y: appointments does not have info about reccurence', async (
 
   await t
     .expect(recurrenceIcon.getAttribute('aria-label'))
-    .eql('Recurring Appointment');
+    .eql('Recurring appointment');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',
