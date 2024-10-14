@@ -410,7 +410,7 @@ const rowsView = (
 
     super._handleScroll(e);
 
-    if (!$focusOverlay.hasClass(CLASSES.hidden)
+    if (!$focusOverlay?.hasClass(CLASSES.hidden)
       && $focusOverlay?.hasClass(CLASSES.focusedFixedCell)) {
       const $element = this.component.$element();
       // @ts-expect-error
