@@ -307,6 +307,45 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             assert.strictEqual($firstChild.hasClass(CHAT_MESSAGEGROUP_CLASS), true, 'first message group is added before day header');
         });
+
+        QUnit.test('Only one day header should be added when there are two messages with the same date and undefined date between them (last day header was added for message in current messageGroup)', function(assert) {
+            this.reinit({
+                items: [{
+                    timestamp: new Date('11.10.2024'),
+                    author: { id: 1 },
+                    text: 'ABC',
+                }, {
+                    author: { id: 2 },
+                    text: 'EFG',
+                }, {
+                    timestamp: new Date('11.10.2024'),
+                    author: { id: 1 },
+                    text: 'HIJ',
+                }],
+            });
+
+            const $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'only one day header was added');
+        });
+
+        QUnit.test('Only one day header should be added when there are two messages with the same date and and undefined date between them (last day header was added for message in older messageGroup)', function(assert) {
+            this.reinit({
+                items: [{
+                    timestamp: new Date('11.10.2024'),
+                    text: 'ABC',
+                }, {
+                    text: 'EFG',
+                }, {
+                    timestamp: new Date('11.10.2024'),
+                    text: 'HIJ',
+                }],
+            });
+
+            const $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'only one day header was added');
+        });
     });
 
     QUnit.module('MessageGroup integration', () => {

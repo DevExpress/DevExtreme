@@ -38,8 +38,6 @@ export interface Properties extends WidgetOptions<MessageList> {
 class MessageList extends Widget<Properties> {
   private _messageGroups?: MessageGroup[];
 
-  private _lastMessageDate?: null | string | number | Date;
-
   private _containerClientHeight!: number;
 
   private _scrollable!: Scrollable<unknown>;
@@ -57,7 +55,6 @@ class MessageList extends Widget<Properties> {
     super._init();
 
     this._messageGroups = [];
-    this._lastMessageDate = null;
   }
 
   _initMarkup(): void {
@@ -176,7 +173,10 @@ class MessageList extends Widget<Properties> {
     });
   }
 
-  _shouldAddDayHeader(timestamp: undefined | string | number | Date): boolean {
+  _shouldAddDayHeader(
+    timestamp: undefined | string | number | Date,
+    currentMessageGroupItems: Message[] = [],
+  ): boolean {
     const { showDayHeaders } = this.option();
 
     if (!showDayHeaders) {
@@ -189,14 +189,52 @@ class MessageList extends Widget<Properties> {
       return false;
     }
 
-    return !dateUtils.sameDate(this._lastMessageDate, deserializedDate);
+    const lastDayHeaderDate = this._getLastDayHeaderDate(currentMessageGroupItems);
+
+    return !dateUtils.sameDate(lastDayHeaderDate, deserializedDate);
+  }
+
+  _getLastDayHeaderDate(currentMessageGroupItems: Message[] = []): Date | null {
+    let lastDayHeaderDate = null;
+    const messageGroups = this._messageGroups ?? [];
+
+    let index = currentMessageGroupItems.length - 1;
+
+    while (index >= 0 && lastDayHeaderDate === null) {
+      const messageTimestamp = currentMessageGroupItems[index].timestamp;
+
+      if (messageTimestamp) {
+        lastDayHeaderDate = dateSerialization.deserializeDate(messageTimestamp);
+      }
+      index -= 1;
+    }
+
+    index = messageGroups.length - 1;
+
+    while (index >= 0 && lastDayHeaderDate === null) {
+      const { items } = messageGroups[index].option();
+
+      const messageGroupTimestampList: (Date | string | number)[] = [];
+      items.forEach((item: Message) => {
+        if (item.timestamp) {
+          messageGroupTimestampList.push(item.timestamp);
+        }
+      });
+
+      if (messageGroupTimestampList.length > 0) {
+        lastDayHeaderDate = dateSerialization.deserializeDate(messageGroupTimestampList.at(-1));
+      }
+
+      index -= 1;
+    }
+
+    return lastDayHeaderDate;
   }
 
   _createDayHeader(timestamp: string | number | Date | undefined): void {
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
     const today = new Date();
     const yesterday = new Date(new Date().setDate(today.getDate() - 1));
-    this._lastMessageDate = deserializedDate;
 
     let headerDate = deserializedDate.toLocaleDateString(undefined, {
       day: '2-digit',
@@ -232,8 +270,9 @@ class MessageList extends Widget<Properties> {
 
     items.forEach((item, index) => {
       const newMessageGroupItem = item ?? {};
+      const { timestamp } = newMessageGroupItem;
       const id = newMessageGroupItem.author?.id;
-      const shouldCreateDayHeader = this._shouldAddDayHeader(newMessageGroupItem.timestamp);
+      const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp, currentMessageGroupItems);
       const isTimeoutExceeded = this._isTimeoutExceeded(
         currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
         item,
