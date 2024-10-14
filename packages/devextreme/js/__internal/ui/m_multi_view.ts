@@ -100,7 +100,7 @@ const MultiView = CollectionWidget.inherit({
     return this.option('items').length;
   },
 
-  _normalizeIndex(index, direction) {
+  _normalizeIndex(index, direction, loop = true) {
     const count = this._itemsCount();
 
     if (index < 0) {
@@ -110,9 +110,9 @@ const MultiView = CollectionWidget.inherit({
       index -= count;
     }
 
-    const step = direction > 0 ? -1 : 1;
-
-    while (!this._isItemVisible(index)) {
+    const step = direction > 0 ? 1 : -1;
+    const isLastNotLoopedIndex = direction > 0 ? count - 1 : 0;
+    while (!this._isItemVisible(index) && (loop || index !== isLastNotLoopedIndex)) {
       index = (index + step) % count;
     }
 
@@ -143,39 +143,31 @@ const MultiView = CollectionWidget.inherit({
   },
 
   _ensureSelectedItemIsVisible(): void {
-    const { items } = this.option();
-    let currentSelectedIndex = this.option('selectedIndex');
+    const { items, selectedIndex, loop } = this.option();
+    let currentSelectedIndex = selectedIndex;
 
-    if (currentSelectedIndex >= items.length) {
-      currentSelectedIndex = items.length - 1;
-      this.option('selectedIndex', currentSelectedIndex);
-    }
-
-    if (this._isItemVisible(currentSelectedIndex)) {
+    const indexOverflowed = currentSelectedIndex >= items.length;
+    if (!indexOverflowed && this._isItemVisible(currentSelectedIndex)) {
       return;
     }
 
     const allItemsHidden = items.every((_, index) => !this._isItemVisible(index));
-    const isIndexOverflowed = (this._itemsCount() - 1) < currentSelectedIndex;
-    const canCheckItemsAhead = items.slice(currentSelectedIndex + 1)
-      .some((_, index) => this._isItemVisible(currentSelectedIndex + 1 + index));
     if (allItemsHidden) {
       this.option('selectedIndex', 0);
       return;
     }
 
-    if (isIndexOverflowed) {
-      this.option('selectedIndex', this._normalizeIndex(currentSelectedIndex, 1));
-      return;
+    if (indexOverflowed) {
+      currentSelectedIndex = items.length - 1;
     }
 
-    if (canCheckItemsAhead) {
-      const direction = this.option('loop') ? 1 : -1;
-      this.option('selectedIndex', this._normalizeIndex(currentSelectedIndex, direction));
-    } else {
-      const direction = this.option('loop') ? -1 : 1;
-      this.option('selectedIndex', this._normalizeIndex(currentSelectedIndex, direction));
+    const direction = this._getRTLSignCorrection();
+    let newSelectedIndex = this._normalizeIndex(currentSelectedIndex, direction, loop);
+    if (newSelectedIndex === currentSelectedIndex) {
+      newSelectedIndex = this._normalizeIndex(currentSelectedIndex, -direction, loop);
     }
+
+    this.option('selectedIndex', newSelectedIndex);
   },
 
   _initMarkup() {
@@ -432,7 +424,7 @@ const MultiView = CollectionWidget.inherit({
 
   _swipeUpdateHandler(e) {
     const { offset } = e;
-    const swipeDirection = sign(offset) * this._getRTLSignCorrection();
+    const swipeDirection = -sign(offset) * this._getRTLSignCorrection();
 
     const selectedIndex = this.option('selectedIndex');
     const newIndex = this._normalizeIndex(selectedIndex - swipeDirection, swipeDirection);
@@ -542,11 +534,6 @@ const MultiView = CollectionWidget.inherit({
     delete this._boundaryIndices;
 
     this.callBase();
-  },
-
-  _updateSelectedIndex() {
-    this._setVisibleSelectedItemIndices([this.option('selectedIndex')]);
-    this._updateItemsVisibility(this.option('selectedIndex'));
   },
 
   _optionChanged(args) {

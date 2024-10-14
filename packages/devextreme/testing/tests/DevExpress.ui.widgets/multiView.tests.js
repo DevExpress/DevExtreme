@@ -1676,6 +1676,21 @@ QUnit.module('selectedIndex vs item.visible', () => {
             assert.strictEqual(instance.option('selectedIndex'), 2, 'selectedIndex is updated on proper index');
         });
 
+        QUnit.test('selectedIndex should be updated to the next visible item to the left if initially selected item is hidden and RTL is enabled', function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: true },
+                    { text: '2', visible: false },
+                    { text: '3', visible: true },
+                ],
+                selectedIndex: 1,
+                rtlEnabled: true
+            });
+            const instance = $multiView.dxMultiView('instance');
+
+            assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
+        });
+
         QUnit.test('selectedIndex should be zero when all items are not visible', function(assert) {
             const $multiView = $('#multiView').dxMultiView({
                 items: [
