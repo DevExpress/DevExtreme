@@ -17,12 +17,6 @@ const elements = [
     selector: (filterBuilder) => filterBuilder.getRootElement(),
   },
   {
-    name: 'Leveled Grouping',
-    role: 'group',
-    label: 'Level 1',
-    selector: (filterBuilder) => filterBuilder.getGroupByLevel(1),
-  },
-  {
     name: 'Group Item',
     role: 'treeitem',
     label: 'Group Item',
@@ -30,13 +24,13 @@ const elements = [
   },
   {
     name: 'Operation Button',
-    role: 'button',
+    role: 'combobox',
     label: 'Operation',
     selector: (filterBuilder) => filterBuilder.getOperationButton(1),
   },
   {
     name: 'Add Button',
-    role: 'button',
+    role: 'combobox',
     label: 'Add',
     selector: (filterBuilder) => filterBuilder.getAddButton(1),
   },

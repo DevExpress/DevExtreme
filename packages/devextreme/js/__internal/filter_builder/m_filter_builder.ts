@@ -331,8 +331,8 @@ class FilterBuilder extends Widget<any> {
       }, 'group').appendTo($groupItem);
     }
 
-    this._addAriaAttributes($group, groupLevelAria, 'group');
-    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel + 1}`);
+    // this._addAriaAttributes($group, groupLevelAria, 'group');
+    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevelAria}`);
     this._addAriaAttributes($groupContent, '', 'group');
     $groupItem.attr('aria-owns', `${$guid}`);
 
@@ -347,7 +347,7 @@ class FilterBuilder extends Widget<any> {
       const field = this.option('fields')[0];
       const newCondition = createCondition(field, this._customOperations);
       addItem(newCondition, criteria);
-      this._createConditionElement(newCondition, criteria).appendTo($groupContent);
+      this._createConditionElement(newCondition, criteria, groupLevel + 1).appendTo($groupContent);
       this._updateFilter();
     }, groupLevel).appendTo($groupItem);
 
@@ -385,7 +385,7 @@ class FilterBuilder extends Widget<any> {
         },
       });
 
-    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaOperationButton'), 'button', true);
+    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaOperationButton'), 'combobox', true, false);
 
     return $operationButton.addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
@@ -640,7 +640,7 @@ class FilterBuilder extends Widget<any> {
       });
     }
 
-    this._addAriaAttributes($button, messageLocalization.format('dxFilterBuilder-filterAriaAddButton'), 'button', true);
+    this._addAriaAttributes($button, messageLocalization.format('dxFilterBuilder-filterAriaAddButton'), 'combobox', true, false);
 
     return $button.addClass(FILTER_BUILDER_IMAGE_CLASS)
       .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
