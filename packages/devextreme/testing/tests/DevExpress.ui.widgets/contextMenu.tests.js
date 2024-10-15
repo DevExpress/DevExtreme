@@ -2,7 +2,7 @@ import $ from 'jquery';
 import devices from '__internal/core/m_devices';
 import domAdapter from '__internal/core/m_dom_adapter';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 import { implementationsMap, getWidth, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';

@@ -2,7 +2,7 @@ import fx from 'animation/fx';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { deferUpdate } from 'core/utils/common';
-import support from 'core/utils/support';
+import support from '__internal/core/utils/m_support';
 import { isRenderer } from 'core/utils/type';
 import 'generic_light.css!';
 import $ from 'jquery';
