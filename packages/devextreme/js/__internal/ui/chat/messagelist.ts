@@ -373,6 +373,7 @@ class MessageList extends Widget<Properties> {
 
   _clean(): void {
     this._messageGroups = [];
+    this._lastMessageDate = null;
 
     super._clean();
   }

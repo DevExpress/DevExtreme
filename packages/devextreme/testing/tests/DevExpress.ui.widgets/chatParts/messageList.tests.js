@@ -346,6 +346,27 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             assert.strictEqual($dayHeaders.length, 1, 'only one day header was added');
         });
+
+        QUnit.test('Day header should not dissapear after component invalidate', function(assert) {
+            const items = [{
+                timestamp: new Date('11.10.2024'),
+                text: 'ABC',
+            }];
+
+            this.reinit({
+                items,
+            });
+
+            let $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'day header was aaded');
+
+            this.instance.option({ items });
+
+            $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'day header is not removed after invalidate');
+        });
     });
 
     QUnit.module('MessageGroup integration', () => {
