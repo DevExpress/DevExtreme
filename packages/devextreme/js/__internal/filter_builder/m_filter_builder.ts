@@ -321,7 +321,6 @@ class FilterBuilder extends Widget<any> {
     const $groupItem = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
     const $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS).attr('id', `${$guid}`);
     const $group = $('<div>').addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
-    const groupLevelAria = (messageLocalization.format as any)('dxFilterBuilder-filterAriaGroupLevel', groupLevel + 1);
 
     if (parent != null) {
       this._createRemoveButton(() => {
@@ -331,8 +330,7 @@ class FilterBuilder extends Widget<any> {
       }, 'group').appendTo($groupItem);
     }
 
-    // this._addAriaAttributes($group, groupLevelAria, 'group');
-    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevelAria}`);
+    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel + 1}`);
     this._addAriaAttributes($groupContent, '', 'group');
     $groupItem.attr('aria-owns', `${$guid}`);
 

@@ -16,10 +16,10 @@ QUnit.test('markup init', function(assert) {
 
     const $etalon = $(
         '<div id="container" class="dx-filterbuilder dx-widget">'
-            + '<div class="dx-filterbuilder-group" role="group" aria-label="Level 1">'
+            + '<div class="dx-filterbuilder-group">'
                 + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group Item" aria-level="1" aria-owns="' + guid + '">'
-                    + '<div role="button" title="Operation" aria-haspopup="true" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
-                    + '<div role="button" aria-label="Add" aria-haspopup="true" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+                    + '<div role="combobox" title="Operation" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
+                    + '<div role="combobox" aria-label="Add" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
                 + '</div>'
                 + '<div class="dx-filterbuilder-group-content" id="' + guid + '" role="group"></div>'
             + '</div>'
@@ -60,14 +60,14 @@ QUnit.test('filter Content init by one condition', function(assert) {
         fields: fields,
         value: [[['CompanyName', '=', 'K&S Music'], 'Or'], 'And']
     });
-    const guid = element.find('.dx-filterbuilder-group[aria-label="Level 2"] .dx-filterbuilder-group-item').attr('aria-owns');
+    const guid = element.find('.dx-filterbuilder-group-item[aria-level="2"]').attr('aria-owns');
 
     const $etalon = $('<div/>').html(
-        '<div class="dx-filterbuilder-group" role="group" aria-label="Level 2">'
+        '<div class="dx-filterbuilder-group">'
             + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group Item" aria-level="2" aria-owns="' + guid + '">'
                 + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove group"></div>'
-                + '<div role="button" title="Operation" aria-haspopup="true" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>'
-                + '<div role="button" aria-label="Add" aria-haspopup="true" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+                + '<div role="combobox" title="Operation" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>'
+                + '<div role="combobox" aria-label="Add" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
             + '</div>'
             + '<div class="dx-filterbuilder-group-content" id="' + guid + '" role="group">'
                 + '<div class="dx-filterbuilder-group">'
