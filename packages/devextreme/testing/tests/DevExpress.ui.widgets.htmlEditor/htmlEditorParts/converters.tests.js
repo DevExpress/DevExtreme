@@ -188,38 +188,33 @@ testModule('converter option', () => {
     });
 
     test('toHtml and fromHtml must be called the correct number of times after the character has been entered', function(assert) {
-        const clock = sinon.useFakeTimers();
+        assert.expect(2);
+
         const toHtmlStub = sinon.stub();
         const fromHtmlStub = sinon.stub();
         const done = assert.async();
 
-        try {
-            const converter = {
-                toHtml: toHtmlStub,
-                fromHtml: fromHtmlStub,
-            };
+        const converter = {
+            toHtml: toHtmlStub,
+            fromHtml: fromHtmlStub,
+        };
 
-            const instance = $('#htmlEditor').dxHtmlEditor({
-                converter,
-                onValueChanged: () => {
-                    assert.strictEqual(toHtmlStub.callCount, 0);
-                    assert.strictEqual(fromHtmlStub.callCount, 1);
+        const instance = $('#htmlEditor').dxHtmlEditor({
+            converter,
+            onValueChanged: () => {
+                assert.strictEqual(toHtmlStub.callCount, 0);
+                assert.strictEqual(fromHtmlStub.callCount, 1);
 
-                    done();
-                },
-            }).dxHtmlEditor('instance');
+                done();
+            },
+        }).dxHtmlEditor('instance');
 
-            instance.focus();
+        instance.focus();
 
-            clock.tick(500);
+        const input = instance.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
 
-            const input = instance.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
-
-            keyboardMock(input).type('t').change();
-            input.textContent = 't';
-        } finally {
-            clock.restore();
-        }
+        keyboardMock(input).type('t').change();
+        input.textContent = 't';
     });
 
     [
@@ -234,11 +229,11 @@ testModule('converter option', () => {
         Infinity,
         -Infinity,
         {},
-    ].forEach(returnedValue => {
-        test(`There is no error here if the toHtml return value is ${returnedValue}`, function(assert) {
+    ].forEach(value => {
+        test(`There is no error here if the toHtml return value is ${value}`, function(assert) {
             const converter = {
-                toHtml: () => returnedValue,
-                fromHtml: (value) => value,
+                toHtml: () => value,
+                fromHtml: (val) => val,
             };
 
             const instance = $('#htmlEditor').dxHtmlEditor({
@@ -254,10 +249,10 @@ testModule('converter option', () => {
             }
         });
 
-        test(`There is no error here if the fromHtml return value is ${returnedValue}`, function(assert) {
+        test(`There is no error here if the fromHtml return value is ${value}`, function(assert) {
             const converter = {
-                toHtml: (value) => value,
-                fromHtml: () => returnedValue,
+                toHtml: (val) => val,
+                fromHtml: () => value,
             };
 
             const instance = $('#htmlEditor').dxHtmlEditor({
@@ -273,7 +268,45 @@ testModule('converter option', () => {
             }
         });
 
-        test('coverter should be replaced in runtime', function(assert) {
+        test(`There is no error here if toHtml is ${value}`, function(assert) {
+            const converter = {
+                toHtml: value,
+                fromHtml: (val) => val,
+            };
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter,
+            }).dxHtmlEditor('instance');
+
+            try {
+                instance.option('value', '');
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                assert.ok(true, 'there is no error');
+            }
+        });
+
+        test(`There is no error here if fromHtml is ${value}`, function(assert) {
+            const converter = {
+                toHtml: (val) => val,
+                fromHtml: value,
+            };
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter,
+            }).dxHtmlEditor('instance');
+
+            try {
+                instance.option('value', '');
+            } catch(e) {
+                assert.ok(false, `error: ${e.message}`);
+            } finally {
+                assert.ok(true, 'there is no error');
+            }
+        });
+
+        test('converter option runtime change should update html converter', function(assert) {
             const toHtmlFirstStub = sinon.stub();
             const fromHtmlFirstStub = sinon.stub();
             const toHtmlSecondStub = sinon.stub();

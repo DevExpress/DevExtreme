@@ -434,7 +434,8 @@ const HtmlEditor = Editor.inherit({
     const { value: currentValue } = this.option();
 
     const htmlMarkup = this._deltaConverter.toHtml();
-    const convertedValue = this._htmlConverter
+
+    const convertedValue = isFunction(this._htmlConverter?.fromHtml)
       ? String(this._htmlConverter.fromHtml(htmlMarkup))
       : htmlMarkup;
 
@@ -522,7 +523,7 @@ const HtmlEditor = Editor.inherit({
           if (this._isEditorUpdating) {
             this._isEditorUpdating = false;
           } else {
-            const updatedValue = this._htmlConverter
+            const updatedValue = isFunction(this._htmlConverter?.toHtml)
               ? String(this._htmlConverter.toHtml(args.value))
               : args.value;
 
