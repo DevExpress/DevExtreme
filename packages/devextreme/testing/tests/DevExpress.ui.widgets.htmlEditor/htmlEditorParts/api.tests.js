@@ -656,6 +656,57 @@ testModule('API', moduleConfig, () => {
             assert.strictEqual(secondConverter.toHtml.callCount, 1);
             assert.strictEqual(secondConverter.fromHtml.callCount, 1);
         });
+
+        test('The converter methods get the correct parameters', function(assert) {
+            const converter = {
+                toHtml: (value) => {
+                    assert.strictEqual(value, 'new value');
+
+                    return value;
+                },
+                fromHtml: (value) => {
+                    assert.strictEqual(value, '<p>new value</p>');
+
+                    return value;
+                },
+            };
+
+            this.options = { converter };
+
+            this.createEditor();
+
+            this.instance.option('value', 'new value');
+        });
+
+        test('toHtml changed value correctly', function(assert) {
+            const converter = {
+                toHtml: () => {
+                    return '<p>NEW VALUE</p>';
+                },
+            };
+            this.options = { converter };
+
+            this.createEditor();
+
+            this.instance.option('value', 'new value');
+
+            assert.strictEqual(this.instance.option('value'), '<p>NEW VALUE</p>');
+        });
+
+        test('fromHtml changed value correctly', function(assert) {
+            const converter = {
+                fromHtml: () => {
+                    return '**NEW VALUE**';
+                },
+            };
+            this.options = { converter };
+
+            this.createEditor();
+
+            this.instance.option('value', 'new value');
+
+            assert.strictEqual(this.instance.option('value'), '**NEW VALUE**');
+        });
     });
 });
 
