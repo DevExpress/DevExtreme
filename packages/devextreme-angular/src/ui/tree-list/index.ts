@@ -25,7 +25,7 @@ export { ExplicitTypes } from 'devextreme/ui/tree_list';
 
 import { PositionConfig } from 'devextreme/animation/position';
 import { DataStructure, DragDirection, DragHighlight, Mode, ScrollbarMode, ScrollMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
-import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, HeaderFilterSearchConfig, PagerDisplayMode, PagerPageSize, StartEditAction, StateStoreType } from 'devextreme/common/grids';
+import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, HeaderFilterSearchConfig, Pager, StartEditAction, StateStoreType } from 'devextreme/common/grids';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
@@ -317,10 +317,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string } } {
+    get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } } {
         return this._getOption('columnFixing');
     }
-    set columnFixing(value: { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string } }) {
+    set columnFixing(value: { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }) {
         this._setOption('columnFixing', value);
     }
 
@@ -811,10 +811,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get pager(): { allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean } {
+    get pager(): Pager {
         return this._getOption('pager');
     }
-    set pager(value: { allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean }) {
+    set pager(value: Pager) {
         this._setOption('pager', value);
     }
 
@@ -1559,7 +1559,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickPosition?: string, unfix?: string } }>;
+    @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }>;
 
     /**
     
@@ -1825,7 +1825,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pagerChange: EventEmitter<{ allowedPageSizes?: Mode | Array<PagerPageSize | number>, displayMode?: PagerDisplayMode, infoText?: string, label?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: Mode | boolean }>;
+    @Output() pagerChange: EventEmitter<Pager>;
 
     /**
     

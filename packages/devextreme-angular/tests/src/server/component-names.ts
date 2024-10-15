@@ -37,6 +37,7 @@ export const componentNames = [
     'menu',
     'multi-view',
     'number-box',
+    'pagination',
     'pie-chart',
     'pivot-grid',
     'pivot-grid-field-chooser',

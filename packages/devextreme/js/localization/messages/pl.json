@@ -237,6 +237,7 @@
         "dxPivotGrid-filterFieldArea": "Przeciągnij pola filtra tutaj",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Dotyczy",
         "dxScheduler-editorLabelStartDate": "Czas rozpoczęcia",

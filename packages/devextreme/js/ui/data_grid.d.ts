@@ -135,8 +135,6 @@ export {
     LoadPanel,
     NewRowPosition,
     Pager,
-    PagerDisplayMode,
-    PagerPageSize,
     RowDraggingTemplateData,
     SearchPanel,
     SelectedFilterOperation,

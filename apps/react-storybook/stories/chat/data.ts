@@ -12,6 +12,11 @@ export const secondAuthor: ChatTypes.User = {
     name: "Jane Smith"
 };
 
+const todayDate = new Date();
+
+const date = new Date();
+const yesterdayDate = date.setDate(date.getDate() - 1);
+
 export const initialMessages: ChatTypes.Message[] = [
     {
         timestamp: "2024-10-01T10:15:30Z",
@@ -54,8 +59,18 @@ export const initialMessages: ChatTypes.Message[] = [
         text: "I also want to get out into nature. Want to join me?"
     },
     {
-        timestamp: "2024-10-01T10:35:00Z",
+        timestamp: yesterdayDate,
         author: secondAuthor,
         text: "I'd love to! Just let me know when you're ready."
+    },
+    {
+        timestamp: todayDate,
+        author: firstAuthor,
+        text: "Great!"
+    },
+    {
+        timestamp: todayDate,
+        author: firstAuthor,
+        text: "Great! Looking forward to it!"
     }
 ];

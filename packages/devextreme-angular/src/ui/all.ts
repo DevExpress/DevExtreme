@@ -40,6 +40,7 @@ import { DxMapModule } from 'devextreme-angular/ui/map';
 import { DxMenuModule } from 'devextreme-angular/ui/menu';
 import { DxMultiViewModule } from 'devextreme-angular/ui/multi-view';
 import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
+import { DxPaginationModule } from 'devextreme-angular/ui/pagination';
 import { DxPieChartModule } from 'devextreme-angular/ui/pie-chart';
 import { DxPivotGridModule } from 'devextreme-angular/ui/pivot-grid';
 import { DxPivotGridFieldChooserModule } from 'devextreme-angular/ui/pivot-grid-field-chooser';
@@ -124,6 +125,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxMenuModule,
     DxMultiViewModule,
     DxNumberBoxModule,
+    DxPaginationModule,
     DxPieChartModule,
     DxPivotGridModule,
     DxPivotGridFieldChooserModule,
@@ -207,6 +209,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxMenuModule,
     DxMultiViewModule,
     DxNumberBoxModule,
+    DxPaginationModule,
     DxPieChartModule,
     DxPivotGridModule,
     DxPivotGridFieldChooserModule,

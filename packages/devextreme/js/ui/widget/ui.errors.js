@@ -199,11 +199,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     E1050: 'The validationRules option does not apply to third-party editors defined in the editCellTemplate',
 
     /**
-     * @name ErrorsUIWidgets.E1051
-     */
-    E1051: 'HtmlEditor\'s valueType is "{0}", but the {0} converter was not imported.',
-
-    /**
     * @name ErrorsUIWidgets.E1052
     */
     E1052: '{0} should have the "dataSource" option specified',
