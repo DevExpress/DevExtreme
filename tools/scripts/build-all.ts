@@ -53,7 +53,7 @@ if (!devMode) {
 }
 
 if (devMode) {
-    sh.exec('pnpx nx build devextreme');
+    sh.exec('pnpx nx build devextreme --skipNxCache');
 } else {
     sh.exec('pnpx nx build devextreme-scss');
     sh.exec('pnpx nx build-dist devextreme --skipNxCache', {
@@ -64,7 +64,7 @@ if (devMode) {
     });
 }
 
-sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
+//sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
@@ -90,10 +90,12 @@ sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist'));
     packAndCopy(NPM_DIR);
 sh.popd();
 
+/*
 sh.pushd(path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'dist'));
     sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
     packAndCopy(NPM_DIR);
 sh.popd();
+*/
 
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_DIR);
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_DIR);

@@ -17,7 +17,7 @@ import {
 } from '../events/index';
 
 import {
-    SelectionChangedInfo,
+    SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -194,9 +194,9 @@ export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
  * @docid _ui_tag_box_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
+export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangeInfo<string | number | any>;
 
 /**
  * @docid _ui_tag_box_ValueChangedEvent
