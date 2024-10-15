@@ -7,7 +7,7 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import dxButton from 'ui/button';
 import 'ui/box';
 import eventsEngine from 'events/core/events_engine';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 
 import 'generic_light.css!';
 

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import support from 'core/utils/support';
 import { implementationsMap, getWidth, getHeight } from 'core/utils/size';

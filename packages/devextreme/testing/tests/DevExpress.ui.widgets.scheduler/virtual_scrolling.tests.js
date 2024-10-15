@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { VirtualScrollingDispatcher } from '__internal/scheduler/workspaces/m_virtual_scrolling';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
 

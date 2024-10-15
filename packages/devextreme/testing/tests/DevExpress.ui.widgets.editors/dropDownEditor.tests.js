@@ -13,7 +13,7 @@ import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dxButton from 'ui/button';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 
 import 'generic_light.css!';
 import 'ui/validator';
