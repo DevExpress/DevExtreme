@@ -199,14 +199,12 @@ export const prevColumnIsFixed = function (
   isDataColumn = false,
 ): boolean {
   const visibleColumns = that.getVisibleColumns(isDataColumn ? null : rowIndex);
-  const parentColumn = !isDataColumn && that.getParentColumn(column);
+  const parentColumn = that.getParentColumn(column);
 
   if (parentColumn) {
     const isFirstColumn = that.isFirstColumn(column, rowIndex, true);
 
-    if (isFirstColumn) {
-      return prevColumnIsFixedCore(that, parentColumn, that.getVisibleColumns(0), 0);
-    }
+    return isFirstColumn && prevColumnIsFixedCore(that, parentColumn, that.getVisibleColumns(0), 0);
   }
 
   return prevColumnIsFixedCore(that, column, visibleColumns, rowIndex);
