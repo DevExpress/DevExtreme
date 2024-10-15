@@ -5,7 +5,7 @@ import { cleanDataRecursive } from '@js/core/element_data';
 import errors from '@js/core/errors';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { TemplateManager } from '@js/core/template_manager';
+import TemplateManagerModule from '@ts/core/m_template_manager';
 // @ts-expect-error
 import { grep, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -82,8 +82,7 @@ class DOMComponent<
       disabled: false,
 
       integrationOptions: {},
-      // @ts-expect-error
-    }, this._useTemplates() ? TemplateManager.createDefaultOptions() : {});
+    }, this._useTemplates() ? TemplateManagerModule.TemplateManager.createDefaultOptions() : {});
   }
 
   ctor(element: Element, options: TProperties): void {
@@ -532,8 +531,7 @@ class DOMComponent<
     const { integrationOptions = {} } = this.option();
     const { createTemplate } = integrationOptions;
 
-    this._templateManager = new TemplateManager(
-      // @ts-expect-error
+    this._templateManager = new TemplateManagerModule.TemplateManager(
       createTemplate,
       this._getAnonymousTemplateName(),
     );

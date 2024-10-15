@@ -17,7 +17,7 @@ import {
     MockSeries, MockPoint, resetMockFactory,
     insertMockFactory, restoreMockFactory, seriesMockData
 } from '../../helpers/chartMocks.js';
-import TemplateManagerModule from 'core/template_manager';
+import TemplateManagerModule from '__internal/core/m_template_manager';
 import graphicObjects from '__internal/common/m_charts';
 import eventsEngine from 'events/core/events_engine';
 import devices from 'core/devices';

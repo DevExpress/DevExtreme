@@ -163,3 +163,5 @@ export class TemplateManager {
     });
   }
 }
+
+export default { TemplateManager }
