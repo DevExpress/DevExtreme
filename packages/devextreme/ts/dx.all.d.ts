@@ -19924,9 +19924,9 @@ declare module DevExpress.ui {
     export type SelectionChangingEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.AsyncCancelable &
-      DevExpress.events.EventInfo<dxList<TItem, TKey>> &
-      DevExpress.ui.CollectionWidget.SelectionChangeInfo<TItem>;
+    > = DevExpress.ui.CollectionWidget.SelectionChangingEventBase<
+      dxList<TItem, TKey>
+    >;
   }
   /**
    * @deprecated Use Item instead
@@ -26097,9 +26097,9 @@ declare module DevExpress.ui {
     export type SelectionChangingEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.AsyncCancelable &
-      DevExpress.events.EventInfo<dxTabPanel<TItem, TKey>> &
-      DevExpress.ui.CollectionWidget.SelectionChangeInfo<TItem>;
+    > = DevExpress.ui.CollectionWidget.SelectionChangingEventBase<
+      dxTabPanel<TItem, TKey>
+    >;
     /**
      * [descr:TabPanelItemInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
