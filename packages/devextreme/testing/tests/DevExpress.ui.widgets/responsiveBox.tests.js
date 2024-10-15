@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import ResponsiveBox from 'ui/responsive_box';

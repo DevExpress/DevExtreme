@@ -8,7 +8,7 @@ import dataUtils from 'core/element_data';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import { getHeight, setHeight, setWidth, getOuterHeight, getWidth } from 'core/utils/size';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import config from 'core/config';
 import support from 'core/utils/support';
 import browser from 'core/utils/browser';

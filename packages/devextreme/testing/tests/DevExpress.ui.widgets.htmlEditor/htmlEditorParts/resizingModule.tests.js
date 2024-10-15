@@ -2,7 +2,7 @@ import $ from 'jquery';
 import Quill from 'devextreme-quill';
 
 import Resizing from '__internal/ui/html_editor/modules/m_resizing';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { name as clickEvent } from 'events/click';
 
 import PointerMock from '../../../helpers/pointerMock.js';

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import fx from 'animation/fx';
 import renderer from 'core/renderer';
 import { isRenderer } from 'core/utils/type';

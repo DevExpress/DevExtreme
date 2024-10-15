@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';

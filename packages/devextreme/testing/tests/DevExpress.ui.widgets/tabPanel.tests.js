@@ -1,6 +1,6 @@
 import fx from 'animation/fx';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { deferUpdate } from 'core/utils/common';
 import support from 'core/utils/support';
 import { isRenderer } from 'core/utils/type';

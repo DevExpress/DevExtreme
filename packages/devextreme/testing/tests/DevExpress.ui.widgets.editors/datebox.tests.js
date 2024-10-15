@@ -7,7 +7,7 @@ import config from 'core/config';
 import dateLocalization from 'localization/date';
 import dateSerialization from 'core/utils/date_serialization';
 import dateUtils from 'core/utils/date';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';

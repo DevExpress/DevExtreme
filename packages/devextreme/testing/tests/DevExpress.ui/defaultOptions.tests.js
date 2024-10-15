@@ -3,7 +3,7 @@ import '../../helpers/includeThemesLinks.js';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import browser from 'core/utils/browser';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import themes from 'ui/themes';
 import support from '__internal/core/utils/m_support';
 import publicComponentUtils from '__internal/core/utils/m_public_component';

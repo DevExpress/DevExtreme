@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { Template } from 'core/templates/template';
 import Guid from 'core/guid';
 import { DataSource } from 'data/data_source/data_source';

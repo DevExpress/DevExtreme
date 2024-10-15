@@ -1,7 +1,7 @@
 import animationFrame from 'animation/frame';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import 'generic_light.css!';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import domUtils from 'core/utils/dom';
 import styleUtils from 'core/utils/style';
 import support from 'core/utils/support';

@@ -9,7 +9,7 @@ import {
 } from 'core/utils/size';
 
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import fx from 'animation/fx';
 import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
