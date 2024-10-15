@@ -3,12 +3,14 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import { prepareEmbedValue, prepareTableValue } from './utils.js';
 import { isObject } from 'core/utils/type';
+import keyboardMock from '../../../helpers/keyboardMock.js';
 
 const { test, module: testModule } = QUnit;
 
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const BUTTON_CLASS = 'dx-button';
+const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -493,6 +495,167 @@ testModule('API', moduleConfig, () => {
 
         this.clock.tick(10);
         assert.ok(this.options.onContentReady.calledOnce, 'onContentReady has been called once');
+    });
+
+    testModule('converter option', () => {
+        test('toHtml and fromHtml should be called once after value option changed', function(assert) {
+            const converter = {
+                toHtml: sinon.stub(),
+                fromHtml: sinon.stub(),
+            };
+            this.options = { converter };
+
+            this.createEditor();
+
+            this.instance.option('value', 'new value');
+
+            assert.strictEqual(this.options.converter.toHtml.callCount, 1);
+            assert.strictEqual(this.options.converter.fromHtml.callCount, 1);
+        });
+
+        test('toHtml and fromHtml must be called the correct number of times after the character has been entered', function(assert) {
+            assert.expect(2);
+
+            const done = assert.async();
+
+            const converter = {
+                toHtml: sinon.stub(),
+                fromHtml: sinon.stub(),
+            };
+
+            this.options = {
+                converter,
+                onValueChanged: () => {
+                    assert.strictEqual(converter.toHtml.callCount, 0);
+                    assert.strictEqual(converter.fromHtml.callCount, 1);
+
+                    done();
+                },
+            };
+
+            this.createEditor();
+
+            this.instance.focus();
+
+            const input = this.instance.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`).get(0);
+
+            keyboardMock(input).type('t').change();
+            input.textContent = 't';
+        });
+
+        [
+            '',
+            'string',
+            true,
+            false,
+            null,
+            undefined,
+            NaN,
+            4,
+            Infinity,
+            -Infinity,
+            {},
+        ].forEach(value => {
+            test(`There is no error here if the toHtml return value is ${value}`, function(assert) {
+                this.options = {
+                    converter: {
+                        toHtml: () => value,
+                        fromHtml: (e) => e,
+                    },
+                };
+
+                this.createEditor();
+
+                try {
+                    this.instance.option('value', '');
+                } catch(e) {
+                    assert.ok(false, `error: ${e.message}`);
+                } finally {
+                    assert.ok(true, 'there is no error');
+                }
+            });
+
+            test(`There is no error here if the fromHtml return value is ${value}`, function(assert) {
+                this.options = {
+                    converter: {
+                        toHtml: (e) => e,
+                        fromHtml: () => value,
+                    },
+                };
+
+                this.createEditor();
+
+                try {
+                    this.instance.option('value', '');
+                } catch(e) {
+                    assert.ok(false, `error: ${e.message}`);
+                } finally {
+                    assert.ok(true, 'there is no error');
+                }
+            });
+
+            test(`There is no error here if toHtml is ${value}`, function(assert) {
+                this.options = {
+                    converter: {
+                        toHtml: value,
+                        fromHtml: (val) => val,
+                    }
+                };
+
+                this.createEditor();
+
+                try {
+                    this.instance.option('value', '');
+                } catch(e) {
+                    assert.ok(false, `error: ${e.message}`);
+                } finally {
+                    assert.ok(true, 'there is no error');
+                }
+            });
+
+            test(`There is no error here if fromHtml is ${value}`, function(assert) {
+                this.options = {
+                    converter: {
+                        toHtml: (val) => val,
+                        fromHtml: value,
+                    },
+                };
+
+                this.createEditor();
+
+                try {
+                    this.instance.option('value', '');
+                } catch(e) {
+                    assert.ok(false, `error: ${e.message}`);
+                } finally {
+                    assert.ok(true, 'there is no error');
+                }
+            });
+        });
+
+        test('converter option runtime change should update html converter', function(assert) {
+            const firstConverter = {
+                toHtml: sinon.stub(),
+                fromHtml: sinon.stub(),
+            };
+
+            const secondConverter = {
+                toHtml: sinon.stub(),
+                fromHtml: sinon.stub(),
+            };
+
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter: firstConverter,
+            }).dxHtmlEditor('instance');
+
+            instance.option('converter', secondConverter);
+            instance.option('value', 'new value');
+
+            assert.strictEqual(firstConverter.toHtml.callCount, 0);
+            assert.strictEqual(firstConverter.fromHtml.callCount, 0);
+            assert.strictEqual(secondConverter.toHtml.callCount, 1);
+            assert.strictEqual(secondConverter.fromHtml.callCount, 1);
+        });
     });
 });
 
