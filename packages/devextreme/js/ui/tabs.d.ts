@@ -13,6 +13,7 @@ import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
     SelectionChangeInfo,
+    SelectionChangingEventBase,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -101,7 +102,7 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @type object
  * @inherits AsyncCancelable,EventInfo,SelectionChangeInfo
  */
-export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = AsyncCancelable & EventInfo<dxTabs<TItem, TKey>> & SelectionChangeInfo<TItem>;
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = SelectionChangingEventBase<dxTabs<TItem, TKey>>;
 
 /**
  * @docid _ui_tabs_SelectionChangedEvent

@@ -26371,9 +26371,9 @@ declare module DevExpress.ui {
     export type SelectionChangingEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.AsyncCancelable &
-      DevExpress.events.EventInfo<dxTabs<TItem, TKey>> &
-      DevExpress.ui.CollectionWidget.SelectionChangeInfo<TItem>;
+    > = DevExpress.ui.CollectionWidget.SelectionChangingEventBase<
+      dxTabs<TItem, TKey>
+    >;
   }
   /**
    * [descr:dxTabsOptions]
