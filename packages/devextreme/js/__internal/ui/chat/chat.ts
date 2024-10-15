@@ -67,6 +67,10 @@ class Chat extends Widget<Properties> {
     this.option('items', newItems.slice());
   }
 
+  _dataSourceLoadingChangedHandler(isLoading: boolean): void {
+    this._messageList?.option('isLoading', isLoading);
+  }
+
   _dataSourceOptions(): DataSourceOptions {
     return { paginate: false };
   }
@@ -110,6 +114,8 @@ class Chat extends Widget<Properties> {
       items,
       currentUserId,
       showDayHeaders,
+      // @ts-expect-error
+      isLoading: this._dataController.isLoading(),
     });
   }
 
