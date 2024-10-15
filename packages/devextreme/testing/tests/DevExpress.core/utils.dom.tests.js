@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import domUtils from 'core/utils/dom';
+import domUtils from '__internal/core/utils/m_dom';
 import support from '__internal/core/utils/m_support';
 import styleUtils from 'core/utils/style';
 import devices from '__internal/core/m_devices';
