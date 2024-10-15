@@ -9,7 +9,6 @@ import { EmptyTemplate } from '@js/core/templates/empty_template';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { contains, resetActiveElement } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
@@ -31,6 +30,7 @@ import type OverlayInstance from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import domUtils from '@ts/core/utils/m_dom';
 
 import windowUtils from '../../core/utils/m_window';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
@@ -289,10 +289,10 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
-    const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
+    const isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target);
     const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
     const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
-            || contains(this._$content.get(0), e.target));
+            || domUtils.contains(this._$content.get(0), e.target));
 
     if (outsideClick && this._shouldHideOnOutsideClick(e)) {
       this._outsideClickHandler(e);
@@ -597,7 +597,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     const shouldResetActiveElement = !!this._$content.find(activeElement).length;
 
     if (shouldResetActiveElement) {
-      resetActiveElement();
+      domUtils.resetActiveElement();
     }
   },
 
@@ -726,7 +726,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
     const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
     const isEmptyTabList = tabbableElements.length === 0;
-    const isOutsideTarget = !contains(this._$wrapper.get(0), e.target);
+    const isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
 
     if (isTabOnLast || isShiftTabOnFirst
             || isEmptyTabList || isOutsideTarget) {
