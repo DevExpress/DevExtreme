@@ -2970,7 +2970,7 @@ QUnit.module('keyboard navigation', {
         const keyboard = keyboardMock($listItemContainer);
         keyboard.keyDown('down');
 
-        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
+        assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
     });
 
     QUnit.test('space key press on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
@@ -4551,5 +4551,40 @@ QUnit.module('searchStartEvent', {
         } finally {
             errors.log.restore();
         }
+    });
+});
+
+QUnit.module('accessibility', {
+    beforeEach: function() {
+        this.$lookup = $('#lookup');
+        const defaultOptions = {
+            items: ['1', '11', '111'],
+            value: '1',
+            dropDownOptions: {
+                hideOnOutsideClick: false, // Ensures the dropdown does not close when clicking outside
+            },
+            opened: true
+        };
+
+        const init = (options = {}) => {
+            this.lookup = this.$lookup
+                .dxLookup($.extend({}, defaultOptions, options))
+                .dxLookup('instance');
+        };
+
+        this.reinit = (options) => {
+            this.lookup.dispose();
+            init(options);
+        };
+
+        init();
+    },
+}, () => {
+    QUnit.test('dropdown should close when focusout event happens outside component', function(assert) {
+        assert.ok(this.lookup.option('opened'), 'popup is shown');
+
+        $(this.lookup._$field).trigger('dxclick');
+
+        assert.notOk(this.lookup.option('opened'), 'popup is hidden');
     });
 });

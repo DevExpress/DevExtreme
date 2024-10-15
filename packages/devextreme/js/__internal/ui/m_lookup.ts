@@ -15,6 +15,7 @@ import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
 import Popover from '@js/ui/popover/ui.popover';
@@ -208,7 +209,6 @@ const Lookup = DropDownList.inherit({
 
   _init() {
     this.callBase();
-
     this._initActions();
   },
 
@@ -578,7 +578,8 @@ const Lookup = DropDownList.inherit({
       },
     ));
 
-    this._popup.$overlayContent().attr('role', 'dialog');
+    const $overlayContent = this._popup.$overlayContent();
+    $overlayContent.attr('role', 'dialog');
 
     this._popup.on({
       showing: this._popupShowingHandler.bind(this),
@@ -588,6 +589,8 @@ const Lookup = DropDownList.inherit({
       contentReady: this._contentReadyHandler.bind(this),
     });
 
+    this._popupFocusOutHandler();
+
     if (this.option('_scrollToSelectedItemEnabled')) this._popup._$arrow.remove();
 
     this._setPopupContentId(this._popup.$content());
@@ -595,9 +598,37 @@ const Lookup = DropDownList.inherit({
     this._contentReadyHandler();
   },
 
+  _popupFocusOutHandler() {
+    this._detachPopupFocusOutEvents();
+    eventsEngine.on(this._popup.$overlayContent(), 'focusout', (event) => {
+      const newTarget = event.relatedTarget;
+
+      if (this.option('opened')) {
+        if (!newTarget && this.option('dropDownOptions.hideOnOutsideClick')) {
+          this._isFocusOutTriggered = true;
+          this.option('opened', false);
+        }
+      }
+    });
+  },
+
+  _isTargetOutOfComponent(newTarget) {
+    return !this._popup.$overlayContent().get(0).contains(newTarget);
+  },
+
+  _detachPopupFocusOutEvents() {
+    eventsEngine.off(this._popup.$overlayContent(), addNamespace('focusout', this.NAME));
+  },
+
   _popupHidingHandler() {
     this.callBase();
-    this.option('focusStateEnabled') && this.focus();
+
+    if (this._isFocusOutTriggered) {
+      this.$element().removeClass('dx-state-focus');
+      this._isFocusOutTriggered = false;
+    } else {
+      this.option('focusStateEnabled') && this.focus();
+    }
   },
 
   _popupHiddenHandler() {
@@ -780,6 +811,8 @@ const Lookup = DropDownList.inherit({
       $searchWrapper.insertBefore(this._$list);
 
       this._setSearchPlaceholder();
+    } else {
+      this._removeSearch();
     }
   },
 
@@ -824,6 +857,17 @@ const Lookup = DropDownList.inherit({
 
   _toggleSearchClass(isSearchEnabled) {
     if (this._popup) {
+      const activeElement = document.activeElement as HTMLElement;
+      if (isSearchEnabled) {
+        activeElement?.focus();
+      } else {
+        const $allFocusable = $('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
+        const currentIndex = $allFocusable.index(activeElement);
+
+        const nextFocusableElement = $allFocusable.get(currentIndex + 1) as HTMLElement | undefined;
+        nextFocusableElement?.focus();
+      }
+
       this._popup.$wrapper().toggleClass(LOOKUP_POPUP_SEARCH_CLASS, isSearchEnabled);
     }
   },
@@ -979,7 +1023,6 @@ const Lookup = DropDownList.inherit({
         break;
       case 'searchEnabled':
         if (this._popup) {
-          this._removeSearch();
           this._renderSearch();
         }
         break;
