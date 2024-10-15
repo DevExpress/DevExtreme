@@ -4,7 +4,7 @@ import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import { isFunction } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
-import { getSvgElement, getSvgMarkup, HIDDEN_FOR_EXPORT } from '../core/utils/svg';
+import svgUtils from '../__internal/core/utils/m_svg';
 import { when, Deferred } from '../core/utils/deferred';
 
 export const svgCreator = {
@@ -77,11 +77,11 @@ export const svgCreator = {
         let markup;
         const that = this;
         const xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
-        const svgElem = getSvgElement(data);
+        const svgElem = svgUtils.getSvgElement(data);
         const $svgObject = $(svgElem);
-        $svgObject.find(`[${HIDDEN_FOR_EXPORT}]`).remove();
+        $svgObject.find(`[${svgUtils.HIDDEN_FOR_EXPORT}]`).remove();
 
-        markup = xmlVersion + getSvgMarkup($svgObject.get(0), options.backgroundColor);
+        markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0), options.backgroundColor);
 
         return that._prepareImages(svgElem).then(() => {
             each(that._imageArray, function(href, dataURI) {

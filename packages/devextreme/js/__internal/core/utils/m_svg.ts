@@ -64,3 +64,9 @@ export function getSvgElement(markup) {
         return markup.get(0);
     }
 }
+
+export default {
+    getSvgElement,
+    getSvgMarkup,
+    HIDDEN_FOR_EXPORT
+}
