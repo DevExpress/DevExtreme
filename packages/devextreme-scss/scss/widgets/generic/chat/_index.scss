@@ -1,6 +1,8 @@
 @use "../../base/chat";
 @use "colors" as *;
+@use "../colors" as *;
 @use "sizes" as *;
+@use "../sizes" as *;
 @use "../../base/chat/mixins" as *;
 
 // adduse
@@ -10,7 +12,11 @@
   $chat-border-color,
   $chat-border-radius
 );
-@include chat-avatar($chat-avatar-size, $chat-avatar-background-color);
+@include chat-avatar(
+  $chat-avatar-size,
+  $chat-avatar-color,
+  $chat-avatar-background-color,
+);
 @include chat-header($chat-header-padding);
 @include chat-messagebox(
   $chat-messagebox-padding,
@@ -23,6 +29,7 @@
   $chat-bubble-padding,
   $chat-bubble-border-radius,
   $chat-bubble-background-color-secondary,
+  $chat-bubble-color-primary,
   $chat-bubble-background-color-primary,
   $chat-bubble-container-gap
 );
