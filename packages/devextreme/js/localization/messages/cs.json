@@ -239,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "Zde vložte filtr pole",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Předmět",
         "dxScheduler-editorLabelStartDate": "Počáteční datum",

@@ -1,9 +1,12 @@
+import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 
 import Provider from './m_provider';
 
 const { abstract } = Provider;
+
+const MAP_MARKER_CLASS = 'dx-map-marker';
 
 const DynamicProvider = Provider.inherit({
   _geocodeLocation(location) {
@@ -80,6 +83,16 @@ const DynamicProvider = Provider.inherit({
   },
 
   _renderMarker: abstract,
+
+  _createIconTemplate(iconSrc: string) {
+    const $img = $('<img>');
+
+    $img.attr('src', iconSrc);
+    $img.attr('alt', 'Marker icon');
+    $img.addClass(MAP_MARKER_CLASS);
+
+    return $img[0];
+  },
 
   removeMarkers(markersOptionsToRemove) {
     const that = this;

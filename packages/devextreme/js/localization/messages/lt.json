@@ -239,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "Numeskite filtrų laukus čia",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Tema",
         "dxScheduler-editorLabelStartDate": "Pradžios data",

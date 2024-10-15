@@ -7,7 +7,9 @@
 $chat-background-color: $base-bg !default;
 $chat-border-color: $base-border-color !default;
 $chat-messagebox-border-color: $base-border-color !default;
-$chat-avatar-background-color: null !default;
+$chat-avatar-color: $base-text-color !default;
+$chat-avatar-background-color: $base-border-color !default;
+$chat-bubble-color-primary: $base-text-color !default;
 $chat-bubble-background-color-primary: null !default;
 $chat-bubble-background-color-secondary: null !default;
 $chat-information-color: null !default;
@@ -19,15 +21,13 @@ $chat-messagelist-empty-prompt-color: rgba($base-inverted-bg, 0.6) !default;
 $chat-messagelist-day-header-color: rgba($base-inverted-bg, 0.38) !default;
 
 @if $mode == "light" {
-  $chat-avatar-background-color: darken($base-bg, 12.16) !default; // #E0E0E0
-  $chat-bubble-background-color-primary: rgba($base-accent, 0.08) !default; // #03A9F414
-  $chat-bubble-background-color-secondary: rgba($base-inverted-bg, 0.08) !default; // #00000014
-  $chat-information-color: rgba(darken($base-bg, 100.00), 0.6) !default; // #0009
+  $chat-bubble-background-color-primary: rgba($base-accent, 0.08) !default;
+  $chat-bubble-background-color-secondary: rgba($base-inverted-bg, 0.08) !default;
+  $chat-information-color: rgba(darken($base-bg, 100.00), 0.6) !default;
 }
 
 @else if $mode == "dark" {
-  $chat-avatar-background-color: lighten(desaturate($base-bg, 3.77), 10.20) !default; // #515159
-  $chat-bubble-background-color-primary: rgba(lighten($base-accent, 19.22), 0.08) !default; // #5CCBFD14
-  $chat-bubble-background-color-secondary: rgba(lighten(desaturate(adjust-hue(#363640, -240), 8.47), 76.86), 0.08) !default; // #FFFFFF14
-  $chat-information-color: rgba(lighten(desaturate(adjust-hue(#363640, -240), 8.47), 76.86), 0.6) !default; // #FFF9
+  $chat-bubble-background-color-primary: rgba(lighten($base-accent, 19.22), 0.08) !default;
+  $chat-bubble-background-color-secondary: rgba(lighten(desaturate(adjust-hue($base-bg, -240), 8.47), 76.86), 0.08) !default;
+  $chat-information-color: rgba(lighten(desaturate(adjust-hue($base-bg, -240), 8.47), 76.86), 0.6) !default;
 }

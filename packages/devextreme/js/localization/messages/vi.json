@@ -239,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "Thả bộ lọc các trường vào đây",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Chủ đề",
         "dxScheduler-editorLabelStartDate": "Ngày bắt đầu",

@@ -239,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "Nomest Filtra Laukus Šeit",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Nosaukums",
         "dxScheduler-editorLabelStartDate": "Sākuma Datums",

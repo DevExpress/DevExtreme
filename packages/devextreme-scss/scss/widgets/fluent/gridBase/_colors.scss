@@ -166,12 +166,12 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
   @if $color == "blue"{
-    $datagrid-row-focused-bg: lighten(desaturate(adjust-hue($base-accent, 3), 0.98), 50.00) !default; // #d0e5fb
+    $datagrid-row-focused-bg: lighten(desaturate(adjust-hue($base-accent, 3), 0.98), 50.00) !default;
     $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
   }
 
   @if $color == "saas" {
-    $datagrid-row-focused-bg: lighten(adjust-hue($base-accent, -1), 26.47) !default; // #dbe6ff
+    $datagrid-row-focused-bg: lighten(adjust-hue($base-accent, -1), 26.47) !default;
     $datagrid-filter-row-background-color: $base-typography-bg !default;
   }
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;

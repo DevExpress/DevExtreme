@@ -239,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "Filtre Alanlarını Buraya Bırak",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Konu",
         "dxScheduler-editorLabelStartDate": "Başlangıç Tarihi",

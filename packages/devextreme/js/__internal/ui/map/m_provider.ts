@@ -37,6 +37,8 @@ const Provider = Class.inherit({
 
   updateMapType: abstract,
 
+  updateDisabled: abstract,
+
   updateBounds: abstract,
 
   updateCenter: abstract,
