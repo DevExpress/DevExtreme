@@ -1,2 +1,1 @@
-import devices from '../__internal/core/m_devices';
-export default devices;
+export { default } from '../__internal/core/m_devices';

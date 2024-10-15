@@ -50,3 +50,4 @@ export function getInstanceByElement($element, componentClass) {
 }
 
 export { getName as name };
+export default { name: getName }
