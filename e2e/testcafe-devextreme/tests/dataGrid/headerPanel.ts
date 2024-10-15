@@ -162,7 +162,7 @@ test('Toolbar should not reset its widget values when changing the disabled prop
 
   // assert
   await t
-    .expect(textBox.find('input > div').textContent)
+    .expect(textBox.find('input').value)
     .eql('test');
 
   // act
@@ -170,7 +170,7 @@ test('Toolbar should not reset its widget values when changing the disabled prop
 
   // assert
   await t
-    .expect(textBox.find('input > div').textContent)
+    .expect(textBox.find('input').value)
     .eql('test');
 }).before(async () => createWidget('dxDataGrid', {
   showBorders: true,
