@@ -1,7 +1,7 @@
 import { noop } from '@js/core/utils/common';
-import { getWindow, hasWindow } from '@js/core/utils/window';
+import windowUtils from './utils/m_window';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 const ResizeObserverMock = {
   observe: noop,
@@ -15,15 +15,13 @@ class ResizeObserverSingleton {
   _observer?: any;
 
   constructor() {
-    // @ts-expect-error ResizeObserver doesn't exist on Window type
     // we need to make our own for extensions like this
-    if (!hasWindow() || !window.ResizeObserver) {
+    if (!windowUtils.hasWindow() || !window.ResizeObserver) {
       // eslint-disable-next-line no-constructor-return
       return ResizeObserverMock;
     }
 
     this._callbacksMap = new Map();
-    // @ts-expect-error ResizeObserver doesn't exist on Window type
     this._observer = new window.ResizeObserver((entries) => {
       entries.forEach((entry) => {
         this._callbacksMap.get(entry.target)?.(entry);

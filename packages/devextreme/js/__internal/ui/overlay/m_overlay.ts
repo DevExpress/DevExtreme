@@ -18,7 +18,6 @@ import {
   isFunction, isObject, isPromise, isWindow,
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
-import { getWindow, hasWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import {
   move as dragEventMove,
@@ -33,11 +32,12 @@ import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 
+import windowUtils from '../../core/utils/m_window';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
 import * as zIndexPool from './m_z_index';
 
 const ready = readyCallbacks.add;
-const window = getWindow();
+const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
@@ -170,7 +170,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   _defaultOptionsRules() {
     return this.callBase().concat([{
       device() {
-        return !hasWindow();
+        return !windowUtils.hasWindow();
       },
       options: {
         width: null,
@@ -289,7 +289,6 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
-    // @ts-expect-error
     const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
     const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
     const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
@@ -742,7 +741,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   },
 
   _toggleSubscriptions(enabled) {
-    if (hasWindow()) {
+    if (windowUtils.hasWindow()) {
       this._toggleHideTopOverlayCallback(enabled);
       this._toggleHideOnParentsScrollSubscription(enabled);
     }
@@ -985,7 +984,7 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   _renderGeometry(options) {
     const { visible } = this.option();
 
-    if (visible && hasWindow()) {
+    if (visible && windowUtils.hasWindow()) {
       this._stopAnimation();
       this._renderGeometryImpl();
     }
