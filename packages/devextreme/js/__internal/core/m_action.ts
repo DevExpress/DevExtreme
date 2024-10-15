@@ -171,4 +171,4 @@ Action.registerExecutor({
 });
 
 export { Action };
-export default { Action }
+export default Action;
