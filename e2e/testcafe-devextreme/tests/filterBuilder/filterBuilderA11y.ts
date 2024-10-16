@@ -14,13 +14,13 @@ const elements = [
   {
     name: 'Root Element',
     role: 'tree',
-    label: 'Filter Builder',
+    label: 'Filter builder',
     selector: (filterBuilder) => filterBuilder.getRootElement(),
   },
   {
     name: 'Group Item',
     role: 'treeitem',
-    label: 'Group Item',
+    label: 'Group item',
     selector: (filterBuilder) => filterBuilder.getGroupItem(),
   },
   {
@@ -50,19 +50,19 @@ const elements = [
   {
     name: 'Item Field',
     role: 'combobox',
-    label: 'Item Field',
+    label: 'Item field',
     selector: (filterBuilder) => filterBuilder.getItem('field', 2),
   },
   {
     name: 'Item Operation',
     role: 'combobox',
-    label: 'Item Operation',
+    label: 'Item operation',
     selector: (filterBuilder) => filterBuilder.getItem('operation', 2),
   },
   {
     name: 'Item Value',
     role: 'button',
-    label: 'Item Value',
+    label: 'Item value',
     selector: (filterBuilder) => filterBuilder.getItem('value', 2),
   },
 ];
