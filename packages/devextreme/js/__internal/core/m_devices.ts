@@ -201,7 +201,7 @@ class Devices {
     return this._currentDevice;
   }
 
-  real(forceDevice) {
+  real(forceDevice?) {
     /// #DEBUG
     if (isPlainObject(forceDevice)) {
       extend(this._realDevice, forceDevice);

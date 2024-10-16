@@ -1,4 +1,3 @@
-import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import callOnce from '@js/core/utils/call_once';
 import { noop } from '@js/core/utils/common';
@@ -11,6 +10,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import {
   createEvent, eventData, eventDelta, isDxMouseWheelEvent, isTouchEvent, needSkipEvent,
 } from '@js/events/utils/index';
+import devices from '@ts/core/m_devices';
 import domUtils from '@ts/core/utils/m_dom';
 
 const ready = readyCallbacks.add;

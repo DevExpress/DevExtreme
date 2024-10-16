@@ -1,7 +1,7 @@
-import devices from '@js/core/devices';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import BaseStrategy from '@js/events/pointer/base';
+import devices from '@ts/core/m_devices';
 
 /* eslint-disable spellcheck/spell-checker */
 const eventMap = {

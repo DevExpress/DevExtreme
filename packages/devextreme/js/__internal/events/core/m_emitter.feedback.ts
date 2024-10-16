@@ -1,5 +1,5 @@
 import Class from '@js/core/class';
-import devices from '@js/core/devices';
+import devices from '@ts/core/m_devices';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import { contains } from '@js/core/utils/dom';
 import Emitter from '@js/events/core/emitter';

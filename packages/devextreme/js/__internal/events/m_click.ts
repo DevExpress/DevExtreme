@@ -1,5 +1,4 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/animation/frame';
-import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { resetActiveElement } from '@js/core/utils/dom';
@@ -10,6 +9,7 @@ import pointerEvents from '@js/events/pointer';
 import { subscribeNodesDisposing, unsubscribeNodesDisposing } from '@js/events/utils/event_nodes_disposing';
 import { getEventTarget } from '@js/events/utils/event_target';
 import { addNamespace, fireEvent } from '@js/events/utils/index';
+import devices from '@ts/core/m_devices';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
