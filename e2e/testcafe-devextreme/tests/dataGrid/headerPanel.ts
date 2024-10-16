@@ -158,7 +158,7 @@ test('Toolbar should not reset its widget values when changing the disabled prop
   const textBox = toolbar.getItem(0);
 
   // act
-  await t.typeText(textBox, 'test')
+  await t.typeText(textBox, 'test');
 
   // assert
   await t
