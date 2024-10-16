@@ -42,7 +42,7 @@ config({
 });
 
 type ComponentBaseProps = ComponentProps & {
-  renderChildren?: () => Record<string, unknown>[] | null | undefined;
+  renderChildren?: () => React.ReactNode;
 };
 
 interface ComponentBaseRef {
@@ -76,7 +76,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       afterCreateWidget = () => undefined,
     } = props;
 
-    const [, setForceUpdateToken] = useState(0);
+    const [, setForceUpdateToken] = useState(Symbol('initial force update token'));
     const removalLocker = useContext(RemovalLockerContext);
     const restoreParentLink = useContext(RestoreTreeContext);
     const instance = useRef<any>();
@@ -338,71 +338,25 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       shouldRestoreFocus.current,
     ]);
 
-    useImperativeHandle(ref, () => (
-      {
-        getInstance() {
-          return instance.current;
-        },
-        getElement() {
-          return element.current;
-        },
-        createWidget(el) {
-          createWidget(el);
-        },
-      }
-    ), [instance.current, element.current, createWidget]);
-
-    // @ts-expect-error TS2339
-    const { children } = props;
-
-    const _renderChildren = useCallback(() => {
-      if (renderChildren) {
-        return renderChildren();
-      }
-
-      return children;
-    }, [children, renderChildren]);
-
-    const renderPortal = useCallback(() => portalContainer.current && createPortal(
-      _renderChildren(),
-      portalContainer.current,
-    ), [portalContainer.current, _renderChildren]);
-
-    const renderContent = useCallback(() => {
-      const contentRef = (node: HTMLDivElement | null) => {
-        if (node && portalContainer.current !== node) {
-          portalContainer.current = node;
-          setForceUpdateToken(Math.random());
-        }
-      };
-
-      return isPortalComponent && children
-        ? <div
-            ref={contentRef}
-            style={{ display: 'contents' }}
-          />
-        : _renderChildren();
-    }, [
-      props,
-      isPortalComponent,
-      portalContainer.current,
-      _renderChildren,
-    ]);
-
     const templateContainer = useMemo(() => document.createElement('div'), []);
 
-    const options = useOptionScanning({
-      type: ElementType.Option,
-      descriptor: {
-        name: '',
-        isCollection: false,
-        templates: templateProps,
-        initialValuesProps: defaults,
-        predefinedValuesProps: {},
-        expectedChildren,
+    const options = useOptionScanning(
+      {
+        type: ElementType.Option,
+        descriptor: {
+          name: '',
+          isCollection: false,
+          templates: templateProps,
+          initialValuesProps: defaults,
+          predefinedValuesProps: {},
+          expectedChildren,
+        },
+        props,
       },
-      props,
-    }, children, templateContainer, Math.random());
+      props.children,
+      templateContainer,
+      Symbol('initial update token'),
+    );
 
     [widgetConfig] = options;
     const [, context] = options;
@@ -418,6 +372,55 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     useLayoutEffect(() => {
       onComponentUpdated();
     });
+
+    useImperativeHandle(ref, () => (
+      {
+        getInstance() {
+          return instance.current;
+        },
+        getElement() {
+          return element.current;
+        },
+        createWidget(el) {
+          createWidget(el);
+        },
+      }
+    ), [instance.current, element.current, createWidget]);
+
+    const _renderChildren = useCallback(() => {
+      if (renderChildren) {
+        return renderChildren();
+      }
+
+      const { children } = props;
+      return children;
+    }, [props, renderChildren]);
+
+    const renderPortal = useCallback(() => portalContainer.current && createPortal(
+      _renderChildren(),
+      portalContainer.current,
+    ), [portalContainer.current, _renderChildren]);
+
+    const renderContent = useCallback(() => {
+      const { children } = props;
+
+      return isPortalComponent && children
+        ? React.createElement('div', {
+          ref: (node: HTMLDivElement | null) => {
+            if (node && portalContainer.current !== node) {
+              portalContainer.current = node;
+              setForceUpdateToken(Symbol('force update token'));
+            }
+          },
+          style: { display: 'contents' },
+        })
+        : _renderChildren();
+    }, [
+      props,
+      isPortalComponent,
+      portalContainer.current,
+      _renderChildren,
+    ]);
 
     return (
       <RestoreTreeContext.Provider value={restoreTree}>

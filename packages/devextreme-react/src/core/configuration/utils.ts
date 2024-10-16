@@ -1,5 +1,3 @@
-import { IConfigNode } from './config-node';
-
 export function mergeNameParts(...args: string[]): string {
   return args.filter((value) => value).join('.');
 }
@@ -19,21 +17,6 @@ export function parseOptionName(name: string): IOptionInfo | ICollectionOptionIn
     name: parts[0],
     index: Number(parts[1].slice(0, -1)),
   };
-}
-
-export function buildFullName(node: IConfigNode): string {
-  let currentNode: IConfigNode | undefined = node;
-  let fullName = '';
-
-  while (currentNode && currentNode.name) {
-    fullName = currentNode.name.concat(
-      typeof currentNode.index === 'number' ? `[${currentNode.index}]` : '',
-      fullName ? `.${fullName}` : '',
-    );
-    currentNode = currentNode.parentNode;
-  }
-
-  return fullName;
 }
 
 interface IOptionInfo {

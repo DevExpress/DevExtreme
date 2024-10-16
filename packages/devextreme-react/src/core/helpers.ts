@@ -19,11 +19,11 @@ export interface NestedOptionContextContent {
   onChildOptionsReady: (
     configNode: IConfigNode,
     optionDescriptor: IOptionDescriptor,
-    childUpdateToken: number,
+    childUpdateToken: symbol,
     optionComponentKey: number
   ) => void;
   getOptionComponentKey: () => number;
-  treeUpdateToken: number;
+  treeUpdateToken: symbol;
 }
 
 export const NestedOptionContext = createContext<NestedOptionContextContent>({
@@ -31,7 +31,7 @@ export const NestedOptionContext = createContext<NestedOptionContextContent>({
   parentFullName: '',
   onChildOptionsReady: () => undefined,
   getOptionComponentKey: () => 0,
-  treeUpdateToken: 0,
+  treeUpdateToken: Symbol('initial tree update token'),
 });
 
 export interface TemplateDiscoveryContextContent {

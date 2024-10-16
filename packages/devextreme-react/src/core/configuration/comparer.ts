@@ -1,6 +1,6 @@
-import { IConfigNode, ITemplate } from './config-node';
+import { IConfigNode, ITemplate, buildNodeFullName } from './config-node';
 import { buildNode, buildTemplates } from './tree';
-import { buildFullName, mergeNameParts } from './utils';
+import { mergeNameParts } from './utils';
 
 interface IConfigChanges {
   options: Record<string, any>;
@@ -48,7 +48,7 @@ function compareTemplates(
 }
 
 function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigChanges) {
-  const fullName = buildFullName(current);
+  const fullName = buildNodeFullName(current);
 
   if (!prev) {
     changesAccum.options[fullName] = buildNode(
