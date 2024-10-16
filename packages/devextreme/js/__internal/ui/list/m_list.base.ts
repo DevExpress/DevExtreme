@@ -11,7 +11,6 @@ import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
-import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { name as clickEventName } from '@js/events/click';
@@ -25,6 +24,7 @@ import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update
 import ScrollView from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
+import supportUtils from '@ts/core/utils/m_support';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/m_scrollable.device';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
@@ -202,7 +202,7 @@ export const ListBase = CollectionWidget.inherit({
     return this.callBase().concat(deviceDependentOptions(), [
       {
         device() {
-          return !nativeScrolling;
+          return !supportUtils.nativeScrolling;
         },
         options: {
           useNativeScrolling: false,
@@ -210,7 +210,7 @@ export const ListBase = CollectionWidget.inherit({
       },
       {
         device(device) {
-          return !nativeScrolling && !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
+          return !supportUtils.nativeScrolling && !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
         },
         options: {
           showScrollbar: 'onHover',

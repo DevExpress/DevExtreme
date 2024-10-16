@@ -6,11 +6,11 @@ import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
-import { touch } from '@js/core/utils/support';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import MultiView from '@js/ui/multi_view';
 import Tabs from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
+import supportUtils from '@ts/core/utils/m_support';
 
 // eslint-disable-next-line import/no-named-default
 import { default as TabPanelItem } from './m_item';
@@ -99,7 +99,7 @@ const TabPanel = MultiView.inherit({
       },
       {
         device() {
-          return !touch;
+          return !supportUtils.touch;
         },
         options: {
           swipeEnabled: false,

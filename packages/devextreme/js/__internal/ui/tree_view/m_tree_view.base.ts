@@ -10,7 +10,6 @@ import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
-import { nativeScrolling } from '@js/core/utils/support';
 import {
   isDefined, isFunction, isPrimitive, isString,
 } from '@js/core/utils/type';
@@ -27,6 +26,7 @@ import CheckBox from '@js/ui/check_box';
 import HierarchicalCollectionWidget from '@js/ui/hierarchical_collection/ui.hierarchical_collection_widget';
 import LoadIndicator from '@js/ui/load_indicator';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
+import supportUtils from '@ts/core/utils/m_support';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -202,7 +202,7 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
     return this.callBase().concat([
       {
         device() {
-          return !nativeScrolling;
+          return !supportUtils.nativeScrolling;
         },
         options: {
           useNativeScrolling: false,

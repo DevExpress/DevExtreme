@@ -16,7 +16,6 @@ import {
   getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { setWidth } from '@js/core/utils/style';
-import { nativeScrolling } from '@js/core/utils/support';
 import {
   isDefined, isFunction, isNumeric,
   isRenderer, isString,
@@ -27,6 +26,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
+import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
@@ -1067,7 +1067,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $scrollContainer = $('<div>');
     const useNative = this.option('scrolling.useNative');
 
-    if (useNative === false || (useNative === 'auto' && !nativeScrolling)) {
+    if (useNative === false || (useNative === 'auto' && !supportUtils.nativeScrolling)) {
       $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
     }
 
