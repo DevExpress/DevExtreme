@@ -1,12 +1,10 @@
 import Splitter from 'devextreme-testcafe-models/splitter';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { clearTestPage } from '../../../helpers/clearPage';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Splitter_integration`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('non resizable pane should not change its size during resize', async (t) => {
   const splitter = new Splitter('#container');

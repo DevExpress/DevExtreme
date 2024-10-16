@@ -103,7 +103,7 @@ safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (
 
   await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu less than root item.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 450px;');
+  await setAttribute('#container', 'style', 'padding-top: 430px;');
 
   await t
     .click(menu.getItem(1))
@@ -117,7 +117,7 @@ safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (
 
   await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, submenu less than root item, bottom collision.png');
 
-  await setAttribute('#container', 'style', 'padding-left: 100px;');
+  await setAttribute('#container', 'style', 'padding-left: 80px;');
 
   await t
     .click(menu.getItem(3))
@@ -125,7 +125,7 @@ safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (
 
   await testScreenshot(t, takeScreenshot, 'Delimiter, horizontal menu, right collision.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 450px; padding-left: 100px;');
+  await setAttribute('#container', 'style', 'padding-top: 400px; padding-left: 80px;');
 
   await t
     .click(menu.getItem(2))
@@ -147,6 +147,9 @@ safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (
     }, {
       id: '2_2',
       text: 'SuperLED 42',
+    }, {
+      id: '2_2',
+      text: 'SuperLED 60',
     }],
   }, {
     text: 'Monitors',
@@ -162,6 +165,12 @@ safeSizeTest('Menu delimiter appearance when orientation is horizontal', async (
     items: [{
       id: '4_1',
       text: 'Projector Plus',
+    }, {
+      id: '4_2',
+      text: 'Projector PlusHD',
+    }, {
+      id: '4_3',
+      text: 'Projector & Screens',
     }],
   }] as Item[];
 
@@ -178,7 +187,7 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 400px;');
+  await setAttribute('#container', 'style', 'padding-top: 300px;');
 
   await t
     .click(menu.getItem(1))
@@ -187,14 +196,14 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, bottom collision.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 350px;');
+  await setAttribute('#container', 'style', 'padding-top: 0px; padding-left: 340px;');
 
   await t
     .click(menu.getItem(2));
 
   await testScreenshot(t, takeScreenshot, 'Delimiter appearance, orientation is vertical, right collision.png');
 
-  await setAttribute('#container', 'style', 'padding-top: 400px; padding-left: 350px;');
+  await setAttribute('#container', 'style', 'padding-top: 300px; padding-left: 300px;');
 
   await t
     .click(menu.getItem(0))
@@ -216,6 +225,18 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
     }, {
       id: '2_2',
       text: 'SuperLED 42',
+    }, {
+      id: '2_3',
+      text: 'SuperLED 60',
+    }, {
+      id: '2_4',
+      text: 'SuperLED 72',
+    }, {
+      id: '2_5',
+      text: 'SuperLED 80',
+    }, {
+      id: '2_6',
+      text: 'SuperLED 91',
     }],
   }, {
     text: 'Monitors',

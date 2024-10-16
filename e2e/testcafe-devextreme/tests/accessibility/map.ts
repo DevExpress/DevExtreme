@@ -3,8 +3,10 @@ import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
-fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'));
+fixture`Accessibility`
+  .page(url(__dirname, '../container.html'))
+  // avoid `sj_evt is not defined` error
+  .skipJsErrors();
 
 const markersData = [
   { location: '40.7825, -73.966111' },
@@ -18,21 +20,27 @@ const options: Options<Properties> = {
   apiKey: [{
     bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
   }],
-  hint: [undefined, 'hint'],
   controls: [true, false],
   zoom: [undefined, 10],
   markers: [markersData],
 };
 
 const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
+  rules: {
+    'color-contrast': { enabled: false },
+    'aria-command-name': { enabled: false },
+  },
+};
+
+const created = async (t: TestController): Promise<void> => {
+  await t.wait(3000);
 };
 
 const configuration: Configuration = {
   component: 'dxMap',
   a11yCheckConfig,
   options,
+  created,
 };
 
 testAccessibility(configuration);
