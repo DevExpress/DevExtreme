@@ -1409,7 +1409,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return 0;
   }
 
-  protected _getRowElementsCore(tableElement) {
+  protected _getRowElementsCore(tableElement?) {
     tableElement = tableElement || this.getTableElement();
 
     if (tableElement) {
