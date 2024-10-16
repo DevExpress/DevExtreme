@@ -1,4 +1,4 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, inject } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
@@ -43,39 +43,32 @@ if (window && window.config.packageConfigPaths) {
 })
 
 export class AppComponent {
+  customService = inject(Service);
+
   stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 
-  fontSizes: FontSize[] = [];
+  fontSizes: FontSize[] = this.customService.getFontSizes();
+  
+  lineHeights: LineHeight[] = this.customService.getLineHeights();
+  lineHeight: number[] = [this.lineHeights[1].lineHeight];
 
-  lineHeights: LineHeight[] = [];
+  fontFamilies: FontFamily[] = this.customService.getFontFamilies();
 
-  lineHeight: number[] = [this.lineHeights[1]?.lineHeight];
-
-  fontFamilies: FontFamily[] = [];
-
-  headings: Heading[] = [];
+  headings: Heading[] = this.customService.getHeadings();
 
   heading = this.headings[0]?.text;
 
-  fontStyles: FontStyle[] = [];
+  fontStyles: FontStyle[] = this.customService.getFontStyles();
 
-  textAlignItems: TextAlign[] = [];
+  textAlignItems: TextAlign[] = this.customService.getTextAlign();
 
-  textAlignItemsExtended: TextAlignExtended[] = [];
+  textAlignItemsExtended: TextAlignExtended[] = this.customService.getTextAlignExtended();
 
   selectedTextAlign = [this.textAlignItems[0]?.alignment];
 
-  listTypes: ListType[] = [];
+  listTypes: ListType[] = this.customService.getListType();
 
-  constructor(private service: Service) {
-    this.fontSizes = service.getFontSizes();
-    this.lineHeights = service.getLineHeights();
-    this.fontFamilies = service.getFontFamilies();
-    this.headings = service.getHeadings();
-    this.fontStyles = service.getFontStyles();
-    this.textAlignItems = service.getTextAlign(); 
-    this.textAlignItemsExtended = service.getTextAlignExtended();
-    this.listTypes = service.getListType(); 
+  constructor() {
   }
 
   onTextAlignChanged(e: { itemData: { hint: string } }): void {
