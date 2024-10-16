@@ -93,7 +93,26 @@ QUnit.test('filter Content init by several conditions', function(assert) {
         return;
     }
     const $etalon = $('<div/>').html(
-        '<div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item Field" aria-haspopup="true" aria-expanded="false">Company Name</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item Operation" aria-haspopup="true" aria-expanded="false">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div></div></div></div><div class="dx-filterbuilder-group"><div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1"><div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div><div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item Field" aria-haspopup="true" aria-expanded="false">Zipcode</div><div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item Operation" aria-haspopup="true" aria-expanded="false">Equals</div><div class="dx-filterbuilder-text dx-filterbuilder-item-value"><div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">98027</div></div></div></div>'
+        '<div class="dx-filterbuilder-group">'
+            + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1">'
+                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item Field" aria-haspopup="true" aria-expanded="false">Company Name</div>'
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item Operation" aria-haspopup="true" aria-expanded="false">Equals</div>'
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
+                    + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">K&amp;S Music</div>'
+                + '</div>'
+            + '</div>'
+        + '</div>'
+        + '<div class="dx-filterbuilder-group">'
+            + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1">'
+                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item Field" aria-haspopup="true" aria-expanded="false">Zipcode</div>'
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item Operation" aria-haspopup="true" aria-expanded="false">Equals</div>'
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
+                    + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item Value" aria-haspopup="true">98027</div>'
+                + '</div>'
+            + '</div>'
+        + '</div>'
     );
 
     const element = $('#container').dxFilterBuilder({

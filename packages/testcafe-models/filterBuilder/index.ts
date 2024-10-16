@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import Field from './field';
@@ -94,5 +94,14 @@ export default class FilterBuilder extends Widget {
       return this.element.find(`.${className}`).nth(index);
     }
     return this.element.find(`.${className}`);
+  }
+
+  isReady(): Promise<boolean> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).isReady(),
+      { dependencies: { getInstance } },
+    )();
   }
 }

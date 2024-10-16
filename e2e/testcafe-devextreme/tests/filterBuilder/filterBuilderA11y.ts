@@ -4,6 +4,7 @@ import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { fields, filter } from './data';
+import { a11yCheck } from '../../helpers/accessibility/utils';
 
 fixture`Filter Builder Accessibility Tests`.page(
   url(__dirname, '../container.html'),
@@ -84,5 +85,20 @@ elements.forEach(({
       fields,
       value: filter,
     });
+  });
+});
+
+test('Filter Builder - ARIA Attributes axe test', async (t) => {
+  const filterBuilder = new FilterBuilder('#container');
+
+  await t
+    .expect(filterBuilder.isReady())
+    .ok();
+
+  await a11yCheck(t, {}, '#container');
+}).before(async () => {
+  await createWidget('dxFilterBuilder', {
+    fields,
+    value: filter,
   });
 });
