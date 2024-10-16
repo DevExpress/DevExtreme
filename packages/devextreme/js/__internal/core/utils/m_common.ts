@@ -11,7 +11,7 @@ export const ensureDefined = function (value, defaultValue) {
   return isDefined(value) ? value : defaultValue;
 };
 
-export const executeAsync = function (action, context/* , internal */) {
+export const executeAsync = function (action, context?/* , internal */) {
   // @ts-expect-error only void function can be called with new
   const deferred = new Deferred();
   const normalizedContext = context || this;

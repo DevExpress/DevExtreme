@@ -73,3 +73,12 @@ export const captionize = function(name) {
   }
   return captionList.join('');
 };
+
+export default {
+  dasherize,
+  underscore,
+  camelize,
+  humanize,
+  titleize,
+  captionize
+}
