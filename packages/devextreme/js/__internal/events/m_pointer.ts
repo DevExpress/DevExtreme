@@ -24,7 +24,6 @@ const getStrategy = (support, { tablet, phone }) => {
 
   return MouseStrategy;
 };
-// @ts-expect-error
 const EventStrategy = getStrategy(support, devices.real());
 
 each(EventStrategy.map, (pointerEvent, originalEvents) => {
