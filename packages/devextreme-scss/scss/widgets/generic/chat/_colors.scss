@@ -8,7 +8,7 @@ $chat-background-color: $base-bg !default;
 $chat-border-color: $base-border-color !default;
 $chat-avatar-color: null !default;
 $chat-messagebox-border-color: $base-border-color !default;
-$chat-avatar-background-color: null !default;
+$chat-avatar-background-color: $base-border-color !default;
 $chat-bubble-color-primary: null !default;
 $chat-bubble-background-color-primary: null !default;
 $chat-bubble-background-color-secondary: null !default;
@@ -18,8 +18,6 @@ $chat-messagelist-empty-icon-color: null !default;
 $chat-messagelist-empty-icon-background-color: null !default;
 $chat-messagelist-empty-message-color: null !default;
 $chat-messagelist-empty-prompt-color: null !default;
-
-$chat-avatar-background-color: $base-border-color !default;
 
 @if $color == "light" {
   $chat-avatar-color: $base-text-color !default;
