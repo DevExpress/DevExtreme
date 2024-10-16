@@ -21,7 +21,14 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type Properties = ChatProperties & { title: string; showDayHeaders: boolean };
+type Properties = ChatProperties & {
+  title: string;
+  showDayHeaders: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onTypingStart: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onTypingEnd: any;
+};
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
@@ -31,6 +38,12 @@ class Chat extends Widget<Properties> {
   _messageList!: MessageList;
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _typingStartAction?: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _typingEndAction?: any;
 
   _getDefaultOptions(): Properties {
     return {
@@ -43,6 +56,8 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
+      onTypingStart: undefined,
+      onTypingEnd: undefined,
       showDayHeaders: true,
     };
   }
@@ -57,6 +72,8 @@ class Chat extends Widget<Properties> {
     this._refreshDataSource();
 
     this._createMessageSendAction();
+    this._createTypingStartAction();
+    this._createTypingEndAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -131,6 +148,12 @@ class Chat extends Widget<Properties> {
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
+      onTypingStart: () => {
+        this._typingStartHandler();
+      },
+      onTypingEnd: () => {
+        this._typingEndHandler();
+      },
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
@@ -158,6 +181,20 @@ class Chat extends Widget<Properties> {
     );
   }
 
+  _createTypingStartAction(): void {
+    this._typingStartAction = this._createActionByOption(
+      'onTypingStart',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
+  }
+
+  _createTypingEndAction(): void {
+    this._typingEndAction = this._createActionByOption(
+      'onTypingEnd',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
+  }
+
   _messageSendHandler(e: MessageBoxMessageSendEvent): void {
     const { text, event } = e;
     const { user } = this.option();
@@ -169,6 +206,18 @@ class Chat extends Widget<Properties> {
     };
 
     this._messageSendAction?.({ message, event });
+  }
+
+  _typingStartHandler(): void {
+    const { user } = this.option();
+
+    this._typingStartAction?.({ user });
+  }
+
+  _typingEndHandler(): void {
+    const { user } = this.option();
+
+    this._typingEndAction?.({ user });
   }
 
   _focusTarget(): dxElementWrapper {
@@ -215,6 +264,12 @@ class Chat extends Widget<Properties> {
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
+        break;
+      case 'onTypingStart':
+        this._createTypingStartAction();
+        break;
+      case 'onTypingEnd':
+        this._createTypingEndAction();
         break;
       case 'showDayHeaders':
         this._messageList.option(name, value);
