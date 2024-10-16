@@ -22,6 +22,7 @@ const internalProps: InternalProps = {
   renderChildren: () => undefined,
   beforeCreateWidget: () => undefined,
   afterCreateWidget: () => undefined,
+  children: null,
 };
 
 function isIgnoredProp(name: string) {

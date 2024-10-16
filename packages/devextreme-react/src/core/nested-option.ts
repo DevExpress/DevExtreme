@@ -24,8 +24,9 @@ interface INestedOptionMeta {
   makeDirty: () => void;
 }
 
-const NestedOption = function NestedOption<P>(props: P & { elementDescriptor: IElementDescriptor }): React.ReactElement | null {
-  // @ts-expect-error TS2339
+const NestedOption = function NestedOption<P>(
+  props: React.PropsWithChildren<P & { elementDescriptor: IElementDescriptor }>,
+): React.ReactElement | null {
   const { children } = props;
   const { elementDescriptor, ...restProps } = props;
 

@@ -14,7 +14,8 @@ import { ComponentProps, NestedComponentMeta } from './component';
 
 type NestedOptionElement = ReactElement<any, React.JSXElementConstructor<any> & NestedComponentMeta>;
 
-function elementIsExtension(el: NestedOptionElement): boolean {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+function elementIsExtension(el: any): el is NestedOptionElement {
   return el.type?.componentType === 'extension';
 }
 

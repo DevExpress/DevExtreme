@@ -1,5 +1,5 @@
-import { IConfigNode, ITemplate } from './config-node';
-import { buildFullName, mergeNameParts, parseOptionName } from './utils';
+import { IConfigNode, ITemplate, buildNodeFullName } from './config-node';
+import { mergeNameParts, parseOptionName } from './utils';
 
 interface IConfig {
   options: Record<string, unknown>;
@@ -11,7 +11,7 @@ function buildTemplates(
   optionsAccum: Record<string, unknown>,
   templatesAccum: Record<string, ITemplate>,
 ): void {
-  const fullName = buildFullName(node);
+  const fullName = buildNodeFullName(node);
 
   node.templates.forEach(
     (template) => {

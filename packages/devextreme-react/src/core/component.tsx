@@ -16,7 +16,7 @@ import { IElementDescriptor, IExpectedChild } from './configuration/react/elemen
 import { ITemplateMeta } from './template';
 import { elementIsExtension } from './extension-component';
 
-interface ComponentProps {
+type ComponentProps = React.PropsWithChildren<{
   WidgetClass?: any;
   isPortalComponent?: boolean;
   defaults?: Record<string, string>;
@@ -28,7 +28,7 @@ interface ComponentProps {
   clearExtensions?: () => void;
   beforeCreateWidget?: (element?: Element) => void;
   afterCreateWidget?: (element?: Element) => void;
-}
+}>;
 
 type ComponentRef = ComponentBaseRef & {
   clearExtensions: () => void;
@@ -48,10 +48,9 @@ const Component = forwardRef<ComponentRef, any>(
     }, [extensionCreators.current, componentBaseRef.current]);
 
     const renderChildren = useCallback(() => React.Children.map(
-      // @ts-expect-error TS2339
       props.children,
       (child) => {
-        if (child && elementIsExtension(child)) {
+        if (React.isValidElement(child) && elementIsExtension(child)) {
           return React.cloneElement(
             child,
             { onMounted: registerExtension },
