@@ -12,6 +12,8 @@
         "Search": "搜索",
         "Back": "返回",
         "OK": "确定",
+        "Today": "今天",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "没有要显示的数据",
 

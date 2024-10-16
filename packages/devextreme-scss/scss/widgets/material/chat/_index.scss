@@ -53,4 +53,9 @@
   $chat-messagelist-empty-prompt-font-size,
   $chat-messagelist-empty-prompt-color,
 );
-@include chat-messagelist($chat-messagelist-padding);
+@include chat-messagelist(
+  $chat-messagelist-padding,
+  $chat-messagelist-day-header-color,
+  $chat-messagelist-day-header-padding-bottom,
+  $chat-messagelist-day-header-first-padding-top,
+);

@@ -17,9 +17,19 @@ const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
+const CHAT_MESSAGELIST_DAY_HEADER_CLASS = 'dx-chat-messagelist-day-header';
 
 const SCROLLABLE_CLASS = 'dx-scrollable';
 
+const MS_IN_DAY = 86400000;
+
+const getStringDate = (date) => {
+    return date.toLocaleDateString(undefined, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    }).replace(/[/-]/g, '.');
+};
 
 const moduleConfig = {
     beforeEach: function() {
@@ -31,6 +41,7 @@ const moduleConfig = {
             this.$element = $(this.instance.$element());
 
             this.getScrollable = () => Scrollable.getInstance(this.$element.find(`.${SCROLLABLE_CLASS}`));
+            this.getDayHeaders = () => $(this.getScrollable().content()).find(`.${CHAT_MESSAGELIST_DAY_HEADER_CLASS}`);
 
             this.scrollable = this.getScrollable();
         };
@@ -124,6 +135,237 @@ QUnit.module('MessageList', moduleConfig, () => {
             const $messageGroups = $(scrollableContent).find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
             assert.strictEqual($messageGroups.length, 26);
+        });
+
+        [
+            {
+                date: new Date(),
+                scenario: 'today\'s date',
+                expectedDatePrefix: 'Today ',
+            },
+            {
+                date: new Date(Date.now() - MS_IN_DAY),
+                scenario: 'yesterday\'s date',
+                expectedDatePrefix: 'Yesterday ',
+            },
+            {
+                date: new Date(Date.now() - 2 * MS_IN_DAY),
+                scenario: 'some older date',
+                expectedDatePrefix: '',
+            },
+        ].forEach(({ date, scenario, expectedDatePrefix }) => {
+            QUnit.test(`Day header should be rendered (message date is ${scenario}, on init)`, function(assert) {
+                const expectedText = `${expectedDatePrefix}${getStringDate(date)}`;
+
+                this.reinit({ items: [{ timestamp: date, text: 'ABC' }] });
+
+                const $dayHeaders = this.getDayHeaders();
+
+                assert.strictEqual($dayHeaders.length, 1, 'day header was added');
+                assert.strictEqual($dayHeaders.text(), expectedText, 'day header text is correct');
+            });
+
+            QUnit.test(`Day header should be rendered (message date is ${scenario}, on runtime)`, function(assert) {
+                const expectedText = `${expectedDatePrefix}${getStringDate(date)}`;
+
+                this.instance.option({ items: [{ timestamp: date, text: 'ABC' }] });
+
+                const $dayHeaders = this.getDayHeaders();
+
+                assert.strictEqual($dayHeaders.length, 1, 'day header was added');
+                assert.strictEqual($dayHeaders.text(), expectedText, 'day header text is correct');
+            });
+        });
+
+        [
+            {
+                date: undefined,
+                scenario: 'date is undefined',
+                showDayHeaders: true,
+            },
+            {
+                date: new Date('invalid'),
+                scenario: 'date is invalid',
+                showDayHeaders: true,
+            },
+            {
+                date: new Date(),
+                scenario: 'showDayHeaders=false',
+                showDayHeaders: false,
+            },
+        ].forEach(({ date, scenario, showDayHeaders }) => {
+            QUnit.test(`Day header should not be rendered when ${scenario}`, function(assert) {
+                this.reinit({
+                    items: [{ timestamp: date, text: 'ABC' }],
+                    showDayHeaders,
+                });
+
+                const $dayHeaders = this.getDayHeaders();
+
+                assert.strictEqual($dayHeaders.length, 0, 'day header was not added');
+            });
+        });
+
+
+        QUnit.test('Day headers should be\'removed on runtime showDayHeaders disable', function(assert) {
+            const now = new Date().getTime();
+
+            this.reinit({
+                items: [{ timestamp: now - MS_IN_DAY, text: 'ABC' }, { timestamp: now, text: 'CBA' }],
+                showDayHeaders: true,
+            });
+
+            this.instance.option({ showDayHeaders: false });
+
+            const $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 0, 'day headers were removed');
+        });
+
+        QUnit.test('Day headers should be added on runtime showDayHeaders enable', function(assert) {
+            const now = new Date().getTime();
+
+            this.reinit({
+                items: [{ timestamp: now - MS_IN_DAY, text: 'ABC' }, { timestamp: now, text: 'CBA' }],
+                showDayHeaders: false,
+            });
+
+            this.instance.option({ showDayHeaders: true });
+
+            const $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 2, 'day headers were added');
+        });
+
+        [
+            {
+                oldItemTimestamp: new Date().getTime() - MS_IN_DAY,
+                newItemTimestamp: new Date().getTime(),
+                scenario: 'items have different date',
+                expectedDayHeadersCount: 2,
+            },
+            {
+                oldItemTimestamp: new Date().getTime(),
+                newItemTimestamp: new Date().getTime(),
+                scenario: 'items have the same date',
+                expectedDayHeadersCount: 1,
+            },
+            {
+                oldItemTimestamp: undefined,
+                newItemTimestamp: new Date().getTime(),
+                scenario: 'first item has undefined date',
+                expectedDayHeadersCount: 1,
+            },
+            {
+                oldItemTimestamp: new Date().getTime(),
+                newItemTimestamp: 'invalid',
+                scenario: 'second item has an invalid date',
+                expectedDayHeadersCount: 1,
+            },
+            {
+                oldItemTimestamp: undefined,
+                newItemTimestamp: undefined,
+                scenario: 'dates are not defined for both items',
+                expectedDayHeadersCount: 0,
+            },
+        ].forEach(({ oldItemTimestamp, newItemTimestamp, scenario, expectedDayHeadersCount }) => {
+            QUnit.test(`It should be ${expectedDayHeadersCount} day headers when add second item on runtime (${scenario})`, function(assert) {
+                const items = [{
+                    timestamp: oldItemTimestamp,
+                    text: 'ABC'
+                }];
+
+                this.reinit({
+                    items,
+                });
+
+                const newMessage = {
+                    timestamp: newItemTimestamp,
+                    text: 'EFG',
+                };
+
+                this.instance.option({ items: [...items, newMessage] });
+
+                const $dayHeaders = this.getDayHeaders();
+
+                assert.strictEqual($dayHeaders.length, expectedDayHeadersCount, 'day headers count is correct');
+            });
+        });
+
+        QUnit.test('Current message group should be rendered before day header is added', function(assert) {
+            this.reinit({
+                items: [{
+                    text: 'ABC',
+                }, {
+                    timestamp: new Date('11.10.2024'),
+                    text: 'EFG',
+                }]
+            });
+
+            const $scrollableContent = $(this.scrollable.content());
+            const $firstChild = $scrollableContent.children().first();
+
+            assert.strictEqual($firstChild.hasClass(CHAT_MESSAGEGROUP_CLASS), true, 'first message group is added before day header');
+        });
+
+        QUnit.test('Only one day header should be added when there are two messages with the same date and undefined date between them (last day header was added for message in current messageGroup)', function(assert) {
+            this.reinit({
+                items: [{
+                    timestamp: new Date('11.10.2024'),
+                    author: { id: 1 },
+                    text: 'ABC',
+                }, {
+                    author: { id: 2 },
+                    text: 'EFG',
+                }, {
+                    timestamp: new Date('11.10.2024'),
+                    author: { id: 1 },
+                    text: 'HIJ',
+                }],
+            });
+
+            const $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'only one day header was added');
+        });
+
+        QUnit.test('Only one day header should be added when there are two messages with the same date and and undefined date between them (last day header was added for message in older messageGroup)', function(assert) {
+            this.reinit({
+                items: [{
+                    timestamp: new Date('11.10.2024'),
+                    text: 'ABC',
+                }, {
+                    text: 'EFG',
+                }, {
+                    timestamp: new Date('11.10.2024'),
+                    text: 'HIJ',
+                }],
+            });
+
+            const $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'only one day header was added');
+        });
+
+        QUnit.test('Day header should not dissapear after component invalidate', function(assert) {
+            const items = [{
+                timestamp: new Date('11.10.2024'),
+                text: 'ABC',
+            }];
+
+            this.reinit({
+                items,
+            });
+
+            let $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'day header was aaded');
+
+            this.instance.option({ items });
+
+            $dayHeaders = this.getDayHeaders();
+
+            assert.strictEqual($dayHeaders.length, 1, 'day header is not removed after invalidate');
         });
     });
 

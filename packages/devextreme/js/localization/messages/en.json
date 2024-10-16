@@ -12,6 +12,8 @@
         "Search": "Search",
         "Back": "Back",
         "OK": "OK",
+        "Today": "Today",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "No data to display",
 
