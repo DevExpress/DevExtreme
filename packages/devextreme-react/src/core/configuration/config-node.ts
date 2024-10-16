@@ -28,6 +28,7 @@ interface NodeConfigBuilder {
   configCollectionMaps: Record<string, Record<string, number>>;
   attachChildNode: (name: string, childNode: IConfigNode) => void;
   attachTemplate: (template: ITemplate) => void;
+  getConfigCollectionData: (name: string) => [IConfigNode[], Record<string, number>];
   updateAnonymousTemplates: (hasTemplateRendered: boolean) => void;
   addCollectionNode: (name: string, collectionNode: IConfigNode, collectionNodeKey: number) => void;
   wrapTemplate: (template: ITemplate) => ITemplate;
@@ -73,22 +74,22 @@ const createConfigBuilder: (
     },
     configCollectionMaps: {},
 
+    getConfigCollectionData(name: string) {
+      if (!this.node.configCollections[name]) {
+        this.node.configCollections[name] = [];
+        this.configCollectionMaps[name] = {};
+      }
+
+      return [this.node.configCollections[name], this.configCollectionMaps[name]];
+    },
+
     attachChildNode(name, childNode) {
       childNode.parentNode = this.node;
       this.node.configs[name] = childNode;
     },
 
     addCollectionNode(name, collectionNode, collectionNodeKey) {
-      let collection = this.node.configCollections[name];
-      let collectionMap = this.configCollectionMaps[name];
-
-      if (!collection) {
-        collection = [];
-        this.node.configCollections[name] = collection;
-        collectionMap = {};
-        this.configCollectionMaps[name] = collectionMap;
-      }
-
+      const [collection, collectionMap] = this.getConfigCollectionData(name);
       const itemIndex = collectionMap[collectionNodeKey] ?? collection.length;
       collectionNode.index = itemIndex;
       collectionNode.parentNode = this.node;
