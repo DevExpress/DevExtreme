@@ -60,11 +60,15 @@ QUnit.module('MessageList', moduleConfig, () => {
         QUnit.test('empty should be toggled after items are updated at runtime', function(assert) {
             this.instance.option('items', [{}]);
 
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false, 'messagelist empty class is removed');
 
             this.instance.option('items', []);
 
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), true);
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), true, 'messagelist empty class is added');
+
+            this.instance.option('items', [{}, {}, {}]);
+
+            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false, 'messagelist empty class is removed');
         });
     });
 

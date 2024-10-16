@@ -114,8 +114,6 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderEmptyViewContent(): void {
-    this.$element().addClass(CHAT_MESSAGELIST_EMPTY_CLASS);
-
     const $emptyView = $('<div>')
       .addClass(CHAT_MESSAGELIST_EMPTY_VIEW_CLASS)
       .attr('id', `dx-${new Guid()}`);
@@ -239,6 +237,8 @@ class MessageList extends Widget<Properties> {
 
   _renderMessageListContent(): void {
     const { isLoading } = this.option();
+
+    this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading);
 
     if (this._isEmpty() && !isLoading) {
       this._renderEmptyViewContent();
