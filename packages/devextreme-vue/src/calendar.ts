@@ -1,4 +1,20 @@
+import { PropType } from "vue";
 import Calendar, { Properties } from "devextreme/ui/calendar";
+import { 
+FirstDayOfWeek,
+ValidationMessageMode,
+Position,
+ValidationStatus,
+ } from "devextreme/common";
+import { 
+CalendarZoomLevel,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+CalendarSelectionMode,
+WeekNumberRule,
+ } from "devextreme/ui/calendar";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -56,52 +72,41 @@ const componentConfig = {
     cellTemplate: {},
     dateSerializationFormat: String,
     disabled: Boolean,
-    disabledDates: [Array, Function],
+    disabledDates: [Array, Function] as PropType<Array<Date> | ((data: Object) => Boolean)>,
     elementAttr: Object,
-    firstDayOfWeek: {
-      type: Number,
-      validator: (v) => typeof(v) !== "number" || [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ].indexOf(v) !== -1
-    },
+    firstDayOfWeek: Object as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
     max: [Date, Number, String],
-    maxZoomLevel: String,
+    maxZoomLevel: Object as PropType<CalendarZoomLevel>,
     min: [Date, Number, String],
-    minZoomLevel: String,
+    minZoomLevel: Object as PropType<CalendarZoomLevel>,
     name: String,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    selectionMode: String,
+    selectionMode: Object as PropType<CalendarSelectionMode>,
     selectWeekOnClick: Boolean,
     showTodayButton: Boolean,
     showWeekNumbers: Boolean,
     tabIndex: Number,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
-    value: [Array, Date, Number, String],
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
+    value: [Array, Date, Number, String] as PropType<(Array<Date> | Array<number> | Array<string>) | Date | number | string>,
     visible: Boolean,
-    weekNumberRule: String,
-    width: [Function, Number, String],
-    zoomLevel: String
+    weekNumberRule: Object as PropType<WeekNumberRule>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    zoomLevel: Object as PropType<CalendarZoomLevel>
   },
   emits: {
     "update:isActive": null,

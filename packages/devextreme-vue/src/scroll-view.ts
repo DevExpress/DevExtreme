@@ -1,4 +1,17 @@
+import { PropType } from "vue";
 import ScrollView, { Properties } from "devextreme/ui/scroll_view";
+import { 
+ScrollDirection,
+ } from "devextreme/common";
+import { 
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+PullDownEvent,
+ReachBottomEvent,
+ScrollEvent,
+UpdatedEvent,
+ } from "devextreme/ui/scroll_view";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -34,17 +47,17 @@ interface DxScrollView extends AccessibleOptions {
 const componentConfig = {
   props: {
     bounceEnabled: Boolean,
-    direction: String,
+    direction: Object as PropType<ScrollDirection>,
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onPullDown: Function,
-    onReachBottom: Function,
-    onScroll: Function,
-    onUpdated: Function,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPullDown: Function as PropType<(e: PullDownEvent) => void>,
+    onReachBottom: Function as PropType<(e: ReachBottomEvent) => void>,
+    onScroll: Function as PropType<(e: ScrollEvent) => void>,
+    onUpdated: Function as PropType<(e: UpdatedEvent) => void>,
     pulledDownText: String,
     pullingDownText: String,
     reachBottomText: String,
@@ -52,9 +65,9 @@ const componentConfig = {
     rtlEnabled: Boolean,
     scrollByContent: Boolean,
     scrollByThumb: Boolean,
-    showScrollbar: String,
+    showScrollbar: String as PropType<"onScroll" | "onHover" | "always" | "never">,
     useNative: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

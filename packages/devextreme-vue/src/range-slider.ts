@@ -1,4 +1,21 @@
+import { PropType } from "vue";
 import RangeSlider, { Properties } from "devextreme/ui/range_slider";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/range_slider";
+import { 
+ValidationMessageMode,
+Position,
+ValidationStatus,
+SliderValueChangeMode,
+Format,
+VerticalEdge,
+TooltipShowMode,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -57,7 +74,7 @@ const componentConfig = {
     end: Number,
     endName: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -66,11 +83,11 @@ const componentConfig = {
     label: Object,
     max: Number,
     min: Number,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     showRange: Boolean,
@@ -80,14 +97,14 @@ const componentConfig = {
     tabIndex: Number,
     tooltip: Object,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
-    value: Array,
-    valueChangeMode: String,
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
+    value: Array as PropType<Array<number>>,
+    valueChangeMode: Object as PropType<SliderValueChangeMode>,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -165,10 +182,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String,
+    type: [Object, String] as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -188,8 +205,8 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    format: [Object, Function, String],
-    position: String,
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    position: Object as PropType<VerticalEdge>,
     visible: Boolean
   }
 };
@@ -214,9 +231,9 @@ const DxTooltipConfig = {
   },
   props: {
     enabled: Boolean,
-    format: [Object, Function, String],
-    position: String,
-    showMode: String
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
+    position: Object as PropType<VerticalEdge>,
+    showMode: Object as PropType<TooltipShowMode>
   }
 };
 

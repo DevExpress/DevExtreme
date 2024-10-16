@@ -1,4 +1,22 @@
+import { PropType } from "vue";
 import Sortable, { Properties } from "devextreme/ui/sortable";
+import { 
+DragDirection,
+DragHighlight,
+Orientation,
+ } from "devextreme/common";
+import { 
+AddEvent,
+DisposingEvent,
+DragChangeEvent,
+DragEndEvent,
+DragMoveEvent,
+DragStartEvent,
+InitializedEvent,
+OptionChangedEvent,
+RemoveEvent,
+ReorderEvent,
+ } from "devextreme/ui/sortable";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -50,30 +68,30 @@ const componentConfig = {
     container: {},
     cursorOffset: [Object, String],
     data: {},
-    dragDirection: String,
+    dragDirection: Object as PropType<DragDirection>,
     dragTemplate: {},
-    dropFeedbackMode: String,
+    dropFeedbackMode: Object as PropType<DragHighlight>,
     elementAttr: Object,
     filter: String,
     group: String,
     handle: String,
-    height: [Function, Number, String],
-    itemOrientation: String,
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    itemOrientation: Object as PropType<Orientation>,
     moveItemOnDrop: Boolean,
-    onAdd: Function,
-    onDisposing: Function,
-    onDragChange: Function,
-    onDragEnd: Function,
-    onDragMove: Function,
-    onDragStart: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onRemove: Function,
-    onReorder: Function,
+    onAdd: Function as PropType<(e: AddEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDragChange: Function as PropType<(e: DragChangeEvent) => void>,
+    onDragEnd: Function as PropType<(e: DragEndEvent) => void>,
+    onDragMove: Function as PropType<(e: DragMoveEvent) => void>,
+    onDragStart: Function as PropType<(e: DragStartEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onRemove: Function as PropType<(e: RemoveEvent) => void>,
+    onReorder: Function as PropType<(e: ReorderEvent) => void>,
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

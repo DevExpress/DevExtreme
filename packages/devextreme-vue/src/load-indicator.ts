@@ -1,4 +1,11 @@
+import { PropType } from "vue";
 import LoadIndicator, { Properties } from "devextreme/ui/load_indicator";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ } from "devextreme/ui/load_indicator";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -23,16 +30,16 @@ interface DxLoadIndicator extends AccessibleOptions {
 const componentConfig = {
   props: {
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     indicatorSrc: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

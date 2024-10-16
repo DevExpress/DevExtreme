@@ -1,4 +1,36 @@
+import { PropType } from "vue";
 import Sankey, { Properties } from "devextreme/viz/sankey";
+import { 
+VerticalAlignment,
+ExportFormat,
+Format,
+HorizontalAlignment,
+VerticalEdge,
+ } from "devextreme/common";
+import { 
+DisposingEvent,
+DrawnEvent,
+ExportedEvent,
+ExportingEvent,
+FileSavingEvent,
+IncidentOccurredEvent,
+InitializedEvent,
+LinkClickEvent,
+LinkHoverEvent,
+NodeClickEvent,
+NodeHoverEvent,
+OptionChangedEvent,
+SankeyColorMode,
+ } from "devextreme/viz/sankey";
+import { 
+Palette,
+PaletteExtensionMode,
+Theme,
+DashStyle,
+HatchDirection,
+TextOverflow,
+WordWrap,
+ } from "devextreme/common/charts";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -50,7 +82,7 @@ interface DxSankey extends AccessibleOptions {
 const componentConfig = {
   props: {
     adaptiveLayout: Object,
-    alignment: [Array, String],
+    alignment: [Array, Object] as PropType<Array<VerticalAlignment> | VerticalAlignment>,
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
@@ -61,20 +93,20 @@ const componentConfig = {
     loadingIndicator: Object,
     margin: Object,
     node: Object,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onLinkClick: Function,
-    onLinkHoverChanged: Function,
-    onNodeClick: Function,
-    onNodeHoverChanged: Function,
-    onOptionChanged: Function,
-    palette: [Array, String],
-    paletteExtensionMode: String,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onLinkClick: Function as PropType<(e: LinkClickEvent) => void>,
+    onLinkHoverChanged: Function as PropType<(e: LinkHoverEvent) => void>,
+    onNodeClick: Function as PropType<(e: NodeClickEvent) => void>,
+    onNodeHoverChanged: Function as PropType<(e: NodeHoverEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    palette: [Array, Object] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: Object as PropType<PaletteExtensionMode>,
     pathModified: Boolean,
     redrawOnResize: Boolean,
     rtlEnabled: Boolean,
@@ -82,7 +114,7 @@ const componentConfig = {
     sortData: {},
     sourceField: String,
     targetField: String,
-    theme: String,
+    theme: Object as PropType<Theme>,
     title: [Object, String],
     tooltip: Object,
     weightField: String
@@ -189,7 +221,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -218,10 +250,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -269,10 +301,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String,
+    type: [Object, String] as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -293,7 +325,7 @@ const DxHatchingConfig = {
     "update:width": null,
   },
   props: {
-    direction: String,
+    direction: Object as PropType<HatchDirection>,
     opacity: Number,
     step: Number,
     width: Number
@@ -345,10 +377,10 @@ const DxLabelConfig = {
   },
   props: {
     border: Object,
-    customizeText: Function,
+    customizeText: Function as PropType<(itemInfo: Object) => string>,
     font: Object,
     horizontalOffset: Number,
-    overlappingBehavior: String,
+    overlappingBehavior: Object as PropType<TextOverflow>,
     shadow: Object,
     useNodeColors: Boolean,
     verticalOffset: Number,
@@ -381,7 +413,7 @@ const DxLinkConfig = {
   props: {
     border: Object,
     color: String,
-    colorMode: String,
+    colorMode: Object as PropType<SankeyColorMode>,
     hoverStyle: Object,
     opacity: Number
   }
@@ -560,8 +592,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: Object as PropType<TextOverflow>,
+    wordWrap: Object as PropType<WordWrap>
   }
 };
 
@@ -590,14 +622,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: Object as PropType<HorizontalAlignment>,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: Object as PropType<TextOverflow>,
+    verticalAlignment: Object as PropType<VerticalEdge>,
+    wordWrap: Object as PropType<WordWrap>
   }
 };
 
@@ -640,11 +672,11 @@ const DxTooltipConfig = {
     color: String,
     container: {},
     cornerRadius: Number,
-    customizeLinkTooltip: Function,
-    customizeNodeTooltip: Function,
+    customizeLinkTooltip: Function as PropType<(info: Object) => Object>,
+    customizeNodeTooltip: Function as PropType<(info: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     linkTooltipTemplate: {},
     nodeTooltipTemplate: {},
     opacity: Number,
@@ -680,7 +712,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number

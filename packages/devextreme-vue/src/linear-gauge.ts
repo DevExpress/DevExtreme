@@ -1,4 +1,36 @@
+import { PropType } from "vue";
 import LinearGauge, { Properties } from "devextreme/viz/linear_gauge";
+import { 
+DisposingEvent,
+DrawnEvent,
+ExportedEvent,
+ExportingEvent,
+FileSavingEvent,
+IncidentOccurredEvent,
+InitializedEvent,
+OptionChangedEvent,
+TooltipHiddenEvent,
+TooltipShownEvent,
+ } from "devextreme/viz/linear_gauge";
+import { 
+Theme,
+AnimationEaseMode,
+DashStyle,
+LabelOverlap,
+Palette,
+PaletteExtensionMode,
+TextOverflow,
+WordWrap,
+ } from "devextreme/common/charts";
+import { 
+ExportFormat,
+Format,
+Orientation,
+HorizontalAlignment,
+VerticalAlignment,
+HorizontalEdge,
+VerticalEdge,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -51,16 +83,16 @@ const componentConfig = {
     geometry: Object,
     loadingIndicator: Object,
     margin: Object,
-    onDisposing: Function,
-    onDrawn: Function,
-    onExported: Function,
-    onExporting: Function,
-    onFileSaving: Function,
-    onIncidentOccurred: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onTooltipHidden: Function,
-    onTooltipShown: Function,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onDrawn: Function as PropType<(e: DrawnEvent) => void>,
+    onExported: Function as PropType<(e: ExportedEvent) => void>,
+    onExporting: Function as PropType<(e: ExportingEvent) => void>,
+    onFileSaving: Function as PropType<(e: FileSavingEvent) => void>,
+    onIncidentOccurred: Function as PropType<(e: IncidentOccurredEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onTooltipHidden: Function as PropType<(e: TooltipHiddenEvent) => void>,
+    onTooltipShown: Function as PropType<(e: TooltipShownEvent) => void>,
     pathModified: Boolean,
     rangeContainer: Object,
     redrawOnResize: Boolean,
@@ -68,8 +100,8 @@ const componentConfig = {
     scale: Object,
     size: Object,
     subvalueIndicator: Object,
-    subvalues: Array,
-    theme: String,
+    subvalues: Array as PropType<Array<number>>,
+    theme: Object as PropType<Theme>,
     title: [Object, String],
     tooltip: Object,
     value: Number,
@@ -150,7 +182,7 @@ const DxAnimationConfig = {
   },
   props: {
     duration: Number,
-    easing: String,
+    easing: Object as PropType<AnimationEaseMode>,
     enabled: Boolean
   }
 };
@@ -192,7 +224,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String,
+    dashStyle: Object as PropType<DashStyle>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -240,10 +272,10 @@ const DxExportConfig = {
     backgroundColor: String,
     enabled: Boolean,
     fileName: String,
-    formats: Array,
+    formats: Array as PropType<Array<ExportFormat>>,
     margin: Number,
     printingEnabled: Boolean,
-    svgToCanvas: Function
+    svgToCanvas: Function as PropType<(svg: any, canvas: any) => any>
   }
 };
 
@@ -291,10 +323,10 @@ const DxFormatConfig = {
   },
   props: {
     currency: String,
-    formatter: Function,
-    parser: Function,
+    formatter: Function as PropType<(value: number | Date) => string>,
+    parser: Function as PropType<(value: string) => (number | Date)>,
     precision: Number,
-    type: String,
+    type: [Object, String] as PropType<Format | string>,
     useCurrencyAccountingStyle: Boolean
   }
 };
@@ -312,7 +344,7 @@ const DxGeometryConfig = {
     "update:orientation": null,
   },
   props: {
-    orientation: String
+    orientation: Object as PropType<Orientation>
   }
 };
 
@@ -335,11 +367,11 @@ const DxLabelConfig = {
     "update:visible": null,
   },
   props: {
-    customizeText: Function,
+    customizeText: Function as PropType<(scaleValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String],
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     indentFromTick: Number,
-    overlappingBehavior: String,
+    overlappingBehavior: Object as PropType<LabelOverlap>,
     useRangeColors: Boolean,
     visible: Boolean
   }
@@ -469,12 +501,12 @@ const DxRangeContainerConfig = {
   },
   props: {
     backgroundColor: [Object, String],
-    horizontalOrientation: String,
+    horizontalOrientation: Object as PropType<HorizontalAlignment>,
     offset: Number,
-    palette: [Array, String],
-    paletteExtensionMode: String,
-    ranges: Array,
-    verticalOrientation: String,
+    palette: [Array, Object] as PropType<Array<string> | Palette>,
+    paletteExtensionMode: Object as PropType<PaletteExtensionMode>,
+    ranges: Array as PropType<Array<Object>>,
+    verticalOrientation: Object as PropType<VerticalAlignment>,
     width: [Number, Object]
   }
 };
@@ -510,10 +542,10 @@ const DxScaleConfig = {
   },
   props: {
     allowDecimals: Boolean,
-    customMinorTicks: Array,
-    customTicks: Array,
+    customMinorTicks: Array as PropType<Array<number>>,
+    customTicks: Array as PropType<Array<number>>,
     endValue: Number,
-    horizontalOrientation: String,
+    horizontalOrientation: Object as PropType<HorizontalAlignment>,
     label: Object,
     minorTick: Object,
     minorTickInterval: Number,
@@ -521,7 +553,7 @@ const DxScaleConfig = {
     startValue: Number,
     tick: Object,
     tickInterval: Number,
-    verticalOrientation: String
+    verticalOrientation: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -594,8 +626,8 @@ const DxSubtitleConfig = {
     font: Object,
     offset: Number,
     text: String,
-    textOverflow: String,
-    wordWrap: String
+    textOverflow: Object as PropType<TextOverflow>,
+    wordWrap: Object as PropType<WordWrap>
   }
 };
 
@@ -638,19 +670,19 @@ const DxSubvalueIndicatorConfig = {
     baseValue: Number,
     beginAdaptingAtRadius: Number,
     color: [Object, String],
-    horizontalOrientation: String,
+    horizontalOrientation: Object as PropType<HorizontalEdge>,
     indentFromCenter: Number,
     length: Number,
     offset: Number,
-    palette: [Array, String],
+    palette: [Array, Object] as PropType<Array<string> | Palette>,
     secondColor: String,
     secondFraction: Number,
     size: Number,
     spindleGapSize: Number,
     spindleSize: Number,
     text: Object,
-    type: String,
-    verticalOrientation: String,
+    type: String as PropType<"circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle">,
+    verticalOrientation: Object as PropType<VerticalEdge>,
     width: Number
   }
 };
@@ -675,9 +707,9 @@ const DxTextConfig = {
     "update:indent": null,
   },
   props: {
-    customizeText: Function,
+    customizeText: Function as PropType<(indicatedValue: Object) => string>,
     font: Object,
-    format: [Object, Function, String],
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     indent: Number
   }
 };
@@ -733,14 +765,14 @@ const DxTitleConfig = {
   },
   props: {
     font: Object,
-    horizontalAlignment: String,
+    horizontalAlignment: Object as PropType<HorizontalAlignment>,
     margin: [Number, Object],
     placeholderSize: Number,
     subtitle: [Object, String],
     text: String,
-    textOverflow: String,
-    verticalAlignment: String,
-    wordWrap: String
+    textOverflow: Object as PropType<TextOverflow>,
+    verticalAlignment: Object as PropType<VerticalEdge>,
+    wordWrap: Object as PropType<WordWrap>
   }
 };
 
@@ -783,10 +815,10 @@ const DxTooltipConfig = {
     container: {},
     contentTemplate: {},
     cornerRadius: Number,
-    customizeTooltip: Function,
+    customizeTooltip: Function as PropType<(scaleValue: Object) => Object>,
     enabled: Boolean,
     font: Object,
-    format: [Object, Function, String],
+    format: [Object, Function, String] as PropType<Object | Format | ((value: number | Date) => string) | string>,
     interactive: Boolean,
     opacity: Number,
     paddingLeftRight: Number,
@@ -838,19 +870,19 @@ const DxValueIndicatorConfig = {
     baseValue: Number,
     beginAdaptingAtRadius: Number,
     color: [Object, String],
-    horizontalOrientation: String,
+    horizontalOrientation: Object as PropType<HorizontalEdge>,
     indentFromCenter: Number,
     length: Number,
     offset: Number,
-    palette: [Array, String],
+    palette: [Array, Object] as PropType<Array<string> | Palette>,
     secondColor: String,
     secondFraction: Number,
     size: Number,
     spindleGapSize: Number,
     spindleSize: Number,
     text: Object,
-    type: String,
-    verticalOrientation: String,
+    type: String as PropType<"circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle">,
+    verticalOrientation: Object as PropType<VerticalEdge>,
     width: Number
   }
 };

@@ -1,4 +1,18 @@
+import { PropType } from "vue";
 import RadioGroup, { Properties } from "devextreme/ui/radio_group";
+import { 
+Orientation,
+ValidationMessageMode,
+Position,
+ValidationStatus,
+ } from "devextreme/common";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/radio_group";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -49,35 +63,35 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     dataSource: {},
     disabled: Boolean,
-    displayExpr: [Function, String],
+    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array,
+    items: Array as PropType<Array<any> | Array<Object>>,
     itemTemplate: {},
-    layout: String,
+    layout: Object as PropType<Orientation>,
     name: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     readOnly: Boolean,
     rtlEnabled: Boolean,
     tabIndex: Number,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: {},
-    valueExpr: [Function, String],
+    valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

@@ -10,13 +10,15 @@ import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/date_range_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, OptionChangedEvent as ButtonOptionChangedEvent, ClickEvent } from "devextreme/ui/button";
-import type { DisposingEvent as CalendarDisposingEvent, InitializedEvent as CalendarInitializedEvent, ValueChangedEvent as CalendarValueChangedEvent, DisabledDate, OptionChangedEvent } from "devextreme/ui/calendar";
-import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
+import type { DisposingEvent as CalendarDisposingEvent, InitializedEvent as CalendarInitializedEvent, ValueChangedEvent as CalendarValueChangedEvent, DisabledDate, CalendarZoomLevel, OptionChangedEvent, CalendarSelectionMode, WeekNumberRule } from "devextreme/ui/calendar";
+import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
+import type { HorizontalAlignment, VerticalAlignment, TextEditorButtonLocation, FirstDayOfWeek, ValidationMessageMode, Position as CommonPosition, ValidationStatus, Format, PositionAlignment, Direction, ButtonStyle, ButtonType, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
+import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
 import type { event, EventInfo } from "devextreme/events/index";
 import type { Component } from "devextreme/core/component";
-import type { PositionConfig } from "devextreme/animation/position";
-import type { dxPopupToolbarItem } from "devextreme/ui/popup";
+import type { dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 
 import type dxOverlay from "devextreme/ui/overlay";
@@ -141,8 +143,8 @@ const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign
 // owners:
 // Position
 type IAtProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentAt = memo(
   (props: IAtProps) => {
@@ -173,7 +175,7 @@ const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Obj
 // owners:
 // DateRangeBox
 type IButtonProps = React.PropsWithChildren<{
-  location?: "after" | "before";
+  location?: TextEditorButtonLocation;
   name?: string;
   options?: dxButtonOptions;
 }>
@@ -202,7 +204,7 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
   elementAttr?: Record<string, any>;
-  firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  firstDayOfWeek?: FirstDayOfWeek;
   focusStateEnabled?: boolean;
   height?: (() => number | string) | number | string;
   hint?: string;
@@ -210,9 +212,9 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   isDirty?: boolean;
   isValid?: boolean;
   max?: Date | number | string;
-  maxZoomLevel?: "century" | "decade" | "month" | "year";
+  maxZoomLevel?: CalendarZoomLevel;
   min?: Date | number | string;
-  minZoomLevel?: "century" | "decade" | "month" | "year";
+  minZoomLevel?: CalendarZoomLevel;
   name?: string;
   onDisposing?: ((e: CalendarDisposingEvent) => void);
   onInitialized?: ((e: CalendarInitializedEvent) => void);
@@ -220,25 +222,25 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   onValueChanged?: ((e: CalendarValueChangedEvent) => void);
   readOnly?: boolean;
   rtlEnabled?: boolean;
-  selectionMode?: "single" | "multiple" | "range";
+  selectionMode?: CalendarSelectionMode;
   selectWeekOnClick?: boolean;
   showTodayButton?: boolean;
   showWeekNumbers?: boolean;
   tabIndex?: number;
   validationError?: any;
   validationErrors?: Array<any>;
-  validationMessageMode?: "always" | "auto";
-  validationMessagePosition?: "bottom" | "left" | "right" | "top";
-  validationStatus?: "valid" | "invalid" | "pending";
+  validationMessageMode?: ValidationMessageMode;
+  validationMessagePosition?: CommonPosition;
+  validationStatus?: ValidationStatus;
   value?: Array<Date | number | string> | Date | number | string;
   visible?: boolean;
-  weekNumberRule?: "auto" | "firstDay" | "fullWeek" | "firstFourDays";
+  weekNumberRule?: WeekNumberRule;
   width?: (() => number | string) | number | string;
-  zoomLevel?: "century" | "decade" | "month" | "year";
+  zoomLevel?: CalendarZoomLevel;
   defaultValue?: Array<Date | number | string> | Date | number | string;
   onValueChange?: (value: Array<Date | number | string> | Date | number | string) => void;
-  defaultZoomLevel?: "century" | "decade" | "month" | "year";
-  onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
+  defaultZoomLevel?: CalendarZoomLevel;
+  onZoomLevelChange?: (value: CalendarZoomLevel) => void;
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
 }>
@@ -264,8 +266,8 @@ const CalendarOptions: typeof _componentCalendarOptions & IElementDescriptor = O
 // owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
-  x?: "fit" | "flip" | "flipfit" | "none";
-  y?: "fit" | "flip" | "flipfit" | "none";
+  x?: CollisionResolution;
+  y?: CollisionResolution;
 }>
 const _componentCollision = memo(
   (props: ICollisionProps) => {
@@ -284,7 +286,7 @@ type IDisplayFormatProps = React.PropsWithChildren<{
   formatter?: ((value: number | Date) => string);
   parser?: ((value: string) => number | Date);
   precision?: number;
-  type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
+  type?: Format | string;
   useCurrencyAccountingStyle?: boolean;
 }>
 const _componentDisplayFormat = memo(
@@ -338,7 +340,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
   onShown?: ((e: EventInfo<any>) => void);
   onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
-  position?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
+  position?: (() => void) | PositionAlignment | PositionConfig;
   resizeEnabled?: boolean;
   restorePosition?: boolean;
   rtlEnabled?: boolean;
@@ -355,8 +357,8 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   wrapperAttr?: any;
   defaultHeight?: (() => number | string) | number | string;
   onHeightChange?: (value: (() => number | string) | number | string) => void;
-  defaultPosition?: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top";
-  onPositionChange?: (value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") => void;
+  defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
+  onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
   defaultWidth?: (() => number | string) | number | string;
@@ -423,14 +425,14 @@ const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componen
 type IHideProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentHide = memo(
   (props: IHideProps) => {
@@ -449,8 +451,8 @@ const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componen
 // owners:
 // Position
 type IMyProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentMy = memo(
   (props: IMyProps) => {
@@ -497,11 +499,11 @@ type IOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: ButtonOptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
@@ -528,22 +530,22 @@ const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_co
 // From
 // DropDownOptions
 type IPositionProps = React.PropsWithChildren<{
-  at?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   boundary?: any | string;
   boundaryOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  collision?: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | {
-    x?: "fit" | "flip" | "flipfit" | "none";
-    y?: "fit" | "flip" | "flipfit" | "none";
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
   };
-  my?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   of?: any | string;
   offset?: Record<string, any> | string | {
@@ -566,14 +568,14 @@ const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_
 type IShowProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentShow = memo(
   (props: IShowProps) => {
@@ -610,16 +612,16 @@ type IToolbarItemProps = React.PropsWithChildren<{
   cssClass?: string;
   disabled?: boolean;
   html?: string;
-  locateInMenu?: "always" | "auto" | "never";
-  location?: "after" | "before" | "center";
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
-  showText?: "always" | "inMenu";
+  showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  toolbar?: "bottom" | "top";
+  toolbar?: ToolbarLocation;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
+  widget?: ToolbarItemComponent;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;

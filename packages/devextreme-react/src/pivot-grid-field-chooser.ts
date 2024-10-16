@@ -10,6 +10,7 @@ import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent } from "devextreme/ui/pivot_grid_field_chooser";
 import type { HeaderFilterSearchConfig } from "devextreme/common/grids";
+import type { SearchMode } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -135,7 +136,7 @@ const PivotGridFieldChooserTexts: typeof _componentPivotGridFieldChooserTexts & 
 type ISearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
-  mode?: "contains" | "startswith" | "equals";
+  mode?: SearchMode;
   timeout?: number;
 }>
 const _componentSearch = memo(

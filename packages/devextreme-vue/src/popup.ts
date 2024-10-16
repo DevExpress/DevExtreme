@@ -1,4 +1,27 @@
+import { PropType } from "vue";
 import Popup, { Properties } from "devextreme/ui/popup";
+import { 
+PositionAlignment,
+HorizontalAlignment,
+VerticalAlignment,
+Direction,
+ToolbarItemLocation,
+ToolbarItemComponent,
+ } from "devextreme/common";
+import { 
+CollisionResolution,
+CollisionResolutionCombination,
+ } from "devextreme/animation/position";
+import { 
+AnimationType,
+ } from "devextreme/animation/fx";
+import { 
+LocateInMenuMode,
+ShowTextMode,
+ } from "devextreme/ui/toolbar";
+import { 
+ToolbarLocation,
+ } from "devextreme/ui/popup";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -63,7 +86,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     animation: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -74,28 +97,28 @@ const componentConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String],
-    hideOnOutsideClick: [Boolean, Function],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onResize: Function,
-    onResizeEnd: Function,
-    onResizeStart: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: [Function, Object, String],
+    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    onContentReady: Function as PropType<(e: Object) => void>,
+    onDisposing: Function as PropType<(e: Object) => void>,
+    onHidden: Function as PropType<(e: Object) => void>,
+    onHiding: Function as PropType<(e: Object) => void>,
+    onInitialized: Function as PropType<(e: Object) => void>,
+    onOptionChanged: Function as PropType<(e: Object) => void>,
+    onResize: Function as PropType<(e: Object) => void>,
+    onResizeEnd: Function as PropType<(e: Object) => void>,
+    onResizeStart: Function as PropType<(e: Object) => void>,
+    onShowing: Function as PropType<(e: Object) => void>,
+    onShown: Function as PropType<(e: Object) => void>,
+    onTitleRendered: Function as PropType<(e: Object) => void>,
+    position: [Function, Object] as PropType<(() => void) | PositionAlignment | Object>,
     resizeEnabled: Boolean,
     restorePosition: Boolean,
     rtlEnabled: Boolean,
@@ -106,9 +129,9 @@ const componentConfig = {
     tabIndex: Number,
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<Object>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapperAttr: {}
   },
   emits: {
@@ -216,8 +239,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -254,8 +277,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<CollisionResolution>,
+    y: Object as PropType<CollisionResolution>
   }
 };
 
@@ -309,16 +332,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -340,8 +363,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -383,11 +406,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: Object as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: Object as PropType<CollisionResolutionCombination | Object>,
+    my: Object as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -415,16 +438,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -481,16 +504,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: Object as PropType<LocateInMenuMode>,
+    location: Object as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: Object as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: Object as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: String
+    widget: Object as PropType<ToolbarItemComponent>
   }
 };
 

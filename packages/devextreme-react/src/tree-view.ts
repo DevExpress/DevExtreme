@@ -11,10 +11,10 @@ import NestedOption from "./core/nested-option";
 
 import type { dxTreeViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, SelectAllValueChangedEvent } from "devextreme/ui/tree_view";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
-import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, OptionChangedEvent as TextBoxOptionChangedEvent, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
+import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, OptionChangedEvent as TextBoxOptionChangedEvent, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
+import type { TextEditorButtonLocation, ButtonStyle, ButtonType, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { template } from "devextreme/core/templates/template";
-import type { TextEditorButton } from "devextreme/common";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -98,7 +98,7 @@ const TreeView = memo(
 // owners:
 // SearchEditorOptions
 type IButtonProps = React.PropsWithChildren<{
-  location?: "after" | "before";
+  location?: TextEditorButtonLocation;
   name?: string;
   options?: dxButtonOptions;
 }>
@@ -169,11 +169,11 @@ type IOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
@@ -202,7 +202,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
-  buttons?: Array<string | "clear" | TextEditorButton>;
+  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
@@ -213,13 +213,13 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   isDirty?: boolean;
   isValid?: boolean;
   label?: string;
-  labelMode?: "static" | "floating" | "hidden" | "outside";
+  labelMode?: LabelMode;
   mask?: string;
   maskChar?: string;
   maskInvalidMessage?: string;
   maskRules?: any;
   maxLength?: number | string;
-  mode?: "email" | "password" | "search" | "tel" | "text" | "url";
+  mode?: TextBoxType;
   name?: string;
   onChange?: ((e: ChangeEvent) => void);
   onContentReady?: ((e: TextBoxContentReadyEvent) => void);
@@ -240,17 +240,17 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   readOnly?: boolean;
   rtlEnabled?: boolean;
   showClearButton?: boolean;
-  showMaskMode?: "always" | "onFocus";
+  showMaskMode?: MaskMode;
   spellcheck?: boolean;
-  stylingMode?: "outlined" | "underlined" | "filled";
+  stylingMode?: EditorStyle;
   tabIndex?: number;
   text?: string;
   useMaskedValue?: boolean;
   validationError?: any;
   validationErrors?: Array<any>;
-  validationMessageMode?: "always" | "auto";
-  validationMessagePosition?: "bottom" | "left" | "right" | "top";
-  validationStatus?: "valid" | "invalid" | "pending";
+  validationMessageMode?: ValidationMessageMode;
+  validationMessagePosition?: Position;
+  validationStatus?: ValidationStatus;
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;

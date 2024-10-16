@@ -1,4 +1,62 @@
+import { PropType } from "vue";
 import Lookup, { Properties } from "devextreme/ui/lookup";
+import { 
+ApplyValueMode,
+LabelMode,
+PageLoadMode,
+SimplifiedSearchMode,
+EditorStyle,
+ValidationMessageMode,
+Mode,
+Position,
+ValidationStatus,
+HorizontalAlignment,
+VerticalAlignment,
+Direction,
+PositionAlignment,
+ToolbarItemLocation,
+ToolbarItemComponent,
+ } from "devextreme/common";
+import { 
+ClosedEvent,
+ContentReadyEvent,
+DisposingEvent,
+InitializedEvent,
+ItemClickEvent,
+OpenedEvent,
+OptionChangedEvent,
+PageLoadingEvent,
+PullRefreshEvent,
+ScrollEvent,
+SelectionChangedEvent,
+SelectionChangingEvent,
+ValueChangedEvent,
+ } from "devextreme/ui/lookup";
+import { 
+CollisionResolution,
+CollisionResolutionCombination,
+ } from "devextreme/animation/position";
+import { 
+ContentReadyEvent as PopoverContentReadyEvent,
+DisposingEvent as PopoverDisposingEvent,
+HiddenEvent,
+HidingEvent,
+InitializedEvent as PopoverInitializedEvent,
+OptionChangedEvent as PopoverOptionChangedEvent,
+ShowingEvent,
+ShownEvent,
+TitleRenderedEvent,
+ } from "devextreme/ui/popover";
+import { 
+AnimationType,
+ } from "devextreme/animation/fx";
+import { 
+LocateInMenuMode,
+ShowTextMode,
+ } from "devextreme/ui/toolbar";
+import { 
+ToolbarLocation,
+ } from "devextreme/ui/popup";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -98,14 +156,14 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     applyButtonText: String,
-    applyValueMode: String,
+    applyValueMode: Object as PropType<ApplyValueMode>,
     cancelButtonText: String,
     cleanSearchOnOpening: Boolean,
     clearButtonText: String,
     dataSource: {},
     deferRendering: Boolean,
     disabled: Boolean,
-    displayExpr: [Function, String],
+    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
     displayValue: String,
     dropDownCentered: Boolean,
     dropDownOptions: Object,
@@ -115,36 +173,36 @@ const componentConfig = {
     fullScreen: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
     isDirty: Boolean,
     isValid: Boolean,
-    items: Array,
+    items: Array as PropType<Array<any> | Array<Object>>,
     itemTemplate: {},
     label: String,
-    labelMode: String,
+    labelMode: Object as PropType<LabelMode>,
     minSearchLength: Number,
     name: String,
     nextButtonText: String,
     noDataText: String,
-    onClosed: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onOpened: Function,
-    onOptionChanged: Function,
-    onPageLoading: Function,
-    onPullRefresh: Function,
-    onScroll: Function,
-    onSelectionChanged: Function,
-    onSelectionChanging: Function,
-    onValueChanged: Function,
+    onClosed: Function as PropType<(e: ClosedEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onOpened: Function as PropType<(e: OpenedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPageLoading: Function as PropType<(e: PageLoadingEvent) => void>,
+    onPullRefresh: Function as PropType<(e: PullRefreshEvent) => void>,
+    onScroll: Function as PropType<(e: ScrollEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onSelectionChanging: Function as PropType<(e: SelectionChangingEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     opened: Boolean,
     pageLoadingText: String,
-    pageLoadMode: String,
+    pageLoadMode: Object as PropType<PageLoadMode>,
     placeholder: String,
     pulledDownText: String,
     pullingDownText: String,
@@ -152,8 +210,8 @@ const componentConfig = {
     refreshingText: String,
     rtlEnabled: Boolean,
     searchEnabled: Boolean,
-    searchExpr: [Array, Function, String],
-    searchMode: String,
+    searchExpr: [Array, Function, String] as PropType<(Array<Function> | Array<string>) | Function | string>,
+    searchMode: Object as PropType<SimplifiedSearchMode>,
     searchPlaceholder: String,
     searchStartEvent: String,
     searchTimeout: Number,
@@ -161,22 +219,22 @@ const componentConfig = {
     showCancelButton: Boolean,
     showClearButton: Boolean,
     showDataBeforeSearch: Boolean,
-    stylingMode: String,
+    stylingMode: Object as PropType<EditorStyle>,
     tabIndex: Number,
     text: String,
     useItemTextAsTitle: Boolean,
     useNativeScrolling: Boolean,
     usePopover: Boolean,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: Object as PropType<ValidationMessageMode>,
+    validationMessagePosition: Object as PropType<Mode | Position>,
+    validationStatus: Object as PropType<ValidationStatus>,
     value: {},
     valueChangeEvent: String,
-    valueExpr: [Function, String],
+    valueExpr: [Function, String] as PropType<((item: Object) => (string | number | Boolean)) | string>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapItemText: Boolean
   },
   emits: {
@@ -318,8 +376,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -356,8 +414,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<CollisionResolution>,
+    y: Object as PropType<CollisionResolution>
   }
 };
 
@@ -416,32 +474,32 @@ const DxDropDownOptionsConfig = {
   props: {
     animation: Object,
     bindingOptions: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
     enableBodyScroll: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hideEvent: [Object, String],
-    hideOnOutsideClick: [Boolean, Function],
+    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String],
-    maxWidth: [Function, Number, String],
-    minHeight: [Function, Number, String],
-    minWidth: [Function, Number, String],
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onShowing: Function,
-    onShown: Function,
-    onTitleRendered: Function,
-    position: [Object, String],
+    maxHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    maxWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minHeight: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    minWidth: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    onContentReady: Function as PropType<(e: PopoverContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: PopoverDisposingEvent) => void>,
+    onHidden: Function as PropType<(e: HiddenEvent) => void>,
+    onHiding: Function as PropType<(e: HidingEvent) => void>,
+    onInitialized: Function as PropType<(e: PopoverInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: PopoverOptionChangedEvent) => void>,
+    onShowing: Function as PropType<(e: ShowingEvent) => void>,
+    onShown: Function as PropType<(e: ShownEvent) => void>,
+    onTitleRendered: Function as PropType<(e: TitleRenderedEvent) => void>,
+    position: Object as PropType<Position | Object>,
     rtlEnabled: Boolean,
     shading: Boolean,
     shadingColor: String,
@@ -451,9 +509,9 @@ const DxDropDownOptionsConfig = {
     target: {},
     title: String,
     titleTemplate: {},
-    toolbarItems: Array,
+    toolbarItems: Array as PropType<Array<Object>>,
     visible: Boolean,
-    width: [Function, Number, String],
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     wrapperAttr: {}
   }
 };
@@ -515,16 +573,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -591,8 +649,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -634,11 +692,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: Object as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: Object as PropType<CollisionResolutionCombination | Object>,
+    my: Object as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -666,16 +724,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -751,16 +809,16 @@ const DxToolbarItemConfig = {
     cssClass: String,
     disabled: Boolean,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: Object as PropType<LocateInMenuMode>,
+    location: Object as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
     options: {},
-    showText: String,
+    showText: Object as PropType<ShowTextMode>,
     template: {},
     text: String,
-    toolbar: String,
+    toolbar: Object as PropType<ToolbarLocation>,
     visible: Boolean,
-    widget: String
+    widget: Object as PropType<ToolbarItemComponent>
   }
 };
 

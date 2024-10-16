@@ -9,8 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescrip
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, RenderedEvent, ShownEvent } from "devextreme/ui/defer_rendering";
-import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
-import type { PositionConfig } from "devextreme/animation/position";
+import type { AnimationConfig, AnimationState, AnimationType } from "devextreme/animation/fx";
+import type { Direction, HorizontalAlignment, VerticalAlignment, PositionAlignment } from "devextreme/common";
+import type { CollisionResolution, PositionConfig, CollisionResolutionCombination } from "devextreme/animation/position";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -68,14 +69,14 @@ const DeferRendering = memo(
 type IAnimationProps = React.PropsWithChildren<{
   complete?: (($element: any, config: AnimationConfig) => void);
   delay?: number;
-  direction?: "bottom" | "left" | "right" | "top";
+  direction?: Direction;
   duration?: number;
   easing?: string;
   from?: AnimationState;
   staggerDelay?: number;
   start?: (($element: any, config: AnimationConfig) => void);
   to?: AnimationState;
-  type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
+  type?: AnimationType;
 }>
 const _componentAnimation = memo(
   (props: IAnimationProps) => {
@@ -94,8 +95,8 @@ const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign
 // owners:
 // Position
 type IAtProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentAt = memo(
   (props: IAtProps) => {
@@ -126,8 +127,8 @@ const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Obj
 // owners:
 // Position
 type ICollisionProps = React.PropsWithChildren<{
-  x?: "fit" | "flip" | "flipfit" | "none";
-  y?: "fit" | "flip" | "flipfit" | "none";
+  x?: CollisionResolution;
+  y?: CollisionResolution;
 }>
 const _componentCollision = memo(
   (props: ICollisionProps) => {
@@ -164,8 +165,8 @@ const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componen
 // owners:
 // Position
 type IMyProps = React.PropsWithChildren<{
-  x?: "center" | "left" | "right";
-  y?: "bottom" | "center" | "top";
+  x?: HorizontalAlignment;
+  y?: VerticalAlignment;
 }>
 const _componentMy = memo(
   (props: IMyProps) => {
@@ -196,22 +197,22 @@ const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_comp
 // owners:
 // From
 type IPositionProps = React.PropsWithChildren<{
-  at?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  at?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   boundary?: any | string;
   boundaryOffset?: Record<string, any> | string | {
     x?: number;
     y?: number;
   };
-  collision?: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | {
-    x?: "fit" | "flip" | "flipfit" | "none";
-    y?: "fit" | "flip" | "flipfit" | "none";
+  collision?: CollisionResolutionCombination | Record<string, any> | {
+    x?: CollisionResolution;
+    y?: CollisionResolution;
   };
-  my?: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | {
-    x?: "center" | "left" | "right";
-    y?: "bottom" | "center" | "top";
+  my?: Record<string, any> | PositionAlignment | {
+    x?: HorizontalAlignment;
+    y?: VerticalAlignment;
   };
   of?: any | string;
   offset?: Record<string, any> | string | {

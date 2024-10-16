@@ -1,4 +1,13 @@
+import { PropType } from "vue";
 import Drawer, { Properties } from "devextreme/ui/drawer";
+import { 
+DisposingEvent,
+InitializedEvent,
+OptionChangedEvent,
+OpenedStateMode,
+PanelLocation,
+RevealMode,
+ } from "devextreme/ui/drawer";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 
@@ -37,26 +46,26 @@ const componentConfig = {
     activeStateEnabled: Boolean,
     animationDuration: Number,
     animationEnabled: Boolean,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     disabled: Boolean,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     maxSize: Number,
     minSize: Number,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     opened: Boolean,
-    openedStateMode: String,
-    position: String,
-    revealMode: String,
+    openedStateMode: Object as PropType<OpenedStateMode>,
+    position: Object as PropType<PanelLocation>,
+    revealMode: Object as PropType<RevealMode>,
     rtlEnabled: Boolean,
     shading: Boolean,
     template: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,

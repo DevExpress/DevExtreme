@@ -1,5 +1,37 @@
 export { ExplicitTypes } from "devextreme/ui/context_menu";
+import { PropType } from "vue";
 import ContextMenu, { Properties } from "devextreme/ui/context_menu";
+import { 
+ContentReadyEvent,
+DisposingEvent,
+HiddenEvent,
+HidingEvent,
+InitializedEvent,
+ItemClickEvent,
+ItemContextMenuEvent,
+ItemRenderedEvent,
+OptionChangedEvent,
+PositioningEvent,
+SelectionChangedEvent,
+ShowingEvent,
+ShownEvent,
+ContextSubmenuDirection,
+ } from "devextreme/ui/context_menu";
+import { 
+SingleOrNone,
+SubmenuShowMode,
+HorizontalAlignment,
+VerticalAlignment,
+Direction,
+PositionAlignment,
+ } from "devextreme/common";
+import { 
+CollisionResolution,
+CollisionResolutionCombination,
+ } from "devextreme/animation/position";
+import { 
+AnimationType,
+ } from "devextreme/animation/fx";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -60,47 +92,47 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animation: Object,
-    closeOnOutsideClick: [Boolean, Function],
+    closeOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     cssClass: String,
     dataSource: {},
     disabled: Boolean,
-    disabledExpr: [Function, String],
-    displayExpr: [Function, String],
+    disabledExpr: [Function, String] as PropType<(() => void) | string>,
+    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
-    hideOnOutsideClick: [Boolean, Function],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
+    hideOnOutsideClick: [Boolean, Function] as PropType<Boolean | ((event: Object) => Boolean)>,
     hint: String,
     hoverStateEnabled: Boolean,
-    items: Array,
-    itemsExpr: [Function, String],
+    items: Array as PropType<Array<Object>>,
+    itemsExpr: [Function, String] as PropType<(() => void) | string>,
     itemTemplate: {},
-    onContentReady: Function,
-    onDisposing: Function,
-    onHidden: Function,
-    onHiding: Function,
-    onInitialized: Function,
-    onItemClick: Function,
-    onItemContextMenu: Function,
-    onItemRendered: Function,
-    onOptionChanged: Function,
-    onPositioning: Function,
-    onSelectionChanged: Function,
-    onShowing: Function,
-    onShown: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onHidden: Function as PropType<(e: HiddenEvent) => void>,
+    onHiding: Function as PropType<(e: HidingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onItemClick: Function as PropType<(e: ItemClickEvent) => void>,
+    onItemContextMenu: Function as PropType<(e: ItemContextMenuEvent) => void>,
+    onItemRendered: Function as PropType<(e: ItemRenderedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onPositioning: Function as PropType<(e: PositioningEvent) => void>,
+    onSelectionChanged: Function as PropType<(e: SelectionChangedEvent) => void>,
+    onShowing: Function as PropType<(e: ShowingEvent) => void>,
+    onShown: Function as PropType<(e: ShownEvent) => void>,
     position: Object,
     rtlEnabled: Boolean,
     selectByClick: Boolean,
-    selectedExpr: [Function, String],
+    selectedExpr: [Function, String] as PropType<(() => void) | string>,
     selectedItem: {},
-    selectionMode: String,
+    selectionMode: Object as PropType<SingleOrNone>,
     showEvent: [Object, String],
-    showSubmenuMode: [Object, String],
-    submenuDirection: String,
+    showSubmenuMode: Object as PropType<Object | SubmenuShowMode>,
+    submenuDirection: Object as PropType<ContextSubmenuDirection>,
     tabIndex: Number,
     target: {},
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -204,8 +236,8 @@ const DxAtConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -242,8 +274,8 @@ const DxCollisionConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<CollisionResolution>,
+    y: Object as PropType<CollisionResolution>
   }
 };
 
@@ -316,16 +348,16 @@ const DxHideConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -359,7 +391,7 @@ const DxItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array,
+    items: Array as PropType<Array<Object>>,
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -383,8 +415,8 @@ const DxMyConfig = {
     "update:y": null,
   },
   props: {
-    x: String,
-    y: String
+    x: Object as PropType<HorizontalAlignment>,
+    y: Object as PropType<VerticalAlignment>
   }
 };
 
@@ -426,11 +458,11 @@ const DxPositionConfig = {
     "update:offset": null,
   },
   props: {
-    at: [Object, String],
+    at: Object as PropType<Object | PositionAlignment>,
     boundary: {},
     boundaryOffset: [Object, String],
-    collision: [Object, String],
-    my: [Object, String],
+    collision: Object as PropType<CollisionResolutionCombination | Object>,
+    my: Object as PropType<Object | PositionAlignment>,
     of: {},
     offset: [Object, String]
   }
@@ -458,16 +490,16 @@ const DxShowConfig = {
     "update:type": null,
   },
   props: {
-    complete: Function,
+    complete: Function as PropType<($element: any, config: Object) => void>,
     delay: Number,
-    direction: String,
+    direction: Object as PropType<Direction>,
     duration: Number,
     easing: String,
     from: Object,
     staggerDelay: Number,
-    start: Function,
+    start: Function as PropType<($element: any, config: Object) => void>,
     to: Object,
-    type: String
+    type: Object as PropType<AnimationType>
   }
 };
 
@@ -505,7 +537,7 @@ const DxShowSubmenuModeConfig = {
   },
   props: {
     delay: [Number, Object],
-    name: String
+    name: Object as PropType<SubmenuShowMode>
   }
 };
 

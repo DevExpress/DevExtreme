@@ -8,9 +8,10 @@ import dxForm, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from "devextreme/ui/form";
+import type { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, InitializedEvent, FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemComponent, LabelLocation } from "devextreme/ui/form";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, ButtonType, ComparisonOperator, TabsIconPosition, TabsStyle, Position } from "devextreme/common";
 import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataSourceOptions } from "devextreme/data/data_source";
@@ -92,7 +93,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
 }>
 const _componentAsyncRule = memo(
@@ -115,10 +116,10 @@ type IButtonItemProps = React.PropsWithChildren<{
   buttonOptions?: dxButtonOptions;
   colSpan?: number;
   cssClass?: string;
-  horizontalAlignment?: "center" | "left" | "right";
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  horizontalAlignment?: HorizontalAlignment;
+  itemType?: FormItemType;
   name?: string;
-  verticalAlignment?: "bottom" | "center" | "top";
+  verticalAlignment?: VerticalAlignment;
   visible?: boolean;
   visibleIndex?: number;
 }>
@@ -158,11 +159,11 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   onInitialized?: ((e: ButtonInitializedEvent) => void);
   onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
-  stylingMode?: "text" | "outlined" | "contained";
+  stylingMode?: ButtonStyle;
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: ButtonType;
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;
@@ -209,10 +210,10 @@ const ColCountByScreen: typeof _componentColCountByScreen & IElementDescriptor =
 // SimpleItem
 type ICompareRuleProps = React.PropsWithChildren<{
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentCompareRule = memo(
   (props: ICompareRuleProps) => {
@@ -234,7 +235,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
 }>
 const _componentCustomRule = memo(
@@ -256,7 +257,7 @@ const CustomRule: typeof _componentCustomRule & IElementDescriptor = Object.assi
 type IEmailRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentEmailRule = memo(
   (props: IEmailRuleProps) => {
@@ -277,7 +278,7 @@ const EmailRule: typeof _componentEmailRule & IElementDescriptor = Object.assign
 type IEmptyItemProps = React.PropsWithChildren<{
   colSpan?: number;
   cssClass?: string;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   name?: string;
   visible?: boolean;
   visibleIndex?: number;
@@ -312,7 +313,7 @@ type IGroupItemProps = React.PropsWithChildren<{
   colSpan?: number;
   cssClass?: string;
   items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   name?: string;
   template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
   visible?: boolean;
@@ -365,13 +366,13 @@ type IItemProps = React.PropsWithChildren<{
   cssClass?: string;
   dataField?: string;
   editorOptions?: any;
-  editorType?: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox";
+  editorType?: FormItemComponent;
   helpText?: string;
   isRequired?: boolean;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   label?: Record<string, any> | {
-    alignment?: "center" | "left" | "right";
-    location?: "left" | "right" | "top";
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
     text?: string;
@@ -410,8 +411,8 @@ type IItemProps = React.PropsWithChildren<{
     title?: string;
   }[];
   buttonOptions?: dxButtonOptions;
-  horizontalAlignment?: "center" | "left" | "right";
-  verticalAlignment?: "bottom" | "center" | "top";
+  horizontalAlignment?: HorizontalAlignment;
+  verticalAlignment?: VerticalAlignment;
   tabRender?: (...params: any) => React.ReactNode;
   tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
@@ -446,8 +447,8 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
 // owners:
 // SimpleItem
 type ILabelProps = React.PropsWithChildren<{
-  alignment?: "center" | "left" | "right";
-  location?: "left" | "right" | "top";
+  alignment?: HorizontalAlignment;
+  location?: LabelLocation;
   showColon?: boolean;
   template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
   text?: string;
@@ -475,7 +476,7 @@ const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_compon
 type INumericRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentNumericRule = memo(
   (props: INumericRuleProps) => {
@@ -497,7 +498,7 @@ type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
   pattern?: RegExp | string;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentPatternRule = memo(
   (props: IPatternRuleProps) => {
@@ -521,7 +522,7 @@ type IRangeRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRangeRule = memo(
   (props: IRangeRuleProps) => {
@@ -542,7 +543,7 @@ const RangeRule: typeof _componentRangeRule & IElementDescriptor = Object.assign
 type IRequiredRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentRequiredRule = memo(
   (props: IRequiredRuleProps) => {
@@ -565,13 +566,13 @@ type ISimpleItemProps = React.PropsWithChildren<{
   cssClass?: string;
   dataField?: string;
   editorOptions?: any;
-  editorType?: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox";
+  editorType?: FormItemComponent;
   helpText?: string;
   isRequired?: boolean;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   label?: Record<string, any> | {
-    alignment?: "center" | "left" | "right";
-    location?: "left" | "right" | "top";
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
     showColon?: boolean;
     template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
     text?: string;
@@ -625,7 +626,7 @@ type IStringLengthRuleProps = React.PropsWithChildren<{
   message?: string;
   min?: number;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
 }>
 const _componentStringLengthRule = memo(
   (props: IStringLengthRuleProps) => {
@@ -692,7 +693,7 @@ const Tab: typeof _componentTab & IElementDescriptor = Object.assign(_componentT
 type ITabbedItemProps = React.PropsWithChildren<{
   colSpan?: number;
   cssClass?: string;
-  itemType?: "empty" | "group" | "simple" | "tabbed" | "button";
+  itemType?: FormItemType;
   name?: string;
   tabPanelOptions?: dxTabPanelOptions;
   tabs?: Array<Record<string, any>> | {
@@ -748,7 +749,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   height?: (() => number | string) | number | string;
   hint?: string;
   hoverStateEnabled?: boolean;
-  iconPosition?: "top" | "end" | "bottom" | "start";
+  iconPosition?: TabsIconPosition;
   itemHoldTimeout?: number;
   items?: Array<any | dxTabPanelItem | string>;
   itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
@@ -775,10 +776,10 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   selectedIndex?: number;
   selectedItem?: any;
   showNavButtons?: boolean;
-  stylingMode?: "primary" | "secondary";
+  stylingMode?: TabsStyle;
   swipeEnabled?: boolean;
   tabIndex?: number;
-  tabsPosition?: "bottom" | "left" | "right" | "top";
+  tabsPosition?: Position;
   visible?: boolean;
   width?: (() => number | string) | number | string;
   defaultItems?: Array<any | dxTabPanelItem | string>;
@@ -862,14 +863,14 @@ const TabPanelOptionsItem: typeof _componentTabPanelOptionsItem & IElementDescri
 type IValidationRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
-  type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
+  type?: ValidationRuleType;
   ignoreEmptyValue?: boolean;
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
-  comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
+  comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;
 }>
 const _componentValidationRule = memo(

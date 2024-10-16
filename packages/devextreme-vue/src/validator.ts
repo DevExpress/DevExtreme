@@ -1,4 +1,9 @@
+import { PropType } from "vue";
 import Validator, { Properties } from "devextreme/ui/validator";
+import { 
+ValidationRuleType,
+ComparisonOperator,
+ } from "devextreme/common";
 import { defineComponent } from "vue";
 import { prepareExtensionComponentConfig } from "./core/index";
 import { prepareConfigurationComponentConfig } from "./core/index";
@@ -25,15 +30,15 @@ const componentConfig = {
   props: {
     adapter: Object,
     elementAttr: Object,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     name: String,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValidated: Function,
+    onDisposing: Function as PropType<(e: Object) => void>,
+    onInitialized: Function as PropType<(e: Object) => void>,
+    onOptionChanged: Function as PropType<(e: Object) => void>,
+    onValidated: Function as PropType<(validatedInfo: Object) => void>,
     validationGroup: String,
-    validationRules: Array,
-    width: [Function, Number, String]
+    validationRules: Array as PropType<Array<Object>>,
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -91,12 +96,12 @@ const DxAdapterConfig = {
     "update:validationRequestsCallbacks": null,
   },
   props: {
-    applyValidationResults: Function,
-    bypass: Function,
-    focus: Function,
-    getValue: Function,
-    reset: Function,
-    validationRequestsCallbacks: Array
+    applyValidationResults: Function as PropType<() => void>,
+    bypass: Function as PropType<() => void>,
+    focus: Function as PropType<() => void>,
+    getValue: Function as PropType<() => void>,
+    reset: Function as PropType<() => void>,
+    validationRequestsCallbacks: Array as PropType<Array<() => void>>
   }
 };
 
@@ -120,8 +125,8 @@ const DxAsyncRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
-    validationCallback: Function
+    type: Object as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<(options: Object) => any>
   }
 };
 
@@ -146,11 +151,11 @@ const DxCompareRuleConfig = {
     "update:type": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: String,
+    comparisonTarget: Function as PropType<() => any>,
+    comparisonType: Object as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -178,8 +183,8 @@ const DxCustomRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     reevaluate: Boolean,
-    type: String,
-    validationCallback: Function
+    type: Object as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
 
@@ -204,7 +209,7 @@ const DxEmailRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -229,7 +234,7 @@ const DxNumericRuleConfig = {
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    type: String
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -256,7 +261,7 @@ const DxPatternRuleConfig = {
     ignoreEmptyValue: Boolean,
     message: String,
     pattern: [RegExp, String],
-    type: String
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -287,7 +292,7 @@ const DxRangeRuleConfig = {
     message: String,
     min: [Date, Number, String],
     reevaluate: Boolean,
-    type: String
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -312,7 +317,7 @@ const DxRequiredRuleConfig = {
   props: {
     message: String,
     trim: Boolean,
-    type: String
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -343,7 +348,7 @@ const DxStringLengthRuleConfig = {
     message: String,
     min: Number,
     trim: Boolean,
-    type: String
+    type: Object as PropType<ValidationRuleType>
   }
 };
 
@@ -374,8 +379,8 @@ const DxValidationRuleConfig = {
     "update:validationCallback": null,
   },
   props: {
-    comparisonTarget: Function,
-    comparisonType: String,
+    comparisonTarget: Function as PropType<() => any>,
+    comparisonType: Object as PropType<ComparisonOperator>,
     ignoreEmptyValue: Boolean,
     max: [Date, Number, String],
     message: String,
@@ -383,8 +388,8 @@ const DxValidationRuleConfig = {
     pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
-    type: String,
-    validationCallback: Function
+    type: Object as PropType<ValidationRuleType>,
+    validationCallback: Function as PropType<(options: Object) => Boolean>
   }
 };
 
