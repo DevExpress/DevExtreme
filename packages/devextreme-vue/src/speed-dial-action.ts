@@ -1,6 +1,14 @@
-import SpeedDialAction, { Properties } from "devextreme/ui/speed_dial_action";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import SpeedDialAction, { Properties } from "devextreme/ui/speed_dial_action";
+import {
+ ClickEvent,
+ ContentReadyEvent,
+ DisposingEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+} from "devextreme/ui/speed_dial_action";
 
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
@@ -37,11 +45,11 @@ const componentConfig = {
     icon: String,
     index: Number,
     label: String,
-    onClick: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
+    onClick: Function as PropType<(e: ClickEvent) => void>,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
     rtlEnabled: Boolean,
     tabIndex: Number,
     visible: Boolean

@@ -1,6 +1,51 @@
-import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
+import { PropType } from "vue";
 import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
+import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
+import {
+ ContentReadyEvent,
+ DisposingEvent,
+ FocusInEvent,
+ FocusOutEvent,
+ InitializedEvent,
+ OptionChangedEvent,
+ ValueChangedEvent,
+ MarkupType,
+ HtmlEditorImageUploadMode,
+ HtmlEditorImageUploadTab,
+ HtmlEditorPredefinedContextMenuItem,
+ HtmlEditorPredefinedToolbarItem,
+} from "devextreme/ui/html_editor";
+import {
+ EditorStyle,
+ ValidationMessageMode,
+ Position,
+ ValidationStatus,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
+} from "devextreme/common";
+import {
+ BeforeSendEvent,
+ ContentReadyEvent as FileUploaderContentReadyEvent,
+ DisposingEvent as FileUploaderDisposingEvent,
+ DropZoneEnterEvent,
+ DropZoneLeaveEvent,
+ FilesUploadedEvent,
+ InitializedEvent as FileUploaderInitializedEvent,
+ OptionChangedEvent as FileUploaderOptionChangedEvent,
+ ProgressEvent,
+ UploadAbortedEvent,
+ UploadedEvent,
+ UploadErrorEvent,
+ UploadStartedEvent,
+ ValueChangedEvent as FileUploaderValueChangedEvent,
+ UploadHttpMethod,
+ FileUploadMode,
+} from "devextreme/ui/file_uploader";
+import {
+ LocateInMenuMode,
+ ShowTextMode,
+} from "devextreme/ui/toolbar";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -56,44 +101,44 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSoftLineBreak: Boolean,
-    customizeModules: Function,
+    customizeModules: Function as PropType<(config: Object) => void>,
     disabled: Boolean,
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     imageUpload: Object,
     isDirty: Boolean,
     isValid: Boolean,
     mediaResizing: Object,
-    mentions: Array,
+    mentions: Array as PropType<Array<Object>>,
     name: String,
-    onContentReady: Function,
-    onDisposing: Function,
-    onFocusIn: Function,
-    onFocusOut: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onValueChanged: Function,
+    onContentReady: Function as PropType<(e: ContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: DisposingEvent) => void>,
+    onFocusIn: Function as PropType<(e: FocusInEvent) => void>,
+    onFocusOut: Function as PropType<(e: FocusOutEvent) => void>,
+    onInitialized: Function as PropType<(e: InitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: OptionChangedEvent) => void>,
+    onValueChanged: Function as PropType<(e: ValueChangedEvent) => void>,
     placeholder: String,
     readOnly: Boolean,
     rtlEnabled: Boolean,
-    stylingMode: String,
+    stylingMode: String as PropType<EditorStyle>,
     tabIndex: Number,
     tableContextMenu: Object,
     tableResizing: Object,
     toolbar: Object,
     validationError: {},
-    validationErrors: Array,
-    validationMessageMode: String,
-    validationMessagePosition: String,
-    validationStatus: String,
+    validationErrors: Array as PropType<Array<any>>,
+    validationMessageMode: String as PropType<ValidationMessageMode>,
+    validationMessagePosition: String as PropType<Position>,
+    validationStatus: String as PropType<ValidationStatus>,
     value: {},
-    valueType: String,
+    valueType: String as PropType<MarkupType>,
     variables: Object,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   },
   emits: {
     "update:isActive": null,
@@ -237,12 +282,12 @@ const DxFileUploaderOptionsConfig = {
     "update:width": null,
   },
   props: {
-    abortUpload: Function,
+    abortUpload: Function as PropType<(file: any, uploadInfo?: Object) => any>,
     accept: String,
     accessKey: String,
     activeStateEnabled: Boolean,
     allowCanceling: Boolean,
-    allowedFileExtensions: Array,
+    allowedFileExtensions: Array as PropType<Array<string>>,
     bindingOptions: Object,
     chunkSize: Number,
     dialogTrigger: {},
@@ -250,7 +295,7 @@ const DxFileUploaderOptionsConfig = {
     dropZone: {},
     elementAttr: Object,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String],
+    height: [Function, Number, String] as PropType<(() => (number | string)) | number | string>,
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -264,20 +309,20 @@ const DxFileUploaderOptionsConfig = {
     minFileSize: Number,
     multiple: Boolean,
     name: String,
-    onBeforeSend: Function,
-    onContentReady: Function,
-    onDisposing: Function,
-    onDropZoneEnter: Function,
-    onDropZoneLeave: Function,
-    onFilesUploaded: Function,
-    onInitialized: Function,
-    onOptionChanged: Function,
-    onProgress: Function,
-    onUploadAborted: Function,
-    onUploaded: Function,
-    onUploadError: Function,
-    onUploadStarted: Function,
-    onValueChanged: Function,
+    onBeforeSend: Function as PropType<(e: BeforeSendEvent) => void>,
+    onContentReady: Function as PropType<(e: FileUploaderContentReadyEvent) => void>,
+    onDisposing: Function as PropType<(e: FileUploaderDisposingEvent) => void>,
+    onDropZoneEnter: Function as PropType<(e: DropZoneEnterEvent) => void>,
+    onDropZoneLeave: Function as PropType<(e: DropZoneLeaveEvent) => void>,
+    onFilesUploaded: Function as PropType<(e: FilesUploadedEvent) => void>,
+    onInitialized: Function as PropType<(e: FileUploaderInitializedEvent) => void>,
+    onOptionChanged: Function as PropType<(e: FileUploaderOptionChangedEvent) => void>,
+    onProgress: Function as PropType<(e: ProgressEvent) => void>,
+    onUploadAborted: Function as PropType<(e: UploadAbortedEvent) => void>,
+    onUploaded: Function as PropType<(e: UploadedEvent) => void>,
+    onUploadError: Function as PropType<(e: UploadErrorEvent) => void>,
+    onUploadStarted: Function as PropType<(e: UploadStartedEvent) => void>,
+    onValueChanged: Function as PropType<(e: FileUploaderValueChangedEvent) => void>,
     progress: Number,
     readOnly: Boolean,
     readyToUploadMessage: String,
@@ -287,21 +332,21 @@ const DxFileUploaderOptionsConfig = {
     tabIndex: Number,
     uploadAbortedMessage: String,
     uploadButtonText: String,
-    uploadChunk: Function,
+    uploadChunk: Function as PropType<(file: any, uploadInfo: Object) => any>,
     uploadCustomData: {},
     uploadedMessage: String,
     uploadFailedMessage: String,
-    uploadFile: Function,
+    uploadFile: Function as PropType<(file: any, progressCallback: () => void) => any>,
     uploadHeaders: {},
-    uploadMethod: String,
-    uploadMode: String,
+    uploadMethod: String as PropType<UploadHttpMethod>,
+    uploadMode: String as PropType<FileUploadMode>,
     uploadUrl: String,
     validationError: {},
-    validationErrors: Array,
-    validationStatus: String,
-    value: Array,
+    validationErrors: Array as PropType<Array<any>>,
+    validationStatus: String as PropType<ValidationStatus>,
+    value: Array as PropType<Array<any>>,
     visible: Boolean,
-    width: [Function, Number, String]
+    width: [Function, Number, String] as PropType<(() => (number | string)) | number | string>
   }
 };
 
@@ -323,8 +368,8 @@ const DxImageUploadConfig = {
   },
   props: {
     fileUploaderOptions: Object,
-    fileUploadMode: String,
-    tabs: Array,
+    fileUploadMode: String as PropType<HtmlEditorImageUploadMode>,
+    tabs: Array as PropType<Array<Object | HtmlEditorImageUploadTab>>,
     uploadDirectory: String,
     uploadUrl: String
   }
@@ -368,28 +413,28 @@ const DxItemConfig = {
     "update:widget": null,
   },
   props: {
-    acceptedValues: Array,
+    acceptedValues: Array as PropType<Array<Boolean | number | string>>,
     beginGroup: Boolean,
     closeMenuOnClick: Boolean,
     cssClass: String,
     disabled: Boolean,
-    formatName: String,
-    formatValues: Array,
+    formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
+    formatValues: Array as PropType<Array<Boolean | number | string>>,
     html: String,
     icon: String,
-    items: Array,
-    locateInMenu: String,
-    location: String,
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedContextMenuItem>>,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String,
+    name: String as PropType<HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | string>,
     options: {},
     selectable: Boolean,
     selected: Boolean,
-    showText: String,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 
@@ -408,7 +453,7 @@ const DxMediaResizingConfig = {
     "update:enabled": null,
   },
   props: {
-    allowedTargets: Array,
+    allowedTargets: Array as PropType<Array<string>>,
     enabled: Boolean
   }
 };
@@ -435,14 +480,14 @@ const DxMentionConfig = {
   },
   props: {
     dataSource: {},
-    displayExpr: [Function, String],
+    displayExpr: [Function, String] as PropType<((item: Object) => string) | string>,
     itemTemplate: {},
     marker: String,
     minSearchLength: Number,
-    searchExpr: [Array, Function, String],
+    searchExpr: [Array, Function, String] as PropType<(Array<Function | string>) | Function | string>,
     searchTimeout: Number,
     template: {},
-    valueExpr: [Function, String]
+    valueExpr: [Function, String] as PropType<(() => void) | string>
   }
 };
 
@@ -460,7 +505,7 @@ const DxTabConfig = {
     "update:name": null,
   },
   props: {
-    name: String
+    name: String as PropType<HtmlEditorImageUploadTab>
   }
 };
 
@@ -480,7 +525,7 @@ const DxTableContextMenuConfig = {
   },
   props: {
     enabled: Boolean,
-    items: Array
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedContextMenuItem>>
   }
 };
 
@@ -515,8 +560,8 @@ const DxTableContextMenuItemConfig = {
     closeMenuOnClick: Boolean,
     disabled: Boolean,
     icon: String,
-    items: Array,
-    name: String,
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedContextMenuItem>>,
+    name: String as PropType<HtmlEditorPredefinedContextMenuItem>,
     selectable: Boolean,
     selected: Boolean,
     template: {},
@@ -563,7 +608,7 @@ const DxToolbarConfig = {
   },
   props: {
     container: {},
-    items: Array,
+    items: Array as PropType<Array<Object | HtmlEditorPredefinedToolbarItem>>,
     multiline: Boolean
   }
 };
@@ -600,22 +645,22 @@ const DxToolbarItemConfig = {
     "update:widget": null,
   },
   props: {
-    acceptedValues: Array,
+    acceptedValues: Array as PropType<Array<Boolean | number | string>>,
     cssClass: String,
     disabled: Boolean,
-    formatName: String,
-    formatValues: Array,
+    formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
+    formatValues: Array as PropType<Array<Boolean | number | string>>,
     html: String,
-    locateInMenu: String,
-    location: String,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String,
+    name: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
     options: {},
-    showText: String,
+    showText: String as PropType<ShowTextMode>,
     template: {},
     text: String,
     visible: Boolean,
-    widget: String
+    widget: String as PropType<ToolbarItemComponent>
   }
 };
 
@@ -635,7 +680,7 @@ const DxVariablesConfig = {
   },
   props: {
     dataSource: {},
-    escapeChar: [Array, String]
+    escapeChar: [Array, String] as PropType<Array<string> | string>
   }
 };
 
