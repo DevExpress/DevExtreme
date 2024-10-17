@@ -1838,6 +1838,20 @@ QUnit.module('selectedIndex vs item.visible', () => {
 
             assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is updated on proper index');
         });
+
+        QUnit.test('if first visible item is not visible and loop = true  it should traverse backward search for last visible item', function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: false },
+                    { text: '2', visible: true },
+                    { text: '3', visible: true }
+                ],
+                loop: true
+            });
+            const instance = $multiView.dxMultiView('instance');
+
+            assert.strictEqual(instance.option('selectedIndex'), 2, 'selectedIndex is updated on proper index');
+        });
     });
 
     QUnit.module('on runtime', () => {
@@ -1982,6 +1996,21 @@ QUnit.module('selectedIndex vs item.visible', () => {
             ]);
 
             assert.strictEqual(instance.option('selectedIndex'), 0, 'selectedIndex is not changed');
+        });
+
+        QUnit.test('if first visible item is not visible and loop = true  it should traverse backward search for last visible item', function(assert) {
+            const $multiView = $('#multiView').dxMultiView({
+                items: [
+                    { text: '1', visible: true },
+                    { text: '2', visible: true },
+                    { text: '3', visible: true }
+                ],
+                loop: true
+            });
+            const instance = $multiView.dxMultiView('instance');
+            instance.option('items[0].visible', false);
+
+            assert.strictEqual(instance.option('selectedIndex'), 2, 'selectedIndex is updated on proper index');
         });
     });
 });

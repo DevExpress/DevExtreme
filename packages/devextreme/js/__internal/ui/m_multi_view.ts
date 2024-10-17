@@ -110,10 +110,22 @@ const MultiView = CollectionWidget.inherit({
       index -= count;
     }
 
-    const step = direction > 0 ? -1 : 1;
+    let step = direction > 0 ? -1 : 1;
     const lastNotLoopedIndex = step === -1 ? 0 : count - 1;
+
+    if (loop) {
+      if (index === count - 1) {
+        step = 1;
+      } else if (index === 0) {
+        step = -1;
+      }
+    }
+
     while (!this._isItemVisible(index) && (loop || index !== lastNotLoopedIndex)) {
       index = (index + step) % count;
+      if (index < 0) {
+        index = count - 1;
+      }
     }
 
     return index;
