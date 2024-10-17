@@ -751,6 +751,16 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
     }
+
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-#{$widget-name}-filter-row > td {
+        &.dx-#{$widget-name}-sticky-column,
+        &.dx-#{$widget-name}-sticky-column-left,
+        &.dx-#{$widget-name}-sticky-column-right {
+          background-color: $datagrid-filter-row-background-color;
+        }
+      }
+    }
   }
 
   .dx-#{$widget-name}-filter-row {
