@@ -358,7 +358,7 @@ export class FocusController extends core.ViewController {
     return undefined;
   }
 
-  public updateFocusedRow(e: { focusedRowKey?: number; preventScroll?: boolean }) {
+  public updateFocusedRow(e: { focusedRowKey?: any; preventScroll?: boolean }) {
     const that = this;
     const focusedRowIndex = that.getDataController().getRowIndexByKey(e.focusedRowKey);
     const rowsView = that.getView('rowsView');
@@ -863,7 +863,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
   }
 
   private _setFocusedRowElementTabIndex(preventScroll) {
-    const focusedRowKey = this.option('focusedRowKey') as number;
+    const focusedRowKey = this.option('focusedRowKey');
     const tabIndex = this.option('tabIndex') ?? 0;
     const columnsController = this._columnsController;
     let rowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
