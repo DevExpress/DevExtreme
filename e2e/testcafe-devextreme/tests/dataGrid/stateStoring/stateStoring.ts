@@ -96,7 +96,7 @@ test('The focused state of a row with the 0 key should be restored (T1252962)', 
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 0, text: 'item 1' },
-    { id: 1, text: 'item 2' }
+    { id: 1, text: 'item 2' },
   ],
   keyExpr: 'id',
   focusedRowEnabled: true,
@@ -107,6 +107,6 @@ test('The focused state of a row with the 0 key should be restored (T1252962)', 
       return Promise.resolve({
         focusedRowKey: 0,
       });
-    }
-  }
+    },
+  },
 }));
