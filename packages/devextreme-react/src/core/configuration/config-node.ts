@@ -26,8 +26,8 @@ interface ITemplate {
 interface NodeConfigBuilder {
   node: IConfigNode;
   configCollectionMaps: Record<string, Record<string, number>>;
-  attachChildNode: (name: string, childNode: IConfigNode) => void;
-  attachTemplate: (template: ITemplate) => void;
+  addChildNode: (name: string, childNode: IConfigNode) => void;
+  addTemplate: (template: ITemplate) => void;
   getConfigCollectionData: (name: string) => [IConfigNode[], Record<string, number>];
   updateAnonymousTemplates: (hasTemplateRendered: boolean) => void;
   addCollectionNode: (name: string, collectionNode: IConfigNode, collectionNodeKey: number) => void;
@@ -83,7 +83,7 @@ const createConfigBuilder: (
       return [this.node.configCollections[name], this.configCollectionMaps[name]];
     },
 
-    attachChildNode(name, childNode) {
+    addChildNode(name, childNode) {
       childNode.parentNode = this.node;
       this.node.configs[name] = childNode;
     },
@@ -102,7 +102,7 @@ const createConfigBuilder: (
       }
     },
 
-    attachTemplate(template) {
+    addTemplate(template) {
       this.node.templates.push(template);
     },
 
