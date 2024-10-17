@@ -6,7 +6,7 @@ import vizMocks from '../../helpers/vizMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import eventsEngine from 'events/core/events_engine';
 import { getDocument } from 'core/dom_adapter';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 
 import 'viz/chart';
 import 'viz/polar_chart';

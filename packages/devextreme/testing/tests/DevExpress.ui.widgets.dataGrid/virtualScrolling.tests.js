@@ -6,7 +6,7 @@ import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 import { VirtualScrollController } from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import browser from 'core/utils/browser';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import renderer from 'core/renderer';
 import { setHeight } from 'core/utils/size';
 

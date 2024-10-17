@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
-import inflector from 'core/utils/inflector';
+import inflector from '__internal/core/utils/m_inflector';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
 import summaryDisplayModesModule from '__internal/grids/pivot_grid/summary_display_modes/m_summary_display_modes';
 import xmlaStoreModule, { XmlaStore } from '__internal/grids/pivot_grid/xmla_store/m_xmla_store';

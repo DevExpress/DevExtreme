@@ -48,7 +48,6 @@ export default CollectionWidget.inherit({
   },
 
   _findItemElementByKey(key) {
-    // @ts-expect-error
     let result = $();
     const keyExpr = this.key();
     // @ts-expect-error

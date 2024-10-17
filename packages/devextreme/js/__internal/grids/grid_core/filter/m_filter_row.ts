@@ -227,7 +227,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     if (gridCoreUtils.checkChanges(optionNames, ['filterValue', 'bufferedFilterValue', 'selectedFilterOperation', 'bufferedSelectedFilterOperation', 'filterValues', 'filterType']) && e.columnIndex !== undefined) {
       const visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
       const column = that._columnsController.columnOption(e.columnIndex);
-      // @ts-expect-error
       $cell = that._getCellElement(that.element().find(`.${that.addWidgetPrefix(FILTER_ROW_CLASS)}`).index(), visibleIndex) ?? $();
       $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
 
@@ -685,7 +684,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
   private _getFilterOperationMenuItems(column) {
     const that = this;
-    let result = [{}];
+    let result: any = [{}];
     const filterRowOptions = that.option('filterRow');
     const operationDescriptions = filterRowOptions && filterRowOptions.operationDescriptions || {};
 

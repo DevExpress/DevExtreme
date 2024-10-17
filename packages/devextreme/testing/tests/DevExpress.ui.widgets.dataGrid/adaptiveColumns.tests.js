@@ -2,7 +2,7 @@ import 'generic_light.css!';
 import 'ui/data_grid';
 
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { noop as noop } from 'core/utils/common';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import dataGridMocks from '../../helpers/dataGridMocks.js';

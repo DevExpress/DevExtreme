@@ -2,7 +2,6 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
-// @ts-expect-error
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error

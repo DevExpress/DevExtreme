@@ -5,7 +5,7 @@ import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
 import { deferUpdate } from 'core/utils/common';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { version } from 'core/version';
 import errors from 'core/errors';
 import gridCore from '__internal/grids/data_grid/m_core';

@@ -229,7 +229,6 @@ Store.registerClass = function (type, alias) {
   }
   return type;
 };
-// @ts-expect-error
 Store.inherit = (function (inheritor) {
   return function (members, alias) {
     const type = inheritor.apply(this, [members]);

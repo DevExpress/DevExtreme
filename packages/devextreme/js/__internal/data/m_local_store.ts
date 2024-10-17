@@ -25,7 +25,6 @@ const LocalStoreBackend = Class.inherit({
       eventsEngine.on(window, 'beforeunload', saveProxy);
       // @ts-expect-error
       if (window.cordova) {
-        // @ts-expect-error
         domAdapter.listen(domAdapter.getDocument(), 'pause', saveProxy, false);
       }
     }

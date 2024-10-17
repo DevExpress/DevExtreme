@@ -70,7 +70,6 @@ export const errorMessageFromXhr = (function () {
   let unloading;
   ready(() => {
     const window = getWindow();
-    // @ts-expect-error
     domAdapter.listen(window, 'beforeunload', () => { unloading = true; });
   });
 

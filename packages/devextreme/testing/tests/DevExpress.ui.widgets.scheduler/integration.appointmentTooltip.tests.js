@@ -8,7 +8,7 @@ import dateLocalization from 'localization/date';
 import messageLocalization from 'localization/message';
 import { DataSource } from 'data/data_source/data_source';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';

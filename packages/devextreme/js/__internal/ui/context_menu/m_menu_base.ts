@@ -167,7 +167,6 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     const { html, url } = itemData;
 
     if (url) {
-      // @ts-expect-error
       $container.html(html);
       const link = this._getLinkContainer(
         this._getIconContainer(itemData),
@@ -300,6 +299,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   _initEditStrategy() {
     const Strategy = MenuBaseEditStrategy;
+    // @ts-expect-error dxClass inheritance issue
     this._editStrategy = new Strategy(this);
   }
 
@@ -662,7 +662,6 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     let result;
 
     each(this._itemElements(), (_, itemElement) => {
-      // @ts-expect-error
       if ($(itemElement).data(this._itemDataKey()) !== itemData) {
         return true;
       }

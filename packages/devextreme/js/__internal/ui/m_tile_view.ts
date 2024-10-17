@@ -13,11 +13,12 @@ import {
   setHeight,
   setWidth,
 } from '@js/core/utils/size';
-import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import ScrollView from '@js/ui/scroll_view';
+
+import supportUtils from '../core/utils/m_support';
 
 const TILEVIEW_CLASS = 'dx-tileview';
 const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
@@ -80,7 +81,7 @@ const TileView = CollectionWidget.inherit({
       },
       {
         device() {
-          return nativeScrolling;
+          return supportUtils.nativeScrolling;
         },
         options: {
           showScrollbar: 'onScroll',

@@ -7,6 +7,7 @@ import CollectionWidgetItem from '@ts/ui/collection/m_item';
 import ResizeHandle from './resize_handle';
 import type Splitter from './splitter';
 
+// @ts-expect-error dxClass inheritance issue
 class SplitterItem extends CollectionWidgetItem {
   private readonly _$element?: dxElementWrapper;
 

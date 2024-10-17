@@ -1,6 +1,6 @@
 import fx from 'animation/fx';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
 import browser from 'core/utils/browser';

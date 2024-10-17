@@ -1,7 +1,6 @@
-// @ts-expect-error
-import { executeAsync } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import commonUtils from '@ts/core/utils/m_common';
 
 import gridCoreUtils from '../m_utils';
 
@@ -45,7 +44,7 @@ export const calculateOperationTypes = function (loadOptions, lastLoadOptions, i
 
 export const executeTask = function (action, timeout) {
   if (isDefined(timeout)) {
-    executeAsync(action, timeout);
+    commonUtils.executeAsync(action, timeout);
   } else {
     action();
   }

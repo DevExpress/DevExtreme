@@ -1,6 +1,5 @@
 import {
   equalByValue,
-  // @ts-expect-error
   getKeyHash,
   noop,
 } from '@js/core/utils/common';

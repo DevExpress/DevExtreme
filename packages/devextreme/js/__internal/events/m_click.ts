@@ -1,8 +1,6 @@
 import { cancelAnimationFrame, requestAnimationFrame } from '@js/animation/frame';
-import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import { resetActiveElement } from '@js/core/utils/dom';
 import Emitter from '@js/events/core/emitter';
 import registerEmitter from '@js/events/core/emitter_registrator';
 import eventsEngine from '@js/events/core/events_engine';
@@ -10,6 +8,8 @@ import pointerEvents from '@js/events/pointer';
 import { subscribeNodesDisposing, unsubscribeNodesDisposing } from '@js/events/utils/event_nodes_disposing';
 import { getEventTarget } from '@js/events/utils/event_target';
 import { addNamespace, fireEvent } from '@js/events/utils/index';
+import devices from '@ts/core/m_devices';
+import domUtils from '@ts/core/utils/m_dom';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -89,7 +89,7 @@ const ClickEmitter = Emitter.inherit({
       const $target = getTarget(e);
 
       if (!blurPrevented && startTarget && !$target.is(startTarget) && !$(startTarget).is('label') && isInput($target)) {
-        resetActiveElement();
+        domUtils.resetActiveElement();
       }
 
       startTarget = null;

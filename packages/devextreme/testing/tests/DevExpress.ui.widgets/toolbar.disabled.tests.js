@@ -15,7 +15,7 @@ import 'ui/autocomplete';
 import 'ui/date_box';
 import 'ui/menu';
 
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 
 import fx from 'animation/fx';
 

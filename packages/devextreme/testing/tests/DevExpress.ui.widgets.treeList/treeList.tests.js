@@ -14,7 +14,7 @@ QUnit.testStart(function() {
 import 'generic_light.css!';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { getOuterHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';

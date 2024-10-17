@@ -564,7 +564,6 @@ const TextEditorBase = Editor.inherit({
   },
 
   _placeholder() {
-    // @ts-expect-error
     return this._$placeholder || $();
   },
 

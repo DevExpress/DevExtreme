@@ -463,7 +463,6 @@ const BingProvider = DynamicProvider.inherit({
 });
 
 /// #DEBUG
-// @ts-expect-error
 BingProvider.remapConstant = function (newValue) {
   BING_URL_V8 = newValue;
 };
