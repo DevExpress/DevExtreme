@@ -11,7 +11,7 @@ const RESULT = {
     ok: 0,
     fail: 1,
 };
-const CYRILLIC_RE = /[а-яА-Я]/;
+const NON_LATIN_RE = /[\u0410-\u044f]/;
 
 const check = async(filePaths) => {
     const nonCodeFiles = filePaths
@@ -26,9 +26,9 @@ const check = async(filePaths) => {
         let lineNum = 1;
 
         rl.on('line', (line) => {
-            if(CYRILLIC_RE.test(line)) {
+            if(NON_LATIN_RE.test(line)) {
                 const filename = path.join(process.cwd(), filePath);
-                console.log(`${filename}:${lineNum} cyrillic symbols found!`);
+                console.log(`${filename}:${lineNum} non-latin symbols found!`);
                 result = RESULT.fail;
             }
             lineNum++;
