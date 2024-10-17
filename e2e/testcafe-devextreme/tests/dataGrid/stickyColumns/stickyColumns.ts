@@ -1085,3 +1085,41 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
     }));
   });
 });
+
+safeSizeTest('The simulated scrollbar should display correctly when there are sticky columns', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const scrollbarVerticalThumbTrack = dataGrid.getScrollBarThumbTrack('horizontal');
+
+  await t.hover(scrollbarVerticalThumbTrack);
+  await takeScreenshot('simulated_scrollbar_with_sticky_columns_1.png', dataGrid.element);
+
+  // act
+  await t
+    .drag(scrollbarVerticalThumbTrack, 600, 0)
+    .wait(1000);
+
+  await takeScreenshot('simulated_scrollbar_with_sticky_columns_2.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [1000, 800]).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 25),
+  columnAutoWidth: true,
+  scrolling: {
+    useNative: false,
+  },
+  customizeColumns: (columns) => {
+    columns[5].fixed = true;
+    columns[5].fixedPosition = 'left';
+    columns[6].fixed = true;
+    columns[6].fixedPosition = 'left';
+
+    columns[8].fixed = true;
+    columns[8].fixedPosition = 'right';
+    columns[9].fixed = true;
+    columns[9].fixedPosition = 'right';
+  },
+}));

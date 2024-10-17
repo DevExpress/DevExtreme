@@ -724,6 +724,16 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         }
       }
     }
+
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-#{$widget-name}-filter-row > td {
+        &.dx-#{$widget-name}-sticky-column,
+        &.dx-#{$widget-name}-sticky-column-left,
+        &.dx-#{$widget-name}-sticky-column-right {
+          background-color: $datagrid-filter-row-background-color;
+        }
+      }
+    }
   }
 
   .dx-#{$widget-name}-filter-row {
@@ -1093,8 +1103,14 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
     }
 
-    &.dx-#{$widget-name}-sticky-columns .dx-row:not(.dx-row-lines) > td {
-      padding-top: $material-grid-base-cell-vertical-padding + 1;
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-row:not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+        padding-top: $material-grid-base-cell-vertical-padding + 1px;
+      }
+
+      .dx-row.dx-row-lines.dx-edit-row > td {
+        border-top-width: 0;
+      }
     }
   }
 
