@@ -8,17 +8,6 @@ const DEFAULT_OUT_COLOR_SCHEME = 'custom-scheme';
 
 const extname = (filename: string): string => filename.substring(filename.lastIndexOf('.'));
 
-const getBootstrapConfig = (fileName: string, configVersion: string | number): ConfigSettings => {
-  let bootstrap = false;
-  let version = 0;
-
-  if (version === 4 && (configVersion === 4 || configVersion === 5)) {
-    version = configVersion;
-  }
-
-  return { isBootstrap: bootstrap, bootstrapVersion: version };
-};
-
 const getOutParameters = (
   command: string,
   themeName: string,
@@ -120,10 +109,9 @@ const processItemKeys = (
 const normalizePath = (path: string): string => path + (!path.endsWith('/') ? '/' : '');
 
 const parseConfig = (config: ConfigSettings): void => {
-  const { command } = config;
-  const metadataFilePath = config.inputFile ?? '';
+  const { command, bootstrapVersion } = config;
   const themeInfo = getThemeAndColorScheme(config);
-  const bootstrapConfig = getBootstrapConfig(metadataFilePath, config.bootstrapVersion);
+  const bootstrapConfig = { isBootstrap: true, bootstrapVersion: bootstrapVersion || 0 };
   const output = getOutParameters(command, themeInfo.themeName, config);
 
   delete config.baseTheme;
