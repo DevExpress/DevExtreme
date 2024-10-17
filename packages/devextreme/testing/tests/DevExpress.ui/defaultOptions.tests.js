@@ -1348,6 +1348,7 @@ testComponentDefaults(Chat,
         title: '',
         onMessageSend: undefined,
         dataSource: undefined,
+        showDayHeaders: true,
     }
 );
 
@@ -1394,6 +1395,8 @@ testComponentDefaults(ChatMessageList,
     {},
     {
         currentUserId: '',
+        showDayHeaders: true,
+        isLoading: false,
     }
 );
 

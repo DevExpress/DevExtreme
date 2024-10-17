@@ -17,7 +17,7 @@ import {
 
 import {
     CollectionWidgetItem,
-    SelectionChangedInfo,
+    SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
 
 import Widget, {
@@ -80,9 +80,9 @@ export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
  * @docid _ui_button_group_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
+export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangeInfo;
 
 /**
  * @deprecated use Properties instead

@@ -1256,8 +1256,6 @@ export class TablePositionViewController extends modules.ViewController {
 }
 
 export class DraggingHeaderViewController extends modules.ViewController {
-  private _columnsController!: ColumnsController;
-
   private _tablePositionController!: TablePositionViewController;
 
   private _columnsSeparatorView!: ColumnsSeparatorView;
@@ -1277,6 +1275,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
   private isCustomGroupColumnPosition?: boolean;
 
   protected _columnHeadersView!: ColumnHeadersView;
+
+  protected _columnsController!: ColumnsController;
 
   public init() {
     super.init();

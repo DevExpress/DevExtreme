@@ -12,6 +12,8 @@
         "Search": "検索",
         "Back": "戻る",
         "OK": "OK",
+        "Today": "今日",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "表示するデータがありません。",
 
@@ -370,6 +372,15 @@
         "dxFilterBuilder-filterOperationBetween": "～から～の間",
         "dxFilterBuilder-filterOperationAnyOf": "どちらかを含む",
         "dxFilterBuilder-filterOperationNoneOf": "すべて含まない",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "フォントの色を変更",
         "dxHtmlEditor-dialogBackgroundCaption": "背景色を変更",

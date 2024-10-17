@@ -14,7 +14,7 @@ import {
 
 import {
     CollectionWidgetItem,
-    SelectionChangedInfo,
+    SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMenuBase, {
@@ -94,9 +94,9 @@ export type OptionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & ChangedOp
  * @docid _ui_menu_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & SelectionChangedInfo<Item>;
+export type SelectionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & SelectionChangeInfo<Item>;
 
 /**
  * @docid _ui_menu_SubmenuHiddenEvent

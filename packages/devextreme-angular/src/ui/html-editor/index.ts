@@ -25,7 +25,7 @@ import {
 
 
 import { EditorStyle, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, MarkupType, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
+import { ContentReadyEvent, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
 
 import DxHtmlEditor from 'devextreme/ui/html_editor';
 
@@ -486,19 +486,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
 
     /**
-     * [descr:dxHtmlEditorOptions.valueType]
-    
-     */
-    @Input()
-    get valueType(): MarkupType {
-        return this._getOption('valueType');
-    }
-    set valueType(value: MarkupType) {
-        this._setOption('valueType', value);
-    }
-
-
-    /**
      * [descr:dxHtmlEditorOptions.variables]
     
      */
@@ -807,13 +794,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueTypeChange: EventEmitter<MarkupType>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() variablesChange: EventEmitter<dxHtmlEditorVariables>;
 
     /**
@@ -913,7 +893,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
             { emit: 'validationMessagePositionChange' },
             { emit: 'validationStatusChange' },
             { emit: 'valueChange' },
-            { emit: 'valueTypeChange' },
             { emit: 'variablesChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' },

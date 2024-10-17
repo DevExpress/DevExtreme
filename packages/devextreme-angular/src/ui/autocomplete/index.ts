@@ -27,7 +27,7 @@ import {
 import { EditorStyle, LabelMode, Mode, Position, SimplifiedSearchMode, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, SelectionChangingEvent, ValueChangedEvent } from 'devextreme/ui/autocomplete';
+import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/autocomplete';
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
@@ -960,14 +960,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
 
     /**
     
-     * [descr:dxAutocompleteOptions.onSelectionChanging]
-    
-    
-     */
-    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
-
-    /**
-    
      * [descr:dxAutocompleteOptions.onValueChanged]
     
     
@@ -1435,7 +1427,6 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'paste', emit: 'onPaste' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { subscribe: 'valueChanged', emit: 'onValueChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },

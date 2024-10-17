@@ -12,6 +12,8 @@
         "Search": "Recherche",
         "Back": "Retour",
         "OK": "OK",
+        "Today": "Aujourd'hui",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "Pas de données",
 
@@ -370,6 +372,15 @@
         "dxFilterBuilder-filterOperationBetween": "Entre",
         "dxFilterBuilder-filterOperationAnyOf": "Est parmi",
         "dxFilterBuilder-filterOperationNoneOf": "N'est pas parmi",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "Changer couleur police",
         "dxHtmlEditor-dialogBackgroundCaption": "Changer couleur fond",

@@ -12,6 +12,8 @@
         "Search": "Keresés",
         "Back": "Vissza",
         "OK": "OK",
+        "Today": "Ma",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "Nincs megjeleníthető adat",
 
@@ -370,6 +372,15 @@
         "dxFilterBuilder-filterOperationBetween": "Között",
         "dxFilterBuilder-filterOperationAnyOf": "Valamelyik",
         "dxFilterBuilder-filterOperationNoneOf": "Egyik sem",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "Betűszín választás",
         "dxHtmlEditor-dialogBackgroundCaption": "Háttérszín választás",

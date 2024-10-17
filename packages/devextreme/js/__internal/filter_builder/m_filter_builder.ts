@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -256,14 +257,45 @@ class FilterBuilder extends Widget<any> {
     this.$element().addClass(FILTER_BUILDER_CLASS);
     // @ts-expect-error
     super._initMarkup();
+
+    this._addAriaAttributes(this.$element(), messageLocalization.format('dxFilterBuilder-filterAriaRootElement'), 'tree');
     this._createGroupElementByCriteria(this._model)
       .appendTo(this.$element());
   }
 
-  _createConditionElement(condition, parent) {
+  _addAriaAttributes($element, ariaLabel, role, hasPopup?, hasExpanded?, ariaLevel?) {
+    if (!$element || !$element.length) return;
+
+    const attributes = { role };
+
+    if (ariaLabel) {
+      if ($element.text().length > 0) {
+        // @ts-expect-error title attr
+        attributes.title = ariaLabel;
+      } else {
+        attributes['aria-label'] = ariaLabel;
+      }
+    }
+
+    if (isDefined(hasPopup)) {
+      attributes['aria-haspopup'] = `${hasPopup}`;
+    }
+
+    if (isDefined(hasExpanded)) {
+      attributes['aria-expanded'] = `${hasExpanded}`;
+    }
+
+    if (isDefined(ariaLevel)) {
+      attributes['aria-level'] = `${ariaLevel}`;
+    }
+
+    $element.attr(attributes);
+  }
+
+  _createConditionElement(condition, parent, groupLevel?) {
     return $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
-      .append(this._createConditionItem(condition, parent));
+      .append(this._createConditionItem(condition, parent, groupLevel));
   }
 
   _createGroupElementByCriteria(criteria, parent?, groupLevel = 0) {
@@ -277,7 +309,7 @@ class FilterBuilder extends Widget<any> {
         this._createGroupElementByCriteria(innerCriteria, criteria, groupLevel + 1)
           .appendTo($groupContent);
       } else if (isCondition(innerCriteria)) {
-        this._createConditionElement(innerCriteria, criteria)
+        this._createConditionElement(innerCriteria, criteria, `${groupLevel + 1}`)
           .appendTo($groupContent);
       }
     }
@@ -285,8 +317,9 @@ class FilterBuilder extends Widget<any> {
   }
 
   _createGroupElement(criteria, parent, groupLevel) {
+    const $guid = new Guid();
     const $groupItem = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
-    const $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS);
+    const $groupContent = $('<div>').addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS).attr('id', `${$guid}`);
     const $group = $('<div>').addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
 
     if (parent != null) {
@@ -294,8 +327,12 @@ class FilterBuilder extends Widget<any> {
         removeItem(parent, criteria);
         $group.remove();
         this._updateFilter();
-      }).appendTo($groupItem);
+      }, 'group').appendTo($groupItem);
     }
+
+    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel + 1}`);
+    this._addAriaAttributes($groupContent, '', 'group');
+    $groupItem.attr('aria-owns', `${$guid}`);
 
     this._createGroupOperationButton(criteria).appendTo($groupItem);
 
@@ -308,7 +345,7 @@ class FilterBuilder extends Widget<any> {
       const field = this.option('fields')[0];
       const newCondition = createCondition(field, this._customOperations);
       addItem(newCondition, criteria);
-      this._createConditionElement(newCondition, criteria).appendTo($groupContent);
+      this._createConditionElement(newCondition, criteria, groupLevel + 1).appendTo($groupContent);
       this._updateFilter();
     }, groupLevel).appendTo($groupItem);
 
@@ -345,6 +382,9 @@ class FilterBuilder extends Widget<any> {
           cssClass: FILTER_BUILDER_GROUP_OPERATIONS_CLASS,
         },
       });
+
+    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaOperationButton'), 'combobox', true, false);
+
     return $operationButton.addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
       .attr('tabindex', 0);
@@ -354,7 +394,7 @@ class FilterBuilder extends Widget<any> {
     const that = this;
     const removeMenu = function () {
       // @ts-expect-error
-      that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS);
+      that.$element().find(`.${ACTIVE_CLASS}`).removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
       // @ts-expect-error
       that.$element().find('.dx-overlay .dx-treeview').remove();
       // @ts-expect-error
@@ -377,7 +417,7 @@ class FilterBuilder extends Widget<any> {
       selectionMode: 'single',
       onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
       onHiding() {
-        $button.removeClass(ACTIVE_CLASS);
+        $button.removeClass(ACTIVE_CLASS).attr('aria-expanded', 'false');
       },
       position: {
         my: `${position} top`, at: `${position} bottom`, offset: '0 1', of: $button, collision: 'flip',
@@ -414,7 +454,7 @@ class FilterBuilder extends Widget<any> {
     this._subscribeOnClickAndEnterKey($button, () => {
       removeMenu();
       that._createPopupWithTreeView(options, that.$element());
-      $button.addClass(ACTIVE_CLASS);
+      $button.addClass(ACTIVE_CLASS).attr('aria-expanded', 'true');
     });
     return $button;
   }
@@ -463,6 +503,7 @@ class FilterBuilder extends Widget<any> {
     }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
       .attr('tabindex', 0);
+    this._addAriaAttributes($operationButton, messageLocalization.format('dxFilterBuilder-filterAriaItemOperation'), 'combobox', true, false);
 
     return $operationButton;
   }
@@ -517,13 +558,17 @@ class FilterBuilder extends Widget<any> {
       .addClass(FILTER_BUILDER_ITEM_FIELD_CLASS)
       .attr('tabindex', 0);
 
+    this._addAriaAttributes($fieldButton, messageLocalization.format('dxFilterBuilder-filterAriaItemField'), 'combobox', true, false);
+
     return $fieldButton;
   }
 
-  _createConditionItem(condition, parent) {
+  _createConditionItem(condition, parent, groupLevel?) {
     const $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
     const fields = this._getNormalizedFields();
     const field = getField(condition[0], fields);
+
+    this._addAriaAttributes($item, '', 'treeitem', null, null, groupLevel);
 
     this._createRemoveButton(() => {
       removeItem(parent, condition);
@@ -534,7 +579,7 @@ class FilterBuilder extends Widget<any> {
         $item.remove();
       }
       this._updateFilter();
-    }).appendTo($item);
+    }, 'condition').appendTo($item);
     this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
     this._createOperationAndValueButtons(condition, field, $item);
     return $item;
@@ -554,12 +599,16 @@ class FilterBuilder extends Widget<any> {
     }));
   }
 
-  _createRemoveButton(handler) {
+  _createRemoveButton(handler, type?) {
     const $removeButton = $('<div>')
       .addClass(FILTER_BUILDER_IMAGE_CLASS)
       .addClass(FILTER_BUILDER_IMAGE_REMOVE_CLASS)
       .addClass(FILTER_BUILDER_ACTION_CLASS)
       .attr('tabindex', 0);
+    if (type) {
+      const removeMessage = (messageLocalization.format as any)('dxFilterBuilder-filterAriaRemoveButton', type);
+      this._addAriaAttributes($removeButton, removeMessage, 'button');
+    }
     this._subscribeOnClickAndEnterKey($removeButton, handler);
     return $removeButton;
   }
@@ -588,6 +637,9 @@ class FilterBuilder extends Widget<any> {
         },
       });
     }
+
+    this._addAriaAttributes($button, messageLocalization.format('dxFilterBuilder-filterAriaAddButton'), 'combobox', true, false);
+
     return $button.addClass(FILTER_BUILDER_IMAGE_CLASS)
       .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
       .addClass(FILTER_BUILDER_ACTION_CLASS)
@@ -601,6 +653,7 @@ class FilterBuilder extends Widget<any> {
       .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
       .attr('tabindex', 0)
       .appendTo($container);
+    this._addAriaAttributes($text, messageLocalization.format('dxFilterBuilder-filterAriaItemValue'), 'button', true);
     const value = item[2];
 
     const customOperation = getCustomOperation(that._customOperations, item[1]);
@@ -768,7 +821,6 @@ class FilterBuilder extends Widget<any> {
     const $valueButton = $('<div>')
       .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
       .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
-
     this._createValueText(item, field, $valueButton);
     return $valueButton;
   }
