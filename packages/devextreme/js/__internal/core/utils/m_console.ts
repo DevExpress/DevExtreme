@@ -33,4 +33,4 @@ export const debug = (function () {
   };
 }());
 
-export default { logger, debug }
+export default { logger, debug };

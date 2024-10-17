@@ -10,12 +10,7 @@ module.exports = {
     ],
     ignorePatterns: [
         // for test
-        'core/**',
-        // files, that have significant changes from lint (IIFE or function lose context)
-        'core/utils/deferred.ts',
-        'core/utils/m_resize_callbacks.ts',
-        'core/utils/m_string.ts',
-        'core/utils/m_view_port.ts',
+        'core/m_*.ts',
     ],
     overrides: [
         // General TS rules.
@@ -207,6 +202,29 @@ module.exports = {
                 '@typescript-eslint/no-explicit-any': 'warn',
                 '@typescript-eslint/explicit-function-return-type': 'warn'
             }
+        },
+        // Rules for migrated core files.
+        {
+            files: [
+                '**/core/options/m_*.ts',
+                '**/core/templates/m_*.ts',
+                '**/core/utils/m_*.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                'guard-for-in': 'off',
+                'no-restricted-syntax': 'off',
+                'func-style': 'off',
+                'wrap-iife': 'off',
+                'prefer-arrow-callback': 'off',
+                '@typescript-eslint/prefer-optional-chain': 'off',
+                'radix': 'off'
+            },
         },
     ],
     settings: {

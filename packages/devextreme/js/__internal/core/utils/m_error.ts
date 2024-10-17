@@ -1,8 +1,9 @@
 /* eslint-disable import/no-commonjs */
-import consoleUtils from './m_console';
 import { extend } from '@js/core/utils/extend';
 import { format } from '@js/core/utils/string';
 import { version } from '@js/core/version';
+
+import consoleUtils from './m_console';
 
 const ERROR_URL = `https://js.devexpress.com/error/${version.split('.').slice(0, 2).join('_')}/`;
 

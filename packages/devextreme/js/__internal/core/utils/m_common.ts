@@ -16,23 +16,23 @@ export const executeAsync = function (action, context?/* , internal */) {
   const deferred = new Deferred();
   const normalizedContext = context || this;
   const task = {
-      promise: deferred.promise(),
-      abort: function() {
-          clearTimeout(timerId);
-          deferred.rejectWith(normalizedContext);
-      }
+    promise: deferred.promise(),
+    abort() {
+      clearTimeout(timerId);
+      deferred.rejectWith(normalizedContext);
+    },
   };
 
-  const callback = function() {
-      const result = action.call(normalizedContext);
+  const callback = function () {
+    const result = action.call(normalizedContext);
 
-      if(result && result.done && isFunction(result.done)) {
-          result.done(function() {
-              deferred.resolveWith(normalizedContext);
-          });
-      } else {
-          deferred.resolveWith(normalizedContext);
-      }
+    if (result && result.done && isFunction(result.done)) {
+      result.done(function () {
+        deferred.resolveWith(normalizedContext);
+      });
+    } else {
+      deferred.resolveWith(normalizedContext);
+    }
   };
 
   const timerId = (arguments[2] || setTimeout)(callback, typeof context === 'number' ? context : 0);
@@ -45,65 +45,64 @@ const delayedNames: any[] = [];
 const delayedDeferreds: any[] = [];
 let executingName;
 
-const deferExecute = function(name, func, deferred?) {
-  if(executingName && executingName !== name) {
-      delayedFuncs.push(func);
-      delayedNames.push(name);
-      // @ts-expect-error only void function can be called with new
-      deferred = deferred || new Deferred();
-      delayedDeferreds.push(deferred);
-      return deferred;
-  } else {
-      const oldExecutingName = executingName;
-      const currentDelayedCount = delayedDeferreds.length;
-
-      executingName = name;
-      let result = func();
-
-      if(!result) {
-          if(delayedDeferreds.length > currentDelayedCount) {
-              result = when.apply(this, delayedDeferreds.slice(currentDelayedCount));
-          } else if(deferred) {
-              deferred.resolve();
-          }
-      }
-
-      executingName = oldExecutingName;
-
-      if(deferred && result && result.done) {
-          result.done(deferred.resolve).fail(deferred.reject);
-      }
-
-      if(!executingName && delayedFuncs.length) {
-          (delayedNames.shift() === 'render' ? deferRender : deferUpdate)(delayedFuncs.shift(), delayedDeferreds.shift());
-      }
-      return result || when();
+const deferExecute = function (name, func, deferred?) {
+  if (executingName && executingName !== name) {
+    delayedFuncs.push(func);
+    delayedNames.push(name);
+    // @ts-expect-error only void function can be called with new
+    deferred = deferred || new Deferred();
+    delayedDeferreds.push(deferred);
+    return deferred;
   }
+  const oldExecutingName = executingName;
+  const currentDelayedCount = delayedDeferreds.length;
+
+  executingName = name;
+  let result = func();
+
+  if (!result) {
+    if (delayedDeferreds.length > currentDelayedCount) {
+      result = when.apply(this, delayedDeferreds.slice(currentDelayedCount));
+    } else if (deferred) {
+      deferred.resolve();
+    }
+  }
+
+  executingName = oldExecutingName;
+
+  if (deferred && result && result.done) {
+    result.done(deferred.resolve).fail(deferred.reject);
+  }
+
+  if (!executingName && delayedFuncs.length) {
+    (delayedNames.shift() === 'render' ? deferRender : deferUpdate)(delayedFuncs.shift(), delayedDeferreds.shift());
+  }
+  return result || when();
 };
 
-export const deferRender = function(func, deferred) {
+export const deferRender = function (func, deferred) {
   return deferExecute('render', func, deferred);
 };
 
-export const deferUpdate = function(func, deferred) {
+export const deferUpdate = function (func, deferred) {
   return deferExecute('update', func, deferred);
 };
 
-export const deferRenderer = function(func) {
-  return function() {
-      const that = this;
-      return deferExecute('render', function() {
-          return func.call(that);
-      });
+export const deferRenderer = function (func) {
+  return function () {
+    const that = this;
+    return deferExecute('render', function () {
+      return func.call(that);
+    });
   };
 };
 
-export const deferUpdater = function(func) {
-  return function() {
-      const that = this;
-      return deferExecute('update', function() {
-          return func.call(that);
-      });
+export const deferUpdater = function (func) {
+  return function () {
+    const that = this;
+    return deferExecute('update', function () {
+      return func.call(that);
+    });
   };
 };
 
@@ -116,138 +115,138 @@ export const findBestMatches = (
   let maxMatchCount = 0;
 
   each(items, (index, itemSrc) => {
-      let matchCount = 0;
-      const item = mapFn ? mapFn(itemSrc) : itemSrc;
+    let matchCount = 0;
+    const item = mapFn ? mapFn(itemSrc) : itemSrc;
 
-      each(targetFilter, (paramName, targetValue) => {
-          const value = item[paramName];
+    each(targetFilter, (paramName, targetValue) => {
+      const value = item[paramName];
 
-          if(value === undefined) {
-              return;
-          }
-
-          if(match(value, targetValue)) {
-              matchCount++;
-              return;
-          }
-          matchCount = -1;
-          return false;
-      });
-
-      if(matchCount < maxMatchCount) {
-          return;
+      if (value === undefined) {
+        return;
       }
-      if(matchCount > maxMatchCount) {
-          bestMatches.length = 0;
-          maxMatchCount = matchCount;
+
+      if (match(value, targetValue)) {
+        matchCount++;
+        return;
       }
-      bestMatches.push(itemSrc);
+      matchCount = -1;
+      return false;
+    });
+
+    if (matchCount < maxMatchCount) {
+      return;
+    }
+    if (matchCount > maxMatchCount) {
+      bestMatches.length = 0;
+      maxMatchCount = matchCount;
+    }
+    bestMatches.push(itemSrc);
   });
 
   return bestMatches;
 };
 
-const match = function(value, targetValue) {
-  if(Array.isArray(value) && Array.isArray(targetValue)) {
-      let mismatch = false;
+const match = function (value, targetValue) {
+  if (Array.isArray(value) && Array.isArray(targetValue)) {
+    let mismatch = false;
 
-      // @ts-expect-error not all code paths return value
-      each(value, (index, valueItem) => {
-          if(valueItem !== targetValue[index]) {
-              mismatch = true;
-              return false;
-          }
-      });
-
-      if(mismatch) {
-          return false;
+    // @ts-expect-error not all code paths return value
+    each(value, (index, valueItem) => {
+      if (valueItem !== targetValue[index]) {
+        mismatch = true;
+        return false;
       }
+    });
 
-      return true;
+    if (mismatch) {
+      return false;
+    }
+
+    return true;
   }
 
-  if(value === targetValue) {
-      return true;
+  if (value === targetValue) {
+    return true;
   }
 
   return false;
 };
 
-export const splitPair = function(raw) {
-  switch(type(raw)) {
-      case 'string':
-          return raw.split(/\s+/, 2);
-      case 'object':
-          return [raw.x ?? raw.h, raw.y ?? raw.v];
-      case 'number':
-          return [raw];
-      case 'array':
-          return raw;
-      default:
-          return null;
+export const splitPair = function (raw) {
+  switch (type(raw)) {
+    case 'string':
+      return raw.split(/\s+/, 2);
+    case 'object':
+      return [raw.x ?? raw.h, raw.y ?? raw.v];
+    case 'number':
+      return [raw];
+    case 'array':
+      return raw;
+    default:
+      return null;
   }
 };
 
-export const normalizeKey = function(id) {
+export const normalizeKey = function (id) {
   let key = isString(id) ? id : id.toString();
   const arr = key.match(/[^a-zA-Z0-9_]/g);
 
   arr && each(arr, (_, sign) => {
-      key = key.replace(sign, '__' + sign.charCodeAt() + '__');
+    key = key.replace(sign, `__${sign.charCodeAt()}__`);
   });
   return key;
 };
 
-export const denormalizeKey = function(key) {
+export const denormalizeKey = function (key) {
   const arr = key.match(/__\d+__/g);
 
   arr && arr.forEach((char) => {
-      const charCode = parseInt(char.replace('__', ''));
+    const charCode = parseInt(char.replace('__', ''));
 
-      key = key.replace(char, String.fromCharCode(charCode));
+    key = key.replace(char, String.fromCharCode(charCode));
   });
 
   return key;
 };
 
-export const pairToObject = function(raw, preventRound) {
+export const pairToObject = function (raw, preventRound) {
   const pair = splitPair(raw);
   let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
   let v = preventRound ? parseFloat(pair && pair[1]) : parseInt(pair && pair[1], 10);
 
-  if(!isFinite(h)) {
-      h = 0;
+  if (!isFinite(h)) {
+    h = 0;
   }
-  if(!isFinite(v)) {
-      v = h;
+  if (!isFinite(v)) {
+    v = h;
   }
 
   return { h, v };
 };
 
-export const getKeyHash = function(key) {
-  if(key instanceof Guid) {
-      return key.toString();
-  } else if(isObject(key) || Array.isArray(key)) {
-      try {
-          const keyHash = JSON.stringify(key);
-          return keyHash === '{}' ? key : keyHash;
-      } catch(e) {
-          return key;
-      }
+export const getKeyHash = function (key) {
+  if (key instanceof Guid) {
+    return key.toString();
+  } if (isObject(key) || Array.isArray(key)) {
+    try {
+      const keyHash = JSON.stringify(key);
+      return keyHash === '{}' ? key : keyHash;
+    } catch (e) {
+      return key;
+    }
   }
 
   return key;
 };
 
-export const escapeRegExp = function(string) {
+export const escapeRegExp = function (string) {
   return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, '\\$&');
 };
 
-export const applyServerDecimalSeparator = function(value) {
+export const applyServerDecimalSeparator = function (value) {
   const separator = config().serverDecimalSeparator;
-  if(isDefined(value)) {
-      value = value.toString().replace('.', separator);
+  if (isDefined(value)) {
+    value = value.toString().replace('.', separator);
   }
   return value;
 };
@@ -261,25 +260,25 @@ export const grep = function (elements, checkFunction, invert) {
   let check;
   const expectedCheck = !invert;
 
-  for(let i = 0; i < elements.length; i++) {
-      check = !!checkFunction(elements[i], i);
+  for (let i = 0; i < elements.length; i++) {
+    check = !!checkFunction(elements[i], i);
 
-      if(check === expectedCheck) {
-          result.push(elements[i]);
-      }
+    if (check === expectedCheck) {
+      result.push(elements[i]);
+    }
   }
 
   return result;
 };
 
 const compareArrays = (array1, array2, depth, options) => {
-  if(array1.length !== array2.length) {
-      return false;
+  if (array1.length !== array2.length) {
+    return false;
   }
 
   return !array1.some((item, idx) => !compareByValue(item, array2[idx], depth + 1, {
-      ...options,
-      strict: true,
+    ...options,
+    strict: true,
   }));
 };
 
@@ -287,14 +286,12 @@ const compareObjects = (object1, object2, depth, options) => {
   const keys1 = Object.keys(object1);
   const keys2 = Object.keys(object2);
 
-  if(keys1.length !== keys2.length) {
-      return false;
+  if (keys1.length !== keys2.length) {
+    return false;
   }
 
   const keys2Set = new Set(keys2);
-  return !keys1.some((key) =>
-      !keys2Set.has(key) || !compareByValue(object1[key], object2[key], depth + 1, options)
-  );
+  return !keys1.some((key) => !keys2Set.has(key) || !compareByValue(object1[key], object2[key], depth + 1, options));
 };
 
 const DEFAULT_EQUAL_BY_VALUE_OPTS = {
@@ -307,20 +304,20 @@ const compareByValue = (value1, value2, depth, options) => {
   const comparable2 = toComparable(value2, true);
 
   const comparisonResult = strict
-      ? comparable1 === comparable2
-      // eslint-disable-next-line eqeqeq
-      : comparable1 == comparable2;
+    ? comparable1 === comparable2
+  // eslint-disable-next-line eqeqeq
+    : comparable1 == comparable2;
 
-  switch(true) {
-      case comparisonResult:
-      case depth >= maxDepth:
-          return true;
-      case isObject(comparable1) && isObject(comparable2):
-          return compareObjects(comparable1, comparable2, depth, options);
-      case Array.isArray(comparable1) && Array.isArray(comparable2):
-          return compareArrays(comparable1, comparable2, depth, options);
-      default:
-          return false;
+  switch (true) {
+    case comparisonResult:
+    case depth >= maxDepth:
+      return true;
+    case isObject(comparable1) && isObject(comparable2):
+      return compareObjects(comparable1, comparable2, depth, options);
+    case Array.isArray(comparable1) && Array.isArray(comparable2):
+      return compareArrays(comparable1, comparable2, depth, options);
+    default:
+      return false;
   }
 };
 
@@ -330,22 +327,22 @@ export const equalByValue = (value1, value2, options = DEFAULT_EQUAL_BY_VALUE_OP
 };
 
 export default {
-    ensureDefined,
-    executeAsync,
-    deferRender,
-    deferUpdate,
-    deferRenderer,
-    deferUpdater,
-    findBestMatches,
-    splitPair,
-    normalizeKey,
-    denormalizeKey,
-    pairToObject,
-    getKeyHash,
-    escapeRegExp,
-    applyServerDecimalSeparator,
-    noop,
-    asyncNoop,
-    grep,
-    equalByValue
-}
+  ensureDefined,
+  executeAsync,
+  deferRender,
+  deferUpdate,
+  deferRenderer,
+  deferUpdater,
+  findBestMatches,
+  splitPair,
+  normalizeKey,
+  denormalizeKey,
+  pairToObject,
+  getKeyHash,
+  escapeRegExp,
+  applyServerDecimalSeparator,
+  noop,
+  asyncNoop,
+  grep,
+  equalByValue,
+};

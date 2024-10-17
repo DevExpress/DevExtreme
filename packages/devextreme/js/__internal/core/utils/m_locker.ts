@@ -8,11 +8,11 @@ const Locker = function () {
   };
 
   return {
-    obtain: function(lockName) {
+    obtain(lockName) {
       info[lockName] = currentCount(lockName) + 1;
     },
 
-    release: function(lockName) {
+    release(lockName) {
       const count = currentCount(lockName);
 
       if (count < 1) {
@@ -27,7 +27,7 @@ const Locker = function () {
       }
     },
 
-    locked: function(lockName) {
+    locked(lockName) {
       return currentCount(lockName) > 0;
     },
   };

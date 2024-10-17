@@ -5,8 +5,8 @@ const map = (values, callback): any[] => {
 
   const result: unknown[] = [];
 
-  for(const key in values) {
-      result.push(callback(values[key], key));
+  for (const key in values) {
+    result.push(callback(values[key], key));
   }
 
   return result;

@@ -7,25 +7,25 @@ let callbacks: any[] = [];
 
 const subscribeReady = callOnce(() => {
   const removeListener = domAdapter.listen(domAdapter.getDocument(), 'DOMContentLoaded', () => {
-      readyCallbacks.fire();
-      removeListener();
+    readyCallbacks.fire();
+    removeListener();
   });
 });
 
 const readyCallbacks = {
-  add: callback => {
-      const windowExists = hasWindow();
-      if(windowExists && domAdapter.getReadyState() !== 'loading') {
-          callback();
-      } else {
-          callbacks.push(callback);
-          windowExists && subscribeReady();
-      }
+  add: (callback) => {
+    const windowExists = hasWindow();
+    if (windowExists && domAdapter.getReadyState() !== 'loading') {
+      callback();
+    } else {
+      callbacks.push(callback);
+      windowExists && subscribeReady();
+    }
   },
   fire: () => {
-      callbacks.forEach(callback => callback());
-      callbacks = [];
-  }
+    callbacks.forEach((callback) => callback());
+    callbacks = [];
+  },
 };
 
 const readyCallbacksModule = injector(readyCallbacks);

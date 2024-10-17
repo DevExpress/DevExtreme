@@ -1,75 +1,76 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { map } from '@js/core/utils/iterator';
 
-const _normalize = function(text) {
-  if(text === undefined || text === null) {
-      return '';
+const _normalize = function (text) {
+  if (text === undefined || text === null) {
+    return '';
   }
   return String(text);
 };
 
-const _upperCaseFirst = function(text) {
+const _upperCaseFirst = function (text) {
   return _normalize(text).charAt(0).toUpperCase() + text.substr(1);
 };
 
-const _chop = function(text) {
+const _chop = function (text) {
   return _normalize(text)
-      .replace(/([a-z\d])([A-Z])/g, '$1 $2')
-      .split(/[\s_-]+/);
+    .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+    .split(/[\s_-]+/);
 };
 
-export const dasherize = function(text) {
-  return map(_chop(text), function(p) { return p.toLowerCase(); }).join('-');
+export const dasherize = function (text) {
+  return map(_chop(text), function (p) { return p.toLowerCase(); }).join('-');
 };
 
-export const underscore = function(text) {
+export const underscore = function (text) {
   return dasherize(text).replace(/-/g, '_');
 };
 
-export const camelize = function(text, upperFirst?) {
-  return map(_chop(text), function(p, i) {
-      p = p.toLowerCase();
-      if(upperFirst || i > 0) {
-          p = _upperCaseFirst(p);
-      }
-      return p;
+export const camelize = function (text, upperFirst?) {
+  return map(_chop(text), function (p, i) {
+    p = p.toLowerCase();
+    if (upperFirst || i > 0) {
+      p = _upperCaseFirst(p);
+    }
+    return p;
   }).join('');
 };
 
-export const humanize = function(text) {
+export const humanize = function (text) {
   return _upperCaseFirst(dasherize(text).replace(/-/g, ' '));
 };
 
-export const titleize = function(text) {
-  return map(_chop(text), function(p) {
-      return _upperCaseFirst(p.toLowerCase());
+export const titleize = function (text) {
+  return map(_chop(text), function (p) {
+    return _upperCaseFirst(p.toLowerCase());
   }).join(' ');
 };
 
 const DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-export const captionize = function(name) {
+export const captionize = function (name) {
   const captionList: any[] = [];
   let i;
   let char;
   let isPrevCharNewWord = false;
   let isNewWord = false;
 
-  for(i = 0; i < name.length; i++) {
-      char = name.charAt(i);
-      isNewWord = (char === char.toUpperCase() && char !== '-' && char !== ')' && char !== '/') || (char in DIGIT_CHARS);
-      if(char === '_' || char === '.') {
-          char = ' ';
-          isNewWord = true;
-      } else if(i === 0) {
-          char = char.toUpperCase();
-          isNewWord = true;
-      } else if(!isPrevCharNewWord && isNewWord) {
-          if(captionList.length > 0) {
-              captionList.push(' ');
-          }
+  for (i = 0; i < name.length; i++) {
+    char = name.charAt(i);
+    isNewWord = (char === char.toUpperCase() && char !== '-' && char !== ')' && char !== '/') || (char in DIGIT_CHARS);
+    if (char === '_' || char === '.') {
+      char = ' ';
+      isNewWord = true;
+    } else if (i === 0) {
+      char = char.toUpperCase();
+      isNewWord = true;
+    } else if (!isPrevCharNewWord && isNewWord) {
+      if (captionList.length > 0) {
+        captionList.push(' ');
       }
-      captionList.push(char);
-      isPrevCharNewWord = isNewWord;
+    }
+    captionList.push(char);
+    isPrevCharNewWord = isNewWord;
   }
   return captionList.join('');
 };
@@ -80,5 +81,5 @@ export default {
   camelize,
   humanize,
   titleize,
-  captionize
-}
+  captionize,
+};
