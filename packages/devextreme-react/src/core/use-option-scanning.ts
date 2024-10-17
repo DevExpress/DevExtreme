@@ -42,7 +42,7 @@ export function useOptionScanning(
         const template = getNamedTemplate(templateElement.props);
 
         if (template) {
-          configBuilder.attachTemplate(template);
+          configBuilder.addTemplate(template);
         }
       }
     },
@@ -70,7 +70,7 @@ export function useOptionScanning(
         return;
       }
 
-      configBuilder.attachChildNode(name, childConfigNode);
+      configBuilder.addChildNode(name, childConfigNode);
     },
   };
 
