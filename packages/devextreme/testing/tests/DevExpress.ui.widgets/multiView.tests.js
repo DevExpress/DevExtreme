@@ -831,12 +831,13 @@ QUnit.module('loop', {
         });
 
         const instance = $multiView.dxMultiView('instance');
-        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
+        const $firstItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
         const $lastItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(2);
         const pointer = pointerMock($multiView);
 
         this.animationStartAction = function() {
-            assert.roughEqual(position($itemContainer), -position($lastItem) / 10, 1, 'container did move');
+            assert.equal(position($firstItem), 0, 'first visible item has correct position');
+            assert.equal(position($lastItem), -800, 'last visible item has correct position');
         };
 
         pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
@@ -855,12 +856,13 @@ QUnit.module('loop', {
         });
 
         const instance = $multiView.dxMultiView('instance');
-        const $itemContainer = $multiView.find(`.${MULTIVIEW_ITEM_CONTAINER_CLASS}`);
-        const $lastItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+        const $firstItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+        const $lastItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
         const pointer = pointerMock($multiView);
 
         this.animationStartAction = function() {
-            assert.roughEqual(position($itemContainer), -position($lastItem) / 10, 1, 'container did move');
+            assert.equal(position($firstItem), 800, 'first visible item has correct position');
+            assert.equal(position($lastItem), 0, 'last visible item has correct position');
         };
 
         pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
