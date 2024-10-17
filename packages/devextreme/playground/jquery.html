@@ -52,15 +52,113 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxChat({
+                const user1 = {
+                    id: 1,
+                    name: 'currentUser',
+                }
+
+                const user2 = {
+                    id: 2,
+                    name: 'James',
+                }
+
+                const user3 = {
+                    id: 3,
+                    name: 'Emma',
+                }
+
+                const statuses1 = {
+                    [user2.id]: {
+                        timestamp: new Date(2021, 9, 17, 14, 45).getTime(),
+                        user: user2,
+                    },
+                    [user3.id]: {
+                        timestamp: new Date(2021, 9, 17, 14, 47).getTime(),
+                        user: user3,
+                    },
+                }
+
+                const instance = $("#button").dxChat({
+                    user: user1,
                     height: 300,
+                    items: [
+                        {
+                            timestamp: new Date(2021, 9, 17, 14, 15),
+                            author: user1,
+                            text: 'message',
+                        }
+                    ],
+                    typingStatuses: statuses1,
                     onTypingStart: (e) => {
                         console.log('Typing has begun');
                     },
                     onTypingEnd: (e) => {
                         console.log('Typing finished');
                     },
-                });
+                }).dxChat('instance');
+
+                const user4 = {
+                    id: 4,
+                    name: 'Michael',
+                }
+
+                const statuses2 = {
+                    [user2.id]: {
+                        timestamp: new Date(2021, 9, 17, 14, 45).getTime(),
+                        user: user2,
+                    },
+                    [user3.id]: {
+                        timestamp: new Date(2021, 9, 17, 14, 47).getTime(),
+                        user: user3,
+                    },
+                    [user4.id]: {
+                        timestamp: new Date(2021, 9, 17, 14, 50).getTime(),
+                        user: user4,
+                    },
+                }
+
+                setTimeout(() => {
+                    instance.option({ typingStatuses: statuses2 })
+                }, 1000);
+
+                // 
+
+                const statuses3 = {
+                    [user2.id]: {
+                        timestamp: new Date(2021, 9, 17, 15, 14).getTime(),
+                        user: user2,
+                    },
+                    [user4.id]: {
+                        timestamp: new Date(2021, 9, 17, 15, 50).getTime(),
+                        user: user4,
+                    },
+                }
+
+                setTimeout(() => {
+                    instance.option({ typingStatuses: statuses3 })
+                }, 2000);
+
+                // 
+
+                const user5 = {
+                    id: 5,
+                    name: 'Olivia',
+                }
+
+                const statuses4 = {
+                    [user4.id]: {
+                        timestamp: new Date(2021, 9, 17, 15, 50).getTime(),
+                        user: user4,
+                    },
+                    [user5.id]: {
+                        timestamp: new Date(2021, 9, 17, 16, 40).getTime(),
+                        user: user5,
+                    },
+                }
+
+                setTimeout(() => {
+                    instance.option({ typingStatuses: statuses3 })
+                }, 2000);
             });
         </script>
     </div>

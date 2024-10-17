@@ -17,6 +17,7 @@ import Widget from '@ts/core/widget/widget';
 import { isElementVisible } from '../splitter/utils/layout';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup from './messagegroup';
+import TypingStatus from './typingStatus';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 
@@ -33,6 +34,8 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  typingStatuses: any;
 }
 
 class MessageList extends Widget<Properties> {
@@ -44,12 +47,15 @@ class MessageList extends Widget<Properties> {
 
   private _scrollable!: Scrollable<unknown>;
 
+  private _typingStatus?: TypingStatus;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       items: [],
       currentUserId: '',
       showDayHeaders: true,
+      typingStatuses: undefined,
     };
   }
 
@@ -67,6 +73,7 @@ class MessageList extends Widget<Properties> {
 
     this._renderScrollable();
     this._renderMessageListContent();
+    this._renderTypingStatus();
     this._updateAria();
   }
 
@@ -216,6 +223,18 @@ class MessageList extends Widget<Properties> {
       .addClass(CHAT_MESSAGELIST_DAY_HEADER_CLASS)
       .text(headerDate)
       .appendTo(this._$content());
+  }
+
+  _renderTypingStatus(): void {
+    const $typingStatus = $('<div>');
+
+    $typingStatus.appendTo(this._$content());
+
+    const { typingStatuses } = this.option();
+
+    this._typingStatus = this._createComponent($typingStatus, TypingStatus, {
+      typingStatuses,
+    });
   }
 
   _renderMessageListContent(): void {
@@ -382,6 +401,9 @@ class MessageList extends Widget<Properties> {
     const { name, value, previousValue } = args;
 
     switch (name) {
+      case 'typingStatuses':
+        this._typingStatus?.option(name, value);
+        break;
       case 'currentUserId':
         this._invalidate();
         break;

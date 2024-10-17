@@ -28,6 +28,8 @@ type Properties = ChatProperties & {
   onTypingStart: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onTypingEnd: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  typingStatuses: any;
 };
 
 class Chat extends Widget<Properties> {
@@ -59,6 +61,7 @@ class Chat extends Widget<Properties> {
       onTypingStart: undefined,
       onTypingEnd: undefined,
       showDayHeaders: true,
+      typingStatuses: undefined,
     };
   }
 
@@ -116,7 +119,12 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const {
+      user,
+      items = [],
+      showDayHeaders,
+      typingStatuses,
+    } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>');
@@ -127,6 +135,7 @@ class Chat extends Widget<Properties> {
       items,
       currentUserId,
       showDayHeaders,
+      typingStatuses,
     });
   }
 
@@ -230,6 +239,9 @@ class Chat extends Widget<Properties> {
     const { name, value } = args;
 
     switch (name) {
+      case 'typingStatuses':
+        this._messageList.option(name, value);
+        break;
       case 'activeStateEnabled':
       case 'focusStateEnabled':
       case 'hoverStateEnabled':
