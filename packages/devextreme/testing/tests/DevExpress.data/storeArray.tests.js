@@ -787,6 +787,27 @@ QUnit.test('update with key', function(assert) {
 
 });
 
+QUnit.test('update with explicit undefined', function(assert) {
+    const done = assert.async();
+
+    const store = new ArrayStore({
+        key: 'id',
+        data: [{ id: 0, nested: { a: 1 } }],
+    });
+
+    store.update(0, { nested: { a: undefined } }).done(function(data, key) {
+        assert.equal(key, 0);
+
+        const expectedData = {
+            nested: { a: undefined },
+            id: key
+        };
+
+        assert.deepEqual(data, expectedData);
+        done();
+    });
+});
+
 QUnit.test('insert duplicate key (simple)', function(assert) {
     const done = assert.async();
 
