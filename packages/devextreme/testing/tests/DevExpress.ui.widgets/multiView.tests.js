@@ -819,6 +819,56 @@ QUnit.module('loop', {
         delete this.animationStartAction;
     }
 }, () => {
+    QUnit.test('if first item is invisible and swiped right last item should be selected', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: false },
+                { text: '2', visible: true },
+                { text: '3', visible: true }
+            ],
+            loop: true,
+            selectedIndex: 1
+        });
+
+        const instance = $multiView.dxMultiView('instance');
+        const $firstItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+        const $lastItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(2);
+        const pointer = pointerMock($multiView);
+
+        this.animationStartAction = function() {
+            assert.equal(position($firstItem), 0, 'first visible item has correct position');
+            assert.equal(position($lastItem), -800, 'last visible item has correct position');
+        };
+
+        pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
+        assert.strictEqual(instance.option('selectedIndex'), 2, 'last item is selected');
+    });
+
+    QUnit.test('if last item is invisible and swiped left first item should be selected', function(assert) {
+        const $multiView = $('#multiView').dxMultiView({
+            items: [
+                { text: '1', visible: true },
+                { text: '2', visible: true },
+                { text: '3', visible: false }
+            ],
+            loop: true,
+            selectedIndex: 1
+        });
+
+        const instance = $multiView.dxMultiView('instance');
+        const $firstItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(0);
+        const $lastItem = $multiView.find(`.${MULTIVIEW_ITEM_CLASS}`).eq(1);
+        const pointer = pointerMock($multiView);
+
+        this.animationStartAction = function() {
+            assert.equal(position($firstItem), 800, 'first visible item has correct position');
+            assert.equal(position($lastItem), 0, 'last visible item has correct position');
+        };
+
+        pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'last item is selected');
+    });
+
     QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
             items: [
