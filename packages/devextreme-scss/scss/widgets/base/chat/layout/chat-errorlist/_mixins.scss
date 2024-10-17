@@ -1,0 +1,33 @@
+@use "../../../icons" as *;
+
+@mixin chat-errorlist(
+  $color,
+  $padding-block,
+  $padding-inline,
+  $error-padding-block,
+  $row-gap,
+  $icon-size,
+  $content-column-gap,
+) {
+  .dx-chat-errorlist {
+    color: $color;
+    padding-block: $padding-block;
+    padding-inline: $padding-inline;
+    row-gap: $row-gap;
+  }
+
+  .dx-chat-errorlist:empty {
+    padding-block: 0;
+    padding-inline: 0;
+  }
+
+  .dx-chat-errorlist-error {
+    column-gap: $content-column-gap;
+    padding-block: $error-padding-block;
+  }
+
+  .dx-chat-errorlist-error-icon {
+    @include dx-icon(errorcircle);
+    @include dx-icon-sizing($icon-size);
+  }
+}

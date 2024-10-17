@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
-import { firstAuthor, secondAuthor, initialMessages } from './data';
+import { firstAuthor, secondAuthor, initialMessages, longError } from './data';
 import { Popup } from 'devextreme-react/popup';
 
 import './styles.css';
@@ -34,6 +34,7 @@ export const Overview: Story = {
     args: {
         items: initialMessages,
         user: firstAuthor,
+        errors: [],
         ...commonArgs,
     },
     argTypes: {
@@ -48,6 +49,23 @@ export const Overview: Story = {
         },
         hint: {
             control: 'text',
+        },
+        errors: {
+            control: 'select',
+            options: ['None', 'One error', 'One error with long text', 'Three errors'],
+            mapping: {
+                ['None']: [],
+                ['One error']: [
+                    { id: 1, message: 'Error Message 1. Error Description...' }
+                ],
+                ['One error with long text']: [longError],
+                ['Three errors']: [
+                    { id: 1, message: 'Error Message 1. Error Description...' },
+                    { id: 2, message: 'Error Message 2. Message was not sent' },
+                    longError,
+                ],
+            },
+            defaultValue: 'Empty',
         }
     },
     render: ({
@@ -57,6 +75,7 @@ export const Overview: Story = {
         rtlEnabled,
         user,
         items,
+        errors,
         visible,
         hint,
         activeStateEnabled,
@@ -84,6 +103,7 @@ export const Overview: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
+                    errors={errors}
                     onMessageSend={onMessageSend}
                     visible={visible}
                     hint={hint}

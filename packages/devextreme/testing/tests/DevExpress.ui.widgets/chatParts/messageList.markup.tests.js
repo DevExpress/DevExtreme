@@ -4,7 +4,6 @@ import MessageList from '__internal/ui/chat/messagelist';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const SCROLLABLE_CLASS = 'dx-scrollable';
-const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
