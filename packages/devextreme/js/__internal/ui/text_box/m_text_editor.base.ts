@@ -920,8 +920,8 @@ const TextEditorBase = Editor.inherit({
 
   _resetToInitialValue() {
     if (this.option('value') === this._initialValue) {
-      this._options.silent('text', this._initialValue);
-      this._renderValue();
+      // this._options.silent('text', this._initialValue);
+      // this._renderValue();
     } else {
       this.callBase();
     }
