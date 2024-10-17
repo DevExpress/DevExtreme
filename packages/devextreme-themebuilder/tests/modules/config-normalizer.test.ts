@@ -52,7 +52,7 @@ describe('Cli arguments normalizer', () => {
   });
 
   test('build-theme bootstrap configuration', () => {
-    config = { command: 'build-theme', inputFile: 'vars.scss', bootstrapVersion: 5 };
+    const config = { command: 'build-theme', inputFile: 'vars.scss', bootstrapVersion: 5 };
     normalizeConfig(config);
 
     expect(config).toEqual({
