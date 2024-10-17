@@ -177,3 +177,66 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
   },
   columns: ['FirstName'],
 }));
+
+['infinite', 'virtual'].forEach((scrollingMode) => {
+  test(`Only the initially focused row should be focused while scrolling in ${scrollingMode} mode`, async (t) => {
+    const dataGrid = new DataGrid(GRID_SELECTOR);
+
+    // assert
+    await t
+      .expect(dataGrid.getDataRow(0).isFocusedRow)
+      .ok();
+
+    // act
+    await dataGrid.scrollBy({ y: 200 });
+    await dataGrid.scrollBy({ y: 200 });
+    await dataGrid.scrollTo(t, { top: 0 });
+    await t.wait(300);
+
+    // assert
+    const visibleRows = await dataGrid.apiGetVisibleRows();
+    const isFocusedRows = await Promise.all(visibleRows.map((_, i) => dataGrid.getDataRow(i).isFocusedRow));
+    const focusedRows = isFocusedRows.filter(isFocusedRow => isFocusedRow);
+
+    await t
+      .expect(focusedRows.length)
+      .eql(1)
+      .expect(dataGrid.getDataRow(0).isFocusedRow)
+      .ok();
+  }).before(async () => {
+    const initStore = ClientFunction(() => {  
+      (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+        key: 'id',
+        data: new Array(40).fill(null).map((_, index) => ({ id: index + 1, text: `item ${index + 1}` })),
+      });
+    });
+  
+    await initStore();
+  
+    return await createWidget('dxDataGrid', {
+      dataSource: {
+        key: 'id',
+        load(loadOptions) {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              (window as any).myStore.load(loadOptions).done((data) => {
+                resolve(data);
+              });
+            }, 300);
+          });
+        },
+        totalCount(loadOptions) {
+          return (window as any).myStore.totalCount(loadOptions);
+        },
+      } as any,
+      height: 450,
+      remoteOperations: true,
+      scrolling: {
+        mode: scrollingMode as any,
+      },
+      showBorders: true,
+      focusedRowEnabled: true,
+      focusedRowKey: 1,
+    });
+  });
+});
