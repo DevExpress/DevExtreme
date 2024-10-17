@@ -137,7 +137,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     const {
       className,
       displayMode,
-      gridCompatibility,
+      isGridCompatibilityMode,
       hasKnownLastPage,
       infoText,
       label,
@@ -178,7 +178,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       pageIndex,
       pageIndexChangedInternal,
       pageSizeChangedInternal,
-      gridCompatibility,
+      isGridCompatibilityMode,
       className,
       showInfo,
       infoText,

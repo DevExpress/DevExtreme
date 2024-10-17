@@ -16,6 +16,7 @@ import type { KeyboardActionContextType } from './common/keyboard_action_context
 import { KeyboardActionContext } from './common/keyboard_action_context';
 import type { PagerProps } from './common/pager_props';
 import { PagerDefaultProps } from './common/pager_props';
+import { PaginationConfigProvider } from './common/pagination_config_provider';
 import { Widget } from './common/widget';
 import { InfoText } from './info';
 import { PageSizeSelector } from './page_size/selector';
@@ -176,6 +177,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
 
   render(): JSX.Element {
     const {
+      isGridCompatibilityMode,
       rtlEnabled,
       visible,
       showPageSizeSelector,
@@ -209,7 +211,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
       hoverStateEnabled,
     } = this.props;
 
-    return (
+    const content = (
       <Widget
         rootElementRef={this.widgetRootElementRef}
         rtlEnabled={rtlEnabled}
@@ -274,6 +276,12 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
           </div>
         )}
       </Widget>
+    );
+
+    return (
+      <PaginationConfigProvider isGridCompatibilityMode={isGridCompatibilityMode}>
+        {content}
+      </PaginationConfigProvider>
     );
   }
 }
