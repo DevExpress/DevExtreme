@@ -678,7 +678,7 @@ testModule('API', moduleConfig, () => {
             this.instance.option('value', 'new value');
         });
 
-        test('toHtml changed value correctly', function(assert) {
+        test('toHtml changes value correctly', function(assert) {
             const converter = {
                 toHtml: () => {
                     return '<p>NEW VALUE</p>';
@@ -693,7 +693,7 @@ testModule('API', moduleConfig, () => {
             assert.strictEqual(this.instance.option('value'), '<p>NEW VALUE</p>');
         });
 
-        test('fromHtml changed value correctly', function(assert) {
+        test('fromHtml changes value correctly', function(assert) {
             const converter = {
                 fromHtml: () => {
                     return '**NEW VALUE**';
