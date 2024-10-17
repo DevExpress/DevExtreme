@@ -100,14 +100,15 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: packages
-          path: artifacts/npm/*.tgz
+#          path: artifacts/npm/*.tgz
+          path: artifacts/*
           retention-days: 2
 
-      - name: Filter packages
-        id: filter
-        working-directory: artifacts/npm
-        shell: bash
-        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+#      - name: Filter packages
+#        id: filter
+#        working-directory: artifacts/npm
+#        shell: bash
+#        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
 #  publish:
 #    name: Publish package
