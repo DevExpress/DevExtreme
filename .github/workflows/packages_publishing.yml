@@ -86,8 +86,12 @@ jobs:
           dotnet build npmDepsScanner.csproj /p:Configuration=Release
 
       - name: Run deps scanner
+        working-directory: deps-scanner
         run: |
-          ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+          pushd deps-scanner/bin/Release
+          dir
+          ./npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+          popd
           mkdir -p ./artifacts/deps-scanner
           cp reportGithub.json ./artifacts/deps-scanner/
 
