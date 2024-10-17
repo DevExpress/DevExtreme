@@ -79,7 +79,9 @@ export default class BootstrapExtractor {
     const variables = await this.readSassFile('_variables.scss');
 
     const variablesDarkFile = '_variables-dark.scss';
-    const variablesDark = this.version === 5 && existsSync(this.getFilePath(variablesDarkFile)) ? await this.readSassFile(variablesDarkFile) : ''; // TODO: can be removed safely in bootstrap@6
+    const variablesDark = this.version === 5 && existsSync(this.getFilePath(variablesDarkFile))
+        ? await this.readSassFile(variablesDarkFile)
+        : ''; // TODO: can be removed safely in bootstrap@6
 
     const result = `${functions}
 ${variables.replace('@import "variables-dark";', '')}
