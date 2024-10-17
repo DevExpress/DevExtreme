@@ -88,11 +88,11 @@ jobs:
       - name: Run deps scanner
         run: |
           pushd deps-scanner/bin/Release
-          dir
           ./npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+          dir
           popd
           mkdir -p ./artifacts/deps-scanner
-          cp reportGithub.json ./artifacts/deps-scanner/
+          cp ./deps-scanner/bin/Release/reportGithub.json ./artifacts/deps-scanner/
 
       #      - name: Build artifacts package
       #        run: npx ts-node tools/scripts/make-artifacts-package
