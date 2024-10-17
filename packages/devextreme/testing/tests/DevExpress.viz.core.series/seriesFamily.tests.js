@@ -1539,6 +1539,14 @@ QUnit.test('Set one series. minBarSize', function(assert) {
     checkStackedPointHeight(assert, family.series[0], 10, 20, 17, 0, 1, 2);
 });
 
+QUnit.test('Set one series. minBarSize and rotated (T1236326)', function(assert) {
+    const series1 = createSeries({ points: pointsForRange.point1(), minBarSize: 10 });
+    const series = [series1];
+    const family = createSeriesFamily('rangebar', series, { rotated: true });
+
+    checkStackedPointHeight(assert, family.series[0], 5, 15, 12, 5, 6, 7);
+});
+
 QUnit.test('Set one series with minBarSize. First point has not value', function(assert) {
     const points1 = pointsForRange.point2();
     points1[0].hasValue = sinon.stub().returns(false);
