@@ -35,8 +35,7 @@ safeSizeTest('The row edit mode: Edit row when there are sticky columns', async 
 }));
 
 // TODO: We need to fix the issues with the validation message and the revert button
-/*
-safeSizeTest('The cell edit mode: Edit cell with validation rule when there are sticky columns', async (t) => {
+test.skip('The cell edit mode: Edit cell with validation rule when there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
@@ -52,7 +51,7 @@ safeSizeTest('The cell edit mode: Edit cell with validation rule when there are 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+}).before(async () => createWidget('dxDataGrid', {
   ...defaultConfig,
   editing: {
     mode: 'cell',
@@ -66,7 +65,6 @@ safeSizeTest('The cell edit mode: Edit cell with validation rule when there are 
     });
   },
 }));
-*/
 
 safeSizeTest('The form edit mode: Edit row when there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
