@@ -218,6 +218,17 @@
         "dxPager-ariaPageSize": "Page size",
         "dxPager-ariaPageNumber": "Page number",
 
+        "dxPagination-infoText": "Puslapis {0} iš {1} (Viso eilučių: {2})",
+        "dxPagination-pagesCountText": "iš",
+        "dxPagination-pageSize": "Items per page: {0}",
+        "dxPagination-pageSizesAllText": "Viskas",
+        "dxPagination-page": "Page {0}",
+        "dxPagination-prevPage": "Previous Page",
+        "dxPagination-nextPage": "Next Page",
+        "dxPagination-ariaLabel": "Page Navigation",
+        "dxPagination-ariaPageSize": "Page size",
+        "dxPagination-ariaPageNumber": "Page number",
+
         "dxPivotGrid-grandTotal": "Iš viso",
         "dxPivotGrid-total": "{0} Viso",
         "dxPivotGrid-fieldChooserTitle": "Stulpelių pasirinkimas",

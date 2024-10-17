@@ -218,6 +218,17 @@
         "dxPager-ariaPageSize": "Page size",
         "dxPager-ariaPageNumber": "Page number",
 
+        "dxPagination-infoText": "Pagina {0} di {1} ({2} elementi)",
+        "dxPagination-pagesCountText": "di",
+        "dxPagination-pageSize": "Items per page: {0}",
+        "dxPagination-pageSizesAllText": "Tutti",
+        "dxPagination-page": "Pagina {0}",
+        "dxPagination-prevPage": "Pagina precedente",
+        "dxPagination-nextPage": "Pagina successiva",
+        "dxPagination-ariaLabel": "Navigazione pagine",
+        "dxPagination-ariaPageSize": "Page size",
+        "dxPagination-ariaPageNumber": "Page number",
+
         "dxPivotGrid-grandTotal": "Totale",
         "dxPivotGrid-total": "{0} Totale",
         "dxPivotGrid-fieldChooserTitle": "Selezione campi",
