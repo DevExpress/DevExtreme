@@ -78,15 +78,22 @@
                     },
                 }
 
+                // websockets
+
                 const instance = $("#button").dxChat({
                     user: user1,
-                    height: 300,
+                    height: 400,
                     items: [
                         {
                             timestamp: new Date(2021, 9, 17, 14, 15),
                             author: user1,
                             text: 'message',
-                        }
+                        },
+                        {
+                            timestamp: new Date(2021, 9, 17, 14, 15),
+                            author: user2,
+                            text: 'message',
+                        },
                     ],
                     typingStatuses: statuses1,
                     onTypingStart: (e) => {
@@ -103,6 +110,10 @@
                 }
 
                 const statuses2 = {
+                    [user2.id]: {
+                        timestamp: new Date(2021, 9, 17, 14, 45).getTime(),
+                        user: user2,
+                    },
                     [user2.id]: {
                         timestamp: new Date(2021, 9, 17, 14, 45).getTime(),
                         user: user2,
@@ -124,6 +135,17 @@
                 // 
 
                 const statuses3 = {
+                    [user2.id]: {
+                        timestamp: new Date(2021, 9, 17, 15, 14).getTime(),
+                        user: user2,
+                    },
+                    [user4.id]: {
+                        timestamp: new Date(2021, 9, 17, 15, 50).getTime(),
+                        user: user4,
+                    },
+                }
+
+                const statuses5 = {
                     [user2.id]: {
                         timestamp: new Date(2021, 9, 17, 15, 14).getTime(),
                         user: user2,
