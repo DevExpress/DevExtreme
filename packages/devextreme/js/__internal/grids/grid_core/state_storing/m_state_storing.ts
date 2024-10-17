@@ -190,7 +190,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
 
     if (this.option('focusedRowEnabled')) {
       this.option('focusedRowIndex', -1);
-      this.option('focusedRowKey', state.focusedRowKey || null);
+      this.option('focusedRowKey', state.focusedRowKey ?? null);
     }
 
     this.component.endUpdate();
