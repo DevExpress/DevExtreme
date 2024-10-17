@@ -35,6 +35,6 @@ test('Chat: messagebubble', async (t) => {
 
   return createWidget('dxChat', {
     width: 400,
-    height: 600,
+    height: 650,
   }, '#chat');
 });

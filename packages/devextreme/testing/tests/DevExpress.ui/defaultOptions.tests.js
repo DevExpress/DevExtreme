@@ -1396,6 +1396,7 @@ testComponentDefaults(ChatMessageList,
     {
         currentUserId: '',
         showDayHeaders: true,
+        isLoading: false,
     }
 );
 

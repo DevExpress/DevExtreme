@@ -22,6 +22,21 @@
       }
     }
   }
+
+  .dx-scrollview-bottom-pocket {
+    width: 100%;
+  }
+
+  .dx-scrollview-scrollbottom-text {
+    margin: 0;
+  }
+}
+
+.dx-chat-messagelist-empty {
+  .dx-scrollable-content {
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .dx-chat-messagelist-empty-view {
