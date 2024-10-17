@@ -649,4 +649,20 @@ export default function() {
             });
         });
     });
+
+    testModule('converter option', () => {
+        test('value from toHtml must match the markup value', function(assert) {
+            const instance = $('#htmlEditor').dxHtmlEditor({
+                converter: {
+                    toHtml: () => '<h1>Hi!</h1><p>Test</p>',
+                },
+            }).dxHtmlEditor('instance');
+
+            instance.option('value', 'new value');
+
+            const markup = instance.$element().find(`.${CONTENT_CLASS}`).html();
+
+            assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
+        });
+    });
 }
