@@ -86,7 +86,6 @@ jobs:
           dotnet build npmDepsScanner.csproj /p:Configuration=Release
 
       - name: Run deps scanner
-        working-directory: deps-scanner
         run: |
           pushd deps-scanner/bin/Release
           dir
