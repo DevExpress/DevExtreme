@@ -111,7 +111,7 @@ const normalizePath = (path: string): string => path + (!path.endsWith('/') ? '/
 const parseConfig = (config: ConfigSettings): void => {
   const { command, bootstrapVersion } = config;
   const themeInfo = getThemeAndColorScheme(config);
-  const bootstrapConfig = { isBootstrap: true, bootstrapVersion: bootstrapVersion || 0 };
+  const bootstrapConfig = { isBootstrap: bootstrapVersion === 5, bootstrapVersion: bootstrapVersion || 0 };
   const output = getOutParameters(command, themeInfo.themeName, config);
 
   delete config.baseTheme;
