@@ -98,19 +98,21 @@ ${collectorServiceCode}`);
   });
 
   test('extract (bootstrap 5)', async () => {
-    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;$var4: var(--bs-blue);';
+    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;$var4: var(--bs-blue);$var5: -.25rem;';
     const extractor = new BootstrapExtractor(input, 5);
     extractor.meta = {
       'dx-var1': '$var1',
       'dx-var2': '$var2',
       'dx-var3': '$var3',
       'dx-var4': '$var4',
+      'dx-var5': '$var5',
     };
 
     expect(await extractor.extract()).toEqual([
       { key: '$dx-var1', value: 'test1' },
       { key: '$dx-var2', value: 'test2' },
       { key: '$dx-var4', value: '#0d6efd' },
+      { key: '$dx-var5', value: '-4px' },
     ]);
   });
 });
