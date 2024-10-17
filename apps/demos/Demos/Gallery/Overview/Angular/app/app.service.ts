@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-interface Image {
+export interface Image {
   imageAlt: string,
   imageSrc: string,
 }
