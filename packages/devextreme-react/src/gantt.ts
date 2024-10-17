@@ -5,7 +5,7 @@ import dxGantt, {
     Properties
 } from "devextreme/ui/gantt";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttContextMenuItem, dxGanttFilterRowOperationDescriptions, dxGanttHeaderFilterTexts, dxGanttToolbarItem } from "devextreme/ui/gantt";
@@ -207,39 +207,42 @@ type IColumnProps = React.PropsWithChildren<{
   headerCellRender?: (...params: any) => React.ReactNode;
   headerCellComponent?: React.ComponentType<any>;
 }>
-const _componentColumn = memo(
-  (props: IColumnProps) => {
-    return React.createElement(NestedOption<IColumnProps>, { ...props });
-  }
-);
+const _componentColumn = (props: IColumnProps) => {
+  return React.createElement(NestedOption<IColumnProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "columns",
+      IsCollectionItem: true,
+      DefaultsProps: {
+        defaultFilterValue: "filterValue",
+        defaultFilterValues: "filterValues",
+        defaultSelectedFilterOperation: "selectedFilterOperation",
+        defaultSortIndex: "sortIndex",
+        defaultSortOrder: "sortOrder",
+        defaultVisible: "visible",
+        defaultVisibleIndex: "visibleIndex"
+      },
+      ExpectedChildren: {
+        columnHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false },
+        headerFilter: { optionName: "headerFilter", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "cellTemplate",
+        render: "cellRender",
+        component: "cellComponent"
+      }, {
+        tmplOption: "headerCellTemplate",
+        render: "headerCellRender",
+        component: "headerCellComponent"
+      }],
+    },
+  });
+};
 
-const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_componentColumn, {
-  OptionName: "columns",
-  IsCollectionItem: true,
-  DefaultsProps: {
-    defaultFilterValue: "filterValue",
-    defaultFilterValues: "filterValues",
-    defaultSelectedFilterOperation: "selectedFilterOperation",
-    defaultSortIndex: "sortIndex",
-    defaultSortOrder: "sortOrder",
-    defaultVisible: "visible",
-    defaultVisibleIndex: "visibleIndex"
-  },
-  ExpectedChildren: {
-    columnHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false },
-    headerFilter: { optionName: "headerFilter", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "cellTemplate",
-    render: "cellRender",
-    component: "cellComponent"
-  }, {
-    tmplOption: "headerCellTemplate",
-    render: "headerCellRender",
-    component: "headerCellComponent"
-  }],
-})
+const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_componentColumn, {
+  componentType: "option",
+});
 
 // owners:
 // Column
@@ -253,19 +256,22 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
 }>
-const _componentColumnHeaderFilter = memo(
-  (props: IColumnHeaderFilterProps) => {
-    return React.createElement(NestedOption<IColumnHeaderFilterProps>, { ...props });
-  }
-);
+const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
+  return React.createElement(NestedOption<IColumnHeaderFilterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "headerFilter",
+      ExpectedChildren: {
+        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        search: { optionName: "search", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const ColumnHeaderFilter: typeof _componentColumnHeaderFilter & IElementDescriptor = Object.assign(_componentColumnHeaderFilter, {
-  OptionName: "headerFilter",
-  ExpectedChildren: {
-    columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
-    search: { optionName: "search", isCollectionItem: false }
-  },
-})
+const ColumnHeaderFilter = Object.assign<typeof _componentColumnHeaderFilter, NestedComponentMeta>(_componentColumnHeaderFilter, {
+  componentType: "option",
+});
 
 // owners:
 // ColumnHeaderFilter
@@ -276,15 +282,18 @@ type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
-const _componentColumnHeaderFilterSearch = memo(
-  (props: IColumnHeaderFilterSearchProps) => {
-    return React.createElement(NestedOption<IColumnHeaderFilterSearchProps>, { ...props });
-  }
-);
+const _componentColumnHeaderFilterSearch = (props: IColumnHeaderFilterSearchProps) => {
+  return React.createElement(NestedOption<IColumnHeaderFilterSearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
 
-const ColumnHeaderFilterSearch: typeof _componentColumnHeaderFilterSearch & IElementDescriptor = Object.assign(_componentColumnHeaderFilterSearch, {
-  OptionName: "search",
-})
+const ColumnHeaderFilterSearch = Object.assign<typeof _componentColumnHeaderFilterSearch, NestedComponentMeta>(_componentColumnHeaderFilterSearch, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -292,19 +301,22 @@ type IContextMenuProps = React.PropsWithChildren<{
   enabled?: boolean;
   items?: Array<dxGanttContextMenuItem | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "deleteDependency" | "taskDetails" | "resourceManager">;
 }>
-const _componentContextMenu = memo(
-  (props: IContextMenuProps) => {
-    return React.createElement(NestedOption<IContextMenuProps>, { ...props });
-  }
-);
+const _componentContextMenu = (props: IContextMenuProps) => {
+  return React.createElement(NestedOption<IContextMenuProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "contextMenu",
+      ExpectedChildren: {
+        contextMenuItem: { optionName: "items", isCollectionItem: true },
+        item: { optionName: "items", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const ContextMenu: typeof _componentContextMenu & IElementDescriptor = Object.assign(_componentContextMenu, {
-  OptionName: "contextMenu",
-  ExpectedChildren: {
-    contextMenuItem: { optionName: "items", isCollectionItem: true },
-    item: { optionName: "items", isCollectionItem: true }
-  },
-})
+const ContextMenu = Object.assign<typeof _componentContextMenu, NestedComponentMeta>(_componentContextMenu, {
+  componentType: "option",
+});
 
 // owners:
 // ContextMenu
@@ -323,21 +335,24 @@ type IContextMenuItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentContextMenuItem = memo(
-  (props: IContextMenuItemProps) => {
-    return React.createElement(NestedOption<IContextMenuItemProps>, { ...props });
-  }
-);
+const _componentContextMenuItem = (props: IContextMenuItemProps) => {
+  return React.createElement(NestedOption<IContextMenuItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const ContextMenuItem: typeof _componentContextMenuItem & IElementDescriptor = Object.assign(_componentContextMenuItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const ContextMenuItem = Object.assign<typeof _componentContextMenuItem, NestedComponentMeta>(_componentContextMenuItem, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -348,15 +363,18 @@ type IDependenciesProps = React.PropsWithChildren<{
   successorIdExpr?: (() => void) | string;
   typeExpr?: (() => void) | string;
 }>
-const _componentDependencies = memo(
-  (props: IDependenciesProps) => {
-    return React.createElement(NestedOption<IDependenciesProps>, { ...props });
-  }
-);
+const _componentDependencies = (props: IDependenciesProps) => {
+  return React.createElement(NestedOption<IDependenciesProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "dependencies",
+    },
+  });
+};
 
-const Dependencies: typeof _componentDependencies & IElementDescriptor = Object.assign(_componentDependencies, {
-  OptionName: "dependencies",
-})
+const Dependencies = Object.assign<typeof _componentDependencies, NestedComponentMeta>(_componentDependencies, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -372,15 +390,18 @@ type IEditingProps = React.PropsWithChildren<{
   allowTaskUpdating?: boolean;
   enabled?: boolean;
 }>
-const _componentEditing = memo(
-  (props: IEditingProps) => {
-    return React.createElement(NestedOption<IEditingProps>, { ...props });
-  }
-);
+const _componentEditing = (props: IEditingProps) => {
+  return React.createElement(NestedOption<IEditingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "editing",
+    },
+  });
+};
 
-const Editing: typeof _componentEditing & IElementDescriptor = Object.assign(_componentEditing, {
-  OptionName: "editing",
-})
+const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -393,18 +414,21 @@ type IFilterRowProps = React.PropsWithChildren<{
   showOperationChooser?: boolean;
   visible?: boolean;
 }>
-const _componentFilterRow = memo(
-  (props: IFilterRowProps) => {
-    return React.createElement(NestedOption<IFilterRowProps>, { ...props });
-  }
-);
+const _componentFilterRow = (props: IFilterRowProps) => {
+  return React.createElement(NestedOption<IFilterRowProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "filterRow",
+      ExpectedChildren: {
+        operationDescriptions: { optionName: "operationDescriptions", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const FilterRow: typeof _componentFilterRow & IElementDescriptor = Object.assign(_componentFilterRow, {
-  OptionName: "filterRow",
-  ExpectedChildren: {
-    operationDescriptions: { optionName: "operationDescriptions", isCollectionItem: false }
-  },
-})
+const FilterRow = Object.assign<typeof _componentFilterRow, NestedComponentMeta>(_componentFilterRow, {
+  componentType: "option",
+});
 
 // owners:
 // Column
@@ -416,15 +440,18 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = memo(
-  (props: IFormatProps) => {
-    return React.createElement(NestedOption<IFormatProps>, { ...props });
-  }
-);
+const _componentFormat = (props: IFormatProps) => {
+  return React.createElement(NestedOption<IFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "format",
+    },
+  });
+};
 
-const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
-  OptionName: "format",
-})
+const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -438,20 +465,23 @@ type IGanttHeaderFilterProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentGanttHeaderFilter = memo(
-  (props: IGanttHeaderFilterProps) => {
-    return React.createElement(NestedOption<IGanttHeaderFilterProps>, { ...props });
-  }
-);
+const _componentGanttHeaderFilter = (props: IGanttHeaderFilterProps) => {
+  return React.createElement(NestedOption<IGanttHeaderFilterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "headerFilter",
+      ExpectedChildren: {
+        ganttHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        search: { optionName: "search", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const GanttHeaderFilter: typeof _componentGanttHeaderFilter & IElementDescriptor = Object.assign(_componentGanttHeaderFilter, {
-  OptionName: "headerFilter",
-  ExpectedChildren: {
-    ganttHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
-    search: { optionName: "search", isCollectionItem: false },
-    texts: { optionName: "texts", isCollectionItem: false }
-  },
-})
+const GanttHeaderFilter = Object.assign<typeof _componentGanttHeaderFilter, NestedComponentMeta>(_componentGanttHeaderFilter, {
+  componentType: "option",
+});
 
 // owners:
 // GanttHeaderFilter
@@ -461,15 +491,18 @@ type IGanttHeaderFilterSearchProps = React.PropsWithChildren<{
   mode?: "contains" | "startswith" | "equals";
   timeout?: number;
 }>
-const _componentGanttHeaderFilterSearch = memo(
-  (props: IGanttHeaderFilterSearchProps) => {
-    return React.createElement(NestedOption<IGanttHeaderFilterSearchProps>, { ...props });
-  }
-);
+const _componentGanttHeaderFilterSearch = (props: IGanttHeaderFilterSearchProps) => {
+  return React.createElement(NestedOption<IGanttHeaderFilterSearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
 
-const GanttHeaderFilterSearch: typeof _componentGanttHeaderFilterSearch & IElementDescriptor = Object.assign(_componentGanttHeaderFilterSearch, {
-  OptionName: "search",
-})
+const GanttHeaderFilterSearch = Object.assign<typeof _componentGanttHeaderFilterSearch, NestedComponentMeta>(_componentGanttHeaderFilterSearch, {
+  componentType: "option",
+});
 
 // owners:
 // Column
@@ -487,15 +520,18 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
 }>
-const _componentHeaderFilter = memo(
-  (props: IHeaderFilterProps) => {
-    return React.createElement(NestedOption<IHeaderFilterProps>, { ...props });
-  }
-);
+const _componentHeaderFilter = (props: IHeaderFilterProps) => {
+  return React.createElement(NestedOption<IHeaderFilterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "headerFilter",
+    },
+  });
+};
 
-const HeaderFilter: typeof _componentHeaderFilter & IElementDescriptor = Object.assign(_componentHeaderFilter, {
-  OptionName: "headerFilter",
-})
+const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponentMeta>(_componentHeaderFilter, {
+  componentType: "option",
+});
 
 // owners:
 // ContextMenu
@@ -525,25 +561,28 @@ type IItemProps = React.PropsWithChildren<{
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
 }>
-const _componentItem = memo(
-  (props: IItemProps) => {
-    return React.createElement(NestedOption<IItemProps>, { ...props });
-  }
-);
+const _componentItem = (props: IItemProps) => {
+  return React.createElement(NestedOption<IItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }, {
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }],
+    },
+  });
+};
 
-const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }, {
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent"
-  }],
-})
+const Item = Object.assign<typeof _componentItem, NestedComponentMeta>(_componentItem, {
+  componentType: "option",
+});
 
 // owners:
 // FilterRow
@@ -560,15 +599,18 @@ type IOperationDescriptionsProps = React.PropsWithChildren<{
   notEqual?: string;
   startsWith?: string;
 }>
-const _componentOperationDescriptions = memo(
-  (props: IOperationDescriptionsProps) => {
-    return React.createElement(NestedOption<IOperationDescriptionsProps>, { ...props });
-  }
-);
+const _componentOperationDescriptions = (props: IOperationDescriptionsProps) => {
+  return React.createElement(NestedOption<IOperationDescriptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "operationDescriptions",
+    },
+  });
+};
 
-const OperationDescriptions: typeof _componentOperationDescriptions & IElementDescriptor = Object.assign(_componentOperationDescriptions, {
-  OptionName: "operationDescriptions",
-})
+const OperationDescriptions = Object.assign<typeof _componentOperationDescriptions, NestedComponentMeta>(_componentOperationDescriptions, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -578,15 +620,18 @@ type IResourceAssignmentsProps = React.PropsWithChildren<{
   resourceIdExpr?: (() => void) | string;
   taskIdExpr?: (() => void) | string;
 }>
-const _componentResourceAssignments = memo(
-  (props: IResourceAssignmentsProps) => {
-    return React.createElement(NestedOption<IResourceAssignmentsProps>, { ...props });
-  }
-);
+const _componentResourceAssignments = (props: IResourceAssignmentsProps) => {
+  return React.createElement(NestedOption<IResourceAssignmentsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "resourceAssignments",
+    },
+  });
+};
 
-const ResourceAssignments: typeof _componentResourceAssignments & IElementDescriptor = Object.assign(_componentResourceAssignments, {
-  OptionName: "resourceAssignments",
-})
+const ResourceAssignments = Object.assign<typeof _componentResourceAssignments, NestedComponentMeta>(_componentResourceAssignments, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -596,15 +641,18 @@ type IResourcesProps = React.PropsWithChildren<{
   keyExpr?: (() => void) | string;
   textExpr?: (() => void) | string;
 }>
-const _componentResources = memo(
-  (props: IResourcesProps) => {
-    return React.createElement(NestedOption<IResourcesProps>, { ...props });
-  }
-);
+const _componentResources = (props: IResourcesProps) => {
+  return React.createElement(NestedOption<IResourcesProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "resources",
+    },
+  });
+};
 
-const Resources: typeof _componentResources & IElementDescriptor = Object.assign(_componentResources, {
-  OptionName: "resources",
-})
+const Resources = Object.assign<typeof _componentResources, NestedComponentMeta>(_componentResources, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -612,15 +660,18 @@ type IScaleTypeRangeProps = React.PropsWithChildren<{
   max?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years";
   min?: "auto" | "minutes" | "hours" | "sixHours" | "days" | "weeks" | "months" | "quarters" | "years";
 }>
-const _componentScaleTypeRange = memo(
-  (props: IScaleTypeRangeProps) => {
-    return React.createElement(NestedOption<IScaleTypeRangeProps>, { ...props });
-  }
-);
+const _componentScaleTypeRange = (props: IScaleTypeRangeProps) => {
+  return React.createElement(NestedOption<IScaleTypeRangeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "scaleTypeRange",
+    },
+  });
+};
 
-const ScaleTypeRange: typeof _componentScaleTypeRange & IElementDescriptor = Object.assign(_componentScaleTypeRange, {
-  OptionName: "scaleTypeRange",
-})
+const ScaleTypeRange = Object.assign<typeof _componentScaleTypeRange, NestedComponentMeta>(_componentScaleTypeRange, {
+  componentType: "option",
+});
 
 // owners:
 // ColumnHeaderFilter
@@ -632,15 +683,18 @@ type ISearchProps = React.PropsWithChildren<{
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
-const _componentSearch = memo(
-  (props: ISearchProps) => {
-    return React.createElement(NestedOption<ISearchProps>, { ...props });
-  }
-);
+const _componentSearch = (props: ISearchProps) => {
+  return React.createElement(NestedOption<ISearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
 
-const Search: typeof _componentSearch & IElementDescriptor = Object.assign(_componentSearch, {
-  OptionName: "search",
-})
+const Search = Object.assign<typeof _componentSearch, NestedComponentMeta>(_componentSearch, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -651,15 +705,18 @@ type ISortingProps = React.PropsWithChildren<{
   mode?: "single" | "multiple" | "none";
   showSortIndexes?: boolean;
 }>
-const _componentSorting = memo(
-  (props: ISortingProps) => {
-    return React.createElement(NestedOption<ISortingProps>, { ...props });
-  }
-);
+const _componentSorting = (props: ISortingProps) => {
+  return React.createElement(NestedOption<ISortingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "sorting",
+    },
+  });
+};
 
-const Sorting: typeof _componentSorting & IElementDescriptor = Object.assign(_componentSorting, {
-  OptionName: "sorting",
-})
+const Sorting = Object.assign<typeof _componentSorting, NestedComponentMeta>(_componentSorting, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -669,16 +726,19 @@ type IStripLineProps = React.PropsWithChildren<{
   start?: Date | (() => Date | number | string) | number | string;
   title?: string;
 }>
-const _componentStripLine = memo(
-  (props: IStripLineProps) => {
-    return React.createElement(NestedOption<IStripLineProps>, { ...props });
-  }
-);
+const _componentStripLine = (props: IStripLineProps) => {
+  return React.createElement(NestedOption<IStripLineProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "stripLines",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const StripLine: typeof _componentStripLine & IElementDescriptor = Object.assign(_componentStripLine, {
-  OptionName: "stripLines",
-  IsCollectionItem: true,
-})
+const StripLine = Object.assign<typeof _componentStripLine, NestedComponentMeta>(_componentStripLine, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -692,15 +752,18 @@ type ITasksProps = React.PropsWithChildren<{
   startExpr?: (() => void) | string;
   titleExpr?: (() => void) | string;
 }>
-const _componentTasks = memo(
-  (props: ITasksProps) => {
-    return React.createElement(NestedOption<ITasksProps>, { ...props });
-  }
-);
+const _componentTasks = (props: ITasksProps) => {
+  return React.createElement(NestedOption<ITasksProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tasks",
+    },
+  });
+};
 
-const Tasks: typeof _componentTasks & IElementDescriptor = Object.assign(_componentTasks, {
-  OptionName: "tasks",
-})
+const Tasks = Object.assign<typeof _componentTasks, NestedComponentMeta>(_componentTasks, {
+  componentType: "option",
+});
 
 // owners:
 // GanttHeaderFilter
@@ -709,34 +772,40 @@ type ITextsProps = React.PropsWithChildren<{
   emptyValue?: string;
   ok?: string;
 }>
-const _componentTexts = memo(
-  (props: ITextsProps) => {
-    return React.createElement(NestedOption<ITextsProps>, { ...props });
-  }
-);
+const _componentTexts = (props: ITextsProps) => {
+  return React.createElement(NestedOption<ITextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
 
-const Texts: typeof _componentTexts & IElementDescriptor = Object.assign(_componentTexts, {
-  OptionName: "texts",
-})
+const Texts = Object.assign<typeof _componentTexts, NestedComponentMeta>(_componentTexts, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
 type IToolbarProps = React.PropsWithChildren<{
   items?: Array<dxGanttToolbarItem | "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">;
 }>
-const _componentToolbar = memo(
-  (props: IToolbarProps) => {
-    return React.createElement(NestedOption<IToolbarProps>, { ...props });
-  }
-);
+const _componentToolbar = (props: IToolbarProps) => {
+  return React.createElement(NestedOption<IToolbarProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "toolbar",
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        toolbarItem: { optionName: "items", isCollectionItem: true }
+      },
+    },
+  });
+};
 
-const Toolbar: typeof _componentToolbar & IElementDescriptor = Object.assign(_componentToolbar, {
-  OptionName: "toolbar",
-  ExpectedChildren: {
-    item: { optionName: "items", isCollectionItem: true },
-    toolbarItem: { optionName: "items", isCollectionItem: true }
-  },
-})
+const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_componentToolbar, {
+  componentType: "option",
+});
 
 // owners:
 // Toolbar
@@ -759,25 +828,28 @@ type IToolbarItemProps = React.PropsWithChildren<{
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
-const _componentToolbarItem = memo(
-  (props: IToolbarItemProps) => {
-    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
-  }
-);
+const _componentToolbarItem = (props: IToolbarItemProps) => {
+  return React.createElement(NestedOption<IToolbarItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
 
-const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
-  OptionName: "items",
-  IsCollectionItem: true,
-  TemplateProps: [{
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component"
-  }],
-})
+const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
+  componentType: "option",
+});
 
 // owners:
 // Gantt
@@ -786,15 +858,18 @@ type IValidationProps = React.PropsWithChildren<{
   enablePredecessorGap?: boolean;
   validateDependencies?: boolean;
 }>
-const _componentValidation = memo(
-  (props: IValidationProps) => {
-    return React.createElement(NestedOption<IValidationProps>, { ...props });
-  }
-);
+const _componentValidation = (props: IValidationProps) => {
+  return React.createElement(NestedOption<IValidationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validation",
+    },
+  });
+};
 
-const Validation: typeof _componentValidation & IElementDescriptor = Object.assign(_componentValidation, {
-  OptionName: "validation",
-})
+const Validation = Object.assign<typeof _componentValidation, NestedComponentMeta>(_componentValidation, {
+  componentType: "option",
+});
 
 export default Gantt;
 export {

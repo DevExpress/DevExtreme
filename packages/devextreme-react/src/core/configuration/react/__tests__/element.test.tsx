@@ -1,64 +1,85 @@
 /* eslint-disable max-classes-per-file */
 import { render } from '@testing-library/react';
 import * as React from 'react';
-import { memo } from 'react';
 import ConfigurationComponent from '../../../nested-option';
 import { Template } from '../../../template';
 
 import {
   ElementType,
+  getElementType,
+  getOptionInfo,
   IElementDescriptor,
-  getElementInfo,
 } from '../element';
 
-const MinimalConfigurationComponent = memo(function MinimalConfigurationComponent(props: any) {
+const minimalComponentDescriptor: IElementDescriptor = {
+  OptionName: 'option',
+  IsCollectionItem: false,
+};
+
+let MinimalConfigurationComponent = function MinimalConfigurationComponent(props: any) {
   return (
     <ConfigurationComponent<any>
+      elementDescriptor={minimalComponentDescriptor}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & IElementDescriptor;
+} as React.ComponentType<any> & { elementDescriptor: IElementDescriptor };
 
-MinimalConfigurationComponent.OptionName = 'option';
-MinimalConfigurationComponent.IsCollectionItem = false;
+MinimalConfigurationComponent = Object.assign(MinimalConfigurationComponent, {
+  elementDescriptor: minimalComponentDescriptor,
+});
 
-const RichConfigurationComponent = memo(function RichConfigurationComponent(props: any) {
+const richComponentDescriptor: IElementDescriptor = {
+  OptionName: 'option',
+  IsCollectionItem: false,
+  DefaultsProps: { defaultValue: 'value' },
+  TemplateProps: [{
+    tmplOption: 'template',
+    render: 'render',
+    component: 'component',
+  }],
+  PredefinedProps: { type: 'numeric' },
+};
+
+let RichConfigurationComponent = function RichConfigurationComponent(props: any) {
   return (
     <ConfigurationComponent<any>
+      elementDescriptor={richComponentDescriptor}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & IElementDescriptor;
+} as React.ComponentType<any> & { elementDescriptor: IElementDescriptor };
 
-RichConfigurationComponent.OptionName = 'option';
-RichConfigurationComponent.IsCollectionItem = false;
-RichConfigurationComponent.DefaultsProps = { defaultValue: 'value' };
-RichConfigurationComponent.TemplateProps = [{
-  tmplOption: 'template',
-  render: 'render',
-  component: 'component',
-}];
-RichConfigurationComponent.PredefinedProps = { type: 'numeric' };
+RichConfigurationComponent = Object.assign(RichConfigurationComponent, {
+  elementDescriptor: richComponentDescriptor,
+});
 
-const CollectionConfigurationComponent = memo(function CollectionConfigurationComponent(props: any) {
+const collectionComponentDescriptor: IElementDescriptor = {
+  OptionName: 'option',
+  IsCollectionItem: true,
+  DefaultsProps: { defaultValue: 'value' },
+  TemplateProps: [{
+    tmplOption: 'template',
+    render: 'render',
+    component: 'component',
+  }],
+  PredefinedProps: { type: 'numeric' },
+};
+
+let CollectionConfigurationComponent = function CollectionConfigurationComponent(props: any) {
   return (
     <ConfigurationComponent<any>
+      elementDescriptor={collectionComponentDescriptor}
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & IElementDescriptor;
+} as React.ComponentType<any> & { elementDescriptor: IElementDescriptor };
 
-CollectionConfigurationComponent.OptionName = 'option';
-CollectionConfigurationComponent.IsCollectionItem = true;
-CollectionConfigurationComponent.DefaultsProps = { defaultValue: 'value' };
-CollectionConfigurationComponent.TemplateProps = [{
-  tmplOption: 'template',
-  render: 'render',
-  component: 'component',
-}];
-CollectionConfigurationComponent.PredefinedProps = { type: 'numeric' };
+CollectionConfigurationComponent = Object.assign(CollectionConfigurationComponent, {
+  elementDescriptor: collectionComponentDescriptor,
+});
 
-const configurationComponents: any[] = [
+const configurationComponents: (React.ComponentType<any> & { elementDescriptor: IElementDescriptor })[] = [
   MinimalConfigurationComponent,
   RichConfigurationComponent,
   CollectionConfigurationComponent,
@@ -75,7 +96,10 @@ describe('getElementInfo', () => {
     it('parses Configuration component', () => {
       const element = React.createElement(component);
 
-      const elementInfo = getElementInfo(element);
+      const elementInfo = getOptionInfo(
+        component.elementDescriptor,
+        element.props,
+      );
 
       if (elementInfo.type !== ElementType.Option) {
         expect(elementInfo.type).toEqual(ElementType.Option);
@@ -85,11 +109,11 @@ describe('getElementInfo', () => {
       expect(elementInfo.props).toEqual(element.props);
 
       const { descriptor } = elementInfo;
-      expect(descriptor.name).toEqual(component.OptionName);
-      expect(descriptor.isCollection).toEqual(component.IsCollectionItem);
-      expect(descriptor.templates).toEqual(component.TemplateProps || []);
-      expect(descriptor.initialValuesProps).toEqual(component.DefaultsProps || {});
-      expect(descriptor.predefinedValuesProps).toEqual(component.PredefinedProps || {});
+      expect(descriptor.name).toEqual(component.elementDescriptor.OptionName);
+      expect(descriptor.isCollection).toEqual(component.elementDescriptor.IsCollectionItem);
+      expect(descriptor.templates).toEqual(component.elementDescriptor.TemplateProps || []);
+      expect(descriptor.initialValuesProps).toEqual(component.elementDescriptor.DefaultsProps || {});
+      expect(descriptor.predefinedValuesProps).toEqual(component.elementDescriptor.PredefinedProps || {});
     });
   });
 
@@ -102,14 +126,9 @@ describe('getElementInfo', () => {
       'Template content',
     );
 
-    const elementInfo = getElementInfo(element);
+    const elementType = getElementType(element);
 
-    if (elementInfo?.type !== ElementType.Template) {
-      expect(elementInfo).toEqual(ElementType.Template);
-      return;
-    }
-
-    expect(elementInfo.props).toEqual(element.props);
+    expect(elementType).toEqual(ElementType.Template);
   });
 
   otherComponents.forEach((component) => {
@@ -117,9 +136,9 @@ describe('getElementInfo', () => {
       const element = React.createElement(component);
 
       render(React.createElement(component));
-      const elementInfo = getElementInfo(element);
+      const elementType = getElementType(element);
 
-      expect(elementInfo.type).toEqual(ElementType.Unknown);
+      expect(elementType).toEqual(ElementType.Unknown);
     });
   });
 });
