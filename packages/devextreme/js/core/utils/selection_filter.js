@@ -1,5 +1,5 @@
 import { getKeyHash, equalByValue } from './common';
-import { isString, isObject } from './type';
+import { isString, isObject, isFunction } from './type';
 import { compileGetter } from './data';
 
 export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
@@ -25,7 +25,7 @@ export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
                 filterExpr.push(isSelectAll ? 'and' : 'or');
             }
 
-            if(isString(keyExpr)) {
+            if(isString(keyExpr) || (isFunction(keyExpr) && keyExpr.length > 0)) {
                 filterExprPart = getFilterForPlainKey(keyExpr, key);
             } else {
                 filterExprPart = getFilterForCompositeKey(keyExpr, key);
