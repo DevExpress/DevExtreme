@@ -1,42 +1,63 @@
 name: 'CodeQL'
 
 on:
-  schedule:
-    - cron: '0 1 * * *'
   workflow_dispatch:
 
 jobs:
-  analyze:
-    name: Analyze
+  analyze-javascript:
+    name: Analyze JavaScript
     runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
       security-events: write
 
-    strategy:
-      fail-fast: false
-      matrix:
-        branch: [ '22_2', '23_1', '23_2', '24_1', '24_2' ]
-        language: [ 'csharp', 'javascript' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
-        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          ref: ${{ matrix.branch }}
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          pnpm install
+
+      - name: Build npm packages
+        run: pnpm run all:build
 
       - name: Get head SHA
         id: get-head-sha
-        run: echo "SHA=$(git rev-parse origin/${{ matrix.branch }})" >> "$GITHUB_OUTPUT"
+        run: echo "SHA=$(git rev-parse origin/${{ github.ref_name }})" >> "$GITHUB_OUTPUT"
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ matrix.language }}
+          languages: javascript
           config-file: ./.github/codeql/codeql-config.yml
 
       - name: Autobuild
@@ -45,14 +66,47 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:${{matrix.language}}"
-          ref: refs/heads/${{ matrix.branch }}
+          category: "/language:javascript"
+          ref: refs/heads/${{ github.ref_name }}
+          sha: ${{ steps.get-head-sha.outputs.SHA }}
+
+  analyze-csharp:
+    name: Analyze C#
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get head SHA
+        id: get-head-sha
+        run: echo "SHA=$(git rev-parse origin/${{ github.ref_name }})" >> "$GITHUB_OUTPUT"
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+          config-file: ./.github/codeql/codeql-config.yml
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:csharp"
+          ref: refs/heads/${{ github.ref_name }}
           sha: ${{ steps.get-head-sha.outputs.SHA }}
 
   fetch:
     runs-on: devextreme-shr2
     name: Fetch analysis
-    needs: [ analyze ]
+    needs: [ analyze-javascript, analyze-csharp ]
 
     steps:
       - name: Get Latest Analysis info
@@ -68,7 +122,7 @@ jobs:
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [ analyze, fetch ]
+    needs: [ fetch ]
 
     steps:
       - name: Get Date
@@ -80,8 +134,8 @@ jobs:
         id: notify-cache
         with:
           path: notify.json
-          key: ${{ runner.os }}-${{ matrix.branch }}-${{ matrix.language }}-${{ steps.get-date.outputs.date }}
-          restore-keys: ${{ runner.os }}-${{ matrix.branch }}-${{ matrix.language }}
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}
+          restore-keys: ${{ runner.os }}
 
       - name: Teams Notification
         uses: DevExpress/github-actions/send-teams-notification@v1
