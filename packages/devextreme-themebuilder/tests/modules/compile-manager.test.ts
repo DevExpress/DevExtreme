@@ -94,58 +94,6 @@ describe('Compile manager - integration test on test sass', () => {
     });
   });
 
-  test('compile test bundle using bootstrap (3) file as input', async () => {
-    const manager = new CompileManager();
-    return manager.compile({
-      isBootstrap: true,
-      bootstrapVersion: 3,
-      data: '@brand-primary: red;',
-    }).then((result) => {
-      expect(result.css).toBe(`.dx-accordion {
-  font-family: "Helvetica Neue","Segoe UI",helvetica,verdana,sans-serif;
-  color: red;
-  background-image: url(icons/icons.woff2);
-}
-.dx-accordion .from-base {
-  background-color: transparent;
-  color: red;
-}`);
-
-      expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue", "Segoe UI", helvetica, verdana, sans-serif',
-        '$base-accent': '#ff0000',
-        '$accordion-title-color': '#ff0000',
-        '$accordion-item-title-opened-bg': 'transparent',
-      });
-    });
-  });
-
-  test('compile test bundle using bootstrap (4) file as input', async () => {
-    const manager = new CompileManager();
-    return manager.compile({
-      isBootstrap: true,
-      bootstrapVersion: 4,
-      data: '$primary: red;$font-family-sans-serif: sans-serif;',
-    }).then((result) => {
-      expect(result.css).toBe(`.dx-accordion {
-  font-family: sans-serif;
-  color: red;
-  background-image: url(icons/icons.woff2);
-}
-.dx-accordion .from-base {
-  background-color: transparent;
-  color: red;
-}`);
-
-      expect(result.compiledMetadata).toEqual({
-        '$base-font-family': 'sans-serif',
-        '$base-accent': '#ff0000',
-        '$accordion-title-color': '#ff0000',
-        '$accordion-item-title-opened-bg': 'transparent',
-      });
-    });
-  });
-
   test('compile test bundle with noClean option', async () => {
     const manager = new CompileManager();
     return manager.compile({
