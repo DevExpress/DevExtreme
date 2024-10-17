@@ -82,3 +82,31 @@ test('The rows should render correctly when cellTemplates are used and the selec
   // simulating async rendering in React
   await makeRowsViewTemplatesAsync(GRID_CONTAINER);
 });
+
+test('The focused state of a row with the 0 key should be restored (T1252962)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const dataRow0 = dataGrid.getDataRow(0);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataRow0.isFocusedRow)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 0, text: 'item 1' },
+    { id: 1, text: 'item 2' }
+  ],
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  stateStoring: {
+    enabled: true,
+    type: 'custom',
+    customLoad() {
+      return Promise.resolve({
+        focusedRowKey: 0,
+      });
+    }
+  }
+}));
