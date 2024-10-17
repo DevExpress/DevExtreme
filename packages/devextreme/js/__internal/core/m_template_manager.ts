@@ -164,4 +164,4 @@ export class TemplateManager {
   }
 }
 
-export default { TemplateManager }
+export default { TemplateManager };

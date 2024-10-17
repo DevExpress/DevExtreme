@@ -8,10 +8,6 @@ module.exports = {
     plugins: [
         'simple-import-sort',
     ],
-    ignorePatterns: [
-        // for test
-        'core/m_*.ts',
-    ],
     overrides: [
         // General TS rules.
         {
@@ -206,9 +202,7 @@ module.exports = {
         // Rules for migrated core files.
         {
             files: [
-                '**/core/options/m_*.ts',
-                '**/core/templates/m_*.ts',
-                '**/core/utils/m_*.ts',
+                '**/core/**/m_*.ts',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -223,7 +217,8 @@ module.exports = {
                 'wrap-iife': 'off',
                 'prefer-arrow-callback': 'off',
                 '@typescript-eslint/prefer-optional-chain': 'off',
-                'radix': 'off'
+                'radix': 'off',
+                'object-shorthand': 'off'
             },
         },
     ],

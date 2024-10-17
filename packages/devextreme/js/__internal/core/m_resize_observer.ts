@@ -1,4 +1,5 @@
 import { noop } from '@js/core/utils/common';
+
 import windowUtils from './utils/m_window';
 
 const window = windowUtils.getWindow();
