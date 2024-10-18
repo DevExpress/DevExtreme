@@ -13,4 +13,5 @@ import './chatParts/messageBox.markup.tests.js';
 import './chatParts/messageBubble.markup.tests.js';
 import './chatParts/messageGroup.markup.tests.js';
 import './chatParts/messageList.markup.tests.js';
+import './chatParts/errorList.markup.tests.js';
 import './chatParts/chat.markup.tests.js';

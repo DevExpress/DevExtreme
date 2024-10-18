@@ -6,6 +6,7 @@ const CHAT_CLASS = 'dx-chat';
 const CHAT_HEADER_CLASS = 'dx-chat-header';
 const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
+const CHAT_ERRORLIST_CLASS = 'dx-chat-errorlist';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -78,6 +79,12 @@ QUnit.module('Chat', moduleConfig, () => {
             const $messageBox = this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`);
 
             assert.strictEqual($messageBox.length, 1);
+        });
+
+        QUnit.test('Error list should be rendered', function(assert) {
+            const $errorList = this.$element.find(`.${CHAT_ERRORLIST_CLASS}`);
+
+            assert.strictEqual($errorList.length, 1);
         });
     });
 

@@ -6,10 +6,15 @@ import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
 import messageLocalization from '@js/localization/message';
-import type { Message, MessageSendEvent, Properties as ChatProperties } from '@js/ui/chat';
+import type {
+  Message,
+  MessageSendEvent,
+  Properties as ChatProperties,
+} from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
+import ErrorList from './errorlist';
 import ChatHeader from './header';
 import type {
   MessageSendEvent as MessageBoxMessageSendEvent,
@@ -21,7 +26,10 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type Properties = ChatProperties & { title: string; showDayHeaders: boolean };
+type Properties = ChatProperties & {
+  title: string;
+  showDayHeaders: boolean;
+};
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
@@ -29,6 +37,8 @@ class Chat extends Widget<Properties> {
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
+
+  _errorList!: ErrorList;
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
@@ -44,6 +54,7 @@ class Chat extends Widget<Properties> {
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
       showDayHeaders: true,
+      errors: [],
     };
   }
 
@@ -87,6 +98,7 @@ class Chat extends Widget<Properties> {
     }
 
     this._renderMessageList();
+    this._renderErrorList();
     this._renderMessageBox();
 
     this._updateRootAria();
@@ -116,6 +128,18 @@ class Chat extends Widget<Properties> {
       showDayHeaders,
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
+    });
+  }
+
+  _renderErrorList(): void {
+    const $errors = $('<div>');
+
+    this.$element().append($errors);
+
+    const { errors = [] } = this.option();
+
+    this._errorList = this._createComponent($errors, ErrorList, {
+      items: errors,
     });
   }
 
@@ -218,6 +242,9 @@ class Chat extends Widget<Properties> {
       case 'dataSource':
         // @ts-expect-error
         this._refreshDataSource();
+        break;
+      case 'errors':
+        this._errorList.option('items', value ?? []);
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
