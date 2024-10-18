@@ -64,6 +64,7 @@ export * from './drag-box-style';
 export * from './drop-down-options';
 export * from './edges';
 export * from './editing';
+export * from './error-dxi';
 export * from './export';
 export * from './field-chooser';
 export * from './field-dxi';

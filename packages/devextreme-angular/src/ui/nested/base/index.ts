@@ -9,6 +9,7 @@ export * from './chart-common-annotation-config';
 export * from './chart-common-series-settings';
 export * from './chart-series-dxi';
 export * from './charts-color';
+export * from './chat-error-dxi';
 export * from './column-chooser-search-config';
 export * from './column-chooser-selection-config';
 export * from './data-change-dxi';
