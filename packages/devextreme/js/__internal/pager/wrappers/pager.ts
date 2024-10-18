@@ -25,7 +25,7 @@ export default class Pager extends GridPagerWrapper {
         'defaultPageIndex',
         'pageIndexChanged',
         'pageIndexChangedInternal',
-        'gridCompatibility',
+        'isGridCompatibilityMode',
         'className',
         'showInfo',
         'infoText',

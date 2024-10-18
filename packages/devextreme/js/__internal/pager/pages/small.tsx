@@ -4,11 +4,11 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
-import messageLocalization from '../../../localization/message';
 import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
 import { NumberBox } from '../editors/number_box';
 import { PAGER_INFO_CLASS } from '../info';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { getElementMinWidth } from '../utils/get_element_width';
 import { Page } from './page';
 
@@ -17,15 +17,10 @@ const PAGER_PAGE_INDEX_CLASS = 'dx-page-index';
 const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
-export interface PagerSmallProps {
-  inputAttr?: any;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallPropsType = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChangedInternal' | 'pagesCountText'> & PagerSmallProps;
+type PagerSmallPropsType = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChangedInternal' | 'pagesCountText'>;
 
 export const PagerSmallDefaultProps: PagerSmallPropsType = {
-  inputAttr: { 'aria-label': messageLocalization.format('dxPager-ariaPageNumber') },
   pageIndex: PagerDefaultProps.pageIndex,
   pageCount: PagerDefaultProps.pageCount,
   pageIndexChangedInternal: PagerDefaultProps.pageIndexChangedInternal,
@@ -75,7 +70,13 @@ export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
   }
 
   getPagesCountText(): string {
-    return (this.props.pagesCountText ?? '') || messageLocalization.getFormatter('dxPager-pagesCountText')();
+    return (this.props.pagesCountText ?? '') || getLocalizationMessage(this.context, 'dxPagination-pagesCountText');
+  }
+
+  getInputAttributes(): object {
+    return {
+      'aria-label': getLocalizationMessage(this.context, 'dxPagination-ariaPageNumber'),
+    };
   }
 
   selectLastPageIndex(): void {
@@ -96,7 +97,7 @@ export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
           width={this.getWidth()}
           value={this.getValue()}
           valueChange={this.valueChange}
-          inputAttr={this.props.inputAttr}
+          inputAttr={this.getInputAttributes()}
         />
         <span className={PAGER_INFO_TEXT_CLASS}>{this.getPagesCountText()}</span>
         <Page

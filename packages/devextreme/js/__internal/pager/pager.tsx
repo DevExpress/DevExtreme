@@ -22,7 +22,7 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
   }
 
   pageIndexChangedInternal(newPageIndex: number): void {
-    const newValue = this.props.gridCompatibility ? newPageIndex + 1 : newPageIndex;
+    const newValue = newPageIndex + 1;
     this.setState(() => ({
       pageIndex: newValue,
     }));
@@ -30,10 +30,7 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
   }
 
   getPageIndex(): number {
-    if (this.props.gridCompatibility) {
-      return this.props.pageIndex - 1;
-    }
-    return this.props.pageIndex;
+    return this.props.pageIndex - 1;
   }
 
   pageSizeChangedInternal(newPageSize: number): void {
@@ -44,13 +41,11 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
   }
 
   getClassName(): string | undefined {
-    if (this.props.gridCompatibility) {
-      return combineClasses({
-        'dx-datagrid-pager': true,
-        [`${this.props.className}`]: !!this.props.className,
-      });
-    }
-    return this.props.className;
+    return combineClasses({
+      // TODO: check if the class needed
+      'dx-datagrid-pager': true,
+      [`${this.props.className}`]: !!this.props.className,
+    });
   }
 
   getPagerProps(): PagerProps {

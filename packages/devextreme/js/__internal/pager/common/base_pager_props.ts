@@ -6,7 +6,7 @@ import type { EventCallback } from '../../core/r1/event_callback';
 import { BaseWidgetDefaultProps, type BaseWidgetProps } from '../base_props';
 
 export interface BasePagerProps extends BaseWidgetProps {
-  gridCompatibility?: boolean;
+  isGridCompatibilityMode?: boolean;
   className?: string;
   showInfo?: boolean;
   infoText?: string;
@@ -29,7 +29,7 @@ export interface BasePagerProps extends BaseWidgetProps {
 
 export const BasePagerDefaultProps: BasePagerProps = {
   ...BaseWidgetDefaultProps,
-  gridCompatibility: true,
+  isGridCompatibilityMode: false,
   showInfo: false,
   displayMode: 'adaptive',
   maxPagesCount: 10,
@@ -41,5 +41,5 @@ export const BasePagerDefaultProps: BasePagerProps = {
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   itemCount: 1,
-  label: messageLocalization.format('dxPager-ariaLabel'),
+  label: messageLocalization.format('dxPagination-ariaLabel'),
 };

@@ -218,6 +218,17 @@
         "dxPager-ariaPageSize": "ページ サイズ",
         "dxPager-ariaPageNumber": "ページ番号",
 
+        "dxPagination-infoText": "ページ {0} / {1} ({2} アイテム)",
+        "dxPagination-pagesCountText": "/",
+        "dxPagination-pageSize": "ページあたりのアイテム数: {0}",
+        "dxPagination-pageSizesAllText": "すべて",
+        "dxPagination-page": "ページ {0}",
+        "dxPagination-prevPage": "前のページ",
+        "dxPagination-nextPage": "次のページ",
+        "dxPagination-ariaLabel": "ページ ナビゲーション",
+        "dxPagination-ariaPageSize": "ページ サイズ",
+        "dxPagination-ariaPageNumber": "ページ番号",
+
         "dxPivotGrid-grandTotal": "総計",
         "dxPivotGrid-total": "{0} 合計",
         "dxPivotGrid-fieldChooserTitle": "フィールドの選択",

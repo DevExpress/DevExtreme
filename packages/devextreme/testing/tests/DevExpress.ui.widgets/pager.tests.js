@@ -6,6 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 
 import 'generic_light.css!';
 import Pager from 'ui/pagination';
+import DataGrid from 'ui/data_grid';
 import localization from 'localization';
 
 const PAGER_LIGHT_MODE_WIDTH = 200;
@@ -1568,7 +1569,7 @@ function() {
         assert.deepEqual(rtlTestSample.pages, ltrTestSample.pages.reverse(), 'check that pages in LTR are equal to reversed pages in RTL');
     });
 
-    QUnit.test('dxPager has locale appropriate aria-labels (T1102800)(T1104028)', function(assert) {
+    QUnit.test('Grid Pager has locale appropriate aria-labels (T1102800)(T1104028)', function(assert) {
         const locale = localization.locale();
         const dictionary = {
             'en': {
@@ -1589,11 +1590,16 @@ function() {
         localization.loadMessages(dictionary);
         localization.locale('en');
 
-        const pagerElement = $('#container').dxPagination({
-            allowedPageSizes: ['all'],
-            showNavigationButtons: true,
-            showInfo: true
-        });
+        const pagerElement = $('#container').dxDataGrid({
+            dataSource: [],
+            pager: {
+                visible: true,
+                allowedPageSizes: ['all'],
+                showNavigationButtons: true,
+                showInfo: true,
+                showPageSizeSelector: true,
+            }
+        }).find('.dx-pager');
 
         let pageSize = pagerElement.find('.dx-page-size');
         let buttonNext = pagerElement.find('.dx-next-button');
@@ -1617,6 +1623,59 @@ function() {
         assert.equal(page.attr('aria-label'), dictionary['fr']['dxPager-page'].replace('{0}', '1'), 'correct aria-label for page on locale change');
         assert.equal(buttonNext.attr('aria-label'), dictionary['fr']['dxPager-nextPage'], 'correct aria-label for next page on locale change');
         assert.equal(buttonPrev.attr('aria-label'), dictionary['fr']['dxPager-prevPage'], 'correct aria-label for prev page on locale change');
+
+        localization.locale(locale);
+    });
+
+    QUnit.test('dxPagination has locale appropriate aria-labels', function(assert) {
+        const locale = localization.locale();
+        const dictionary = {
+            'en': {
+                'dxPagination-pageSize': 'test Items per page: {0}',
+                'dxPagination-pageSizesAllText': 'test All',
+                'dxPagination-page': 'test Page {0}',
+                'dxPagination-prevPage': 'test Previous Page',
+                'dxPagination-nextPage': 'test Next Page',
+            },
+            'fr': {
+                'dxPagination-pageSize': 'test Nombre d\'éléments par page: {0}',
+                'dxPagination-pageSizesAllText': 'test Tous',
+                'dxPagination-page': 'test Page {0}',
+                'dxPagination-prevPage': 'test Page précédente',
+                'dxPagination-nextPage': 'test Page suivante',
+            }
+        };
+        localization.loadMessages(dictionary);
+        localization.locale('en');
+
+        const pagerElement = $('#container').dxPagination({
+            allowedPageSizes: ['all'],
+            showNavigationButtons: true,
+            showInfo: true
+        });
+
+        let pageSize = pagerElement.find('.dx-page-size');
+        let buttonNext = pagerElement.find('.dx-next-button');
+        let buttonPrev = pagerElement.find('.dx-prev-button');
+        let page = pagerElement.find('.dx-page');
+
+        assert.equal(pageSize.attr('aria-label'), dictionary['en']['dxPagination-pageSize'].replace('{0}', dictionary['en']['dxPagination-pageSizesAllText']), 'correct aria-label for page size on initial render');
+        assert.equal(page.attr('aria-label'), dictionary['en']['dxPagination-page'].replace('{0}', '1'), 'correct aria-label for page on initial render');
+        assert.equal(buttonNext.attr('aria-label'), dictionary['en']['dxPagination-nextPage'], 'correct aria-label for next page on initial render');
+        assert.equal(buttonPrev.attr('aria-label'), dictionary['en']['dxPagination-prevPage'], 'correct aria-label for prev page on initial render');
+
+        localization.locale('fr');
+        pagerElement.dxPagination('instance').repaint();
+
+        pageSize = pagerElement.find('.dx-page-size');
+        buttonNext = pagerElement.find('.dx-next-button');
+        buttonPrev = pagerElement.find('.dx-prev-button');
+        page = pagerElement.find('.dx-page');
+
+        assert.equal(pageSize.attr('aria-label'), dictionary['fr']['dxPagination-pageSize'].replace('{0}', dictionary['fr']['dxPagination-pageSizesAllText']), 'correct aria-label for page size on locale change');
+        assert.equal(page.attr('aria-label'), dictionary['fr']['dxPagination-page'].replace('{0}', '1'), 'correct aria-label for page on locale change');
+        assert.equal(buttonNext.attr('aria-label'), dictionary['fr']['dxPagination-nextPage'], 'correct aria-label for next page on locale change');
+        assert.equal(buttonPrev.attr('aria-label'), dictionary['fr']['dxPagination-prevPage'], 'correct aria-label for prev page on locale change');
 
         localization.locale(locale);
     });
