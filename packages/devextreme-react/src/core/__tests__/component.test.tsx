@@ -13,6 +13,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+import { TemplateDiscoveryContext } from '../helpers';
 
 
 jest.useFakeTimers();
@@ -130,8 +131,8 @@ describe('rendering', () => {
     let didRenderToDetachedBranch = false;
 
     beforeEach(() => {
-      WidgetClass.mockImplementation((element: Element) => {
-        didRenderToDetachedBranch = didRenderToDetachedBranch || !element.isConnected;
+      WidgetClass.mockImplementation((element: Element, options: any) => {
+        didRenderToDetachedBranch = didRenderToDetachedBranch || (!element.isConnected && options.isTemplateTested === false);
         return Widget;
       })
     });
@@ -143,11 +144,19 @@ describe('rendering', () => {
     it('does not render a nested component\'s widget to a detached DOM branch in Strict Mode', () => {
       testingLib.configure({ reactStrictMode: true });
 
-      const component = (
-        <TestComponent>
-          <TestComponent>
+      const InnerComponent = () => {
+        const { discoveryRendering: isTemplateTested } = React.useContext(TemplateDiscoveryContext);
+
+        return (
+          <TestComponent isTemplateTested={isTemplateTested}>
             <div>Test</div>
           </TestComponent>
+        );
+      };
+
+      const component = (
+        <TestComponent>
+          <InnerComponent/>
         </TestComponent>
       );
       testingLib.render(component);
@@ -190,7 +199,11 @@ describe('rendering', () => {
     const content = container.firstChild as HTMLElement;
     expect(content.tagName.toLowerCase()).toBe('div');
 
-    expect(createPortalFn).not.toHaveBeenCalled();
+    expect(createPortalFn.mock.calls.some(call => {
+      const reactElement = call[0] as unknown as React.ReactElement;
+
+      return reactElement.type !== TemplateDiscoveryContext.Provider
+    })).toBeFalsy();
   });
 
   it('renders portal component with children correctly', () => {
@@ -215,7 +228,11 @@ describe('rendering', () => {
     expect(portal.children.length).toBe(1);
     expect(portal.children[0].tagName.toLowerCase()).toBe('span');
 
-    expect(createPortalFn).toHaveBeenCalledTimes(1);
+    expect(createPortalFn.mock.calls.filter(call => {
+      const reactElement = call[0] as unknown as React.ReactElement;
+
+      return reactElement.type !== TemplateDiscoveryContext.Provider
+    }).length).toEqual(1);
   });
 
   it('create widget on componentDidMount', () => {
@@ -239,8 +256,8 @@ describe('rendering', () => {
       </TestComponent>,
     );
 
-    expect(WidgetClass.mock.instances.length).toBe(2);
-    expect(WidgetClass.mock.instances[1]).toEqual({});
+    expect(WidgetClass.mock.instances.length).toBe(3);
+    expect(WidgetClass.mock.instances[2]).toEqual({});
   });
 
   it('clears nested option in strict mode', () => {
@@ -251,7 +268,7 @@ describe('rendering', () => {
         </TestComponent>
       </React.StrictMode>,
     );
-    expect(Widget.clearExtensions).toHaveBeenCalledTimes(4);
+    expect(Widget.clearExtensions).toHaveBeenCalledTimes(6);
   });
 
   it('do not pass children to options', () => {

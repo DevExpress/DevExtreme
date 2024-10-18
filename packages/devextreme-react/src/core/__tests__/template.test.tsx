@@ -3,7 +3,7 @@ import { cleanup, render, screen } from '@testing-library/react';
 import * as React from 'react';
 import { memo, forwardRef, ForwardedRef } from 'react';
 import { act } from 'react-dom/test-utils';
-import { Component } from '../component';
+import { Component, NestedComponentMeta } from '../component';
 import ConfigurationComponent from '../nested-option';
 import { Template } from '../template';
 import {
@@ -162,7 +162,7 @@ function testTemplateOption(testedOption: string) {
     changedElementOptions[testedOption] = () => <div className="template">Second Template</div>;
     rerender(
       <ComponentWithTemplates {...changedElementOptions}>
-        <div ref={containerRef} />
+        <div ref={containerRef} className="container" />
       </ComponentWithTemplates>,
     );
 
@@ -562,51 +562,50 @@ describe('component/render in nested options', () => {
     cleanup();
   });
 
-  const NestedComponent = memo(function NestedComponent(props: any) {
+  const NestedComponent = function NestedComponent(props: any) {
     return (
       <ConfigurationComponent<{
         item?: any;
         itemRender?: any;
         itemComponent?: any;
       } & React.PropsWithChildren>
+        elementDescriptor={{
+          OptionName: 'option',
+          TemplateProps: [{
+            tmplOption: 'item',
+            render: 'itemRender',
+            component: 'itemComponent',
+          }],
+        }}
         {...props}
       />
     );
-  }) as React.MemoExoticComponent<any> & {
-    OptionName: string
-    TemplateProps: Record<string, string>[]
-  };
+  } as React.ComponentType<any> & NestedComponentMeta;
 
-  NestedComponent.OptionName = 'option';
-  NestedComponent.TemplateProps = [{
-    tmplOption: 'item',
-    render: 'itemRender',
-    component: 'itemComponent',
-  }];
+  NestedComponent.componentType = 'option';
 
-  const CollectionNestedComponent = memo(function CollectionNestedComponent(props: any) {
+  const CollectionNestedComponent = function CollectionNestedComponent(props: any) {
     return (
       <ConfigurationComponent<{
         template?: any;
         render?: any;
         component?: any;
       } & React.PropsWithChildren>
+        elementDescriptor={{
+          OptionName: 'collection',
+          IsCollectionItem: true,
+          TemplateProps: [{
+            tmplOption: 'template',
+            render: 'render',
+            component: 'component',
+          }],
+        }}
         {...props}
       />
     );
-  }) as React.MemoExoticComponent<any> & {
-    OptionName: string
-    IsCollectionItem: boolean;
-    TemplateProps: Record<string, string>[]
-  };
+  } as React.ComponentType<any> & NestedComponentMeta;
 
-  CollectionNestedComponent.OptionName = 'collection';
-  CollectionNestedComponent.IsCollectionItem = true;
-  CollectionNestedComponent.TemplateProps = [{
-    tmplOption: 'template',
-    render: 'render',
-    component: 'component',
-  }];
+  CollectionNestedComponent.componentType = 'option';
 
   it('pass integrationOptions options to widget', () => {
     const ItemTemplate = () => <div>Template</div>;
@@ -670,6 +669,7 @@ describe('component/render in nested options', () => {
 
   it('pass integrationOptions options for collection nested components', () => {
     const UserTemplate = () => <div>Template</div>;
+
     render(
       <TestComponent>
         <CollectionNestedComponent render={UserTemplate} />
@@ -680,8 +680,11 @@ describe('component/render in nested options', () => {
         </CollectionNestedComponent>
         // @ts-expect-error TS2769
         <CollectionNestedComponent>
-          <NestedComponent />
+          <NestedComponent prop='value' />
           abc
+        </CollectionNestedComponent>
+        <CollectionNestedComponent>
+          <NestedComponent prop='value' />
         </CollectionNestedComponent>
         // @ts-expect-error TS2769
         <NestedComponent>
@@ -695,8 +698,10 @@ describe('component/render in nested options', () => {
     expect(options.collection[0].template).toBe('collection[0].template');
     expect(options.collection[1].template).toBe('collection[1].template');
     expect(options.collection[2].option.item).toBe('collection[2].option.item');
+    expect(options.collection[3].option.prop).toBe('value');
+    expect(options.collection[4].option.prop).toBe('value');
     expect(options.option.collection[0].template).toBe('option.collection[0].template');
-
+    
     const { integrationOptions } = options;
 
     expect(Object.keys(integrationOptions.templates)).toEqual([
@@ -704,6 +709,50 @@ describe('component/render in nested options', () => {
       'collection[0].template',
       'collection[1].template',
       'collection[2].option.item',
+      'collection[3].template',
+    ]);
+  });
+
+  it('pass integrationOptions options for collection nested components with custom components', () => {
+    const UserTemplate = () => <div>Template</div>;
+
+    const CustomComponentWithTemplate = () => <NestedComponent itemRender={UserTemplate} />;
+    const CustomComponentWithProp = () => <NestedComponent prop='value' />;
+
+    render(
+      <TestComponent>
+        <CollectionNestedComponent>
+          <CustomComponentWithTemplate />
+        </CollectionNestedComponent>
+        // @ts-expect-error TS2769
+        <CollectionNestedComponent>
+          <CustomComponentWithProp />
+          abc
+        </CollectionNestedComponent>
+        <CollectionNestedComponent>
+          <CustomComponentWithProp />
+        </CollectionNestedComponent>
+        <CollectionNestedComponent>
+          <CustomComponentWithProp />
+          <UserTemplate />
+        </CollectionNestedComponent>
+      </TestComponent>,
+    );
+
+    const options = WidgetClass.mock.calls[0][1];
+
+    expect(options.collection[0].option.item).toBe('collection[0].option.item');
+    expect(options.collection[1].option.prop).toBe('value');
+    expect(options.collection[1].template).toBe('collection[1].template');
+    expect(options.collection[2].option.prop).toBe('value');
+    expect(options.collection[3].option.prop).toBe('value');
+    expect(options.collection[3].template).toBe('collection[3].template');
+
+    const { integrationOptions } = options;
+
+    expect(Object.keys(integrationOptions.templates)).toEqual([
+      'collection[0].option.item',
+      'collection[1].template',
       'collection[3].template',
     ]);
   });
@@ -807,7 +856,6 @@ describe('component/render in nested options', () => {
 
     expect(options.collection[0].template).toBe('collection[0].template');
     expect(options.collection[1].template).toBe('collection[1].template');
-    expect(options.collection[2].template).toBe('collection[2].template');
     expect(options.collection[3].template).toBe('collection[3].template');
     expect(options.collection[4].template).toBe('collection[4].template');
 
@@ -815,7 +863,6 @@ describe('component/render in nested options', () => {
     expect(Object.keys(integrationOptions.templates)).toEqual([
       'collection[0].template',
       'collection[1].template',
-      'collection[2].template',
       'collection[3].template',
       'collection[4].template',
     ]);

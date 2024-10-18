@@ -62,6 +62,7 @@ const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestCompon
 
   const afterCreateWidget = useCallback(() => {
     Widget.option.mockReset();
+    Widget.resetOption.mockReset();
   }, []);
 
   useImperativeHandle(ref, () => {

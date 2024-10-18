@@ -1,4 +1,5 @@
 import { ITemplateMeta, Template as TemplateComponent } from '../../template';
+import { NestedComponentMeta } from '../../types';
 
 enum ElementType {
   Option,
@@ -26,66 +27,55 @@ interface IOptionElement {
   props: Record<string, any>;
 }
 
-interface ITemplateElement {
-  type: ElementType.Template;
-  props: Record<string, any>;
-}
-
-interface IUnknownElement {
-  type: ElementType.Unknown;
-}
-
-type IElement = IOptionElement | ITemplateElement | IUnknownElement;
-
-function getElementInfo(
-  element: React.ReactNode,
+function getOptionInfo(
+  elementDescriptor: IElementDescriptor,
+  props: Record<string, any>,
   parentExpectedChildren?: Record<string, IExpectedChild>,
-): IElement {
-  const reactElement = element as unknown as React.ReactElement;
-  if (!reactElement || !reactElement.type) {
-    return {
-      type: ElementType.Unknown,
-    };
-  }
+): IOptionElement {
+  let name = elementDescriptor.OptionName;
+  let isCollectionItem = elementDescriptor.IsCollectionItem;
 
-  if (reactElement.type === TemplateComponent) {
-    return {
-      type: ElementType.Template,
-      props: reactElement.props,
-    };
-  }
-
-  const elementDescriptor = reactElement.type as any as IElementDescriptor;
-
-  if (elementDescriptor.OptionName) {
-    let name = elementDescriptor.OptionName;
-    let isCollectionItem = elementDescriptor.IsCollectionItem;
-
-    const expectation = parentExpectedChildren && parentExpectedChildren[name];
-    if (expectation) {
-      isCollectionItem = expectation.isCollectionItem;
-      if (expectation.optionName) {
-        name = expectation.optionName;
-      }
+  const expectation = parentExpectedChildren && parentExpectedChildren[name];
+  if (expectation) {
+    isCollectionItem = expectation.isCollectionItem;
+    if (expectation.optionName) {
+      name = expectation.optionName;
     }
-
-    return {
-      type: ElementType.Option,
-      descriptor: {
-        name,
-        isCollection: !!isCollectionItem,
-        templates: elementDescriptor.TemplateProps || [],
-        initialValuesProps: elementDescriptor.DefaultsProps || {},
-        predefinedValuesProps: elementDescriptor.PredefinedProps || {},
-        expectedChildren: elementDescriptor.ExpectedChildren || {},
-      },
-      props: reactElement.props,
-    };
   }
 
   return {
-    type: ElementType.Unknown,
+    type: ElementType.Option,
+    descriptor: {
+      name,
+      isCollection: !!isCollectionItem,
+      templates: elementDescriptor.TemplateProps || [],
+      initialValuesProps: elementDescriptor.DefaultsProps || {},
+      predefinedValuesProps: elementDescriptor.PredefinedProps || {},
+      expectedChildren: elementDescriptor.ExpectedChildren || {},
+    },
+    props,
   };
+}
+
+function getElementType(
+  element: React.ReactNode,
+): ElementType {
+  const reactElement = element as unknown as React.ReactElement;
+  if (!reactElement || !reactElement.type) {
+    return ElementType.Unknown;
+  }
+
+  if (reactElement.type === TemplateComponent) {
+    return ElementType.Template;
+  }
+
+  const nestedComponentMeta = reactElement.type as any as NestedComponentMeta;
+
+  if (nestedComponentMeta.componentType === 'option') {
+    return ElementType.Option;
+  }
+
+  return ElementType.Unknown;
 }
 
 interface IElementDescriptor {
@@ -98,10 +88,11 @@ interface IElementDescriptor {
 }
 
 export {
-  getElementInfo,
+  getElementType,
+  getOptionInfo,
   ElementType,
-  IElement,
   IOptionElement,
   IExpectedChild,
   IElementDescriptor,
+  IOptionDescriptor,
 };
