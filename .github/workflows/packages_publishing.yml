@@ -46,13 +46,13 @@ jobs:
       - name: Get pnpm store directory
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: |
-            ${{ env.STORE_PATH }}
+            ${{ env.PNPM_STORE_PATH }}
             .nx/cache
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
@@ -87,7 +87,7 @@ jobs:
 
       - name: Run deps scanner
         run: |
-          dir ${{ env.STORE_PATH }}
+          dir ${{ env.PNPM_STORE_PATH }}
           pushd deps-scanner/bin/Release
           ./npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
           dir
@@ -147,13 +147,13 @@ jobs:
 #      - name: Get pnpm store directory
 #        shell: bash
 #        run: |
-#          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+#          echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 #
 #      - uses: actions/cache@v4
 #        name: Setup pnpm cache
 #        with:
 #          path: |
-#            ${{ env.STORE_PATH }}
+#            ${{ env.PNPM_STORE_PATH }}
 #            .nx/cache
 #          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
 #          restore-keys: |
