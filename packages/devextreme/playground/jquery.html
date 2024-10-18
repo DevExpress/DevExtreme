@@ -46,141 +46,100 @@
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <select id="theme-selector" style="display: block;">
+        <select id="theme-selector" style="display: none;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div style="display: flex; gap: 20px;">
+            <div id="chat1"></div>
+            <div id="chat2"></div>
+        </div>
+
         <script>
+            const user1 = {
+                id: 1,
+                name: 'Karl',
+            }
+
+            const user2 = {
+                id: 2,
+                name: 'James',
+            }
+
+            const items = [
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user1,
+                    text: 'message 1',
+                },
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user2,
+                    text: 'message 2',
+                },
+            ];
+
             $(function() {
-                const user1 = {
-                    id: 1,
-                    name: 'currentUser',
-                }
+                const statuses1 = {};
+                const statuses2 = {};
 
-                const user2 = {
-                    id: 2,
-                    name: 'James',
-                }
+                const updateTypingStatusesOption = (instance, statuses) => {
+                    instance.option({ typingStatuses: statuses });
+                };
 
-                const user3 = {
-                    id: 3,
-                    name: 'Emma',
-                }
+                const addOrUpdateStatus = (e, statuses, instance) => {
+                    statuses[e.user.id] = e;
 
-                const statuses1 = {
-                    [user2.id]: {
-                        timestamp: new Date(2021, 9, 17, 14, 45).getTime(),
-                        user: user2,
-                    },
-                    [user3.id]: {
-                        timestamp: new Date(2021, 9, 17, 14, 47).getTime(),
-                        user: user3,
-                    },
-                }
+                    updateTypingStatusesOption(instance, statuses);
+                };
 
-                // websockets
+                const removeStatus = (e, statuses, instance) => {
+                    e?.user?.id && delete statuses[e.user.id];
 
-                const instance = $("#button").dxChat({
+                    updateTypingStatusesOption(instance, statuses);
+                };
+
+                const sendToSockets = (e, eventName, statuses, instance) => {
+                    if (eventName === 'start') {
+                        addOrUpdateStatus(e, statuses, instance);
+
+                        return;
+                    }
+
+                    removeStatus(e, statuses, instance);
+                };
+
+                const instance1 = $("#chat1").dxChat({
+                    items,
                     user: user1,
-                    height: 400,
-                    items: [
-                        {
-                            timestamp: new Date(2021, 9, 17, 14, 15),
-                            author: user1,
-                            text: 'message',
-                        },
-                        {
-                            timestamp: new Date(2021, 9, 17, 14, 15),
-                            author: user2,
-                            text: 'message',
-                        },
-                    ],
-                    typingStatuses: statuses1,
+                    height: 600,
+                    onMessageSend: (e) => {
+                        e.component.renderMessage(e.message);
+                        instance2.renderMessage(e.message);
+                    },
                     onTypingStart: (e) => {
-                        console.log('Typing has begun');
+                        sendToSockets(e, 'start', statuses1, instance2);
                     },
                     onTypingEnd: (e) => {
-                        console.log('Typing finished');
+                        sendToSockets(e, 'end', statuses1, instance2);
                     },
                 }).dxChat('instance');
 
-                const user4 = {
-                    id: 4,
-                    name: 'Michael',
-                }
-
-                const statuses2 = {
-                    [user2.id]: {
-                        timestamp: new Date(2021, 9, 17, 14, 45).getTime(),
-                        user: user2,
+                const instance2 = $("#chat2").dxChat({
+                    items,
+                    user: user2,
+                    height: 600,
+                    onMessageSend: (e) => {
+                        e.component.renderMessage(e.message);
+                        instance1.renderMessage(e.message);
                     },
-                    [user2.id]: {
-                        timestamp: new Date(2021, 9, 17, 14, 45).getTime(),
-                        user: user2,
+                    onTypingStart: (e) => {
+                        sendToSockets(e, 'start', statuses2, instance1);
                     },
-                    [user3.id]: {
-                        timestamp: new Date(2021, 9, 17, 14, 47).getTime(),
-                        user: user3,
+                    onTypingEnd: (e) => {
+                        sendToSockets(e, 'end', statuses2), instance1;
                     },
-                    [user4.id]: {
-                        timestamp: new Date(2021, 9, 17, 14, 50).getTime(),
-                        user: user4,
-                    },
-                }
-
-                setTimeout(() => {
-                    instance.option({ typingStatuses: statuses2 })
-                }, 1000);
-
-                // 
-
-                const statuses3 = {
-                    [user2.id]: {
-                        timestamp: new Date(2021, 9, 17, 15, 14).getTime(),
-                        user: user2,
-                    },
-                    [user4.id]: {
-                        timestamp: new Date(2021, 9, 17, 15, 50).getTime(),
-                        user: user4,
-                    },
-                }
-
-                const statuses5 = {
-                    [user2.id]: {
-                        timestamp: new Date(2021, 9, 17, 15, 14).getTime(),
-                        user: user2,
-                    },
-                    [user4.id]: {
-                        timestamp: new Date(2021, 9, 17, 15, 50).getTime(),
-                        user: user4,
-                    },
-                }
-
-                setTimeout(() => {
-                    instance.option({ typingStatuses: statuses3 })
-                }, 2000);
-
-                // 
-
-                const user5 = {
-                    id: 5,
-                    name: 'Olivia',
-                }
-
-                const statuses4 = {
-                    [user4.id]: {
-                        timestamp: new Date(2021, 9, 17, 15, 50).getTime(),
-                        user: user4,
-                    },
-                    [user5.id]: {
-                        timestamp: new Date(2021, 9, 17, 16, 40).getTime(),
-                        user: user5,
-                    },
-                }
-
-                setTimeout(() => {
-                    instance.option({ typingStatuses: statuses3 })
-                }, 2000);
+                }).dxChat('instance');
             });
         </script>
     </div>

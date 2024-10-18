@@ -53,6 +53,10 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
   _initStatuses(): void {
     const { typingStatuses } = this.option();
 
+    if (!typingStatuses) {
+      return;
+    }
+
     const userIds = Object.keys(typingStatuses);
 
     userIds.forEach((userId) => {
@@ -127,7 +131,7 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
 
     userIds.forEach((userId) => {
       const newStatus = newTypingStatuses[userId];
-      const prevStatus = prevTypingStatuses[userId];
+      const prevStatus = prevTypingStatuses?.[userId];
 
       if (!this._statuses[userId]) {
         this._addTypingStatus(userId, newStatus);
