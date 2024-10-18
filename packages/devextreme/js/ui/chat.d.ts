@@ -68,18 +68,18 @@ export type User = {
 };
 
 /**
- * @docid
+ * @docid ChatError
  * @namespace DevExpress.ui.dxChat
  * @public
  */
 export type Error = {
     /**
-     * @docid
+     * @docid ChatError.id
      * @public
      */
     id?: number | string;
     /**
-     * @docid
+     * @docid ChatError.message
      * @default ''
      * @public
      */
@@ -164,6 +164,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     dataSource?: DataSourceLike<Message> | null;
     /**
      * @docid
+     * @type Array<ChatError>
      * @default undefined
      * @public
      */

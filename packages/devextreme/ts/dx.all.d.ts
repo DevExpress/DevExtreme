@@ -30659,15 +30659,15 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxChat {
   /**
-   * [descr:Error]
+   * [descr:ChatError]
    */
   export type Error = {
     /**
-     * [descr:Error.id]
+     * [descr:ChatError.id]
      */
     id?: number | string;
     /**
-     * [descr:Error.message]
+     * [descr:ChatError.message]
      */
     message?: string;
   };
