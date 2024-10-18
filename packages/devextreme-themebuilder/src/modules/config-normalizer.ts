@@ -10,23 +10,11 @@ const extname = (filename: string): string => filename.substring(filename.lastIn
 
 const getBootstrapConfig = (fileName: string, configVersion: string | number): ConfigSettings => {
   const extension = extname(fileName);
-  let bootstrap = false;
-  let version = 0;
+  const isBootstrap = ['.scss', '.less'].includes(extension);
 
-  if (extension === '.scss') {
-    bootstrap = true;
-    version = 4;
-  } else if (extension === '.less') {
-    bootstrap = true;
-    version = 3;
-  }
-
-  if (version === 4 && (configVersion === 4 || configVersion === 5)) {
-    version = configVersion;
-  }
-
-  return { isBootstrap: bootstrap, bootstrapVersion: version };
+  return { isBootstrap, bootstrapVersion: extension === '.scss' && configVersion === 5 ? 5 : 0 };
 };
+
 
 const getOutParameters = (
   command: string,

@@ -1,8 +1,6 @@
 import * as sass from 'sass-embedded';
 import less from 'less';
 import { promises as fs, existsSync } from 'fs';
-import bootstrap3meta from '../data/bootstrap-metadata/bootstrap3-metadata';
-import bootstrap4meta from '../data/bootstrap-metadata/bootstrap4-metadata';
 import bootstrap5meta from '../data/bootstrap-metadata/bootstrap5-metadata';
 
 export default class BootstrapExtractor {
@@ -19,28 +17,14 @@ export default class BootstrapExtractor {
   constructor(source: string, version: number) {
     this.input = source;
     this.version = version;
-    if (version === 3) {
-      this.compiler = BootstrapExtractor.lessRender;
-      this.sourceProcessor = this.lessProcessor;
-      this.meta = bootstrap3meta;
-    } else {
-      this.compiler = BootstrapExtractor.sassRender;
-      this.sourceProcessor = this.sassProcessor;
-
-      this.meta = version === 4
-        ? bootstrap4meta
-        : bootstrap5meta;
-    }
+    this.meta = bootstrap5meta;
+    this.compiler = BootstrapExtractor.sassRender;
+    this.sourceProcessor = this.sassProcessor;
   }
 
   async getRootVariablesSass(): Promise<ConfigMetaItem[]> {
     const result: ConfigMetaItem[] = [];
-
-    if (this.version === 3 || this.version === 4) {
-      return result;
-    }
-
-    const path = require.resolve(`bootstrap${this.version}/dist/css/bootstrap.css`);
+    const path = require.resolve(`bootstrap/dist/css/bootstrap.css`);
     const content = await fs.readFile(path, 'utf8');
     const rootVariables = new RegExp(':root(,.+?])? {.+?}', 's').exec(content)[0];
 
@@ -93,9 +77,14 @@ export default class BootstrapExtractor {
   async sassProcessor(): Promise<string> {
     const functions = await this.readSassFile('_functions.scss');
     const variables = await this.readSassFile('_variables.scss');
-    
+
     const variablesDarkFile = '_variables-dark.scss';
-    const variablesDark = this.version === 5 && existsSync(this.getFilePath(variablesDarkFile)) ? await this.readSassFile(variablesDarkFile) : ''; // TODO: can be removed safely in bootstrap@6
+
+    let variablesDark = '';
+
+    if(existsSync(this.getFilePath(variablesDarkFile))) {
+      variablesDark = await this.readSassFile(variablesDarkFile)
+    }
 
     const result = `${functions}
 ${variables.replace('@import "variables-dark";', '')}
@@ -116,7 +105,7 @@ ${this.getCollectorServiceCode()}`;
   }
 
   getFilePath(fileName: string): string {
-    return require.resolve(`bootstrap${this.version}/scss/${fileName}`);
+    return require.resolve(`bootstrap/scss/${fileName}`);
   }
 
   getSetterServiceCode(postfix = ''): string {
