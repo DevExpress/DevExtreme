@@ -429,7 +429,6 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _initMarkup() {
-    // @ts-expect-error
     this._tagElementsCache = $();
     const isSingleLineMode = !this.option('multiline');
 
@@ -1330,7 +1329,6 @@ const TagBox = (SelectBox as any).inherit({
 
     each(values, (index, selectedValue) => {
       if (this._isValueEquals(value, selectedValue)) {
-        // @ts-expect-error
         result = index;
         return false;
       }

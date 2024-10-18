@@ -43,7 +43,8 @@ OptionChangedEventInfo<TComponent>
 export class Component<
   TComponent extends Component<TComponent, TProperties>,
   TProperties extends Properties<TComponent>,
-// eslint-disable-next-line @typescript-eslint/ban-types
+  // @ts-expect-error dxClass inheritance issue
+  // eslint-disable-next-line @typescript-eslint/ban-types
 > extends (Class.inherit({}) as new() => {}) {
   _deprecatedOptions!: Partial<TProperties>;
 
@@ -492,7 +493,7 @@ export class Component<
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   option(...args): TProperties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._options.option(...args);
+    return this._options.option(...args as [never, never]);
   }
 
   resetOption(name: string): void {

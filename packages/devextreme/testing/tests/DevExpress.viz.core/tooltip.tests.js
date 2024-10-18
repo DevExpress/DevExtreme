@@ -6,7 +6,7 @@ import tooltipModule from 'viz/core/tooltip';
 const Tooltip = tooltipModule.Tooltip;
 import vizUtils from 'viz/core/utils';
 import rendererModule from 'viz/core/renderers/renderer';
-import domAdapter from 'core/dom_adapter';
+import domAdapter from '__internal/core/m_dom_adapter';
 import { implementationsMap } from 'core/utils/size';
 import { initializeSizeMocks, destroySizeMocks } from '../../helpers/sizeMocks.js';
 

@@ -1,7 +1,5 @@
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
-// @ts-expect-error
-import { executeAsync } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -24,6 +22,7 @@ import {
 import { errors } from '@js/data/errors';
 // @ts-expect-error
 import { throttleChanges } from '@js/data/utils';
+import commonUtils from '@ts/core/utils/m_common';
 
 export const DataSource = Class.inherit({
   ctor(options) {
@@ -422,7 +421,7 @@ export const DataSource = Class.inherit({
 
     this._loadQueue.add(() => {
       if (typeof loadOperation.delay === 'number') {
-        this._delayedLoadTask = executeAsync(loadTask, loadOperation.delay);
+        this._delayedLoadTask = commonUtils.executeAsync(loadTask, loadOperation.delay);
       } else {
         loadTask();
       }

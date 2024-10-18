@@ -1,6 +1,6 @@
 import fx from 'animation/fx';
 import translator from 'animation/translator';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';

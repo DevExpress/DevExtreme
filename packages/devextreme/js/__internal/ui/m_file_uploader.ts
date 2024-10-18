@@ -365,7 +365,6 @@ class FileUploader extends Editor<Properties> {
 
   _getFiles(fileList: File[]) {
     const values: File[] = [];
-    // @ts-expect-error
     each(fileList, (_, value) => values.push(value));
 
     return values;

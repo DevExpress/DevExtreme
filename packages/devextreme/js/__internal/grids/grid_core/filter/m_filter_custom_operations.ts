@@ -63,7 +63,7 @@ function baseOperation(grid) {
         column = extend({}, column, { filterType: 'include', filterValues: values });
         const dataSourceOptions = headerFilterController.getDataSource(column);
         dataSourceOptions.paginate = false;
-        const dataSource = new DataSource(dataSourceOptions) as any;
+        const dataSource = new DataSource(dataSourceOptions);
         const key = dataSource.store().key();
 
         if (key) {

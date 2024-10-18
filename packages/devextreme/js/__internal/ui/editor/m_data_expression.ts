@@ -1,7 +1,6 @@
 import { ensureDefined, noop } from '@js/core/utils/common';
 import {
   compileGetter,
-  // @ts-expect-error
   toComparable,
 } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';

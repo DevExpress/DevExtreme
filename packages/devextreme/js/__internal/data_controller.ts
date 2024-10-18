@@ -76,7 +76,6 @@ class DataController {
 
   _updateDataSourceByItems(items: unknown[]): void {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     this._dataSource = new DataSource({
       store: new ArrayStore({
         key: this.key(),

@@ -291,11 +291,8 @@ const SimulatedScrollViewStrategy = SimulatedStrategy.inherit({
   _createScroller(direction) {
     const that = this;
     const scroller = that._scrollers[direction] = new ScrollViewScroller(that._scrollerOptions(direction));
-    // @ts-expect-error
     scroller.pullDownCallbacks.add(() => { that.pullDownCallbacks.fire(); });
-    // @ts-expect-error
     scroller.releaseCallbacks.add(() => { that.releaseCallbacks.fire(); });
-    // @ts-expect-error
     scroller.reachBottomCallbacks.add(() => { that.reachBottomCallbacks.fire(); });
   },
 

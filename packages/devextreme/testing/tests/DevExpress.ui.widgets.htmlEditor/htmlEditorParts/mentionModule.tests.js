@@ -4,7 +4,7 @@ import MentionFormat from '__internal/ui/html_editor/formats/m_mention';
 import Mentions from '__internal/ui/html_editor/modules/m_mentions';
 
 import { noop } from 'core/utils/common';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { Event as dxEvent } from 'events/index';
 import { normalizeKeyName } from 'events/utils/index';
 import Quill from 'devextreme-quill';

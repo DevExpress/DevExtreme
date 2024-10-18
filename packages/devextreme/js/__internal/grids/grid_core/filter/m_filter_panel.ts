@@ -2,11 +2,11 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
 import CheckBox from '@js/ui/check_box';
+import inflector from '@ts/core/utils/m_inflector';
 import {
   getCaptionByOperation, getCurrentLookupValueText, getCurrentValueText,
   getCustomOperation, getField, getGroupValue, isCondition, isGroup,
@@ -244,7 +244,7 @@ export class FilterPanelView extends modules.View {
     const value = filterValue[2];
 
     if (customOperation) {
-      operationText = customOperation.caption || captionize(customOperation.name);
+      operationText = customOperation.caption || inflector.captionize(customOperation.name);
     } else if (value === null) {
       operationText = getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', options.filterOperationDescriptions);
     } else {

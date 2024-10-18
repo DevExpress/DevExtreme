@@ -1,11 +1,11 @@
 import GlobalConfig from '@js/core/config';
-import devices from '@js/core/devices';
 import { each } from '@js/core/utils/iterator';
-import * as support from '@js/core/utils/support';
 import registerEvent from '@js/events/core/event_registrator';
 import MouseStrategy from '@js/events/pointer/mouse';
 import MouseAndTouchStrategy from '@js/events/pointer/mouse_and_touch';
 import TouchStrategy from '@js/events/pointer/touch';
+import devices from '@ts/core/m_devices';
+import support from '@ts/core/utils/m_support';
 
 const getStrategy = (support, { tablet, phone }) => {
   const pointerEventStrategy = getStrategyFromGlobalConfig();
@@ -24,7 +24,6 @@ const getStrategy = (support, { tablet, phone }) => {
 
   return MouseStrategy;
 };
-// @ts-expect-error
 const EventStrategy = getStrategy(support, devices.real());
 
 each(EventStrategy.map, (pointerEvent, originalEvents) => {

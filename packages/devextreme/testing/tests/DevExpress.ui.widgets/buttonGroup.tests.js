@@ -2,7 +2,7 @@ import { getWidth, getHeight, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/button';
 import 'ui/button_group';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';

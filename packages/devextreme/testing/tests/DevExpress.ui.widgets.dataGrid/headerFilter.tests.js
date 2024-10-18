@@ -7,7 +7,7 @@ import $ from 'jquery';
 import ArrayStore from 'data/array_store';
 import { noop } from 'core/utils/common';
 import ODataStore from 'data/odata/store';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { DataSource } from 'data/data_source/data_source';
 import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/m_header_filter';
 import dragEvents from 'events/drag';

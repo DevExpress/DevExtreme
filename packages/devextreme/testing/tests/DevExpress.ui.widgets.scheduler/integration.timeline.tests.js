@@ -11,7 +11,7 @@ import 'generic_light.css!';
 
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 
 import '__internal/scheduler/m_scheduler';
 import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';

@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import Color from '../color';
 import { isFunction, isPromise, isDefined, isRenderer } from '../core/utils/type';
-import { getSvgElement, HIDDEN_FOR_EXPORT } from '../core/utils/svg';
+import svgUtils from '../__internal/core/utils/m_svg';
 import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import domAdapter from '../core/dom_adapter';
@@ -383,7 +383,7 @@ function drawElement(element, context, parentOptions, shared) {
     const isComment = element.nodeType === 8;
     const options = extend({}, parentOptions, getElementOptions(element, shared.rootAppended));
 
-    if(options.visibility === 'hidden' || options[HIDDEN_FOR_EXPORT] || isComment) {
+    if(options.visibility === 'hidden' || options[svgUtils.HIDDEN_FOR_EXPORT] || isComment) {
         return;
     }
 
@@ -752,7 +752,7 @@ function getCanvasFromSvg(markup, { width, height, backgroundColor, margin, svgT
     const canvas = imageCreator._createCanvas(scaledScreenInfo.width, scaledScreenInfo.height, margin);
     const context = canvas.getContext('2d');
     context.setTransform(scaledScreenInfo.pixelRatio, 0, 0, scaledScreenInfo.pixelRatio, 0, 0);
-    const svgElem = getSvgElement(markup);
+    const svgElem = svgUtils.getSvgElement(markup);
     let invisibleDiv;
     const markupIsDomElement = domAdapter.isElementNode(markup) || isRenderer(markup);
     context.translate(margin, margin);

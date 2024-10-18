@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-// @ts-expect-error
 import { compileGetter, toComparable } from '@js/core/utils/data';
 import dataQuery from '@js/data/query';
 import messageLocalization from '@js/localization/message';
@@ -285,7 +284,6 @@ const rowsView = (
       }
       $textNode.after($searchTextSpan.text(text.substr(index, searchText.length)));
 
-      // @ts-expect-error
       $textNode = $(domAdapter.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
 
       return that._highlightSearchTextCore($textNode, searchText);

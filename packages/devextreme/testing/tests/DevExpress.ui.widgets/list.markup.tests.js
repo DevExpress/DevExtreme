@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import List from 'ui/list';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import localization from 'localization';

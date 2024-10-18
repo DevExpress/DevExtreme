@@ -113,7 +113,6 @@ export class StateStoringController extends modules.ViewController {
       return options.customLoad && options.customLoad();
     }
     try {
-      // @ts-expect-error
       return JSON.parse(getStorage(options).getItem(getUniqueStorageKey(options)));
     } catch (e: any) {
       errors.log('W1022', 'State storing', e.message);

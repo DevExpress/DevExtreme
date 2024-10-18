@@ -365,10 +365,8 @@ class ToolbarBase extends AsyncCollectionWidget<Properties> {
 
   _renderGroupedItems(): void {
     each(this.option('items'), (groupIndex, group) => {
-      // @ts-expect-error
       const groupItems = group.items;
       const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
-      // @ts-expect-error
       const location = group.location ?? 'center';
 
       if (!groupItems || !groupItems.length) {

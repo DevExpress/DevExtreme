@@ -4,7 +4,7 @@ import 'ui/data_grid';
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
 import supportUtils from 'core/utils/support';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import themes from 'ui/themes';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import publicComponentUtils from 'core/utils/public_component';

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import SelectBox from 'ui/select_box';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';

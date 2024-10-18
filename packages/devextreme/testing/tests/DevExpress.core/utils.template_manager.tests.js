@@ -1,17 +1,17 @@
-import domUtils from 'core/utils/dom';
-import type from 'core/utils/type';
-import renderer from 'core/renderer';
+import domUtils from '__internal/core/utils/m_dom';
+import type from '__internal/core/utils/m_type';
+import renderer from '__internal/core/m_renderer';
 import {
     findTemplates, suitableTemplatesByName, addOneRenderedCall, templateKey,
     getNormalizedTemplateArgs, validateTemplateSource, addPublicElementNormalization,
     defaultCreateElement, acquireIntegrationTemplate, acquireTemplate,
-} from 'core/utils/template_manager';
-import { Template } from 'core/templates/template';
-import { TemplateBase } from 'core/templates/template_base';
-import { EmptyTemplate } from 'core/templates/empty_template';
-import { ChildDefaultTemplate } from 'core/templates/child_default_template';
-import devices from 'core/devices';
-import { getPublicElement } from 'core/element';
+} from '__internal/core/utils/m_template_manager';
+import { Template } from '__internal/core/templates/m_template';
+import { TemplateBase } from '__internal/core/templates/m_template_base';
+import { EmptyTemplate } from '__internal/core/templates/m_empty_template';
+import { ChildDefaultTemplate } from '__internal/core/templates/m_child_default_template';
+import devices from '__internal/core/m_devices';
+import { getPublicElement } from '__internal/core/m_element';
 import $ from 'jquery';
 
 QUnit.module('TemplateManager utils', {

@@ -1,11 +1,8 @@
 import Class from '@js/core/class';
 import { EventsStrategy } from '@js/core/events_strategy';
 import { normalizeIndexes } from '@js/core/utils/array';
-// @ts-expect-error
-import { executeAsync } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { titleize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isFunction, isNumeric, isPlainObject,
@@ -13,6 +10,8 @@ import {
 } from '@js/core/utils/type';
 import Store from '@js/data/abstract_store';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
+import commonUtils from '@ts/core/utils/m_common';
+import inflector from '@ts/core/utils/m_inflector';
 
 import { LocalStore } from '../local_store/m_local_store';
 import {
@@ -74,7 +73,7 @@ function createCaption(field) {
     summaryType = '';
   }
 
-  return titleize(caption) + summaryType;
+  return inflector.titleize(caption) + summaryType;
 }
 
 function resetFieldState(field, properties) {
@@ -772,7 +771,7 @@ const PivotGridDataSource = Class.inherit((function () {
         }
       }
       if (that.store()) {
-        that._delayedLoadTask = executeAsync(loadTask);
+        that._delayedLoadTask = commonUtils.executeAsync(loadTask);
       } else {
         loadTask();
       }

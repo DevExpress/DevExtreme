@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import FileUploader from 'ui/file_uploader';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';

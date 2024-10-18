@@ -139,7 +139,6 @@ const Resizable = DOMComponent.inherit({
 
   _detachEventHandlers() {
     this._handles.forEach((handleElement) => {
-      // @ts-expect-error
       eventsEngine.off(handleElement);
     });
   },

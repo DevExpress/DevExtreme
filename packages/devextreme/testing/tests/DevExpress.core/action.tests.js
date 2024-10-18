@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import Action from 'core/action';
+import Action from '__internal/core/m_action';
 
 
 QUnit.testStart(function() {

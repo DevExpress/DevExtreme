@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 import PopupModule from '__internal/ui/html_editor/modules/m_popup';
-import windowUtils from 'core/utils/window';
+import windowUtils from '__internal/core/utils/m_window';
 
 const POPUP_CLASS = 'dx-popup';
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';

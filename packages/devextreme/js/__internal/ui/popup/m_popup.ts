@@ -24,7 +24,6 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
-import { getWindow, hasWindow } from '@js/core/utils/window';
 import { triggerResizeEvent } from '@js/events/visibility_change';
 import messageLocalization from '@js/localization/message';
 import Button from '@js/ui/button';
@@ -34,11 +33,12 @@ import Resizable from '@js/ui/resizable';
 import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
 
+import windowUtils from '../../core/utils/m_window';
 import PopupDrag from './m_popup_drag';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
 import { PopupPositionController } from './m_popup_position_controller';
 
-const window = getWindow();
+const window = windowUtils.getWindow();
 
 const POPUP_CLASS = 'dx-popup';
 const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
@@ -690,7 +690,7 @@ const Popup = Overlay.inherit({
   _renderGeometry(options) {
     const { visible, useResizeObserver } = this.option();
 
-    if (visible && hasWindow()) {
+    if (visible && windowUtils.hasWindow()) {
       const isAnimated = this._showAnimationProcessing;
       const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && useResizeObserver;
       this._isAnimationPaused = shouldRepeatAnimation || undefined;
@@ -844,7 +844,7 @@ const Popup = Overlay.inherit({
     if (currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
       if (!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
         const overlayHeight = this.option('fullScreen')
-          ? Math.min(getBoundingRect(overlayContent).height, getWindow().innerHeight)
+          ? Math.min(getBoundingRect(overlayContent).height, windowUtils.getWindow().innerHeight)
           : getBoundingRect(overlayContent).height;
         const contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
         cssStyles = {
@@ -915,7 +915,7 @@ const Popup = Overlay.inherit({
     } else {
       this.callBase();
     }
-    if (hasWindow()) {
+    if (windowUtils.hasWindow()) {
       this._renderFullscreenWidthClass();
     }
   },

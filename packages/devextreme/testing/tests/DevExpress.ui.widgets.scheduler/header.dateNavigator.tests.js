@@ -1,6 +1,6 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 const { testStart, test, module } = QUnit;
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 
 testStart(() => initTestMarkup());
 

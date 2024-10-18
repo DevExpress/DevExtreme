@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';

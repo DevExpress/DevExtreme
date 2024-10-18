@@ -540,7 +540,6 @@ export function getCurrentLookupValueText(field, value, handler) {
   } else {
     const lookupDataSource = isFunction(lookup.dataSource) ? lookup.dataSource({}) : lookup.dataSource;
     const dataSource = new DataSource(lookupDataSource);
-    // @ts-expect-error DataSource is badly typed.
     dataSource.loadSingle(lookup.valueExpr, value).done((result) => {
       let valueText = '';
 

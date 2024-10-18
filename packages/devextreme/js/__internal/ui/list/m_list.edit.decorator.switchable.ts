@@ -145,7 +145,6 @@ const SwitchableEditDecorator = EditDecorator.inherit({
   _enablePositioning($itemElement) {
     $itemElement.addClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS);
     eventsEngine.on($itemElement, ACTIVE_EVENT_NAME, noop);
-    // @ts-expect-error
     eventsEngine.one($itemElement, pointerEvents.up, this._disablePositioning.bind(this, $itemElement));
   },
 

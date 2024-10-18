@@ -286,7 +286,6 @@ const DataAdapter = Class.inherit({
     const items = extend([], this._dataStructure);
     each(items, (index, item) => {
       if (!item) {
-        // @ts-expect-error
         that._dataStructure.splice(index - counter, 1);
         counter++;
       }

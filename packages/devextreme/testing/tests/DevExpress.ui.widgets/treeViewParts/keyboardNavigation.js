@@ -3,7 +3,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';

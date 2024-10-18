@@ -804,7 +804,6 @@ export class ResizingController extends modules.ViewController {
 
         each(VIEW_NAMES, (index, viewName) => {
           // TODO getView
-          // @ts-expect-error
           const view = that.getView(viewName);
           if (view) {
             view.resize();
