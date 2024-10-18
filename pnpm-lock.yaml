@@ -572,6 +572,9 @@ importers:
       devextreme-react:
         specifier: workspace:~24.2.0
         version: link:../../packages/devextreme-react/npm
+      inferno:
+        specifier: ^7.4.9
+        version: 7.4.11
     devDependencies:
       '@storybook/addon-essentials':
         specifier: 7.6.19
