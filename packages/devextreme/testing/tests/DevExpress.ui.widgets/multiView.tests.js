@@ -836,12 +836,12 @@ QUnit.module('loop', {
         const pointer = pointerMock($multiView);
 
         this.animationStartAction = function() {
-            assert.equal(position($firstItem), 0, 'first visible item has correct position');
-            assert.equal(position($lastItem), -800, 'last visible item has correct position');
+            assert.equal(position($firstItem), 0, 'item "2" is positioned correctly as the first visible item.');
+            assert.equal(position($lastItem), -800, 'item "3" is positioned correctly as the last visible item.');
         };
 
         pointer.start().swipeStart().swipe(0.1).swipeEnd(1);
-        assert.strictEqual(instance.option('selectedIndex'), 2, 'last item is selected');
+        assert.strictEqual(instance.option('selectedIndex'), 2, 'item "3" is selected');
     });
 
     QUnit.test('if last item is invisible and swiped left first item should be selected', function(assert) {
@@ -861,12 +861,12 @@ QUnit.module('loop', {
         const pointer = pointerMock($multiView);
 
         this.animationStartAction = function() {
-            assert.equal(position($firstItem), 800, 'first visible item has correct position');
-            assert.equal(position($lastItem), 0, 'last visible item has correct position');
+            assert.equal(position($firstItem), 800, 'item "1" is positioned correctly as the first visible item.');
+            assert.equal(position($lastItem), 0, 'item "2" is positioned correctly as the last visible item.');
         };
 
         pointer.start().swipeStart().swipe(-0.1).swipeEnd(-1);
-        assert.strictEqual(instance.option('selectedIndex'), 0, 'last item is selected');
+        assert.strictEqual(instance.option('selectedIndex'), 0, 'item "1" is selected');
     });
 
     QUnit.test('when only one item is visible, swipe action does not move the current visible item', function(assert) {
