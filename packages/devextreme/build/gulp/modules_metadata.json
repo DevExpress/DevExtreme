@@ -562,6 +562,12 @@
     }
   },
   {
+    "name": "ui/rating",
+    "exports": {
+      "default": { "path": "ui.dxRating", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/resizable",
     "exports": {
       "default": { "path": "ui.dxResizable", "isWidget": true }
