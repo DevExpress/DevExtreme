@@ -4,7 +4,7 @@ export {
   OptionChangedEvent,
   MessageSendEvent,
   User,
-  Error,
+  ChatError,
   Message,
   dxChatOptions,
   Properties,

@@ -72,7 +72,7 @@ export type User = {
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type Error = {
+export type ChatError = {
     /**
      * @docid
      * @public
@@ -167,7 +167,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @default undefined
      * @public
      */
-    errors?: Array<Error>;
+    errors?: Array<ChatError>;
     /**
      * @docid
      * @default null
