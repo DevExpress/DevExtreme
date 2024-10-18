@@ -1,16 +1,6 @@
 import Class from '@js/core/class';
 
 const Guid = Class.inherit({
-
-  /**
-    * @name Guid.ctor
-    * @publicName ctor()
-    */
-  /**
-    * @name Guid.ctor
-    * @publicName ctor(value)
-    * @param1 value:string
-    */
   ctor: function (value) {
     if (value) {
       value = String(value);

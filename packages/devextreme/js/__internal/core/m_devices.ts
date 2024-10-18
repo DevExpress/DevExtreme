@@ -150,13 +150,6 @@ class Devices {
 
   _currentWidth: any;
 
-  /**
-    * @name DevicesObject.ctor
-    * @publicName ctor(options)
-    * @param1 options:object
-    * @param1_field1 window:Window
-    * @hidden
-    */
   constructor(options?: { window?: Window }) {
     this._window = options?.window ?? window;
 

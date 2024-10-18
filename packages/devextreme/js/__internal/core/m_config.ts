@@ -14,11 +14,6 @@ const config = {
   forceIsoDateParsing: true,
   wrapActionsBeforeExecute: true,
   useLegacyStoreResult: false,
-  /**
-    * @name GlobalConfig.useJQuery
-    * @type boolean
-    * @hidden
-    */
   useJQuery: undefined,
   editorStylingMode: undefined,
   useLegacyVisibleIndex: false,
