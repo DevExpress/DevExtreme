@@ -67,19 +67,19 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
   }
 
   _addTypingStatus(userId: any, status: any): void {
-    const timeoutId = setTimeout(() => {
-      this._removeTypingStatus(userId);
-    }, 3000);
+    // const timeoutId = setTimeout(() => {
+    //   this._removeTypingStatus(userId);
+    // }, 3000);
 
     this._statuses[userId] = {
       ...status,
-      timeoutId,
+      // timeoutId,
     };
   }
 
   _removeTypingStatus(userId: any): void {
     if (this._statuses[userId]) {
-      clearTimeout(this._statuses[userId].timeoutId);
+      // clearTimeout(this._statuses[userId].timeoutId);
 
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this._statuses[userId];
@@ -89,9 +89,9 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
   }
 
   _updateTypingStatus(userId: any, status: any): void {
-    if (this._statuses[userId]) {
-      clearTimeout(this._statuses[userId].timeoutId);
-    }
+    // if (this._statuses[userId]) {
+    //   clearTimeout(this._statuses[userId].timeoutId);
+    // }
 
     this._addTypingStatus(userId, status);
   }
