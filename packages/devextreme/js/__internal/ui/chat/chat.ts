@@ -219,16 +219,14 @@ class Chat extends Widget<Properties> {
 
   _typingStartHandler(): void {
     const { user } = this.option();
-    const timestamp = new Date();
 
-    this._typingStartAction?.({ user, timestamp });
+    this._typingStartAction?.({ user });
   }
 
   _typingEndHandler(): void {
     const { user } = this.option();
-    const timestamp = new Date();
 
-    this._typingEndAction?.({ user, timestamp });
+    this._typingEndAction?.({ user });
   }
 
   _focusTarget(): dxElementWrapper {

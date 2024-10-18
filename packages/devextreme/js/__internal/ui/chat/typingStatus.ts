@@ -79,7 +79,7 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
 
   _removeTypingStatus(userId: any): void {
     if (this._statuses[userId]) {
-      clearTimeout(this._statuses[userId].timeoutHandle);
+      clearTimeout(this._statuses[userId].timeoutId);
 
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this._statuses[userId];
@@ -90,7 +90,7 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
 
   _updateTypingStatus(userId: any, status: any): void {
     if (this._statuses[userId]) {
-      clearTimeout(this._statuses[userId].timeoutHandle);
+      clearTimeout(this._statuses[userId].timeoutId);
     }
 
     this._addTypingStatus(userId, status);
@@ -126,16 +126,15 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
     this._updateText(text);
   }
 
-  _processStatusUpdating(newTypingStatuses: any, prevTypingStatuses: any): void {
+  _processStatusUpdating(newTypingStatuses: any): void {
     const userIds = Object.keys(newTypingStatuses);
 
     userIds.forEach((userId) => {
       const newStatus = newTypingStatuses[userId];
-      const prevStatus = prevTypingStatuses?.[userId];
 
       if (!this._statuses[userId]) {
         this._addTypingStatus(userId, newStatus);
-      } else if (prevStatus?.timestamp !== newStatus.timestamp) {
+      } else {
         this._updateTypingStatus(userId, newStatus);
       }
     });
@@ -152,11 +151,11 @@ class TypingStatus extends DOMComponent<TypingStatus, Properties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    const { name, value, previousValue } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'typingStatuses':
-        this._processStatusUpdating(value, previousValue);
+        this._processStatusUpdating(value);
         break;
       default:
         super._optionChanged(args);

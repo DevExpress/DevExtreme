@@ -202,8 +202,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _onInputTriggerTypingEventsHandler(): void {
-    // eslint-disable-next-line spellcheck/spell-checker
-    this._debouncedTriggerTypingStartEvent();
+    if (this._isValuableTextEntered()) {
+      // eslint-disable-next-line spellcheck/spell-checker
+      this._debouncedTriggerTypingStartEvent();
+    }
   }
 
   _triggerTypingStartEvent(): void {
@@ -225,6 +227,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     if (!this._isValuableTextEntered()) {
       return;
     }
+
+    clearTimeout(this._typingStartEventTimeout);
+
+    this._typingEndAction?.();
 
     const { text } = this._textArea.option();
 

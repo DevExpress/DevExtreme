@@ -112,7 +112,7 @@
                 const instance1 = $("#chat1").dxChat({
                     items,
                     user: user1,
-                    height: 600,
+                    height: 500,
                     onMessageSend: (e) => {
                         e.component.renderMessage(e.message);
                         instance2.renderMessage(e.message);
@@ -128,7 +128,7 @@
                 const instance2 = $("#chat2").dxChat({
                     items,
                     user: user2,
-                    height: 600,
+                    height: 500,
                     onMessageSend: (e) => {
                         e.component.renderMessage(e.message);
                         instance1.renderMessage(e.message);
@@ -137,7 +137,7 @@
                         sendToSockets(e, 'start', statuses2, instance1);
                     },
                     onTypingEnd: (e) => {
-                        sendToSockets(e, 'end', statuses2), instance1;
+                        sendToSockets(e, 'end', statuses2, instance1);
                     },
                 }).dxChat('instance');
             });
