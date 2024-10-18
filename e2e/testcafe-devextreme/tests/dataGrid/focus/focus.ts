@@ -180,28 +180,28 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
 
 ['infinite', 'virtual'].forEach((scrollingMode) => {
   test(`Only the initially focused row should be focused while scrolling in ${scrollingMode} mode`, async (t) => {
-    const dataGrid = new DataGrid(GRID_SELECTOR);
+    const grid = new DataGrid(GRID_SELECTOR);
 
     // assert
     await t
-      .expect(dataGrid.getDataRow(0).isFocusedRow)
+      .expect(grid.getDataRow(0).isFocusedRow)
       .ok();
 
     // act
-    await dataGrid.scrollBy({ y: 200 });
-    await dataGrid.scrollBy({ y: 200 });
-    await dataGrid.scrollTo(t, { top: 0 });
+    await grid.scrollBy({ y: 200 });
+    await grid.scrollBy({ y: 200 });
+    await grid.scrollTo(t, { top: 0 });
     await t.wait(300);
 
     // assert
-    const rows = await dataGrid.apiGetVisibleRows();
-    const isFocusedRows = await Promise.all(rows.map((_, i) => dataGrid.getDataRow(i).isFocusedRow));
+    const rows = await grid.apiGetVisibleRows();
+    const isFocusedRows = await Promise.all(rows.map((_, i) => grid.getDataRow(i).isFocusedRow));
     const focusedRows = isFocusedRows.filter((isFocusedRow) => isFocusedRow);
 
     await t
       .expect(focusedRows.length)
       .eql(1)
-      .expect(dataGrid.getDataRow(0).isFocusedRow)
+      .expect(grid.getDataRow(0).isFocusedRow)
       .ok();
   }).before(async () => {
     const initStore = ClientFunction(() => {
