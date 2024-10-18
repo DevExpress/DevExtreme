@@ -10,11 +10,8 @@ const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="messageGroup"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new MessageGroup($('#messageGroup'), options);
+            this.instance = new MessageGroup($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 

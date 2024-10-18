@@ -11,11 +11,8 @@ const BUTTON_CLASS = 'dx-button';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="messageBox"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new MessageBox($('#messageBox'), options);
+            this.instance = new MessageBox($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 
