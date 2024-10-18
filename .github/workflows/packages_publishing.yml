@@ -87,8 +87,7 @@ jobs:
 
       - name: Run deps scanner
         run: |
-          dir C:\Users\runneradmin\setup-pnpm\node_modules\.bin\pnpm \s \d
-          dir C:\Users\runneradmin\setup-pnpm\node_modules\.bin\pnpx \s \d
+          dir ${{ env.STORE_PATH }}
           pushd deps-scanner/bin/Release
           ./npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
           dir
