@@ -13,11 +13,8 @@ const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="messageList"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new MessageList($('#messageList'), options);
+            this.instance = new MessageList($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 

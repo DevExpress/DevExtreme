@@ -34,10 +34,7 @@ const SCROLLVIEW_CLASS = 'dx-scrollview';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="messageList"></div>';
-        $('#qunit-fixture').html(markup);
-
-        const init = (options = {}, selector = '#messageList') => {
+        const init = (options = {}, selector = '#component') => {
             this.instance = new MessageList($(selector), options);
             this.$element = $(this.instance.$element());
 
@@ -1079,7 +1076,7 @@ QUnit.module('MessageList', moduleConfig, () => {
         });
     });
 
-    QUnit.module('localization', moduleConfig, () => {
+    QUnit.module('localization', () => {
         QUnit.test('message, prompt texts should be equal custom localized values from the dictionary', function(assert) {
             const defaultLocale = localization.locale();
 
