@@ -24,7 +24,7 @@ export default class BootstrapExtractor {
 
   async getRootVariablesSass(): Promise<ConfigMetaItem[]> {
     const result: ConfigMetaItem[] = [];
-    const path = require.resolve(`bootstrap${this.version}/dist/css/bootstrap.css`);
+    const path = require.resolve(`bootstrap/dist/css/bootstrap.css`);
     const content = await fs.readFile(path, 'utf8');
     const rootVariables = new RegExp(':root(,.+?])? {.+?}', 's').exec(content)[0];
 
@@ -105,7 +105,7 @@ ${this.getCollectorServiceCode()}`;
   }
 
   getFilePath(fileName: string): string {
-    return require.resolve(`bootstrap${this.version}/scss/${fileName}`);
+    return require.resolve(`bootstrap/scss/${fileName}`);
   }
 
   getSetterServiceCode(postfix = ''): string {
