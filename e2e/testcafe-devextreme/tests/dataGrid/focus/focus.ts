@@ -194,9 +194,9 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
     await t.wait(300);
 
     // assert
-    const visibleRows = await dataGrid.apiGetVisibleRows();
-    const isFocusedRows = await Promise.all(visibleRows.map((_, i) => dataGrid.getDataRow(i).isFocusedRow));
-    const focusedRows = isFocusedRows.filter(isFocusedRow => isFocusedRow);
+    const rows = await dataGrid.apiGetVisibleRows();
+    const isFocusedRows = await Promise.all(rows.map((_, i) => dataGrid.getDataRow(i).isFocusedRow));
+    const focusedRows = isFocusedRows.filter((isFocusedRow) => isFocusedRow);
 
     await t
       .expect(focusedRows.length)
@@ -204,15 +204,15 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
       .expect(dataGrid.getDataRow(0).isFocusedRow)
       .ok();
   }).before(async () => {
-    const initStore = ClientFunction(() => {  
+    const initStore = ClientFunction(() => {
       (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
         key: 'id',
         data: new Array(40).fill(null).map((_, index) => ({ id: index + 1, text: `item ${index + 1}` })),
       });
     });
-  
+
     await initStore();
-  
+
     return await createWidget('dxDataGrid', {
       dataSource: {
         key: 'id',
