@@ -73,8 +73,10 @@ export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
     return (this.props.pagesCountText ?? '') || getLocalizationMessage(this.context, 'dxPagination-pagesCountText');
   }
 
-  getAriaPageNumberText(): string {
-    return getLocalizationMessage(this.context, 'dxPagination-ariaPageNumber');
+  getInputAttributes(): object {
+    return {
+      'aria-label': getLocalizationMessage(this.context, 'dxPagination-ariaPageNumber'),
+    };
   }
 
   selectLastPageIndex(): void {
@@ -95,9 +97,7 @@ export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
           width={this.getWidth()}
           value={this.getValue()}
           valueChange={this.valueChange}
-          inputAttr={{
-            'aria-label': this.getAriaPageNumberText(),
-          }}
+          inputAttr={this.getInputAttributes()}
         />
         <span className={PAGER_INFO_TEXT_CLASS}>{this.getPagesCountText()}</span>
         <Page

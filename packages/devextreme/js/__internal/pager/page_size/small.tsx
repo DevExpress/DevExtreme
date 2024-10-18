@@ -78,8 +78,10 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
     );
   }
 
-  getAriaPageSizeText(): string {
-    return getLocalizationMessage(this.context, 'dxPagination-ariaPageSize');
+  getInputAttributes(): object {
+    return {
+      'aria-label': getLocalizationMessage(this.context, 'dxPagination-ariaPageSize'),
+    };
   }
 
   render(): JSX.Element {
@@ -96,9 +98,7 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
         value={pageSize}
         valueChange={pageSizeChangedInternal}
         width={this.getWidth()}
-        inputAttr={{
-          'aria-label': this.getAriaPageSizeText(),
-        }}
+        inputAttr={this.getInputAttributes()}
       />
     );
   }
