@@ -8,7 +8,7 @@
           placeholder="Type first name..."
           [(value)]="firstName"
           [dataSource]="names"
-          (onValueChanged)="updateEmployeeInfo($event)"
+          (onValueChanged)="updateEmployeeInfo()"
         >
         </dx-autocomplete>
       </div>
@@ -24,7 +24,7 @@
           [showClearButton]="true"
           [dataSource]="surnames"
           [(value)]="lastName"
-          (onValueChanged)="updateEmployeeInfo($event)"
+          (onValueChanged)="updateEmployeeInfo()"
         >
         </dx-autocomplete>
       </div>
@@ -57,7 +57,7 @@
           valueExpr="State_Long"
           [dataSource]="states"
           [(value)]="state"
-          (onValueChanged)="updateEmployeeInfo($event)"
+          (onValueChanged)="updateEmployeeInfo()"
         >
           <div *dxTemplate="let item of 'item'">
             <span>{{ item.State_Long }} ({{ item.State_Short }})</span>
@@ -78,7 +78,7 @@
           valueExpr="Text"
           [dataSource]="clientsStore"
           [(value)]="currentClient"
-          (onValueChanged)="updateEmployeeInfo($event)"
+          (onValueChanged)="updateEmployeeInfo()"
         >
         </dx-autocomplete>
       </div>

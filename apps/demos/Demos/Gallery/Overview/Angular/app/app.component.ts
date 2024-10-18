@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxGalleryModule } from 'devextreme-angular';
 import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { Service } from './app.service';
+import { Service, Image } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,7 +22,7 @@ if (window && window.config.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  dataSource: string[];
+  dataSource: Image[];
 
   slideshowDelay = 2000;
 
