@@ -12,14 +12,6 @@
   "author": "Developer Express Inc.",
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
-  "dependencies": {
-    "autoprefixer": "^10.4.7",
-    "bootstrap5": "npm:bootstrap@^5.3.0",
-    "clean-css": "^5.3.0",
-    "less": "^3.13.1",
-    "postcss": "^8.2.6",
-    "sass-embedded": "1.66.0"
-  },
   "scripts": {
     "test": "jest --coverage --verbose --runInBand",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
@@ -28,6 +20,17 @@
     "build": "pnpm run generate-metadata && pnpm run build-ts && pnpm run copy-resources",
     "pack": "cd dist && pnpm pack"
   },
+  "peerDependencies": {
+    "bootstrap5": "npm:bootstrap@^5.3.0"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.7",
+    "clean-css": "^5.3.0",
+    "less": "^3.13.1",
+    "postcss": "^8.2.6",
+    "sass-embedded": "1.66.0"
+  },
+
   "devDependencies": {
     "@types/clean-css": "4.2.11",
     "@types/dependency-tree": "7.2.0",
