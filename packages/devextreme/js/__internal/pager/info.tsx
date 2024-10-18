@@ -4,8 +4,8 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { format } from '../../core/utils/string';
-import messageLocalization from '../../localization/message';
 import { PagerDefaultProps, type PagerProps } from './common/pager_props';
+import { getLocalizationMessage } from './utils/compatibility_utils';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 
@@ -30,7 +30,7 @@ export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
   public rootElementRef?: RefObject<HTMLDivElement> = infernoCreateRef() as RefObject<HTMLDivElement>;
 
   getInfoText(): string {
-    return this.props.infoText ?? messageLocalization.getFormatter('dxPager-infoText')();
+    return this.props.infoText ?? getLocalizationMessage(this.context, 'dxPagination-infoText');
   }
 
   getText(): string {

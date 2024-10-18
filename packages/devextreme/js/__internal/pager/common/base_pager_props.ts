@@ -41,5 +41,5 @@ export const BasePagerDefaultProps: BasePagerProps = {
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   itemCount: 1,
-  label: messageLocalization.format('dxPager-ariaLabel'),
+  label: messageLocalization.format('dxPagination-ariaLabel'),
 };

@@ -3,23 +3,19 @@
 import type { RefObject } from '@devextreme/runtime/inferno';
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 
-import messageLocalization from '../../../localization/message';
 import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
 import type { FullPageSize } from '../common/types';
 import { SelectBox } from '../drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { getElementMinWidth } from '../utils/get_element_width';
 
 export interface PagerSmallProps {
   parentRef?: RefObject<HTMLElement>;
   allowedPageSizes: FullPageSize[];
-  inputAttr?: any;
 }
 
 const PagerSmallDefaultProps: PagerSmallProps = {
-  inputAttr: {
-    'aria-label': messageLocalization.format('dxPager-ariaPageSize'),
-  },
   allowedPageSizes: [],
 };
 
@@ -54,7 +50,6 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.props.pageSize,
       this.props.pageSizeChangedInternal,
       this.props.allowedPageSizes,
-      this.props.inputAttr,
     ];
     return [new InfernoEffect(this.updateWidth, dependency)];
   }
@@ -66,7 +61,6 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
       this.props.pageSize,
       this.props.pageSizeChangedInternal,
       this.props.allowedPageSizes,
-      this.props.inputAttr,
     ];
     this._effects[0]?.update(dependency);
   }
@@ -84,9 +78,12 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
     );
   }
 
+  getAriaPageSizeText(): string {
+    return getLocalizationMessage(this.context, 'dxPagination-ariaPageSize');
+  }
+
   render(): JSX.Element {
     const {
-      inputAttr,
       allowedPageSizes,
       pageSize,
       pageSizeChangedInternal,
@@ -99,7 +96,9 @@ export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {
         value={pageSize}
         valueChange={pageSizeChangedInternal}
         width={this.getWidth()}
-        inputAttr={inputAttr}
+        inputAttr={{
+          'aria-label': this.getAriaPageSizeText(),
+        }}
       />
     );
   }
