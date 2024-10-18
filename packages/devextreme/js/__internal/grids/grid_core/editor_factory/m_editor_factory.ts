@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/animation/position';
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
@@ -62,7 +63,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   public focused: any;
 
-  private _$focusOverlay: any;
+  protected _$focusOverlay: any;
 
   private _updateFocusHandler: any;
 
@@ -244,37 +245,24 @@ export class EditorFactory extends ViewControllerWithMixin {
     this.focus($focus);
   }
 
-  /**
-   * @extended: focus
-   */
-  protected renderFocusOverlay($element, isHideBorder) {
-    const that = this;
-
-    if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
-      return;
-    }
-
-    if (!that._$focusOverlay) {
-      that._$focusOverlay = $('<div>').addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
-    }
-
+  public updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
     if (isHideBorder) {
-      that._$focusOverlay.addClass(DX_HIDDEN);
+      this._$focusOverlay.addClass(DX_HIDDEN);
     } else if ($element.length) {
       // align "right bottom" for Mozilla
       const align = browser.mozilla ? 'right bottom' : 'left top';
-      const $content = $element.closest(`.${that.addWidgetPrefix(CONTENT_CLASS)}`);
       const elemCoord = getBoundingRect($element.get(0));
       const isFocusedCellInvalid = $element.hasClass(this.addWidgetPrefix(CELL_INVALID_CLASS));
       const isFocusedCellModified = $element.hasClass(CELL_MODIFIED_CLASS) && !isFocusedCellInvalid;
+      const $content = $element.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
-      that._$focusOverlay
+      this._$focusOverlay
         .removeClass(DX_HIDDEN)
         .toggleClass(FOCUSED_CELL_INVALID_CLASS, isFocusedCellInvalid)
         .toggleClass(FOCUSED_CELL_MODIFIED_CLASS, isFocusedCellModified)
         .appendTo($content);
-      setOuterHeight(that._$focusOverlay, elemCoord.bottom - elemCoord.top + 1);
-      setOuterWidth(that._$focusOverlay, elemCoord.right - elemCoord.left + 1);
+      setOuterHeight(this._$focusOverlay, elemCoord.bottom - elemCoord.top + 1);
+      setOuterWidth(this._$focusOverlay, elemCoord.right - elemCoord.left + 1);
 
       const focusOverlayPosition = {
         precise: true,
@@ -284,12 +272,27 @@ export class EditorFactory extends ViewControllerWithMixin {
         boundary: $content.length && $content,
       };
 
-      that._updateFocusOverlaySize(that._$focusOverlay, focusOverlayPosition);
+      this._updateFocusOverlaySize(this._$focusOverlay, focusOverlayPosition);
       // @ts-expect-error
-      positionUtils.setup(that._$focusOverlay, focusOverlayPosition);
+      positionUtils.setup(this._$focusOverlay, focusOverlayPosition);
 
-      that._$focusOverlay.css('visibility', 'visible'); // for ios
+      this._$focusOverlay.css('visibility', 'visible'); // for ios
     }
+  }
+
+  /**
+   * @extended: focus
+   */
+  protected renderFocusOverlay($element, isHideBorder) {
+    if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
+      return;
+    }
+
+    if (!this._$focusOverlay) {
+      this._$focusOverlay = $('<div>').addClass(this.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+    }
+
+    this.updateFocusOverlay($element, isHideBorder);
   }
 
   public resize() {
@@ -338,6 +341,10 @@ export class EditorFactory extends ViewControllerWithMixin {
         }
       });
     }
+  }
+
+  public getFocusOverlay() {
+    return this._$focusOverlay;
   }
 }
 
