@@ -20,6 +20,7 @@ const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
+const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -28,6 +29,8 @@ const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 export const NOW = '1721747399083';
+
+const RELEASE_TIMEOUT = 800;
 
 export const userFirst = {
     id: MOCK_COMPANION_USER_ID,
@@ -55,11 +58,8 @@ export const generateMessages = (length) => {
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="chat"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new Chat($('#chat'), options);
+            this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
 
             this.$textArea = this.$element.find(`.${CHAT_MESSAGEBOX_TEXTAREA_CLASS}`);
@@ -86,14 +86,14 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Chat', moduleConfig, () => {
-    QUnit.module('Render', () => {
+QUnit.module('Chat', () => {
+    QUnit.module('Render', moduleConfig, () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof Chat);
         });
     });
 
-    QUnit.module('Default options', () => {
+    QUnit.module('Default options', moduleConfig, () => {
         QUnit.test('user should be set to an object with generated id if property is not passed', function(assert) {
             const { user } = this.instance.option();
 
@@ -106,7 +106,7 @@ QUnit.module('Chat', moduleConfig, () => {
         });
     });
 
-    QUnit.module('Header integration', () => {
+    QUnit.module('Header integration', moduleConfig, () => {
         QUnit.test('Header text element should have correct text', function(assert) {
             this.reinit({
                 title: MOCK_CHAT_HEADER_TEXT
@@ -126,7 +126,7 @@ QUnit.module('Chat', moduleConfig, () => {
         });
     });
 
-    QUnit.module('MessageList integration', {
+    QUnit.module('MessageList integration', moduleConfig, {
         beforeEach: function() {
             this.getMessageList = () => MessageList.getInstance(this.$element.find(`.${CHAT_MESSAGELIST_CLASS}`));
         }
@@ -389,7 +389,7 @@ QUnit.module('Chat', moduleConfig, () => {
         });
     });
 
-    QUnit.module('Proxy state options', () => {
+    QUnit.module('Proxy state options', moduleConfig, () => {
         [true, false].forEach(value => {
             QUnit.test('passed state enabled options should be equal chat state enabled options', function(assert) {
                 const options = {
@@ -425,7 +425,7 @@ QUnit.module('Chat', moduleConfig, () => {
         });
     });
 
-    QUnit.module('Methods', () => {
+    QUnit.module('Methods', moduleConfig, () => {
         QUnit.test('The textarea input element must be active after the focus() method is invoked', function(assert) {
             this.instance.focus();
 
@@ -452,7 +452,15 @@ QUnit.module('Chat', moduleConfig, () => {
         });
     });
 
-    QUnit.module('Data Layer Integration', moduleConfig, () => {
+    QUnit.module('Data Layer Integration', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+            moduleConfig.beforeEach.apply(this, arguments);
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
         QUnit.test('Should render empty view container if dataSource is empty', function(assert) {
             this.reinit({
                 dataSource: {
@@ -585,89 +593,106 @@ QUnit.module('Chat', moduleConfig, () => {
         });
 
         QUnit.test('should render all messages correctly when using an asynchronous data source', function(assert) {
-            const clock = sinon.useFakeTimers();
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            const timeout = 1000;
 
-            try {
-                const messages = [{ text: 'message_1' }, { text: 'message_2' }];
-                const timeout = 1000;
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(messages);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
 
-                const store = new CustomStore({
-                    load: function() {
-                        const d = $.Deferred();
-                        setTimeout(function() {
-                            d.resolve(messages);
-                        }, timeout);
-                        return d.promise();
-                    },
-                });
+            this.reinit({
+                dataSource: store,
+            });
 
-                this.reinit({
-                    dataSource: store,
-                });
+            const $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
 
-                assert.strictEqual(this.getEmptyView().length, 1, 'empty messagelist view should be rendered');
-                assert.strictEqual(this.getBubbles().length, 0, 'there should be no message bubbles rendered');
+            assert.strictEqual(this.getEmptyView().length, 0, 'Empty view should not be rendered');
+            assert.strictEqual(this.getBubbles().length, 0, 'No message bubbles should be rendered initially');
+            assert.strictEqual($indicator.is(':visible'), true, 'Loading indicator is visible');
 
-                clock.tick(timeout / 2);
+            this.clock.tick(timeout / 2);
 
-                assert.strictEqual(this.getEmptyView().length, 1, 'empty messagelist view should still be visible while data is loading');
-                assert.strictEqual(this.getBubbles().length, 0, 'should still be no message bubbles rendered while data is loading');
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty messagelist view should still be not rendered while data is loading');
+            assert.strictEqual(this.getBubbles().length, 0, 'should still be no message bubbles rendered while data is loading');
+            assert.strictEqual($indicator.is(':visible'), true, 'Loading indicator is visible');
 
-                clock.tick(timeout / 2);
+            this.clock.tick(timeout / 2);
 
-                assert.strictEqual(this.getEmptyView().length, 0, 'empty messagelist view should not be visible when data is loaded');
-                assert.strictEqual(this.getBubbles().length, 2, 'message bubbles should be rendered when data is loaded');
-
-            } finally {
-                clock.restore();
-            }
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty messagelist view should not be rendered when data is loaded');
+            assert.strictEqual(this.getBubbles().length, 2, 'Message bubbles rendered');
+            assert.strictEqual($indicator.is(':visible'), false, 'Loading indicator is hidden');
         });
 
         QUnit.test('new message should be rendered when using an asynchronous custom store', function(assert) {
-            const clock = sinon.useFakeTimers();
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            const timeout = 1000;
 
-            try {
-                const messages = [{ text: 'message_1' }, { text: 'message_2' }];
-                const timeout = 1000;
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(messages);
+                    }, timeout);
+                    return d.promise();
+                },
+                insert: function(values) {
+                    const d = $.Deferred();
 
-                const store = new CustomStore({
-                    load: function() {
-                        const d = $.Deferred();
-                        setTimeout(function() {
-                            d.resolve(messages);
-                        }, timeout);
-                        return d.promise();
-                    },
-                    insert: function(values) {
-                        const d = $.Deferred();
+                    setTimeout(() => {
+                        messages.push(values);
+                        d.resolve(values);
+                    }, timeout);
 
-                        setTimeout(() => {
-                            messages.push(values);
-                            d.resolve(values);
-                        }, timeout);
+                    return d.promise();
+                },
+            });
 
-                        return d.promise();
-                    },
-                });
+            this.reinit({
+                dataSource: store,
+            });
 
-                this.reinit({
-                    dataSource: store,
-                });
+            this.clock.tick(timeout);
 
-                clock.tick(timeout);
+            const newMessage = { text: 'message_3' };
+            this.instance.renderMessage(newMessage);
 
-                const newMessage = { text: 'message_3' };
-                this.instance.renderMessage(newMessage);
+            this.clock.tick(timeout);
 
-                clock.tick(timeout * 2);
+            assert.deepEqual(this.instance.option('items'), messages, 'items option should contain all messages including the new one');
+            assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
+        });
 
-                assert.deepEqual(this.instance.option('items'), messages, 'items option should contain all messages including the new one');
-                assert.strictEqual(this.getBubbles().length, 3, 'new message should be rendered in list');
-            } finally {
-                clock.restore();
-            }
+        QUnit.test('Loading and Empty view should not be shown at the same time when the dataSource option changes', function(assert) {
+            const messages = [{ text: 'message_1' }, { text: 'message_2' }];
+            const timeout = 400;
+
+            const store = new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(messages);
+                    }, timeout);
+                    return d.promise();
+                },
+            });
+
+            this.reinit({ dataSource: store });
+
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty view is not rendered');
+            let $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
+            assert.strictEqual($indicator.is(':visible'), true, 'loading indicator is visible');
+
+            this.clock.tick(timeout);
+
+            $indicator = this.$element.find(`.${SCROLLVIEW_REACHBOTTOM_INDICATOR}`);
+            assert.strictEqual($indicator.is(':visible'), false, 'loading indicator is hidden');
+            assert.strictEqual(this.getEmptyView().length, 0, 'empty view was removed');
         });
     });
 });
-
-

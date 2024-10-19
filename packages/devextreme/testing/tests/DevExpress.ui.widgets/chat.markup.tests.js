@@ -1,4 +1,11 @@
+import $ from 'jquery';
 import 'generic_light.css!';
+
+QUnit.testStart(() => {
+    const markup = '<div id="component"></div>';
+
+    $('#qunit-fixture').html(markup);
+});
 
 import './chatParts/header.markup.tests.js';
 import './chatParts/avatar.markup.tests.js';

@@ -152,7 +152,9 @@ test('Accessibility: Scrollable should have focusable element when navigate out 
   await createWidget('dxButton', { text: 'Focus' }, '#myButton');
 
   await createWidget('dxDataGrid', getGridConfig());
-});
+}).after(async () => ClientFunction(() => {
+  $('#myButton').remove();
+})());
 
 test('Accessibility: Scrollable should have focusable when fixed on the right side columns are focused', async (t) => {
   const dataGrid = new DataGrid('#container');

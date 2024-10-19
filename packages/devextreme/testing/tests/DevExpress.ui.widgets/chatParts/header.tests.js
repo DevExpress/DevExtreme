@@ -4,11 +4,8 @@ import ChatHeader from '__internal/ui/chat/header';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="header"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new ChatHeader($('#header'), options);
+            this.instance = new ChatHeader($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 

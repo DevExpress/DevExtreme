@@ -8,11 +8,8 @@ const AVATAR_INITIALS_CLASS = 'dx-avatar-initials';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="avatar"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new Avatar($('#avatar'), options);
+            this.instance = new Avatar($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 
