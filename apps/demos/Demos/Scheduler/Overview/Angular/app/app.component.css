@@ -54,19 +54,19 @@
 }
 
 ::ng-deep .employee-1 {
-  background-color: rgba(86, 202, 133, 0.1);
+  background-color: rgba(55, 126, 58, 0.08);
 }
 
 ::ng-deep .employee-2 {
-  background-color: rgba(255, 151, 71, 0.1);
+  background-color: rgba(194, 81, 0, 0.08);
 }
 
 ::ng-deep .employee-weekend-1 {
-  background-color: rgba(86, 202, 133, 0.2);
+  background-color: rgba(55, 126, 58, 0.12);
 }
 
 ::ng-deep .employee-weekend-2 {
-  background-color: rgba(255, 151, 71, 0.2);
+  background-color: rgba(194, 81, 0, 0.12);
 }
 
 ::ng-deep .training-background-0 {
