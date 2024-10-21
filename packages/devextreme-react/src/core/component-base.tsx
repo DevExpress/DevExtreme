@@ -438,8 +438,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
               {renderContent()}
             </NestedOptionContext.Provider>
             <TemplateManager init={setTemplateManagerHooks} onTemplatesRendered={onTemplatesRendered}/>
-              { isPortalComponent && 
-                <NestedOptionContext.Provider value={context}>
+              { isPortalComponent
+                && <NestedOptionContext.Provider value={context}>
                   { renderPortal() }
                 </NestedOptionContext.Provider>
               }
