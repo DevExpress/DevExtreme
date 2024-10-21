@@ -32,7 +32,7 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   onMessageSend?: (e: MessageSendEvent) => void;
 
-  onTypingStart?: (e: TypingStartEvent) => void;
+  onTypingStart?: (e: NativeEventInfo<MessageBox>) => void;
 
   onTypingEnd?: (e: NativeEventInfo<MessageBox>) => void;
 }
