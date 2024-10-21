@@ -1,14 +1,14 @@
 const employees = [{
   text: 'John Heart',
   id: 1,
-  color: '#56ca85',
+  color: 'rgba(50, 134, 56, 1)',
   avatar: '../../../../images/gym/coach-man.png',
   age: 27,
   discipline: 'ABS, Fitball, StepFit',
 }, {
   text: 'Sandra Johnson',
   id: 2,
-  color: '#ff9747',
+  color: 'rgba(194, 81, 0, 1)',
   avatar: '../../../../images/gym/coach-woman.png',
   age: 25,
   discipline: 'ABS, Fitball, StepFit',
