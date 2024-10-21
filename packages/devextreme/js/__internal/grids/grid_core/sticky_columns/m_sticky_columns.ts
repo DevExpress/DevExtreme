@@ -428,14 +428,14 @@ const rowsView = (
   protected _handleScroll(e): void {
     const isStickyColumns = this.isStickyColumns();
 
+    super._handleScroll(e);
+
     if (isStickyColumns) {
       const editorFactoryController = this.getController('editorFactory');
       const $focusOverlay = editorFactoryController.getFocusOverlay();
       const hasFixedColumnsWithStickyPosition = !!this._columnsController
         .getStickyColumns()
         .filter((column) => column.fixedPosition === StickyPosition.Sticky).length;
-
-      super._handleScroll(e);
 
       if (!$focusOverlay?.hasClass(CLASSES.hidden)
         && $focusOverlay?.hasClass(CLASSES.focusedFixedCell)) {
