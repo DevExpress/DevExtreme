@@ -14,7 +14,6 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -54,10 +53,10 @@ export class DxoVectorMapControlBarComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get horizontalAlignment(): HorizontalAlignment {
+    get horizontalAlignment(): "center" | "left" | "right" {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: HorizontalAlignment) {
+    set horizontalAlignment(value: "center" | "left" | "right") {
         this._setOption('horizontalAlignment', value);
     }
 
@@ -86,10 +85,10 @@ export class DxoVectorMapControlBarComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get verticalAlignment(): VerticalEdge {
+    get verticalAlignment(): "bottom" | "top" {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: VerticalEdge) {
+    set verticalAlignment(value: "bottom" | "top") {
         this._setOption('verticalAlignment', value);
     }
 

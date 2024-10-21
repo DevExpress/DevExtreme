@@ -14,7 +14,6 @@ import {
 
 
 
-import { ConnectorLineEnd, ConnectorLineType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -30,74 +29,74 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDiagramDefaultItemPropertiesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get connectorLineEnd(): ConnectorLineEnd {
+    get connectorLineEnd(): "none" | "arrow" | "outlinedTriangle" | "filledTriangle" {
         return this._getOption('connectorLineEnd');
     }
-    set connectorLineEnd(value: ConnectorLineEnd) {
+    set connectorLineEnd(value: "none" | "arrow" | "outlinedTriangle" | "filledTriangle") {
         this._setOption('connectorLineEnd', value);
     }
 
     @Input()
-    get connectorLineStart(): ConnectorLineEnd {
+    get connectorLineStart(): "none" | "arrow" | "outlinedTriangle" | "filledTriangle" {
         return this._getOption('connectorLineStart');
     }
-    set connectorLineStart(value: ConnectorLineEnd) {
+    set connectorLineStart(value: "none" | "arrow" | "outlinedTriangle" | "filledTriangle") {
         this._setOption('connectorLineStart', value);
     }
 
     @Input()
-    get connectorLineType(): ConnectorLineType {
+    get connectorLineType(): "straight" | "orthogonal" {
         return this._getOption('connectorLineType');
     }
-    set connectorLineType(value: ConnectorLineType) {
+    set connectorLineType(value: "straight" | "orthogonal") {
         this._setOption('connectorLineType', value);
     }
 
     @Input()
-    get shapeMaxHeight(): number | undefined {
+    get shapeMaxHeight(): number {
         return this._getOption('shapeMaxHeight');
     }
-    set shapeMaxHeight(value: number | undefined) {
+    set shapeMaxHeight(value: number) {
         this._setOption('shapeMaxHeight', value);
     }
 
     @Input()
-    get shapeMaxWidth(): number | undefined {
+    get shapeMaxWidth(): number {
         return this._getOption('shapeMaxWidth');
     }
-    set shapeMaxWidth(value: number | undefined) {
+    set shapeMaxWidth(value: number) {
         this._setOption('shapeMaxWidth', value);
     }
 
     @Input()
-    get shapeMinHeight(): number | undefined {
+    get shapeMinHeight(): number {
         return this._getOption('shapeMinHeight');
     }
-    set shapeMinHeight(value: number | undefined) {
+    set shapeMinHeight(value: number) {
         this._setOption('shapeMinHeight', value);
     }
 
     @Input()
-    get shapeMinWidth(): number | undefined {
+    get shapeMinWidth(): number {
         return this._getOption('shapeMinWidth');
     }
-    set shapeMinWidth(value: number | undefined) {
+    set shapeMinWidth(value: number) {
         this._setOption('shapeMinWidth', value);
     }
 
     @Input()
-    get style(): any {
+    get style(): Record<string, any> {
         return this._getOption('style');
     }
-    set style(value: any) {
+    set style(value: Record<string, any>) {
         this._setOption('style', value);
     }
 
     @Input()
-    get textStyle(): any {
+    get textStyle(): Record<string, any> {
         return this._getOption('textStyle');
     }
-    set textStyle(value: any) {
+    set textStyle(value: Record<string, any>) {
         this._setOption('textStyle', value);
     }
 

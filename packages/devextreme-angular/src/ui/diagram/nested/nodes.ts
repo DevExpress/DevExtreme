@@ -14,10 +14,9 @@ import {
 
 
 
-import { Orientation } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { DataLayoutType } from 'devextreme/ui/diagram';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -33,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDiagramNodesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get autoLayout(): DataLayoutType | { orientation?: Orientation, type?: DataLayoutType } {
+    get autoLayout(): Record<string, any> | "auto" | "off" | "tree" | "layered" {
         return this._getOption('autoLayout');
     }
-    set autoLayout(value: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }) {
+    set autoLayout(value: Record<string, any> | "auto" | "off" | "tree" | "layered") {
         this._setOption('autoLayout', value);
     }
 
@@ -49,146 +48,146 @@ export class DxoDiagramNodesComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get containerChildrenExpr(): Function | string | undefined {
+    get containerChildrenExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('containerChildrenExpr');
     }
-    set containerChildrenExpr(value: Function | string | undefined) {
+    set containerChildrenExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('containerChildrenExpr', value);
     }
 
     @Input()
-    get containerKeyExpr(): Function | string {
+    get containerKeyExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('containerKeyExpr');
     }
-    set containerKeyExpr(value: Function | string) {
+    set containerKeyExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('containerKeyExpr', value);
     }
 
     @Input()
-    get customDataExpr(): Function | string | undefined {
+    get customDataExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('customDataExpr');
     }
-    set customDataExpr(value: Function | string | undefined) {
+    set customDataExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('customDataExpr', value);
     }
 
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get heightExpr(): Function | string | undefined {
+    get heightExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('heightExpr');
     }
-    set heightExpr(value: Function | string | undefined) {
+    set heightExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('heightExpr', value);
     }
 
     @Input()
-    get imageUrlExpr(): Function | string | undefined {
+    get imageUrlExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('imageUrlExpr');
     }
-    set imageUrlExpr(value: Function | string | undefined) {
+    set imageUrlExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('imageUrlExpr', value);
     }
 
     @Input()
-    get itemsExpr(): Function | string | undefined {
+    get itemsExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: Function | string | undefined) {
+    set itemsExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('itemsExpr', value);
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get leftExpr(): Function | string | undefined {
+    get leftExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('leftExpr');
     }
-    set leftExpr(value: Function | string | undefined) {
+    set leftExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('leftExpr', value);
     }
 
     @Input()
-    get lockedExpr(): Function | string | undefined {
+    get lockedExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('lockedExpr');
     }
-    set lockedExpr(value: Function | string | undefined) {
+    set lockedExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('lockedExpr', value);
     }
 
     @Input()
-    get parentKeyExpr(): Function | string | undefined {
+    get parentKeyExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('parentKeyExpr');
     }
-    set parentKeyExpr(value: Function | string | undefined) {
+    set parentKeyExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('parentKeyExpr', value);
     }
 
     @Input()
-    get styleExpr(): Function | string | undefined {
+    get styleExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('styleExpr');
     }
-    set styleExpr(value: Function | string | undefined) {
+    set styleExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('styleExpr', value);
     }
 
     @Input()
-    get textExpr(): Function | string {
+    get textExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('textExpr');
     }
-    set textExpr(value: Function | string) {
+    set textExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('textExpr', value);
     }
 
     @Input()
-    get textStyleExpr(): Function | string | undefined {
+    get textStyleExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('textStyleExpr');
     }
-    set textStyleExpr(value: Function | string | undefined) {
+    set textStyleExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('textStyleExpr', value);
     }
 
     @Input()
-    get topExpr(): Function | string | undefined {
+    get topExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('topExpr');
     }
-    set topExpr(value: Function | string | undefined) {
+    set topExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('topExpr', value);
     }
 
     @Input()
-    get typeExpr(): Function | string {
+    get typeExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('typeExpr');
     }
-    set typeExpr(value: Function | string) {
+    set typeExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('typeExpr', value);
     }
 
     @Input()
-    get widthExpr(): Function | string | undefined {
+    get widthExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('widthExpr');
     }
-    set widthExpr(value: Function | string | undefined) {
+    set widthExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('widthExpr', value);
     }
 
     @Input()
-    get zIndexExpr(): Function | string | undefined {
+    get zIndexExpr(): ((data: any, value: any) => any) | string {
         return this._getOption('zIndexExpr');
     }
-    set zIndexExpr(value: Function | string | undefined) {
+    set zIndexExpr(value: ((data: any, value: any) => any) | string) {
         this._setOption('zIndexExpr', value);
     }
 

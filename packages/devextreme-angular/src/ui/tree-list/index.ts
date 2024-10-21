@@ -23,16 +23,13 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tree_list';
 
-import { PositionConfig } from 'devextreme/animation/position';
-import { DataStructure, DragDirection, DragHighlight, Mode, ScrollbarMode, ScrollMode, SingleMultipleOrNone, SortOrder } from 'devextreme/common';
-import { ApplyFilterMode, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, DataRenderMode, EnterKeyAction, EnterKeyDirection, GridsEditMode, GridsEditRefreshMode, HeaderFilterSearchConfig, Pager, StartEditAction, StateStoreType } from 'devextreme/common/grids';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Properties as dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { Properties as dxFormOptions } from 'devextreme/ui/form';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
-import { AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, dxTreeListColumn, dxTreeListToolbar, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, TreeListFilterMode } from 'devextreme/ui/tree_list';
+import DataSource from 'devextreme/data/data_source';
+import { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { dxPopupOptions } from 'devextreme/ui/popup';
+import { Pager } from 'devextreme/common/grids';
 
 import DxTreeList from 'devextreme/ui/tree_list';
 
@@ -103,62 +100,81 @@ import { DxoSortingModule } from 'devextreme-angular/ui/nested';
 import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 
-import { DxoTreeListColumnChooserModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListPositionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListAtModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListBoundaryOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListMyModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListSearchModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListColumnFixingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListIconsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListTextsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListColumnModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListButtonModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListChangeModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListColumnModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnChooserModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnChooserSearchModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnChooserSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnFixingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnFixingTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListColumnLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListCompareRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListCursorOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListCustomOperationModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListCustomRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListEditingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListEditingTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListEmailRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListFieldModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFieldLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterBuilderModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterBuilderPopupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterPanelModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterPanelTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFilterRowModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListFormModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormatModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListLabelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListEditingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListChangeModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFormModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListTabPanelOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListTabModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListButtonOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListPopupModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListAnimationModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListHideModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFromModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListToModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListShowModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterBuilderModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListCustomOperationModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxiTreeListFieldModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListGroupOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterBuilderPopupModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterPanelModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListFilterRowModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListHideModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListIconsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListKeyboardNavigationModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListLabelModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListLoadPanelModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListLookupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListMyModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListNumericRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListPagerModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListPagingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListPatternRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListPopupModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListPositionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListRangeRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListRemoteOperationsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListRequiredRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListRowDraggingModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListCursorOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListScrollingModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSearchPanelModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListShowModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSortingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListStateStoringModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListStringLengthRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListToModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListToolbarModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListHeaderFilterTextsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 
 import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
 
@@ -187,10 +203,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -304,10 +320,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnChooser(): { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
+    get columnChooser(): Record<string, any> {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }) {
+    set columnChooser(value: Record<string, any>) {
         this._setOption('columnChooser', value);
     }
 
@@ -317,10 +333,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnFixing(): { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } } {
+    get columnFixing(): Record<string, any> {
         return this._getOption('columnFixing');
     }
-    set columnFixing(value: { enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }) {
+    set columnFixing(value: Record<string, any>) {
         this._setOption('columnFixing', value);
     }
 
@@ -343,10 +359,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnMinWidth(): number | undefined {
+    get columnMinWidth(): number {
         return this._getOption('columnMinWidth');
     }
-    set columnMinWidth(value: number | undefined) {
+    set columnMinWidth(value: number) {
         this._setOption('columnMinWidth', value);
     }
 
@@ -356,10 +372,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnResizingMode(): ColumnResizeMode {
+    get columnResizingMode(): "nextColumn" | "widget" {
         return this._getOption('columnResizingMode');
     }
-    set columnResizingMode(value: ColumnResizeMode) {
+    set columnResizingMode(value: "nextColumn" | "widget") {
         this._setOption('columnResizingMode', value);
     }
 
@@ -382,10 +398,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnWidth(): Mode | number | undefined {
+    get columnWidth(): number | "auto" {
         return this._getOption('columnWidth');
     }
-    set columnWidth(value: Mode | number | undefined) {
+    set columnWidth(value: number | "auto") {
         this._setOption('columnWidth', value);
     }
 
@@ -395,10 +411,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get customizeColumns(): Function {
+    get customizeColumns(): ((columns: Array<dxTreeListColumn>) => void) {
         return this._getOption('customizeColumns');
     }
-    set customizeColumns(value: Function) {
+    set customizeColumns(value: ((columns: Array<dxTreeListColumn>) => void)) {
         this._setOption('customizeColumns', value);
     }
 
@@ -408,10 +424,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -421,10 +437,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataStructure(): DataStructure {
+    get dataStructure(): "plain" | "tree" {
         return this._getOption('dataStructure');
     }
-    set dataStructure(value: DataStructure) {
+    set dataStructure(value: "plain" | "tree") {
         this._setOption('dataStructure', value);
     }
 
@@ -460,10 +476,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get editing(): { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
+    get editing(): Record<string, any> {
         return this._getOption('editing');
     }
-    set editing(value: { allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
+    set editing(value: Record<string, any>) {
         this._setOption('editing', value);
     }
 
@@ -473,10 +489,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -538,10 +554,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterBuilderPopup(): dxPopupOptions {
+    get filterBuilderPopup(): dxPopupOptions<any> {
         return this._getOption('filterBuilderPopup');
     }
-    set filterBuilderPopup(value: dxPopupOptions) {
+    set filterBuilderPopup(value: dxPopupOptions<any>) {
         this._setOption('filterBuilderPopup', value);
     }
 
@@ -551,10 +567,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterMode(): TreeListFilterMode {
+    get filterMode(): "fullBranch" | "withAncestors" | "matchOnly" {
         return this._getOption('filterMode');
     }
-    set filterMode(value: TreeListFilterMode) {
+    set filterMode(value: "fullBranch" | "withAncestors" | "matchOnly") {
         this._setOption('filterMode', value);
     }
 
@@ -564,10 +580,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterPanel(): { customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean } {
+    get filterPanel(): Record<string, any> {
         return this._getOption('filterPanel');
     }
-    set filterPanel(value: { customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }) {
+    set filterPanel(value: Record<string, any>) {
         this._setOption('filterPanel', value);
     }
 
@@ -577,10 +593,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterRow(): { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
+    get filterRow(): Record<string, any> {
         return this._getOption('filterRow');
     }
-    set filterRow(value: { applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }) {
+    set filterRow(value: Record<string, any>) {
         this._setOption('filterRow', value);
     }
 
@@ -590,10 +606,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterSyncEnabled(): Mode | boolean {
+    get filterSyncEnabled(): boolean | "auto" {
         return this._getOption('filterSyncEnabled');
     }
-    set filterSyncEnabled(value: Mode | boolean) {
+    set filterSyncEnabled(value: boolean | "auto") {
         this._setOption('filterSyncEnabled', value);
     }
 
@@ -603,10 +619,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterValue(): any {
+    get filterValue(): Array<any> | (() => any) | string {
         return this._getOption('filterValue');
     }
-    set filterValue(value: any) {
+    set filterValue(value: Array<any> | (() => any) | string) {
         this._setOption('filterValue', value);
     }
 
@@ -655,10 +671,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get focusedRowKey(): any | undefined {
+    get focusedRowKey(): any {
         return this._getOption('focusedRowKey');
     }
-    set focusedRowKey(value: any | undefined) {
+    set focusedRowKey(value: any) {
         this._setOption('focusedRowKey', value);
     }
 
@@ -668,10 +684,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get hasItemsExpr(): Function | string {
+    get hasItemsExpr(): (() => void) | string {
         return this._getOption('hasItemsExpr');
     }
-    set hasItemsExpr(value: Function | string) {
+    set hasItemsExpr(value: (() => void) | string) {
         this._setOption('hasItemsExpr', value);
     }
 
@@ -681,10 +697,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string } {
+    get headerFilter(): Record<string, any> {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }) {
+    set headerFilter(value: Record<string, any>) {
         this._setOption('headerFilter', value);
     }
 
@@ -694,10 +710,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -720,10 +736,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -746,10 +762,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get itemsExpr(): Function | string {
+    get itemsExpr(): (() => void) | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: Function | string) {
+    set itemsExpr(value: (() => void) | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -759,10 +775,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyboardNavigation(): { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection } {
+    get keyboardNavigation(): Record<string, any> {
         return this._getOption('keyboardNavigation');
     }
-    set keyboardNavigation(value: { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }) {
+    set keyboardNavigation(value: Record<string, any>) {
         this._setOption('keyboardNavigation', value);
     }
 
@@ -772,10 +788,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): (() => void) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: (() => void) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -785,10 +801,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): { enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
+    get loadPanel(): Record<string, any> {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: { enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
+    set loadPanel(value: Record<string, any>) {
         this._setOption('loadPanel', value);
     }
 
@@ -824,10 +840,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get paging(): { enabled?: boolean, pageIndex?: number, pageSize?: number } {
+    get paging(): Record<string, any> {
         return this._getOption('paging');
     }
-    set paging(value: { enabled?: boolean, pageIndex?: number, pageSize?: number }) {
+    set paging(value: Record<string, any>) {
         this._setOption('paging', value);
     }
 
@@ -837,10 +853,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get parentIdExpr(): Function | string {
+    get parentIdExpr(): (() => void) | string {
         return this._getOption('parentIdExpr');
     }
-    set parentIdExpr(value: Function | string) {
+    set parentIdExpr(value: (() => void) | string) {
         this._setOption('parentIdExpr', value);
     }
 
@@ -850,10 +866,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get remoteOperations(): Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean } {
+    get remoteOperations(): Record<string, any> | "auto" {
         return this._getOption('remoteOperations');
     }
-    set remoteOperations(value: Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean }) {
+    set remoteOperations(value: Record<string, any> | "auto") {
         this._setOption('remoteOperations', value);
     }
 
@@ -915,10 +931,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get rowDragging(): { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
+    get rowDragging(): Record<string, any> {
         return this._getOption('rowDragging');
     }
-    set rowDragging(value: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
+    set rowDragging(value: Record<string, any>) {
         this._setOption('rowDragging', value);
     }
 
@@ -941,10 +957,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get scrolling(): { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean } {
+    get scrolling(): Record<string, any> {
         return this._getOption('scrolling');
     }
-    set scrolling(value: { columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }) {
+    set scrolling(value: Record<string, any>) {
         this._setOption('scrolling', value);
     }
 
@@ -954,10 +970,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get searchPanel(): { highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string } {
+    get searchPanel(): Record<string, any> {
         return this._getOption('searchPanel');
     }
-    set searchPanel(value: { highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string }) {
+    set searchPanel(value: Record<string, any>) {
         this._setOption('searchPanel', value);
     }
 
@@ -980,10 +996,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get selection(): { allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean } {
+    get selection(): Record<string, any> {
         return this._getOption('selection');
     }
-    set selection(value: { allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean }) {
+    set selection(value: Record<string, any>) {
         this._setOption('selection', value);
     }
 
@@ -1045,10 +1061,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get sorting(): { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean } {
+    get sorting(): Record<string, any> {
         return this._getOption('sorting');
     }
-    set sorting(value: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }) {
+    set sorting(value: Record<string, any>) {
         this._setOption('sorting', value);
     }
 
@@ -1058,10 +1074,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get stateStoring(): { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType } {
+    get stateStoring(): Record<string, any> {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: { customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }) {
+    set stateStoring(value: Record<string, any>) {
         this._setOption('stateStoring', value);
     }
 
@@ -1097,10 +1113,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get toolbar(): dxTreeListToolbar | undefined {
+    get toolbar(): dxTreeListToolbar {
         return this._getOption('toolbar');
     }
-    set toolbar(value: dxTreeListToolbar | undefined) {
+    set toolbar(value: dxTreeListToolbar) {
         this._setOption('toolbar', value);
     }
 
@@ -1136,10 +1152,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -1489,7 +1505,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -1552,14 +1568,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
+    @Output() columnChooserChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnFixingChange: EventEmitter<{ enabled?: boolean, icons?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }>;
+    @Output() columnFixingChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1573,14 +1589,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnMinWidthChange: EventEmitter<number | undefined>;
+    @Output() columnMinWidthChange: EventEmitter<number>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnResizingModeChange: EventEmitter<ColumnResizeMode>;
+    @Output() columnResizingModeChange: EventEmitter<"nextColumn" | "widget">;
 
     /**
     
@@ -1594,28 +1610,28 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnWidthChange: EventEmitter<Mode | number | undefined>;
+    @Output() columnWidthChange: EventEmitter<number | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeColumnsChange: EventEmitter<Function>;
+    @Output() customizeColumnsChange: EventEmitter<((columns: Array<dxTreeListColumn>) => void)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataStructureChange: EventEmitter<DataStructure>;
+    @Output() dataStructureChange: EventEmitter<"plain" | "tree">;
 
     /**
     
@@ -1636,14 +1652,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<{ allowAdding?: boolean | Function, allowDeleting?: boolean | Function, allowUpdating?: boolean | Function, changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: GridsEditMode, popup?: dxPopupOptions, refreshMode?: GridsEditRefreshMode, selectTextOnEditStart?: boolean, startEditAction?: StartEditAction, texts?: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
+    @Output() editingChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1678,42 +1694,42 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions>;
+    @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterModeChange: EventEmitter<TreeListFilterMode>;
+    @Output() filterModeChange: EventEmitter<"fullBranch" | "withAncestors" | "matchOnly">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterPanelChange: EventEmitter<{ customizeText?: Function, filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }>;
+    @Output() filterPanelChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterRowChange: EventEmitter<{ applyFilter?: ApplyFilterMode, applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
+    @Output() filterRowChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterSyncEnabledChange: EventEmitter<Mode | boolean>;
+    @Output() filterSyncEnabledChange: EventEmitter<boolean | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterValueChange: EventEmitter<any>;
+    @Output() filterValueChange: EventEmitter<Array<any> | (() => any) | string>;
 
     /**
     
@@ -1741,28 +1757,28 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() focusedRowKeyChange: EventEmitter<any | undefined>;
+    @Output() focusedRowKeyChange: EventEmitter<any>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hasItemsExprChange: EventEmitter<Function | string>;
+    @Output() hasItemsExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() headerFilterChange: EventEmitter<{ allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }>;
+    @Output() headerFilterChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1776,7 +1792,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -1790,28 +1806,28 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<Function | string>;
+    @Output() itemsExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyboardNavigationChange: EventEmitter<{ editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: EnterKeyAction, enterKeyDirection?: EnterKeyDirection }>;
+    @Output() keyboardNavigationChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<{ enabled?: Mode | boolean, height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
+    @Output() loadPanelChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1832,21 +1848,21 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pagingChange: EventEmitter<{ enabled?: boolean, pageIndex?: number, pageSize?: number }>;
+    @Output() pagingChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() parentIdExprChange: EventEmitter<Function | string>;
+    @Output() parentIdExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() remoteOperationsChange: EventEmitter<Mode | { filtering?: boolean, grouping?: boolean, sorting?: boolean }>;
+    @Output() remoteOperationsChange: EventEmitter<Record<string, any> | "auto">;
 
     /**
     
@@ -1881,7 +1897,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowDraggingChange: EventEmitter<{ allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: UserDefinedElement | string | undefined, container?: UserDefinedElement | string | undefined, cursorOffset?: string | { x?: number, y?: number }, data?: any | undefined, dragDirection?: DragDirection, dragTemplate?: any | undefined, dropFeedbackMode?: DragHighlight, filter?: string, group?: string | undefined, handle?: string, onAdd?: Function, onDragChange?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, onReorder?: Function, scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
+    @Output() rowDraggingChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1895,14 +1911,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<{ columnRenderingMode?: DataRenderMode, mode?: ScrollMode, preloadEnabled?: boolean, renderAsync?: boolean | undefined, rowRenderingMode?: DataRenderMode, scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: Mode | boolean }>;
+    @Output() scrollingChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchPanelChange: EventEmitter<{ highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string }>;
+    @Output() searchPanelChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1916,7 +1932,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionChange: EventEmitter<{ allowSelectAll?: boolean, mode?: SingleMultipleOrNone, recursive?: boolean }>;
+    @Output() selectionChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1951,14 +1967,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortingChange: EventEmitter<{ ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }>;
+    @Output() sortingChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<{ customLoad?: Function, customSave?: Function, enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: StateStoreType }>;
+    @Output() stateStoringChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1979,7 +1995,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() toolbarChange: EventEmitter<dxTreeListToolbar | undefined>;
+    @Output() toolbarChange: EventEmitter<dxTreeListToolbar>;
 
     /**
     
@@ -2000,7 +2016,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -2268,62 +2284,81 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
-    DxoTreeListColumnChooserModule,
-    DxoTreeListPositionModule,
+    DxoTreeListAnimationModule,
+    DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
-    DxoTreeListCollisionModule,
-    DxoTreeListMyModule,
-    DxoTreeListOffsetModule,
-    DxoTreeListSearchModule,
-    DxoTreeListSelectionModule,
-    DxoTreeListColumnFixingModule,
-    DxoTreeListIconsModule,
-    DxoTreeListTextsModule,
-    DxiTreeListColumnModule,
     DxiTreeListButtonModule,
-    DxoTreeListHeaderFilterModule,
-    DxoTreeListLookupModule,
+    DxiTreeListChangeModule,
+    DxoTreeListColCountByScreenModule,
+    DxoTreeListCollisionModule,
+    DxiTreeListColumnModule,
+    DxoTreeListColumnChooserModule,
+    DxoTreeListColumnChooserSearchModule,
+    DxoTreeListColumnChooserSelectionModule,
+    DxoTreeListColumnFixingModule,
+    DxoTreeListColumnFixingTextsModule,
+    DxoTreeListColumnHeaderFilterModule,
+    DxoTreeListColumnHeaderFilterSearchModule,
+    DxoTreeListColumnLookupModule,
+    DxiTreeListCompareRuleModule,
+    DxoTreeListCursorOffsetModule,
+    DxiTreeListCustomOperationModule,
+    DxiTreeListCustomRuleModule,
+    DxoTreeListEditingModule,
+    DxoTreeListEditingTextsModule,
+    DxiTreeListEmailRuleModule,
+    DxiTreeListFieldModule,
+    DxoTreeListFieldLookupModule,
+    DxoTreeListFilterBuilderModule,
+    DxoTreeListFilterBuilderPopupModule,
+    DxoTreeListFilterOperationDescriptionsModule,
+    DxoTreeListFilterPanelModule,
+    DxoTreeListFilterPanelTextsModule,
+    DxoTreeListFilterRowModule,
+    DxoTreeListFormModule,
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
-    DxoTreeListLabelModule,
-    DxiTreeListValidationRuleModule,
-    DxoTreeListEditingModule,
-    DxiTreeListChangeModule,
-    DxoTreeListFormModule,
-    DxoTreeListColCountByScreenModule,
-    DxiTreeListItemModule,
-    DxoTreeListTabPanelOptionsModule,
-    DxiTreeListTabModule,
-    DxoTreeListButtonOptionsModule,
-    DxoTreeListPopupModule,
-    DxoTreeListAnimationModule,
-    DxoTreeListHideModule,
     DxoTreeListFromModule,
-    DxoTreeListToModule,
-    DxoTreeListShowModule,
-    DxiTreeListToolbarItemModule,
-    DxoTreeListFilterBuilderModule,
-    DxiTreeListCustomOperationModule,
-    DxiTreeListFieldModule,
-    DxoTreeListFilterOperationDescriptionsModule,
     DxoTreeListGroupOperationDescriptionsModule,
-    DxoTreeListFilterBuilderPopupModule,
-    DxoTreeListFilterPanelModule,
-    DxoTreeListFilterRowModule,
-    DxoTreeListOperationDescriptionsModule,
+    DxoTreeListHeaderFilterModule,
+    DxoTreeListHideModule,
+    DxoTreeListIconsModule,
+    DxiTreeListItemModule,
     DxoTreeListKeyboardNavigationModule,
+    DxoTreeListLabelModule,
     DxoTreeListLoadPanelModule,
+    DxoTreeListLookupModule,
+    DxoTreeListMyModule,
+    DxiTreeListNumericRuleModule,
+    DxoTreeListOffsetModule,
+    DxoTreeListOperationDescriptionsModule,
     DxoTreeListPagerModule,
     DxoTreeListPagingModule,
+    DxiTreeListPatternRuleModule,
+    DxoTreeListPopupModule,
+    DxoTreeListPositionModule,
+    DxiTreeListRangeRuleModule,
     DxoTreeListRemoteOperationsModule,
+    DxiTreeListRequiredRuleModule,
     DxoTreeListRowDraggingModule,
-    DxoTreeListCursorOffsetModule,
     DxoTreeListScrollingModule,
+    DxoTreeListSearchModule,
     DxoTreeListSearchPanelModule,
+    DxoTreeListSelectionModule,
+    DxoTreeListShowModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
+    DxiTreeListStringLengthRuleModule,
+    DxoTreeListTextsModule,
+    DxoTreeListToModule,
     DxoTreeListToolbarModule,
+    DxiTreeListToolbarItemModule,
+    DxoTreeListTreeListHeaderFilterModule,
+    DxoTreeListTreeListHeaderFilterSearchModule,
+    DxoTreeListTreeListHeaderFilterTextsModule,
+    DxoTreeListTreeListSelectionModule,
+    DxiTreeListValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -2387,62 +2422,81 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoSortingModule,
     DxoStateStoringModule,
     DxoToolbarModule,
-    DxoTreeListColumnChooserModule,
-    DxoTreeListPositionModule,
+    DxoTreeListAnimationModule,
+    DxiTreeListAsyncRuleModule,
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
-    DxoTreeListCollisionModule,
-    DxoTreeListMyModule,
-    DxoTreeListOffsetModule,
-    DxoTreeListSearchModule,
-    DxoTreeListSelectionModule,
-    DxoTreeListColumnFixingModule,
-    DxoTreeListIconsModule,
-    DxoTreeListTextsModule,
-    DxiTreeListColumnModule,
     DxiTreeListButtonModule,
-    DxoTreeListHeaderFilterModule,
-    DxoTreeListLookupModule,
+    DxiTreeListChangeModule,
+    DxoTreeListColCountByScreenModule,
+    DxoTreeListCollisionModule,
+    DxiTreeListColumnModule,
+    DxoTreeListColumnChooserModule,
+    DxoTreeListColumnChooserSearchModule,
+    DxoTreeListColumnChooserSelectionModule,
+    DxoTreeListColumnFixingModule,
+    DxoTreeListColumnFixingTextsModule,
+    DxoTreeListColumnHeaderFilterModule,
+    DxoTreeListColumnHeaderFilterSearchModule,
+    DxoTreeListColumnLookupModule,
+    DxiTreeListCompareRuleModule,
+    DxoTreeListCursorOffsetModule,
+    DxiTreeListCustomOperationModule,
+    DxiTreeListCustomRuleModule,
+    DxoTreeListEditingModule,
+    DxoTreeListEditingTextsModule,
+    DxiTreeListEmailRuleModule,
+    DxiTreeListFieldModule,
+    DxoTreeListFieldLookupModule,
+    DxoTreeListFilterBuilderModule,
+    DxoTreeListFilterBuilderPopupModule,
+    DxoTreeListFilterOperationDescriptionsModule,
+    DxoTreeListFilterPanelModule,
+    DxoTreeListFilterPanelTextsModule,
+    DxoTreeListFilterRowModule,
+    DxoTreeListFormModule,
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
-    DxoTreeListLabelModule,
-    DxiTreeListValidationRuleModule,
-    DxoTreeListEditingModule,
-    DxiTreeListChangeModule,
-    DxoTreeListFormModule,
-    DxoTreeListColCountByScreenModule,
-    DxiTreeListItemModule,
-    DxoTreeListTabPanelOptionsModule,
-    DxiTreeListTabModule,
-    DxoTreeListButtonOptionsModule,
-    DxoTreeListPopupModule,
-    DxoTreeListAnimationModule,
-    DxoTreeListHideModule,
     DxoTreeListFromModule,
-    DxoTreeListToModule,
-    DxoTreeListShowModule,
-    DxiTreeListToolbarItemModule,
-    DxoTreeListFilterBuilderModule,
-    DxiTreeListCustomOperationModule,
-    DxiTreeListFieldModule,
-    DxoTreeListFilterOperationDescriptionsModule,
     DxoTreeListGroupOperationDescriptionsModule,
-    DxoTreeListFilterBuilderPopupModule,
-    DxoTreeListFilterPanelModule,
-    DxoTreeListFilterRowModule,
-    DxoTreeListOperationDescriptionsModule,
+    DxoTreeListHeaderFilterModule,
+    DxoTreeListHideModule,
+    DxoTreeListIconsModule,
+    DxiTreeListItemModule,
     DxoTreeListKeyboardNavigationModule,
+    DxoTreeListLabelModule,
     DxoTreeListLoadPanelModule,
+    DxoTreeListLookupModule,
+    DxoTreeListMyModule,
+    DxiTreeListNumericRuleModule,
+    DxoTreeListOffsetModule,
+    DxoTreeListOperationDescriptionsModule,
     DxoTreeListPagerModule,
     DxoTreeListPagingModule,
+    DxiTreeListPatternRuleModule,
+    DxoTreeListPopupModule,
+    DxoTreeListPositionModule,
+    DxiTreeListRangeRuleModule,
     DxoTreeListRemoteOperationsModule,
+    DxiTreeListRequiredRuleModule,
     DxoTreeListRowDraggingModule,
-    DxoTreeListCursorOffsetModule,
     DxoTreeListScrollingModule,
+    DxoTreeListSearchModule,
     DxoTreeListSearchPanelModule,
+    DxoTreeListSelectionModule,
+    DxoTreeListShowModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
+    DxiTreeListStringLengthRuleModule,
+    DxoTreeListTextsModule,
+    DxoTreeListToModule,
     DxoTreeListToolbarModule,
+    DxiTreeListToolbarItemModule,
+    DxoTreeListTreeListHeaderFilterModule,
+    DxoTreeListTreeListHeaderFilterSearchModule,
+    DxoTreeListTreeListHeaderFilterTextsModule,
+    DxoTreeListTreeListSelectionModule,
+    DxiTreeListValidationRuleModule,
     DxTemplateModule
   ]
 })

@@ -8,23 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
-import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCircularGaugeRangeComponent } from './range-dxi';
 
 
 @Component({
@@ -51,34 +46,34 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
     }
 
     @Input()
-    get orientation(): CircularGaugeElementOrientation {
+    get orientation(): "center" | "inside" | "outside" {
         return this._getOption('orientation');
     }
-    set orientation(value: CircularGaugeElementOrientation) {
+    set orientation(value: "center" | "inside" | "outside") {
         this._setOption('orientation', value);
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): PaletteExtensionMode {
+    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: PaletteExtensionMode) {
+    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
         this._setOption('paletteExtensionMode', value);
     }
 
     @Input()
-    get ranges(): Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }> {
+    get ranges(): Array<Record<string, any>> {
         return this._getOption('ranges');
     }
-    set ranges(value: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>) {
+    set ranges(value: Array<Record<string, any>>) {
         this._setOption('ranges', value);
     }
 
@@ -95,14 +90,6 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
         return 'rangeContainer';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiCircularGaugeRangeComponent))
-    get rangesChildren(): QueryList<DxiCircularGaugeRangeComponent> {
-        return this._getOption('ranges');
-    }
-    set rangesChildren(value) {
-        this.setChildren('ranges', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

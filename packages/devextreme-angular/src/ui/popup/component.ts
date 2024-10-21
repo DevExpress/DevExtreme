@@ -22,12 +22,14 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
+import dxOverlay from 'devextreme/ui/overlay';
+import DOMComponent from 'devextreme/core/dom_component';
+import dxPopup from 'devextreme/ui/popup';
+import { event, EventInfo } from 'devextreme/events/index';
+import { template } from 'devextreme/core/templates/template';
+import { Component } from 'devextreme/core/component';
 import { PositionConfig } from 'devextreme/animation/position';
-import { PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import DxPopup from 'devextreme/ui/popup';
 
@@ -55,16 +57,16 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
 import { DxoPopupAnimationModule } from 'devextreme-angular/ui/popup/nested';
-import { DxoPopupHideModule } from 'devextreme-angular/ui/popup/nested';
-import { DxoPopupFromModule } from 'devextreme-angular/ui/popup/nested';
-import { DxoPopupPositionModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupAtModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupBoundaryOffsetModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupCollisionModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupFromModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupHideModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupMyModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupOffsetModule } from 'devextreme-angular/ui/popup/nested';
-import { DxoPopupToModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupPositionModule } from 'devextreme-angular/ui/popup/nested';
 import { DxoPopupShowModule } from 'devextreme-angular/ui/popup/nested';
+import { DxoPopupToModule } from 'devextreme-angular/ui/popup/nested';
 import { DxiPopupToolbarItemModule } from 'devextreme-angular/ui/popup/nested';
 
 
@@ -93,10 +95,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -106,10 +108,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): Record<string, any> {
         return this._getOption('animation');
     }
-    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: Record<string, any>) {
         this._setOption('animation', value);
     }
 
@@ -121,10 +123,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
@@ -134,10 +136,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
@@ -147,10 +149,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get contentTemplate(): any {
+    get contentTemplate(): ((contentElement: any) => string | any) | template {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: any) {
+    set contentTemplate(value: ((contentElement: any) => string | any) | template) {
         this._setOption('contentTemplate', value);
     }
 
@@ -186,10 +188,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get dragAndResizeArea(): UserDefinedElement | string | undefined {
+    get dragAndResizeArea(): any | string {
         return this._getOption('dragAndResizeArea');
     }
-    set dragAndResizeArea(value: UserDefinedElement | string | undefined) {
+    set dragAndResizeArea(value: any | string) {
         this._setOption('dragAndResizeArea', value);
     }
 
@@ -264,10 +266,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -277,10 +279,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get hideOnOutsideClick(): boolean | Function {
+    get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('hideOnOutsideClick');
     }
-    set hideOnOutsideClick(value: boolean | Function) {
+    set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
 
@@ -303,10 +305,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -329,10 +331,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get maxHeight(): number | Function | string {
+    get maxHeight(): (() => number | string) | number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: number | Function | string) {
+    set maxHeight(value: (() => number | string) | number | string) {
         this._setOption('maxHeight', value);
     }
 
@@ -342,10 +344,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get maxWidth(): number | Function | string {
+    get maxWidth(): (() => number | string) | number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: number | Function | string) {
+    set maxWidth(value: (() => number | string) | number | string) {
         this._setOption('maxWidth', value);
     }
 
@@ -355,10 +357,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get minHeight(): number | Function | string {
+    get minHeight(): (() => number | string) | number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: number | Function | string) {
+    set minHeight(value: (() => number | string) | number | string) {
         this._setOption('minHeight', value);
     }
 
@@ -368,10 +370,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get minWidth(): number | Function | string {
+    get minWidth(): (() => number | string) | number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | Function | string) {
+    set minWidth(value: (() => number | string) | number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -381,10 +383,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get position(): PositionAlignment | PositionConfig | Function {
+    get position(): (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" {
         return this._getOption('position');
     }
-    set position(value: PositionAlignment | PositionConfig | Function) {
+    set position(value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") {
         this._setOption('position', value);
     }
 
@@ -511,10 +513,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get titleTemplate(): any {
+    get titleTemplate(): ((titleElement: any) => string | any) | template {
         return this._getOption('titleTemplate');
     }
-    set titleTemplate(value: any) {
+    set titleTemplate(value: ((titleElement: any) => string | any) | template) {
         this._setOption('titleTemplate', value);
     }
 
@@ -524,10 +526,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }> {
+    get toolbarItems(): Array<dxPopupToolbarItem> {
         return this._getOption('toolbarItems');
     }
-    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>) {
+    set toolbarItems(value: Array<dxPopupToolbarItem>) {
         this._setOption('toolbarItems', value);
     }
 
@@ -550,10 +552,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -576,7 +578,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onContentReady: EventEmitter<any>;
+    @Output() onContentReady: EventEmitter<EventInfo>;
 
     /**
     
@@ -584,7 +586,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onDisposing: EventEmitter<any>;
+    @Output() onDisposing: EventEmitter<EventInfo>;
 
     /**
     
@@ -592,7 +594,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onHidden: EventEmitter<any>;
+    @Output() onHidden: EventEmitter<EventInfo>;
 
     /**
     
@@ -600,7 +602,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onHiding: EventEmitter<any>;
+    @Output() onHiding: EventEmitter<Object>;
 
     /**
     
@@ -608,7 +610,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onInitialized: EventEmitter<any>;
+    @Output() onInitialized: EventEmitter<Object>;
 
     /**
     
@@ -616,7 +618,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onOptionChanged: EventEmitter<any>;
+    @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
     
@@ -624,7 +626,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onResize: EventEmitter<any>;
+    @Output() onResize: EventEmitter<Object>;
 
     /**
     
@@ -632,7 +634,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onResizeEnd: EventEmitter<any>;
+    @Output() onResizeEnd: EventEmitter<Object>;
 
     /**
     
@@ -640,7 +642,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onResizeStart: EventEmitter<any>;
+    @Output() onResizeStart: EventEmitter<Object>;
 
     /**
     
@@ -648,7 +650,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onShowing: EventEmitter<any>;
+    @Output() onShowing: EventEmitter<Object>;
 
     /**
     
@@ -656,7 +658,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onShown: EventEmitter<any>;
+    @Output() onShown: EventEmitter<EventInfo>;
 
     /**
     
@@ -664,42 +666,42 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onTitleRendered: EventEmitter<any>;
+    @Output() onTitleRendered: EventEmitter<Object>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
+    @Output() animationChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() containerChange: EventEmitter<any | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contentTemplateChange: EventEmitter<any>;
+    @Output() contentTemplateChange: EventEmitter<((contentElement: any) => string | any) | template>;
 
     /**
     
@@ -720,7 +722,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragAndResizeAreaChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() dragAndResizeAreaChange: EventEmitter<any | string>;
 
     /**
     
@@ -762,14 +764,14 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -783,7 +785,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -797,35 +799,35 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxHeightChange: EventEmitter<number | Function | string>;
+    @Output() maxHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxWidthChange: EventEmitter<number | Function | string>;
+    @Output() maxWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minHeightChange: EventEmitter<number | Function | string>;
+    @Output() minHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minWidthChange: EventEmitter<number | Function | string>;
+    @Output() minWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionAlignment | PositionConfig | Function>;
+    @Output() positionChange: EventEmitter<(() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top">;
 
     /**
     
@@ -895,14 +897,14 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleTemplateChange: EventEmitter<any>;
+    @Output() titleTemplateChange: EventEmitter<((titleElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() toolbarItemsChange: EventEmitter<Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>>;
+    @Output() toolbarItemsChange: EventEmitter<Array<dxPopupToolbarItem>>;
 
     /**
     
@@ -916,7 +918,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1058,16 +1060,16 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     DxoToModule,
     DxoShowModule,
     DxoPopupAnimationModule,
-    DxoPopupHideModule,
-    DxoPopupFromModule,
-    DxoPopupPositionModule,
     DxoPopupAtModule,
     DxoPopupBoundaryOffsetModule,
     DxoPopupCollisionModule,
+    DxoPopupFromModule,
+    DxoPopupHideModule,
     DxoPopupMyModule,
     DxoPopupOffsetModule,
-    DxoPopupToModule,
+    DxoPopupPositionModule,
     DxoPopupShowModule,
+    DxoPopupToModule,
     DxiPopupToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1089,16 +1091,16 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     DxoToModule,
     DxoShowModule,
     DxoPopupAnimationModule,
-    DxoPopupHideModule,
-    DxoPopupFromModule,
-    DxoPopupPositionModule,
     DxoPopupAtModule,
     DxoPopupBoundaryOffsetModule,
     DxoPopupCollisionModule,
+    DxoPopupFromModule,
+    DxoPopupHideModule,
     DxoPopupMyModule,
     DxoPopupOffsetModule,
-    DxoPopupToModule,
+    DxoPopupPositionModule,
     DxoPopupShowModule,
+    DxoPopupToModule,
     DxiPopupToolbarItemModule,
     DxTemplateModule
   ]

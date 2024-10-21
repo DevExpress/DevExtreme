@@ -5,31 +5,39 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
-
+import { DOCUMENT } from '@angular/common';
 
 
 import { dxMenuItem } from 'devextreme/ui/menu';
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-menu-item',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiMenuItemComponent extends CollectionNestedOption {
+export class DxiMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -71,10 +79,10 @@ export class DxiMenuItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get linkAttr(): any {
+    get linkAttr(): Record<string, any> {
         return this._getOption('linkAttr');
     }
-    set linkAttr(value: any) {
+    set linkAttr(value: Record<string, any>) {
         this._setOption('linkAttr', value);
     }
 
@@ -95,10 +103,10 @@ export class DxiMenuItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get template(): any {
+    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('template', value);
     }
 
@@ -132,19 +140,23 @@ export class DxiMenuItemComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiMenuItemComponent))
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

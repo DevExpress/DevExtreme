@@ -14,7 +14,6 @@ import {
 
 
 
-import { Position } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -46,18 +45,18 @@ export class DxoChartScrollBarComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
     @Input()
-    get position(): Position {
+    get position(): "bottom" | "left" | "right" | "top" {
         return this._getOption('position');
     }
-    set position(value: Position) {
+    set position(value: "bottom" | "left" | "right" | "top") {
         this._setOption('position', value);
     }
 

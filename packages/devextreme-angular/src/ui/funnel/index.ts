@@ -20,13 +20,10 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, HorizontalEdge, Orientation, Position, SingleMultipleOrNone, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Font, HatchDirection, LabelPosition, Palette, PaletteExtensionMode, ShiftLabelOverlap, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, FunnelAlgorithm, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/viz/funnel';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/viz/funnel';
 
 import DxFunnel from 'devextreme/viz/funnel';
 
@@ -62,24 +59,32 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 
 import { DxoFunnelAdaptiveLayoutModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelExportModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelItemModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelBorderModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelHoverStyleModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelHatchingModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelSelectionStyleModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelLabelModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelConnectorModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelExportModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelFontModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelFormatModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelFunnelTitleModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelFunnelTitleSubtitleModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelHatchingModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelHoverStyleModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelItemModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelItemBorderModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelLabelModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelLabelBorderModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelLegendModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelMarginModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelTitleModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelSubtitleModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelLegendBorderModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelLegendTitleModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelLegendTitleSubtitleModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelLoadingIndicatorModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelSizeModule } from 'devextreme-angular/ui/funnel/nested';
-import { DxoFunnelTooltipModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelMarginModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelSelectionStyleModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelShadowModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelSizeModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelSubtitleModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelTitleModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelTooltipModule } from 'devextreme-angular/ui/funnel/nested';
+import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/nested';
 
 
 
@@ -107,10 +112,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get adaptiveLayout(): { height?: number, keepLabels?: boolean, width?: number } {
+    get adaptiveLayout(): Record<string, any> {
         return this._getOption('adaptiveLayout');
     }
-    set adaptiveLayout(value: { height?: number, keepLabels?: boolean, width?: number }) {
+    set adaptiveLayout(value: Record<string, any>) {
         this._setOption('adaptiveLayout', value);
     }
 
@@ -120,10 +125,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get algorithm(): FunnelAlgorithm {
+    get algorithm(): "dynamicHeight" | "dynamicSlope" {
         return this._getOption('algorithm');
     }
-    set algorithm(value: FunnelAlgorithm) {
+    set algorithm(value: "dynamicHeight" | "dynamicSlope") {
         this._setOption('algorithm', value);
     }
 
@@ -159,10 +164,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -185,10 +190,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -198,10 +203,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): Record<string, any> {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: Record<string, any>) {
         this._setOption('export', value);
     }
 
@@ -237,10 +242,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get item(): { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } } {
+    get item(): Record<string, any> {
         return this._getOption('item');
     }
-    set item(value: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }) {
+    set item(value: Record<string, any>) {
         this._setOption('item', value);
     }
 
@@ -250,10 +255,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get label(): { backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }, customizeText?: Function, font?: Font, format?: Format | string | undefined, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }, customizeText?: Function, font?: Font, format?: Format | string | undefined, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
@@ -263,10 +268,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
+    get legend(): Record<string, any> {
         return this._getOption('legend');
     }
-    set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
+    set legend(value: Record<string, any>) {
         this._setOption('legend', value);
     }
 
@@ -276,10 +281,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
+    get loadingIndicator(): Record<string, any> {
         return this._getOption('loadingIndicator');
     }
-    set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
+    set loadingIndicator(value: Record<string, any>) {
         this._setOption('loadingIndicator', value);
     }
 
@@ -289,10 +294,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): Record<string, any> {
         return this._getOption('margin');
     }
-    set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: Record<string, any>) {
         this._setOption('margin', value);
     }
 
@@ -328,10 +333,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
@@ -341,10 +346,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get paletteExtensionMode(): PaletteExtensionMode {
+    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: PaletteExtensionMode) {
+    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -380,10 +385,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get resolveLabelOverlapping(): ShiftLabelOverlap {
+    get resolveLabelOverlapping(): "hide" | "none" | "shift" {
         return this._getOption('resolveLabelOverlapping');
     }
-    set resolveLabelOverlapping(value: ShiftLabelOverlap) {
+    set resolveLabelOverlapping(value: "hide" | "none" | "shift") {
         this._setOption('resolveLabelOverlapping', value);
     }
 
@@ -406,10 +411,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get selectionMode(): SingleMultipleOrNone {
+    get selectionMode(): "single" | "multiple" | "none" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleMultipleOrNone) {
+    set selectionMode(value: "single" | "multiple" | "none") {
         this._setOption('selectionMode', value);
     }
 
@@ -419,10 +424,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get size(): { height?: number | undefined, width?: number | undefined } {
+    get size(): Record<string, any> {
         return this._getOption('size');
     }
-    set size(value: { height?: number | undefined, width?: number | undefined }) {
+    set size(value: Record<string, any>) {
         this._setOption('size', value);
     }
 
@@ -445,10 +450,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get theme(): Theme {
+    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
         return this._getOption('theme');
     }
-    set theme(value: Theme) {
+    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
         this._setOption('theme', value);
     }
 
@@ -458,10 +463,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
+    get title(): Record<string, any> | string {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
+    set title(value: Record<string, any> | string) {
         this._setOption('title', value);
     }
 
@@ -471,10 +476,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): Record<string, any> {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: Record<string, any>) {
         this._setOption('tooltip', value);
     }
 
@@ -592,14 +597,14 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() adaptiveLayoutChange: EventEmitter<{ height?: number, keepLabels?: boolean, width?: number }>;
+    @Output() adaptiveLayoutChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() algorithmChange: EventEmitter<FunnelAlgorithm>;
+    @Output() algorithmChange: EventEmitter<"dynamicHeight" | "dynamicSlope">;
 
     /**
     
@@ -620,7 +625,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -634,14 +639,14 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -662,35 +667,35 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemChange: EventEmitter<{ border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number } } }>;
+    @Output() itemChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<{ backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }, customizeText?: Function, font?: Font, format?: Format | string | undefined, horizontalAlignment?: HorizontalEdge, horizontalOffset?: number, position?: LabelPosition, showForZeroValues?: boolean, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }>;
+    @Output() labelChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
+    @Output() legendChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }>;
+    @Output() loadingIndicatorChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
+    @Output() marginChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -711,14 +716,14 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteChange: EventEmitter<Palette | string | Array<string>>;
+    @Output() paletteChange: EventEmitter<Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteExtensionModeChange: EventEmitter<PaletteExtensionMode>;
+    @Output() paletteExtensionModeChange: EventEmitter<"alternate" | "blend" | "extrapolate">;
 
     /**
     
@@ -739,7 +744,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resolveLabelOverlappingChange: EventEmitter<ShiftLabelOverlap>;
+    @Output() resolveLabelOverlappingChange: EventEmitter<"hide" | "none" | "shift">;
 
     /**
     
@@ -753,14 +758,14 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<SingleMultipleOrNone>;
+    @Output() selectionModeChange: EventEmitter<"single" | "multiple" | "none">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
+    @Output() sizeChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -774,21 +779,21 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<Theme>;
+    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -924,24 +929,32 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     DxoTooltipModule,
     DxoShadowModule,
     DxoFunnelAdaptiveLayoutModule,
-    DxoFunnelExportModule,
-    DxoFunnelItemModule,
     DxoFunnelBorderModule,
-    DxoFunnelHoverStyleModule,
-    DxoFunnelHatchingModule,
-    DxoFunnelSelectionStyleModule,
-    DxoFunnelLabelModule,
     DxoFunnelConnectorModule,
+    DxoFunnelExportModule,
     DxoFunnelFontModule,
     DxoFunnelFormatModule,
+    DxoFunnelFunnelTitleModule,
+    DxoFunnelFunnelTitleSubtitleModule,
+    DxoFunnelHatchingModule,
+    DxoFunnelHoverStyleModule,
+    DxoFunnelItemModule,
+    DxoFunnelItemBorderModule,
+    DxoFunnelLabelModule,
+    DxoFunnelLabelBorderModule,
     DxoFunnelLegendModule,
-    DxoFunnelMarginModule,
-    DxoFunnelTitleModule,
-    DxoFunnelSubtitleModule,
+    DxoFunnelLegendBorderModule,
+    DxoFunnelLegendTitleModule,
+    DxoFunnelLegendTitleSubtitleModule,
     DxoFunnelLoadingIndicatorModule,
-    DxoFunnelSizeModule,
-    DxoFunnelTooltipModule,
+    DxoFunnelMarginModule,
+    DxoFunnelSelectionStyleModule,
     DxoFunnelShadowModule,
+    DxoFunnelSizeModule,
+    DxoFunnelSubtitleModule,
+    DxoFunnelTitleModule,
+    DxoFunnelTooltipModule,
+    DxoFunnelTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -970,24 +983,32 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     DxoTooltipModule,
     DxoShadowModule,
     DxoFunnelAdaptiveLayoutModule,
-    DxoFunnelExportModule,
-    DxoFunnelItemModule,
     DxoFunnelBorderModule,
-    DxoFunnelHoverStyleModule,
-    DxoFunnelHatchingModule,
-    DxoFunnelSelectionStyleModule,
-    DxoFunnelLabelModule,
     DxoFunnelConnectorModule,
+    DxoFunnelExportModule,
     DxoFunnelFontModule,
     DxoFunnelFormatModule,
+    DxoFunnelFunnelTitleModule,
+    DxoFunnelFunnelTitleSubtitleModule,
+    DxoFunnelHatchingModule,
+    DxoFunnelHoverStyleModule,
+    DxoFunnelItemModule,
+    DxoFunnelItemBorderModule,
+    DxoFunnelLabelModule,
+    DxoFunnelLabelBorderModule,
     DxoFunnelLegendModule,
-    DxoFunnelMarginModule,
-    DxoFunnelTitleModule,
-    DxoFunnelSubtitleModule,
+    DxoFunnelLegendBorderModule,
+    DxoFunnelLegendTitleModule,
+    DxoFunnelLegendTitleSubtitleModule,
     DxoFunnelLoadingIndicatorModule,
-    DxoFunnelSizeModule,
-    DxoFunnelTooltipModule,
+    DxoFunnelMarginModule,
+    DxoFunnelSelectionStyleModule,
     DxoFunnelShadowModule,
+    DxoFunnelSizeModule,
+    DxoFunnelSubtitleModule,
+    DxoFunnelTitleModule,
+    DxoFunnelTooltipModule,
+    DxoFunnelTooltipBorderModule,
     DxTemplateModule
   ]
 })

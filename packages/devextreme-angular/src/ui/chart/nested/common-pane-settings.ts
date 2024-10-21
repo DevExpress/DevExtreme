@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle } from 'devextreme/common/charts';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +38,10 @@ export class DxoChartCommonPaneSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get border(): { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 

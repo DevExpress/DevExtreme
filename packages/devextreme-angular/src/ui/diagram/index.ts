@@ -22,10 +22,9 @@ import {
 } from '@angular/core';
 
 
-import { Orientation, PageOrientation } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { AutoZoomMode, Command, ConnectorLineEnd, ConnectorLineType, ContentReadyEvent, CustomCommand, CustomCommandEvent, DataLayoutType, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, PanelVisibility, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent, ShapeCategory, ShapeType, ToolboxDisplayMode, Units } from 'devextreme/ui/diagram';
+import { dxSVGElement } from 'devextreme/core/element';
+import { dxDiagramShape, ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent } from 'devextreme/ui/diagram';
+import { template } from 'devextreme/core/templates/template';
 
 import DxDiagram from 'devextreme/ui/diagram';
 
@@ -63,26 +62,30 @@ import { DxoToolboxModule } from 'devextreme-angular/ui/nested';
 import { DxoViewToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoZoomLevelModule } from 'devextreme-angular/ui/nested';
 
-import { DxoDiagramContextMenuModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramAutoLayoutModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiDiagramCommandModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiDiagramItemModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramCommandItemModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramConnectionPointModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDiagramContextMenuModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramContextToolboxModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiDiagramCustomShapeModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiDiagramConnectionPointModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramDefaultItemPropertiesModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramEdgesModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramEditingModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramExportModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramGridSizeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramGroupModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramHistoryToolbarModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramItemModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramMainToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramNodesModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxoDiagramAutoLayoutModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramPageSizeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramPageSizeItemModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramPropertiesPanelModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiDiagramTabModule } from 'devextreme-angular/ui/diagram/nested';
-import { DxiDiagramGroupModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramTabGroupModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramToolboxModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiDiagramToolboxGroupModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
 
@@ -113,10 +116,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get autoZoomMode(): AutoZoomMode {
+    get autoZoomMode(): "fitContent" | "fitWidth" | "disabled" {
         return this._getOption('autoZoomMode');
     }
-    set autoZoomMode(value: AutoZoomMode) {
+    set autoZoomMode(value: "fitContent" | "fitWidth" | "disabled") {
         this._setOption('autoZoomMode', value);
     }
 
@@ -126,10 +129,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get contextMenu(): { commands?: Array<CustomCommand | Command>, enabled?: boolean } {
+    get contextMenu(): Record<string, any> {
         return this._getOption('contextMenu');
     }
-    set contextMenu(value: { commands?: Array<CustomCommand | Command>, enabled?: boolean }) {
+    set contextMenu(value: Record<string, any>) {
         this._setOption('contextMenu', value);
     }
 
@@ -139,10 +142,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get contextToolbox(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType | string>, width?: number } {
+    get contextToolbox(): Record<string, any> {
         return this._getOption('contextToolbox');
     }
-    set contextToolbox(value: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType | string>, width?: number }) {
+    set contextToolbox(value: Record<string, any>) {
         this._setOption('contextToolbox', value);
     }
 
@@ -152,10 +155,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get customShapes(): Array<any | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: Array<any | { x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }> {
+    get customShapes(): Array<Record<string, any>> {
         return this._getOption('customShapes');
     }
-    set customShapes(value: Array<any | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: Array<any | { x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }>) {
+    set customShapes(value: Array<Record<string, any>>) {
         this._setOption('customShapes', value);
     }
 
@@ -165,10 +168,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get customShapeTemplate(): any {
+    get customShapeTemplate(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
         return this._getOption('customShapeTemplate');
     }
-    set customShapeTemplate(value: any) {
+    set customShapeTemplate(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
         this._setOption('customShapeTemplate', value);
     }
 
@@ -178,10 +181,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get customShapeToolboxTemplate(): any {
+    get customShapeToolboxTemplate(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
         return this._getOption('customShapeToolboxTemplate');
     }
-    set customShapeToolboxTemplate(value: any) {
+    set customShapeToolboxTemplate(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
         this._setOption('customShapeToolboxTemplate', value);
     }
 
@@ -191,10 +194,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get defaultItemProperties(): { connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number | undefined, shapeMaxWidth?: number | undefined, shapeMinHeight?: number | undefined, shapeMinWidth?: number | undefined, style?: any, textStyle?: any } {
+    get defaultItemProperties(): Record<string, any> {
         return this._getOption('defaultItemProperties');
     }
-    set defaultItemProperties(value: { connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number | undefined, shapeMaxWidth?: number | undefined, shapeMinHeight?: number | undefined, shapeMinWidth?: number | undefined, style?: any, textStyle?: any }) {
+    set defaultItemProperties(value: Record<string, any>) {
         this._setOption('defaultItemProperties', value);
     }
 
@@ -217,10 +220,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get edges(): { customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined } {
+    get edges(): Record<string, any> {
         return this._getOption('edges');
     }
-    set edges(value: { customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }) {
+    set edges(value: Record<string, any>) {
         this._setOption('edges', value);
     }
 
@@ -230,10 +233,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get editing(): { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean } {
+    get editing(): Record<string, any> {
         return this._getOption('editing');
     }
-    set editing(value: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean }) {
+    set editing(value: Record<string, any>) {
         this._setOption('editing', value);
     }
 
@@ -243,10 +246,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -256,10 +259,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get export(): { fileName?: string } {
+    get export(): Record<string, any> {
         return this._getOption('export');
     }
-    set export(value: { fileName?: string }) {
+    set export(value: Record<string, any>) {
         this._setOption('export', value);
     }
 
@@ -282,10 +285,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get gridSize(): number | { items?: Array<number>, value?: number } {
+    get gridSize(): number | Record<string, any> {
         return this._getOption('gridSize');
     }
-    set gridSize(value: number | { items?: Array<number>, value?: number }) {
+    set gridSize(value: number | Record<string, any>) {
         this._setOption('gridSize', value);
     }
 
@@ -308,10 +311,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -321,10 +324,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get historyToolbar(): { commands?: Array<CustomCommand | Command>, visible?: boolean } {
+    get historyToolbar(): Record<string, any> {
         return this._getOption('historyToolbar');
     }
-    set historyToolbar(value: { commands?: Array<CustomCommand | Command>, visible?: boolean }) {
+    set historyToolbar(value: Record<string, any>) {
         this._setOption('historyToolbar', value);
     }
 
@@ -334,10 +337,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get mainToolbar(): { commands?: Array<CustomCommand | Command>, visible?: boolean } {
+    get mainToolbar(): Record<string, any> {
         return this._getOption('mainToolbar');
     }
-    set mainToolbar(value: { commands?: Array<CustomCommand | Command>, visible?: boolean }) {
+    set mainToolbar(value: Record<string, any>) {
         this._setOption('mainToolbar', value);
     }
 
@@ -347,10 +350,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get nodes(): { autoLayout?: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined } {
+    get nodes(): Record<string, any> {
         return this._getOption('nodes');
     }
-    set nodes(value: { autoLayout?: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }) {
+    set nodes(value: Record<string, any>) {
         this._setOption('nodes', value);
     }
 
@@ -373,10 +376,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get pageOrientation(): PageOrientation {
+    get pageOrientation(): "portrait" | "landscape" {
         return this._getOption('pageOrientation');
     }
-    set pageOrientation(value: PageOrientation) {
+    set pageOrientation(value: "portrait" | "landscape") {
         this._setOption('pageOrientation', value);
     }
 
@@ -386,10 +389,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get pageSize(): { height?: number, items?: Array<any | { height?: number, text?: string, width?: number }>, width?: number } {
+    get pageSize(): Record<string, any> {
         return this._getOption('pageSize');
     }
-    set pageSize(value: { height?: number, items?: Array<any | { height?: number, text?: string, width?: number }>, width?: number }) {
+    set pageSize(value: Record<string, any>) {
         this._setOption('pageSize', value);
     }
 
@@ -399,10 +402,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get propertiesPanel(): { tabs?: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility } {
+    get propertiesPanel(): Record<string, any> {
         return this._getOption('propertiesPanel');
     }
-    set propertiesPanel(value: { tabs?: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility }) {
+    set propertiesPanel(value: Record<string, any>) {
         this._setOption('propertiesPanel', value);
     }
 
@@ -477,10 +480,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get toolbox(): { groups?: Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }>, shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number | undefined } {
+    get toolbox(): Record<string, any> {
         return this._getOption('toolbox');
     }
-    set toolbox(value: { groups?: Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }>, shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number | undefined }) {
+    set toolbox(value: Record<string, any>) {
         this._setOption('toolbox', value);
     }
 
@@ -490,10 +493,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get units(): Units {
+    get units(): "in" | "cm" | "px" {
         return this._getOption('units');
     }
-    set units(value: Units) {
+    set units(value: "in" | "cm" | "px") {
         this._setOption('units', value);
     }
 
@@ -516,10 +519,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get viewToolbar(): { commands?: Array<CustomCommand | Command>, visible?: boolean } {
+    get viewToolbar(): Record<string, any> {
         return this._getOption('viewToolbar');
     }
-    set viewToolbar(value: { commands?: Array<CustomCommand | Command>, visible?: boolean }) {
+    set viewToolbar(value: Record<string, any>) {
         this._setOption('viewToolbar', value);
     }
 
@@ -529,10 +532,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get viewUnits(): Units {
+    get viewUnits(): "in" | "cm" | "px" {
         return this._getOption('viewUnits');
     }
-    set viewUnits(value: Units) {
+    set viewUnits(value: "in" | "cm" | "px") {
         this._setOption('viewUnits', value);
     }
 
@@ -555,10 +558,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -568,10 +571,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get zoomLevel(): number | { items?: Array<number>, value?: number | undefined } {
+    get zoomLevel(): number | Record<string, any> {
         return this._getOption('zoomLevel');
     }
-    set zoomLevel(value: number | { items?: Array<number>, value?: number | undefined }) {
+    set zoomLevel(value: number | Record<string, any>) {
         this._setOption('zoomLevel', value);
     }
 
@@ -660,49 +663,49 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() autoZoomModeChange: EventEmitter<AutoZoomMode>;
+    @Output() autoZoomModeChange: EventEmitter<"fitContent" | "fitWidth" | "disabled">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contextMenuChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, enabled?: boolean }>;
+    @Output() contextMenuChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contextToolboxChange: EventEmitter<{ category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<ShapeType | string>, width?: number }>;
+    @Output() contextToolboxChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customShapesChange: EventEmitter<Array<any | { allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: ShapeType | string, category?: string, connectionPoints?: Array<any | { x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, keepRatioOnAutoSize?: boolean, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: any, templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: any, toolboxWidthToHeightRatio?: number, type?: string }>>;
+    @Output() customShapesChange: EventEmitter<Array<Record<string, any>>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customShapeTemplateChange: EventEmitter<any>;
+    @Output() customShapeTemplateChange: EventEmitter<((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customShapeToolboxTemplateChange: EventEmitter<any>;
+    @Output() customShapeToolboxTemplateChange: EventEmitter<((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() defaultItemPropertiesChange: EventEmitter<{ connectorLineEnd?: ConnectorLineEnd, connectorLineStart?: ConnectorLineEnd, connectorLineType?: ConnectorLineType, shapeMaxHeight?: number | undefined, shapeMaxWidth?: number | undefined, shapeMinHeight?: number | undefined, shapeMinWidth?: number | undefined, style?: any, textStyle?: any }>;
+    @Output() defaultItemPropertiesChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -716,28 +719,28 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() edgesChange: EventEmitter<{ customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }>;
+    @Output() edgesChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<{ allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean }>;
+    @Output() editingChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ fileName?: string }>;
+    @Output() exportChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -751,7 +754,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() gridSizeChange: EventEmitter<number | { items?: Array<number>, value?: number }>;
+    @Output() gridSizeChange: EventEmitter<number | Record<string, any>>;
 
     /**
     
@@ -765,28 +768,28 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() historyToolbarChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, visible?: boolean }>;
+    @Output() historyToolbarChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() mainToolbarChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, visible?: boolean }>;
+    @Output() mainToolbarChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() nodesChange: EventEmitter<{ autoLayout?: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }>;
+    @Output() nodesChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -800,21 +803,21 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pageOrientationChange: EventEmitter<PageOrientation>;
+    @Output() pageOrientationChange: EventEmitter<"portrait" | "landscape">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pageSizeChange: EventEmitter<{ height?: number, items?: Array<any | { height?: number, text?: string, width?: number }>, width?: number }>;
+    @Output() pageSizeChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() propertiesPanelChange: EventEmitter<{ tabs?: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility }>;
+    @Output() propertiesPanelChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -856,14 +859,14 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() toolboxChange: EventEmitter<{ groups?: Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }>, shapeIconsPerRow?: number, showSearch?: boolean, visibility?: PanelVisibility, width?: number | undefined }>;
+    @Output() toolboxChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() unitsChange: EventEmitter<Units>;
+    @Output() unitsChange: EventEmitter<"in" | "cm" | "px">;
 
     /**
     
@@ -877,14 +880,14 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewToolbarChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, visible?: boolean }>;
+    @Output() viewToolbarChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewUnitsChange: EventEmitter<Units>;
+    @Output() viewUnitsChange: EventEmitter<"in" | "cm" | "px">;
 
     /**
     
@@ -898,14 +901,14 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() zoomLevelChange: EventEmitter<number | { items?: Array<number>, value?: number | undefined }>;
+    @Output() zoomLevelChange: EventEmitter<number | Record<string, any>>;
 
 
 
@@ -1057,26 +1060,30 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     DxoToolboxModule,
     DxoViewToolbarModule,
     DxoZoomLevelModule,
-    DxoDiagramContextMenuModule,
+    DxoDiagramAutoLayoutModule,
     DxiDiagramCommandModule,
-    DxiDiagramItemModule,
+    DxiDiagramCommandItemModule,
+    DxiDiagramConnectionPointModule,
+    DxoDiagramContextMenuModule,
     DxoDiagramContextToolboxModule,
     DxiDiagramCustomShapeModule,
-    DxiDiagramConnectionPointModule,
     DxoDiagramDefaultItemPropertiesModule,
     DxoDiagramEdgesModule,
     DxoDiagramEditingModule,
     DxoDiagramExportModule,
     DxoDiagramGridSizeModule,
+    DxiDiagramGroupModule,
     DxoDiagramHistoryToolbarModule,
+    DxiDiagramItemModule,
     DxoDiagramMainToolbarModule,
     DxoDiagramNodesModule,
-    DxoDiagramAutoLayoutModule,
     DxoDiagramPageSizeModule,
+    DxiDiagramPageSizeItemModule,
     DxoDiagramPropertiesPanelModule,
     DxiDiagramTabModule,
-    DxiDiagramGroupModule,
+    DxiDiagramTabGroupModule,
     DxoDiagramToolboxModule,
+    DxiDiagramToolboxGroupModule,
     DxoDiagramViewToolbarModule,
     DxoDiagramZoomLevelModule,
     DxIntegrationModule,
@@ -1109,26 +1116,30 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     DxoToolboxModule,
     DxoViewToolbarModule,
     DxoZoomLevelModule,
-    DxoDiagramContextMenuModule,
+    DxoDiagramAutoLayoutModule,
     DxiDiagramCommandModule,
-    DxiDiagramItemModule,
+    DxiDiagramCommandItemModule,
+    DxiDiagramConnectionPointModule,
+    DxoDiagramContextMenuModule,
     DxoDiagramContextToolboxModule,
     DxiDiagramCustomShapeModule,
-    DxiDiagramConnectionPointModule,
     DxoDiagramDefaultItemPropertiesModule,
     DxoDiagramEdgesModule,
     DxoDiagramEditingModule,
     DxoDiagramExportModule,
     DxoDiagramGridSizeModule,
+    DxiDiagramGroupModule,
     DxoDiagramHistoryToolbarModule,
+    DxiDiagramItemModule,
     DxoDiagramMainToolbarModule,
     DxoDiagramNodesModule,
-    DxoDiagramAutoLayoutModule,
     DxoDiagramPageSizeModule,
+    DxiDiagramPageSizeItemModule,
     DxoDiagramPropertiesPanelModule,
     DxiDiagramTabModule,
-    DxiDiagramGroupModule,
+    DxiDiagramTabGroupModule,
     DxoDiagramToolboxModule,
+    DxiDiagramToolboxGroupModule,
     DxoDiagramViewToolbarModule,
     DxoDiagramZoomLevelModule,
     DxTemplateModule

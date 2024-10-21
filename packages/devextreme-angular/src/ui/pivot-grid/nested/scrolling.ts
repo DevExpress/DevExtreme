@@ -14,7 +14,6 @@ import {
 
 
 
-import { Mode, ScrollMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPivotGridScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get mode(): ScrollMode {
+    get mode(): "standard" | "virtual" {
         return this._getOption('mode');
     }
-    set mode(value: ScrollMode) {
+    set mode(value: "standard" | "virtual") {
         this._setOption('mode', value);
     }
 
     @Input()
-    get useNative(): Mode | boolean {
+    get useNative(): boolean | "auto" {
         return this._getOption('useNative');
     }
-    set useNative(value: Mode | boolean) {
+    set useNative(value: boolean | "auto") {
         this._setOption('useNative', value);
     }
 

@@ -14,7 +14,6 @@ import {
 
 
 
-import { DashStyle } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,18 +37,18 @@ export class DxoCircularGaugeBorderComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 

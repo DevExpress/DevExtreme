@@ -29,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCircularGaugeColorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get base(): string | undefined {
+    get base(): string {
         return this._getOption('base');
     }
-    set base(value: string | undefined) {
+    set base(value: string) {
         this._setOption('base', value);
     }
 
     @Input()
-    get fillId(): string | undefined {
+    get fillId(): string {
         return this._getOption('fillId');
     }
-    set fillId(value: string | undefined) {
+    set fillId(value: string) {
         this._setOption('fillId', value);
     }
 

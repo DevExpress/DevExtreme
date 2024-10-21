@@ -37,10 +37,10 @@ export class DxoVectorMapImageComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get url(): string | undefined {
+    get url(): string {
         return this._getOption('url');
     }
-    set url(value: string | undefined) {
+    set url(value: string) {
         this._setOption('url', value);
     }
 

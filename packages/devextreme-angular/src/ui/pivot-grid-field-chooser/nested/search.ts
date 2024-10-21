@@ -14,7 +14,6 @@ import {
 
 
 
-import { SearchMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -46,10 +45,10 @@ export class DxoPivotGridFieldChooserSearchComponent extends NestedOption implem
     }
 
     @Input()
-    get mode(): SearchMode {
+    get mode(): "contains" | "startswith" | "equals" {
         return this._getOption('mode');
     }
-    set mode(value: SearchMode) {
+    set mode(value: "contains" | "startswith" | "equals") {
         this._setOption('mode', value);
     }
 

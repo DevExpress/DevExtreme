@@ -10,15 +10,14 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -28,7 +27,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiResponsiveBoxLocationComponent } from './location-dxi';
 
 
 @Component({
@@ -56,18 +54,18 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get location(): Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }> {
+    get location(): Array<Record<string, any>> | Record<string, any> {
         return this._getOption('location');
     }
-    set location(value: Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>) {
+    set location(value: Array<Record<string, any>> | Record<string, any>) {
         this._setOption('location', value);
     }
 
     @Input()
-    get template(): any {
+    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('template', value);
     }
 
@@ -92,14 +90,6 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiResponsiveBoxLocationComponent))
-    get locationChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
-        return this._getOption('location');
-    }
-    set locationChildren(value) {
-        this.setChildren('location', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

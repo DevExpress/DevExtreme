@@ -7,36 +7,43 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { FirstDayOfWeek, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { CalendarSelectionMode, CalendarZoomLevel, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, WeekNumberRule } from 'devextreme/ui/calendar';
+import { template } from 'devextreme/core/templates/template';
+import { DisabledDate, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/calendar';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-date-box-calendar-options',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -49,18 +56,26 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get cellTemplate(): any {
+    get bindingOptions(): Record<string, any> {
+        return this._getOption('bindingOptions');
+    }
+    set bindingOptions(value: Record<string, any>) {
+        this._setOption('bindingOptions', value);
+    }
+
+    @Input()
+    get cellTemplate(): ((itemData: { date: Date, text: string, view: string }, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('cellTemplate');
     }
-    set cellTemplate(value: any) {
+    set cellTemplate(value: ((itemData: { date: Date, text: string, view: string }, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('cellTemplate', value);
     }
 
     @Input()
-    get dateSerializationFormat(): string | undefined {
+    get dateSerializationFormat(): string {
         return this._getOption('dateSerializationFormat');
     }
-    set dateSerializationFormat(value: string | undefined) {
+    set dateSerializationFormat(value: string) {
         this._setOption('dateSerializationFormat', value);
     }
 
@@ -73,26 +88,26 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get disabledDates(): Function | Array<Date> {
+    get disabledDates(): Array<Date> | ((data: DisabledDate) => boolean) {
         return this._getOption('disabledDates');
     }
-    set disabledDates(value: Function | Array<Date>) {
+    set disabledDates(value: Array<Date> | ((data: DisabledDate) => boolean)) {
         this._setOption('disabledDates', value);
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -105,18 +120,18 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -153,10 +168,10 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get maxZoomLevel(): CalendarZoomLevel {
+    get maxZoomLevel(): "century" | "decade" | "month" | "year" {
         return this._getOption('maxZoomLevel');
     }
-    set maxZoomLevel(value: CalendarZoomLevel) {
+    set maxZoomLevel(value: "century" | "decade" | "month" | "year") {
         this._setOption('maxZoomLevel', value);
     }
 
@@ -169,10 +184,10 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get minZoomLevel(): CalendarZoomLevel {
+    get minZoomLevel(): "century" | "decade" | "month" | "year" {
         return this._getOption('minZoomLevel');
     }
-    set minZoomLevel(value: CalendarZoomLevel) {
+    set minZoomLevel(value: "century" | "decade" | "month" | "year") {
         this._setOption('minZoomLevel', value);
     }
 
@@ -233,10 +248,10 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get selectionMode(): CalendarSelectionMode {
+    get selectionMode(): "single" | "multiple" | "range" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: CalendarSelectionMode) {
+    set selectionMode(value: "single" | "multiple" | "range") {
         this._setOption('selectionMode', value);
     }
 
@@ -289,34 +304,34 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
     @Input()
-    get validationMessagePosition(): Position {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
         this._setOption('validationMessagePosition', value);
     }
 
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
     @Input()
-    get value(): Date | number | string | Array<Date | number | string> {
+    get value(): Array<Date | number | string> | Date | number | string {
         return this._getOption('value');
     }
-    set value(value: Date | number | string | Array<Date | number | string>) {
+    set value(value: Array<Date | number | string> | Date | number | string) {
         this._setOption('value', value);
     }
 
@@ -329,59 +344,52 @@ export class DxoDateBoxCalendarOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get weekNumberRule(): WeekNumberRule {
+    get weekNumberRule(): "auto" | "firstDay" | "fullWeek" | "firstFourDays" {
         return this._getOption('weekNumberRule');
     }
-    set weekNumberRule(value: WeekNumberRule) {
+    set weekNumberRule(value: "auto" | "firstDay" | "fullWeek" | "firstFourDays") {
         this._setOption('weekNumberRule', value);
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
     @Input()
-    get zoomLevel(): CalendarZoomLevel {
+    get zoomLevel(): "century" | "decade" | "month" | "year" {
         return this._getOption('zoomLevel');
     }
-    set zoomLevel(value: CalendarZoomLevel) {
+    set zoomLevel(value: "century" | "decade" | "month" | "year") {
         this._setOption('zoomLevel', value);
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() valueChange: EventEmitter<Date | number | string | Array<Date | number | string>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() zoomLevelChange: EventEmitter<CalendarZoomLevel>;
     protected get _optionPath() {
         return 'calendarOptions';
     }
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'valueChange' },
-            { emit: 'zoomLevelChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

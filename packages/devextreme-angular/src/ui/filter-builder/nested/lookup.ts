@@ -14,8 +14,8 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -39,26 +39,26 @@ export class DxoFilterBuilderLookupComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dataSource(): Store | DataSourceOptions | undefined | Array<any> {
+    get dataSource(): Array<any> | DataSourceOptions | Store {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSourceOptions | undefined | Array<any>) {
+    set dataSource(value: Array<any> | DataSourceOptions | Store) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get displayExpr(): Function | string | undefined {
+    get displayExpr(): ((data: any) => string) | string {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string | undefined) {
+    set displayExpr(value: ((data: any) => string) | string) {
         this._setOption('displayExpr', value);
     }
 
     @Input()
-    get valueExpr(): Function | string | undefined {
+    get valueExpr(): ((data: any) => string | number | boolean) | string {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: Function | string | undefined) {
+    set valueExpr(value: ((data: any) => string | number | boolean) | string) {
         this._setOption('valueExpr', value);
     }
 

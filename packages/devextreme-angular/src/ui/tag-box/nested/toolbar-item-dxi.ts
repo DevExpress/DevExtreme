@@ -16,9 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { template } from 'devextreme/core/templates/template';
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 
 import {
     NestedOptionHost,
@@ -39,10 +38,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 export class DxiTagBoxToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
@@ -63,26 +62,26 @@ export class DxiTagBoxToolbarItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get locateInMenu(): LocateInMenuMode {
+    get locateInMenu(): "always" | "auto" | "never" {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: LocateInMenuMode) {
+    set locateInMenu(value: "always" | "auto" | "never") {
         this._setOption('locateInMenu', value);
     }
 
     @Input()
-    get location(): ToolbarItemLocation {
+    get location(): "after" | "before" | "center" {
         return this._getOption('location');
     }
-    set location(value: ToolbarItemLocation) {
+    set location(value: "after" | "before" | "center") {
         this._setOption('location', value);
     }
 
     @Input()
-    get menuItemTemplate(): any {
+    get menuItemTemplate(): (() => string | any) | template {
         return this._getOption('menuItemTemplate');
     }
-    set menuItemTemplate(value: any) {
+    set menuItemTemplate(value: (() => string | any) | template) {
         this._setOption('menuItemTemplate', value);
     }
 
@@ -95,18 +94,18 @@ export class DxiTagBoxToolbarItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get showText(): ShowTextMode {
+    get showText(): "always" | "inMenu" {
         return this._getOption('showText');
     }
-    set showText(value: ShowTextMode) {
+    set showText(value: "always" | "inMenu") {
         this._setOption('showText', value);
     }
 
     @Input()
-    get template(): any {
+    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('template', value);
     }
 
@@ -119,10 +118,10 @@ export class DxiTagBoxToolbarItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get toolbar(): ToolbarLocation {
+    get toolbar(): "bottom" | "top" {
         return this._getOption('toolbar');
     }
-    set toolbar(value: ToolbarLocation) {
+    set toolbar(value: "bottom" | "top") {
         this._setOption('toolbar', value);
     }
 
@@ -135,10 +134,10 @@ export class DxiTagBoxToolbarItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get widget(): ToolbarItemComponent {
+    get widget(): "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox" {
         return this._getOption('widget');
     }
-    set widget(value: ToolbarItemComponent) {
+    set widget(value: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox") {
         this._setOption('widget', value);
     }
 

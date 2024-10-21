@@ -7,29 +7,39 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { MapLayerElement } from 'devextreme/viz/vector_map';
+import { template } from 'devextreme/core/templates/template';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-vector-map-tooltip',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoVectorMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapTooltipComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -39,10 +49,10 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 
@@ -55,18 +65,18 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
     @Input()
-    get contentTemplate(): any | undefined {
+    get contentTemplate(): ((info: MapLayerElement, element: any) => string | any) | template {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: any | undefined) {
+    set contentTemplate(value: ((info: MapLayerElement, element: any) => string | any) | template) {
         this._setOption('contentTemplate', value);
     }
 
@@ -79,10 +89,10 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get customizeTooltip(): Function | undefined {
+    get customizeTooltip(): ((info: MapLayerElement) => Record<string, any>) {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: Function | undefined) {
+    set customizeTooltip(value: ((info: MapLayerElement) => Record<string, any>)) {
         this._setOption('customizeTooltip', value);
     }
 
@@ -103,10 +113,10 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
@@ -127,18 +137,18 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get shadow(): { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
+    get shadow(): Record<string, any> {
         return this._getOption('shadow');
     }
-    set shadow(value: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
+    set shadow(value: Record<string, any>) {
         this._setOption('shadow', value);
     }
 
     @Input()
-    get zIndex(): number | undefined {
+    get zIndex(): number {
         return this._getOption('zIndex');
     }
-    set zIndex(value: number | undefined) {
+    set zIndex(value: number) {
         this._setOption('zIndex', value);
     }
 
@@ -149,10 +159,22 @@ export class DxoVectorMapTooltipComponent extends NestedOption implements OnDest
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

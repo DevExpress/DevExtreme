@@ -35,10 +35,10 @@ export class DxiResponsiveBoxLocationComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get colspan(): number | undefined {
+    get colspan(): number {
         return this._getOption('colspan');
     }
-    set colspan(value: number | undefined) {
+    set colspan(value: number) {
         this._setOption('colspan', value);
     }
 
@@ -51,18 +51,18 @@ export class DxiResponsiveBoxLocationComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get rowspan(): number | undefined {
+    get rowspan(): number {
         return this._getOption('rowspan');
     }
-    set rowspan(value: number | undefined) {
+    set rowspan(value: number) {
         this._setOption('rowspan', value);
     }
 
     @Input()
-    get screen(): string | undefined {
+    get screen(): string {
         return this._getOption('screen');
     }
-    set screen(value: string | undefined) {
+    set screen(value: string) {
         this._setOption('screen', value);
     }
 

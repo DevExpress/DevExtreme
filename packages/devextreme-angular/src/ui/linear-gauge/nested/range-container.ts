@@ -8,23 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiLinearGaugeRangeComponent } from './range-dxi';
 
 
 @Component({
@@ -43,10 +38,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get horizontalOrientation(): HorizontalAlignment {
+    get horizontalOrientation(): "center" | "left" | "right" {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: HorizontalAlignment) {
+    set horizontalOrientation(value: "center" | "left" | "right") {
         this._setOption('horizontalOrientation', value);
     }
 
@@ -59,42 +54,42 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): PaletteExtensionMode {
+    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: PaletteExtensionMode) {
+    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
         this._setOption('paletteExtensionMode', value);
     }
 
     @Input()
-    get ranges(): Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }> {
+    get ranges(): Array<Record<string, any>> {
         return this._getOption('ranges');
     }
-    set ranges(value: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>) {
+    set ranges(value: Array<Record<string, any>>) {
         this._setOption('ranges', value);
     }
 
     @Input()
-    get verticalOrientation(): VerticalAlignment {
+    get verticalOrientation(): "bottom" | "center" | "top" {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: VerticalAlignment) {
+    set verticalOrientation(value: "bottom" | "center" | "top") {
         this._setOption('verticalOrientation', value);
     }
 
     @Input()
-    get width(): number | { end?: number, start?: number } {
+    get width(): number | Record<string, any> {
         return this._getOption('width');
     }
-    set width(value: number | { end?: number, start?: number }) {
+    set width(value: number | Record<string, any>) {
         this._setOption('width', value);
     }
 
@@ -103,14 +98,6 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
         return 'rangeContainer';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiLinearGaugeRangeComponent))
-    get rangesChildren(): QueryList<DxiLinearGaugeRangeComponent> {
-        return this._getOption('ranges');
-    }
-    set rangesChildren(value) {
-        this.setChildren('ranges', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

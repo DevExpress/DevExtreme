@@ -14,7 +14,6 @@ import {
 
 
 
-import { ScrollMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSchedulerScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get mode(): ScrollMode {
+    get mode(): "standard" | "virtual" {
         return this._getOption('mode');
     }
-    set mode(value: ScrollMode) {
+    set mode(value: "standard" | "virtual") {
         this._setOption('mode', value);
     }
 

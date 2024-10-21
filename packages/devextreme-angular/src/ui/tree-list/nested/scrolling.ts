@@ -14,8 +14,6 @@ import {
 
 
 
-import { Mode, ScrollbarMode, ScrollMode } from 'devextreme/common';
-import { DataRenderMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -31,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTreeListScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get columnRenderingMode(): DataRenderMode {
+    get columnRenderingMode(): "standard" | "virtual" {
         return this._getOption('columnRenderingMode');
     }
-    set columnRenderingMode(value: DataRenderMode) {
+    set columnRenderingMode(value: "standard" | "virtual") {
         this._setOption('columnRenderingMode', value);
     }
 
     @Input()
-    get mode(): ScrollMode {
+    get mode(): "standard" | "virtual" {
         return this._getOption('mode');
     }
-    set mode(value: ScrollMode) {
+    set mode(value: "standard" | "virtual") {
         this._setOption('mode', value);
     }
 
@@ -55,18 +53,18 @@ export class DxoTreeListScrollingComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get renderAsync(): boolean | undefined {
+    get renderAsync(): boolean {
         return this._getOption('renderAsync');
     }
-    set renderAsync(value: boolean | undefined) {
+    set renderAsync(value: boolean) {
         this._setOption('renderAsync', value);
     }
 
     @Input()
-    get rowRenderingMode(): DataRenderMode {
+    get rowRenderingMode(): "standard" | "virtual" {
         return this._getOption('rowRenderingMode');
     }
-    set rowRenderingMode(value: DataRenderMode) {
+    set rowRenderingMode(value: "standard" | "virtual") {
         this._setOption('rowRenderingMode', value);
     }
 
@@ -87,18 +85,18 @@ export class DxoTreeListScrollingComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get showScrollbar(): ScrollbarMode {
+    get showScrollbar(): "always" | "never" | "onHover" | "onScroll" {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: ScrollbarMode) {
+    set showScrollbar(value: "always" | "never" | "onHover" | "onScroll") {
         this._setOption('showScrollbar', value);
     }
 
     @Input()
-    get useNative(): Mode | boolean {
+    get useNative(): boolean | "auto" {
         return this._getOption('useNative');
     }
-    set useNative(value: Mode | boolean) {
+    set useNative(value: boolean | "auto") {
         this._setOption('useNative', value);
     }
 

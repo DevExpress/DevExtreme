@@ -20,8 +20,8 @@ import {
 } from '@angular/core';
 
 
-import { SingleOrMultiple } from 'devextreme/common';
-import { ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, CurrentDirectoryChangedEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, dxFileManagerContextMenu, dxFileManagerDetailsColumn, dxFileManagerToolbar, ErrorOccurredEvent, FileManagerItemViewMode, FileUploadedEvent, FileUploadingEvent, FocusedItemChangedEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, OptionChangedEvent, SelectedFileOpenedEvent, SelectionChangedEvent, ToolbarItemClickEvent } from 'devextreme/ui/file_manager';
+import { dxFileManagerContextMenu, dxFileManagerDetailsColumn, ContentReadyEvent, ContextMenuItemClickEvent, ContextMenuShowingEvent, CurrentDirectoryChangedEvent, DirectoryCreatedEvent, DirectoryCreatingEvent, DisposingEvent, ErrorOccurredEvent, FileUploadedEvent, FileUploadingEvent, FocusedItemChangedEvent, InitializedEvent, ItemCopiedEvent, ItemCopyingEvent, ItemDeletedEvent, ItemDeletingEvent, ItemDownloadingEvent, ItemMovedEvent, ItemMovingEvent, ItemRenamedEvent, ItemRenamingEvent, OptionChangedEvent, SelectedFileOpenedEvent, SelectionChangedEvent, ToolbarItemClickEvent, dxFileManagerToolbar } from 'devextreme/ui/file_manager';
+import { FileSystemItem } from 'devextreme/file_management/file_system_item';
 
 import DxFileManager from 'devextreme/ui/file_manager';
 
@@ -47,15 +47,17 @@ import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxiFileSelectionItemModule } from 'devextreme-angular/ui/nested';
 import { DxoUploadModule } from 'devextreme-angular/ui/nested';
 
+import { DxiFileManagerColumnModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerContextMenuModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerContextMenuItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoFileManagerDetailsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerFileSelectionItemModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxiFileManagerItemModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerItemViewModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxoFileManagerDetailsModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxiFileManagerColumnModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerNotificationsModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerPermissionsModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerToolbarModule } from 'devextreme-angular/ui/file-manager/nested';
-import { DxiFileManagerFileSelectionItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileManagerToolbarItemModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
 
 
@@ -83,10 +85,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -161,10 +163,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get customizeDetailColumns(): Function {
+    get customizeDetailColumns(): ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>) {
         return this._getOption('customizeDetailColumns');
     }
-    set customizeDetailColumns(value: Function) {
+    set customizeDetailColumns(value: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>)) {
         this._setOption('customizeDetailColumns', value);
     }
 
@@ -174,10 +176,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get customizeThumbnail(): Function {
+    get customizeThumbnail(): ((fileSystemItem: FileSystemItem) => string) {
         return this._getOption('customizeThumbnail');
     }
-    set customizeThumbnail(value: Function) {
+    set customizeThumbnail(value: ((fileSystemItem: FileSystemItem) => string)) {
         this._setOption('customizeThumbnail', value);
     }
 
@@ -200,10 +202,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -252,10 +254,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -265,10 +267,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -291,10 +293,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get itemView(): { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean } {
+    get itemView(): Record<string, any> {
         return this._getOption('itemView');
     }
-    set itemView(value: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }) {
+    set itemView(value: Record<string, any>) {
         this._setOption('itemView', value);
     }
 
@@ -304,10 +306,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get notifications(): { showPanel?: boolean, showPopup?: boolean } {
+    get notifications(): Record<string, any> {
         return this._getOption('notifications');
     }
-    set notifications(value: { showPanel?: boolean, showPopup?: boolean }) {
+    set notifications(value: Record<string, any>) {
         this._setOption('notifications', value);
     }
 
@@ -317,10 +319,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get permissions(): { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean } {
+    get permissions(): Record<string, any> {
         return this._getOption('permissions');
     }
-    set permissions(value: { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean }) {
+    set permissions(value: Record<string, any>) {
         this._setOption('permissions', value);
     }
 
@@ -369,10 +371,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get selectionMode(): SingleOrMultiple {
+    get selectionMode(): "single" | "multiple" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleOrMultiple) {
+    set selectionMode(value: "single" | "multiple") {
         this._setOption('selectionMode', value);
     }
 
@@ -408,10 +410,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get upload(): { chunkSize?: number, maxFileSize?: number } {
+    get upload(): Record<string, any> {
         return this._getOption('upload');
     }
-    set upload(value: { chunkSize?: number, maxFileSize?: number }) {
+    set upload(value: Record<string, any>) {
         this._setOption('upload', value);
     }
 
@@ -434,10 +436,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -646,7 +648,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -688,14 +690,14 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeDetailColumnsChange: EventEmitter<Function>;
+    @Output() customizeDetailColumnsChange: EventEmitter<((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeThumbnailChange: EventEmitter<Function>;
+    @Output() customizeThumbnailChange: EventEmitter<((fileSystemItem: FileSystemItem) => string)>;
 
     /**
     
@@ -709,7 +711,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -737,14 +739,14 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -758,21 +760,21 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemViewChange: EventEmitter<{ details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: FileManagerItemViewMode, showFolders?: boolean, showParentFolder?: boolean }>;
+    @Output() itemViewChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() notificationsChange: EventEmitter<{ showPanel?: boolean, showPopup?: boolean }>;
+    @Output() notificationsChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() permissionsChange: EventEmitter<{ copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean }>;
+    @Output() permissionsChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -800,7 +802,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
+    @Output() selectionModeChange: EventEmitter<"single" | "multiple">;
 
     /**
     
@@ -821,7 +823,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() uploadChange: EventEmitter<{ chunkSize?: number, maxFileSize?: number }>;
+    @Output() uploadChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -835,7 +837,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 
@@ -967,15 +969,17 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     DxoToolbarModule,
     DxiFileSelectionItemModule,
     DxoUploadModule,
+    DxiFileManagerColumnModule,
     DxoFileManagerContextMenuModule,
+    DxiFileManagerContextMenuItemModule,
+    DxoFileManagerDetailsModule,
+    DxiFileManagerFileSelectionItemModule,
     DxiFileManagerItemModule,
     DxoFileManagerItemViewModule,
-    DxoFileManagerDetailsModule,
-    DxiFileManagerColumnModule,
     DxoFileManagerNotificationsModule,
     DxoFileManagerPermissionsModule,
     DxoFileManagerToolbarModule,
-    DxiFileManagerFileSelectionItemModule,
+    DxiFileManagerToolbarItemModule,
     DxoFileManagerUploadModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -995,15 +999,17 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     DxoToolbarModule,
     DxiFileSelectionItemModule,
     DxoUploadModule,
+    DxiFileManagerColumnModule,
     DxoFileManagerContextMenuModule,
+    DxiFileManagerContextMenuItemModule,
+    DxoFileManagerDetailsModule,
+    DxiFileManagerFileSelectionItemModule,
     DxiFileManagerItemModule,
     DxoFileManagerItemViewModule,
-    DxoFileManagerDetailsModule,
-    DxiFileManagerColumnModule,
     DxoFileManagerNotificationsModule,
     DxoFileManagerPermissionsModule,
     DxoFileManagerToolbarModule,
-    DxiFileManagerFileSelectionItemModule,
+    DxiFileManagerToolbarItemModule,
     DxoFileManagerUploadModule,
     DxTemplateModule
   ]

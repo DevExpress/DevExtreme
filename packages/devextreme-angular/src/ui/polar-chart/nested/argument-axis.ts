@@ -8,24 +8,17 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { ArgumentAxisHoverMode, AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiPolarChartConstantLineComponent } from './constant-line-dxi';
-import { DxiPolarChartStripComponent } from './strip-dxi';
 
 
 @Component({
@@ -36,18 +29,18 @@ import { DxiPolarChartStripComponent } from './strip-dxi';
 })
 export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowDecimals(): boolean | undefined {
+    get allowDecimals(): boolean {
         return this._getOption('allowDecimals');
     }
-    set allowDecimals(value: boolean | undefined) {
+    set allowDecimals(value: boolean) {
         this._setOption('allowDecimals', value);
     }
 
     @Input()
-    get argumentType(): ChartsDataType | undefined {
+    get argumentType(): "datetime" | "numeric" | "string" {
         return this._getOption('argumentType');
     }
-    set argumentType(value: ChartsDataType | undefined) {
+    set argumentType(value: "datetime" | "numeric" | "string") {
         this._setOption('argumentType', value);
     }
 
@@ -60,10 +53,10 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
     }
 
     @Input()
-    get categories(): Array<number | string | Date> {
+    get categories(): Array<Date | number | string> {
         return this._getOption('categories');
     }
-    set categories(value: Array<number | string | Date>) {
+    set categories(value: Array<Date | number | string>) {
         this._setOption('categories', value);
     }
 
@@ -76,34 +69,34 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
     }
 
     @Input()
-    get constantLines(): Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }> {
+    get constantLines(): Array<Record<string, any>> {
         return this._getOption('constantLines');
     }
-    set constantLines(value: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>) {
+    set constantLines(value: Array<Record<string, any>>) {
         this._setOption('constantLines', value);
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number } {
+    get constantLineStyle(): Record<string, any> {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }) {
+    set constantLineStyle(value: Record<string, any>) {
         this._setOption('constantLineStyle', value);
     }
 
     @Input()
-    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
+    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
+    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
     @Input()
-    get endOnTick(): boolean | undefined {
+    get endOnTick(): boolean {
         return this._getOption('endOnTick');
     }
-    set endOnTick(value: boolean | undefined) {
+    set endOnTick(value: boolean) {
         this._setOption('endOnTick', value);
     }
 
@@ -116,18 +109,18 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
     }
 
     @Input()
-    get grid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get grid(): Record<string, any> {
         return this._getOption('grid');
     }
-    set grid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set grid(value: Record<string, any>) {
         this._setOption('grid', value);
     }
 
     @Input()
-    get hoverMode(): ArgumentAxisHoverMode {
+    get hoverMode(): "allArgumentPoints" | "none" {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: ArgumentAxisHoverMode) {
+    set hoverMode(value: "allArgumentPoints" | "none") {
         this._setOption('hoverMode', value);
     }
 
@@ -140,18 +133,18 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
     }
 
     @Input()
-    get label(): { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
     @Input()
-    get linearThreshold(): number | undefined {
+    get linearThreshold(): number {
         return this._getOption('linearThreshold');
     }
-    set linearThreshold(value: number | undefined) {
+    set linearThreshold(value: number) {
         this._setOption('linearThreshold', value);
     }
 
@@ -164,58 +157,58 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
     }
 
     @Input()
-    get minorGrid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get minorGrid(): Record<string, any> {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set minorGrid(value: Record<string, any>) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
+    get minorTick(): Record<string, any> {
         return this._getOption('minorTick');
     }
-    set minorTick(value: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: Record<string, any>) {
         this._setOption('minorTick', value);
     }
 
     @Input()
-    get minorTickCount(): number | undefined {
+    get minorTickCount(): number {
         return this._getOption('minorTickCount');
     }
-    set minorTickCount(value: number | undefined) {
+    set minorTickCount(value: number) {
         this._setOption('minorTickCount', value);
     }
 
     @Input()
-    get minorTickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minorTickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minorTickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('minorTickInterval', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
     @Input()
-    get originValue(): number | undefined {
+    get originValue(): number {
         return this._getOption('originValue');
     }
-    set originValue(value: number | undefined) {
+    set originValue(value: number) {
         this._setOption('originValue', value);
     }
 
     @Input()
-    get period(): number | undefined {
+    get period(): number {
         return this._getOption('period');
     }
-    set period(value: number | undefined) {
+    set period(value: number) {
         this._setOption('period', value);
     }
 
@@ -228,42 +221,42 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
     }
 
     @Input()
-    get strips(): Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }> {
+    get strips(): Array<Record<string, any>> {
         return this._getOption('strips');
     }
-    set strips(value: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>) {
+    set strips(value: Array<Record<string, any>>) {
         this._setOption('strips', value);
     }
 
     @Input()
-    get stripStyle(): { label?: { font?: Font } } {
+    get stripStyle(): Record<string, any> {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: { label?: { font?: Font } }) {
+    set stripStyle(value: Record<string, any>) {
         this._setOption('stripStyle', value);
     }
 
     @Input()
-    get tick(): { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number } {
+    get tick(): Record<string, any> {
         return this._getOption('tick');
     }
-    set tick(value: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }) {
+    set tick(value: Record<string, any>) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get tickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get tickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set tickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get type(): AxisScaleType | undefined {
+    get type(): "continuous" | "discrete" | "logarithmic" {
         return this._getOption('type');
     }
-    set type(value: AxisScaleType | undefined) {
+    set type(value: "continuous" | "discrete" | "logarithmic") {
         this._setOption('type', value);
     }
 
@@ -288,22 +281,6 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
         return 'argumentAxis';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiPolarChartConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiPolarChartConstantLineComponent> {
-        return this._getOption('constantLines');
-    }
-    set constantLinesChildren(value) {
-        this.setChildren('constantLines', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiPolarChartStripComponent))
-    get stripsChildren(): QueryList<DxiPolarChartStripComponent> {
-        return this._getOption('strips');
-    }
-    set stripsChildren(value) {
-        this.setChildren('strips', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

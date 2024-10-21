@@ -14,7 +14,6 @@ import {
 
 
 
-import { HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFunnelSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 
     @Input()
-    get hatching(): { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
+    get hatching(): Record<string, any> {
         return this._getOption('hatching');
     }
-    set hatching(value: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
+    set hatching(value: Record<string, any>) {
         this._setOption('hatching', value);
     }
 

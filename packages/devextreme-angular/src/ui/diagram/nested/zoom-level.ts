@@ -8,9 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
 
@@ -39,20 +37,14 @@ export class DxoDiagramZoomLevelComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get value(): number | undefined {
+    get value(): number {
         return this._getOption('value');
     }
-    set value(value: number | undefined) {
+    set value(value: number) {
         this._setOption('value', value);
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() valueChange: EventEmitter<number | undefined>;
     protected get _optionPath() {
         return 'zoomLevel';
     }
@@ -61,11 +53,6 @@ export class DxoDiagramZoomLevelComponent extends NestedOption implements OnDest
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'valueChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

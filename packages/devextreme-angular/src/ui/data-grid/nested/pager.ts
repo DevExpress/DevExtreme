@@ -14,8 +14,6 @@ import {
 
 
 
-import { DisplayMode, Mode } from 'devextreme/common';
-import { PagerPageSize } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -31,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowedPageSizes(): Mode | Array<PagerPageSize | number> {
+    get allowedPageSizes(): Array<number | "all" | "auto"> | "auto" {
         return this._getOption('allowedPageSizes');
     }
-    set allowedPageSizes(value: Mode | Array<PagerPageSize | number>) {
+    set allowedPageSizes(value: Array<number | "all" | "auto"> | "auto") {
         this._setOption('allowedPageSizes', value);
     }
 
     @Input()
-    get displayMode(): DisplayMode {
+    get displayMode(): "adaptive" | "compact" | "full" {
         return this._getOption('displayMode');
     }
-    set displayMode(value: DisplayMode) {
+    set displayMode(value: "adaptive" | "compact" | "full") {
         this._setOption('displayMode', value);
     }
 
@@ -87,10 +85,10 @@ export class DxoDataGridPagerComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get visible(): Mode | boolean {
+    get visible(): boolean | "auto" {
         return this._getOption('visible');
     }
-    set visible(value: Mode | boolean) {
+    set visible(value: boolean | "auto") {
         this._setOption('visible', value);
     }
 

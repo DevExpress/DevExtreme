@@ -14,9 +14,9 @@ import {
 
 
 
-import { HorizontalEdge } from 'devextreme/common';
-import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { dxFunnelItem } from 'devextreme/viz/funnel';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -40,26 +40,26 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): { color?: string | undefined, opacity?: number, visible?: boolean, width?: number } {
+    get connector(): Record<string, any> {
         return this._getOption('connector');
     }
-    set connector(value: { color?: string | undefined, opacity?: number, visible?: boolean, width?: number }) {
+    set connector(value: Record<string, any>) {
         this._setOption('connector', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { item: dxFunnelItem, percent: number, percentText: string, value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -72,18 +72,18 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get horizontalAlignment(): HorizontalEdge {
+    get horizontalAlignment(): "left" | "right" {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: HorizontalEdge) {
+    set horizontalAlignment(value: "left" | "right") {
         this._setOption('horizontalAlignment', value);
     }
 
@@ -96,10 +96,10 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get position(): LabelPosition {
+    get position(): "columns" | "inside" | "outside" {
         return this._getOption('position');
     }
-    set position(value: LabelPosition) {
+    set position(value: "columns" | "inside" | "outside") {
         this._setOption('position', value);
     }
 
@@ -112,10 +112,10 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get textOverflow(): TextOverflow {
+    get textOverflow(): "ellipsis" | "hide" | "none" {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: TextOverflow) {
+    set textOverflow(value: "ellipsis" | "hide" | "none") {
         this._setOption('textOverflow', value);
     }
 
@@ -128,10 +128,10 @@ export class DxoFunnelLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get wordWrap(): WordWrap {
+    get wordWrap(): "normal" | "breakWord" | "none" {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: WordWrap) {
+    set wordWrap(value: "normal" | "breakWord" | "none") {
         this._setOption('wordWrap', value);
     }
 

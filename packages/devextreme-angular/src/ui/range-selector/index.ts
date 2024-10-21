@@ -22,13 +22,11 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, SliderValueChangeMode, VerticalEdge } from 'devextreme/common';
-import { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, Palette, PaletteExtensionMode, ScaleBreak, ScaleBreakLineStyle, TextOverflow, Theme, TimeInterval, VisualRange, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
-import { ChartSeries } from 'devextreme/viz/common';
-import { AxisScale, BackgroundImageLocation, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedCallMode, ValueChangedEvent } from 'devextreme/viz/range_selector';
+import DataSource from 'devextreme/data/data_source';
+import * as CommonChartTypes from 'devextreme/common/charts';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/viz/range_selector';
 
 import DxRangeSelector from 'devextreme/viz/range_selector';
 
@@ -118,76 +116,66 @@ import { DxoSliderMarkerModule } from 'devextreme-angular/ui/nested';
 import { DxoTitleModule } from 'devextreme-angular/ui/nested';
 import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
 
-import { DxoRangeSelectorBackgroundModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorImageModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBehaviorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorChartModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorCommonSeriesSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorAggregationModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorAreaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBorderModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorHatchingModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorLabelModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorConnectorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorPointModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorHeightModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorUrlModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorReductionModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorBubbleModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorCandlestickModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorColorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedbarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedlineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedsplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFullstackedsplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorArgumentFormatModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFontModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorFormatModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorLineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorRangeareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorRangebarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorScatterModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedbarModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedlineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedsplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStackedsplineareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStepareaModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSteplineModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorStockModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorDataPrepareSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxiRangeSelectorSeriesModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorSeriesTemplateModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorValueAxisModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorExportModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorIndentModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorLoadingIndicatorModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorMarginModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorScaleModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorAggregationIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorArgumentFormatModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBackgroundModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBackgroundImageModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBehaviorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorBorderModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxiRangeSelectorBreakModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorBreakStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorChartModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorColorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsLabelModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorCommonSeriesSettingsSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorConnectorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorDataPrepareSettingsModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorExportModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorFontModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorFormatModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorHatchingModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorHeightModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorImageModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorIndentModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorLabelModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorLengthModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorLoadingIndicatorModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorMarginModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMarkerModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorMarkerLabelModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMaxRangeModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMinorTickModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMinorTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorMinRangeModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorTickModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointBorderModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointHoverStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointImageModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorPointSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorReductionModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorScaleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorScaleLabelModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorSelectionStyleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxiRangeSelectorSeriesModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorSeriesBorderModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorSeriesTemplateModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorShutterModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSizeModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSliderHandleModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSliderMarkerModule } from 'devextreme-angular/ui/range-selector/nested';
-import { DxoRangeSelectorTitleModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorSubtitleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorTickModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorTickIntervalModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorTitleModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorUrlModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorValueModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorValueAxisModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
+import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selector/nested';
 
 
 
@@ -222,10 +210,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get background(): { color?: string, image?: { location?: BackgroundImageLocation, url?: string | undefined }, visible?: boolean } {
+    get background(): Record<string, any> {
         return this._getOption('background');
     }
-    set background(value: { color?: string, image?: { location?: BackgroundImageLocation, url?: string | undefined }, visible?: boolean }) {
+    set background(value: Record<string, any>) {
         this._setOption('background', value);
     }
 
@@ -235,10 +223,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get behavior(): { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode } {
+    get behavior(): Record<string, any> {
         return this._getOption('behavior');
     }
-    set behavior(value: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }) {
+    set behavior(value: Record<string, any>) {
         this._setOption('behavior', value);
     }
 
@@ -248,10 +236,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get chart(): { barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: any, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, series?: ChartSeries | any | undefined | Array<ChartSeries | any>, seriesTemplate?: { customizeSeries?: Function, nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } } {
+    get chart(): Record<string, any> {
         return this._getOption('chart');
     }
-    set chart(value: { barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: any, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, series?: ChartSeries | any | undefined | Array<ChartSeries | any>, seriesTemplate?: { customizeSeries?: Function, nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } }) {
+    set chart(value: Record<string, any>) {
         this._setOption('chart', value);
     }
 
@@ -274,10 +262,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -313,10 +301,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -326,10 +314,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): Record<string, any> {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: Record<string, any>) {
         this._setOption('export', value);
     }
 
@@ -339,10 +327,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get indent(): { left?: number | undefined, right?: number | undefined } {
+    get indent(): Record<string, any> {
         return this._getOption('indent');
     }
-    set indent(value: { left?: number | undefined, right?: number | undefined }) {
+    set indent(value: Record<string, any>) {
         this._setOption('indent', value);
     }
 
@@ -352,10 +340,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
+    get loadingIndicator(): Record<string, any> {
         return this._getOption('loadingIndicator');
     }
-    set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
+    set loadingIndicator(value: Record<string, any>) {
         this._setOption('loadingIndicator', value);
     }
 
@@ -365,10 +353,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): Record<string, any> {
         return this._getOption('margin');
     }
-    set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: Record<string, any>) {
         this._setOption('margin', value);
     }
 
@@ -417,10 +405,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get scale(): { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string | number>, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string | number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> } {
+    get scale(): Record<string, any> {
         return this._getOption('scale');
     }
-    set scale(value: { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string | number>, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string | number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }) {
+    set scale(value: Record<string, any>) {
         this._setOption('scale', value);
     }
 
@@ -443,10 +431,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get selectedRangeUpdateMode(): VisualRangeUpdateMode {
+    get selectedRangeUpdateMode(): "auto" | "keep" | "reset" | "shift" {
         return this._getOption('selectedRangeUpdateMode');
     }
-    set selectedRangeUpdateMode(value: VisualRangeUpdateMode) {
+    set selectedRangeUpdateMode(value: "auto" | "keep" | "reset" | "shift") {
         this._setOption('selectedRangeUpdateMode', value);
     }
 
@@ -456,10 +444,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get shutter(): { color?: string | undefined, opacity?: number } {
+    get shutter(): Record<string, any> {
         return this._getOption('shutter');
     }
-    set shutter(value: { color?: string | undefined, opacity?: number }) {
+    set shutter(value: Record<string, any>) {
         this._setOption('shutter', value);
     }
 
@@ -469,10 +457,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get size(): { height?: number | undefined, width?: number | undefined } {
+    get size(): Record<string, any> {
         return this._getOption('size');
     }
-    set size(value: { height?: number | undefined, width?: number | undefined }) {
+    set size(value: Record<string, any>) {
         this._setOption('size', value);
     }
 
@@ -482,10 +470,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get sliderHandle(): { color?: string, opacity?: number, width?: number } {
+    get sliderHandle(): Record<string, any> {
         return this._getOption('sliderHandle');
     }
-    set sliderHandle(value: { color?: string, opacity?: number, width?: number }) {
+    set sliderHandle(value: Record<string, any>) {
         this._setOption('sliderHandle', value);
     }
 
@@ -495,10 +483,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get sliderMarker(): { color?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean } {
+    get sliderMarker(): Record<string, any> {
         return this._getOption('sliderMarker');
     }
-    set sliderMarker(value: { color?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean }) {
+    set sliderMarker(value: Record<string, any>) {
         this._setOption('sliderMarker', value);
     }
 
@@ -508,10 +496,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get theme(): Theme {
+    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
         return this._getOption('theme');
     }
-    set theme(value: Theme) {
+    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
         this._setOption('theme', value);
     }
 
@@ -521,10 +509,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
+    get title(): Record<string, any> | string {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
+    set title(value: Record<string, any> | string) {
         this._setOption('title', value);
     }
 
@@ -534,10 +522,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get value(): VisualRange | Array<number | string | Date> {
+    get value(): Array<Date | number | string> | CommonChartTypes.VisualRange {
         return this._getOption('value');
     }
-    set value(value: VisualRange | Array<number | string | Date>) {
+    set value(value: Array<Date | number | string> | CommonChartTypes.VisualRange) {
         this._setOption('value', value);
     }
 
@@ -618,21 +606,21 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() backgroundChange: EventEmitter<{ color?: string, image?: { location?: BackgroundImageLocation, url?: string | undefined }, visible?: boolean }>;
+    @Output() backgroundChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() behaviorChange: EventEmitter<{ allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }>;
+    @Output() behaviorChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() chartChange: EventEmitter<{ barGroupPadding?: number, barGroupWidth?: number | undefined, bottomIndent?: number, commonSeriesSettings?: any, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, series?: ChartSeries | any | undefined | Array<ChartSeries | any>, seriesTemplate?: { customizeSeries?: Function, nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } }>;
+    @Output() chartChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -646,7 +634,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -667,35 +655,35 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() indentChange: EventEmitter<{ left?: number | undefined, right?: number | undefined }>;
+    @Output() indentChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }>;
+    @Output() loadingIndicatorChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
+    @Output() marginChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -723,7 +711,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<{ aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak>, breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<number | string | Date>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string | number>, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string | number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }>;
+    @Output() scaleChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -737,56 +725,56 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedRangeUpdateModeChange: EventEmitter<VisualRangeUpdateMode>;
+    @Output() selectedRangeUpdateModeChange: EventEmitter<"auto" | "keep" | "reset" | "shift">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() shutterChange: EventEmitter<{ color?: string | undefined, opacity?: number }>;
+    @Output() shutterChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
+    @Output() sizeChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sliderHandleChange: EventEmitter<{ color?: string, opacity?: number, width?: number }>;
+    @Output() sliderHandleChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sliderMarkerChange: EventEmitter<{ color?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number | undefined, visible?: boolean }>;
+    @Output() sliderMarkerChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<Theme>;
+    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<VisualRange | Array<number | string | Date>>;
+    @Output() valueChange: EventEmitter<Array<Date | number | string> | CommonChartTypes.VisualRange>;
 
     /**
     
@@ -984,76 +972,66 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoSliderMarkerModule,
     DxoTitleModule,
     DxoSubtitleModule,
-    DxoRangeSelectorBackgroundModule,
-    DxoRangeSelectorImageModule,
-    DxoRangeSelectorBehaviorModule,
-    DxoRangeSelectorChartModule,
-    DxoRangeSelectorCommonSeriesSettingsModule,
     DxoRangeSelectorAggregationModule,
-    DxoRangeSelectorAreaModule,
-    DxoRangeSelectorBorderModule,
-    DxoRangeSelectorHoverStyleModule,
-    DxoRangeSelectorHatchingModule,
-    DxoRangeSelectorLabelModule,
-    DxoRangeSelectorConnectorModule,
-    DxoRangeSelectorPointModule,
-    DxoRangeSelectorHeightModule,
-    DxoRangeSelectorUrlModule,
-    DxoRangeSelectorWidthModule,
-    DxoRangeSelectorSelectionStyleModule,
-    DxoRangeSelectorReductionModule,
-    DxoRangeSelectorValueErrorBarModule,
-    DxoRangeSelectorBarModule,
-    DxoRangeSelectorBubbleModule,
-    DxoRangeSelectorCandlestickModule,
-    DxoRangeSelectorColorModule,
-    DxoRangeSelectorFullstackedareaModule,
-    DxoRangeSelectorFullstackedbarModule,
-    DxoRangeSelectorFullstackedlineModule,
-    DxoRangeSelectorFullstackedsplineModule,
-    DxoRangeSelectorFullstackedsplineareaModule,
-    DxoRangeSelectorArgumentFormatModule,
-    DxoRangeSelectorFontModule,
-    DxoRangeSelectorFormatModule,
-    DxoRangeSelectorLineModule,
-    DxoRangeSelectorRangeareaModule,
-    DxoRangeSelectorRangebarModule,
-    DxoRangeSelectorScatterModule,
-    DxoRangeSelectorSplineModule,
-    DxoRangeSelectorSplineareaModule,
-    DxoRangeSelectorStackedareaModule,
-    DxoRangeSelectorStackedbarModule,
-    DxoRangeSelectorStackedlineModule,
-    DxoRangeSelectorStackedsplineModule,
-    DxoRangeSelectorStackedsplineareaModule,
-    DxoRangeSelectorStepareaModule,
-    DxoRangeSelectorSteplineModule,
-    DxoRangeSelectorStockModule,
-    DxoRangeSelectorDataPrepareSettingsModule,
-    DxiRangeSelectorSeriesModule,
-    DxoRangeSelectorSeriesTemplateModule,
-    DxoRangeSelectorValueAxisModule,
-    DxoRangeSelectorExportModule,
-    DxoRangeSelectorIndentModule,
-    DxoRangeSelectorLoadingIndicatorModule,
-    DxoRangeSelectorMarginModule,
-    DxoRangeSelectorScaleModule,
     DxoRangeSelectorAggregationIntervalModule,
+    DxoRangeSelectorArgumentFormatModule,
+    DxoRangeSelectorBackgroundModule,
+    DxoRangeSelectorBackgroundImageModule,
+    DxoRangeSelectorBehaviorModule,
+    DxoRangeSelectorBorderModule,
     DxiRangeSelectorBreakModule,
     DxoRangeSelectorBreakStyleModule,
+    DxoRangeSelectorChartModule,
+    DxoRangeSelectorColorModule,
+    DxoRangeSelectorCommonSeriesSettingsModule,
+    DxoRangeSelectorCommonSeriesSettingsHoverStyleModule,
+    DxoRangeSelectorCommonSeriesSettingsLabelModule,
+    DxoRangeSelectorCommonSeriesSettingsSelectionStyleModule,
+    DxoRangeSelectorConnectorModule,
+    DxoRangeSelectorDataPrepareSettingsModule,
+    DxoRangeSelectorExportModule,
+    DxoRangeSelectorFontModule,
+    DxoRangeSelectorFormatModule,
+    DxoRangeSelectorHatchingModule,
+    DxoRangeSelectorHeightModule,
+    DxoRangeSelectorHoverStyleModule,
+    DxoRangeSelectorImageModule,
+    DxoRangeSelectorIndentModule,
+    DxoRangeSelectorLabelModule,
+    DxoRangeSelectorLengthModule,
+    DxoRangeSelectorLoadingIndicatorModule,
+    DxoRangeSelectorMarginModule,
     DxoRangeSelectorMarkerModule,
+    DxoRangeSelectorMarkerLabelModule,
     DxoRangeSelectorMaxRangeModule,
     DxoRangeSelectorMinorTickModule,
     DxoRangeSelectorMinorTickIntervalModule,
     DxoRangeSelectorMinRangeModule,
-    DxoRangeSelectorTickModule,
-    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorPointModule,
+    DxoRangeSelectorPointBorderModule,
+    DxoRangeSelectorPointHoverStyleModule,
+    DxoRangeSelectorPointImageModule,
+    DxoRangeSelectorPointSelectionStyleModule,
+    DxoRangeSelectorReductionModule,
+    DxoRangeSelectorScaleModule,
+    DxoRangeSelectorScaleLabelModule,
+    DxoRangeSelectorSelectionStyleModule,
+    DxiRangeSelectorSeriesModule,
+    DxoRangeSelectorSeriesBorderModule,
+    DxoRangeSelectorSeriesTemplateModule,
     DxoRangeSelectorShutterModule,
     DxoRangeSelectorSizeModule,
     DxoRangeSelectorSliderHandleModule,
     DxoRangeSelectorSliderMarkerModule,
-    DxoRangeSelectorTitleModule,
     DxoRangeSelectorSubtitleModule,
+    DxoRangeSelectorTickModule,
+    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorTitleModule,
+    DxoRangeSelectorUrlModule,
+    DxoRangeSelectorValueModule,
+    DxoRangeSelectorValueAxisModule,
+    DxoRangeSelectorValueErrorBarModule,
+    DxoRangeSelectorWidthModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1132,76 +1110,66 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoSliderMarkerModule,
     DxoTitleModule,
     DxoSubtitleModule,
-    DxoRangeSelectorBackgroundModule,
-    DxoRangeSelectorImageModule,
-    DxoRangeSelectorBehaviorModule,
-    DxoRangeSelectorChartModule,
-    DxoRangeSelectorCommonSeriesSettingsModule,
     DxoRangeSelectorAggregationModule,
-    DxoRangeSelectorAreaModule,
-    DxoRangeSelectorBorderModule,
-    DxoRangeSelectorHoverStyleModule,
-    DxoRangeSelectorHatchingModule,
-    DxoRangeSelectorLabelModule,
-    DxoRangeSelectorConnectorModule,
-    DxoRangeSelectorPointModule,
-    DxoRangeSelectorHeightModule,
-    DxoRangeSelectorUrlModule,
-    DxoRangeSelectorWidthModule,
-    DxoRangeSelectorSelectionStyleModule,
-    DxoRangeSelectorReductionModule,
-    DxoRangeSelectorValueErrorBarModule,
-    DxoRangeSelectorBarModule,
-    DxoRangeSelectorBubbleModule,
-    DxoRangeSelectorCandlestickModule,
-    DxoRangeSelectorColorModule,
-    DxoRangeSelectorFullstackedareaModule,
-    DxoRangeSelectorFullstackedbarModule,
-    DxoRangeSelectorFullstackedlineModule,
-    DxoRangeSelectorFullstackedsplineModule,
-    DxoRangeSelectorFullstackedsplineareaModule,
-    DxoRangeSelectorArgumentFormatModule,
-    DxoRangeSelectorFontModule,
-    DxoRangeSelectorFormatModule,
-    DxoRangeSelectorLineModule,
-    DxoRangeSelectorRangeareaModule,
-    DxoRangeSelectorRangebarModule,
-    DxoRangeSelectorScatterModule,
-    DxoRangeSelectorSplineModule,
-    DxoRangeSelectorSplineareaModule,
-    DxoRangeSelectorStackedareaModule,
-    DxoRangeSelectorStackedbarModule,
-    DxoRangeSelectorStackedlineModule,
-    DxoRangeSelectorStackedsplineModule,
-    DxoRangeSelectorStackedsplineareaModule,
-    DxoRangeSelectorStepareaModule,
-    DxoRangeSelectorSteplineModule,
-    DxoRangeSelectorStockModule,
-    DxoRangeSelectorDataPrepareSettingsModule,
-    DxiRangeSelectorSeriesModule,
-    DxoRangeSelectorSeriesTemplateModule,
-    DxoRangeSelectorValueAxisModule,
-    DxoRangeSelectorExportModule,
-    DxoRangeSelectorIndentModule,
-    DxoRangeSelectorLoadingIndicatorModule,
-    DxoRangeSelectorMarginModule,
-    DxoRangeSelectorScaleModule,
     DxoRangeSelectorAggregationIntervalModule,
+    DxoRangeSelectorArgumentFormatModule,
+    DxoRangeSelectorBackgroundModule,
+    DxoRangeSelectorBackgroundImageModule,
+    DxoRangeSelectorBehaviorModule,
+    DxoRangeSelectorBorderModule,
     DxiRangeSelectorBreakModule,
     DxoRangeSelectorBreakStyleModule,
+    DxoRangeSelectorChartModule,
+    DxoRangeSelectorColorModule,
+    DxoRangeSelectorCommonSeriesSettingsModule,
+    DxoRangeSelectorCommonSeriesSettingsHoverStyleModule,
+    DxoRangeSelectorCommonSeriesSettingsLabelModule,
+    DxoRangeSelectorCommonSeriesSettingsSelectionStyleModule,
+    DxoRangeSelectorConnectorModule,
+    DxoRangeSelectorDataPrepareSettingsModule,
+    DxoRangeSelectorExportModule,
+    DxoRangeSelectorFontModule,
+    DxoRangeSelectorFormatModule,
+    DxoRangeSelectorHatchingModule,
+    DxoRangeSelectorHeightModule,
+    DxoRangeSelectorHoverStyleModule,
+    DxoRangeSelectorImageModule,
+    DxoRangeSelectorIndentModule,
+    DxoRangeSelectorLabelModule,
+    DxoRangeSelectorLengthModule,
+    DxoRangeSelectorLoadingIndicatorModule,
+    DxoRangeSelectorMarginModule,
     DxoRangeSelectorMarkerModule,
+    DxoRangeSelectorMarkerLabelModule,
     DxoRangeSelectorMaxRangeModule,
     DxoRangeSelectorMinorTickModule,
     DxoRangeSelectorMinorTickIntervalModule,
     DxoRangeSelectorMinRangeModule,
-    DxoRangeSelectorTickModule,
-    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorPointModule,
+    DxoRangeSelectorPointBorderModule,
+    DxoRangeSelectorPointHoverStyleModule,
+    DxoRangeSelectorPointImageModule,
+    DxoRangeSelectorPointSelectionStyleModule,
+    DxoRangeSelectorReductionModule,
+    DxoRangeSelectorScaleModule,
+    DxoRangeSelectorScaleLabelModule,
+    DxoRangeSelectorSelectionStyleModule,
+    DxiRangeSelectorSeriesModule,
+    DxoRangeSelectorSeriesBorderModule,
+    DxoRangeSelectorSeriesTemplateModule,
     DxoRangeSelectorShutterModule,
     DxoRangeSelectorSizeModule,
     DxoRangeSelectorSliderHandleModule,
     DxoRangeSelectorSliderMarkerModule,
-    DxoRangeSelectorTitleModule,
     DxoRangeSelectorSubtitleModule,
+    DxoRangeSelectorTickModule,
+    DxoRangeSelectorTickIntervalModule,
+    DxoRangeSelectorTitleModule,
+    DxoRangeSelectorUrlModule,
+    DxoRangeSelectorValueModule,
+    DxoRangeSelectorValueAxisModule,
+    DxoRangeSelectorValueErrorBarModule,
+    DxoRangeSelectorWidthModule,
     DxTemplateModule
   ]
 })

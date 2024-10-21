@@ -12,8 +12,6 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -37,10 +35,10 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
@@ -61,10 +59,10 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
@@ -85,10 +83,10 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get value(): Date | number | string | undefined {
+    get value(): Date | number | string {
         return this._getOption('value');
     }
-    set value(value: Date | number | string | undefined) {
+    set value(value: Date | number | string) {
         this._setOption('value', value);
     }
 

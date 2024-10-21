@@ -69,10 +69,10 @@ export class DxoPivotGridFieldPanelComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get texts(): { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string } {
+    get texts(): Record<string, any> {
         return this._getOption('texts');
     }
-    set texts(value: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }) {
+    set texts(value: Record<string, any>) {
         this._setOption('texts', value);
     }
 

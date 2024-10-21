@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font, LabelOverlap, RelativePosition } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -39,10 +39,10 @@ export class DxoPolarChartLabelComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get text(): string | undefined {
+    get text(): string {
         return this._getOption('text');
     }
-    set text(value: string | undefined) {
+    set text(value: string) {
         this._setOption('text', value);
     }
 
@@ -55,26 +55,26 @@ export class DxoPolarChartLabelComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
@@ -87,58 +87,58 @@ export class DxoPolarChartLabelComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get overlappingBehavior(): LabelOverlap {
+    get overlappingBehavior(): "hide" | "none" {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: LabelOverlap) {
+    set overlappingBehavior(value: "hide" | "none") {
         this._setOption('overlappingBehavior', value);
     }
 
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): LocalizationTypes.Format {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: LocalizationTypes.Format) {
         this._setOption('argumentFormat', value);
     }
 
     @Input()
-    get backgroundColor(): string | undefined {
+    get backgroundColor(): string {
         return this._getOption('backgroundColor');
     }
-    set backgroundColor(value: string | undefined) {
+    set backgroundColor(value: string) {
         this._setOption('backgroundColor', value);
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): { color?: string | undefined, visible?: boolean, width?: number } {
+    get connector(): Record<string, any> {
         return this._getOption('connector');
     }
-    set connector(value: { color?: string | undefined, visible?: boolean, width?: number }) {
+    set connector(value: Record<string, any>) {
         this._setOption('connector', value);
     }
 
     @Input()
-    get displayFormat(): string | undefined {
+    get displayFormat(): string {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: string | undefined) {
+    set displayFormat(value: string) {
         this._setOption('displayFormat', value);
     }
 
     @Input()
-    get position(): RelativePosition {
+    get position(): "inside" | "outside" {
         return this._getOption('position');
     }
-    set position(value: RelativePosition) {
+    set position(value: "inside" | "outside") {
         this._setOption('position', value);
     }
 

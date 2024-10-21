@@ -8,23 +8,19 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
 import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
-import { dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadMode, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorImageUploadTabItem } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorTabComponent } from './tab-dxi';
 
 
 @Component({
@@ -43,34 +39,34 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
     }
 
     @Input()
-    get fileUploadMode(): HtmlEditorImageUploadMode {
+    get fileUploadMode(): "base64" | "server" | "both" {
         return this._getOption('fileUploadMode');
     }
-    set fileUploadMode(value: HtmlEditorImageUploadMode) {
+    set fileUploadMode(value: "base64" | "server" | "both") {
         this._setOption('fileUploadMode', value);
     }
 
     @Input()
-    get tabs(): Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab> {
+    get tabs(): Array<dxHtmlEditorImageUploadTabItem | "url" | "file"> {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab>) {
+    set tabs(value: Array<dxHtmlEditorImageUploadTabItem | "url" | "file">) {
         this._setOption('tabs', value);
     }
 
     @Input()
-    get uploadDirectory(): string | undefined {
+    get uploadDirectory(): string {
         return this._getOption('uploadDirectory');
     }
-    set uploadDirectory(value: string | undefined) {
+    set uploadDirectory(value: string) {
         this._setOption('uploadDirectory', value);
     }
 
     @Input()
-    get uploadUrl(): string | undefined {
+    get uploadUrl(): string {
         return this._getOption('uploadUrl');
     }
-    set uploadUrl(value: string | undefined) {
+    set uploadUrl(value: string) {
         this._setOption('uploadUrl', value);
     }
 
@@ -79,14 +75,6 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
         return 'imageUpload';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorTabComponent))
-    get tabsChildren(): QueryList<DxiHtmlEditorTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

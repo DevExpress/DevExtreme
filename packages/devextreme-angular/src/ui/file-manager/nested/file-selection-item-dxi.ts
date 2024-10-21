@@ -12,9 +12,6 @@ import {
 
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import {
     NestedOptionHost,
@@ -30,10 +27,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption {
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
@@ -54,26 +51,26 @@ export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOp
     }
 
     @Input()
-    get locateInMenu(): LocateInMenuMode {
+    get locateInMenu(): "always" | "auto" | "never" {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: LocateInMenuMode) {
+    set locateInMenu(value: "always" | "auto" | "never") {
         this._setOption('locateInMenu', value);
     }
 
     @Input()
-    get location(): ToolbarItemLocation {
+    get location(): "after" | "before" | "center" {
         return this._getOption('location');
     }
-    set location(value: ToolbarItemLocation) {
+    set location(value: "after" | "before" | "center") {
         this._setOption('location', value);
     }
 
     @Input()
-    get name(): FileManagerPredefinedToolbarItem | string {
+    get name(): "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator" {
         return this._getOption('name');
     }
-    set name(value: FileManagerPredefinedToolbarItem | string) {
+    set name(value: "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator") {
         this._setOption('name', value);
     }
 
@@ -86,10 +83,10 @@ export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOp
     }
 
     @Input()
-    get showText(): ShowTextMode {
+    get showText(): "always" | "inMenu" {
         return this._getOption('showText');
     }
-    set showText(value: ShowTextMode) {
+    set showText(value: "always" | "inMenu") {
         this._setOption('showText', value);
     }
 
@@ -102,18 +99,18 @@ export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOp
     }
 
     @Input()
-    get visible(): boolean | undefined {
+    get visible(): boolean {
         return this._getOption('visible');
     }
-    set visible(value: boolean | undefined) {
+    set visible(value: boolean) {
         this._setOption('visible', value);
     }
 
     @Input()
-    get widget(): ToolbarItemComponent {
+    get widget(): "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox" {
         return this._getOption('widget');
     }
-    set widget(value: ToolbarItemComponent) {
+    set widget(value: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox") {
         this._setOption('widget', value);
     }
 

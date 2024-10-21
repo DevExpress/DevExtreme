@@ -23,11 +23,11 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/menu';
 
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxMenuItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuDirection, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';
+import DataSource from 'devextreme/data/data_source';
+import { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { template } from 'devextreme/core/templates/template';
 
 import DxMenu from 'devextreme/ui/menu';
 
@@ -59,20 +59,20 @@ import { DxoDelayModule } from 'devextreme-angular/ui/nested';
 import { DxoShowSubmenuModeModule } from 'devextreme-angular/ui/nested';
 
 import { DxoMenuAnimationModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoMenuHideModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoMenuFromModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoMenuPositionModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuAtModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuBoundaryOffsetModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuCollisionModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuDelayModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuFromModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuHideModule } from 'devextreme-angular/ui/menu/nested';
+import { DxiMenuItemModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuMyModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuOffsetModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuPositionModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowModule } from 'devextreme-angular/ui/menu/nested';
-import { DxiMenuItemModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
-import { DxoMenuDelayModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -101,10 +101,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -140,10 +140,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): Record<string, any> {
         return this._getOption('animation');
     }
-    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: Record<string, any>) {
         this._setOption('animation', value);
     }
 
@@ -166,10 +166,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxMenuItem> {
+    get dataSource(): Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxMenuItem>) {
+    set dataSource(value: Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -192,10 +192,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get disabledExpr(): Function | string {
+    get disabledExpr(): (() => void) | string {
         return this._getOption('disabledExpr');
     }
-    set disabledExpr(value: Function | string) {
+    set disabledExpr(value: (() => void) | string) {
         this._setOption('disabledExpr', value);
     }
 
@@ -205,10 +205,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get displayExpr(): Function | string {
+    get displayExpr(): ((item: any) => string) | string {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string) {
+    set displayExpr(value: ((item: any) => string) | string) {
         this._setOption('displayExpr', value);
     }
 
@@ -218,10 +218,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -244,10 +244,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -270,10 +270,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -309,10 +309,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get itemsExpr(): Function | string {
+    get itemsExpr(): (() => void) | string {
         return this._getOption('itemsExpr');
     }
-    set itemsExpr(value: Function | string) {
+    set itemsExpr(value: (() => void) | string) {
         this._setOption('itemsExpr', value);
     }
 
@@ -322,10 +322,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get itemTemplate(): any {
+    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: any) {
+    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('itemTemplate', value);
     }
 
@@ -335,10 +335,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get orientation(): Orientation {
+    get orientation(): "horizontal" | "vertical" {
         return this._getOption('orientation');
     }
-    set orientation(value: Orientation) {
+    set orientation(value: "horizontal" | "vertical") {
         this._setOption('orientation', value);
     }
 
@@ -374,10 +374,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get selectedExpr(): Function | string {
+    get selectedExpr(): (() => void) | string {
         return this._getOption('selectedExpr');
     }
-    set selectedExpr(value: Function | string) {
+    set selectedExpr(value: (() => void) | string) {
         this._setOption('selectedExpr', value);
     }
 
@@ -400,10 +400,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get selectionMode(): SingleOrNone {
+    get selectionMode(): "single" | "none" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleOrNone) {
+    set selectionMode(value: "single" | "none") {
         this._setOption('selectionMode', value);
     }
 
@@ -413,10 +413,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get showFirstSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
+    get showFirstSubmenuMode(): Record<string, any> | "onClick" | "onHover" {
         return this._getOption('showFirstSubmenuMode');
     }
-    set showFirstSubmenuMode(value: SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
+    set showFirstSubmenuMode(value: Record<string, any> | "onClick" | "onHover") {
         this._setOption('showFirstSubmenuMode', value);
     }
 
@@ -426,10 +426,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get showSubmenuMode(): SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode } {
+    get showSubmenuMode(): Record<string, any> | "onClick" | "onHover" {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }) {
+    set showSubmenuMode(value: Record<string, any> | "onClick" | "onHover") {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -439,10 +439,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get submenuDirection(): SubmenuDirection {
+    get submenuDirection(): "auto" | "leftOrTop" | "rightOrBottom" {
         return this._getOption('submenuDirection');
     }
-    set submenuDirection(value: SubmenuDirection) {
+    set submenuDirection(value: "auto" | "leftOrTop" | "rightOrBottom") {
         this._setOption('submenuDirection', value);
     }
 
@@ -478,10 +478,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -586,7 +586,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -607,7 +607,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
+    @Output() animationChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -621,7 +621,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxMenuItem>>;
+    @Output() dataSourceChange: EventEmitter<Array<dxMenuItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -635,21 +635,21 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledExprChange: EventEmitter<Function | string>;
+    @Output() disabledExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayExprChange: EventEmitter<Function | string>;
+    @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -663,7 +663,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -677,7 +677,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -698,21 +698,21 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsExprChange: EventEmitter<Function | string>;
+    @Output() itemsExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<any>;
+    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() orientationChange: EventEmitter<Orientation>;
+    @Output() orientationChange: EventEmitter<"horizontal" | "vertical">;
 
     /**
     
@@ -733,7 +733,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectedExprChange: EventEmitter<Function | string>;
+    @Output() selectedExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
@@ -747,28 +747,28 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<SingleOrNone>;
+    @Output() selectionModeChange: EventEmitter<"single" | "none">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showFirstSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
+    @Output() showFirstSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<SubmenuShowMode | { delay?: number | { hide?: number, show?: number }, name?: SubmenuShowMode }>;
+    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() submenuDirectionChange: EventEmitter<SubmenuDirection>;
+    @Output() submenuDirectionChange: EventEmitter<"auto" | "leftOrTop" | "rightOrBottom">;
 
     /**
     
@@ -789,7 +789,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 
@@ -933,20 +933,20 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     DxoDelayModule,
     DxoShowSubmenuModeModule,
     DxoMenuAnimationModule,
-    DxoMenuHideModule,
-    DxoMenuFromModule,
-    DxoMenuPositionModule,
     DxoMenuAtModule,
     DxoMenuBoundaryOffsetModule,
     DxoMenuCollisionModule,
+    DxoMenuDelayModule,
+    DxoMenuFromModule,
+    DxoMenuHideModule,
+    DxiMenuItemModule,
     DxoMenuMyModule,
     DxoMenuOffsetModule,
-    DxoMenuToModule,
+    DxoMenuPositionModule,
     DxoMenuShowModule,
-    DxiMenuItemModule,
     DxoMenuShowFirstSubmenuModeModule,
-    DxoMenuDelayModule,
     DxoMenuShowSubmenuModeModule,
+    DxoMenuToModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -971,20 +971,20 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     DxoDelayModule,
     DxoShowSubmenuModeModule,
     DxoMenuAnimationModule,
-    DxoMenuHideModule,
-    DxoMenuFromModule,
-    DxoMenuPositionModule,
     DxoMenuAtModule,
     DxoMenuBoundaryOffsetModule,
     DxoMenuCollisionModule,
+    DxoMenuDelayModule,
+    DxoMenuFromModule,
+    DxoMenuHideModule,
+    DxiMenuItemModule,
     DxoMenuMyModule,
     DxoMenuOffsetModule,
-    DxoMenuToModule,
+    DxoMenuPositionModule,
     DxoMenuShowModule,
-    DxiMenuItemModule,
     DxoMenuShowFirstSubmenuModeModule,
-    DxoMenuDelayModule,
     DxoMenuShowSubmenuModeModule,
+    DxoMenuToModule,
     DxTemplateModule
   ]
 })

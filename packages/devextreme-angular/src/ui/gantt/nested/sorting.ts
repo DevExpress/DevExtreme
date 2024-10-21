@@ -14,7 +14,6 @@ import {
 
 
 
-import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -54,10 +53,10 @@ export class DxoGanttSortingComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get mode(): SingleMultipleOrNone | string {
+    get mode(): "single" | "multiple" | "none" {
         return this._getOption('mode');
     }
-    set mode(value: SingleMultipleOrNone | string) {
+    set mode(value: "single" | "multiple" | "none") {
         this._setOption('mode', value);
     }
 

@@ -22,8 +22,6 @@ import {
 } from '@angular/core';
 
 
-import { Position, SliderValueChangeMode, TooltipShowMode, ValidationMessageMode, ValidationStatus, VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/range_slider';
 
 import DxRangeSlider from 'devextreme/ui/range_slider';
@@ -47,8 +45,8 @@ import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 
-import { DxoRangeSliderLabelModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoRangeSliderFormatModule } from 'devextreme-angular/ui/range-slider/nested';
+import { DxoRangeSliderLabelModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoRangeSliderTooltipModule } from 'devextreme-angular/ui/range-slider/nested';
 
 
@@ -83,10 +81,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -122,10 +120,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -174,10 +172,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -187,10 +185,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -252,10 +250,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get label(): { format?: Format | string, position?: VerticalEdge, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { format?: Format | string, position?: VerticalEdge, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
@@ -382,10 +380,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get tooltip(): { enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode } {
+    get tooltip(): Record<string, any> {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode }) {
+    set tooltip(value: Record<string, any>) {
         this._setOption('tooltip', value);
     }
 
@@ -421,10 +419,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
@@ -434,10 +432,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationMessagePosition(): Position {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -447,10 +445,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -473,10 +471,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get valueChangeMode(): SliderValueChangeMode {
+    get valueChangeMode(): "onHandleMove" | "onHandleRelease" {
         return this._getOption('valueChangeMode');
     }
-    set valueChangeMode(value: SliderValueChangeMode) {
+    set valueChangeMode(value: "onHandleMove" | "onHandleRelease") {
         this._setOption('valueChangeMode', value);
     }
 
@@ -499,10 +497,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -551,7 +549,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -572,7 +570,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -600,14 +598,14 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -642,7 +640,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<{ format?: Format | string, position?: VerticalEdge, visible?: boolean }>;
+    @Output() labelChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -712,7 +710,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ enabled?: boolean, format?: Format | string, position?: VerticalEdge, showMode?: TooltipShowMode }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -733,21 +731,21 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position>;
+    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
 
     /**
     
@@ -761,7 +759,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChangeModeChange: EventEmitter<SliderValueChangeMode>;
+    @Output() valueChangeModeChange: EventEmitter<"onHandleMove" | "onHandleRelease">;
 
     /**
     
@@ -775,7 +773,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -914,8 +912,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
-    DxoRangeSliderLabelModule,
     DxoRangeSliderFormatModule,
+    DxoRangeSliderLabelModule,
     DxoRangeSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -928,8 +926,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
-    DxoRangeSliderLabelModule,
     DxoRangeSliderFormatModule,
+    DxoRangeSliderLabelModule,
     DxoRangeSliderTooltipModule,
     DxTemplateModule
   ]

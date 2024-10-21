@@ -14,7 +14,6 @@ import {
 
 
 
-import { ExportFormat } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -54,10 +53,10 @@ export class DxoChartExportComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get formats(): any | Array<ExportFormat> {
+    get formats(): Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG"> {
         return this._getOption('formats');
     }
-    set formats(value: any | Array<ExportFormat>) {
+    set formats(value: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">) {
         this._setOption('formats', value);
     }
 
@@ -78,10 +77,10 @@ export class DxoChartExportComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get svgToCanvas(): Function | undefined {
+    get svgToCanvas(): ((svg: any, canvas: any) => any) {
         return this._getOption('svgToCanvas');
     }
-    set svgToCanvas(value: Function | undefined) {
+    set svgToCanvas(value: ((svg: any, canvas: any) => any)) {
         this._setOption('svgToCanvas', value);
     }
 

@@ -16,7 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { Properties as dxBoxOptions } from 'devextreme/ui/box';
+import { dxBoxOptions } from 'devextreme/ui/box';
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -45,10 +47,10 @@ export class DxiBoxItemComponent extends CollectionNestedOption implements After
     }
 
     @Input()
-    get box(): dxBoxOptions | undefined {
+    get box(): dxBoxOptions {
         return this._getOption('box');
     }
-    set box(value: dxBoxOptions | undefined) {
+    set box(value: dxBoxOptions) {
         this._setOption('box', value);
     }
 
@@ -85,10 +87,10 @@ export class DxiBoxItemComponent extends CollectionNestedOption implements After
     }
 
     @Input()
-    get template(): any {
+    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('template', value);
     }
 

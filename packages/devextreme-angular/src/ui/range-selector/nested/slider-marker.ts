@@ -14,8 +14,8 @@ import {
 
 
 
+import * as LocalizationTypes from 'devextreme/localization';
 import { Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -39,10 +39,10 @@ export class DxoRangeSelectorSliderMarkerComponent extends NestedOption implemen
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((scaleValue: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((scaleValue: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -55,10 +55,10 @@ export class DxoRangeSelectorSliderMarkerComponent extends NestedOption implemen
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
@@ -87,10 +87,10 @@ export class DxoRangeSelectorSliderMarkerComponent extends NestedOption implemen
     }
 
     @Input()
-    get placeholderHeight(): number | undefined {
+    get placeholderHeight(): number {
         return this._getOption('placeholderHeight');
     }
-    set placeholderHeight(value: number | undefined) {
+    set placeholderHeight(value: number) {
         this._setOption('placeholderHeight', value);
     }
 

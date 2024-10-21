@@ -14,7 +14,6 @@ import {
 
 
 
-import { Format } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -38,18 +37,18 @@ export class DxoGanttFormatComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get formatter(): Function {
+    get formatter(): ((value: number | Date) => string) {
         return this._getOption('formatter');
     }
-    set formatter(value: Function) {
+    set formatter(value: ((value: number | Date) => string)) {
         this._setOption('formatter', value);
     }
 
     @Input()
-    get parser(): Function {
+    get parser(): ((value: string) => number | Date) {
         return this._getOption('parser');
     }
-    set parser(value: Function) {
+    set parser(value: ((value: string) => number | Date)) {
         this._setOption('parser', value);
     }
 
@@ -62,10 +61,10 @@ export class DxoGanttFormatComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get type(): Format | string {
+    get type(): "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime" {
         return this._getOption('type');
     }
-    set type(value: Format | string) {
+    set type(value: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime") {
         this._setOption('type', value);
     }
 

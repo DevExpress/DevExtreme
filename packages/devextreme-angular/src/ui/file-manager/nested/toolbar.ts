@@ -8,23 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { dxFileManagerToolbarItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
+import { dxFileManagerToolbarItem } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFileManagerFileSelectionItemComponent } from './file-selection-item-dxi';
-import { DxiFileManagerItemComponent } from './item-dxi';
 
 
 @Component({
@@ -35,18 +30,18 @@ import { DxiFileManagerItemComponent } from './item-dxi';
 })
 export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get fileSelectionItems(): Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem> {
+    get fileSelectionItems(): Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator"> {
         return this._getOption('fileSelectionItems');
     }
-    set fileSelectionItems(value: Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem>) {
+    set fileSelectionItems(value: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">) {
         this._setOption('fileSelectionItems', value);
     }
 
     @Input()
-    get items(): Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem> {
+    get items(): Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator"> {
         return this._getOption('items');
     }
-    set items(value: Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem>) {
+    set items(value: Array<dxFileManagerToolbarItem | "showNavPane" | "create" | "upload" | "refresh" | "switchView" | "download" | "move" | "copy" | "rename" | "delete" | "clearSelection" | "separator">) {
         this._setOption('items', value);
     }
 
@@ -55,22 +50,6 @@ export class DxoFileManagerToolbarComponent extends NestedOption implements OnDe
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiFileManagerFileSelectionItemComponent))
-    get fileSelectionItemsChildren(): QueryList<DxiFileManagerFileSelectionItemComponent> {
-        return this._getOption('fileSelectionItems');
-    }
-    set fileSelectionItemsChildren(value) {
-        this.setChildren('fileSelectionItems', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
-    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

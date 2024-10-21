@@ -14,8 +14,8 @@ import {
 
 
 
-import { Font, LabelOverlap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLinearGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((scaleValue: { value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((scaleValue: { value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -47,10 +47,10 @@ export class DxoLinearGaugeLabelComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoLinearGaugeLabelComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get overlappingBehavior(): LabelOverlap {
+    get overlappingBehavior(): "hide" | "none" {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: LabelOverlap) {
+    set overlappingBehavior(value: "hide" | "none") {
         this._setOption('overlappingBehavior', value);
     }
 

@@ -8,22 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
+import { dxFileManagerContextMenuItem } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFileManagerItemComponent } from './item-dxi';
 
 
 @Component({
@@ -34,10 +30,10 @@ import { DxiFileManagerItemComponent } from './item-dxi';
 })
 export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get items(): Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem> {
+    get items(): Array<dxFileManagerContextMenuItem | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete"> {
         return this._getOption('items');
     }
-    set items(value: Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem>) {
+    set items(value: Array<dxFileManagerContextMenuItem | "create" | "upload" | "refresh" | "download" | "move" | "copy" | "rename" | "delete">) {
         this._setOption('items', value);
     }
 
@@ -46,14 +42,6 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
         return 'contextMenu';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
-    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

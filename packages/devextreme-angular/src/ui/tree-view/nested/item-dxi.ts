@@ -5,31 +5,39 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
-
+import { DOCUMENT } from '@angular/common';
 
 
 import { dxTreeViewItem } from 'devextreme/ui/tree_view';
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-tree-view-item',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiTreeViewItemComponent extends CollectionNestedOption {
+export class DxiTreeViewItemComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -47,10 +55,10 @@ export class DxiTreeViewItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get hasItems(): boolean | undefined {
+    get hasItems(): boolean {
         return this._getOption('hasItems');
     }
-    set hasItems(value: boolean | undefined) {
+    set hasItems(value: boolean) {
         this._setOption('hasItems', value);
     }
 
@@ -71,10 +79,10 @@ export class DxiTreeViewItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get id(): number | string | undefined {
+    get id(): number | string {
         return this._getOption('id');
     }
-    set id(value: number | string | undefined) {
+    set id(value: number | string) {
         this._setOption('id', value);
     }
 
@@ -87,10 +95,10 @@ export class DxiTreeViewItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get parentId(): number | string | undefined {
+    get parentId(): number | string {
         return this._getOption('parentId');
     }
-    set parentId(value: number | string | undefined) {
+    set parentId(value: number | string) {
         this._setOption('parentId', value);
     }
 
@@ -103,10 +111,10 @@ export class DxiTreeViewItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get template(): any {
+    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('template', value);
     }
 
@@ -132,19 +140,23 @@ export class DxiTreeViewItemComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeViewItemComponent))
-    get itemsChildren(): QueryList<DxiTreeViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

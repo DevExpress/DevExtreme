@@ -8,22 +8,17 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramTabComponent } from './tab-dxi';
 
 
 @Component({
@@ -34,18 +29,18 @@ import { DxiDiagramTabComponent } from './tab-dxi';
 })
 export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get tabs(): Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }> {
+    get tabs(): Array<Record<string, any>> {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>) {
+    set tabs(value: Array<Record<string, any>>) {
         this._setOption('tabs', value);
     }
 
     @Input()
-    get visibility(): PanelVisibility {
+    get visibility(): "auto" | "visible" | "collapsed" | "disabled" {
         return this._getOption('visibility');
     }
-    set visibility(value: PanelVisibility) {
+    set visibility(value: "auto" | "visible" | "collapsed" | "disabled") {
         this._setOption('visibility', value);
     }
 
@@ -54,14 +49,6 @@ export class DxoDiagramPropertiesPanelComponent extends NestedOption implements 
         return 'propertiesPanel';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramTabComponent))
-    get tabsChildren(): QueryList<DxiDiagramTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

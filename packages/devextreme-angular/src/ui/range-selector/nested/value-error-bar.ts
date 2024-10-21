@@ -14,7 +14,6 @@ import {
 
 
 
-import { ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +37,10 @@ export class DxoRangeSelectorValueErrorBarComponent extends NestedOption impleme
     }
 
     @Input()
-    get displayMode(): ValueErrorBarDisplayMode {
+    get displayMode(): "auto" | "high" | "low" | "none" {
         return this._getOption('displayMode');
     }
-    set displayMode(value: ValueErrorBarDisplayMode) {
+    set displayMode(value: "auto" | "high" | "low" | "none") {
         this._setOption('displayMode', value);
     }
 
@@ -54,10 +53,10 @@ export class DxoRangeSelectorValueErrorBarComponent extends NestedOption impleme
     }
 
     @Input()
-    get highValueField(): string | undefined {
+    get highValueField(): string {
         return this._getOption('highValueField');
     }
-    set highValueField(value: string | undefined) {
+    set highValueField(value: string) {
         this._setOption('highValueField', value);
     }
 
@@ -70,26 +69,26 @@ export class DxoRangeSelectorValueErrorBarComponent extends NestedOption impleme
     }
 
     @Input()
-    get lowValueField(): string | undefined {
+    get lowValueField(): string {
         return this._getOption('lowValueField');
     }
-    set lowValueField(value: string | undefined) {
+    set lowValueField(value: string) {
         this._setOption('lowValueField', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
     @Input()
-    get type(): ValueErrorBarType | undefined {
+    get type(): "fixed" | "percent" | "stdDeviation" | "stdError" | "variance" {
         return this._getOption('type');
     }
-    set type(value: ValueErrorBarType | undefined) {
+    set type(value: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance") {
         this._setOption('type', value);
     }
 

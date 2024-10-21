@@ -27,34 +27,34 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiGanttStripLineComponent extends CollectionNestedOption {
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
     @Input()
-    get end(): Date | number | Function | string | undefined {
+    get end(): Date | (() => Date | number | string) | number | string {
         return this._getOption('end');
     }
-    set end(value: Date | number | Function | string | undefined) {
+    set end(value: Date | (() => Date | number | string) | number | string) {
         this._setOption('end', value);
     }
 
     @Input()
-    get start(): Date | number | Function | string | undefined {
+    get start(): Date | (() => Date | number | string) | number | string {
         return this._getOption('start');
     }
-    set start(value: Date | number | Function | string | undefined) {
+    set start(value: Date | (() => Date | number | string) | number | string) {
         this._setOption('start', value);
     }
 
     @Input()
-    get title(): string | undefined {
+    get title(): string {
         return this._getOption('title');
     }
-    set title(value: string | undefined) {
+    set title(value: string) {
         this._setOption('title', value);
     }
 

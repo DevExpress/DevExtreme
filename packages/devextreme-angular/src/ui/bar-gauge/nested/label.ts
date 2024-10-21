@@ -14,8 +14,8 @@ import {
 
 
 
+import * as LocalizationTypes from 'devextreme/localization';
 import { Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoBarGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get connectorColor(): string | undefined {
+    get connectorColor(): string {
         return this._getOption('connectorColor');
     }
-    set connectorColor(value: string | undefined) {
+    set connectorColor(value: string) {
         this._setOption('connectorColor', value);
     }
 
@@ -47,10 +47,10 @@ export class DxoBarGaugeLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((barValue: { value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((barValue: { value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoBarGaugeLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 

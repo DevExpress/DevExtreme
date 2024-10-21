@@ -23,10 +23,11 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tile_view';
 
-import { Orientation, ScrollbarMode } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxTileViewItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
+import DataSource from 'devextreme/data/data_source';
+import { dxTileViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { template } from 'devextreme/core/templates/template';
 
 import DxTileView from 'devextreme/ui/tile_view';
 
@@ -72,10 +73,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -124,10 +125,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxTileViewItem | string | any> {
+    get dataSource(): Array<any | dxTileViewItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxTileViewItem | string | any>) {
+    set dataSource(value: Array<any | dxTileViewItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -137,10 +138,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get direction(): Orientation {
+    get direction(): "horizontal" | "vertical" {
         return this._getOption('direction');
     }
-    set direction(value: Orientation) {
+    set direction(value: "horizontal" | "vertical") {
         this._setOption('direction', value);
     }
 
@@ -163,10 +164,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -189,10 +190,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -202,10 +203,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -254,10 +255,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, heightRatio?: number, html?: string, template?: any, text?: string, visible?: boolean, widthRatio?: number }> {
+    get items(): Array<any | dxTileViewItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, heightRatio?: number, html?: string, template?: any, text?: string, visible?: boolean, widthRatio?: number }>) {
+    set items(value: Array<any | dxTileViewItem | string>) {
         this._setOption('items', value);
     }
 
@@ -267,10 +268,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get itemTemplate(): any {
+    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: any) {
+    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('itemTemplate', value);
     }
 
@@ -306,10 +307,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get showScrollbar(): ScrollbarMode {
+    get showScrollbar(): "always" | "never" | "onHover" | "onScroll" {
         return this._getOption('showScrollbar');
     }
-    set showScrollbar(value: ScrollbarMode) {
+    set showScrollbar(value: "always" | "never" | "onHover" | "onScroll") {
         this._setOption('showScrollbar', value);
     }
 
@@ -345,10 +346,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -421,7 +422,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -449,14 +450,14 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxTileViewItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxTileViewItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() directionChange: EventEmitter<Orientation>;
+    @Output() directionChange: EventEmitter<"horizontal" | "vertical">;
 
     /**
     
@@ -470,7 +471,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -484,14 +485,14 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -519,14 +520,14 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, heightRatio?: number, html?: string, template?: any, text?: string, visible?: boolean, widthRatio?: number }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxTileViewItem | string>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<any>;
+    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
 
     /**
     
@@ -547,7 +548,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showScrollbarChange: EventEmitter<ScrollbarMode>;
+    @Output() showScrollbarChange: EventEmitter<"always" | "never" | "onHover" | "onScroll">;
 
     /**
     
@@ -568,7 +569,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

@@ -6,10 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -20,7 +17,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiMapLocationComponent } from './location-dxi';
 
 
 @Component({
@@ -39,26 +35,26 @@ export class DxiMapMarkerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get location(): string | Array<number | { lat?: number, lng?: number }> {
+    get location(): Array<number> | Record<string, any> | string {
         return this._getOption('location');
     }
-    set location(value: string | Array<number | { lat?: number, lng?: number }>) {
+    set location(value: Array<number> | Record<string, any> | string) {
         this._setOption('location', value);
     }
 
     @Input()
-    get onClick(): Function {
+    get onClick(): (() => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: Function) {
+    set onClick(value: (() => void)) {
         this._setOption('onClick', value);
     }
 
     @Input()
-    get tooltip(): string | { isShown?: boolean, text?: string } {
+    get tooltip(): Record<string, any> | string {
         return this._getOption('tooltip');
     }
-    set tooltip(value: string | { isShown?: boolean, text?: string }) {
+    set tooltip(value: Record<string, any> | string) {
         this._setOption('tooltip', value);
     }
 
@@ -67,14 +63,6 @@ export class DxiMapMarkerComponent extends CollectionNestedOption {
         return 'markers';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiMapLocationComponent))
-    get locationChildren(): QueryList<DxiMapLocationComponent> {
-        return this._getOption('location');
-    }
-    set locationChildren(value) {
-        this.setChildren('location', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

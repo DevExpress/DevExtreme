@@ -22,7 +22,6 @@ import {
 } from '@angular/core';
 
 
-import { Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/recurrence_editor';
 
 import DxRecurrenceEditor from 'devextreme/ui/recurrence_editor';
@@ -76,10 +75,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -115,10 +114,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -141,10 +140,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -154,10 +153,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -271,10 +270,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
@@ -284,10 +283,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get validationMessagePosition(): Position {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -297,10 +296,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -336,10 +335,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -388,7 +387,7 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -409,7 +408,7 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -423,14 +422,14 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -493,21 +492,21 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position>;
+    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
 
     /**
     
@@ -528,7 +527,7 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     

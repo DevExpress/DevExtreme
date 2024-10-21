@@ -14,7 +14,6 @@ import {
 
 
 
-import { SearchMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -46,18 +45,18 @@ export class DxoGanttSearchComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get mode(): SearchMode {
+    get mode(): "contains" | "startswith" | "equals" {
         return this._getOption('mode');
     }
-    set mode(value: SearchMode) {
+    set mode(value: "contains" | "startswith" | "equals") {
         this._setOption('mode', value);
     }
 
     @Input()
-    get searchExpr(): Function | string | undefined | Array<Function | string> {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | undefined | Array<Function | string>) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 

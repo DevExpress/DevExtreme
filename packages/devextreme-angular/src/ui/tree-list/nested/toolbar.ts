@@ -8,22 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
+import { dxTreeListToolbarItem } from 'devextreme/ui/tree_list';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeListItemComponent } from './item-dxi';
 
 
 @Component({
@@ -42,18 +38,18 @@ export class DxoTreeListToolbarComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<dxTreeListToolbarItem | TreeListPredefinedToolbarItem> {
+    get items(): Array<dxTreeListToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel"> {
         return this._getOption('items');
     }
-    set items(value: Array<dxTreeListToolbarItem | TreeListPredefinedToolbarItem>) {
+    set items(value: Array<dxTreeListToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "revertButton" | "saveButton" | "searchPanel">) {
         this._setOption('items', value);
     }
 
     @Input()
-    get visible(): boolean | undefined {
+    get visible(): boolean {
         return this._getOption('visible');
     }
-    set visible(value: boolean | undefined) {
+    set visible(value: boolean) {
         this._setOption('visible', value);
     }
 
@@ -62,14 +58,6 @@ export class DxoTreeListToolbarComponent extends NestedOption implements OnDestr
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiTreeListItemComponent))
-    get itemsChildren(): QueryList<DxiTreeListItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

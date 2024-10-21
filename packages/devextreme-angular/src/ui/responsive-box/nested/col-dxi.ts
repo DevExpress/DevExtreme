@@ -43,10 +43,10 @@ export class DxiResponsiveBoxColComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get screen(): string | undefined {
+    get screen(): string {
         return this._getOption('screen');
     }
-    set screen(value: string | undefined) {
+    set screen(value: string) {
         this._setOption('screen', value);
     }
 

@@ -12,9 +12,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle, Font, HatchDirection, PointInteractionMode, PointSymbol, RelativePosition, SeriesHoverMode, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
-import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,26 +36,26 @@ export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get barPadding(): number | undefined {
+    get barPadding(): number {
         return this._getOption('barPadding');
     }
-    set barPadding(value: number | undefined) {
+    set barPadding(value: number) {
         this._setOption('barPadding', value);
     }
 
     @Input()
-    get barWidth(): number | undefined {
+    get barWidth(): number {
         return this._getOption('barWidth');
     }
-    set barWidth(value: number | undefined) {
+    set barWidth(value: number) {
         this._setOption('barWidth', value);
     }
 
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 
@@ -70,34 +68,34 @@ export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get color(): ChartsColor | string | undefined {
+    get color(): ChartsColor | string {
         return this._getOption('color');
     }
-    set color(value: ChartsColor | string | undefined) {
+    set color(value: ChartsColor | string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get hoverMode(): SeriesHoverMode {
+    get hoverMode(): "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint" {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: SeriesHoverMode) {
+    set hoverMode(value: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint") {
         this._setOption('hoverMode', value);
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } {
+    get hoverStyle(): Record<string, any> {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }) {
+    set hoverStyle(value: Record<string, any>) {
         this._setOption('hoverStyle', value);
     }
 
@@ -110,34 +108,34 @@ export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: RelativePosition, rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
     @Input()
-    get maxLabelCount(): number | undefined {
+    get maxLabelCount(): number {
         return this._getOption('maxLabelCount');
     }
-    set maxLabelCount(value: number | undefined) {
+    set maxLabelCount(value: number) {
         this._setOption('maxLabelCount', value);
     }
 
     @Input()
-    get minBarSize(): number | undefined {
+    get minBarSize(): number {
         return this._getOption('minBarSize');
     }
-    set minBarSize(value: number | undefined) {
+    set minBarSize(value: number) {
         this._setOption('minBarSize', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
@@ -150,26 +148,26 @@ export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get point(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }, image?: string | undefined | { height?: number, url?: string | undefined, width?: number }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }, size?: number, symbol?: PointSymbol, visible?: boolean } {
+    get point(): Record<string, any> {
         return this._getOption('point');
     }
-    set point(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hoverMode?: PointInteractionMode, hoverStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }, image?: string | undefined | { height?: number, url?: string | undefined, width?: number }, selectionMode?: PointInteractionMode, selectionStyle?: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }, size?: number, symbol?: PointSymbol, visible?: boolean }) {
+    set point(value: Record<string, any>) {
         this._setOption('point', value);
     }
 
     @Input()
-    get selectionMode(): SeriesSelectionMode {
+    get selectionMode(): "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SeriesSelectionMode) {
+    set selectionMode(value: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint") {
         this._setOption('selectionMode', value);
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number } {
+    get selectionStyle(): Record<string, any> {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, dashStyle?: DashStyle, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }) {
+    set selectionStyle(value: Record<string, any>) {
         this._setOption('selectionStyle', value);
     }
 
@@ -190,10 +188,10 @@ export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get tag(): any | undefined {
+    get tag(): any {
         return this._getOption('tag');
     }
-    set tag(value: any | undefined) {
+    set tag(value: any) {
         this._setOption('tag', value);
     }
 
@@ -206,18 +204,18 @@ export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): PolarChartSeriesType {
+    get type(): "area" | "bar" | "line" | "scatter" | "stackedbar" {
         return this._getOption('type');
     }
-    set type(value: PolarChartSeriesType) {
+    set type(value: "area" | "bar" | "line" | "scatter" | "stackedbar") {
         this._setOption('type', value);
     }
 
     @Input()
-    get valueErrorBar(): { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: ValueErrorBarType | undefined, value?: number } {
+    get valueErrorBar(): Record<string, any> {
         return this._getOption('valueErrorBar');
     }
-    set valueErrorBar(value: { color?: string, displayMode?: ValueErrorBarDisplayMode, edgeLength?: number, highValueField?: string | undefined, lineWidth?: number, lowValueField?: string | undefined, opacity?: number | undefined, type?: ValueErrorBarType | undefined, value?: number }) {
+    set valueErrorBar(value: Record<string, any>) {
         this._setOption('valueErrorBar', value);
     }
 

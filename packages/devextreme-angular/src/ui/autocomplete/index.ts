@@ -24,13 +24,14 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, Mode, Position, SimplifiedSearchMode, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/autocomplete';
+import DataSource from 'devextreme/data/data_source';
+import { TextEditorButton } from 'devextreme/common';
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { template } from 'devextreme/core/templates/template';
+import { dxPopupOptions } from 'devextreme/ui/popup';
+import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/autocomplete';
 
 import DxAutocomplete from 'devextreme/ui/autocomplete';
 
@@ -65,22 +66,22 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxiAutocompleteButtonModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAutocompleteOptionsModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAutocompleteDropDownOptionsModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteAnimationModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAutocompleteHideModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAutocompleteFromModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAutocompletePositionModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteAtModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteBoundaryOffsetModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxiAutocompleteButtonModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteCollisionModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAutocompleteDropDownOptionsModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAutocompleteFromModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAutocompleteHideModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxiAutocompleteItemModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteMyModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteOffsetModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxoAutocompleteToModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAutocompleteOptionsModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAutocompletePositionModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteShowModule } from 'devextreme-angular/ui/autocomplete/nested';
+import { DxoAutocompleteToModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxiAutocompleteToolbarItemModule } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxiAutocompleteItemModule } from 'devextreme-angular/ui/autocomplete/nested';
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
@@ -118,10 +119,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -144,10 +145,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> {
+    get buttons(): Array<"clear" | "dropDown" | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<"clear" | "dropDown" | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -157,10 +158,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any> {
+    get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>) {
+    set dataSource(value: Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -196,10 +197,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get displayValue(): string | undefined {
+    get displayValue(): string {
         return this._getOption('displayValue');
     }
-    set displayValue(value: string | undefined) {
+    set displayValue(value: string) {
         this._setOption('displayValue', value);
     }
 
@@ -209,10 +210,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dropDownButtonTemplate(): any {
+    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: any) {
+    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -222,10 +223,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dropDownOptions(): dxPopupOptions {
+    get dropDownOptions(): dxPopupOptions<any> {
         return this._getOption('dropDownOptions');
     }
-    set dropDownOptions(value: dxPopupOptions) {
+    set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
 
@@ -235,10 +236,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -274,10 +275,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get groupTemplate(): any {
+    get groupTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('groupTemplate');
     }
-    set groupTemplate(value: any) {
+    set groupTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('groupTemplate', value);
     }
 
@@ -287,10 +288,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -300,10 +301,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -365,10 +366,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get items(): Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | CollectionWidgetItem> {
         return this._getOption('items');
     }
-    set items(value: Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | CollectionWidgetItem>) {
         this._setOption('items', value);
     }
 
@@ -378,10 +379,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get itemTemplate(): any {
+    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: any) {
+    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('itemTemplate', value);
     }
 
@@ -404,10 +405,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get labelMode(): LabelMode {
+    get labelMode(): "static" | "floating" | "hidden" | "outside" {
         return this._getOption('labelMode');
     }
-    set labelMode(value: LabelMode) {
+    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
         this._setOption('labelMode', value);
     }
 
@@ -534,10 +535,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get searchExpr(): Function | string | Array<Function | string> {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | Array<Function | string>) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 
@@ -547,10 +548,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get searchMode(): SimplifiedSearchMode {
+    get searchMode(): "contains" | "startswith" {
         return this._getOption('searchMode');
     }
-    set searchMode(value: SimplifiedSearchMode) {
+    set searchMode(value: "contains" | "startswith") {
         this._setOption('searchMode', value);
     }
 
@@ -625,10 +626,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get stylingMode(): EditorStyle {
+    get stylingMode(): "outlined" | "underlined" | "filled" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: EditorStyle) {
+    set stylingMode(value: "outlined" | "underlined" | "filled") {
         this._setOption('stylingMode', value);
     }
 
@@ -703,10 +704,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
@@ -716,10 +717,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationMessagePosition(): Position | Mode {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" | "auto" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position | Mode) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top" | "auto") {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -729,10 +730,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -768,10 +769,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get valueExpr(): Function | string {
+    get valueExpr(): ((item: any) => string | number | boolean) | string {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: Function | string) {
+    set valueExpr(value: ((item: any) => string | number | boolean) | string) {
         this._setOption('valueExpr', value);
     }
 
@@ -794,10 +795,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -971,7 +972,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -985,14 +986,14 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<"clear" | "dropDown" | TextEditorButton>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1013,28 +1014,28 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayValueChange: EventEmitter<string | undefined>;
+    @Output() displayValueChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions>;
+    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1055,21 +1056,21 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupTemplateChange: EventEmitter<any>;
+    @Output() groupTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -1104,14 +1105,14 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | CollectionWidgetItem>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<any>;
+    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
 
     /**
     
@@ -1125,7 +1126,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<LabelMode>;
+    @Output() labelModeChange: EventEmitter<"static" | "floating" | "hidden" | "outside">;
 
     /**
     
@@ -1195,14 +1196,14 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchExprChange: EventEmitter<Function | string | Array<Function | string>>;
+    @Output() searchExprChange: EventEmitter<Array<(() => any) | string> | (() => any) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<SimplifiedSearchMode>;
+    @Output() searchModeChange: EventEmitter<"contains" | "startswith">;
 
     /**
     
@@ -1244,7 +1245,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<EditorStyle>;
+    @Output() stylingModeChange: EventEmitter<"outlined" | "underlined" | "filled">;
 
     /**
     
@@ -1286,21 +1287,21 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
+    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
 
     /**
     
@@ -1321,7 +1322,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueExprChange: EventEmitter<Function | string>;
+    @Output() valueExprChange: EventEmitter<((item: any) => string | number | boolean) | string>;
 
     /**
     
@@ -1335,7 +1336,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1572,22 +1573,22 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxoToModule,
     DxoShowModule,
     DxiItemModule,
-    DxiAutocompleteButtonModule,
-    DxoAutocompleteOptionsModule,
-    DxoAutocompleteDropDownOptionsModule,
     DxoAutocompleteAnimationModule,
-    DxoAutocompleteHideModule,
-    DxoAutocompleteFromModule,
-    DxoAutocompletePositionModule,
     DxoAutocompleteAtModule,
     DxoAutocompleteBoundaryOffsetModule,
+    DxiAutocompleteButtonModule,
     DxoAutocompleteCollisionModule,
+    DxoAutocompleteDropDownOptionsModule,
+    DxoAutocompleteFromModule,
+    DxoAutocompleteHideModule,
+    DxiAutocompleteItemModule,
     DxoAutocompleteMyModule,
     DxoAutocompleteOffsetModule,
-    DxoAutocompleteToModule,
+    DxoAutocompleteOptionsModule,
+    DxoAutocompletePositionModule,
     DxoAutocompleteShowModule,
+    DxoAutocompleteToModule,
     DxiAutocompleteToolbarItemModule,
-    DxiAutocompleteItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1611,22 +1612,22 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     DxoToModule,
     DxoShowModule,
     DxiItemModule,
-    DxiAutocompleteButtonModule,
-    DxoAutocompleteOptionsModule,
-    DxoAutocompleteDropDownOptionsModule,
     DxoAutocompleteAnimationModule,
-    DxoAutocompleteHideModule,
-    DxoAutocompleteFromModule,
-    DxoAutocompletePositionModule,
     DxoAutocompleteAtModule,
     DxoAutocompleteBoundaryOffsetModule,
+    DxiAutocompleteButtonModule,
     DxoAutocompleteCollisionModule,
+    DxoAutocompleteDropDownOptionsModule,
+    DxoAutocompleteFromModule,
+    DxoAutocompleteHideModule,
+    DxiAutocompleteItemModule,
     DxoAutocompleteMyModule,
     DxoAutocompleteOffsetModule,
-    DxoAutocompleteToModule,
+    DxoAutocompleteOptionsModule,
+    DxoAutocompletePositionModule,
     DxoAutocompleteShowModule,
+    DxoAutocompleteToModule,
     DxiAutocompleteToolbarItemModule,
-    DxiAutocompleteItemModule,
     DxTemplateModule
   ]
 })

@@ -24,9 +24,9 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, NumberBoxPredefinedButton, NumberBoxType, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
+import * as LocalizationTypes from 'devextreme/localization';
+import { TextEditorButton } from 'devextreme/common';
+import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
 
 import DxNumberBox from 'devextreme/ui/number_box';
 
@@ -50,8 +50,8 @@ import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 
 import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/nested';
-import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
+import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
 
@@ -87,10 +87,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -113,10 +113,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get buttons(): Array<NumberBoxPredefinedButton | TextEditorButton> {
+    get buttons(): Array<"clear" | "spins" | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<NumberBoxPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<"clear" | "spins" | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -139,10 +139,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -165,10 +165,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get format(): Format | string {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
@@ -178,10 +178,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -191,10 +191,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -282,10 +282,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get labelMode(): LabelMode {
+    get labelMode(): "static" | "floating" | "hidden" | "outside" {
         return this._getOption('labelMode');
     }
-    set labelMode(value: LabelMode) {
+    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
         this._setOption('labelMode', value);
     }
 
@@ -295,10 +295,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get max(): number | undefined {
+    get max(): number {
         return this._getOption('max');
     }
-    set max(value: number | undefined) {
+    set max(value: number) {
         this._setOption('max', value);
     }
 
@@ -308,10 +308,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get min(): number | undefined {
+    get min(): number {
         return this._getOption('min');
     }
-    set min(value: number | undefined) {
+    set min(value: number) {
         this._setOption('min', value);
     }
 
@@ -321,10 +321,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get mode(): NumberBoxType {
+    get mode(): "number" | "text" | "tel" {
         return this._getOption('mode');
     }
-    set mode(value: NumberBoxType) {
+    set mode(value: "number" | "text" | "tel") {
         this._setOption('mode', value);
     }
 
@@ -425,10 +425,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get stylingMode(): EditorStyle {
+    get stylingMode(): "outlined" | "underlined" | "filled" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: EditorStyle) {
+    set stylingMode(value: "outlined" | "underlined" | "filled") {
         this._setOption('stylingMode', value);
     }
 
@@ -503,10 +503,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
@@ -516,10 +516,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationMessagePosition(): Position {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top") {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -529,10 +529,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -581,10 +581,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -713,7 +713,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -727,7 +727,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<NumberBoxPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<"clear" | "spins" | TextEditorButton>>;
 
     /**
     
@@ -741,7 +741,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -755,21 +755,21 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() formatChange: EventEmitter<Format | string>;
+    @Output() formatChange: EventEmitter<LocalizationTypes.Format>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -818,28 +818,28 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<LabelMode>;
+    @Output() labelModeChange: EventEmitter<"static" | "floating" | "hidden" | "outside">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<number | undefined>;
+    @Output() maxChange: EventEmitter<number>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<number | undefined>;
+    @Output() minChange: EventEmitter<number>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() modeChange: EventEmitter<NumberBoxType>;
+    @Output() modeChange: EventEmitter<"number" | "text" | "tel">;
 
     /**
     
@@ -895,7 +895,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<EditorStyle>;
+    @Output() stylingModeChange: EventEmitter<"outlined" | "underlined" | "filled">;
 
     /**
     
@@ -937,21 +937,21 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position>;
+    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
 
     /**
     
@@ -979,7 +979,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1154,8 +1154,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOptionsModule,
     DxoFormatModule,
     DxiNumberBoxButtonModule,
-    DxoNumberBoxOptionsModule,
     DxoNumberBoxFormatModule,
+    DxoNumberBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1168,8 +1168,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoOptionsModule,
     DxoFormatModule,
     DxiNumberBoxButtonModule,
-    DxoNumberBoxOptionsModule,
     DxoNumberBoxFormatModule,
+    DxoNumberBoxOptionsModule,
     DxTemplateModule
   ]
 })

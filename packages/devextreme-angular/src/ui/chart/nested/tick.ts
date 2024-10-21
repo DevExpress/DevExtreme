@@ -45,10 +45,10 @@ export class DxoChartTickComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 

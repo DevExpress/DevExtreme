@@ -15,9 +15,7 @@ import {
 
 
 import { PositionConfig } from 'devextreme/animation/position';
-import { SortOrder } from 'devextreme/common';
-import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -41,10 +39,10 @@ export class DxoTreeListColumnChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
@@ -73,18 +71,18 @@ export class DxoTreeListColumnChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get mode(): ColumnChooserMode {
+    get mode(): "dragAndDrop" | "select" {
         return this._getOption('mode');
     }
-    set mode(value: ColumnChooserMode) {
+    set mode(value: "dragAndDrop" | "select") {
         this._setOption('mode', value);
     }
 
     @Input()
-    get position(): PositionConfig | undefined {
+    get position(): PositionConfig {
         return this._getOption('position');
     }
-    set position(value: PositionConfig | undefined) {
+    set position(value: PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -113,10 +111,10 @@ export class DxoTreeListColumnChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get sortOrder(): SortOrder | undefined {
+    get sortOrder(): "asc" | "desc" {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | undefined) {
+    set sortOrder(value: "asc" | "desc") {
         this._setOption('sortOrder', value);
     }
 

@@ -8,17 +8,14 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
 
 
 
-import { ValidationStatus } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, FileUploadMode, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadHttpMethod, UploadStartedEvent, ValueChangedEvent } from 'devextreme/ui/file_uploader';
+import UploadInfo from 'devextreme/file_management/upload_info';
+import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent } from 'devextreme/ui/file_uploader';
 
 import {
     NestedOptionHost,
@@ -34,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get abortUpload(): Function {
+    get abortUpload(): ((file: any, uploadInfo?: UploadInfo) => any) {
         return this._getOption('abortUpload');
     }
-    set abortUpload(value: Function) {
+    set abortUpload(value: ((file: any, uploadInfo?: UploadInfo) => any)) {
         this._setOption('abortUpload', value);
     }
 
@@ -50,10 +47,10 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -82,6 +79,14 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
+    get bindingOptions(): Record<string, any> {
+        return this._getOption('bindingOptions');
+    }
+    set bindingOptions(value: Record<string, any>) {
+        this._setOption('bindingOptions', value);
+    }
+
+    @Input()
     get chunkSize(): number {
         return this._getOption('chunkSize');
     }
@@ -90,10 +95,10 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get dialogTrigger(): UserDefinedElement | string | undefined {
+    get dialogTrigger(): any | string {
         return this._getOption('dialogTrigger');
     }
-    set dialogTrigger(value: UserDefinedElement | string | undefined) {
+    set dialogTrigger(value: any | string) {
         this._setOption('dialogTrigger', value);
     }
 
@@ -106,18 +111,18 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get dropZone(): UserDefinedElement | string | undefined {
+    get dropZone(): any | string {
         return this._getOption('dropZone');
     }
-    set dropZone(value: UserDefinedElement | string | undefined) {
+    set dropZone(value: any | string) {
         this._setOption('dropZone', value);
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -130,18 +135,18 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -426,10 +431,10 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get uploadChunk(): Function {
+    get uploadChunk(): ((file: any, uploadInfo: UploadInfo) => any) {
         return this._getOption('uploadChunk');
     }
-    set uploadChunk(value: Function) {
+    set uploadChunk(value: ((file: any, uploadInfo: UploadInfo) => any)) {
         this._setOption('uploadChunk', value);
     }
 
@@ -458,10 +463,10 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get uploadFile(): Function {
+    get uploadFile(): ((file: any, progressCallback: (() => void)) => any) {
         return this._getOption('uploadFile');
     }
-    set uploadFile(value: Function) {
+    set uploadFile(value: ((file: any, progressCallback: (() => void)) => any)) {
         this._setOption('uploadFile', value);
     }
 
@@ -474,18 +479,18 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get uploadMethod(): UploadHttpMethod {
+    get uploadMethod(): "POST" | "PUT" {
         return this._getOption('uploadMethod');
     }
-    set uploadMethod(value: UploadHttpMethod) {
+    set uploadMethod(value: "POST" | "PUT") {
         this._setOption('uploadMethod', value);
     }
 
     @Input()
-    get uploadMode(): FileUploadMode {
+    get uploadMode(): "instantly" | "useButtons" | "useForm" {
         return this._getOption('uploadMode');
     }
-    set uploadMode(value: FileUploadMode) {
+    set uploadMode(value: "instantly" | "useButtons" | "useForm") {
         this._setOption('uploadMode', value);
     }
 
@@ -514,10 +519,10 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -538,20 +543,14 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() valueChange: EventEmitter<Array<any>>;
     protected get _optionPath() {
         return 'fileUploaderOptions';
     }
@@ -560,11 +559,6 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'valueChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

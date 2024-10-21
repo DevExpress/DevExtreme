@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +38,10 @@ export class DxoTreeMapLabelComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get textOverflow(): TextOverflow {
+    get textOverflow(): "ellipsis" | "hide" | "none" {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: TextOverflow) {
+    set textOverflow(value: "ellipsis" | "hide" | "none") {
         this._setOption('textOverflow', value);
     }
 
@@ -54,10 +54,10 @@ export class DxoTreeMapLabelComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get wordWrap(): WordWrap {
+    get wordWrap(): "normal" | "breakWord" | "none" {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: WordWrap) {
+    set wordWrap(value: "normal" | "breakWord" | "none") {
         this._setOption('wordWrap', value);
     }
 

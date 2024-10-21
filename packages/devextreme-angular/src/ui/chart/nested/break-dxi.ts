@@ -27,18 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiChartBreakComponent extends CollectionNestedOption {
     @Input()
-    get endValue(): Date | number | string | undefined {
+    get endValue(): Date | number | string {
         return this._getOption('endValue');
     }
-    set endValue(value: Date | number | string | undefined) {
+    set endValue(value: Date | number | string) {
         this._setOption('endValue', value);
     }
 
     @Input()
-    get startValue(): Date | number | string | undefined {
+    get startValue(): Date | number | string {
         return this._getOption('startValue');
     }
-    set startValue(value: Date | number | string | undefined) {
+    set startValue(value: Date | number | string) {
         this._setOption('startValue', value);
     }
 

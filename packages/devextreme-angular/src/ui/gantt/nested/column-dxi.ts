@@ -5,39 +5,45 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { DataType, HorizontalAlignment, SearchMode, SortOrder } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
+import dxTreeList from 'devextreme/ui/tree_list';
+import * as LocalizationTypes from 'devextreme/localization';
+import { dxTreeListColumn, dxTreeListRowObject } from 'devextreme/ui/tree_list';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-gantt-column',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiGanttColumnComponent extends CollectionNestedOption {
+export class DxiGanttColumnComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
-    get alignment(): HorizontalAlignment | string | undefined {
+    get alignment(): "center" | "left" | "right" {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | string | undefined) {
+    set alignment(value: "center" | "left" | "right") {
         this._setOption('alignment', value);
     }
 
@@ -66,82 +72,82 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get calculateCellValue(): Function {
+    get calculateCellValue(): ((rowData: any) => any) {
         return this._getOption('calculateCellValue');
     }
-    set calculateCellValue(value: Function) {
+    set calculateCellValue(value: ((rowData: any) => any)) {
         this._setOption('calculateCellValue', value);
     }
 
     @Input()
-    get calculateDisplayValue(): Function | string {
+    get calculateDisplayValue(): ((rowData: any) => any) | string {
         return this._getOption('calculateDisplayValue');
     }
-    set calculateDisplayValue(value: Function | string) {
+    set calculateDisplayValue(value: ((rowData: any) => any) | string) {
         this._setOption('calculateDisplayValue', value);
     }
 
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
     @Input()
-    get calculateSortValue(): Function | string {
+    get calculateSortValue(): ((rowData: any) => any) | string {
         return this._getOption('calculateSortValue');
     }
-    set calculateSortValue(value: Function | string) {
+    set calculateSortValue(value: ((rowData: any) => any) | string) {
         this._setOption('calculateSortValue', value);
     }
 
     @Input()
-    get caption(): string | undefined {
+    get caption(): string {
         return this._getOption('caption');
     }
-    set caption(value: string | undefined) {
+    set caption(value: string) {
         this._setOption('caption', value);
     }
 
     @Input()
-    get cellTemplate(): any {
+    get cellTemplate(): ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, displayValue: any, oldValue: any, row: dxTreeListRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template {
         return this._getOption('cellTemplate');
     }
-    set cellTemplate(value: any) {
+    set cellTemplate(value: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, displayValue: any, oldValue: any, row: dxTreeListRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template) {
         this._setOption('cellTemplate', value);
     }
 
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get dataField(): string | undefined {
+    get dataField(): string {
         return this._getOption('dataField');
     }
-    set dataField(value: string | undefined) {
+    set dataField(value: string) {
         this._setOption('dataField', value);
     }
 
     @Input()
-    get dataType(): DataType | undefined {
+    get dataType(): "string" | "number" | "date" | "boolean" | "object" | "datetime" {
         return this._getOption('dataType');
     }
-    set dataType(value: DataType | undefined) {
+    set dataType(value: "string" | "number" | "date" | "boolean" | "object" | "datetime") {
         this._setOption('dataType', value);
     }
 
@@ -162,26 +168,26 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get filterOperations(): Array<FilterOperation | string> {
+    get filterOperations(): Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string> {
         return this._getOption('filterOperations');
     }
-    set filterOperations(value: Array<FilterOperation | string>) {
+    set filterOperations(value: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | "anyof" | "noneof" | string>) {
         this._setOption('filterOperations', value);
     }
 
     @Input()
-    get filterType(): FilterType {
+    get filterType(): "exclude" | "include" {
         return this._getOption('filterType');
     }
-    set filterType(value: FilterType) {
+    set filterType(value: "exclude" | "include") {
         this._setOption('filterType', value);
     }
 
     @Input()
-    get filterValue(): any | undefined {
+    get filterValue(): any {
         return this._getOption('filterValue');
     }
-    set filterValue(value: any | undefined) {
+    set filterValue(value: any) {
         this._setOption('filterValue', value);
     }
 
@@ -194,66 +200,66 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get format(): Format | string {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get headerCellTemplate(): any {
+    get headerCellTemplate(): ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template {
         return this._getOption('headerCellTemplate');
     }
-    set headerCellTemplate(value: any) {
+    set headerCellTemplate(value: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template) {
         this._setOption('headerCellTemplate', value);
     }
 
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): Record<string, any> {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: Record<string, any>) {
         this._setOption('headerFilter', value);
     }
 
     @Input()
-    get minWidth(): number | undefined {
+    get minWidth(): number {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | undefined) {
+    set minWidth(value: number) {
         this._setOption('minWidth', value);
     }
 
     @Input()
-    get selectedFilterOperation(): SelectedFilterOperation | undefined {
+    get selectedFilterOperation(): "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith" {
         return this._getOption('selectedFilterOperation');
     }
-    set selectedFilterOperation(value: SelectedFilterOperation | undefined) {
+    set selectedFilterOperation(value: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith") {
         this._setOption('selectedFilterOperation', value);
     }
 
     @Input()
-    get sortIndex(): number | undefined {
+    get sortIndex(): number {
         return this._getOption('sortIndex');
     }
-    set sortIndex(value: number | undefined) {
+    set sortIndex(value: number) {
         this._setOption('sortIndex', value);
     }
 
     @Input()
-    get sortingMethod(): Function | undefined {
+    get sortingMethod(): ((value1: any, value2: any) => number) {
         return this._getOption('sortingMethod');
     }
-    set sortingMethod(value: Function | undefined) {
+    set sortingMethod(value: ((value1: any, value2: any) => number)) {
         this._setOption('sortingMethod', value);
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): "asc" | "desc" {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: "asc" | "desc") {
         this._setOption('sortOrder', value);
     }
 
@@ -274,91 +280,44 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get visibleIndex(): number | undefined {
+    get visibleIndex(): number {
         return this._getOption('visibleIndex');
     }
-    set visibleIndex(value: number | undefined) {
+    set visibleIndex(value: number) {
         this._setOption('visibleIndex', value);
     }
 
     @Input()
-    get width(): number | string | undefined {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: number | string | undefined) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() filterValueChange: EventEmitter<any | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() filterValuesChange: EventEmitter<Array<any>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() selectedFilterOperationChange: EventEmitter<SelectedFilterOperation | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() sortIndexChange: EventEmitter<number | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() sortOrderChange: EventEmitter<SortOrder | string | undefined>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() visibleChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() visibleIndexChange: EventEmitter<number | undefined>;
     protected get _optionPath() {
         return 'columns';
     }
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'filterValueChange' },
-            { emit: 'filterValuesChange' },
-            { emit: 'selectedFilterOperationChange' },
-            { emit: 'sortIndexChange' },
-            { emit: 'sortOrderChange' },
-            { emit: 'visibleChange' },
-            { emit: 'visibleIndexChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 
