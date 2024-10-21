@@ -8,9 +8,9 @@ import { createRef as infernoCreateRef } from 'inferno';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { isDefined } from '../../core/utils/type';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
-import { PagerDefaultProps, type PagerProps } from './common/pager_props';
+import { PaginationDefaultProps, type PaginationProps } from './common/pagination_props';
 import type { RefObject } from './common/types';
-import type { PagerContentProps } from './content';
+import type { PaginationContentProps } from './content';
 import { getElementContentWidth, getElementStyle, getElementWidth } from './utils/get_element_width';
 
 interface ChildElements<T> { allowedPageSizes: T; pages: T; info: T }
@@ -49,12 +49,12 @@ function getElementsWidth({
 }
 
 export interface ResizableContainerProps {
-  pagerProps: PagerProps;
-  contentTemplate: JSXTemplate<PagerContentProps, 'pageSizeChangedInternal' | 'pageIndexChangedInternal'>;
+  paginationProps: PaginationProps;
+  contentTemplate: JSXTemplate<PaginationContentProps, 'pageSizeChangedInternal' | 'pageIndexChangedInternal'>;
 }
 
 export const ResizableContainerDefaultProps = {
-  pagerProps: { ...PagerDefaultProps },
+  paginationProps: { ...PaginationDefaultProps },
 };
 
 export class ResizableContainer extends InfernoComponent<ResizableContainerProps> {
@@ -101,7 +101,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
         this.props,
         this.state.infoTextVisible,
         this.state.isLargeDisplayMode,
-        this.props.pagerProps,
+        this.props.paginationProps,
         this.props.contentTemplate,
       ])];
   }
@@ -112,7 +112,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       this.props,
       this.state.infoTextVisible,
       this.state.isLargeDisplayMode,
-      this.props.pagerProps,
+      this.props.paginationProps,
       this.props.contentTemplate,
     ]);
   }
@@ -133,7 +133,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
     }
   }
 
-  getContentAttributes(): PagerProps {
+  getContentAttributes(): PaginationProps {
     const {
       className,
       displayMode,
@@ -171,7 +171,7 @@ export class ResizableContainer extends InfernoComponent<ResizableContainerProps
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-    } = this.props.pagerProps;
+    } = this.props.paginationProps;
 
     return {
       pageSize,
