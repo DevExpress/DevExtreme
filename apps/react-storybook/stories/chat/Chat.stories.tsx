@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
+import DataSource from 'devextreme/data/data_source';
+import CustomStore from 'devextreme/data/custom_store';
 import { firstAuthor, secondAuthor, initialMessages } from './data';
 import { Popup } from 'devextreme-react/popup';
 
@@ -155,6 +157,74 @@ export const EmptyView: Story = {
                     rtlEnabled={rtlEnabled}
                     user={user}
                     onMessageSend={onMessageSend}
+                    visible={visible}
+                    hint={hint}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
+                >
+                </Chat>
+            </div>
+        );
+    }
+}
+
+export const DataLoading: Story = {
+    args: {
+        items: initialMessages,
+        user: firstAuthor,
+        ...commonArgs,
+    },
+    argTypes: {
+        user: {
+            control: 'select',
+            options: [firstAuthor.name, secondAuthor.name],
+            mapping: {
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
+            },
+            defaultValue: firstAuthor.name,
+        },
+        hint: {
+            control: 'text',
+        },
+    },
+    render: ({
+        width,
+        height,
+        disabled,
+        rtlEnabled,
+        user,
+        visible,
+        hint,
+        activeStateEnabled,
+        hoverStateEnabled,
+        focusStateEnabled,
+    }) => {       
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: () => {
+                  const promise = new Promise((resolve) => {
+                    setTimeout(() => {
+                      resolve(initialMessages);
+                    }, 3000);
+                  });
+          
+                  return promise;
+                },
+            }),
+            paginate: false,
+        });
+        
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    dataSource={dataSource}
+                    disabled={disabled}
+                    rtlEnabled={rtlEnabled}
+                    user={user}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}
