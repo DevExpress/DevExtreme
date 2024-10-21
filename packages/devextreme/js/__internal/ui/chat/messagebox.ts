@@ -15,6 +15,26 @@ const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
+const TYPING_START_DELAY = 1500;
+const TYPING_END_DELAY = 2000;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, spellcheck/spell-checker
+const debounce = (func: any, delay: number): any => {
+  let timestamp = 0;
+
+  // eslint-disable-next-line func-names, @typescript-eslint/no-explicit-any
+  return function (...args: any) {
+    const now = Date.now();
+
+    if (now - timestamp >= delay) {
+      // eslint-disable-next-line @typescript-eslint/no-invalid-this
+      func.apply(this, args);
+
+      timestamp = now;
+    }
+  };
+};
+
 export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
   { text?: string };
@@ -36,13 +56,28 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _typingStartAction?: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _typingEndAction?: any;
+
+  // eslint-disable-next-line spellcheck/spell-checker, @typescript-eslint/no-explicit-any
+  _debouncedTriggerTypingStartAction?: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _typingEndEventTimeout: any;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
-      onMessageSend: undefined,
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      onMessageSend: undefined,
+      // @ts-expect-error
+      onTypingStart: undefined,
+      onTypingEnd: undefined,
     };
   }
 
@@ -50,6 +85,18 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     super._init();
 
     this._createMessageSendAction();
+    this._createTypingStartAction();
+    this._createTypingEndAction();
+
+    this._wrapTriggerTypingStartEvent();
+  }
+
+  _wrapTriggerTypingStartEvent(): void {
+    // eslint-disable-next-line spellcheck/spell-checker
+    this._debouncedTriggerTypingStartAction = debounce(
+      this._triggerTypingStartAction,
+      TYPING_START_DELAY,
+    );
   }
 
   _initMarkup(): void {
@@ -85,6 +132,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
         this._toggleButtonDisableState(shouldButtonBeDisabled);
+
+        this._onInputTriggerTypingEventsHandler();
       },
       onEnterKey: (e: EnterKeyEvent): void => {
         if (!e.event?.shiftKey) {
@@ -126,6 +175,13 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
+  _onInputTriggerTypingEventsHandler(): void {
+    if (this._isValuableTextEntered()) {
+      // eslint-disable-next-line spellcheck/spell-checker
+      this._debouncedTriggerTypingStartAction();
+    }
+  }
+
   _createMessageSendAction(): void {
     this._messageSendAction = this._createActionByOption(
       'onMessageSend',
@@ -133,10 +189,39 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     );
   }
 
+  _createTypingStartAction(): void {
+    this._typingStartAction = this._createActionByOption(
+      'onTypingStart',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
+  }
+
+  _createTypingEndAction(): void {
+    this._typingEndAction = this._createActionByOption(
+      'onTypingEnd',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
+  }
+
+  _triggerTypingStartAction(): void {
+    clearTimeout(this._typingEndEventTimeout);
+
+    // eslint-disable-next-line no-restricted-globals
+    this._typingEndEventTimeout = setTimeout(() => {
+      this._typingEndAction?.();
+    }, TYPING_END_DELAY);
+
+    this._typingStartAction?.();
+  }
+
   _sendHandler(e: ClickEvent | EnterKeyEvent): void {
     if (!this._isValuableTextEntered()) {
       return;
     }
+
+    clearTimeout(this._typingEndEventTimeout);
+
+    this._typingEndAction?.();
 
     const { text } = this._textArea.option();
 
@@ -170,6 +255,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       }
       case 'onMessageSend':
         this._createMessageSendAction();
+        break;
+      // @ts-expect-error
+      case 'onTypingStart':
+        this._createTypingStartAction();
+        break;
+      // @ts-expect-error
+      case 'onTypingEnd':
+        this._createTypingEndAction();
         break;
       default:
         super._optionChanged(args);

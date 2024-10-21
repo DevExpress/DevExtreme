@@ -42,19 +42,28 @@ class Chat extends Widget<Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _typingStartAction?: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _typingEndAction?: any;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      title: '',
+      showDayHeaders: true,
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
-      title: '',
       items: [],
       dataSource: null,
       user: { id: new Guid().toString() },
-      onMessageSend: undefined,
-      showDayHeaders: true,
       errors: [],
+      onMessageSend: undefined,
+      // @ts-expect-error
+      onTypingStart: undefined,
+      onTypingEnd: undefined,
     };
   }
 
@@ -63,11 +72,12 @@ class Chat extends Widget<Properties> {
 
     // @ts-expect-error
     this._initDataController();
-
     // @ts-expect-error
     this._refreshDataSource();
 
     this._createMessageSendAction();
+    this._createTypingStartAction();
+    this._createTypingEndAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -161,6 +171,13 @@ class Chat extends Widget<Properties> {
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
+      // @ts-expect-error
+      onTypingStart: () => {
+        this._typingStartHandler();
+      },
+      onTypingEnd: () => {
+        this._typingEndHandler();
+      },
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
@@ -188,6 +205,20 @@ class Chat extends Widget<Properties> {
     );
   }
 
+  _createTypingStartAction(): void {
+    this._typingStartAction = this._createActionByOption(
+      'onTypingStart',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
+  }
+
+  _createTypingEndAction(): void {
+    this._typingEndAction = this._createActionByOption(
+      'onTypingEnd',
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
+  }
+
   _messageSendHandler(e: MessageBoxMessageSendEvent): void {
     const { text, event } = e;
     const { user } = this.option();
@@ -199,6 +230,18 @@ class Chat extends Widget<Properties> {
     };
 
     this._messageSendAction?.({ message, event });
+  }
+
+  _typingStartHandler(): void {
+    const { user } = this.option();
+
+    this._typingStartAction?.({ user });
+  }
+
+  _typingEndHandler(): void {
+    const { user } = this.option();
+
+    this._typingEndAction?.({ user });
   }
 
   _focusTarget(): dxElementWrapper {
@@ -248,6 +291,14 @@ class Chat extends Widget<Properties> {
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
+        break;
+      // @ts-expect-error
+      case 'onTypingStart':
+        this._createTypingStartAction();
+        break;
+      // @ts-expect-error
+      case 'onTypingEnd':
+        this._createTypingEndAction();
         break;
       case 'showDayHeaders':
         this._messageList.option(name, value);
