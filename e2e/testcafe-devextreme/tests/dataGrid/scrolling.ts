@@ -946,10 +946,10 @@ safeSizeTest('Rows are rendered properly when window content is scrolled (T10703
 }, [800, 800]).before(async () => {
   const renderContent = ClientFunction(() => {
     for (let i = 0; i < 100; i += 1) {
-      $('body').prepend('<br/>');
+      $('body').prepend('<br class="myBr" />');
     }
     for (let i = 0; i < 100; i += 1) {
-      $('body').append('<br/>');
+      $('body').append('<br class="myBr" />');
     }
   });
 
@@ -975,7 +975,9 @@ safeSizeTest('Rows are rendered properly when window content is scrolled (T10703
       mode: 'virtual',
     },
   });
-});
+}).after(async () => ClientFunction(() => {
+  $('.myBr').remove();
+})());
 
 // T1129252
 test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {

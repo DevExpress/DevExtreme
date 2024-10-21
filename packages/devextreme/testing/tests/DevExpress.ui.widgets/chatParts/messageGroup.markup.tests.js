@@ -14,11 +14,8 @@ const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="messageGroup"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new MessageGroup($('#messageGroup'), options);
+            this.instance = new MessageGroup($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 

@@ -79,6 +79,13 @@ const isStickyCellPinnedToRight = (
   return Math.round(cellRight) >= Math.round(calculatedCellRight);
 };
 
+const isStickyCellPinned = (
+  $cell: dxElementWrapper,
+  $container: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => isStickyCellPinnedToLeft($cell, $container, addWidgetPrefix)
+  || isStickyCellPinnedToRight($cell, $container, addWidgetPrefix);
+
 const isFixedCellPinnedToRight = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
@@ -97,6 +104,11 @@ const isFirstRightFixedCell = (
   addWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
     && $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
+
+const isStickyCell = (
+  $cell: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
 const isFixedCell = (
   $cell: dxElementWrapper,
@@ -283,4 +295,7 @@ export const GridCoreStickyColumnsDom = {
   noNeedToCreateResizingPoint,
   isFixedCellPinnedToRight,
   noNeedToCreateReorderingPoint,
+  isFixedCell,
+  isStickyCell,
+  isStickyCellPinned,
 };

@@ -11,11 +11,8 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="chat"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new Chat($('#chat'), options);
+            this.instance = new Chat($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 
