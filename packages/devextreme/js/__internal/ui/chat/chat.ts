@@ -28,14 +28,15 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
+type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
+type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
+
 type Properties = ChatProperties & {
   title: string;
   showDayHeaders: boolean;
+  onTypingStart: TypingStartEvent;
+  onTypingEnd: TypingEndEvent;
 };
-
-type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
-
-type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
@@ -65,7 +66,6 @@ class Chat extends Widget<Properties> {
       user: { id: new Guid().toString() },
       errors: [],
       onMessageSend: undefined,
-      // @ts-expect-error
       onTypingStart: undefined,
       onTypingEnd: undefined,
     };
@@ -295,11 +295,9 @@ class Chat extends Widget<Properties> {
       case 'onMessageSend':
         this._createMessageSendAction();
         break;
-      // @ts-expect-error
       case 'onTypingStart':
         this._createTypingStartAction();
         break;
-      // @ts-expect-error
       case 'onTypingEnd':
         this._createTypingEndAction();
         break;
