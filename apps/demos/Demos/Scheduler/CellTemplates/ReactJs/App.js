@@ -11,19 +11,11 @@ import TimeCell from './TimeCell.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek', 'month'];
-const notifyDisableDate = () => {
-  notify(
-    'Cannot create or move an appointment/event to disabled time/date regions.',
-    'warning',
-    1000,
-  );
-};
 const ariaDescription = () => {
   const disabledDates = holidays.map((date) => {
     if (Utils.isWeekend(date)) {
       return null;
     }
-
     return new Date(date).toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -31,19 +23,25 @@ const ariaDescription = () => {
       day: 'numeric',
     });
   });
-
   if (disabledDates?.length > 0) {
     return disabledDates.map((dateText) => `${dateText} is a disabled date`).join('. ');
   }
+};
+const notifyDisableDate = () => {
+  notify(
+    'Cannot create or move an appointment/event to disabled time/date regions.',
+    'warning',
+    1000,
+  );
+};
+const onContentReady = (e) => {
+  setComponentAria(e.component?.$element());
 };
 const applyDisableDatesToDateEditors = (form) => {
   const startDateEditor = form.getEditor('startDate');
   startDateEditor?.option('disabledDates', holidays);
   const endDateEditor = form.getEditor('endDate');
   endDateEditor?.option('disabledDates', holidays);
-};
-const onContentReady = (e) => {
-  setComponentAria(e.component?.$element());
 };
 const onAppointmentFormOpening = (e) => {
   if (e.appointmentData?.startDate) {
@@ -70,7 +68,7 @@ const onAppointmentUpdating = (e) => {
   }
 };
 const setComponentAria = (element) => {
-  element.attr({
+  element?.attr({
     role: 'grid',
     'aria-label': 'Scheduler',
     'aria-roledescription': ariaDescription(),
