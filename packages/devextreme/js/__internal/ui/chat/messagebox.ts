@@ -23,14 +23,22 @@ export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
   { text?: string };
 
-export interface Properties extends DOMComponentProperties<MessageBox> {
-  onMessageSend?: (e: MessageSendEvent) => void;
+export type TypingStartEvent = NativeEventInfo<MessageBox>;
 
+export type TypingEndEvent = NativeEventInfo<MessageBox>;
+
+export interface Properties extends DOMComponentProperties<MessageBox> {
   activeStateEnabled?: boolean;
 
   focusStateEnabled?: boolean;
 
   hoverStateEnabled?: boolean;
+
+  onMessageSend?: (e: MessageSendEvent) => void;
+
+  onTypingStart?: (e: TypingStartEvent) => void;
+
+  onTypingEnd?: (e: TypingEndEvent) => void;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
@@ -40,17 +48,13 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _typingStartAction?: any;
+  _typingStartAction?: () => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _typingEndAction?: any;
+  _throttledTriggerTypingStartAction?: () => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _throttledTriggerTypingStartAction?: any;
+  _typingEndAction?: () => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _typingEndEventTimeout: any;
+  _typingEndEventTimeout?: ReturnType<typeof setTimeout>;
 
   _getDefaultOptions(): Properties {
     return {
@@ -59,7 +63,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled: true,
       hoverStateEnabled: true,
       onMessageSend: undefined,
-      // @ts-expect-error
       onTypingStart: undefined,
       onTypingEnd: undefined,
     };
@@ -160,7 +163,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _onInputTriggerTypingEventsHandler(): void {
     if (this._isValuableTextEntered()) {
-      this._throttledTriggerTypingStartAction();
+      this._throttledTriggerTypingStartAction?.();
     }
   }
 
@@ -188,7 +191,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _triggerTypingStartAction(): void {
     clearTimeout(this._typingEndEventTimeout);
 
-    // eslint-disable-next-line no-restricted-globals
     this._typingEndEventTimeout = setTimeout(() => {
       this._typingEndAction?.();
     }, TYPING_END_DELAY);
@@ -238,17 +240,21 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       case 'onMessageSend':
         this._createMessageSendAction();
         break;
-      // @ts-expect-error
       case 'onTypingStart':
         this._createTypingStartAction();
         break;
-      // @ts-expect-error
       case 'onTypingEnd':
         this._createTypingEndAction();
         break;
       default:
         super._optionChanged(args);
     }
+  }
+
+  _clean(): void {
+    clearTimeout(this._typingEndEventTimeout);
+
+    super._clean();
   }
 
   updateInputAria(emptyViewId: string | null): void {
