@@ -12,7 +12,8 @@ import TimeCell from './TimeCell.js';
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek', 'month'];
 const ariaDescription = () => {
-  const disabledDates = holidays.map((date) => {
+  const disabledDates = holidays
+  .map((date) => {
     if (Utils.isWeekend(date)) {
       return null;
     }
@@ -22,7 +23,8 @@ const ariaDescription = () => {
       month: 'long',
       day: 'numeric',
     });
-  }).filter(dateText => dateText);
+  })
+  .filter(dateText => dateText);
   if (disabledDates?.length > 0) {
     return disabledDates.map((dateText) => `${dateText} is a disabled date`).join('. ');
   }
