@@ -5,13 +5,13 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
-import type { NativeEventInfo } from '@js/events';
+// import type { NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
   MessageSendEvent,
   Properties as ChatProperties,
-  User,
+  // User,
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -29,8 +29,8 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
-type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
+// type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
+// type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
 
 type Properties = ChatProperties & {
   title: string;
@@ -50,9 +50,9 @@ class Chat extends Widget<Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
+  // _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
-  _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
+  // _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -67,8 +67,8 @@ class Chat extends Widget<Properties> {
       user: { id: new Guid().toString() },
       errors: [],
       onMessageSend: undefined,
-      onTypingStart: undefined,
-      onTypingEnd: undefined,
+      // onTypingStart: undefined,
+      // onTypingEnd: undefined,
     };
   }
 
@@ -81,8 +81,8 @@ class Chat extends Widget<Properties> {
     this._refreshDataSource();
 
     this._createMessageSendAction();
-    this._createTypingStartAction();
-    this._createTypingEndAction();
+    // this._createTypingStartAction();
+    // this._createTypingEndAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -243,11 +243,11 @@ class Chat extends Widget<Properties> {
     this._typingStartAction?.({ user, event });
   }
 
-  _typingEndHandler(): void {
-    const { user } = this.option();
+  // _typingEndHandler(): void {
+  //   const { user } = this.option();
 
-    this._typingEndAction?.({ user });
-  }
+  //   this._typingEndAction?.({ user });
+  // }
 
   _focusTarget(): dxElementWrapper {
     const $input = $(this.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
@@ -287,6 +287,7 @@ class Chat extends Widget<Properties> {
         this._messageList.option(name, value);
         this._updateMessageBoxAria();
         break;
+
       case 'dataSource':
         // @ts-expect-error
         this._refreshDataSource();
@@ -297,12 +298,12 @@ class Chat extends Widget<Properties> {
       case 'onMessageSend':
         this._createMessageSendAction();
         break;
-      case 'onTypingStart':
-        this._createTypingStartAction();
-        break;
-      case 'onTypingEnd':
-        this._createTypingEndAction();
-        break;
+      // case 'onTypingStart':
+      //   this._createTypingStartAction();
+      //   break;
+      // case 'onTypingEnd':
+      //   this._createTypingEndAction();
+      //   break;
       case 'showDayHeaders':
         this._messageList.option(name, value);
         break;
