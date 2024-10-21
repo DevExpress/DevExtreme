@@ -424,6 +424,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     return (
       <RestoreTreeContext.Provider value={restoreTree}>
+        <TemplateDiscoveryContext.Provider value={{ discoveryRendering: false }}>
           {
             createPortal(
               <TemplateDiscoveryContext.Provider value={{ discoveryRendering: true }}>
@@ -437,8 +438,13 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
               {renderContent()}
             </NestedOptionContext.Provider>
             <TemplateManager init={setTemplateManagerHooks} onTemplatesRendered={onTemplatesRendered}/>
-            {isPortalComponent && renderPortal()}
+              { isPortalComponent && 
+                <NestedOptionContext.Provider value={context}>
+                  { renderPortal() }
+                </NestedOptionContext.Provider>
+              }
           </div>
+        </TemplateDiscoveryContext.Provider>
       </RestoreTreeContext.Provider>
     );
   },

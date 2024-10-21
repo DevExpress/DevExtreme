@@ -4,7 +4,7 @@ import * as React from 'react';
 import { memo } from 'react';
 import { Component, IHtmlOptions, NestedComponentMeta } from '../component';
 import ConfigurationComponent from '../nested-option';
-import { TestComponent, Widget, WidgetClass } from './test-component';
+import { TestComponent, TestPortalComponent, Widget, WidgetClass } from './test-component';
 
 jest.useFakeTimers();
 
@@ -166,6 +166,78 @@ describe('nested option', () => {
     );
 
     expect(WidgetClass.mock.calls[1][1]).toEqual({
+      templatesRenderAsynchronously: true,
+      option: {
+        a: 345,
+      },
+    });
+  });
+
+  it('is pulled from portal component', () => {
+    render(
+      <TestPortalComponent>
+        <NestedComponent a={123} />
+      </TestPortalComponent>,
+    );
+
+    expect(WidgetClass.mock.calls[0][1]).toEqual({
+      templatesRenderAsynchronously: true,
+    });
+
+    expect(Widget.option.mock.calls[0][1]).toEqual({ a: 123 });
+
+    const MySetting = () => <NestedComponent a={345} />;
+
+    render(
+      <TestPortalComponent>
+        <MySetting />
+      </TestPortalComponent>,
+    );
+
+    expect(WidgetClass.mock.calls[1][1]).toEqual({
+      templatesRenderAsynchronously: true,
+    });
+
+    expect(Widget.option.mock.calls[0][1]).toEqual({ a: 345 });
+  });
+
+  it('is pulled form nested component', () => {
+    render(
+      <TestComponent
+        templateProps={[{
+          tmplOption: 'template',
+          render: 'render',
+          component: 'component',
+        }]}>
+        <TestComponent>
+          <NestedComponent a={123} />
+        </TestComponent>
+      </TestComponent>,
+    );
+
+    expect(WidgetClass.mock.calls[0][1]).toEqual({
+      templatesRenderAsynchronously: true,
+      option: {
+        a: 123,
+      },
+    });
+
+    const MySetting = () => <NestedComponent a={345} />;
+
+    render(
+      <TestComponent
+        templateProps={[{
+          tmplOption: 'template',
+          render: 'render',
+          component: 'component',
+        }]}>
+        <TestComponent>
+          <MySetting />
+        </TestComponent>
+      </TestComponent>,
+    );
+
+    expect(WidgetClass.mock.calls[3][1]).toEqual({
       templatesRenderAsynchronously: true,
       option: {
         a: 345,
