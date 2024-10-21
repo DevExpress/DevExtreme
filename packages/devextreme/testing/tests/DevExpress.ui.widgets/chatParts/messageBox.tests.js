@@ -36,6 +36,7 @@ const moduleConfig = {
         init();
     }
 };
+
 QUnit.module('MessageBox', moduleConfig, () => {
     QUnit.module('Render', () => {
         QUnit.test('should be initialized with correct type', function(assert) {
@@ -290,6 +291,20 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .type(text)
                 .keyDown('enter')
                 .keyUp('enter');
+        });
+    });
+
+    QUnit.module('onTypingStart event', () => {
+        QUnit.test('should be triggered if a character is entered in the input', function(assert) {
+            const onTypingStartStub = sinon.stub();
+
+            this.reinit({ onTypingStart: onTypingStartStub });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('n');
+
+            assert.strictEqual(onTypingStartStub.callCount, 1);
         });
     });
 
