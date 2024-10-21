@@ -1,0 +1,40 @@
+@use "../../../mixins" as *;
+@use "./mixins" as *;
+@include chat-typingindicator-scale('dx-typingindicator-circle-scale-outer', 1.5);
+@include chat-typingindicator-scale('dx-typingindicator-circle-scale-inner', 0.666667);
+
+.dx-chat-typingindicator-content {
+  display: grid;
+  align-items: start;
+  justify-items: start;
+
+  .dx-avatar {
+    grid-row: 2 / auto;
+  }
+}
+
+.dx-chat-typingindicator-text {
+  grid-column: 2;
+  grid-row: 1;
+  max-width: 100%;
+
+  @include dx-overflow();
+}
+
+.dx-chat-typingindicator-bubble {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dx-chat-typingindicator-circle {
+  &:nth-child(1),
+  &:nth-child(3) {
+    animation: dx-typingindicator-circle-scale-outer 1.5s infinite;
+  }
+
+  &:nth-child(2) {
+    animation: dx-typingindicator-circle-scale-inner 1.5s infinite;
+  }
+}

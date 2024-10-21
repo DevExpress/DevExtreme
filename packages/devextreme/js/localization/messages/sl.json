@@ -345,7 +345,10 @@
         "dxChat-messageListAriaLabel": "Message list",
         "dxChat-errorListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
-        "dxChat-emptyListPrompt": "Write your first message",
+        "dxChat-typingMessageSingleUser": "{0} is typing...",
+        "dxChat-typingMessageTwoUsers": "{0} and {1} are typing...",
+        "dxChat-typingMessageThreeUsers": "{0}, {1} and {2} are typing...",
+        "dxChat-typingMessageMultipleUsers": "{0} and other are typing...",
 
         "dxColorView-ariaRed": "Rdeča",
         "dxColorView-ariaGreen": "Zelena",

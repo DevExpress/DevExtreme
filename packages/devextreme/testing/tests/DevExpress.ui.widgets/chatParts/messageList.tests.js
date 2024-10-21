@@ -300,7 +300,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 }]
             });
 
-            const $scrollableContent = $(this.getScrollView().content());
+            const $scrollableContent = $(this.getScrollView().content()).children().first();
             const $firstChild = $scrollableContent.children().first();
 
             assert.strictEqual($firstChild.hasClass(CHAT_MESSAGEGROUP_CLASS), true, 'first message group is added before day header');
