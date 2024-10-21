@@ -22,7 +22,7 @@ const ariaDescription = () => {
       month: 'long',
       day: 'numeric',
     });
-  });
+  }).filter(dateText => dateText);
   if (disabledDates?.length > 0) {
     return disabledDates.map((dateText) => `${dateText} is a disabled date`).join('. ');
   }
@@ -68,10 +68,9 @@ const onAppointmentUpdating = (e) => {
   }
 };
 const setComponentAria = (element) => {
+  const prevAria = element?.attr('aria-label') || '';
   element?.attr({
-    role: 'grid',
-    'aria-label': 'Scheduler',
-    'aria-roledescription': ariaDescription(),
+    'aria-label': [prevAria, ariaDescription()].filter(Boolean).join(', '),
   });
 };
 const App = () => {

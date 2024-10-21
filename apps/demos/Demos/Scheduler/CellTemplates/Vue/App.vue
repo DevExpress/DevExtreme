@@ -118,10 +118,9 @@ function applyDisableDatesToDateEditors(form) {
 }
 
 function setComponentAria(element) {
+  const prevAria = element?.attr('aria-label') || '';
   element?.attr({
-    role: 'grid',
-    'aria-label': 'Scheduler',
-    'aria-roledescription': ariaDescription.value,
+    'aria-label': [prevAria, ariaDescription.value].filter(Boolean).join(', '),
   });
 }
 </script>

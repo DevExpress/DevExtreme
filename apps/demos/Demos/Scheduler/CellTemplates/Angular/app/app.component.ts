@@ -173,10 +173,9 @@ export class AppComponent {
   };
 
   setComponentAria(element): void {
+    const prevAria = element?.attr('aria-label') || '';
     element?.attr({
-      'role': 'grid',
-      'aria-label': 'Scheduler',
-      'aria-roledescription': this.ariaDescription(),
+      'aria-label': [prevAria, this.ariaDescription()].filter(Boolean).join(', '),
     });
   }
 }

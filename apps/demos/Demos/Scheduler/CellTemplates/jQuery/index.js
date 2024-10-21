@@ -103,7 +103,7 @@ const ariaDescription = () => {
         day: 'numeric',
       })
     }
-  );
+  ).filter(dateText => dateText);
   
   if (disabledDates?.length > 0) {
     return disabledDates.map(dateText => `${dateText} is a disabled date`).join('. ');
@@ -180,9 +180,8 @@ function applyDisableDatesToDateEditors(form) {
 }
 
 function setComponentAria(element) {
-  element.attr({
-    'role': 'grid',
-    'aria-label': 'Scheduler',
-    'aria-roledescription': ariaDescription(),
+  const prevAria = element?.attr('aria-label') || '';
+  element?.attr({
+    'aria-label': [prevAria, ariaDescription()].filter(Boolean).join(', '),
   });
 }
