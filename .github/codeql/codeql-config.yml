@@ -1,6 +1,7 @@
 name: "DevExtreme CodeQL config"
-
 paths-ignore:
-  - "/js/bundles/dx.custom.js"
-  - "/js/localization/default_messages.js"
-  - "/js/localization/cldr-data/**"
+  # all published sources are located in artifacts/npm/**, so we can disable following paths:
+  - "/packages/devextreme/artifacts/transpiled/**"
+  - "/packages/devextreme/artifacts/transpiled-esm-npm/**"
+  - "/packages/devextreme/artifacts/transpiled-renovation/**"
+  - "/packages/devextreme/artifacts/transpiled-renovation-npm/**"
