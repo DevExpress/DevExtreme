@@ -1,7 +1,6 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import 'devextreme/ui/html_editor/converters/markdown';
 import prettier from 'prettier/standalone';
 import parserHtml from 'prettier/parser-html';
 import { DxHtmlEditorModule, DxHtmlEditorTypes } from 'devextreme-angular/ui/html-editor';
