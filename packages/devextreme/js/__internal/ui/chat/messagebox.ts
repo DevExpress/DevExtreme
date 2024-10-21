@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import { throttle } from '@js/core/utils/throttle';
 import type { NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { ClickEvent } from '@js/ui/button';
@@ -17,23 +18,6 @@ const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 const TYPING_START_DELAY = 1500;
 const TYPING_END_DELAY = 2000;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, spellcheck/spell-checker
-const debounce = (func: any, delay: number): any => {
-  let timestamp = 0;
-
-  // eslint-disable-next-line func-names, @typescript-eslint/no-explicit-any
-  return function (...args: any) {
-    const now = Date.now();
-
-    if (now - timestamp >= delay) {
-      // eslint-disable-next-line @typescript-eslint/no-invalid-this
-      func.apply(this, args);
-
-      timestamp = now;
-    }
-  };
-};
 
 export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
@@ -62,8 +46,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _typingEndAction?: any;
 
-  // eslint-disable-next-line spellcheck/spell-checker, @typescript-eslint/no-explicit-any
-  _debouncedTriggerTypingStartAction?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _throttledTriggerTypingStartAction?: any;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _typingEndEventTimeout: any;
@@ -92,8 +76,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _wrapTriggerTypingStartEvent(): void {
-    // eslint-disable-next-line spellcheck/spell-checker
-    this._debouncedTriggerTypingStartAction = debounce(
+    this._throttledTriggerTypingStartAction = throttle(
       this._triggerTypingStartAction,
       TYPING_START_DELAY,
     );
@@ -177,8 +160,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _onInputTriggerTypingEventsHandler(): void {
     if (this._isValuableTextEntered()) {
-      // eslint-disable-next-line spellcheck/spell-checker
-      this._debouncedTriggerTypingStartAction();
+      this._throttledTriggerTypingStartAction();
     }
   }
 
