@@ -67,6 +67,7 @@ export const CLASS = {
   commandDrag: 'dx-command-drag',
   dialogWrapper: 'dx-dialog-wrapper',
   summaryTotal: 'dx-datagrid-summary-item',
+  scrollableContainer: 'dx-scrollable-container',
 };
 
 const E2E_ATTRIBUTES = {
@@ -154,6 +155,10 @@ export default class DataGrid extends Widget {
 
   getRowsView(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.rowsView)}`);
+  }
+
+  getScrollContainer(): Selector {
+    return this.getRowsView().find(`.${CLASS.scrollableContainer}`);
   }
 
   getDataRow(index: number): DataRow {

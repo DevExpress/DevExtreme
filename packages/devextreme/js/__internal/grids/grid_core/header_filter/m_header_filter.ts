@@ -321,7 +321,6 @@ export class HeaderFilterController extends Modules.ViewController {
       // TODO getView
       const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
       const $columnElement = view.getColumnElements()
-        // @ts-expect-error
         .eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
       this.showHeaderFilterMenuBase({
