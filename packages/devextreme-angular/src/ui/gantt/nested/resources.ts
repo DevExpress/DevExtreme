@@ -14,8 +14,9 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -31,34 +32,34 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoGanttResourcesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get colorExpr(): Function | string {
+    get colorExpr(): (() => void) | string {
         return this._getOption('colorExpr');
     }
-    set colorExpr(value: Function | string) {
+    set colorExpr(value: (() => void) | string) {
         this._setOption('colorExpr', value);
     }
 
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): (() => void) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: (() => void) | string) {
         this._setOption('keyExpr', value);
     }
 
     @Input()
-    get textExpr(): Function | string {
+    get textExpr(): (() => void) | string {
         return this._getOption('textExpr');
     }
-    set textExpr(value: Function | string) {
+    set textExpr(value: (() => void) | string) {
         this._setOption('textExpr', value);
     }
 

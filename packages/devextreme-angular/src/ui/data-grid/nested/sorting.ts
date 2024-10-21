@@ -14,7 +14,6 @@ import {
 
 
 
-import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -54,10 +53,10 @@ export class DxoDataGridSortingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get mode(): SingleMultipleOrNone {
+    get mode(): "single" | "multiple" | "none" {
         return this._getOption('mode');
     }
-    set mode(value: SingleMultipleOrNone) {
+    set mode(value: "single" | "multiple" | "none") {
         this._setOption('mode', value);
     }
 

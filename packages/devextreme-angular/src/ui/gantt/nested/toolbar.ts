@@ -8,22 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
+import { dxGanttToolbarItem } from 'devextreme/ui/gantt';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGanttItemComponent } from './item-dxi';
 
 
 @Component({
@@ -34,10 +30,10 @@ import { DxiGanttItemComponent } from './item-dxi';
 })
 export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get items(): Array<dxGanttToolbarItem | GanttPredefinedToolbarItem> {
+    get items(): Array<dxGanttToolbarItem | "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies"> {
         return this._getOption('items');
     }
-    set items(value: Array<dxGanttToolbarItem | GanttPredefinedToolbarItem>) {
+    set items(value: Array<dxGanttToolbarItem | "separator" | "undo" | "redo" | "expandAll" | "collapseAll" | "addTask" | "deleteTask" | "zoomIn" | "zoomOut" | "taskDetails" | "fullScreen" | "resourceManager" | "showResources" | "showDependencies">) {
         this._setOption('items', value);
     }
 
@@ -46,14 +42,6 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
-    get itemsChildren(): QueryList<DxiGanttItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

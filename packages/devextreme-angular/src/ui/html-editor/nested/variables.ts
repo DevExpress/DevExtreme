@@ -14,8 +14,9 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -31,18 +32,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoHtmlEditorVariablesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<string> {
+    get dataSource(): Array<string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<string>) {
+    set dataSource(value: Array<string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get escapeChar(): string | Array<string> {
+    get escapeChar(): Array<string> | string {
         return this._getOption('escapeChar');
     }
-    set escapeChar(value: string | Array<string>) {
+    set escapeChar(value: Array<string> | string) {
         this._setOption('escapeChar', value);
     }
 

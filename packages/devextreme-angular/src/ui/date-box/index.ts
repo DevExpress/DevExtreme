@@ -24,12 +24,13 @@ import {
 } from '@angular/core';
 
 
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
-import { Properties as dxCalendarOptions } from 'devextreme/ui/calendar';
-import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DatePickerType, DateType, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/date_box';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import * as LocalizationTypes from 'devextreme/localization';
+import { TextEditorButton } from 'devextreme/common';
+import { dxCalendarOptions } from 'devextreme/ui/button';
+import { dxDateBox } from 'UNKNOWN_MODULE';
+import { template } from 'devextreme/core/templates/template';
+import { dxPopupOptions } from 'devextreme/ui/popup';
+import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/date_box';
 
 import DxDateBox from 'devextreme/ui/date_box';
 
@@ -65,22 +66,22 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
-import { DxiDateBoxButtonModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxOptionsModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxCalendarOptionsModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxDisplayFormatModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxDropDownOptionsModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxAnimationModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxHideModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxFromModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxPositionModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxAtModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxBoundaryOffsetModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxiDateBoxButtonModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxCalendarOptionsModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxCollisionModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxDisplayFormatModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxDropDownOptionsModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxFromModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxHideModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxMyModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxOffsetModule } from 'devextreme-angular/ui/date-box/nested';
-import { DxoDateBoxToModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxOptionsModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxPositionModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxShowModule } from 'devextreme-angular/ui/date-box/nested';
+import { DxoDateBoxToModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nested';
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
@@ -130,10 +131,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -182,10 +183,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get applyValueMode(): ApplyValueMode {
+    get applyValueMode(): "instantly" | "useButtons" {
         return this._getOption('applyValueMode');
     }
-    set applyValueMode(value: ApplyValueMode) {
+    set applyValueMode(value: "instantly" | "useButtons") {
         this._setOption('applyValueMode', value);
     }
 
@@ -195,10 +196,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> {
+    get buttons(): Array<"clear" | "dropDown" | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<"clear" | "dropDown" | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -247,10 +248,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get dateSerializationFormat(): string | undefined {
+    get dateSerializationFormat(): string {
         return this._getOption('dateSerializationFormat');
     }
-    set dateSerializationFormat(value: string | undefined) {
+    set dateSerializationFormat(value: string) {
         this._setOption('dateSerializationFormat', value);
     }
 
@@ -286,10 +287,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get disabledDates(): Function | Array<Date> {
+    get disabledDates(): Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean) {
         return this._getOption('disabledDates');
     }
-    set disabledDates(value: Function | Array<Date>) {
+    set disabledDates(value: Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean)) {
         this._setOption('disabledDates', value);
     }
 
@@ -299,10 +300,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get displayFormat(): Format | string {
+    get displayFormat(): LocalizationTypes.Format {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: Format | string) {
+    set displayFormat(value: LocalizationTypes.Format) {
         this._setOption('displayFormat', value);
     }
 
@@ -312,10 +313,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get dropDownButtonTemplate(): any {
+    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: any) {
+    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -325,10 +326,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get dropDownOptions(): dxPopupOptions {
+    get dropDownOptions(): dxPopupOptions<any> {
         return this._getOption('dropDownOptions');
     }
-    set dropDownOptions(value: dxPopupOptions) {
+    set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
 
@@ -338,10 +339,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -364,10 +365,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -377,10 +378,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -481,10 +482,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get labelMode(): LabelMode {
+    get labelMode(): "static" | "floating" | "hidden" | "outside" {
         return this._getOption('labelMode');
     }
-    set labelMode(value: LabelMode) {
+    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
         this._setOption('labelMode', value);
     }
 
@@ -494,10 +495,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get max(): Date | number | string | undefined {
+    get max(): Date | number | string {
         return this._getOption('max');
     }
-    set max(value: Date | number | string | undefined) {
+    set max(value: Date | number | string) {
         this._setOption('max', value);
     }
 
@@ -520,10 +521,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get min(): Date | number | string | undefined {
+    get min(): Date | number | string {
         return this._getOption('min');
     }
-    set min(value: Date | number | string | undefined) {
+    set min(value: Date | number | string) {
         this._setOption('min', value);
     }
 
@@ -572,10 +573,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get pickerType(): DatePickerType {
+    get pickerType(): "calendar" | "list" | "native" | "rollers" {
         return this._getOption('pickerType');
     }
-    set pickerType(value: DatePickerType) {
+    set pickerType(value: "calendar" | "list" | "native" | "rollers") {
         this._setOption('pickerType', value);
     }
 
@@ -676,10 +677,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get stylingMode(): EditorStyle {
+    get stylingMode(): "outlined" | "underlined" | "filled" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: EditorStyle) {
+    set stylingMode(value: "outlined" | "underlined" | "filled") {
         this._setOption('stylingMode', value);
     }
 
@@ -728,10 +729,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get type(): DateType {
+    get type(): "date" | "datetime" | "time" {
         return this._getOption('type');
     }
-    set type(value: DateType) {
+    set type(value: "date" | "datetime" | "time") {
         this._setOption('type', value);
     }
 
@@ -780,10 +781,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
@@ -793,10 +794,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationMessagePosition(): Position | Mode {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" | "auto" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position | Mode) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top" | "auto") {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -806,10 +807,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -858,10 +859,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -1013,7 +1014,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -1041,14 +1042,14 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
+    @Output() applyValueModeChange: EventEmitter<"instantly" | "useButtons">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<"clear" | "dropDown" | TextEditorButton>>;
 
     /**
     
@@ -1076,7 +1077,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dateSerializationFormatChange: EventEmitter<string | undefined>;
+    @Output() dateSerializationFormatChange: EventEmitter<string>;
 
     /**
     
@@ -1097,35 +1098,35 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() disabledDatesChange: EventEmitter<Function | Array<Date>>;
+    @Output() disabledDatesChange: EventEmitter<Array<Date> | ((data: { component: dxDateBox, date: Date, view: string }) => boolean)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayFormatChange: EventEmitter<Format | string>;
+    @Output() displayFormatChange: EventEmitter<LocalizationTypes.Format>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions>;
+    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1139,14 +1140,14 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -1202,14 +1203,14 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<LabelMode>;
+    @Output() labelModeChange: EventEmitter<"static" | "floating" | "hidden" | "outside">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | number | string | undefined>;
+    @Output() maxChange: EventEmitter<Date | number | string>;
 
     /**
     
@@ -1223,7 +1224,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | number | string | undefined>;
+    @Output() minChange: EventEmitter<Date | number | string>;
 
     /**
     
@@ -1251,7 +1252,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pickerTypeChange: EventEmitter<DatePickerType>;
+    @Output() pickerTypeChange: EventEmitter<"calendar" | "list" | "native" | "rollers">;
 
     /**
     
@@ -1307,7 +1308,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<EditorStyle>;
+    @Output() stylingModeChange: EventEmitter<"outlined" | "underlined" | "filled">;
 
     /**
     
@@ -1335,7 +1336,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<DateType>;
+    @Output() typeChange: EventEmitter<"date" | "datetime" | "time">;
 
     /**
     
@@ -1363,21 +1364,21 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
+    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
 
     /**
     
@@ -1405,7 +1406,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1615,22 +1616,22 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiDateBoxButtonModule,
-    DxoDateBoxOptionsModule,
-    DxoDateBoxCalendarOptionsModule,
-    DxoDateBoxDisplayFormatModule,
-    DxoDateBoxDropDownOptionsModule,
     DxoDateBoxAnimationModule,
-    DxoDateBoxHideModule,
-    DxoDateBoxFromModule,
-    DxoDateBoxPositionModule,
     DxoDateBoxAtModule,
     DxoDateBoxBoundaryOffsetModule,
+    DxiDateBoxButtonModule,
+    DxoDateBoxCalendarOptionsModule,
     DxoDateBoxCollisionModule,
+    DxoDateBoxDisplayFormatModule,
+    DxoDateBoxDropDownOptionsModule,
+    DxoDateBoxFromModule,
+    DxoDateBoxHideModule,
     DxoDateBoxMyModule,
     DxoDateBoxOffsetModule,
-    DxoDateBoxToModule,
+    DxoDateBoxOptionsModule,
+    DxoDateBoxPositionModule,
     DxoDateBoxShowModule,
+    DxoDateBoxToModule,
     DxiDateBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1656,22 +1657,22 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiDateBoxButtonModule,
-    DxoDateBoxOptionsModule,
-    DxoDateBoxCalendarOptionsModule,
-    DxoDateBoxDisplayFormatModule,
-    DxoDateBoxDropDownOptionsModule,
     DxoDateBoxAnimationModule,
-    DxoDateBoxHideModule,
-    DxoDateBoxFromModule,
-    DxoDateBoxPositionModule,
     DxoDateBoxAtModule,
     DxoDateBoxBoundaryOffsetModule,
+    DxiDateBoxButtonModule,
+    DxoDateBoxCalendarOptionsModule,
     DxoDateBoxCollisionModule,
+    DxoDateBoxDisplayFormatModule,
+    DxoDateBoxDropDownOptionsModule,
+    DxoDateBoxFromModule,
+    DxoDateBoxHideModule,
     DxoDateBoxMyModule,
     DxoDateBoxOffsetModule,
-    DxoDateBoxToModule,
+    DxoDateBoxOptionsModule,
+    DxoDateBoxPositionModule,
     DxoDateBoxShowModule,
+    DxoDateBoxToModule,
     DxiDateBoxToolbarItemModule,
     DxTemplateModule
   ]

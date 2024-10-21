@@ -5,29 +5,38 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { FirstDayOfWeek, Orientation } from 'devextreme/common';
-import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
+import { template } from 'devextreme/core/templates/template';
+import { AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-scheduler-view',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiSchedulerViewComponent extends CollectionNestedOption {
+export class DxiSchedulerViewComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
     get agendaDuration(): number {
         return this._getOption('agendaDuration');
@@ -37,34 +46,34 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get allDayPanelMode(): AllDayPanelMode {
+    get allDayPanelMode(): "all" | "allDay" | "hidden" {
         return this._getOption('allDayPanelMode');
     }
-    set allDayPanelMode(value: AllDayPanelMode) {
+    set allDayPanelMode(value: "all" | "allDay" | "hidden") {
         this._setOption('allDayPanelMode', value);
     }
 
     @Input()
-    get appointmentCollectorTemplate(): any {
+    get appointmentCollectorTemplate(): ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template {
         return this._getOption('appointmentCollectorTemplate');
     }
-    set appointmentCollectorTemplate(value: any) {
+    set appointmentCollectorTemplate(value: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template) {
         this._setOption('appointmentCollectorTemplate', value);
     }
 
     @Input()
-    get appointmentTemplate(): any {
+    get appointmentTemplate(): ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template {
         return this._getOption('appointmentTemplate');
     }
-    set appointmentTemplate(value: any) {
+    set appointmentTemplate(value: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template) {
         this._setOption('appointmentTemplate', value);
     }
 
     @Input()
-    get appointmentTooltipTemplate(): any {
+    get appointmentTooltipTemplate(): ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template {
         return this._getOption('appointmentTooltipTemplate');
     }
-    set appointmentTooltipTemplate(value: any) {
+    set appointmentTooltipTemplate(value: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template) {
         this._setOption('appointmentTooltipTemplate', value);
     }
 
@@ -77,26 +86,26 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataCellTemplate(): any {
+    get dataCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('dataCellTemplate');
     }
-    set dataCellTemplate(value: any) {
+    set dataCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('dataCellTemplate', value);
     }
 
     @Input()
-    get dateCellTemplate(): any {
+    get dateCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('dateCellTemplate');
     }
-    set dateCellTemplate(value: any) {
+    set dateCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('dateCellTemplate', value);
     }
 
     @Input()
-    get dropDownAppointmentTemplate(): any {
+    get dropDownAppointmentTemplate(): ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template {
         return this._getOption('dropDownAppointmentTemplate');
     }
-    set dropDownAppointmentTemplate(value: any) {
+    set dropDownAppointmentTemplate(value: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template) {
         this._setOption('dropDownAppointmentTemplate', value);
     }
 
@@ -109,10 +118,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -125,10 +134,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get groupOrientation(): Orientation {
+    get groupOrientation(): "horizontal" | "vertical" {
         return this._getOption('groupOrientation');
     }
-    set groupOrientation(value: Orientation) {
+    set groupOrientation(value: "horizontal" | "vertical") {
         this._setOption('groupOrientation', value);
     }
 
@@ -149,18 +158,18 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get maxAppointmentsPerCell(): CellAppointmentsLimit | number {
+    get maxAppointmentsPerCell(): number | "auto" | "unlimited" {
         return this._getOption('maxAppointmentsPerCell');
     }
-    set maxAppointmentsPerCell(value: CellAppointmentsLimit | number) {
+    set maxAppointmentsPerCell(value: number | "auto" | "unlimited") {
         this._setOption('maxAppointmentsPerCell', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
@@ -173,10 +182,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get resourceCellTemplate(): any {
+    get resourceCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('resourceCellTemplate');
     }
-    set resourceCellTemplate(value: any) {
+    set resourceCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('resourceCellTemplate', value);
     }
 
@@ -189,10 +198,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get startDate(): Date | number | string | undefined {
+    get startDate(): Date | number | string {
         return this._getOption('startDate');
     }
-    set startDate(value: Date | number | string | undefined) {
+    set startDate(value: Date | number | string) {
         this._setOption('startDate', value);
     }
 
@@ -205,18 +214,18 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get timeCellTemplate(): any {
+    get timeCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('timeCellTemplate');
     }
-    set timeCellTemplate(value: any) {
+    set timeCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('timeCellTemplate', value);
     }
 
     @Input()
-    get type(): ViewType | undefined {
+    get type(): "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" {
         return this._getOption('type');
     }
-    set type(value: ViewType | undefined) {
+    set type(value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") {
         this._setOption('type', value);
     }
 
@@ -227,10 +236,22 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

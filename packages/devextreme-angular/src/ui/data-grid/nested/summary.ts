@@ -8,25 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { SummaryType } from 'devextreme/common/grids';
-import { Format } from 'devextreme/localization';
+import dxDataGrid from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridGroupItemComponent } from './group-item-dxi';
-import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 
 
 @Component({
@@ -37,18 +30,18 @@ import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 })
 export class DxoDataGridSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get calculateCustomSummary(): Function {
+    get calculateCustomSummary(): ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void) {
         return this._getOption('calculateCustomSummary');
     }
-    set calculateCustomSummary(value: Function) {
+    set calculateCustomSummary(value: ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void)) {
         this._setOption('calculateCustomSummary', value);
     }
 
     @Input()
-    get groupItems(): Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> {
+    get groupItems(): Array<Record<string, any>> {
         return this._getOption('groupItems');
     }
-    set groupItems(value: Array<any | { alignByColumn?: boolean, column?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>) {
+    set groupItems(value: Array<Record<string, any>>) {
         this._setOption('groupItems', value);
     }
 
@@ -69,18 +62,18 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get texts(): { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string } {
+    get texts(): Record<string, any> {
         return this._getOption('texts');
     }
-    set texts(value: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }) {
+    set texts(value: Record<string, any>) {
         this._setOption('texts', value);
     }
 
     @Input()
-    get totalItems(): Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }> {
+    get totalItems(): Array<Record<string, any>> {
         return this._getOption('totalItems');
     }
-    set totalItems(value: Array<any | { alignment?: HorizontalAlignment | undefined, column?: string | undefined, cssClass?: string | undefined, customizeText?: Function, displayFormat?: string | undefined, name?: string | undefined, showInColumn?: string | undefined, skipEmptyValues?: boolean, summaryType?: SummaryType | string | undefined, valueFormat?: Format | string | undefined }>) {
+    set totalItems(value: Array<Record<string, any>>) {
         this._setOption('totalItems', value);
     }
 
@@ -89,22 +82,6 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
         return 'summary';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDataGridGroupItemComponent))
-    get groupItemsChildren(): QueryList<DxiDataGridGroupItemComponent> {
-        return this._getOption('groupItems');
-    }
-    set groupItemsChildren(value) {
-        this.setChildren('groupItems', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiDataGridTotalItemComponent))
-    get totalItemsChildren(): QueryList<DxiDataGridTotalItemComponent> {
-        return this._getOption('totalItems');
-    }
-    set totalItemsChildren(value) {
-        this.setChildren('totalItems', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

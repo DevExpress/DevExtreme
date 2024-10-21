@@ -23,9 +23,11 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/responsive_box';
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxResponsiveBoxItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/responsive_box';
+import DataSource from 'devextreme/data/data_source';
+import { dxResponsiveBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/responsive_box';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { template } from 'devextreme/core/templates/template';
 
 import DxResponsiveBox from 'devextreme/ui/responsive_box';
 
@@ -81,10 +83,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get cols(): Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }> {
+    get cols(): Array<Record<string, any>> {
         return this._getOption('cols');
     }
-    set cols(value: Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>) {
+    set cols(value: Array<Record<string, any>>) {
         this._setOption('cols', value);
     }
 
@@ -94,10 +96,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxResponsiveBoxItem | string | any> {
+    get dataSource(): Array<any | dxResponsiveBoxItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxResponsiveBoxItem | string | any>) {
+    set dataSource(value: Array<any | dxResponsiveBoxItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -120,10 +122,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -133,10 +135,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -172,10 +174,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, html?: string, location?: Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | dxResponsiveBoxItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, html?: string, location?: Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | dxResponsiveBoxItem | string>) {
         this._setOption('items', value);
     }
 
@@ -185,10 +187,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get itemTemplate(): any {
+    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: any) {
+    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('itemTemplate', value);
     }
 
@@ -198,10 +200,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get rows(): Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }> {
+    get rows(): Array<Record<string, any>> {
         return this._getOption('rows');
     }
-    set rows(value: Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>) {
+    set rows(value: Array<Record<string, any>>) {
         this._setOption('rows', value);
     }
 
@@ -224,10 +226,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get screenByWidth(): Function {
+    get screenByWidth(): (() => void) {
         return this._getOption('screenByWidth');
     }
-    set screenByWidth(value: Function) {
+    set screenByWidth(value: (() => void)) {
         this._setOption('screenByWidth', value);
     }
 
@@ -263,10 +265,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -339,14 +341,14 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colsChange: EventEmitter<Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>>;
+    @Output() colsChange: EventEmitter<Array<Record<string, any>>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxResponsiveBoxItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxResponsiveBoxItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -360,14 +362,14 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -388,21 +390,21 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, html?: string, location?: Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxResponsiveBoxItem | string>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<any>;
+    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowsChange: EventEmitter<Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>>;
+    @Output() rowsChange: EventEmitter<Array<Record<string, any>>>;
 
     /**
     
@@ -416,7 +418,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() screenByWidthChange: EventEmitter<Function>;
+    @Output() screenByWidthChange: EventEmitter<(() => void)>;
 
     /**
     
@@ -437,7 +439,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

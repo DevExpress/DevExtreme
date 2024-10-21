@@ -14,9 +14,6 @@ import {
 
 
 
-import { Font, LabelOverlap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
-import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 
 import {
     NestedOptionHost,
@@ -32,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowDecimals(): boolean | undefined {
+    get allowDecimals(): boolean {
         return this._getOption('allowDecimals');
     }
-    set allowDecimals(value: boolean | undefined) {
+    set allowDecimals(value: boolean) {
         this._setOption('allowDecimals', value);
     }
 
@@ -64,34 +61,34 @@ export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get label(): { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
     @Input()
-    get minorTick(): { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
+    get minorTick(): Record<string, any> {
         return this._getOption('minorTick');
     }
-    set minorTick(value: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: Record<string, any>) {
         this._setOption('minorTick', value);
     }
 
     @Input()
-    get minorTickInterval(): number | undefined {
+    get minorTickInterval(): number {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: number | undefined) {
+    set minorTickInterval(value: number) {
         this._setOption('minorTickInterval', value);
     }
 
     @Input()
-    get orientation(): CircularGaugeElementOrientation {
+    get orientation(): "center" | "inside" | "outside" {
         return this._getOption('orientation');
     }
-    set orientation(value: CircularGaugeElementOrientation) {
+    set orientation(value: "center" | "inside" | "outside") {
         this._setOption('orientation', value);
     }
 
@@ -112,18 +109,18 @@ export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get tick(): { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
+    get tick(): Record<string, any> {
         return this._getOption('tick');
     }
-    set tick(value: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
+    set tick(value: Record<string, any>) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get tickInterval(): number | undefined {
+    get tickInterval(): number {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: number | undefined) {
+    set tickInterval(value: number) {
         this._setOption('tickInterval', value);
     }
 

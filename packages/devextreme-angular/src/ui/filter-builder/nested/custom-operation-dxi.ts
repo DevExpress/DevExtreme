@@ -5,65 +5,75 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { DataType } from 'devextreme/common';
+import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-filter-builder-custom-operation',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption {
+export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
     @Input()
-    get caption(): string | undefined {
+    get caption(): string {
         return this._getOption('caption');
     }
-    set caption(value: string | undefined) {
+    set caption(value: string) {
         this._setOption('caption', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get dataTypes(): any | undefined | Array<DataType> {
+    get dataTypes(): Array<"string" | "number" | "date" | "boolean" | "object" | "datetime"> {
         return this._getOption('dataTypes');
     }
-    set dataTypes(value: any | undefined | Array<DataType>) {
+    set dataTypes(value: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">) {
         this._setOption('dataTypes', value);
     }
 
     @Input()
-    get editorTemplate(): any {
+    get editorTemplate(): ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template {
         return this._getOption('editorTemplate');
     }
-    set editorTemplate(value: any) {
+    set editorTemplate(value: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template) {
         this._setOption('editorTemplate', value);
     }
 
@@ -76,18 +86,18 @@ export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOp
     }
 
     @Input()
-    get icon(): string | undefined {
+    get icon(): string {
         return this._getOption('icon');
     }
-    set icon(value: string | undefined) {
+    set icon(value: string) {
         this._setOption('icon', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
@@ -98,10 +108,22 @@ export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOp
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

@@ -8,22 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorTableContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
 
 
 @Component({
@@ -42,10 +38,10 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     }
 
     @Input()
-    get items(): Array<HtmlEditorPredefinedContextMenuItem | any | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<HtmlEditorPredefinedContextMenuItem | any>, name?: HtmlEditorPredefinedContextMenuItem | undefined, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties"> {
         return this._getOption('items');
     }
-    set items(value: Array<HtmlEditorPredefinedContextMenuItem | any | { beginGroup?: boolean, closeMenuOnClick?: boolean, disabled?: boolean, icon?: string, items?: Array<HtmlEditorPredefinedContextMenuItem | any>, name?: HtmlEditorPredefinedContextMenuItem | undefined, selectable?: boolean, selected?: boolean, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">) {
         this._setOption('items', value);
     }
 
@@ -54,14 +50,6 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
         return 'tableContextMenu';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

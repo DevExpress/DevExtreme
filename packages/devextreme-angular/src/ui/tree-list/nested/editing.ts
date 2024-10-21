@@ -8,26 +8,22 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
-import { Properties as dxFormOptions } from 'devextreme/ui/form';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
+import dxTreeList from 'devextreme/ui/tree_list';
+import { dxTreeListRowObject } from 'devextreme/ui/tree_list';
+import { DataChange } from 'devextreme/common/grids';
+import { dxFormOptions } from 'devextreme/ui/form';
+import { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeListChangeComponent } from './change-dxi';
 
 
 @Component({
@@ -38,26 +34,26 @@ import { DxiTreeListChangeComponent } from './change-dxi';
 })
 export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowAdding(): boolean | Function {
+    get allowAdding(): boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('allowAdding');
     }
-    set allowAdding(value: boolean | Function) {
+    set allowAdding(value: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('allowAdding', value);
     }
 
     @Input()
-    get allowDeleting(): boolean | Function {
+    get allowDeleting(): boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('allowDeleting');
     }
-    set allowDeleting(value: boolean | Function) {
+    set allowDeleting(value: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('allowDeleting', value);
     }
 
     @Input()
-    get allowUpdating(): boolean | Function {
+    get allowUpdating(): boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('allowUpdating');
     }
-    set allowUpdating(value: boolean | Function) {
+    set allowUpdating(value: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('allowUpdating', value);
     }
 
@@ -102,26 +98,26 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get mode(): GridsEditMode {
+    get mode(): "batch" | "cell" | "row" | "form" | "popup" {
         return this._getOption('mode');
     }
-    set mode(value: GridsEditMode) {
+    set mode(value: "batch" | "cell" | "row" | "form" | "popup") {
         this._setOption('mode', value);
     }
 
     @Input()
-    get popup(): dxPopupOptions {
+    get popup(): dxPopupOptions<any> {
         return this._getOption('popup');
     }
-    set popup(value: dxPopupOptions) {
+    set popup(value: dxPopupOptions<any>) {
         this._setOption('popup', value);
     }
 
     @Input()
-    get refreshMode(): GridsEditRefreshMode {
+    get refreshMode(): "full" | "reshape" | "repaint" {
         return this._getOption('refreshMode');
     }
-    set refreshMode(value: GridsEditRefreshMode) {
+    set refreshMode(value: "full" | "reshape" | "repaint") {
         this._setOption('refreshMode', value);
     }
 
@@ -134,18 +130,18 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get startEditAction(): StartEditAction {
+    get startEditAction(): "click" | "dblClick" {
         return this._getOption('startEditAction');
     }
-    set startEditAction(value: StartEditAction) {
+    set startEditAction(value: "click" | "dblClick") {
         this._setOption('startEditAction', value);
     }
 
     @Input()
-    get texts(): { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string } {
+    get texts(): Record<string, any> {
         return this._getOption('texts');
     }
-    set texts(value: { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }) {
+    set texts(value: Record<string, any>) {
         this._setOption('texts', value);
     }
 
@@ -158,49 +154,14 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() changesChange: EventEmitter<Array<DataChange>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() editColumnNameChange: EventEmitter<string>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() editRowKeyChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'editing';
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeListChangeComponent))
-    get changesChildren(): QueryList<DxiTreeListChangeComponent> {
-        return this._getOption('changes');
-    }
-    set changesChildren(value) {
-        this.setChildren('changes', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'changesChange' },
-            { emit: 'editColumnNameChange' },
-            { emit: 'editRowKeyChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

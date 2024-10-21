@@ -24,12 +24,12 @@ import {
 } from '@angular/core';
 
 
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
-import { Properties as dxCalendarOptions } from 'devextreme/ui/calendar';
+import * as LocalizationTypes from 'devextreme/localization';
+import { TextEditorButton } from 'devextreme/common';
+import { dxCalendarOptions } from 'devextreme/ui/button';
+import { template } from 'devextreme/core/templates/template';
+import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/date_range_box';
-import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import DxDateRangeBox from 'devextreme/ui/date_range_box';
 
@@ -65,22 +65,22 @@ import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
 import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
-import { DxiDateRangeBoxButtonModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxCalendarOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxDisplayFormatModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxDropDownOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxAnimationModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxHideModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxFromModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxPositionModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxAtModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxBoundaryOffsetModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxiDateRangeBoxButtonModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxCalendarOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxCollisionModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxDisplayFormatModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxDropDownOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxFromModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxHideModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxMyModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxOffsetModule } from 'devextreme-angular/ui/date-range-box/nested';
-import { DxoDateRangeBoxToModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxOptionsModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxPositionModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxShowModule } from 'devextreme-angular/ui/date-range-box/nested';
+import { DxoDateRangeBoxToModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxiDateRangeBoxToolbarItemModule } from 'devextreme-angular/ui/date-range-box/nested';
 
 import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
@@ -130,10 +130,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -169,10 +169,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get applyValueMode(): ApplyValueMode {
+    get applyValueMode(): "instantly" | "useButtons" {
         return this._getOption('applyValueMode');
     }
-    set applyValueMode(value: ApplyValueMode) {
+    set applyValueMode(value: "instantly" | "useButtons") {
         this._setOption('applyValueMode', value);
     }
 
@@ -182,10 +182,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> {
+    get buttons(): Array<"clear" | "dropDown" | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<"clear" | "dropDown" | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -221,10 +221,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dateSerializationFormat(): string | undefined {
+    get dateSerializationFormat(): string {
         return this._getOption('dateSerializationFormat');
     }
-    set dateSerializationFormat(value: string | undefined) {
+    set dateSerializationFormat(value: string) {
         this._setOption('dateSerializationFormat', value);
     }
 
@@ -273,10 +273,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get displayFormat(): Format | string {
+    get displayFormat(): LocalizationTypes.Format {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: Format | string) {
+    set displayFormat(value: LocalizationTypes.Format) {
         this._setOption('displayFormat', value);
     }
 
@@ -286,10 +286,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dropDownButtonTemplate(): any {
+    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: any) {
+    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -299,10 +299,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dropDownOptions(): dxPopupOptions {
+    get dropDownOptions(): dxPopupOptions<any> {
         return this._getOption('dropDownOptions');
     }
-    set dropDownOptions(value: dxPopupOptions) {
+    set dropDownOptions(value: dxPopupOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
 
@@ -312,10 +312,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -429,10 +429,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -442,10 +442,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -520,10 +520,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get labelMode(): LabelMode {
+    get labelMode(): "static" | "floating" | "hidden" | "outside" {
         return this._getOption('labelMode');
     }
-    set labelMode(value: LabelMode) {
+    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
         this._setOption('labelMode', value);
     }
 
@@ -533,10 +533,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get max(): Date | number | string | undefined {
+    get max(): Date | number | string {
         return this._getOption('max');
     }
-    set max(value: Date | number | string | undefined) {
+    set max(value: Date | number | string) {
         this._setOption('max', value);
     }
 
@@ -546,10 +546,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get min(): Date | number | string | undefined {
+    get min(): Date | number | string {
         return this._getOption('min');
     }
-    set min(value: Date | number | string | undefined) {
+    set min(value: Date | number | string) {
         this._setOption('min', value);
     }
 
@@ -754,10 +754,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get stylingMode(): EditorStyle {
+    get stylingMode(): "outlined" | "underlined" | "filled" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: EditorStyle) {
+    set stylingMode(value: "outlined" | "underlined" | "filled") {
         this._setOption('stylingMode', value);
     }
 
@@ -832,10 +832,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
@@ -845,10 +845,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationMessagePosition(): Position | Mode {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" | "auto" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position | Mode) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top" | "auto") {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -858,10 +858,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -910,10 +910,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -1065,7 +1065,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -1086,14 +1086,14 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
+    @Output() applyValueModeChange: EventEmitter<"instantly" | "useButtons">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<"clear" | "dropDown" | TextEditorButton>>;
 
     /**
     
@@ -1114,7 +1114,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dateSerializationFormatChange: EventEmitter<string | undefined>;
+    @Output() dateSerializationFormatChange: EventEmitter<string>;
 
     /**
     
@@ -1142,28 +1142,28 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayFormatChange: EventEmitter<Format | string>;
+    @Output() displayFormatChange: EventEmitter<LocalizationTypes.Format>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions>;
+    @Output() dropDownOptionsChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1226,14 +1226,14 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -1275,21 +1275,21 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<LabelMode>;
+    @Output() labelModeChange: EventEmitter<"static" | "floating" | "hidden" | "outside">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | number | string | undefined>;
+    @Output() maxChange: EventEmitter<Date | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | number | string | undefined>;
+    @Output() minChange: EventEmitter<Date | number | string>;
 
     /**
     
@@ -1401,7 +1401,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<EditorStyle>;
+    @Output() stylingModeChange: EventEmitter<"outlined" | "underlined" | "filled">;
 
     /**
     
@@ -1443,21 +1443,21 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
+    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
 
     /**
     
@@ -1485,7 +1485,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1699,22 +1699,22 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiDateRangeBoxButtonModule,
-    DxoDateRangeBoxOptionsModule,
-    DxoDateRangeBoxCalendarOptionsModule,
-    DxoDateRangeBoxDisplayFormatModule,
-    DxoDateRangeBoxDropDownOptionsModule,
     DxoDateRangeBoxAnimationModule,
-    DxoDateRangeBoxHideModule,
-    DxoDateRangeBoxFromModule,
-    DxoDateRangeBoxPositionModule,
     DxoDateRangeBoxAtModule,
     DxoDateRangeBoxBoundaryOffsetModule,
+    DxiDateRangeBoxButtonModule,
+    DxoDateRangeBoxCalendarOptionsModule,
     DxoDateRangeBoxCollisionModule,
+    DxoDateRangeBoxDisplayFormatModule,
+    DxoDateRangeBoxDropDownOptionsModule,
+    DxoDateRangeBoxFromModule,
+    DxoDateRangeBoxHideModule,
     DxoDateRangeBoxMyModule,
     DxoDateRangeBoxOffsetModule,
-    DxoDateRangeBoxToModule,
+    DxoDateRangeBoxOptionsModule,
+    DxoDateRangeBoxPositionModule,
     DxoDateRangeBoxShowModule,
+    DxoDateRangeBoxToModule,
     DxiDateRangeBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1740,22 +1740,22 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     DxoOffsetModule,
     DxoToModule,
     DxoShowModule,
-    DxiDateRangeBoxButtonModule,
-    DxoDateRangeBoxOptionsModule,
-    DxoDateRangeBoxCalendarOptionsModule,
-    DxoDateRangeBoxDisplayFormatModule,
-    DxoDateRangeBoxDropDownOptionsModule,
     DxoDateRangeBoxAnimationModule,
-    DxoDateRangeBoxHideModule,
-    DxoDateRangeBoxFromModule,
-    DxoDateRangeBoxPositionModule,
     DxoDateRangeBoxAtModule,
     DxoDateRangeBoxBoundaryOffsetModule,
+    DxiDateRangeBoxButtonModule,
+    DxoDateRangeBoxCalendarOptionsModule,
     DxoDateRangeBoxCollisionModule,
+    DxoDateRangeBoxDisplayFormatModule,
+    DxoDateRangeBoxDropDownOptionsModule,
+    DxoDateRangeBoxFromModule,
+    DxoDateRangeBoxHideModule,
     DxoDateRangeBoxMyModule,
     DxoDateRangeBoxOffsetModule,
-    DxoDateRangeBoxToModule,
+    DxoDateRangeBoxOptionsModule,
+    DxoDateRangeBoxPositionModule,
     DxoDateRangeBoxShowModule,
+    DxoDateRangeBoxToModule,
     DxiDateRangeBoxToolbarItemModule,
     DxTemplateModule
   ]

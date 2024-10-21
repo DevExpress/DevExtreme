@@ -10,16 +10,15 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { ShapeType } from 'devextreme/ui/diagram';
+import { dxSVGElement } from 'devextreme/core/element';
+import { dxDiagramShape } from 'devextreme/ui/diagram';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -29,7 +28,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramConnectionPointComponent } from './connection-point-dxi';
 
 
 @Component({
@@ -113,10 +111,10 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get baseType(): ShapeType | string {
+    get baseType(): "text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight" {
         return this._getOption('baseType');
     }
-    set baseType(value: ShapeType | string) {
+    set baseType(value: "text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight") {
         this._setOption('baseType', value);
     }
 
@@ -129,10 +127,10 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get connectionPoints(): Array<any | { x?: number, y?: number }> {
+    get connectionPoints(): Array<Record<string, any>> {
         return this._getOption('connectionPoints');
     }
-    set connectionPoints(value: Array<any | { x?: number, y?: number }>) {
+    set connectionPoints(value: Array<Record<string, any>>) {
         this._setOption('connectionPoints', value);
     }
 
@@ -241,10 +239,10 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get template(): any {
+    get template(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
         this._setOption('template', value);
     }
 
@@ -321,10 +319,10 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get toolboxTemplate(): any {
+    get toolboxTemplate(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
         return this._getOption('toolboxTemplate');
     }
-    set toolboxTemplate(value: any) {
+    set toolboxTemplate(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
         this._setOption('toolboxTemplate', value);
     }
 
@@ -349,14 +347,6 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
         return 'customShapes';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramConnectionPointComponent))
-    get connectionPointsChildren(): QueryList<DxiDiagramConnectionPointComponent> {
-        return this._getOption('connectionPoints');
-    }
-    set connectionPointsChildren(value) {
-        this.setChildren('connectionPoints', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

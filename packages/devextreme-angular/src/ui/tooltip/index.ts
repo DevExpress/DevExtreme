@@ -17,11 +17,10 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
-import { Position } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { event } from 'devextreme/events/index';
+import { template } from 'devextreme/core/templates/template';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/tooltip';
+import { PositionConfig } from 'devextreme/animation/position';
 
 import DxTooltip from 'devextreme/ui/tooltip';
 
@@ -50,18 +49,18 @@ import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
 
 import { DxoTooltipAnimationModule } from 'devextreme-angular/ui/tooltip/nested';
-import { DxoTooltipHideModule } from 'devextreme-angular/ui/tooltip/nested';
-import { DxoTooltipFromModule } from 'devextreme-angular/ui/tooltip/nested';
-import { DxoTooltipPositionModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoTooltipAtModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoTooltipBoundaryOffsetModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoTooltipCollisionModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipFromModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipHideModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipHideEventModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoTooltipMyModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoTooltipOffsetModule } from 'devextreme-angular/ui/tooltip/nested';
-import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipPositionModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoTooltipShowModule } from 'devextreme-angular/ui/tooltip/nested';
-import { DxoTooltipHideEventModule } from 'devextreme-angular/ui/tooltip/nested';
 import { DxoTooltipShowEventModule } from 'devextreme-angular/ui/tooltip/nested';
+import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
 
 
 
@@ -87,10 +86,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): Record<string, any> {
         return this._getOption('animation');
     }
-    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: Record<string, any>) {
         this._setOption('animation', value);
     }
 
@@ -102,10 +101,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
@@ -115,10 +114,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
@@ -128,10 +127,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get contentTemplate(): any {
+    get contentTemplate(): ((contentElement: any) => string | any) | template {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: any) {
+    set contentTemplate(value: ((contentElement: any) => string | any) | template) {
         this._setOption('contentTemplate', value);
     }
 
@@ -167,10 +166,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -180,10 +179,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hideEvent(): string | undefined | { delay?: number | undefined, name?: string | undefined } {
+    get hideEvent(): Record<string, any> | string {
         return this._getOption('hideEvent');
     }
-    set hideEvent(value: string | undefined | { delay?: number | undefined, name?: string | undefined }) {
+    set hideEvent(value: Record<string, any> | string) {
         this._setOption('hideEvent', value);
     }
 
@@ -193,10 +192,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hideOnOutsideClick(): boolean | Function {
+    get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('hideOnOutsideClick');
     }
-    set hideOnOutsideClick(value: boolean | Function) {
+    set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
 
@@ -219,10 +218,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -245,10 +244,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxHeight(): number | Function | string {
+    get maxHeight(): (() => number | string) | number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: number | Function | string) {
+    set maxHeight(value: (() => number | string) | number | string) {
         this._setOption('maxHeight', value);
     }
 
@@ -258,10 +257,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxWidth(): number | Function | string {
+    get maxWidth(): (() => number | string) | number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: number | Function | string) {
+    set maxWidth(value: (() => number | string) | number | string) {
         this._setOption('maxWidth', value);
     }
 
@@ -271,10 +270,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minHeight(): number | Function | string {
+    get minHeight(): (() => number | string) | number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: number | Function | string) {
+    set minHeight(value: (() => number | string) | number | string) {
         this._setOption('minHeight', value);
     }
 
@@ -284,10 +283,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minWidth(): number | Function | string {
+    get minWidth(): (() => number | string) | number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | Function | string) {
+    set minWidth(value: (() => number | string) | number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -297,10 +296,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): Position | PositionConfig {
+    get position(): PositionConfig | "bottom" | "left" | "right" | "top" {
         return this._getOption('position');
     }
-    set position(value: Position | PositionConfig) {
+    set position(value: PositionConfig | "bottom" | "left" | "right" | "top") {
         this._setOption('position', value);
     }
 
@@ -349,10 +348,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get showEvent(): string | undefined | { delay?: number | undefined, name?: string | undefined } {
+    get showEvent(): Record<string, any> | string {
         return this._getOption('showEvent');
     }
-    set showEvent(value: string | undefined | { delay?: number | undefined, name?: string | undefined }) {
+    set showEvent(value: Record<string, any> | string) {
         this._setOption('showEvent', value);
     }
 
@@ -362,10 +361,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get target(): UserDefinedElement | string | undefined {
+    get target(): any | string {
         return this._getOption('target');
     }
-    set target(value: UserDefinedElement | string | undefined) {
+    set target(value: any | string) {
         this._setOption('target', value);
     }
 
@@ -388,10 +387,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -477,28 +476,28 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
+    @Output() animationChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() containerChange: EventEmitter<any | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contentTemplateChange: EventEmitter<any>;
+    @Output() contentTemplateChange: EventEmitter<((contentElement: any) => string | any) | template>;
 
     /**
     
@@ -519,21 +518,21 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideEventChange: EventEmitter<string | undefined | { delay?: number | undefined, name?: string | undefined }>;
+    @Output() hideEventChange: EventEmitter<Record<string, any> | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -547,7 +546,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -561,35 +560,35 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxHeightChange: EventEmitter<number | Function | string>;
+    @Output() maxHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxWidthChange: EventEmitter<number | Function | string>;
+    @Output() maxWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minHeightChange: EventEmitter<number | Function | string>;
+    @Output() minHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minWidthChange: EventEmitter<number | Function | string>;
+    @Output() minWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<Position | PositionConfig>;
+    @Output() positionChange: EventEmitter<PositionConfig | "bottom" | "left" | "right" | "top">;
 
     /**
     
@@ -617,14 +616,14 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showEventChange: EventEmitter<string | undefined | { delay?: number | undefined, name?: string | undefined }>;
+    @Output() showEventChange: EventEmitter<Record<string, any> | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() targetChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() targetChange: EventEmitter<any | string>;
 
     /**
     
@@ -638,7 +637,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -728,18 +727,18 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     DxoHideEventModule,
     DxoShowEventModule,
     DxoTooltipAnimationModule,
-    DxoTooltipHideModule,
-    DxoTooltipFromModule,
-    DxoTooltipPositionModule,
     DxoTooltipAtModule,
     DxoTooltipBoundaryOffsetModule,
     DxoTooltipCollisionModule,
+    DxoTooltipFromModule,
+    DxoTooltipHideModule,
+    DxoTooltipHideEventModule,
     DxoTooltipMyModule,
     DxoTooltipOffsetModule,
-    DxoTooltipToModule,
+    DxoTooltipPositionModule,
     DxoTooltipShowModule,
-    DxoTooltipHideEventModule,
     DxoTooltipShowEventModule,
+    DxoTooltipToModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -762,18 +761,18 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     DxoHideEventModule,
     DxoShowEventModule,
     DxoTooltipAnimationModule,
-    DxoTooltipHideModule,
-    DxoTooltipFromModule,
-    DxoTooltipPositionModule,
     DxoTooltipAtModule,
     DxoTooltipBoundaryOffsetModule,
     DxoTooltipCollisionModule,
+    DxoTooltipFromModule,
+    DxoTooltipHideModule,
+    DxoTooltipHideEventModule,
     DxoTooltipMyModule,
     DxoTooltipOffsetModule,
-    DxoTooltipToModule,
+    DxoTooltipPositionModule,
     DxoTooltipShowModule,
-    DxoTooltipHideEventModule,
     DxoTooltipShowEventModule,
+    DxoTooltipToModule,
     DxTemplateModule
   ]
 })

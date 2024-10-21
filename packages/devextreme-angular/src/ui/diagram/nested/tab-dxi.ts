@@ -6,23 +6,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { Command, CustomCommand } from 'devextreme/ui/diagram';
+import { CustomCommand } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramCommandComponent } from './command-dxi';
-import { DxiDiagramGroupComponent } from './group-dxi';
 
 
 @Component({
@@ -33,18 +28,18 @@ import { DxiDiagramGroupComponent } from './group-dxi';
 })
 export class DxiDiagramTabComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<CustomCommand | Command> {
+    get commands(): Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox"> {
         return this._getOption('commands');
     }
-    set commands(value: Array<CustomCommand | Command>) {
+    set commands(value: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">) {
         this._setOption('commands', value);
     }
 
     @Input()
-    get groups(): Array<any | { commands?: Array<CustomCommand | Command>, title?: string }> {
+    get groups(): Array<Record<string, any>> {
         return this._getOption('groups');
     }
-    set groups(value: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>) {
+    set groups(value: Array<Record<string, any>>) {
         this._setOption('groups', value);
     }
 
@@ -61,22 +56,6 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
         return 'tabs';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
-    get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent))
-    get groupsChildren(): QueryList<DxiDiagramGroupComponent> {
-        return this._getOption('groups');
-    }
-    set groupsChildren(value) {
-        this.setChildren('groups', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

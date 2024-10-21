@@ -29,26 +29,26 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartImageComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
+    get height(): number | Record<string, any> {
         return this._getOption('height');
     }
-    set height(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
+    set height(value: number | Record<string, any>) {
         this._setOption('height', value);
     }
 
     @Input()
-    get url(): string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined } {
+    get url(): string | Record<string, any> {
         return this._getOption('url');
     }
-    set url(value: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }) {
+    set url(value: string | Record<string, any>) {
         this._setOption('url', value);
     }
 
     @Input()
-    get width(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
+    get width(): number | Record<string, any> {
         return this._getOption('width');
     }
-    set width(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
+    set width(value: number | Record<string, any>) {
         this._setOption('width', value);
     }
 

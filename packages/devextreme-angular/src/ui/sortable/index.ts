@@ -17,8 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { template } from 'devextreme/core/templates/template';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import DxSortable from 'devextreme/ui/sortable';
@@ -100,10 +99,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get boundary(): UserDefinedElement | string | undefined {
+    get boundary(): any | string {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | undefined) {
+    set boundary(value: any | string) {
         this._setOption('boundary', value);
     }
 
@@ -113,10 +112,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
@@ -126,10 +125,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get cursorOffset(): string | { x?: number, y?: number } {
+    get cursorOffset(): Record<string, any> | string {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: string | { x?: number, y?: number }) {
+    set cursorOffset(value: Record<string, any> | string) {
         this._setOption('cursorOffset', value);
     }
 
@@ -139,10 +138,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get data(): any | undefined {
+    get data(): any {
         return this._getOption('data');
     }
-    set data(value: any | undefined) {
+    set data(value: any) {
         this._setOption('data', value);
     }
 
@@ -152,10 +151,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dragDirection(): DragDirection {
+    get dragDirection(): "both" | "horizontal" | "vertical" {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: DragDirection) {
+    set dragDirection(value: "both" | "horizontal" | "vertical") {
         this._setOption('dragDirection', value);
     }
 
@@ -165,10 +164,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dragTemplate(): any | undefined {
+    get dragTemplate(): ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: any | undefined) {
+    set dragTemplate(value: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template) {
         this._setOption('dragTemplate', value);
     }
 
@@ -178,10 +177,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dropFeedbackMode(): DragHighlight {
+    get dropFeedbackMode(): "push" | "indicate" {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: DragHighlight) {
+    set dropFeedbackMode(value: "push" | "indicate") {
         this._setOption('dropFeedbackMode', value);
     }
 
@@ -191,10 +190,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -217,10 +216,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get group(): string | undefined {
+    get group(): string {
         return this._getOption('group');
     }
-    set group(value: string | undefined) {
+    set group(value: string) {
         this._setOption('group', value);
     }
 
@@ -243,10 +242,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -256,10 +255,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get itemOrientation(): Orientation {
+    get itemOrientation(): "horizontal" | "vertical" {
         return this._getOption('itemOrientation');
     }
-    set itemOrientation(value: Orientation) {
+    set itemOrientation(value: "horizontal" | "vertical") {
         this._setOption('itemOrientation', value);
     }
 
@@ -321,10 +320,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -434,56 +433,56 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() boundaryChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() boundaryChange: EventEmitter<any | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() containerChange: EventEmitter<any | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() cursorOffsetChange: EventEmitter<string | { x?: number, y?: number }>;
+    @Output() cursorOffsetChange: EventEmitter<Record<string, any> | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataChange: EventEmitter<any | undefined>;
+    @Output() dataChange: EventEmitter<any>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragDirectionChange: EventEmitter<DragDirection>;
+    @Output() dragDirectionChange: EventEmitter<"both" | "horizontal" | "vertical">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragTemplateChange: EventEmitter<any | undefined>;
+    @Output() dragTemplateChange: EventEmitter<((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropFeedbackModeChange: EventEmitter<DragHighlight>;
+    @Output() dropFeedbackModeChange: EventEmitter<"push" | "indicate">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -497,7 +496,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupChange: EventEmitter<string | undefined>;
+    @Output() groupChange: EventEmitter<string>;
 
     /**
     
@@ -511,14 +510,14 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemOrientationChange: EventEmitter<Orientation>;
+    @Output() itemOrientationChange: EventEmitter<"horizontal" | "vertical">;
 
     /**
     
@@ -553,7 +552,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

@@ -14,7 +14,6 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPolarChartStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get label(): { font?: Font } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { font?: Font }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 

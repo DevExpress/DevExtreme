@@ -14,8 +14,6 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -39,26 +37,26 @@ export class DxoChartHorizontalLineComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get label(): { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 

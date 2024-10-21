@@ -20,11 +20,9 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, ChartsColor, DashStyle, Font, LabelOverlap, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Format } from 'devextreme/localization';
-import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/circular_gauge';
+import { dxCircularGauge } from 'UNKNOWN_MODULE';
+import { template } from 'devextreme/core/templates/template';
+import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/circular_gauge';
 import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 
 import DxCircularGauge from 'devextreme/viz/circular_gauge';
@@ -66,28 +64,28 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
 import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
 
 import { DxoCircularGaugeAnimationModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeExportModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeGeometryModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeLoadingIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeFontModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeMarginModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeRangeContainerModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeBackgroundColorModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxiCircularGaugeRangeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeBorderModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeColorModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeScaleModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeLabelModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeExportModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeFontModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeFormatModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeGeometryModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeLabelModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeLoadingIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeMarginModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeMinorTickModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeTickModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxiCircularGaugeRangeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeRangeContainerModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeScaleModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeShadowModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeSizeModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeSubtitleModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeSubvalueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeTextModule } from 'devextreme-angular/ui/circular-gauge/nested';
+import { DxoCircularGaugeTickModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeTitleModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeSubtitleModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeTooltipModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeBorderModule } from 'devextreme-angular/ui/circular-gauge/nested';
-import { DxoCircularGaugeShadowModule } from 'devextreme-angular/ui/circular-gauge/nested';
 import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
 
 
@@ -116,10 +114,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get animation(): { duration?: number, easing?: AnimationEaseMode, enabled?: boolean } {
+    get animation(): Record<string, any> {
         return this._getOption('animation');
     }
-    set animation(value: { duration?: number, easing?: AnimationEaseMode, enabled?: boolean }) {
+    set animation(value: Record<string, any>) {
         this._setOption('animation', value);
     }
 
@@ -129,10 +127,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get centerTemplate(): any | undefined {
+    get centerTemplate(): ((component: dxCircularGauge, element: any) => string | any) | template {
         return this._getOption('centerTemplate');
     }
-    set centerTemplate(value: any | undefined) {
+    set centerTemplate(value: ((component: dxCircularGauge, element: any) => string | any) | template) {
         this._setOption('centerTemplate', value);
     }
 
@@ -168,10 +166,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -181,10 +179,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): Record<string, any> {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: Record<string, any>) {
         this._setOption('export', value);
     }
 
@@ -194,10 +192,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get geometry(): { endAngle?: number, startAngle?: number } {
+    get geometry(): Record<string, any> {
         return this._getOption('geometry');
     }
-    set geometry(value: { endAngle?: number, startAngle?: number }) {
+    set geometry(value: Record<string, any>) {
         this._setOption('geometry', value);
     }
 
@@ -207,10 +205,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get loadingIndicator(): { backgroundColor?: string, font?: Font, show?: boolean, text?: string } {
+    get loadingIndicator(): Record<string, any> {
         return this._getOption('loadingIndicator');
     }
-    set loadingIndicator(value: { backgroundColor?: string, font?: Font, show?: boolean, text?: string }) {
+    set loadingIndicator(value: Record<string, any>) {
         this._setOption('loadingIndicator', value);
     }
 
@@ -220,10 +218,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): Record<string, any> {
         return this._getOption('margin');
     }
-    set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: Record<string, any>) {
         this._setOption('margin', value);
     }
 
@@ -246,10 +244,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get rangeContainer(): { backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, width?: number } {
+    get rangeContainer(): Record<string, any> {
         return this._getOption('rangeContainer');
     }
-    set rangeContainer(value: { backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, width?: number }) {
+    set rangeContainer(value: Record<string, any>) {
         this._setOption('rangeContainer', value);
     }
 
@@ -285,10 +283,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get scale(): { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined } {
+    get scale(): Record<string, any> {
         return this._getOption('scale');
     }
-    set scale(value: { allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined }) {
+    set scale(value: Record<string, any>) {
         this._setOption('scale', value);
     }
 
@@ -298,10 +296,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get size(): { height?: number | undefined, width?: number | undefined } {
+    get size(): Record<string, any> {
         return this._getOption('size');
     }
-    set size(value: { height?: number | undefined, width?: number | undefined }) {
+    set size(value: Record<string, any>) {
         this._setOption('size', value);
     }
 
@@ -337,10 +335,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get theme(): Theme {
+    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
         return this._getOption('theme');
     }
-    set theme(value: Theme) {
+    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
         this._setOption('theme', value);
     }
 
@@ -350,10 +348,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
+    get title(): Record<string, any> | string {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
+    set title(value: Record<string, any> | string) {
         this._setOption('title', value);
     }
 
@@ -363,10 +361,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): Record<string, any> {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: Record<string, any>) {
         this._setOption('tooltip', value);
     }
 
@@ -376,10 +374,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get value(): number | undefined {
+    get value(): number {
         return this._getOption('value');
     }
-    set value(value: number | undefined) {
+    set value(value: number) {
         this._setOption('value', value);
     }
 
@@ -481,14 +479,14 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<{ duration?: number, easing?: AnimationEaseMode, enabled?: boolean }>;
+    @Output() animationChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() centerTemplateChange: EventEmitter<any | undefined>;
+    @Output() centerTemplateChange: EventEmitter<((component: dxCircularGauge, element: any) => string | any) | template>;
 
     /**
     
@@ -509,35 +507,35 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() geometryChange: EventEmitter<{ endAngle?: number, startAngle?: number }>;
+    @Output() geometryChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, font?: Font, show?: boolean, text?: string }>;
+    @Output() loadingIndicatorChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
+    @Output() marginChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -551,7 +549,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rangeContainerChange: EventEmitter<{ backgroundColor?: ChartsColor | string, offset?: number, orientation?: CircularGaugeElementOrientation, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, width?: number }>;
+    @Output() rangeContainerChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -572,14 +570,14 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<{ allowDecimals?: boolean | undefined, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: { customizeText?: Function, font?: Font, format?: Format | string | undefined, hideFirstOrLast?: CircularGaugeLabelOverlap, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number | undefined, orientation?: CircularGaugeElementOrientation, scaleDivisionFactor?: number, startValue?: number, tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | undefined }>;
+    @Output() scaleChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
+    @Output() sizeChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -600,28 +598,28 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<Theme>;
+    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<number | undefined>;
+    @Output() valueChange: EventEmitter<number>;
 
     /**
     
@@ -750,28 +748,28 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     DxoShadowModule,
     DxoValueIndicatorModule,
     DxoCircularGaugeAnimationModule,
-    DxoCircularGaugeExportModule,
-    DxoCircularGaugeGeometryModule,
-    DxoCircularGaugeLoadingIndicatorModule,
-    DxoCircularGaugeFontModule,
-    DxoCircularGaugeMarginModule,
-    DxoCircularGaugeRangeContainerModule,
     DxoCircularGaugeBackgroundColorModule,
-    DxiCircularGaugeRangeModule,
+    DxoCircularGaugeBorderModule,
     DxoCircularGaugeColorModule,
-    DxoCircularGaugeScaleModule,
-    DxoCircularGaugeLabelModule,
+    DxoCircularGaugeExportModule,
+    DxoCircularGaugeFontModule,
     DxoCircularGaugeFormatModule,
+    DxoCircularGaugeGeometryModule,
+    DxoCircularGaugeLabelModule,
+    DxoCircularGaugeLoadingIndicatorModule,
+    DxoCircularGaugeMarginModule,
     DxoCircularGaugeMinorTickModule,
-    DxoCircularGaugeTickModule,
+    DxiCircularGaugeRangeModule,
+    DxoCircularGaugeRangeContainerModule,
+    DxoCircularGaugeScaleModule,
+    DxoCircularGaugeShadowModule,
     DxoCircularGaugeSizeModule,
+    DxoCircularGaugeSubtitleModule,
     DxoCircularGaugeSubvalueIndicatorModule,
     DxoCircularGaugeTextModule,
+    DxoCircularGaugeTickModule,
     DxoCircularGaugeTitleModule,
-    DxoCircularGaugeSubtitleModule,
     DxoCircularGaugeTooltipModule,
-    DxoCircularGaugeBorderModule,
-    DxoCircularGaugeShadowModule,
     DxoCircularGaugeValueIndicatorModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -806,28 +804,28 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     DxoShadowModule,
     DxoValueIndicatorModule,
     DxoCircularGaugeAnimationModule,
-    DxoCircularGaugeExportModule,
-    DxoCircularGaugeGeometryModule,
-    DxoCircularGaugeLoadingIndicatorModule,
-    DxoCircularGaugeFontModule,
-    DxoCircularGaugeMarginModule,
-    DxoCircularGaugeRangeContainerModule,
     DxoCircularGaugeBackgroundColorModule,
-    DxiCircularGaugeRangeModule,
+    DxoCircularGaugeBorderModule,
     DxoCircularGaugeColorModule,
-    DxoCircularGaugeScaleModule,
-    DxoCircularGaugeLabelModule,
+    DxoCircularGaugeExportModule,
+    DxoCircularGaugeFontModule,
     DxoCircularGaugeFormatModule,
+    DxoCircularGaugeGeometryModule,
+    DxoCircularGaugeLabelModule,
+    DxoCircularGaugeLoadingIndicatorModule,
+    DxoCircularGaugeMarginModule,
     DxoCircularGaugeMinorTickModule,
-    DxoCircularGaugeTickModule,
+    DxiCircularGaugeRangeModule,
+    DxoCircularGaugeRangeContainerModule,
+    DxoCircularGaugeScaleModule,
+    DxoCircularGaugeShadowModule,
     DxoCircularGaugeSizeModule,
+    DxoCircularGaugeSubtitleModule,
     DxoCircularGaugeSubvalueIndicatorModule,
     DxoCircularGaugeTextModule,
+    DxoCircularGaugeTickModule,
     DxoCircularGaugeTitleModule,
-    DxoCircularGaugeSubtitleModule,
     DxoCircularGaugeTooltipModule,
-    DxoCircularGaugeBorderModule,
-    DxoCircularGaugeShadowModule,
     DxoCircularGaugeValueIndicatorModule,
     DxTemplateModule
   ]

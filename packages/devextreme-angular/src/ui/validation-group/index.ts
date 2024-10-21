@@ -57,10 +57,10 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -70,10 +70,10 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -83,10 +83,10 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -119,21 +119,21 @@ export class DxValidationGroupComponent extends DxComponent implements OnDestroy
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

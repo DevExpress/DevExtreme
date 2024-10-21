@@ -20,7 +20,9 @@ import {
 } from '@angular/core';
 
 
-import { DisplayMode } from 'devextreme/common';
+import DOMComponent from 'devextreme/core/dom_component';
+import { EventInfo } from 'devextreme/events/index';
+import { Component } from 'devextreme/core/component';
 
 import DxPagination from 'devextreme/ui/pagination';
 
@@ -62,10 +64,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -110,27 +112,14 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBase.displayMode]
-    
-     */
-    @Input()
-    get displayMode(): DisplayMode {
-        return this._getOption('displayMode');
-    }
-    set displayMode(value: DisplayMode) {
-        this._setOption('displayMode', value);
-    }
-
-
-    /**
      * [descr:DOMComponentOptions.elementAttr]
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -153,10 +142,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -166,10 +155,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -188,19 +177,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBase.infoText]
-    
-     */
-    @Input()
-    get infoText(): string {
-        return this._getOption('infoText');
-    }
-    set infoText(value: string) {
-        this._setOption('infoText', value);
-    }
-
-
-    /**
      * [descr:dxPaginationOptions.itemCount]
     
      */
@@ -210,19 +186,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     }
     set itemCount(value: number) {
         this._setOption('itemCount', value);
-    }
-
-
-    /**
-     * [descr:PagerBase.label]
-    
-     */
-    @Input()
-    get label(): string {
-        return this._getOption('label');
-    }
-    set label(value: string) {
-        this._setOption('label', value);
     }
 
 
@@ -266,45 +229,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 
     /**
-     * [descr:PagerBase.showInfo]
-    
-     */
-    @Input()
-    get showInfo(): boolean {
-        return this._getOption('showInfo');
-    }
-    set showInfo(value: boolean) {
-        this._setOption('showInfo', value);
-    }
-
-
-    /**
-     * [descr:PagerBase.showNavigationButtons]
-    
-     */
-    @Input()
-    get showNavigationButtons(): boolean {
-        return this._getOption('showNavigationButtons');
-    }
-    set showNavigationButtons(value: boolean) {
-        this._setOption('showNavigationButtons', value);
-    }
-
-
-    /**
-     * [descr:PagerBase.showPageSizeSelector]
-    
-     */
-    @Input()
-    get showPageSizeSelector(): boolean {
-        return this._getOption('showPageSizeSelector');
-    }
-    set showPageSizeSelector(value: boolean) {
-        this._setOption('showPageSizeSelector', value);
-    }
-
-
-    /**
      * [descr:WidgetOptions.tabIndex]
     
      */
@@ -335,10 +259,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -348,7 +272,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
     
      */
-    @Output() onContentReady: EventEmitter<any>;
+    @Output() onContentReady: EventEmitter<EventInfo>;
 
     /**
     
@@ -356,7 +280,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
     
      */
-    @Output() onDisposing: EventEmitter<any>;
+    @Output() onDisposing: EventEmitter<EventInfo>;
 
     /**
     
@@ -364,7 +288,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
     
      */
-    @Output() onInitialized: EventEmitter<any>;
+    @Output() onInitialized: EventEmitter<Object>;
 
     /**
     
@@ -372,14 +296,14 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
     
      */
-    @Output() onOptionChanged: EventEmitter<any>;
+    @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -407,14 +331,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayModeChange: EventEmitter<DisplayMode>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -428,14 +345,14 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -449,21 +366,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() infoTextChange: EventEmitter<string>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() itemCountChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() labelChange: EventEmitter<string>;
 
     /**
     
@@ -491,27 +394,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showInfoChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() showNavigationButtonsChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() showPageSizeSelectorChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -526,7 +408,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 
@@ -553,21 +435,15 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
             { emit: 'activeStateEnabledChange' },
             { emit: 'allowedPageSizesChange' },
             { emit: 'disabledChange' },
-            { emit: 'displayModeChange' },
             { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },
             { emit: 'hoverStateEnabledChange' },
-            { emit: 'infoTextChange' },
             { emit: 'itemCountChange' },
-            { emit: 'labelChange' },
             { emit: 'pageIndexChange' },
             { emit: 'pageSizeChange' },
             { emit: 'rtlEnabledChange' },
-            { emit: 'showInfoChange' },
-            { emit: 'showNavigationButtonsChange' },
-            { emit: 'showPageSizeSelectorChange' },
             { emit: 'tabIndexChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }

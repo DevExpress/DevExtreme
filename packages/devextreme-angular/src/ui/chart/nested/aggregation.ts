@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
+import { chartPointAggregationInfoObject, chartSeriesObject } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get calculate(): Function | undefined {
+    get calculate(): ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) {
         return this._getOption('calculate');
     }
-    set calculate(value: Function | undefined) {
+    set calculate(value: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>)) {
         this._setOption('calculate', value);
     }
 
@@ -46,10 +46,10 @@ export class DxoChartAggregationComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get method(): ChartSeriesAggregationMethod {
+    get method(): "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" {
         return this._getOption('method');
     }
-    set method(value: ChartSeriesAggregationMethod) {
+    set method(value: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom") {
         this._setOption('method', value);
     }
 

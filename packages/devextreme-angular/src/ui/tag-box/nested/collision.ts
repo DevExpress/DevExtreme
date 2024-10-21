@@ -14,7 +14,6 @@ import {
 
 
 
-import { CollisionResolution } from 'devextreme/animation/position';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTagBoxCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get x(): CollisionResolution {
+    get x(): "fit" | "flip" | "flipfit" | "none" {
         return this._getOption('x');
     }
-    set x(value: CollisionResolution) {
+    set x(value: "fit" | "flip" | "flipfit" | "none") {
         this._setOption('x', value);
     }
 
     @Input()
-    get y(): CollisionResolution {
+    get y(): "fit" | "flip" | "flipfit" | "none" {
         return this._getOption('y');
     }
-    set y(value: CollisionResolution) {
+    set y(value: "fit" | "flip" | "flipfit" | "none") {
         this._setOption('y', value);
     }
 

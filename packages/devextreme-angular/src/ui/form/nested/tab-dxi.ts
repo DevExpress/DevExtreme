@@ -10,16 +10,14 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { ButtonItem, EmptyItem, GroupItem, SimpleItem, TabbedItem } from 'devextreme/ui/form';
+import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -29,7 +27,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiFormItemComponent } from './item-dxi';
 
 
 @Component({
@@ -49,10 +46,10 @@ export class DxiFormTabComponent extends CollectionNestedOption implements After
     }
 
     @Input()
-    get badge(): string | undefined {
+    get badge(): string {
         return this._getOption('badge');
     }
-    set badge(value: string | undefined) {
+    set badge(value: string) {
         this._setOption('badge', value);
     }
 
@@ -65,10 +62,10 @@ export class DxiFormTabComponent extends CollectionNestedOption implements After
     }
 
     @Input()
-    get colCountByScreen(): { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined } {
+    get colCountByScreen(): Record<string, any> {
         return this._getOption('colCountByScreen');
     }
-    set colCountByScreen(value: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }) {
+    set colCountByScreen(value: Record<string, any>) {
         this._setOption('colCountByScreen', value);
     }
 
@@ -81,42 +78,42 @@ export class DxiFormTabComponent extends CollectionNestedOption implements After
     }
 
     @Input()
-    get icon(): string | undefined {
+    get icon(): string {
         return this._getOption('icon');
     }
-    set icon(value: string | undefined) {
+    set icon(value: string) {
         this._setOption('icon', value);
     }
 
     @Input()
-    get items(): Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem> {
+    get items(): Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem> {
         return this._getOption('items');
     }
-    set items(value: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>) {
+    set items(value: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>) {
         this._setOption('items', value);
     }
 
     @Input()
-    get tabTemplate(): any | undefined {
+    get tabTemplate(): ((tabData: any, tabIndex: number, tabElement: any) => any) | template {
         return this._getOption('tabTemplate');
     }
-    set tabTemplate(value: any | undefined) {
+    set tabTemplate(value: ((tabData: any, tabIndex: number, tabElement: any) => any) | template) {
         this._setOption('tabTemplate', value);
     }
 
     @Input()
-    get template(): any | undefined {
+    get template(): ((tabData: any, tabIndex: number, tabElement: any) => any) | template {
         return this._getOption('template');
     }
-    set template(value: any | undefined) {
+    set template(value: ((tabData: any, tabIndex: number, tabElement: any) => any) | template) {
         this._setOption('template', value);
     }
 
     @Input()
-    get title(): string | undefined {
+    get title(): string {
         return this._getOption('title');
     }
-    set title(value: string | undefined) {
+    set title(value: string) {
         this._setOption('title', value);
     }
 
@@ -125,14 +122,6 @@ export class DxiFormTabComponent extends CollectionNestedOption implements After
         return 'tabs';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiFormItemComponent))
-    get itemsChildren(): QueryList<DxiFormItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

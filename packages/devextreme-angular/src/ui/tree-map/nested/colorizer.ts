@@ -14,8 +14,6 @@ import {
 
 
 
-import { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
-import { TreeMapColorizerType } from 'devextreme/viz/tree_map';
 
 import {
     NestedOptionHost,
@@ -31,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTreeMapColorizerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get colorCodeField(): string | undefined {
+    get colorCodeField(): string {
         return this._getOption('colorCodeField');
     }
-    set colorCodeField(value: string | undefined) {
+    set colorCodeField(value: string) {
         this._setOption('colorCodeField', value);
     }
 
@@ -47,18 +45,18 @@ export class DxoTreeMapColorizerComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): PaletteExtensionMode {
+    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: PaletteExtensionMode) {
+    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -71,10 +69,10 @@ export class DxoTreeMapColorizerComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get type(): TreeMapColorizerType | undefined {
+    get type(): "discrete" | "gradient" | "none" | "range" {
         return this._getOption('type');
     }
-    set type(value: TreeMapColorizerType | undefined) {
+    set type(value: "discrete" | "gradient" | "none" | "range") {
         this._setOption('type', value);
     }
 

@@ -8,12 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -24,7 +19,6 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramItemComponent } from './item-dxi';
 
 
 @Component({
@@ -43,10 +37,10 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<any | { height?: number, text?: string, width?: number }> {
+    get items(): Array<Record<string, any>> {
         return this._getOption('items');
     }
-    set items(value: Array<any | { height?: number, text?: string, width?: number }>) {
+    set items(value: Array<Record<string, any>>) {
         this._setOption('items', value);
     }
 
@@ -59,41 +53,14 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() heightChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() widthChange: EventEmitter<number>;
     protected get _optionPath() {
         return 'pageSize';
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDiagramItemComponent))
-    get itemsChildren(): QueryList<DxiDiagramItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'heightChange' },
-            { emit: 'widthChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

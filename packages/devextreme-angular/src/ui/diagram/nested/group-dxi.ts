@@ -6,22 +6,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { Command, CustomCommand, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { CustomCommand } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramCommandComponent } from './command-dxi';
 
 
 @Component({
@@ -32,10 +28,10 @@ import { DxiDiagramCommandComponent } from './command-dxi';
 })
 export class DxiDiagramGroupComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<CustomCommand | Command> {
+    get commands(): Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox"> {
         return this._getOption('commands');
     }
-    set commands(value: Array<CustomCommand | Command>) {
+    set commands(value: Array<CustomCommand | "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox">) {
         this._setOption('commands', value);
     }
 
@@ -48,18 +44,18 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get category(): ShapeCategory | string {
+    get category(): "general" | "flowchart" | "orgChart" | "containers" | "custom" {
         return this._getOption('category');
     }
-    set category(value: ShapeCategory | string) {
+    set category(value: "general" | "flowchart" | "orgChart" | "containers" | "custom") {
         this._setOption('category', value);
     }
 
     @Input()
-    get displayMode(): ToolboxDisplayMode {
+    get displayMode(): "icons" | "texts" {
         return this._getOption('displayMode');
     }
-    set displayMode(value: ToolboxDisplayMode) {
+    set displayMode(value: "icons" | "texts") {
         this._setOption('displayMode', value);
     }
 
@@ -72,10 +68,10 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get shapes(): Array<ShapeType | string> {
+    get shapes(): Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight"> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<ShapeType | string>) {
+    set shapes(value: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">) {
         this._setOption('shapes', value);
     }
 
@@ -84,14 +80,6 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
         return 'groups';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
-    get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

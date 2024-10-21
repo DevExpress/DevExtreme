@@ -23,6 +23,8 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/validation_summary';
 
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { template } from 'devextreme/core/templates/template';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent } from 'devextreme/ui/validation_summary';
 
 import DxValidationSummary from 'devextreme/ui/validation_summary';
@@ -69,10 +71,10 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -95,10 +97,10 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | CollectionWidgetItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | CollectionWidgetItem | string>) {
         this._setOption('items', value);
     }
 
@@ -108,10 +110,10 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     
      */
     @Input()
-    get itemTemplate(): any {
+    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: any) {
+    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('itemTemplate', value);
     }
 
@@ -173,7 +175,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -187,14 +189,14 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | CollectionWidgetItem | string>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<any>;
+    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
 
     /**
     

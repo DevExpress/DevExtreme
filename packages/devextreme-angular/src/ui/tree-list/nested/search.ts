@@ -14,7 +14,6 @@ import {
 
 
 
-import { SearchMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -46,27 +45,27 @@ export class DxoTreeListSearchComponent extends NestedOption implements OnDestro
     }
 
     @Input()
+    get mode(): "contains" | "startswith" | "equals" {
+        return this._getOption('mode');
+    }
+    set mode(value: "contains" | "startswith" | "equals") {
+        this._setOption('mode', value);
+    }
+
+    @Input()
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
+        return this._getOption('searchExpr');
+    }
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
+        this._setOption('searchExpr', value);
+    }
+
+    @Input()
     get timeout(): number {
         return this._getOption('timeout');
     }
     set timeout(value: number) {
         this._setOption('timeout', value);
-    }
-
-    @Input()
-    get mode(): SearchMode {
-        return this._getOption('mode');
-    }
-    set mode(value: SearchMode) {
-        this._setOption('mode', value);
-    }
-
-    @Input()
-    get searchExpr(): Function | string | undefined | Array<Function | string> {
-        return this._getOption('searchExpr');
-    }
-    set searchExpr(value: Function | string | undefined | Array<Function | string>) {
-        this._setOption('searchExpr', value);
     }
 
 

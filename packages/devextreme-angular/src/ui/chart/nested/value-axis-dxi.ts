@@ -6,29 +6,19 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, RelativePosition, ScaleBreak, ScaleBreakLineStyle, TextOverflow, TimeInterval, VisualRange, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
-import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import * as CommonChartTypes from 'devextreme/common/charts';
+import { ScaleBreak } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiChartBreakComponent } from './break-dxi';
-import { DxiChartConstantLineComponent } from './constant-line-dxi';
-import { DxiChartStripComponent } from './strip-dxi';
 
 
 @Component({
@@ -39,18 +29,18 @@ import { DxiChartStripComponent } from './strip-dxi';
 })
 export class DxiChartValueAxisComponent extends CollectionNestedOption {
     @Input()
-    get aggregatedPointsPosition(): AggregatedPointsPosition {
+    get aggregatedPointsPosition(): "betweenTicks" | "crossTicks" {
         return this._getOption('aggregatedPointsPosition');
     }
-    set aggregatedPointsPosition(value: AggregatedPointsPosition) {
+    set aggregatedPointsPosition(value: "betweenTicks" | "crossTicks") {
         this._setOption('aggregatedPointsPosition', value);
     }
 
     @Input()
-    get allowDecimals(): boolean | undefined {
+    get allowDecimals(): boolean {
         return this._getOption('allowDecimals');
     }
-    set allowDecimals(value: boolean | undefined) {
+    set allowDecimals(value: boolean) {
         this._setOption('allowDecimals', value);
     }
 
@@ -79,18 +69,18 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get breakStyle(): { color?: string, line?: ScaleBreakLineStyle, width?: number } {
+    get breakStyle(): Record<string, any> {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
+    set breakStyle(value: Record<string, any>) {
         this._setOption('breakStyle', value);
     }
 
     @Input()
-    get categories(): Array<number | string | Date> {
+    get categories(): Array<Date | number | string> {
         return this._getOption('categories');
     }
-    set categories(value: Array<number | string | Date>) {
+    set categories(value: Array<Date | number | string>) {
         this._setOption('categories', value);
     }
 
@@ -103,50 +93,50 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get constantLines(): Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }> {
+    get constantLines(): Array<Record<string, any>> {
         return this._getOption('constantLines');
     }
-    set constantLines(value: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, text?: string | undefined, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string | undefined, width?: number }>) {
+    set constantLines(value: Array<Record<string, any>>) {
         this._setOption('constantLines', value);
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
+    get constantLineStyle(): Record<string, any> {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
+    set constantLineStyle(value: Record<string, any>) {
         this._setOption('constantLineStyle', value);
     }
 
     @Input()
-    get customPosition(): Date | number | string | undefined {
+    get customPosition(): Date | number | string {
         return this._getOption('customPosition');
     }
-    set customPosition(value: Date | number | string | undefined) {
+    set customPosition(value: Date | number | string) {
         this._setOption('customPosition', value);
     }
 
     @Input()
-    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
+    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
+    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
     @Input()
-    get endOnTick(): boolean | undefined {
+    get endOnTick(): boolean {
         return this._getOption('endOnTick');
     }
-    set endOnTick(value: boolean | undefined) {
+    set endOnTick(value: boolean) {
         this._setOption('endOnTick', value);
     }
 
     @Input()
-    get grid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get grid(): Record<string, any> {
         return this._getOption('grid');
     }
-    set grid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set grid(value: Record<string, any>) {
         this._setOption('grid', value);
     }
 
@@ -159,18 +149,18 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { alignment?: HorizontalAlignment | undefined, customizeHint?: Function, customizeText?: Function, displayMode?: ChartLabelDisplayMode, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: ChartsAxisLabelOverlap, position?: RelativePosition | Position, rotationAngle?: number, staggeringSpacing?: number, template?: any | undefined, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
     @Input()
-    get linearThreshold(): number | undefined {
+    get linearThreshold(): number {
         return this._getOption('linearThreshold');
     }
-    set linearThreshold(value: number | undefined) {
+    set linearThreshold(value: number) {
         this._setOption('linearThreshold', value);
     }
 
@@ -191,58 +181,58 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get maxValueMargin(): number | undefined {
+    get maxValueMargin(): number {
         return this._getOption('maxValueMargin');
     }
-    set maxValueMargin(value: number | undefined) {
+    set maxValueMargin(value: number) {
         this._setOption('maxValueMargin', value);
     }
 
     @Input()
-    get minorGrid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get minorGrid(): Record<string, any> {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set minorGrid(value: Record<string, any>) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
+    get minorTick(): Record<string, any> {
         return this._getOption('minorTick');
     }
-    set minorTick(value: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: Record<string, any>) {
         this._setOption('minorTick', value);
     }
 
     @Input()
-    get minorTickCount(): number | undefined {
+    get minorTickCount(): number {
         return this._getOption('minorTickCount');
     }
-    set minorTickCount(value: number | undefined) {
+    set minorTickCount(value: number) {
         this._setOption('minorTickCount', value);
     }
 
     @Input()
-    get minorTickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minorTickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minorTickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('minorTickInterval', value);
     }
 
     @Input()
-    get minValueMargin(): number | undefined {
+    get minValueMargin(): number {
         return this._getOption('minValueMargin');
     }
-    set minValueMargin(value: number | undefined) {
+    set minValueMargin(value: number) {
         this._setOption('minValueMargin', value);
     }
 
     @Input()
-    get minVisualRangeLength(): TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minVisualRangeLength(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('minVisualRangeLength');
     }
-    set minVisualRangeLength(value: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minVisualRangeLength(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('minVisualRangeLength', value);
     }
 
@@ -255,34 +245,34 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
     @Input()
-    get offset(): number | undefined {
+    get offset(): number {
         return this._getOption('offset');
     }
-    set offset(value: number | undefined) {
+    set offset(value: number) {
         this._setOption('offset', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
     @Input()
-    get pane(): string | undefined {
+    get pane(): string {
         return this._getOption('pane');
     }
-    set pane(value: string | undefined) {
+    set pane(value: string) {
         this._setOption('pane', value);
     }
 
@@ -295,74 +285,74 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get position(): Position {
+    get position(): "bottom" | "left" | "right" | "top" {
         return this._getOption('position');
     }
-    set position(value: Position) {
+    set position(value: "bottom" | "left" | "right" | "top") {
         this._setOption('position', value);
     }
 
     @Input()
-    get showZero(): boolean | undefined {
+    get showZero(): boolean {
         return this._getOption('showZero');
     }
-    set showZero(value: boolean | undefined) {
+    set showZero(value: boolean) {
         this._setOption('showZero', value);
     }
 
     @Input()
-    get strips(): Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }> {
+    get strips(): Array<Record<string, any>> {
         return this._getOption('strips');
     }
-    set strips(value: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, text?: string | undefined, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string | undefined }>) {
+    set strips(value: Array<Record<string, any>>) {
         this._setOption('strips', value);
     }
 
     @Input()
-    get stripStyle(): { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number } {
+    get stripStyle(): Record<string, any> {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: { label?: { font?: Font, horizontalAlignment?: HorizontalAlignment, verticalAlignment?: VerticalAlignment }, paddingLeftRight?: number, paddingTopBottom?: number }) {
+    set stripStyle(value: Record<string, any>) {
         this._setOption('stripStyle', value);
     }
 
     @Input()
-    get synchronizedValue(): number | undefined {
+    get synchronizedValue(): number {
         return this._getOption('synchronizedValue');
     }
-    set synchronizedValue(value: number | undefined) {
+    set synchronizedValue(value: number) {
         this._setOption('synchronizedValue', value);
     }
 
     @Input()
-    get tick(): { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number } {
+    get tick(): Record<string, any> {
         return this._getOption('tick');
     }
-    set tick(value: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }) {
+    set tick(value: Record<string, any>) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get tickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get tickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set tickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get title(): string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get title(): Record<string, any> | string {
         return this._getOption('title');
     }
-    set title(value: string | { alignment?: HorizontalAlignment, font?: Font, margin?: number, text?: string | undefined, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set title(value: Record<string, any> | string) {
         this._setOption('title', value);
     }
 
     @Input()
-    get type(): AxisScaleType | undefined {
+    get type(): "continuous" | "discrete" | "logarithmic" {
         return this._getOption('type');
     }
-    set type(value: AxisScaleType | undefined) {
+    set type(value: "continuous" | "discrete" | "logarithmic") {
         this._setOption('type', value);
     }
 
@@ -375,10 +365,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get valueType(): ChartsDataType | undefined {
+    get valueType(): "datetime" | "numeric" | "string" {
         return this._getOption('valueType');
     }
-    set valueType(value: ChartsDataType | undefined) {
+    set valueType(value: "datetime" | "numeric" | "string") {
         this._setOption('valueType', value);
     }
 
@@ -391,26 +381,26 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get visualRange(): VisualRange | Array<number | string | Date> {
+    get visualRange(): Array<Date | number | string> | CommonChartTypes.VisualRange {
         return this._getOption('visualRange');
     }
-    set visualRange(value: VisualRange | Array<number | string | Date>) {
+    set visualRange(value: Array<Date | number | string> | CommonChartTypes.VisualRange) {
         this._setOption('visualRange', value);
     }
 
     @Input()
-    get visualRangeUpdateMode(): VisualRangeUpdateMode {
+    get visualRangeUpdateMode(): "auto" | "keep" | "reset" | "shift" {
         return this._getOption('visualRangeUpdateMode');
     }
-    set visualRangeUpdateMode(value: VisualRangeUpdateMode) {
+    set visualRangeUpdateMode(value: "auto" | "keep" | "reset" | "shift") {
         this._setOption('visualRangeUpdateMode', value);
     }
 
     @Input()
-    get wholeRange(): VisualRange | undefined | Array<number | string | Date> {
+    get wholeRange(): Array<Date | number | string> | CommonChartTypes.VisualRange {
         return this._getOption('wholeRange');
     }
-    set wholeRange(value: VisualRange | undefined | Array<number | string | Date>) {
+    set wholeRange(value: Array<Date | number | string> | CommonChartTypes.VisualRange) {
         this._setOption('wholeRange', value);
     }
 
@@ -423,57 +413,14 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() categoriesChange: EventEmitter<Array<number | string | Date>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() visualRangeChange: EventEmitter<VisualRange | Array<number | string | Date>>;
     protected get _optionPath() {
         return 'valueAxis';
     }
 
 
-    @ContentChildren(forwardRef(() => DxiChartBreakComponent))
-    get breaksChildren(): QueryList<DxiChartBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiChartConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiChartConstantLineComponent> {
-        return this._getOption('constantLines');
-    }
-    set constantLinesChildren(value) {
-        this.setChildren('constantLines', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiChartStripComponent))
-    get stripsChildren(): QueryList<DxiChartStripComponent> {
-        return this._getOption('strips');
-    }
-    set stripsChildren(value) {
-        this.setChildren('strips', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'categoriesChange' },
-            { emit: 'visualRangeChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

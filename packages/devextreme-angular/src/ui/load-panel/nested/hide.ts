@@ -14,8 +14,7 @@ import {
 
 
 
-import { AnimationState, AnimationType } from 'devextreme/animation/fx';
-import { Direction } from 'devextreme/common';
+import { AnimationConfig, AnimationState } from 'devextreme/animation/fx';
 
 import {
     NestedOptionHost,
@@ -31,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLoadPanelHideComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get complete(): Function {
+    get complete(): (($element: any, config: AnimationConfig) => void) {
         return this._getOption('complete');
     }
-    set complete(value: Function) {
+    set complete(value: (($element: any, config: AnimationConfig) => void)) {
         this._setOption('complete', value);
     }
 
@@ -47,10 +46,10 @@ export class DxoLoadPanelHideComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get direction(): Direction | undefined {
+    get direction(): "bottom" | "left" | "right" | "top" {
         return this._getOption('direction');
     }
-    set direction(value: Direction | undefined) {
+    set direction(value: "bottom" | "left" | "right" | "top") {
         this._setOption('direction', value);
     }
 
@@ -79,18 +78,18 @@ export class DxoLoadPanelHideComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get staggerDelay(): number | undefined {
+    get staggerDelay(): number {
         return this._getOption('staggerDelay');
     }
-    set staggerDelay(value: number | undefined) {
+    set staggerDelay(value: number) {
         this._setOption('staggerDelay', value);
     }
 
     @Input()
-    get start(): Function {
+    get start(): (($element: any, config: AnimationConfig) => void) {
         return this._getOption('start');
     }
-    set start(value: Function) {
+    set start(value: (($element: any, config: AnimationConfig) => void)) {
         this._setOption('start', value);
     }
 
@@ -103,10 +102,10 @@ export class DxoLoadPanelHideComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get type(): AnimationType {
+    get type(): "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut" {
         return this._getOption('type');
     }
-    set type(value: AnimationType) {
+    set type(value: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut") {
         this._setOption('type', value);
     }
 

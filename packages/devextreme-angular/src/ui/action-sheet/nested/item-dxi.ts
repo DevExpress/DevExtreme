@@ -16,7 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import { NativeEventInfo } from 'devextreme/events/index';
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -53,26 +55,26 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get onClick(): Function {
+    get onClick(): ((e: NativeEventInfo<any>) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: Function) {
+    set onClick(value: ((e: NativeEventInfo<any>) => void)) {
         this._setOption('onClick', value);
     }
 
     @Input()
-    get stylingMode(): ButtonStyle {
+    get stylingMode(): "text" | "outlined" | "contained" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: ButtonStyle) {
+    set stylingMode(value: "text" | "outlined" | "contained") {
         this._setOption('stylingMode', value);
     }
 
     @Input()
-    get template(): any {
+    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
         this._setOption('template', value);
     }
 
@@ -85,10 +87,10 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get type(): ButtonType {
+    get type(): "danger" | "default" | "normal" | "success" {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: "danger" | "default" | "normal" | "success") {
         this._setOption('type', value);
     }
 

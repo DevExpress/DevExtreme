@@ -12,9 +12,7 @@ import {
 
 
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { SummaryType } from 'devextreme/common/grids';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -30,58 +28,58 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): HorizontalAlignment | undefined {
+    get alignment(): "center" | "left" | "right" {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | undefined) {
+    set alignment(value: "center" | "left" | "right") {
         this._setOption('alignment', value);
     }
 
     @Input()
-    get column(): string | undefined {
+    get column(): string {
         return this._getOption('column');
     }
-    set column(value: string | undefined) {
+    set column(value: string) {
         this._setOption('column', value);
     }
 
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get displayFormat(): string | undefined {
+    get displayFormat(): string {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: string | undefined) {
+    set displayFormat(value: string) {
         this._setOption('displayFormat', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
     @Input()
-    get showInColumn(): string | undefined {
+    get showInColumn(): string {
         return this._getOption('showInColumn');
     }
-    set showInColumn(value: string | undefined) {
+    set showInColumn(value: string) {
         this._setOption('showInColumn', value);
     }
 
@@ -94,18 +92,18 @@ export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get summaryType(): SummaryType | string | undefined {
+    get summaryType(): "avg" | "count" | "custom" | "max" | "min" | "sum" {
         return this._getOption('summaryType');
     }
-    set summaryType(value: SummaryType | string | undefined) {
+    set summaryType(value: "avg" | "count" | "custom" | "max" | "min" | "sum") {
         this._setOption('summaryType', value);
     }
 
     @Input()
-    get valueFormat(): Format | string | undefined {
+    get valueFormat(): LocalizationTypes.Format {
         return this._getOption('valueFormat');
     }
-    set valueFormat(value: Format | string | undefined) {
+    set valueFormat(value: LocalizationTypes.Format) {
         this._setOption('valueFormat', value);
     }
 

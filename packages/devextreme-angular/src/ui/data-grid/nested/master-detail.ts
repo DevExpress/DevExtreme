@@ -18,6 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -54,10 +55,10 @@ export class DxoDataGridMasterDetailComponent extends NestedOption implements Af
     }
 
     @Input()
-    get template(): any {
+    get template(): ((detailElement: any, detailInfo: { data: Record<string, any>, key: any, watch: (() => void) }) => any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((detailElement: any, detailInfo: { data: Record<string, any>, key: any, watch: (() => void) }) => any) | template) {
         this._setOption('template', value);
     }
 

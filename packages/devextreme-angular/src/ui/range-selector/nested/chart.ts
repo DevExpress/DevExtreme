@@ -8,24 +8,19 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { ChartsDataType, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
 import { ChartSeries } from 'devextreme/viz/common';
-import { ChartAxisScale } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiRangeSelectorSeriesComponent } from './series-dxi';
 
 
 @Component({
@@ -44,10 +39,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get barGroupWidth(): number | undefined {
+    get barGroupWidth(): number {
         return this._getOption('barGroupWidth');
     }
-    set barGroupWidth(value: number | undefined) {
+    set barGroupWidth(value: number) {
         this._setOption('barGroupWidth', value);
     }
 
@@ -60,18 +55,18 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get commonSeriesSettings(): any {
+    get commonSeriesSettings(): dxChartCommonSeriesSettings {
         return this._getOption('commonSeriesSettings');
     }
-    set commonSeriesSettings(value: any) {
+    set commonSeriesSettings(value: dxChartCommonSeriesSettings) {
         this._setOption('commonSeriesSettings', value);
     }
 
     @Input()
-    get dataPrepareSettings(): { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function } {
+    get dataPrepareSettings(): Record<string, any> {
         return this._getOption('dataPrepareSettings');
     }
-    set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }) {
+    set dataPrepareSettings(value: Record<string, any>) {
         this._setOption('dataPrepareSettings', value);
     }
 
@@ -100,34 +95,34 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
     @Input()
-    get paletteExtensionMode(): PaletteExtensionMode {
+    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: PaletteExtensionMode) {
+    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
         this._setOption('paletteExtensionMode', value);
     }
 
     @Input()
-    get series(): ChartSeries | any | undefined | Array<ChartSeries | any> {
+    get series(): Array<ChartSeries> | ChartSeries {
         return this._getOption('series');
     }
-    set series(value: ChartSeries | any | undefined | Array<ChartSeries | any>) {
+    set series(value: Array<ChartSeries> | ChartSeries) {
         this._setOption('series', value);
     }
 
     @Input()
-    get seriesTemplate(): { customizeSeries?: Function, nameField?: string } {
+    get seriesTemplate(): Record<string, any> {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: { customizeSeries?: Function, nameField?: string }) {
+    set seriesTemplate(value: Record<string, any>) {
         this._setOption('seriesTemplate', value);
     }
 
@@ -140,10 +135,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get valueAxis(): { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined } {
+    get valueAxis(): Record<string, any> {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: { inverted?: boolean, logarithmBase?: number, max?: number | undefined, min?: number | undefined, type?: ChartAxisScale | undefined, valueType?: ChartsDataType | undefined }) {
+    set valueAxis(value: Record<string, any>) {
         this._setOption('valueAxis', value);
     }
 
@@ -152,14 +147,6 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
         return 'chart';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiRangeSelectorSeriesComponent))
-    get seriesChildren(): QueryList<DxiRangeSelectorSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this.setChildren('series', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

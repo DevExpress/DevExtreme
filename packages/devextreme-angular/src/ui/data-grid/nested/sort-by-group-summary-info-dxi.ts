@@ -12,7 +12,6 @@ import {
 
 
 
-import { SortOrder } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -28,26 +27,26 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNestedOption {
     @Input()
-    get groupColumn(): string | undefined {
+    get groupColumn(): string {
         return this._getOption('groupColumn');
     }
-    set groupColumn(value: string | undefined) {
+    set groupColumn(value: string) {
         this._setOption('groupColumn', value);
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): "asc" | "desc" {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: "asc" | "desc") {
         this._setOption('sortOrder', value);
     }
 
     @Input()
-    get summaryItem(): number | string | undefined {
+    get summaryItem(): number | string {
         return this._getOption('summaryItem');
     }
-    set summaryItem(value: number | string | undefined) {
+    set summaryItem(value: number | string) {
         this._setOption('summaryItem', value);
     }
 

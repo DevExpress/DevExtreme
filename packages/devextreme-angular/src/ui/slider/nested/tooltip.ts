@@ -14,8 +14,7 @@ import {
 
 
 
-import { TooltipShowMode, VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -39,26 +38,26 @@ export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): Format | string {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get position(): VerticalEdge {
+    get position(): "bottom" | "top" {
         return this._getOption('position');
     }
-    set position(value: VerticalEdge) {
+    set position(value: "bottom" | "top") {
         this._setOption('position', value);
     }
 
     @Input()
-    get showMode(): TooltipShowMode {
+    get showMode(): "always" | "onHover" {
         return this._getOption('showMode');
     }
-    set showMode(value: TooltipShowMode) {
+    set showMode(value: "always" | "onHover") {
         this._setOption('showMode', value);
     }
 

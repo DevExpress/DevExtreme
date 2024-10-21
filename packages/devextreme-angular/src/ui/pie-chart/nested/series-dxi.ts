@@ -12,9 +12,7 @@ import {
 
 
 
-import { ChartsColor, ChartsDataType, DashStyle, Font, HatchDirection, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
-import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,106 +36,106 @@ export class DxiPieChartSeriesComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get argumentType(): ChartsDataType | undefined {
+    get argumentType(): "datetime" | "numeric" | "string" {
         return this._getOption('argumentType');
     }
-    set argumentType(value: ChartsDataType | undefined) {
+    set argumentType(value: "datetime" | "numeric" | "string") {
         this._setOption('argumentType', value);
     }
 
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 
     @Input()
-    get color(): ChartsColor | string | undefined {
+    get color(): ChartsColor | string {
         return this._getOption('color');
     }
-    set color(value: ChartsColor | string | undefined) {
+    set color(value: ChartsColor | string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get hoverMode(): PieChartSeriesInteractionMode {
+    get hoverMode(): "none" | "onlyPoint" {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: PieChartSeriesInteractionMode) {
+    set hoverMode(value: "none" | "onlyPoint") {
         this._setOption('hoverMode', value);
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean } {
+    get hoverStyle(): Record<string, any> {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }) {
+    set hoverStyle(value: Record<string, any>) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get label(): { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { argumentFormat?: Format | string | undefined, backgroundColor?: string | undefined, border?: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }, connector?: { color?: string | undefined, visible?: boolean, width?: number }, customizeText?: Function, displayFormat?: string | undefined, font?: Font, format?: Format | string | undefined, position?: LabelPosition, radialOffset?: number, rotationAngle?: number, textOverflow?: TextOverflow, visible?: boolean, wordWrap?: WordWrap }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
     @Input()
-    get maxLabelCount(): number | undefined {
+    get maxLabelCount(): number {
         return this._getOption('maxLabelCount');
     }
-    set maxLabelCount(value: number | undefined) {
+    set maxLabelCount(value: number) {
         this._setOption('maxLabelCount', value);
     }
 
     @Input()
-    get minSegmentSize(): number | undefined {
+    get minSegmentSize(): number {
         return this._getOption('minSegmentSize');
     }
-    set minSegmentSize(value: number | undefined) {
+    set minSegmentSize(value: number) {
         this._setOption('minSegmentSize', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
     @Input()
-    get selectionMode(): PieChartSeriesInteractionMode {
+    get selectionMode(): "none" | "onlyPoint" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: PieChartSeriesInteractionMode) {
+    set selectionMode(value: "none" | "onlyPoint") {
         this._setOption('selectionMode', value);
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean } {
+    get selectionStyle(): Record<string, any> {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, highlight?: boolean }) {
+    set selectionStyle(value: Record<string, any>) {
         this._setOption('selectionStyle', value);
     }
 
     @Input()
-    get smallValuesGrouping(): { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number | undefined, topCount?: number | undefined } {
+    get smallValuesGrouping(): Record<string, any> {
         return this._getOption('smallValuesGrouping');
     }
-    set smallValuesGrouping(value: { groupName?: string, mode?: SmallValuesGroupingMode, threshold?: number | undefined, topCount?: number | undefined }) {
+    set smallValuesGrouping(value: Record<string, any>) {
         this._setOption('smallValuesGrouping', value);
     }
 
     @Input()
-    get tag(): any | undefined {
+    get tag(): any {
         return this._getOption('tag');
     }
-    set tag(value: any | undefined) {
+    set tag(value: any) {
         this._setOption('tag', value);
     }
 

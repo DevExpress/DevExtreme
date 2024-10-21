@@ -7,29 +7,41 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { DragDirection, DragHighlight } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import dxSortable from 'devextreme/ui/sortable';
+import dxDraggable from 'devextreme/ui/draggable';
+import { template } from 'devextreme/core/templates/template';
+import { GridBase } from 'devextreme/common/grids';
+import { event } from 'devextreme/events/index';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-data-grid-row-dragging',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoDataGridRowDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridRowDraggingComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
     get allowDropInsideItem(): boolean {
         return this._getOption('allowDropInsideItem');
@@ -55,58 +67,58 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get boundary(): UserDefinedElement | string | undefined {
+    get boundary(): any | string {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | undefined) {
+    set boundary(value: any | string) {
         this._setOption('boundary', value);
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
     @Input()
-    get cursorOffset(): string | { x?: number, y?: number } {
+    get cursorOffset(): Record<string, any> | string {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: string | { x?: number, y?: number }) {
+    set cursorOffset(value: Record<string, any> | string) {
         this._setOption('cursorOffset', value);
     }
 
     @Input()
-    get data(): any | undefined {
+    get data(): any {
         return this._getOption('data');
     }
-    set data(value: any | undefined) {
+    set data(value: any) {
         this._setOption('data', value);
     }
 
     @Input()
-    get dragDirection(): DragDirection {
+    get dragDirection(): "both" | "horizontal" | "vertical" {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: DragDirection) {
+    set dragDirection(value: "both" | "horizontal" | "vertical") {
         this._setOption('dragDirection', value);
     }
 
     @Input()
-    get dragTemplate(): any | undefined {
+    get dragTemplate(): ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: any | undefined) {
+    set dragTemplate(value: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template) {
         this._setOption('dragTemplate', value);
     }
 
     @Input()
-    get dropFeedbackMode(): DragHighlight {
+    get dropFeedbackMode(): "push" | "indicate" {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: DragHighlight) {
+    set dropFeedbackMode(value: "push" | "indicate") {
         this._setOption('dropFeedbackMode', value);
     }
 
@@ -119,10 +131,10 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get group(): string | undefined {
+    get group(): string {
         return this._getOption('group');
     }
-    set group(value: string | undefined) {
+    set group(value: string) {
         this._setOption('group', value);
     }
 
@@ -135,58 +147,58 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get onAdd(): Function {
+    get onAdd(): ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onAdd');
     }
-    set onAdd(value: Function) {
+    set onAdd(value: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onAdd', value);
     }
 
     @Input()
-    get onDragChange(): Function {
+    get onDragChange(): ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onDragChange');
     }
-    set onDragChange(value: Function) {
+    set onDragChange(value: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onDragChange', value);
     }
 
     @Input()
-    get onDragEnd(): Function {
+    get onDragEnd(): ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onDragEnd');
     }
-    set onDragEnd(value: Function) {
+    set onDragEnd(value: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onDragEnd', value);
     }
 
     @Input()
-    get onDragMove(): Function {
+    get onDragMove(): ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onDragMove');
     }
-    set onDragMove(value: Function) {
+    set onDragMove(value: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onDragMove', value);
     }
 
     @Input()
-    get onDragStart(): Function {
+    get onDragStart(): ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void) {
         return this._getOption('onDragStart');
     }
-    set onDragStart(value: Function) {
+    set onDragStart(value: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void)) {
         this._setOption('onDragStart', value);
     }
 
     @Input()
-    get onRemove(): Function {
+    get onRemove(): ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onRemove');
     }
-    set onRemove(value: Function) {
+    set onRemove(value: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onRemove', value);
     }
 
     @Input()
-    get onReorder(): Function {
+    get onReorder(): ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void) {
         return this._getOption('onReorder');
     }
-    set onReorder(value: Function) {
+    set onReorder(value: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void)) {
         this._setOption('onReorder', value);
     }
 
@@ -221,10 +233,22 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

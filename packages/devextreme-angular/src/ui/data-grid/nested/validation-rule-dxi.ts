@@ -12,7 +12,6 @@ import {
 
 
 
-import { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -44,10 +43,10 @@ export class DxiDataGridValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): ValidationRuleType {
+    get type(): "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async" {
         return this._getOption('type');
     }
-    set type(value: ValidationRuleType) {
+    set type(value: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async") {
         this._setOption('type', value);
     }
 
@@ -84,26 +83,26 @@ export class DxiDataGridValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get validationCallback(): Function {
+    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean) {
         return this._getOption('validationCallback');
     }
-    set validationCallback(value: Function) {
+    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)) {
         this._setOption('validationCallback', value);
     }
 
     @Input()
-    get comparisonTarget(): Function {
+    get comparisonTarget(): (() => any) {
         return this._getOption('comparisonTarget');
     }
-    set comparisonTarget(value: Function) {
+    set comparisonTarget(value: (() => any)) {
         this._setOption('comparisonTarget', value);
     }
 
     @Input()
-    get comparisonType(): ComparisonOperator {
+    get comparisonType(): "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=" {
         return this._getOption('comparisonType');
     }
-    set comparisonType(value: ComparisonOperator) {
+    set comparisonType(value: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=") {
         this._setOption('comparisonType', value);
     }
 

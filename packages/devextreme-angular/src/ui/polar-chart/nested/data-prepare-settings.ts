@@ -45,10 +45,10 @@ export class DxoPolarChartDataPrepareSettingsComponent extends NestedOption impl
     }
 
     @Input()
-    get sortingMethod(): boolean | Function {
+    get sortingMethod(): boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) {
         return this._getOption('sortingMethod');
     }
-    set sortingMethod(value: boolean | Function) {
+    set sortingMethod(value: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number)) {
         this._setOption('sortingMethod', value);
     }
 

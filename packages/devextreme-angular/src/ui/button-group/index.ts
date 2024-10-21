@@ -22,8 +22,9 @@ import {
 } from '@angular/core';
 
 
-import { ButtonStyle, SingleMultipleOrNone } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, dxButtonGroupItem, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import { template } from 'devextreme/core/templates/template';
+import { dxButtonGroupItem } from 'devextreme/ui/button';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
 
 import DxButtonGroup from 'devextreme/ui/button_group';
 
@@ -69,10 +70,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -95,10 +96,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get buttonTemplate(): any {
+    get buttonTemplate(): ((buttonData: any, buttonContent: any) => string | any) | template {
         return this._getOption('buttonTemplate');
     }
-    set buttonTemplate(value: any) {
+    set buttonTemplate(value: ((buttonData: any, buttonContent: any) => string | any) | template) {
         this._setOption('buttonTemplate', value);
     }
 
@@ -121,10 +122,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -147,10 +148,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -160,10 +161,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -199,10 +200,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): (() => void) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: (() => void) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -251,10 +252,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get selectionMode(): SingleMultipleOrNone {
+    get selectionMode(): "single" | "multiple" | "none" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleMultipleOrNone) {
+    set selectionMode(value: "single" | "multiple" | "none") {
         this._setOption('selectionMode', value);
     }
 
@@ -264,10 +265,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get stylingMode(): ButtonStyle {
+    get stylingMode(): "text" | "outlined" | "contained" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: ButtonStyle) {
+    set stylingMode(value: "text" | "outlined" | "contained") {
         this._setOption('stylingMode', value);
     }
 
@@ -303,10 +304,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -363,7 +364,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -377,7 +378,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonTemplateChange: EventEmitter<any>;
+    @Output() buttonTemplateChange: EventEmitter<((buttonData: any, buttonContent: any) => string | any) | template>;
 
     /**
     
@@ -391,7 +392,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -405,14 +406,14 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -433,7 +434,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
@@ -461,14 +462,14 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<SingleMultipleOrNone>;
+    @Output() selectionModeChange: EventEmitter<"single" | "multiple" | "none">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<ButtonStyle>;
+    @Output() stylingModeChange: EventEmitter<"text" | "outlined" | "contained">;
 
     /**
     
@@ -489,7 +490,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

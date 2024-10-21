@@ -7,34 +7,43 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-tree-view-options',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeViewOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -47,6 +56,14 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
+    get bindingOptions(): Record<string, any> {
+        return this._getOption('bindingOptions');
+    }
+    set bindingOptions(value: Record<string, any>) {
+        this._setOption('bindingOptions', value);
+    }
+
+    @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
     }
@@ -55,10 +72,10 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -71,18 +88,18 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -151,10 +168,10 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get stylingMode(): ButtonStyle {
+    get stylingMode(): "text" | "outlined" | "contained" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: ButtonStyle) {
+    set stylingMode(value: "text" | "outlined" | "contained") {
         this._setOption('stylingMode', value);
     }
 
@@ -167,10 +184,10 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get template(): any {
+    get template(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
         this._setOption('template', value);
     }
 
@@ -183,10 +200,10 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get type(): ButtonType {
+    get type(): "danger" | "default" | "normal" | "success" {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: "danger" | "default" | "normal" | "success") {
         this._setOption('type', value);
     }
 
@@ -199,10 +216,10 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get validationGroup(): string | undefined {
+    get validationGroup(): string {
         return this._getOption('validationGroup');
     }
-    set validationGroup(value: string | undefined) {
+    set validationGroup(value: string) {
         this._setOption('validationGroup', value);
     }
 
@@ -215,10 +232,10 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -229,10 +246,22 @@ export class DxoTreeViewOptionsComponent extends NestedOption implements OnDestr
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

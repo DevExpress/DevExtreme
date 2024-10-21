@@ -12,7 +12,6 @@ import {
 
 
 
-import { DataType, HorizontalAlignment, SortOrder } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -28,66 +27,66 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiFileManagerColumnComponent extends CollectionNestedOption {
     @Input()
-    get alignment(): HorizontalAlignment | string | undefined {
+    get alignment(): "center" | "left" | "right" {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | string | undefined) {
+    set alignment(value: "center" | "left" | "right") {
         this._setOption('alignment', value);
     }
 
     @Input()
-    get caption(): string | undefined {
+    get caption(): string {
         return this._getOption('caption');
     }
-    set caption(value: string | undefined) {
+    set caption(value: string) {
         this._setOption('caption', value);
     }
 
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
     @Input()
-    get dataField(): string | undefined {
+    get dataField(): string {
         return this._getOption('dataField');
     }
-    set dataField(value: string | undefined) {
+    set dataField(value: string) {
         this._setOption('dataField', value);
     }
 
     @Input()
-    get dataType(): DataType | undefined {
+    get dataType(): "string" | "number" | "date" | "boolean" | "object" | "datetime" {
         return this._getOption('dataType');
     }
-    set dataType(value: DataType | undefined) {
+    set dataType(value: "string" | "number" | "date" | "boolean" | "object" | "datetime") {
         this._setOption('dataType', value);
     }
 
     @Input()
-    get hidingPriority(): number | undefined {
+    get hidingPriority(): number {
         return this._getOption('hidingPriority');
     }
-    set hidingPriority(value: number | undefined) {
+    set hidingPriority(value: number) {
         this._setOption('hidingPriority', value);
     }
 
     @Input()
-    get sortIndex(): number | undefined {
+    get sortIndex(): number {
         return this._getOption('sortIndex');
     }
-    set sortIndex(value: number | undefined) {
+    set sortIndex(value: number) {
         this._setOption('sortIndex', value);
     }
 
     @Input()
-    get sortOrder(): SortOrder | string | undefined {
+    get sortOrder(): "asc" | "desc" {
         return this._getOption('sortOrder');
     }
-    set sortOrder(value: SortOrder | string | undefined) {
+    set sortOrder(value: "asc" | "desc") {
         this._setOption('sortOrder', value);
     }
 
@@ -100,18 +99,18 @@ export class DxiFileManagerColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get visibleIndex(): number | undefined {
+    get visibleIndex(): number {
         return this._getOption('visibleIndex');
     }
-    set visibleIndex(value: number | undefined) {
+    set visibleIndex(value: number) {
         this._setOption('visibleIndex', value);
     }
 
     @Input()
-    get width(): number | string | undefined {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: number | string | undefined) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 

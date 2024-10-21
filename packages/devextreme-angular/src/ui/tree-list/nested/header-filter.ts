@@ -14,10 +14,9 @@ import {
 
 
 
-import { SearchMode } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -49,26 +48,26 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get dataSource(): Store | DataSourceOptions | Function | null | undefined | Array<any> {
+    get dataSource(): Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSourceOptions | Function | null | undefined | Array<any>) {
+    set dataSource(value: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get groupInterval(): HeaderFilterGroupInterval | number | undefined {
+    get groupInterval(): number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year" {
         return this._getOption('groupInterval');
     }
-    set groupInterval(value: HeaderFilterGroupInterval | number | undefined) {
+    set groupInterval(value: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year") {
         this._setOption('groupInterval', value);
     }
 
     @Input()
-    get height(): number | string | undefined {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: number | string | undefined) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -81,18 +80,18 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get searchMode(): SearchMode {
+    get searchMode(): "contains" | "startswith" | "equals" {
         return this._getOption('searchMode');
     }
-    set searchMode(value: SearchMode) {
+    set searchMode(value: "contains" | "startswith" | "equals") {
         this._setOption('searchMode', value);
     }
 
     @Input()
-    get width(): number | string | undefined {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: number | string | undefined) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
@@ -105,10 +104,10 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get texts(): { cancel?: string, emptyValue?: string, ok?: string } {
+    get texts(): Record<string, any> {
         return this._getOption('texts');
     }
-    set texts(value: { cancel?: string, emptyValue?: string, ok?: string }) {
+    set texts(value: Record<string, any>) {
         this._setOption('texts', value);
     }
 

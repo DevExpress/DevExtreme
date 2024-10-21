@@ -14,7 +14,6 @@ import {
 
 
 
-import { EnterKeyAction, EnterKeyDirection } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -46,18 +45,18 @@ export class DxoDataGridKeyboardNavigationComponent extends NestedOption impleme
     }
 
     @Input()
-    get enterKeyAction(): EnterKeyAction {
+    get enterKeyAction(): "startEdit" | "moveFocus" {
         return this._getOption('enterKeyAction');
     }
-    set enterKeyAction(value: EnterKeyAction) {
+    set enterKeyAction(value: "startEdit" | "moveFocus") {
         this._setOption('enterKeyAction', value);
     }
 
     @Input()
-    get enterKeyDirection(): EnterKeyDirection {
+    get enterKeyDirection(): "none" | "column" | "row" {
         return this._getOption('enterKeyDirection');
     }
-    set enterKeyDirection(value: EnterKeyDirection) {
+    set enterKeyDirection(value: "none" | "column" | "row") {
         this._setOption('enterKeyDirection', value);
     }
 

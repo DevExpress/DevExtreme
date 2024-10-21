@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,26 +30,26 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPieChartSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any>) {
         this._setOption('border', value);
     }
 
     @Input()
-    get color(): ChartsColor | string | undefined {
+    get color(): ChartsColor | string {
         return this._getOption('color');
     }
-    set color(value: ChartsColor | string | undefined) {
+    set color(value: ChartsColor | string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get hatching(): { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
+    get hatching(): Record<string, any> {
         return this._getOption('hatching');
     }
-    set hatching(value: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
+    set hatching(value: Record<string, any>) {
         this._setOption('hatching', value);
     }
 

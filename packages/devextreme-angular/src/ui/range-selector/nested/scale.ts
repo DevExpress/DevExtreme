@@ -8,24 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, ScaleBreak, ScaleBreakLineStyle, TimeInterval } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
-import { AxisScale } from 'devextreme/viz/range_selector';
+import { ScaleBreak } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiRangeSelectorBreakComponent } from './break-dxi';
 
 
 @Component({
@@ -44,26 +38,26 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get aggregationGroupWidth(): number | undefined {
+    get aggregationGroupWidth(): number {
         return this._getOption('aggregationGroupWidth');
     }
-    set aggregationGroupWidth(value: number | undefined) {
+    set aggregationGroupWidth(value: number) {
         this._setOption('aggregationGroupWidth', value);
     }
 
     @Input()
-    get aggregationInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get aggregationInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('aggregationInterval');
     }
-    set aggregationInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set aggregationInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('aggregationInterval', value);
     }
 
     @Input()
-    get allowDecimals(): boolean | undefined {
+    get allowDecimals(): boolean {
         return this._getOption('allowDecimals');
     }
-    set allowDecimals(value: boolean | undefined) {
+    set allowDecimals(value: boolean) {
         this._setOption('allowDecimals', value);
     }
 
@@ -76,26 +70,26 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get breakStyle(): { color?: string, line?: ScaleBreakLineStyle, width?: number } {
+    get breakStyle(): Record<string, any> {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: { color?: string, line?: ScaleBreakLineStyle, width?: number }) {
+    set breakStyle(value: Record<string, any>) {
         this._setOption('breakStyle', value);
     }
 
     @Input()
-    get categories(): Array<number | string | Date> {
+    get categories(): Array<Date | number | string> {
         return this._getOption('categories');
     }
-    set categories(value: Array<number | string | Date>) {
+    set categories(value: Array<Date | number | string>) {
         this._setOption('categories', value);
     }
 
     @Input()
-    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
+    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
+    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
@@ -108,26 +102,26 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get endValue(): Date | number | string | undefined {
+    get endValue(): Date | number | string {
         return this._getOption('endValue');
     }
-    set endValue(value: Date | number | string | undefined) {
+    set endValue(value: Date | number | string) {
         this._setOption('endValue', value);
     }
 
     @Input()
-    get holidays(): Array<Date | string | number> {
+    get holidays(): Array<Date | string> | Array<number> {
         return this._getOption('holidays');
     }
-    set holidays(value: Array<Date | string | number>) {
+    set holidays(value: Array<Date | string> | Array<number>) {
         this._setOption('holidays', value);
     }
 
     @Input()
-    get label(): { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { customizeText?: Function, font?: Font, format?: Format | string | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
@@ -148,58 +142,58 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get marker(): { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean } {
+    get marker(): Record<string, any> {
         return this._getOption('marker');
     }
-    set marker(value: { label?: { customizeText?: Function, format?: Format | string | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }) {
+    set marker(value: Record<string, any>) {
         this._setOption('marker', value);
     }
 
     @Input()
-    get maxRange(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get maxRange(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('maxRange');
     }
-    set maxRange(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set maxRange(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('maxRange', value);
     }
 
     @Input()
-    get minorTick(): { color?: string, opacity?: number, visible?: boolean, width?: number } {
+    get minorTick(): Record<string, any> {
         return this._getOption('minorTick');
     }
-    set minorTick(value: { color?: string, opacity?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: Record<string, any>) {
         this._setOption('minorTick', value);
     }
 
     @Input()
-    get minorTickCount(): number | undefined {
+    get minorTickCount(): number {
         return this._getOption('minorTickCount');
     }
-    set minorTickCount(value: number | undefined) {
+    set minorTickCount(value: number) {
         this._setOption('minorTickCount', value);
     }
 
     @Input()
-    get minorTickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minorTickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minorTickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('minorTickInterval', value);
     }
 
     @Input()
-    get minRange(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get minRange(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('minRange');
     }
-    set minRange(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set minRange(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('minRange', value);
     }
 
     @Input()
-    get placeholderHeight(): number | undefined {
+    get placeholderHeight(): number {
         return this._getOption('placeholderHeight');
     }
-    set placeholderHeight(value: number | undefined) {
+    set placeholderHeight(value: number) {
         this._setOption('placeholderHeight', value);
     }
 
@@ -212,50 +206,50 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get singleWorkdays(): Array<Date | string | number> {
+    get singleWorkdays(): Array<Date | string> | Array<number> {
         return this._getOption('singleWorkdays');
     }
-    set singleWorkdays(value: Array<Date | string | number>) {
+    set singleWorkdays(value: Array<Date | string> | Array<number>) {
         this._setOption('singleWorkdays', value);
     }
 
     @Input()
-    get startValue(): Date | number | string | undefined {
+    get startValue(): Date | number | string {
         return this._getOption('startValue');
     }
-    set startValue(value: Date | number | string | undefined) {
+    set startValue(value: Date | number | string) {
         this._setOption('startValue', value);
     }
 
     @Input()
-    get tick(): { color?: string, opacity?: number, width?: number } {
+    get tick(): Record<string, any> {
         return this._getOption('tick');
     }
-    set tick(value: { color?: string, opacity?: number, width?: number }) {
+    set tick(value: Record<string, any>) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get tickInterval(): TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
+    get tickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
+    set tickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year") {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get type(): AxisScale | undefined {
+    get type(): "continuous" | "discrete" | "logarithmic" | "semidiscrete" {
         return this._getOption('type');
     }
-    set type(value: AxisScale | undefined) {
+    set type(value: "continuous" | "discrete" | "logarithmic" | "semidiscrete") {
         this._setOption('type', value);
     }
 
     @Input()
-    get valueType(): ChartsDataType | undefined {
+    get valueType(): "datetime" | "numeric" | "string" {
         return this._getOption('valueType');
     }
-    set valueType(value: ChartsDataType | undefined) {
+    set valueType(value: "datetime" | "numeric" | "string") {
         this._setOption('valueType', value);
     }
 
@@ -280,14 +274,6 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
         return 'scale';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiRangeSelectorBreakComponent))
-    get breaksChildren(): QueryList<DxiRangeSelectorBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

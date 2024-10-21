@@ -14,8 +14,6 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -39,18 +37,18 @@ export class DxoChartConstantLineStyleComponent extends NestedOption implements 
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, position?: RelativePosition, visible?: boolean } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, position?: RelativePosition, visible?: boolean }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 

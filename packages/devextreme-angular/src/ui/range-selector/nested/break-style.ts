@@ -14,7 +14,6 @@ import {
 
 
 
-import { ScaleBreakLineStyle } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +37,10 @@ export class DxoRangeSelectorBreakStyleComponent extends NestedOption implements
     }
 
     @Input()
-    get line(): ScaleBreakLineStyle {
+    get line(): "straight" | "waved" {
         return this._getOption('line');
     }
-    set line(value: ScaleBreakLineStyle) {
+    set line(value: "straight" | "waved") {
         this._setOption('line', value);
     }
 

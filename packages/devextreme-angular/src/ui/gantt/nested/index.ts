@@ -1,9 +1,14 @@
 export * from './column-dxi';
+export * from './column-header-filter-search';
+export * from './column-header-filter';
+export * from './context-menu-item-dxi';
 export * from './context-menu';
 export * from './dependencies';
 export * from './editing';
 export * from './filter-row';
 export * from './format';
+export * from './gantt-header-filter-search';
+export * from './gantt-header-filter';
 export * from './header-filter';
 export * from './item-dxi';
 export * from './operation-descriptions';
@@ -15,6 +20,7 @@ export * from './sorting';
 export * from './strip-line-dxi';
 export * from './tasks';
 export * from './texts';
+export * from './toolbar-item-dxi';
 export * from './toolbar';
 export * from './validation';
 

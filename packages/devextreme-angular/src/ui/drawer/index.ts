@@ -17,7 +17,9 @@ import {
 } from '@angular/core';
 
 
-import { DisposingEvent, InitializedEvent, OpenedStateMode, OptionChangedEvent, PanelLocation, RevealMode } from 'devextreme/ui/drawer';
+import { event } from 'devextreme/events/index';
+import { DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/drawer';
+import { template } from 'devextreme/core/templates/template';
 
 import DxDrawer from 'devextreme/ui/drawer';
 
@@ -96,10 +98,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
@@ -122,10 +124,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -135,10 +137,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -148,10 +150,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -213,10 +215,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get openedStateMode(): OpenedStateMode {
+    get openedStateMode(): "overlap" | "shrink" | "push" {
         return this._getOption('openedStateMode');
     }
-    set openedStateMode(value: OpenedStateMode) {
+    set openedStateMode(value: "overlap" | "shrink" | "push") {
         this._setOption('openedStateMode', value);
     }
 
@@ -226,10 +228,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): PanelLocation {
+    get position(): "left" | "right" | "top" | "bottom" | "before" | "after" {
         return this._getOption('position');
     }
-    set position(value: PanelLocation) {
+    set position(value: "left" | "right" | "top" | "bottom" | "before" | "after") {
         this._setOption('position', value);
     }
 
@@ -239,10 +241,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get revealMode(): RevealMode {
+    get revealMode(): "slide" | "expand" {
         return this._getOption('revealMode');
     }
-    set revealMode(value: RevealMode) {
+    set revealMode(value: "slide" | "expand") {
         this._setOption('revealMode', value);
     }
 
@@ -278,10 +280,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get template(): any {
+    get template(): ((Element: any) => any) | template {
         return this._getOption('template');
     }
-    set template(value: any) {
+    set template(value: ((Element: any) => any) | template) {
         this._setOption('template', value);
     }
 
@@ -304,10 +306,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -361,7 +363,7 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -375,21 +377,21 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -424,21 +426,21 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() openedStateModeChange: EventEmitter<OpenedStateMode>;
+    @Output() openedStateModeChange: EventEmitter<"overlap" | "shrink" | "push">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PanelLocation>;
+    @Output() positionChange: EventEmitter<"left" | "right" | "top" | "bottom" | "before" | "after">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() revealModeChange: EventEmitter<RevealMode>;
+    @Output() revealModeChange: EventEmitter<"slide" | "expand">;
 
     /**
     
@@ -459,7 +461,7 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() templateChange: EventEmitter<any>;
+    @Output() templateChange: EventEmitter<((Element: any) => any) | template>;
 
     /**
     
@@ -473,7 +475,7 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

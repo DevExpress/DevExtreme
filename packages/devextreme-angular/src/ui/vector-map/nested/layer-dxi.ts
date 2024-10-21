@@ -12,11 +12,10 @@ import {
 
 
 
-import { SingleMultipleOrNone } from 'devextreme/common';
-import { Font, Palette } from 'devextreme/common/charts';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_map';
+import DataSource from 'devextreme/data/data_source';
+import { MapLayerElement } from 'devextreme/viz/vector_map';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -56,10 +55,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get colorGroupingField(): string | undefined {
+    get colorGroupingField(): string {
         return this._getOption('colorGroupingField');
     }
-    set colorGroupingField(value: string | undefined) {
+    set colorGroupingField(value: string) {
         this._setOption('colorGroupingField', value);
     }
 
@@ -72,34 +71,34 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customize(): Function {
+    get customize(): ((elements: Array<MapLayerElement>) => void) {
         return this._getOption('customize');
     }
-    set customize(value: Function) {
+    set customize(value: ((elements: Array<MapLayerElement>) => void)) {
         this._setOption('customize', value);
     }
 
     @Input()
-    get dataField(): string | undefined {
+    get dataField(): string {
         return this._getOption('dataField');
     }
-    set dataField(value: string | undefined) {
+    set dataField(value: string) {
         this._setOption('dataField', value);
     }
 
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | any | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | any | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Record<string, any> | Store | string) {
         this._setOption('dataSource', value);
     }
 
     @Input()
-    get elementType(): VectorMapMarkerType {
+    get elementType(): "bubble" | "dot" | "image" | "pie" {
         return this._getOption('elementType');
     }
-    set elementType(value: VectorMapMarkerType) {
+    set elementType(value: "bubble" | "dot" | "image" | "pie") {
         this._setOption('elementType', value);
     }
 
@@ -136,10 +135,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): { dataField?: string, enabled?: boolean, font?: Font } {
+    get label(): Record<string, any> {
         return this._getOption('label');
     }
-    set label(value: { dataField?: string, enabled?: boolean, font?: Font }) {
+    set label(value: Record<string, any>) {
         this._setOption('label', value);
     }
 
@@ -176,10 +175,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
@@ -224,10 +223,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get selectionMode(): SingleMultipleOrNone {
+    get selectionMode(): "single" | "multiple" | "none" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleMultipleOrNone) {
+    set selectionMode(value: "single" | "multiple" | "none") {
         this._setOption('selectionMode', value);
     }
 
@@ -240,10 +239,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get sizeGroupingField(): string | undefined {
+    get sizeGroupingField(): string {
         return this._getOption('sizeGroupingField');
     }
-    set sizeGroupingField(value: string | undefined) {
+    set sizeGroupingField(value: string) {
         this._setOption('sizeGroupingField', value);
     }
 
@@ -256,10 +255,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): VectorMapLayerType {
+    get type(): "area" | "line" | "marker" {
         return this._getOption('type');
     }
-    set type(value: VectorMapLayerType) {
+    set type(value: "area" | "line" | "marker") {
         this._setOption('type', value);
     }
 
