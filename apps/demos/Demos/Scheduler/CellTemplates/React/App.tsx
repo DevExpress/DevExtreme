@@ -13,10 +13,33 @@ import TimeCell from './TimeCell.tsx';
 
 const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek', 'month'];
+const ariaDescription = () => {
+  const disabledDates = holidays.map(date => 
+    {
+      if (Utils.isWeekend(date)) {
+        return null;
+      }
+      return new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    }
+  );
+  
+  if (disabledDates?.length > 0) {
+    return disabledDates.map(dateText => `${dateText} is a disabled date`).join('. ');
+  }
+};
 
 const notifyDisableDate = () => {
   notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
 };
+
+const onContentReady = (e: SchedulerTypes.ContentReadyEvent) => {
+  setComponentAria(e.component?.$element());
+}
 
 const applyDisableDatesToDateEditors = (form: ReturnType<FormRef['instance']>) => {
   const startDateEditor = form.getEditor('startDate');
@@ -53,6 +76,14 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
   }
 };
 
+const setComponentAria = (element) => {
+  element?.attr({
+    'role': 'grid',
+    'aria-label': 'Scheduler',
+    'aria-roledescription': ariaDescription(),
+  });
+}
+
 const App = () => {
   const [currentView, setCurrentView] = useState<SchedulerTypes.ViewType>(views[0]);
 
@@ -81,6 +112,7 @@ const App = () => {
       dataCellComponent={DataCellComponent}
       dateCellRender={renderDateCell}
       timeCellComponent={TimeCell}
+      onContentReady={onContentReady}
       onAppointmentFormOpening={onAppointmentFormOpening}
       onAppointmentAdding={onAppointmentAdding}
       onAppointmentUpdating={onAppointmentUpdating}

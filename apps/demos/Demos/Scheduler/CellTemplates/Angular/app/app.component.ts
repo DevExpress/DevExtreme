@@ -44,10 +44,33 @@ export class AppComponent {
 
   currentView = this.views[0];
 
+  ariaDescription = () => {
+    const disabledDates = this.holidays.map(date => {
+        if (this.isWeekend(date)) {
+          return null;
+        }
+        return new Date(date).toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      }
+    ).filter(dateText => dateText);
+    
+    if (disabledDates?.length > 0) {
+      return disabledDates.map(dateText => `${dateText} is a disabled date`).join('. ');
+    }
+  };
+
   constructor(public dataService: DataService) {
     this.dataSource = new DataSource({
       store: dataService.getData(),
     });
+  }
+
+  onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
+    this.setComponentAria(e.component?.$element());
   }
 
   onOptionChanged = (e: DxSchedulerTypes.OptionChangedEvent) => {
@@ -148,6 +171,14 @@ export class AppComponent {
     const endDateEditor = form.getEditor('endDate');
     endDateEditor.option('disabledDates', holidays);
   };
+
+  setComponentAria(element): void {
+    element?.attr({
+      'role': 'grid',
+      'aria-label': 'Scheduler',
+      'aria-roledescription': this.ariaDescription(),
+    });
+  }
 }
 
 @NgModule({

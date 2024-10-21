@@ -18,12 +18,34 @@ const notifyDisableDate = () => {
     1000,
   );
 };
+const ariaDescription = () => {
+  const disabledDates = holidays.map(date => {
+      if (Utils.isWeekend(date)) {
+        return null;
+      }
+
+      return new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    }
+  );
+  
+  if (disabledDates?.length > 0) {
+    return disabledDates.map(dateText => `${dateText} is a disabled date`).join('. ');
+  }
+};
 const applyDisableDatesToDateEditors = (form) => {
   const startDateEditor = form.getEditor('startDate');
   startDateEditor?.option('disabledDates', holidays);
   const endDateEditor = form.getEditor('endDate');
   endDateEditor?.option('disabledDates', holidays);
 };
+const onContentReady = (e) => {
+  setComponentAria(e.component?.$element());
+}
 const onAppointmentFormOpening = (e) => {
   if (e.appointmentData?.startDate) {
     const startDate = new Date(e.appointmentData.startDate);
@@ -48,6 +70,13 @@ const onAppointmentUpdating = (e) => {
     notifyDisableDate();
   }
 };
+const setComponentAria = (element) => {
+  element.attr({
+    'role': 'grid',
+    'aria-label': 'Scheduler',
+    'aria-roledescription': ariaDescription(),
+  })
+}
 const App = () => {
   const [currentView, setCurrentView] = useState(views[0]);
   const DataCellComponent = useMemo(
@@ -79,6 +108,7 @@ const App = () => {
       dataCellComponent={DataCellComponent}
       dateCellRender={renderDateCell}
       timeCellComponent={TimeCell}
+      onContentReady={onContentReady}
       onAppointmentFormOpening={onAppointmentFormOpening}
       onAppointmentAdding={onAppointmentAdding}
       onAppointmentUpdating={onAppointmentUpdating}
