@@ -3,12 +3,15 @@ import $ from 'jquery';
 import MessageList from '__internal/ui/chat/messagelist';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
-const SCROLLABLE_CLASS = 'dx-scrollable';
+const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
 const CHAT_MESSAGELIST_EMPTY_MESSAGE_CLASS = 'dx-chat-messagelist-empty-message';
 const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
+
+const CHAT_TYPINGINDICATOR_CLASS = 'dx-chat-typingindicator';
+const SCROLLABLE_CLASS = 'dx-scrollable';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -65,6 +68,14 @@ QUnit.module('MessageList', moduleConfig, () => {
             this.instance.option('items', [{}, {}, {}]);
 
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGELIST_EMPTY_CLASS), false, 'messagelist empty class is removed');
+        });
+
+        QUnit.test('should have content element', function(assert) {
+            assert.strictEqual(this.$element.find(`.${CHAT_MESSAGELIST_CONTENT_CLASS}`).length, 1, 'content element is rendered');
+        });
+
+        QUnit.test('should render typing indicator element', function(assert) {
+            assert.strictEqual(this.$element.find(`.${CHAT_TYPINGINDICATOR_CLASS}`).length, 1, 'typing indicator is rendered');
         });
     });
 

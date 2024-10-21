@@ -21,6 +21,7 @@ import ChatMessageBubble from '__internal/ui/chat/messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatErrorList from '__internal/ui/chat/errorlist';
+import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -1348,15 +1349,20 @@ testComponentDefaults(Chat,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,
-        title: '',
-        onMessageSend: undefined,
-        dataSource: undefined,
         showDayHeaders: true,
         showAvatar: true,
         showUserName: true,
         showMessageTimestamp: true,
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
+        title: '',
+        dataSource: null,
+        items: [],
+        errors: [],
+        typingUsers: [],
+        onMessageSend: undefined,
+        onTypingStart: undefined,
+        onTypingEnd: undefined,
     }
 );
 
@@ -1379,10 +1385,12 @@ testComponentDefaults(ChatHeader,
 testComponentDefaults(ChatMessageBox,
     {},
     {
-        onMessageSend: undefined,
         activeStateEnabled: true,
         focusStateEnabled: true,
         hoverStateEnabled: true,
+        onMessageSend: undefined,
+        onTypingStart: undefined,
+        onTypingEnd: undefined,
     }
 );
 
@@ -1405,6 +1413,7 @@ testComponentDefaults(ChatMessageList,
     {},
     {
         items: [],
+        typingUsers: [],
         currentUserId: '',
         showDayHeaders: true,
         isLoading: false,
@@ -1416,7 +1425,14 @@ testComponentDefaults(ChatMessageList,
 testComponentDefaults(ChatErrorList,
     {},
     {
-        items: []
+        items: [],
+    }
+);
+
+testComponentDefaults(ChatTypingIndicator,
+    {},
+    {
+        typingUsers: [],
     }
 );
 
