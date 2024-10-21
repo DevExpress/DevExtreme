@@ -24,7 +24,7 @@ const ariaDescription = () => {
       day: 'numeric',
     });
   })
-  .filter(dateText => dateText);
+  .filter((dateText) => dateText);
   if (disabledDates?.length > 0) {
     return disabledDates.map((dateText) => `${dateText} is a disabled date`).join('. ');
   }
