@@ -5,11 +5,13 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
+import type { NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
   MessageSendEvent,
   Properties as ChatProperties,
+  User,
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -31,6 +33,10 @@ type Properties = ChatProperties & {
   showDayHeaders: boolean;
 };
 
+type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
+
+type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
+
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
 
@@ -42,11 +48,9 @@ class Chat extends Widget<Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _typingStartAction?: any;
+  _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _typingEndAction?: any;
+  _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
 
   _getDefaultOptions(): Properties {
     return {
@@ -171,7 +175,6 @@ class Chat extends Widget<Properties> {
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
-      // @ts-expect-error
       onTypingStart: () => {
         this._typingStartHandler();
       },

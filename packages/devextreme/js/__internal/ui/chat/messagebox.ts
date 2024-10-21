@@ -23,10 +23,6 @@ export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
   { text?: string };
 
-export type TypingStartEvent = NativeEventInfo<MessageBox>;
-
-export type TypingEndEvent = NativeEventInfo<MessageBox>;
-
 export interface Properties extends DOMComponentProperties<MessageBox> {
   activeStateEnabled?: boolean;
 
@@ -36,9 +32,9 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   onMessageSend?: (e: MessageSendEvent) => void;
 
-  onTypingStart?: (e: TypingStartEvent) => void;
+  onTypingStart?: (e: NativeEventInfo<MessageBox>) => void;
 
-  onTypingEnd?: (e: TypingEndEvent) => void;
+  onTypingEnd?: (e: NativeEventInfo<MessageBox>) => void;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
@@ -239,12 +235,15 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       }
       case 'onMessageSend':
         this._createMessageSendAction();
+
         break;
       case 'onTypingStart':
         this._createTypingStartAction();
+
         break;
       case 'onTypingEnd':
         this._createTypingEndAction();
+
         break;
       default:
         super._optionChanged(args);
