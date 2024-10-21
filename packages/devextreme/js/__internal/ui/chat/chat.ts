@@ -175,12 +175,12 @@ class Chat extends Widget<Properties> {
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
-      // onTypingStart: () => {
-      //   this._typingStartHandler();
-      // },
-      // onTypingEnd: () => {
-      //   this._typingEndHandler();
-      // },
+      onTypingStart: () => {
+        this._typingStartHandler();
+      },
+      onTypingEnd: () => {
+        this._typingEndHandler();
+      },
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
