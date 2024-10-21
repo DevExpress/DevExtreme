@@ -13,20 +13,22 @@ const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek', 'month'];
 const ariaDescription = () => {
   const disabledDates = holidays
-  .map((date) => {
-    if (Utils.isWeekend(date)) {
-      return null;
-    }
-    return new Date(date).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  })
-  .filter((dateText) => dateText);
+    .map((date) => {
+      if (Utils.isWeekend(date)) {
+        return null;
+      }
+      return new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    })
+    .filter((dateText) => dateText);
   if (disabledDates?.length > 0) {
-    return disabledDates.map((dateText) => `${dateText} is a disabled date`).join('. ');
+    return disabledDates
+      .map((dateText) => `${dateText} is a disabled date`)
+      .join('. ');
   }
 };
 const notifyDisableDate = () => {
