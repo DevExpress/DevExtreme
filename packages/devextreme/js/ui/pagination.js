@@ -1,6 +1,6 @@
-import Pager from '../__internal/pager/wrappers/pager';
+import Pagination from '../__internal/pager/wrappers/pagination';
 import registerComponent from '../core/component_registrator';
 
-export default Pager;
+export default Pagination;
 
-registerComponent('dxPagination', Pager);
+registerComponent('dxPagination', Pagination);

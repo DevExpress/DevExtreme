@@ -3,7 +3,7 @@ import { ComponentWrapper } from '../../core/r1/component_wrapper';
 import type { Option } from '../../core/r1/types';
 import { validateOptions } from '../utils/validation_utils';
 
-export class GridPagerWrapper extends ComponentWrapper {
+export class PaginationWrapper extends ComponentWrapper {
   _optionChanged(args: Option): void {
     switch (args.name) {
       case 'pageIndex': {

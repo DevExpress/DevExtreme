@@ -14,14 +14,14 @@ import {
 } from './common/consts';
 import type { KeyboardActionContextType } from './common/keyboard_action_context';
 import { KeyboardActionContext } from './common/keyboard_action_context';
-import type { PagerProps } from './common/pager_props';
-import { PagerDefaultProps } from './common/pager_props';
+import type { PaginationProps } from './common/pagination_props';
+import { PaginationDefaultProps } from './common/pagination_props';
 import { Widget } from './common/widget';
 import { InfoText } from './info';
 import { PageSizeSelector } from './page_size/selector';
 import { PageIndexSelector } from './pages/page_index_selector';
 
-export interface PagerContentProps extends PagerProps {
+export interface PaginationContentProps extends PaginationProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
   rootElementRef?: RefObject<HTMLDivElement>;
@@ -30,13 +30,13 @@ export interface PagerContentProps extends PagerProps {
   infoTextRef?: RefObject<HTMLDivElement>;
 }
 
-export const PagerContentDefaultProps: PagerContentProps = {
-  ...PagerDefaultProps,
+export const PaginationContentDefaultProps: PaginationContentProps = {
+  ...PaginationDefaultProps,
   infoTextVisible: true,
   isLargeDisplayMode: true,
 };
 
-export class PagerContent extends InfernoComponent<PagerContentProps> {
+export class PaginationContent extends InfernoComponent<PaginationContentProps> {
   public state: any = {};
 
   public refs: any = null;
@@ -100,8 +100,8 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     return {
       registerKeyboardAction:
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
-          const fakePagerInstance = this.createFakeInstance();
-          return registerKeyboardAction('pager', fakePagerInstance, element, undefined, action);
+          const fakePaginationInstance = this.createFakeInstance();
+          return registerKeyboardAction('pager', fakePaginationInstance, element, undefined, action);
         },
     };
   }
@@ -167,7 +167,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     };
   }
 
-  componentWillUpdate(nextProps: PagerContentProps): void {
+  componentWillUpdate(nextProps: PaginationContentProps): void {
     super.componentWillUpdate();
     if (this.props.onKeyDown !== nextProps.onKeyDown) {
       this.__getterCache.keyboardAction = undefined;
@@ -277,4 +277,4 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     );
   }
 }
-PagerContent.defaultProps = PagerContentDefaultProps;
+PaginationContent.defaultProps = PaginationContentDefaultProps;
