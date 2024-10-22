@@ -413,6 +413,7 @@ onOptionChanged?: ((e: OptionChangedEvent) => void);
 /**
  * @docid dxTabPanelOptions.onSelectionChanging
  * @type_function_param1 e:{ui/tab_panel:SelectionChangingEvent}
+ * @action
  */
 onSelectionChanging?: ((e: SelectionChangingEvent) => void);
 /**
