@@ -71,18 +71,18 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get label(): Record<string, any> | { customizeText: ((scaleValue: { value: number, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, indentFromTick: number, overlappingBehavior: "hide" | "none", useRangeColors: boolean, visible: boolean } {
+    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { customizeText: ((scaleValue: { value: number, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, indentFromTick: number, overlappingBehavior: "hide" | "none", useRangeColors: boolean, visible: boolean }) {
+    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get minorTick(): Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number } {
+    get minorTick(): Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number }) {
+    set minorTick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
@@ -111,10 +111,10 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get tick(): Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number } {
+    get tick(): Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number }) {
+    set tick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('tick', value);
     }
 

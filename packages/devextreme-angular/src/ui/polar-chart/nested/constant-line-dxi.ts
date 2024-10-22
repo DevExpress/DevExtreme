@@ -60,10 +60,10 @@ export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { font: Font, text: string, visible: boolean } {
+    get label(): Record<string, any> | { font?: Font, text?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font: Font, text: string, visible: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, text?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 

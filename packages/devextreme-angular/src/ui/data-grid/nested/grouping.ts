@@ -61,10 +61,10 @@ export class DxoDataGridGroupingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get texts(): Record<string, any> | { groupByThisColumn: string, groupContinuedMessage: string, groupContinuesMessage: string, ungroup: string, ungroupAll: string } {
+    get texts(): Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any> | { groupByThisColumn: string, groupContinuedMessage: string, groupContinuesMessage: string, ungroup: string, ungroupAll: string }) {
+    set texts(value: Record<string, any> | { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string }) {
         this._setOption('texts', value);
     }
 

@@ -53,10 +53,10 @@ export class DxoDataGridExportComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get texts(): Record<string, any> | { exportAll: string, exportSelectedRows: string, exportTo: string } {
+    get texts(): Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any> | { exportAll: string, exportSelectedRows: string, exportTo: string }) {
+    set texts(value: Record<string, any> | { exportAll?: string, exportSelectedRows?: string, exportTo?: string }) {
         this._setOption('texts', value);
     }
 

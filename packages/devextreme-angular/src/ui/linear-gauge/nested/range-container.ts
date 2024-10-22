@@ -70,10 +70,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get ranges(): Array<Record<string, any>> | { color: ChartsColor | string, endValue: number, startValue: number }[] {
+    get ranges(): Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[] {
         return this._getOption('ranges');
     }
-    set ranges(value: Array<Record<string, any>> | { color: ChartsColor | string, endValue: number, startValue: number }[]) {
+    set ranges(value: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[]) {
         this._setOption('ranges', value);
     }
 
@@ -86,10 +86,10 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
     }
 
     @Input()
-    get width(): number | Record<string, any> | { end: number, start: number } {
+    get width(): number | Record<string, any> | { end?: number, start?: number } {
         return this._getOption('width');
     }
-    set width(value: number | Record<string, any> | { end: number, start: number }) {
+    set width(value: number | Record<string, any> | { end?: number, start?: number }) {
         this._setOption('width', value);
     }
 

@@ -37,18 +37,18 @@ export class DxoTreeListColumnFixingComponent extends NestedOption implements On
     }
 
     @Input()
-    get icons(): Record<string, any> | { fix: string, leftPosition: string, rightPosition: string, stickyPosition: string, unfix: string } {
+    get icons(): Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } {
         return this._getOption('icons');
     }
-    set icons(value: Record<string, any> | { fix: string, leftPosition: string, rightPosition: string, stickyPosition: string, unfix: string }) {
+    set icons(value: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }) {
         this._setOption('icons', value);
     }
 
     @Input()
-    get texts(): Record<string, any> | { fix: string, leftPosition: string, rightPosition: string, stickyPosition: string, unfix: string } {
+    get texts(): Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any> | { fix: string, leftPosition: string, rightPosition: string, stickyPosition: string, unfix: string }) {
+    set texts(value: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }) {
         this._setOption('texts', value);
     }
 

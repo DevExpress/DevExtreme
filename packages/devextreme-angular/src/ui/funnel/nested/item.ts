@@ -29,26 +29,26 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFunnelItemComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> | { color: string, visible: boolean, width: number } {
+    get border(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color: string, visible: boolean, width: number }) {
+    set border(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border: Record<string, any>, hatching: Record<string, any> } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, hatching?: Record<string, any> } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border: Record<string, any>, hatching: Record<string, any> }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, hatching?: Record<string, any> }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border: Record<string, any>, hatching: Record<string, any> } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any>, hatching?: Record<string, any> } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border: Record<string, any>, hatching: Record<string, any> }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any>, hatching?: Record<string, any> }) {
         this._setOption('selectionStyle', value);
     }
 

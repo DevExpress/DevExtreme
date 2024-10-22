@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTreeMapTileComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> | { color: string, width: number } {
+    get border(): Record<string, any> | { color?: string, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color: string, width: number }) {
+    set border(value: Record<string, any> | { color?: string, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -46,26 +46,26 @@ export class DxoTreeMapTileComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border: Record<string, any>, color: string } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, color?: string } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border: Record<string, any>, color: string }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, color?: string }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get label(): Record<string, any> | { font: Font, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font: Font, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border: Record<string, any>, color: string } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any>, color?: string } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border: Record<string, any>, color: string }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any>, color?: string }) {
         this._setOption('selectionStyle', value);
     }
 

@@ -56,18 +56,18 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get horizontalLine(): boolean | Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, opacity: number, visible: boolean, width: number } {
+    get horizontalLine(): boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('horizontalLine');
     }
-    set horizontalLine(value: boolean | Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, opacity: number, visible: boolean, width: number }) {
+    set horizontalLine(value: boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('horizontalLine', value);
     }
 
     @Input()
-    get label(): Record<string, any> | { backgroundColor: string, customizeText: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, visible: boolean } {
+    get label(): Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { backgroundColor: string, customizeText: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, visible: boolean }) {
+    set label(value: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -80,10 +80,10 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get verticalLine(): boolean | Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, opacity: number, visible: boolean, width: number } {
+    get verticalLine(): boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('verticalLine');
     }
-    set verticalLine(value: boolean | Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, opacity: number, visible: boolean, width: number }) {
+    set verticalLine(value: boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('verticalLine', value);
     }
 

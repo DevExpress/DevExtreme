@@ -70,10 +70,10 @@ export class DxoTreeListTreeListHeaderFilterComponent extends NestedOption imple
     }
 
     @Input()
-    get texts(): Record<string, any> | { cancel: string, emptyValue: string, ok: string } {
+    get texts(): Record<string, any> | { cancel?: string, emptyValue?: string, ok?: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any> | { cancel: string, emptyValue: string, ok: string }) {
+    set texts(value: Record<string, any> | { cancel?: string, emptyValue?: string, ok?: string }) {
         this._setOption('texts', value);
     }
 

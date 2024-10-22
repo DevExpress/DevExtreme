@@ -151,10 +151,10 @@ export class DxoCircularGaugeValueIndicatorComponent extends NestedOption implem
     }
 
     @Input()
-    get text(): Record<string, any> | { customizeText: ((indicatedValue: { value: number, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, indent: number } {
+    get text(): Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indent?: number } {
         return this._getOption('text');
     }
-    set text(value: Record<string, any> | { customizeText: ((indicatedValue: { value: number, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, indent: number }) {
+    set text(value: Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indent?: number }) {
         this._setOption('text', value);
     }
 

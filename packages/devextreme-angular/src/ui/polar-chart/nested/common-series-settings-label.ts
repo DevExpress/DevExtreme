@@ -47,18 +47,18 @@ export class DxoPolarChartCommonSeriesSettingsLabelComponent extends NestedOptio
     }
 
     @Input()
-    get border(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): Record<string, any> | { color: string, visible: boolean, width: number } {
+    get connector(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('connector');
     }
-    set connector(value: Record<string, any> | { color: string, visible: boolean, width: number }) {
+    set connector(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('connector', value);
     }
 

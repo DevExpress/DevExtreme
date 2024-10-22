@@ -362,10 +362,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): Record<string, any> | { allowSearch: boolean, allowSelectAll: boolean, dataSource: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height: number | string, search: ColumnHeaderFilterSearchConfig, searchMode: "contains" | "startswith" | "equals", width: number | string } {
+    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: Record<string, any> | { allowSearch: boolean, allowSelectAll: boolean, dataSource: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height: number | string, search: ColumnHeaderFilterSearchConfig, searchMode: "contains" | "startswith" | "equals", width: number | string }) {
+    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string }) {
         this._setOption('headerFilter', value);
     }
 
@@ -386,10 +386,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get lookup(): Record<string, any> | { allowClearing: boolean, calculateCellValue: ((rowData: any) => any), dataSource: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store, displayExpr: ((data: any) => string) | string, valueExpr: string } {
+    get lookup(): Record<string, any> | { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store, displayExpr?: ((data: any) => string) | string, valueExpr?: string } {
         return this._getOption('lookup');
     }
-    set lookup(value: Record<string, any> | { allowClearing: boolean, calculateCellValue: ((rowData: any) => any), dataSource: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store, displayExpr: ((data: any) => string) | string, valueExpr: string }) {
+    set lookup(value: Record<string, any> | { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store, displayExpr?: ((data: any) => string) | string, valueExpr?: string }) {
         this._setOption('lookup', value);
     }
 
