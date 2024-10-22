@@ -204,7 +204,13 @@ export type ExplicitTypes = {
 };
 
 /** @public */
-export type Properties = dxChatOptions;
+export type Properties = dxChatOptions & { title: string;
+    showDateHeaders: boolean;
+    showDayHeaders: boolean;
+    showAvatar: boolean;
+    showUsername: boolean;
+    showMessageTimestamp: boolean;
+};
 
 ///#DEBUG
 // eslint-disable-next-line import/first
