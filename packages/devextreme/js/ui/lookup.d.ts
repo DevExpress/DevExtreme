@@ -13,7 +13,6 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-    AsyncCancelable,
 } from '../events/index';
 
 import {
@@ -22,7 +21,6 @@ import {
 
 import dxDropDownList, {
     dxDropDownListOptions,
-    SelectionChangingInfo,
     SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
@@ -127,14 +125,6 @@ export type PullRefreshEvent = EventInfo<dxLookup>;
  * @inherits NativeEventInfo,ScrollInfo
  */
 export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & ScrollInfo;
-
-/**
- * @docid _ui_lookup_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,_ui_drop_down_editor_ui_drop_down_list_SelectionChangingInfo
- */
-export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxLookup> & SelectionChangingInfo;
 
 /**
  * @docid _ui_lookup_SelectionChangedEvent
@@ -441,11 +431,6 @@ onOpened?: ((e: OpenedEvent) => void);
  * @type_function_param1 e:{ui/lookup:OptionChangedEvent}
  */
 onOptionChanged?: ((e: OptionChangedEvent) => void);
-/**
- * @docid dxLookupOptions.onSelectionChanging
- * @type_function_param1 e:{ui/lookup:SelectionChangingEvent}
- */
-onSelectionChanging?: ((e: SelectionChangingEvent) => void);
 /**
  * @docid dxLookupOptions.onSelectionChanged
  * @type_function_param1 e:{ui/lookup:SelectionChangedEvent}

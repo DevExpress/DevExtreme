@@ -12,6 +12,8 @@
         "Search": "Paieška",
         "Back": "Atgal",
         "OK": "Gerai",
+        "Today": "Šiandien",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "Nėra duomenų",
 
@@ -237,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "Numeskite filtrų laukus čia",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Tema",
         "dxScheduler-editorLabelStartDate": "Pradžios data",
@@ -329,6 +332,7 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
+        "dxChat-errorListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
@@ -369,6 +373,15 @@
         "dxFilterBuilder-filterOperationBetween": "Intervale",
         "dxFilterBuilder-filterOperationAnyOf": "Kuris nors iš",
         "dxFilterBuilder-filterOperationNoneOf": "Nė vienas iš",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "Pakeisti šrifto spalvą",
         "dxHtmlEditor-dialogBackgroundCaption": "Pakeisti fono spalvą",

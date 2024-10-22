@@ -1,9 +1,23 @@
 @use "sass:math";
 
-@mixin chat-messagelist($padding) {
+@mixin chat-messagelist(
+  $padding,
+  $day-header-color,
+  $day-header-padding-bottom,
+  $day-header-first-padding-top,
+) {
   .dx-chat-messagelist {
     .dx-scrollable-content {
       padding-inline: $padding;
+    }
+  }
+
+  .dx-chat-messagelist-day-header {
+    padding-bottom: $day-header-padding-bottom;
+    color: $day-header-color;
+
+    &:first-child {
+      padding-top: $day-header-first-padding-top;
     }
   }
 }

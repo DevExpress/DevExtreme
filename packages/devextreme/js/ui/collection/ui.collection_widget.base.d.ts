@@ -22,30 +22,13 @@ import Widget, {
 
 export type ItemLike = string | CollectionWidgetItem | any;
 
-/**
- * @docid
- * @hidden
- */
-export interface SelectionChangingInfo<TItem extends ItemLike = any> {
-    /** @docid */
-    readonly addedItems: Array<TItem>;
-    /** @docid */
-    readonly removedItems: Array<TItem>;
-}
-
-/**
- * @docid
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
- */
-export type SelectionChangingEvent<TComponent> = AsyncCancelable & EventInfo<TComponent> & SelectionChangingInfo;
+export type SelectionChangingEventBase<TComponent> = AsyncCancelable & EventInfo<TComponent> & SelectionChangeInfo;
 
 /**
  * @docid
  * @hidden
  */
-export interface SelectionChangedInfo<TItem extends ItemLike = any> {
+export interface SelectionChangeInfo<TItem extends ItemLike = any> {
     /** @docid */
     readonly addedItems: Array<TItem>;
     /** @docid */
@@ -149,11 +132,15 @@ export interface CollectionWidgetOptions<
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:{ui/collection/ui.collection_widget.base:SelectionChangingEvent}
+     * @type_function_param1 e:object
+     * @type_function_param1_field cancel:boolean|Promise<boolean>
+     * @type_function_param1_field addedItems:array<any>
+     * @type_function_param1_field removedItems:array<any>
+     * @type_function_param1_field component:this
      * @action
      * @public
      */
-    onSelectionChanging?: ((e: SelectionChangingEvent<TComponent>) => void);
+    onSelectionChanging?: ((e: SelectionChangingEventBase<TComponent>) => void);
     /**
      * @docid
      * @default null
@@ -164,7 +151,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TItem>) => void);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangeInfo<TItem>) => void);
     /**
      * @docid
      * @default -1

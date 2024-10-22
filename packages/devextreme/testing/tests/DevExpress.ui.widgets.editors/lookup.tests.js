@@ -63,6 +63,7 @@ QUnit.testStart(function() {
     $('#widthRootStyle').css('width', '300px');
 });
 
+const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
@@ -89,8 +90,9 @@ const PLACEHOLDER_CLASS = 'dx-placeholder';
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
 const SCROLL_VIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
-
 const FOCUSED_CLASS = 'dx-state-focused';
+
+const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 
 const WINDOW_RATIO = 0.8;
 
@@ -1033,11 +1035,14 @@ QUnit.module('Lookup', {
 
         openPopupWithList(firstLookup);
 
-        // NOTE: in ShadowDOM mode one selected item is inside ShadowDOM
-        // and other is in document
+        // NOTE: In ShadowDom mode, the two selected elements are inside ShadowDom.
+        // This happens because the overlays were closed and moved to the overlay container.
         if(QUnit.isInShadowDomMode()) {
-            assert.strictEqual(document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
-            assert.strictEqual($('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`).length, 1);
+            const listItemSelectedInDocument = document.querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
+            const listItemSelectedInShadowDOM = $('#qunit-fixture').get(0).querySelectorAll(`.${LIST_ITEM_SELECTED_CLASS}`);
+
+            assert.strictEqual(listItemSelectedInDocument.length, 0);
+            assert.strictEqual(listItemSelectedInShadowDOM.length, 2);
         } else {
             assert.strictEqual($(`.${LIST_ITEM_SELECTED_CLASS}`).length, 2);
         }
@@ -2156,7 +2161,7 @@ QUnit.module('popup options', {
         assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
     });
 
-    QUnit.test('popup should not be hidden after outsideClick', function(assert) {
+    QUnit.test('popup should be hidden after outsideClick', function(assert) {
         const $lookup = $('#lookupOptions');
         const instance = $lookup.dxLookup({
             dataSource: [1, 2, 3]
@@ -2167,13 +2172,13 @@ QUnit.module('popup options', {
         const $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
 
         $(document).trigger('dxpointerdown');
-        assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
+        assert.equal($overlay.is(':visible'), false, 'overlay is hidden');
     });
 
-    QUnit.test('lookup popup should be hidden after click outside was present', function(assert) {
+    QUnit.test('lookup popup should not be hidden after click outside was present if dropDownOptions.hideOnOutsideClick is set to false', function(assert) {
         const $lookup = $('#lookupOptions');
         const instance = $lookup.dxLookup({
-            'dropDownOptions.hideOnOutsideClick': true,
+            'dropDownOptions.hideOnOutsideClick': false,
             visible: true,
             usePopover: false
         }).dxLookup('instance');
@@ -2186,7 +2191,37 @@ QUnit.module('popup options', {
         assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
 
         $(document).trigger('dxpointerdown');
-        assert.equal($overlay.is(':visible'), false, 'overlay is hidden');
+        assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
+    });
+
+    [true, false].forEach(dropDownCentered => {
+        [true, false].forEach(_scrollToSelectedItemEnabled => {
+            [true, false].forEach(usePopover => {
+                QUnit.test(`Popup should have correct _loopFocus option value if usePopover=${usePopover}, _scrollToSelectedItemEnabled=${_scrollToSelectedItemEnabled}, dropDownCentered=${dropDownCentered}`, function(assert) {
+                    const instance = $('#lookupOptions').dxLookup({
+                        _scrollToSelectedItemEnabled,
+                        usePopover,
+                        dropDownCentered,
+                    }).dxLookup('instance');
+
+                    openPopupWithList(instance);
+
+                    const $popup = $(`.${POPUP_CLASS}`);
+
+                    const popup = usePopover && !_scrollToSelectedItemEnabled
+                        ? PopoverFull.getInstance($popup)
+                        : PopupFull.getInstance($popup);
+
+                    const expectedValue = _scrollToSelectedItemEnabled
+                        ? dropDownCentered
+                        : !usePopover;
+
+                    const { _loopFocus } = popup.option();
+
+                    assert.strictEqual(_loopFocus, expectedValue, `_loopFocus: ${_loopFocus} is correct`);
+                });
+            });
+        });
     });
 
     QUnit.test('custom titleTemplate option', function(assert) {
@@ -2225,7 +2260,8 @@ QUnit.module('popup options', {
     QUnit.test('custom titleTemplate and onTitleRendered option is set correctly by options', function(assert) {
         assert.expect(2);
 
-        const $lookup = $('#lookupOptions').dxLookup(); const instance = $lookup.dxLookup('instance');
+        const $lookup = $('#lookupOptions').dxLookup();
+        const instance = $lookup.dxLookup('instance');
 
         instance.option('dropDownOptions.onTitleRendered', function(e) {
             assert.ok(true, 'option \'onTitleRendered\' successfully passed to the popup widget raised on titleTemplate');
@@ -2904,6 +2940,80 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_CLASS), 'second list-item is focused after down key pressing');
+    });
+
+    [true, false].forEach(value => {
+        QUnit.test(`focus from last Popover element should ${value ? 'not' : ''} move to Lookup field while keeping Popup open when usePopover: true and _scrollToSelectedItemEnabled: ${value}`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            const $element = $('#widget').dxLookup({
+                _scrollToSelectedItemEnabled: value,
+                items: [1, 2, 3],
+                opened: true,
+                focusStateEnabled: true,
+            });
+            const instance = $element.dxLookup('instance');
+            const tabKeyDownEvent = $.Event('keydown', { key: 'Tab' });
+            const $overlayContent = $(instance.content()).parent();
+            const $cancelButton = $overlayContent.find(CANCEL_BUTTON_SELECTOR);
+
+            $cancelButton.trigger(tabKeyDownEvent);
+
+            assert.strictEqual($element.hasClass(FOCUSED_CLASS), !value);
+            assert.ok(instance.option('opened'), 'popup is opened');
+        });
+    });
+
+    [true, false].forEach(value => {
+        QUnit.test(`focus from last Popover element should not move to Lookup field while keeping Popup open when usePopover: false and dropDownCentered: ${value}`, function(assert) {
+            if(devices.real().deviceType !== 'desktop') {
+                assert.ok(true, 'test does not actual for mobile devices');
+                return;
+            }
+
+            const $element = $('#widget').dxLookup({
+                dropDownCentered: value,
+                items: [1, 2, 3],
+                opened: true,
+                usePopover: false,
+                focusStateEnabled: true,
+                _scrollToSelectedItemEnabled: true,
+            });
+            const instance = $element.dxLookup('instance');
+            const tabKeyDownEvent = $.Event('keydown', { key: 'Tab' });
+            const $overlayContent = $(instance.content()).parent();
+            const $cancelButton = $overlayContent.find(CANCEL_BUTTON_SELECTOR);
+
+            $cancelButton.trigger(tabKeyDownEvent);
+
+            assert.strictEqual($element.hasClass(FOCUSED_CLASS), false);
+            assert.ok(instance.option('opened'), 'popup is opened');
+        });
+    });
+
+    QUnit.test('focus from first Popover element should move back to Lookup field while keeping Popup open when usePopover: true and shift+Tab is pressed', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test does not actual for mobile devices');
+            return;
+        }
+
+        const $element = $('#widget').dxLookup({
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+        });
+        const instance = $element.dxLookup('instance');
+        const shiftTabKeyDownEvent = $.Event('keydown', { key: 'Tab', shiftKey: true });
+        const $overlayContent = $(instance.content()).parent();
+        const $searchInput = $overlayContent.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+        $searchInput.trigger(shiftTabKeyDownEvent);
+
+        assert.ok($element.hasClass(FOCUSED_CLASS), 'lookup field is focused');
+        assert.ok(instance.option('opened'), 'popup is opened');
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {

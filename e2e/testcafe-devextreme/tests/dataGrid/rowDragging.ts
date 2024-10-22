@@ -147,7 +147,9 @@ safeSizeTest('The placeholder should appear when a cross-component dragging rows
       },
     }, '#otherContainer'),
   ]);
-});
+}).after(async () => ClientFunction(() => {
+  $('body').css('display', '');
+})());
 
 safeSizeTest('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -254,7 +256,9 @@ safeSizeTest('The cross-component drag and drop rows should work when there are 
       },
     }, '#otherContainer'),
   ]);
-});
+}).after(async () => ClientFunction(() => {
+  $('body').css('display', '');
+})());
 
 safeSizeTest('The cross-component drag and drop rows should not block rows', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -359,7 +363,9 @@ safeSizeTest('The cross-component drag and drop rows should not block rows', asy
       },
     }, '#otherContainer'),
   ]);
-});
+}).after(async () => ClientFunction(() => {
+  $('body').css('display', '');
+})());
 
 safeSizeTest('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
   const dataGrid = new DataGrid('#container');

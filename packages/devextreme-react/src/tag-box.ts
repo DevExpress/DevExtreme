@@ -8,7 +8,7 @@ import dxTagBox, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, SelectAllValueChangedEvent, SelectionChangingEvent, ValueChangedEvent } from "devextreme/ui/tag_box";
+import type { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, SelectAllValueChangedEvent, ValueChangedEvent } from "devextreme/ui/tag_box";
 import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { event, EventInfo } from "devextreme/events/index";
@@ -43,7 +43,6 @@ type ITagBoxOptionsNarrowedEvents = {
   onMultiTagPreparing?: ((e: MultiTagPreparingEvent) => void);
   onOpened?: ((e: OpenedEvent) => void);
   onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
-  onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onValueChanged?: ((e: ValueChangedEvent) => void);
 }
 
@@ -82,7 +81,7 @@ const TagBox = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["opened","value"]), []);
-      const independentEvents = useMemo(() => (["onChange","onClosed","onContentReady","onCustomItemCreating","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onMultiTagPreparing","onOpened","onSelectAllValueChanged","onSelectionChanging","onValueChanged"]), []);
+      const independentEvents = useMemo(() => (["onChange","onClosed","onContentReady","onCustomItemCreating","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onMultiTagPreparing","onOpened","onSelectAllValueChanged","onValueChanged"]), []);
 
       const defaults = useMemo(() => ({
         defaultOpened: "opened",

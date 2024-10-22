@@ -20,6 +20,7 @@ import ChatMessageBox from '__internal/ui/chat/messagebox';
 import ChatMessageBubble from '__internal/ui/chat/messagebubble';
 import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
+import ChatErrorList from '__internal/ui/chat/errorlist';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -114,6 +115,8 @@ const checkOptions = function(expectedOptions, resultOptions, deviceString, asse
 
         if($.isPlainObject(expectedValue)) {
             checkOptions(expectedValue, resultValue, null, assert);
+        } else if(Array.isArray(expectedValue)) {
+            assert.deepEqual(resultValue, expectedValue, optionName + ' is configured on device ' + deviceString);
         } else {
             assert.equal(resultValue, expectedValue, optionName + ' is configured on device ' + deviceString);
         }
@@ -1348,6 +1351,7 @@ testComponentDefaults(Chat,
         title: '',
         onMessageSend: undefined,
         dataSource: undefined,
+        showDayHeaders: true,
     }
 );
 
@@ -1393,7 +1397,17 @@ testComponentDefaults(ChatMessageGroup,
 testComponentDefaults(ChatMessageList,
     {},
     {
+        items: [],
         currentUserId: '',
+        showDayHeaders: true,
+        isLoading: false,
+    }
+);
+
+testComponentDefaults(ChatErrorList,
+    {},
+    {
+        items: []
     }
 );
 

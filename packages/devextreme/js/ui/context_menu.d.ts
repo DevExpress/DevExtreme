@@ -30,7 +30,7 @@ import {
 } from './menu';
 
 import {
-    SelectionChangedInfo,
+    SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -123,9 +123,9 @@ export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, 
  * @docid _ui_context_menu_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & SelectionChangedInfo<Item>;
+export type SelectionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & SelectionChangeInfo<Item>;
 
 /**
  * @docid _ui_context_menu_ShowingEvent

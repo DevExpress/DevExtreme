@@ -12,6 +12,8 @@
         "Search": "搜尋",
         "Back": "返回",
         "OK": "確定",
+        "Today": "今天",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "沒有要顯示的資料",
 
@@ -237,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "拖動篩選欄位到此處",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "標題",
         "dxScheduler-editorLabelStartDate": "開始日期",
@@ -329,6 +332,7 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
+        "dxChat-errorListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
@@ -369,6 +373,15 @@
         "dxFilterBuilder-filterOperationBetween": "之間",
         "dxFilterBuilder-filterOperationAnyOf": "任何一個",
         "dxFilterBuilder-filterOperationNoneOf": "任何一個都不",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "更改字體顏色",
         "dxHtmlEditor-dialogBackgroundCaption": "更改背景顏色",

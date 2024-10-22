@@ -1,11 +1,26 @@
 import { isDefined } from '@js/core/utils/type';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
+import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import { STICKY_BORDER_WIDTH, StickyPosition } from './const';
 
 export const getColumnFixedPosition = (
-  { fixedPosition }: { fixedPosition: StickyPosition | undefined },
-): StickyPosition => fixedPosition ?? StickyPosition.Left;
+  that: ColumnsController,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  column,
+): StickyPosition => {
+  const { fixedPosition }: { fixedPosition: StickyPosition } = column;
+  const rtlEnabled = that.option('rtlEnabled');
+  const isDefaultCommandColumn = column.command
+    && !gridCoreUtils.isCustomCommandColumn(that._columns, column);
+
+  if (isDefaultCommandColumn && rtlEnabled) {
+    return fixedPosition === StickyPosition.Right ? StickyPosition.Left : StickyPosition.Right;
+  }
+
+  return fixedPosition ?? StickyPosition.Left;
+};
 
 const getStickyOffsetCore = function (
   columns,
@@ -17,7 +32,7 @@ const getStickyOffsetCore = function (
   const column = columns[columnIndex];
   const isChildColumn = isDefined(column.ownerBand);
   const targetColumnIsRight = fixedPosition === StickyPosition.Right;
-  const targetColumnIsSticky = getColumnFixedPosition(column) === StickyPosition.Sticky;
+  const targetColumnIsSticky = column.fixedPosition === StickyPosition.Sticky;
   const processedColumns = targetColumnIsRight
     ? columns.slice(columnIndex + 1) : columns.slice(0, columnIndex).reverse();
   const processedWidths = targetColumnIsRight
@@ -28,7 +43,7 @@ const getStickyOffsetCore = function (
 
   processedColumns.forEach((col, colIndex: number) => {
     if (col.fixed && (!isDefined(offsets) || column.ownerBand === col.ownerBand)) {
-      const columnIsSticky = getColumnFixedPosition(col) === StickyPosition.Sticky;
+      const columnIsSticky = col.fixedPosition === StickyPosition.Sticky;
       const areNextOnlyFixedColumns = !processedColumns.slice(colIndex + 1)
         .some(({ fixed }: { fixed: boolean }) => !fixed);
 
@@ -44,6 +59,8 @@ const getStickyOffsetCore = function (
           adjacentStickyColumnIndex += 1;
         }
       }
+    } else if (col.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+      adjacentStickyColumnIndex += 1;
     }
   });
 
@@ -79,22 +96,38 @@ const isFirstOrLastColumn = function (
   return that[methodName](column, rowIndex, onlyWithinBandColumn, fixedPosition);
 };
 
+const getPrevColumn = function (
+  that: ColumnsController,
+  column,
+  visibleColumns,
+  rowIndex: number | null,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any {
+  const visibleColumnIndex = that.getVisibleIndex(column.index, rowIndex);
+
+  return visibleColumns?.slice(0, visibleColumnIndex)
+    .reverse()
+    .find((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+};
+
 const prevColumnIsFixedCore = function (
   that: ColumnsController,
   column,
   visibleColumns,
+  rowIndex: number | null,
 ): boolean {
-  const visibleColumnIndex = that.getVisibleIndex(column.index, 0);
-  const prevColumn = visibleColumns?.[visibleColumnIndex - 1];
+  const prevColumn = getPrevColumn(that, column, visibleColumns, rowIndex);
+  const fixedPosition = getColumnFixedPosition(that, column);
 
-  return prevColumn?.fixed as boolean
+  return !!prevColumn?.fixed
     && (!column.fixed
-      || column.fixedPosition === StickyPosition.Sticky
-      || column.fixedPosition !== prevColumn?.fixedPosition
+      || fixedPosition === StickyPosition.Sticky
+      || fixedPosition !== getColumnFixedPosition(that, prevColumn)
     );
 };
 
 export const getStickyOffset = function (
+  that: ColumnsController,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any[],
   widths: number[],
@@ -105,7 +138,7 @@ export const getStickyOffset = function (
   const column = columns[columnIndex];
 
   if (column) {
-    const fixedPosition = getColumnFixedPosition(column);
+    const fixedPosition = getColumnFixedPosition(that, column);
 
     switch (fixedPosition) {
       case StickyPosition.Sticky: {
@@ -162,20 +195,19 @@ export const prevColumnIsFixed = function (
   that: ColumnsController,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   column,
-  rowIndex: number,
+  rowIndex: number | null,
+  isDataColumn = false,
 ): boolean {
+  const visibleColumns = that.getVisibleColumns(isDataColumn ? null : rowIndex);
   const parentColumn = that.getParentColumn(column);
-  const visibleColumns = that.getVisibleColumns(0);
 
   if (parentColumn) {
     const isFirstColumn = that.isFirstColumn(column, rowIndex, true);
 
-    if (isFirstColumn) {
-      return prevColumnIsFixedCore(that, parentColumn, visibleColumns);
-    }
+    return isFirstColumn && prevColumnIsFixedCore(that, parentColumn, that.getVisibleColumns(0), 0);
   }
 
-  return prevColumnIsFixedCore(that, column, visibleColumns);
+  return prevColumnIsFixedCore(that, column, visibleColumns, rowIndex);
 };
 
 export const normalizeOffset = function (offset: Record<string, number>): CSSStyleDeclaration {

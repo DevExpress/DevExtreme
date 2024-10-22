@@ -7,11 +7,8 @@ const CHAT_HEADER_TEXT_CLASS = 'dx-chat-header-text';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="chatHeader"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new ChatHeader($('#chatHeader'), options);
+            this.instance = new ChatHeader($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 

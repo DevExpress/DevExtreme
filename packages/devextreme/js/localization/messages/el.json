@@ -12,6 +12,8 @@
         "Search": "Αναζήτηση",
         "Back": "Πίσω",
         "OK": "ΟΚ",
+        "Today": "Σήμερα",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "Δεν υπάρχουν δεδομένα προς εμφάνιση",
 
@@ -237,6 +239,7 @@
         "dxPivotGrid-filterFieldArea": "Τοποθετήστε τα πεδία φίλτρων εδώ",
 
         "dxScheduler-appointmentAriaLabel-group": "Group: {0}",
+        "dxScheduler-appointmentAriaLabel-recurring": "Recurring appointment",
 
         "dxScheduler-editorLabelTitle": "Θέμα",
         "dxScheduler-editorLabelStartDate": "Ημερομηνία έναρξης",
@@ -329,6 +332,7 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
+        "dxChat-errorListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
@@ -369,6 +373,15 @@
         "dxFilterBuilder-filterOperationBetween": "Είναι ανάμεσα",
         "dxFilterBuilder-filterOperationAnyOf": "Είναι κάποιο από αυτά",
         "dxFilterBuilder-filterOperationNoneOf": "Δεν είναι τίποτα από αυτά",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "Αλλαγή χρώματος γραμματοσειράς",
         "dxHtmlEditor-dialogBackgroundCaption": "Αλλαγή χρώματος φόντου",
