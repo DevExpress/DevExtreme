@@ -4,7 +4,7 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from 'inferno';
 import { createRef } from 'inferno';
 
-import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
+import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import { NumberBox } from '../editors/number_box';
 import { PAGER_INFO_CLASS } from '../info';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
@@ -18,15 +18,15 @@ const LIGHT_PAGES_CLASS = 'dx-light-pages';
 const PAGER_PAGES_COUNT_CLASS = 'dx-pages-count';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PagerSmallPropsType = Pick<PagerProps, 'pageCount' | 'pageIndex' | 'pageIndexChangedInternal' | 'pagesCountText'>;
+type PaginationSmallPropsType = Pick<PaginationProps, 'pageCount' | 'pageIndex' | 'pageIndexChangedInternal' | 'pagesCountText'>;
 
-export const PagerSmallDefaultProps: PagerSmallPropsType = {
-  pageIndex: PagerDefaultProps.pageIndex,
-  pageCount: PagerDefaultProps.pageCount,
-  pageIndexChangedInternal: PagerDefaultProps.pageIndexChangedInternal,
+export const PaginationSmallDefaultProps: PaginationSmallPropsType = {
+  pageIndex: PaginationDefaultProps.pageIndex,
+  pageCount: PaginationDefaultProps.pageCount,
+  pageIndexChangedInternal: PaginationDefaultProps.pageIndexChangedInternal,
 };
 
-export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
+export class PagesSmall extends InfernoComponent<PaginationSmallPropsType> {
   public state = {
     minWidth: 10,
   };
@@ -42,7 +42,7 @@ export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
     this.valueChange = this.valueChange.bind(this);
   }
 
-  componentWillUpdate(nextProps: PagerSmallPropsType, nextState, context): void {
+  componentWillUpdate(nextProps: PaginationSmallPropsType, nextState, context): void {
     super.componentWillUpdate(nextProps, nextState, context);
   }
 
@@ -110,4 +110,4 @@ export class PagesSmall extends InfernoComponent<PagerSmallPropsType> {
     );
   }
 }
-PagesSmall.defaultProps = PagerSmallDefaultProps;
+PagesSmall.defaultProps = PaginationSmallDefaultProps;

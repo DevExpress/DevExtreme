@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Pager as PagerComponent } from '../pager';
-import { GridPagerWrapper } from './grid_pager';
+import { Pagination as PaginationComponent } from '../pagination';
+import { PaginationWrapper } from './pagination_wrapper';
 
-export default class Pager extends GridPagerWrapper {
+export default class Pagination extends PaginationWrapper {
   getProps(): Record<string, unknown> {
     const props = super.getProps();
     props.onKeyDown = this._wrapKeyDownHandler(props.onKeyDown as any);
@@ -65,7 +65,7 @@ export default class Pager extends GridPagerWrapper {
   }
 
   // @ts-expect-error types error in R1
-  get _viewComponent(): typeof PagerComponent {
-    return PagerComponent;
+  get _viewComponent(): typeof PaginationComponent {
+    return PaginationComponent;
   }
 }

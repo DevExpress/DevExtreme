@@ -7,8 +7,8 @@ import type { RefObject } from '@devextreme-generator/declarations';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
-import type { PagerProps } from '../common/pager_props';
-import { PagerDefaultProps } from '../common/pager_props';
+import type { PaginationProps } from '../common/pagination_props';
+import { PaginationDefaultProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
 import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { PageSizeLarge } from './large';
@@ -20,13 +20,13 @@ export interface PageSizeSelectorProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
 
 const PageSizeSelectorDefaultProps: PageSizeSelectorPropsType = {
   isLargeDisplayMode: true,
-  pageSize: PagerDefaultProps.pageSize,
-  pageSizeChangedInternal: PagerDefaultProps.pageSizeChangedInternal,
-  allowedPageSizes: PagerDefaultProps.allowedPageSizes,
+  pageSize: PaginationDefaultProps.pageSize,
+  pageSizeChangedInternal: PaginationDefaultProps.pageSizeChangedInternal,
+  allowedPageSizes: PaginationDefaultProps.allowedPageSizes,
 };
 
 export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType> {

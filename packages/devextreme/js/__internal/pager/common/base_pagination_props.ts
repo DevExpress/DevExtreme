@@ -5,7 +5,7 @@ import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
 import { BaseWidgetDefaultProps, type BaseWidgetProps } from '../base_props';
 
-export interface BasePagerProps extends BaseWidgetProps {
+export interface BasePaginationProps extends BaseWidgetProps {
   isGridCompatibilityMode?: boolean;
   className?: string;
   showInfo?: boolean;
@@ -27,7 +27,7 @@ export interface BasePagerProps extends BaseWidgetProps {
   onKeyDown?: EventCallback<Event>;
 }
 
-export const BasePagerDefaultProps: BasePagerProps = {
+export const BasePaginationDefaultProps: BasePaginationProps = {
   ...BaseWidgetDefaultProps,
   isGridCompatibilityMode: false,
   showInfo: false,

@@ -3,28 +3,29 @@
 import type { RefObject } from '@devextreme/runtime/inferno';
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 
-import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
+import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
 import { SelectBox } from '../drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
 import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { getElementMinWidth } from '../utils/get_element_width';
 
-export interface PagerSmallProps {
+export interface PaginationSmallProps {
   parentRef?: RefObject<HTMLElement>;
   allowedPageSizes: FullPageSize[];
 }
 
-const PagerSmallDefaultProps: PagerSmallProps = {
+const PaginationSmallDefaultProps: PaginationSmallProps = {
+
   allowedPageSizes: [],
 };
 
-type PageSizeSmallPropsType = PagerSmallProps & Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal'>;
+type PageSizeSmallPropsType = PaginationSmallProps & Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal'>;
 
 const PageSizeSmallDefaultProps: PageSizeSmallPropsType = {
-  ...PagerSmallDefaultProps,
-  pageSize: PagerDefaultProps.pageSize,
-  pageSizeChangedInternal: PagerDefaultProps.pageSizeChangedInternal,
+  ...PaginationSmallDefaultProps,
+  pageSize: PaginationDefaultProps.pageSize,
+  pageSizeChangedInternal: PaginationDefaultProps.pageSizeChangedInternal,
 };
 
 export class PageSizeSmall extends InfernoComponent<PageSizeSmallPropsType> {

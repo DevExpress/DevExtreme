@@ -1,7 +1,7 @@
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
-import Pager from '@ts/pager/wrappers/pager';
+import Pagination from '@ts/pager/wrappers/pagination';
 
 import modules from '../m_modules';
 
@@ -121,7 +121,7 @@ export class PagerView extends modules.View {
     }
 
     if (hasWindow()) {
-      this._pager = that._createComponent($element, Pager, options);
+      this._pager = that._createComponent($element, Pagination, options);
     } else {
       $element
         .addClass('dx-pager')

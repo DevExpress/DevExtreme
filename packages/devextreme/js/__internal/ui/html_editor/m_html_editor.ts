@@ -57,13 +57,11 @@ const HtmlEditor = Editor.inherit({
       customizeModules: null,
       tableContextMenu: null,
       allowSoftLineBreak: false,
-
       formDialogOptions: null,
-
       imageUpload: null,
-
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       stylingMode: config().editorStylingMode || 'outlined',
+      converter: null,
     });
   },
 
@@ -264,6 +262,12 @@ const HtmlEditor = Editor.inherit({
         this._deltaConverter = new DeltaConverter();
       }
     }
+
+    const { converter } = this.option();
+
+    if (converter) {
+      this._htmlConverter = converter;
+    }
   },
 
   _renderContentImpl() {
@@ -428,7 +432,12 @@ const HtmlEditor = Editor.inherit({
 
   _textChangeHandler() {
     const { value: currentValue } = this.option();
-    const convertedValue = this._deltaConverter.toHtml();
+
+    const htmlMarkup = this._deltaConverter.toHtml();
+
+    const convertedValue = isFunction(this._htmlConverter?.fromHtml)
+      ? String(this._htmlConverter.fromHtml(htmlMarkup))
+      : htmlMarkup;
 
     if (
       currentValue !== convertedValue
@@ -505,13 +514,21 @@ const HtmlEditor = Editor.inherit({
 
   _optionChanged(args) {
     switch (args.name) {
+      case 'converter': {
+        this._htmlConverter = args.value;
+        break;
+      }
       case 'value': {
         if (this._quillInstance) {
           if (this._isEditorUpdating) {
             this._isEditorUpdating = false;
           } else {
+            const updatedValue = isFunction(this._htmlConverter?.toHtml)
+              ? String(this._htmlConverter.toHtml(args.value))
+              : args.value;
+
             this._suppressValueChangeAction();
-            this._updateHtmlContent(args.value);
+            this._updateHtmlContent(updatedValue);
             this._resumeValueChangeAction();
           }
         } else {

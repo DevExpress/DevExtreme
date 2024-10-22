@@ -3,12 +3,12 @@ import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 
 import { combineClasses } from '../core/r1/utils/render_utils';
-import type { PagerProps } from './common/pager_props';
-import { PagerDefaultProps } from './common/pager_props';
-import { PagerContent } from './content';
+import type { PaginationProps } from './common/pagination_props';
+import { PaginationDefaultProps } from './common/pagination_props';
+import { PaginationContent } from './content';
 import { ResizableContainer } from './resizable_container';
 
-export class Pager extends InfernoWrapperComponent<PagerProps> {
+export class Pagination extends InfernoWrapperComponent<PaginationProps> {
   public __getterCache = {};
 
   constructor(props) {
@@ -48,7 +48,7 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
     });
   }
 
-  getPagerProps(): PagerProps {
+  getPaginationProps(): PaginationProps {
     return {
       ...this.props,
       className: this.getClassName(),
@@ -62,10 +62,10 @@ export class Pager extends InfernoWrapperComponent<PagerProps> {
   render(): JSX.Element {
     return (
       <ResizableContainer
-        contentTemplate={PagerContent}
-        pagerProps={this.getPagerProps()}
+        contentTemplate={PaginationContent}
+        paginationProps={this.getPaginationProps()}
       />
     );
   }
 }
-Pager.defaultProps = PagerDefaultProps;
+Pagination.defaultProps = PaginationDefaultProps;

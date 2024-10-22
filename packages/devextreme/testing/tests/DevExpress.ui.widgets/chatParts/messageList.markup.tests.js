@@ -4,7 +4,6 @@ import MessageList from '__internal/ui/chat/messagelist';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
 const SCROLLABLE_CLASS = 'dx-scrollable';
-const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
 const CHAT_MESSAGELIST_EMPTY_IMAGE_CLASS = 'dx-chat-messagelist-empty-image';
@@ -13,11 +12,8 @@ const CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS = 'dx-chat-messagelist-empty-prompt';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="messageList"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new MessageList($('#messageList'), options);
+            this.instance = new MessageList($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 

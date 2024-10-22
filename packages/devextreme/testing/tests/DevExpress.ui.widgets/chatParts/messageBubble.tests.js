@@ -4,11 +4,8 @@ import MessageBubble from '__internal/ui/chat/messagebubble';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="messageBubble"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new MessageBubble($('#messageBubble'), options);
+            this.instance = new MessageBubble($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 
