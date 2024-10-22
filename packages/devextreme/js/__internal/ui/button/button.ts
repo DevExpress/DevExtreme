@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/ui/button.js)
-* Version: 24.2.0
-* Build date: Tue Oct 22 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
 import _extends from "@babel/runtime/helpers/esm/extends";
 const _excluded = ["accessKey", "activeStateEnabled", "children", "className", "disabled", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "icon", "iconPosition", "iconTemplate", "onClick", "onKeyDown", "onSubmit", "pressed", "rtlEnabled", "stylingMode", "tabIndex", "template", "templateData", "text", "type", "useInkRipple", "useSubmitBehavior", "visible", "width"];
@@ -23,7 +15,9 @@ import { InkRipple } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import { BaseWidgetProps } from './common/base_props';
 import messageLocalization from '../../localization/message';
+
 const stylingModes = ['outlined', 'text', 'contained'];
+
 const getCssClasses = model => {
   const {
     icon,
@@ -43,6 +37,7 @@ const getCssClasses = model => {
   };
   return combineClasses(classesMap);
 };
+
 export const viewFunction = viewModel => {
   const {
     children,
@@ -88,6 +83,7 @@ export const viewFunction = viewModel => {
     }, null, viewModel.inkRippleRef)], 0, null, null, viewModel.contentRef)
   }), null, viewModel.widgetRef));
 };
+
 export const ButtonProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(BaseWidgetProps), Object.getOwnPropertyDescriptors({
   activeStateEnabled: true,
   hoverStateEnabled: true,
@@ -100,6 +96,7 @@ export const ButtonProps = Object.create(Object.prototype, Object.assign(Object.
   useSubmitBehavior: false,
   templateData: Object.freeze({})
 })));
+
 export const defaultOptionRules = createDefaultOptionRules([{
   device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: {
@@ -111,8 +108,10 @@ export const defaultOptionRules = createDefaultOptionRules([{
     useInkRipple: true
   }
 }]);
+
 import { createReRenderEffect } from '@devextreme/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
+
 const getTemplate = TemplateProp => TemplateProp && (TemplateProp.defaultProps ? props => normalizeProps(createComponentVNode(2, TemplateProp, _extends({}, props))) : TemplateProp);
 export class Button extends InfernoWrapperComponent {
   constructor(props) {
