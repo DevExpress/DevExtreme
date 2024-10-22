@@ -63,10 +63,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get dataPrepareSettings(): Record<string, any> | { checkTypeForAllData: boolean, convertToAxisDataType: boolean, sortingMethod: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) } {
+    get dataPrepareSettings(): Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) } {
         return this._getOption('dataPrepareSettings');
     }
-    set dataPrepareSettings(value: Record<string, any> | { checkTypeForAllData: boolean, convertToAxisDataType: boolean, sortingMethod: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }) {
+    set dataPrepareSettings(value: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }) {
         this._setOption('dataPrepareSettings', value);
     }
 
@@ -135,10 +135,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get valueAxis(): Record<string, any> | { inverted: boolean, logarithmBase: number, max: number, min: number, type: "continuous" | "logarithmic", valueType: "datetime" | "numeric" | "string" } {
+    get valueAxis(): Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: "continuous" | "logarithmic", valueType?: "datetime" | "numeric" | "string" } {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: Record<string, any> | { inverted: boolean, logarithmBase: number, max: number, min: number, type: "continuous" | "logarithmic", valueType: "datetime" | "numeric" | "string" }) {
+    set valueAxis(value: Record<string, any> | { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: "continuous" | "logarithmic", valueType?: "datetime" | "numeric" | "string" }) {
         this._setOption('valueAxis', value);
     }
 

@@ -29,26 +29,26 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartPointImageComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get height(): number | Record<string, any> | { rangeMaxPoint: number, rangeMinPoint: number } {
+    get height(): number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } {
         return this._getOption('height');
     }
-    set height(value: number | Record<string, any> | { rangeMaxPoint: number, rangeMinPoint: number }) {
+    set height(value: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }) {
         this._setOption('height', value);
     }
 
     @Input()
-    get url(): Record<string, any> | string | { rangeMaxPoint: string, rangeMinPoint: string } {
+    get url(): Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string } {
         return this._getOption('url');
     }
-    set url(value: Record<string, any> | string | { rangeMaxPoint: string, rangeMinPoint: string }) {
+    set url(value: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }) {
         this._setOption('url', value);
     }
 
     @Input()
-    get width(): number | Record<string, any> | { rangeMaxPoint: number, rangeMinPoint: number } {
+    get width(): number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } {
         return this._getOption('width');
     }
-    set width(value: number | Record<string, any> | { rangeMaxPoint: number, rangeMinPoint: number }) {
+    set width(value: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }) {
         this._setOption('width', value);
     }
 

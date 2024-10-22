@@ -46,10 +46,10 @@ export class DxoChartConstantLineStyleComponent extends NestedOption implements 
     }
 
     @Input()
-    get label(): Record<string, any> | { font: Font, horizontalAlignment: "center" | "left" | "right", position: "inside" | "outside", verticalAlignment: "bottom" | "center" | "top", visible: boolean } {
+    get label(): Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", verticalAlignment?: "bottom" | "center" | "top", visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { font: Font, horizontalAlignment: "center" | "left" | "right", position: "inside" | "outside", verticalAlignment: "bottom" | "center" | "top", visible: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }) {
         this._setOption('label', value);
     }
 

@@ -178,10 +178,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment: "center" | "left" | "right", location: "left" | "right" | "top", showColon: boolean, template: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text: string, visible: boolean } {
+    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment: "center" | "left" | "right", location: "left" | "right" | "top", showColon: boolean, template: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text: string, visible: boolean }) {
+    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -242,10 +242,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get colCountByScreen(): Record<string, any> | { lg: number, md: number, sm: number, xs: number } {
+    get colCountByScreen(): Record<string, any> | { lg?: number, md?: number, sm?: number, xs?: number } {
         return this._getOption('colCountByScreen');
     }
-    set colCountByScreen(value: Record<string, any> | { lg: number, md: number, sm: number, xs: number }) {
+    set colCountByScreen(value: Record<string, any> | { lg?: number, md?: number, sm?: number, xs?: number }) {
         this._setOption('colCountByScreen', value);
     }
 
@@ -266,10 +266,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get tabs(): Array<Record<string, any>> | { alignItemLabels: boolean, badge: string, colCount: number, colCountByScreen: Record<string, any>, disabled: boolean, icon: string, items: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title: string }[] {
+    get tabs(): Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string, colCount?: number, colCountByScreen?: Record<string, any>, disabled?: boolean, icon?: string, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title?: string }[] {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<Record<string, any>> | { alignItemLabels: boolean, badge: string, colCount: number, colCountByScreen: Record<string, any>, disabled: boolean, icon: string, items: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title: string }[]) {
+    set tabs(value: Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string, colCount?: number, colCountByScreen?: Record<string, any>, disabled?: boolean, icon?: string, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title?: string }[]) {
         this._setOption('tabs', value);
     }
 

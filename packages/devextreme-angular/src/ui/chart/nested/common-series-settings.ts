@@ -32,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get aggregation(): Record<string, any> | { calculate: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled: boolean, method: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" } {
+    get aggregation(): Record<string, any> | { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled?: boolean, method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" } {
         return this._getOption('aggregation');
     }
-    set aggregation(value: Record<string, any> | { calculate: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled: boolean, method: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" }) {
+    set aggregation(value: Record<string, any> | { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>), enabled?: boolean, method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom" }) {
         this._setOption('aggregation', value);
     }
 
@@ -96,10 +96,10 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
     }
 
     @Input()
-    get border(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -208,10 +208,10 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any>, highlight?: boolean, width?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any>, highlight?: boolean, width?: number }) {
         this._setOption('hoverStyle', value);
     }
 
@@ -232,10 +232,10 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment: "center" | "left" | "right", argumentFormat: LocalizationTypes.Format, backgroundColor: string, border: Record<string, any>, connector: Record<string, any>, customizeText: ((pointInfo: any) => string), displayFormat: string, font: Font, format: LocalizationTypes.Format, horizontalOffset: number, position: "inside" | "outside", rotationAngle: number, showForZeroValues: boolean, verticalOffset: number, visible: boolean } {
+    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any>, connector?: Record<string, any>, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, horizontalOffset?: number, position?: "inside" | "outside", rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment: "center" | "left" | "right", argumentFormat: LocalizationTypes.Format, backgroundColor: string, border: Record<string, any>, connector: Record<string, any>, customizeText: ((pointInfo: any) => string), displayFormat: string, font: Font, format: LocalizationTypes.Format, horizontalOffset: number, position: "inside" | "outside", rotationAngle: number, showForZeroValues: boolean, verticalOffset: number, visible: boolean }) {
+    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any>, connector?: Record<string, any>, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, horizontalOffset?: number, position?: "inside" | "outside", rotationAngle?: number, showForZeroValues?: boolean, verticalOffset?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -296,10 +296,10 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
     }
 
     @Input()
-    get point(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hoverMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle: Record<string, any>, image: Record<string, any> | string, selectionMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle: Record<string, any>, size: number, symbol: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible: boolean } {
+    get point(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle?: Record<string, any>, image?: Record<string, any> | string, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any>, size?: number, symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible?: boolean } {
         return this._getOption('point');
     }
-    set point(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hoverMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle: Record<string, any>, image: Record<string, any> | string, selectionMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle: Record<string, any>, size: number, symbol: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible: boolean }) {
+    set point(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle?: Record<string, any>, image?: Record<string, any> | string, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any>, size?: number, symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible?: boolean }) {
         this._setOption('point', value);
     }
 
@@ -336,10 +336,10 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
     }
 
     @Input()
-    get reduction(): Record<string, any> | { color: string, level: "close" | "high" | "low" | "open" } {
+    get reduction(): Record<string, any> | { color?: string, level?: "close" | "high" | "low" | "open" } {
         return this._getOption('reduction');
     }
-    set reduction(value: Record<string, any> | { color: string, level: "close" | "high" | "low" | "open" }) {
+    set reduction(value: Record<string, any> | { color?: string, level?: "close" | "high" | "low" | "open" }) {
         this._setOption('reduction', value);
     }
 
@@ -360,10 +360,10 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any>, highlight?: boolean, width?: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any>, highlight?: boolean, width?: number }) {
         this._setOption('selectionStyle', value);
     }
 
@@ -488,10 +488,10 @@ export class DxoChartCommonSeriesSettingsComponent extends NestedOption implemen
     }
 
     @Input()
-    get valueErrorBar(): Record<string, any> | { color: string, displayMode: "auto" | "high" | "low" | "none", edgeLength: number, highValueField: string, lineWidth: number, lowValueField: string, opacity: number, type: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value: number } {
+    get valueErrorBar(): Record<string, any> | { color?: string, displayMode?: "auto" | "high" | "low" | "none", edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value?: number } {
         return this._getOption('valueErrorBar');
     }
-    set valueErrorBar(value: Record<string, any> | { color: string, displayMode: "auto" | "high" | "low" | "none", edgeLength: number, highValueField: string, lineWidth: number, lowValueField: string, opacity: number, type: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value: number }) {
+    set valueErrorBar(value: Record<string, any> | { color?: string, displayMode?: "auto" | "high" | "low" | "none", edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value?: number }) {
         this._setOption('valueErrorBar', value);
     }
 

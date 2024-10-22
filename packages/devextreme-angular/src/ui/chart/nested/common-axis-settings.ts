@@ -47,10 +47,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get breakStyle(): Record<string, any> | { color: string, line: "straight" | "waved", width: number } {
+    get breakStyle(): Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: Record<string, any> | { color: string, line: "straight" | "waved", width: number }) {
+    set breakStyle(value: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, width: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, width: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -87,10 +87,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get grid(): Record<string, any> | { color: string, opacity: number, visible: boolean, width: number } {
+    get grid(): Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('grid');
     }
-    set grid(value: Record<string, any> | { color: string, opacity: number, visible: boolean, width: number }) {
+    set grid(value: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('grid', value);
     }
 
@@ -103,10 +103,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment: "center" | "left" | "right", displayMode: "rotate" | "stagger" | "standard", font: Font, indentFromAxis: number, overlappingBehavior: "rotate" | "stagger" | "none" | "hide", position: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle: number, staggeringSpacing: number, template: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", displayMode?: "rotate" | "stagger" | "standard", font?: Font, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment: "center" | "left" | "right", displayMode: "rotate" | "stagger" | "standard", font: Font, indentFromAxis: number, overlappingBehavior: "rotate" | "stagger" | "none" | "hide", position: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle: number, staggeringSpacing: number, template: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", displayMode?: "rotate" | "stagger" | "standard", font?: Font, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('label', value);
     }
 
@@ -119,18 +119,18 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get minorGrid(): Record<string, any> | { color: string, opacity: number, visible: boolean, width: number } {
+    get minorGrid(): Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: Record<string, any> | { color: string, opacity: number, visible: boolean, width: number }) {
+    set minorGrid(value: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number } {
+    get minorTick(): Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number }) {
+    set minorTick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
@@ -159,26 +159,26 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number }) {
         this._setOption('stripStyle', value);
     }
 
     @Input()
-    get tick(): Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number } {
+    get tick(): Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number }) {
+    set tick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get title(): Record<string, any> | { alignment: "center" | "left" | "right", font: Font, margin: number, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | { alignment: "center" | "left" | "right", font: Font, margin: number, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('title', value);
     }
 

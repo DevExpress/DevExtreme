@@ -63,18 +63,18 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> | { endValue: Date | number | string, startValue: Date | number | string }[] {
+    get breaks(): Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[] {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak> | { endValue: Date | number | string, startValue: Date | number | string }[]) {
+    set breaks(value: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[]) {
         this._setOption('breaks', value);
     }
 
     @Input()
-    get breakStyle(): Record<string, any> | { color: string, line: "straight" | "waved", width: number } {
+    get breakStyle(): Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: Record<string, any> | { color: string, line: "straight" | "waved", width: number }) {
+    set breakStyle(value: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -95,18 +95,18 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get constantLines(): Array<Record<string, any>> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", displayBehindSeries: boolean, extendAxis: boolean, label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, value: Date | number | string, width: number }[] {
+    get constantLines(): Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[] {
         return this._getOption('constantLines');
     }
-    set constantLines(value: Array<Record<string, any>> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", displayBehindSeries: boolean, extendAxis: boolean, label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, value: Date | number | string, width: number }[]) {
+    set constantLines(value: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[]) {
         this._setOption('constantLines', value);
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, width: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, width: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -135,10 +135,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get grid(): Record<string, any> | { color: string, opacity: number, visible: boolean, width: number } {
+    get grid(): Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('grid');
     }
-    set grid(value: Record<string, any> | { color: string, opacity: number, visible: boolean, width: number }) {
+    set grid(value: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('grid', value);
     }
 
@@ -151,10 +151,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment: "center" | "left" | "right", customizeHint: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode: "rotate" | "stagger" | "standard", font: Font, format: LocalizationTypes.Format, indentFromAxis: number, overlappingBehavior: "rotate" | "stagger" | "none" | "hide", position: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle: number, staggeringSpacing: number, template: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment: "center" | "left" | "right", customizeHint: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode: "rotate" | "stagger" | "standard", font: Font, format: LocalizationTypes.Format, indentFromAxis: number, overlappingBehavior: "rotate" | "stagger" | "none" | "hide", position: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle: number, staggeringSpacing: number, template: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('label', value);
     }
 
@@ -191,18 +191,18 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get minorGrid(): Record<string, any> | { color: string, opacity: number, visible: boolean, width: number } {
+    get minorGrid(): Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: Record<string, any> | { color: string, opacity: number, visible: boolean, width: number }) {
+    set minorGrid(value: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number } {
+    get minorTick(): Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number }) {
+    set minorTick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
@@ -215,10 +215,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get minorTickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get minorTickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set minorTickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minorTickInterval', value);
     }
 
@@ -231,10 +231,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get minVisualRangeLength(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get minVisualRangeLength(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minVisualRangeLength');
     }
-    set minVisualRangeLength(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set minVisualRangeLength(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minVisualRangeLength', value);
     }
 
@@ -303,18 +303,18 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get strips(): Array<Record<string, any>> | { color: string, endValue: Date | number | string, label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, startValue: Date | number | string }[] {
+    get strips(): Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[] {
         return this._getOption('strips');
     }
-    set strips(value: Array<Record<string, any>> | { color: string, endValue: Date | number | string, label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number, startValue: Date | number | string }[]) {
+    set strips(value: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[]) {
         this._setOption('strips', value);
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label: Record<string, any>, paddingLeftRight: number, paddingTopBottom: number }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number }) {
         this._setOption('stripStyle', value);
     }
 
@@ -327,26 +327,26 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get tick(): Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number } {
+    get tick(): Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: Record<string, any> | { color: string, length: number, opacity: number, shift: number, visible: boolean, width: number }) {
+    set tick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get tickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get tickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set tickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get title(): Record<string, any> | string | { alignment: "center" | "left" | "right", font: Font, margin: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" } {
+    get title(): Record<string, any> | string | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | string | { alignment: "center" | "left" | "right", font: Font, margin: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" }) {
+    set title(value: Record<string, any> | string | { alignment?: "center" | "left" | "right", font?: Font, margin?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('title', value);
     }
 

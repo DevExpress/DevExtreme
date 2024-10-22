@@ -61,10 +61,10 @@ export class DxoTreeListFilterRowComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get operationDescriptions(): Record<string, any> | { between: string, contains: string, endsWith: string, equal: string, greaterThan: string, greaterThanOrEqual: string, lessThan: string, lessThanOrEqual: string, notContains: string, notEqual: string, startsWith: string } {
+    get operationDescriptions(): Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
         return this._getOption('operationDescriptions');
     }
-    set operationDescriptions(value: Record<string, any> | { between: string, contains: string, endsWith: string, equal: string, greaterThan: string, greaterThanOrEqual: string, lessThan: string, lessThanOrEqual: string, notContains: string, notEqual: string, startsWith: string }) {
+    set operationDescriptions(value: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
         this._setOption('operationDescriptions', value);
     }
 

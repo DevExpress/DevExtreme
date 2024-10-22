@@ -105,10 +105,10 @@ export class DxoTreeListFormItemComponent extends NestedOption implements AfterV
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment: "center" | "left" | "right", location: "left" | "right" | "top", showColon: boolean, template: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text: string, visible: boolean } {
+    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment: "center" | "left" | "right", location: "left" | "right" | "top", showColon: boolean, template: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text: string, visible: boolean }) {
+    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template, text?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 

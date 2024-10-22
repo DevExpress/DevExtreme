@@ -46,10 +46,10 @@ export class DxoFunnelFunnelTitleComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get margin(): number | Record<string, any> | { bottom: number, left: number, right: number, top: number } {
+    get margin(): number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: number | Record<string, any> | { bottom: number, left: number, right: number, top: number }) {
+    set margin(value: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -62,10 +62,10 @@ export class DxoFunnelFunnelTitleComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get subtitle(): Record<string, any> | string | { font: Font, offset: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" } {
+    get subtitle(): Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: Record<string, any> | string | { font: Font, offset: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" }) {
+    set subtitle(value: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('subtitle', value);
     }
 

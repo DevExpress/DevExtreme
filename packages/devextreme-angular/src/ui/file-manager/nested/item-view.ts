@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFileManagerItemViewComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get details(): Record<string, any> | { columns: Array<dxFileManagerDetailsColumn | string> } {
+    get details(): Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> } {
         return this._getOption('details');
     }
-    set details(value: Record<string, any> | { columns: Array<dxFileManagerDetailsColumn | string> }) {
+    set details(value: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }) {
         this._setOption('details', value);
     }
 

@@ -39,10 +39,10 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get groupItems(): Array<Record<string, any>> | { alignByColumn: boolean, column: string, customizeText: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat: string, name: string, showInColumn: string, showInGroupFooter: boolean, skipEmptyValues: boolean, summaryType: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat: LocalizationTypes.Format }[] {
+    get groupItems(): Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[] {
         return this._getOption('groupItems');
     }
-    set groupItems(value: Array<Record<string, any>> | { alignByColumn: boolean, column: string, customizeText: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat: string, name: string, showInColumn: string, showInGroupFooter: boolean, skipEmptyValues: boolean, summaryType: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat: LocalizationTypes.Format }[]) {
+    set groupItems(value: Array<Record<string, any>> | { alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[]) {
         this._setOption('groupItems', value);
     }
 
@@ -63,18 +63,18 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get texts(): Record<string, any> | { avg: string, avgOtherColumn: string, count: string, max: string, maxOtherColumn: string, min: string, minOtherColumn: string, sum: string, sumOtherColumn: string } {
+    get texts(): Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any> | { avg: string, avgOtherColumn: string, count: string, max: string, maxOtherColumn: string, min: string, minOtherColumn: string, sum: string, sumOtherColumn: string }) {
+    set texts(value: Record<string, any> | { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }) {
         this._setOption('texts', value);
     }
 
     @Input()
-    get totalItems(): Array<Record<string, any>> | { alignment: "center" | "left" | "right", column: string, cssClass: string, customizeText: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat: string, name: string, showInColumn: string, skipEmptyValues: boolean, summaryType: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat: LocalizationTypes.Format }[] {
+    get totalItems(): Array<Record<string, any>> | { alignment?: "center" | "left" | "right", column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[] {
         return this._getOption('totalItems');
     }
-    set totalItems(value: Array<Record<string, any>> | { alignment: "center" | "left" | "right", column: string, cssClass: string, customizeText: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat: string, name: string, showInColumn: string, skipEmptyValues: boolean, summaryType: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat: LocalizationTypes.Format }[]) {
+    set totalItems(value: Array<Record<string, any>> | { alignment?: "center" | "left" | "right", column?: string, cssClass?: string, customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum", valueFormat?: LocalizationTypes.Format }[]) {
         this._setOption('totalItems', value);
     }
 

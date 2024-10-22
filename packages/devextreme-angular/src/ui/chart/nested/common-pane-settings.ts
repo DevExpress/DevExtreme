@@ -38,10 +38,10 @@ export class DxoChartCommonPaneSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get border(): Record<string, any> | { bottom: boolean, color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", left: boolean, opacity: number, right: boolean, top: boolean, visible: boolean, width: number } {
+    get border(): Record<string, any> | { bottom?: boolean, color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { bottom: boolean, color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", left: boolean, opacity: number, right: boolean, top: boolean, visible: boolean, width: number }) {
+    set border(value: Record<string, any> | { bottom?: boolean, color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

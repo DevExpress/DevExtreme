@@ -110,10 +110,10 @@ export class DxiFilterBuilderFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get lookup(): Record<string, any> | { allowClearing: boolean, dataSource: Array<any> | DataSourceOptions | Store, displayExpr: ((data: any) => string) | string, valueExpr: ((data: any) => string | number | boolean) | string } {
+    get lookup(): Record<string, any> | { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store, displayExpr?: ((data: any) => string) | string, valueExpr?: ((data: any) => string | number | boolean) | string } {
         return this._getOption('lookup');
     }
-    set lookup(value: Record<string, any> | { allowClearing: boolean, dataSource: Array<any> | DataSourceOptions | Store, displayExpr: ((data: any) => string) | string, valueExpr: ((data: any) => string | number | boolean) | string }) {
+    set lookup(value: Record<string, any> | { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store, displayExpr?: ((data: any) => string) | string, valueExpr?: ((data: any) => string | number | boolean) | string }) {
         this._setOption('lookup', value);
     }
 

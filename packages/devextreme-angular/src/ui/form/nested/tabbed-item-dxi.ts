@@ -70,10 +70,10 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get tabs(): Array<Record<string, any>> | { alignItemLabels: boolean, badge: string, colCount: number, colCountByScreen: Record<string, any>, disabled: boolean, icon: string, items: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title: string }[] {
+    get tabs(): Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string, colCount?: number, colCountByScreen?: Record<string, any>, disabled?: boolean, icon?: string, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title?: string }[] {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<Record<string, any>> | { alignItemLabels: boolean, badge: string, colCount: number, colCountByScreen: Record<string, any>, disabled: boolean, icon: string, items: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title: string }[]) {
+    set tabs(value: Array<Record<string, any>> | { alignItemLabels?: boolean, badge?: string, colCount?: number, colCountByScreen?: Record<string, any>, disabled?: boolean, icon?: string, items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title?: string }[]) {
         this._setOption('tabs', value);
     }
 

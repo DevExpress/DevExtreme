@@ -47,10 +47,10 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get aggregationInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get aggregationInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('aggregationInterval');
     }
-    set aggregationInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set aggregationInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('aggregationInterval', value);
     }
 
@@ -63,18 +63,18 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> | { endValue: Date | number | string, startValue: Date | number | string }[] {
+    get breaks(): Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[] {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak> | { endValue: Date | number | string, startValue: Date | number | string }[]) {
+    set breaks(value: Array<ScaleBreak> | { endValue?: Date | number | string, startValue?: Date | number | string }[]) {
         this._setOption('breaks', value);
     }
 
     @Input()
-    get breakStyle(): Record<string, any> | { color: string, line: "straight" | "waved", width: number } {
+    get breakStyle(): Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number } {
         return this._getOption('breakStyle');
     }
-    set breakStyle(value: Record<string, any> | { color: string, line: "straight" | "waved", width: number }) {
+    set breakStyle(value: Record<string, any> | { color?: string, line?: "straight" | "waved", width?: number }) {
         this._setOption('breakStyle', value);
     }
 
@@ -119,10 +119,10 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get label(): Record<string, any> | { customizeText: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, overlappingBehavior: "hide" | "none", topIndent: number, visible: boolean } {
+    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, overlappingBehavior?: "hide" | "none", topIndent?: number, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { customizeText: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, overlappingBehavior: "hide" | "none", topIndent: number, visible: boolean }) {
+    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, overlappingBehavior?: "hide" | "none", topIndent?: number, visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -143,26 +143,26 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get marker(): Record<string, any> | { label: Record<string, any>, separatorHeight: number, textLeftIndent: number, textTopIndent: number, topIndent: number, visible: boolean } {
+    get marker(): Record<string, any> | { label?: Record<string, any>, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean } {
         return this._getOption('marker');
     }
-    set marker(value: Record<string, any> | { label: Record<string, any>, separatorHeight: number, textLeftIndent: number, textTopIndent: number, topIndent: number, visible: boolean }) {
+    set marker(value: Record<string, any> | { label?: Record<string, any>, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }) {
         this._setOption('marker', value);
     }
 
     @Input()
-    get maxRange(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get maxRange(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('maxRange');
     }
-    set maxRange(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set maxRange(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('maxRange', value);
     }
 
     @Input()
-    get minorTick(): Record<string, any> | { color: string, opacity: number, visible: boolean, width: number } {
+    get minorTick(): Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: Record<string, any> | { color: string, opacity: number, visible: boolean, width: number }) {
+    set minorTick(value: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
@@ -175,18 +175,18 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get minorTickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get minorTickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set minorTickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minorTickInterval', value);
     }
 
     @Input()
-    get minRange(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get minRange(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('minRange');
     }
-    set minRange(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set minRange(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('minRange', value);
     }
 
@@ -223,18 +223,18 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get tick(): Record<string, any> | { color: string, opacity: number, width: number } {
+    get tick(): Record<string, any> | { color?: string, opacity?: number, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: Record<string, any> | { color: string, opacity: number, width: number }) {
+    set tick(value: Record<string, any> | { color?: string, opacity?: number, width?: number }) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get tickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number } {
+    get tickInterval(): number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days: number, hours: number, milliseconds: number, minutes: number, months: number, quarters: number, seconds: number, weeks: number, years: number }) {
+    set tickInterval(value: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }) {
         this._setOption('tickInterval', value);
     }
 

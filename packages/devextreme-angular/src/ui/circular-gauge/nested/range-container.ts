@@ -70,10 +70,10 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
     }
 
     @Input()
-    get ranges(): Array<Record<string, any>> | { color: ChartsColor | string, endValue: number, startValue: number }[] {
+    get ranges(): Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[] {
         return this._getOption('ranges');
     }
-    set ranges(value: Array<Record<string, any>> | { color: ChartsColor | string, endValue: number, startValue: number }[]) {
+    set ranges(value: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[]) {
         this._setOption('ranges', value);
     }
 

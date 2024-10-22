@@ -47,10 +47,10 @@ export class DxoPieChartCommonSeriesSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get border(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -71,18 +71,18 @@ export class DxoPieChartCommonSeriesSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hatching: Record<string, any>, highlight: boolean } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, hatching?: Record<string, any>, highlight?: boolean } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hatching: Record<string, any>, highlight: boolean }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, hatching?: Record<string, any>, highlight?: boolean }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get label(): Record<string, any> | { argumentFormat: LocalizationTypes.Format, backgroundColor: string, border: Record<string, any>, connector: Record<string, any>, customizeText: ((pointInfo: any) => string), displayFormat: string, font: Font, format: LocalizationTypes.Format, position: "columns" | "inside" | "outside", radialOffset: number, rotationAngle: number, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any>, connector?: Record<string, any>, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "columns" | "inside" | "outside", radialOffset?: number, rotationAngle?: number, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { argumentFormat: LocalizationTypes.Format, backgroundColor: string, border: Record<string, any>, connector: Record<string, any>, customizeText: ((pointInfo: any) => string), displayFormat: string, font: Font, format: LocalizationTypes.Format, position: "columns" | "inside" | "outside", radialOffset: number, rotationAngle: number, textOverflow: "ellipsis" | "hide" | "none", visible: boolean, wordWrap: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any>, connector?: Record<string, any>, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "columns" | "inside" | "outside", radialOffset?: number, rotationAngle?: number, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('label', value);
     }
 
@@ -111,18 +111,18 @@ export class DxoPieChartCommonSeriesSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hatching: Record<string, any>, highlight: boolean } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, hatching?: Record<string, any>, highlight?: boolean } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hatching: Record<string, any>, highlight: boolean }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, hatching?: Record<string, any>, highlight?: boolean }) {
         this._setOption('selectionStyle', value);
     }
 
     @Input()
-    get smallValuesGrouping(): Record<string, any> | { groupName: string, mode: "none" | "smallValueThreshold" | "topN", threshold: number, topCount: number } {
+    get smallValuesGrouping(): Record<string, any> | { groupName?: string, mode?: "none" | "smallValueThreshold" | "topN", threshold?: number, topCount?: number } {
         return this._getOption('smallValuesGrouping');
     }
-    set smallValuesGrouping(value: Record<string, any> | { groupName: string, mode: "none" | "smallValueThreshold" | "topN", threshold: number, topCount: number }) {
+    set smallValuesGrouping(value: Record<string, any> | { groupName?: string, mode?: "none" | "smallValueThreshold" | "topN", threshold?: number, topCount?: number }) {
         this._setOption('smallValuesGrouping', value);
     }
 

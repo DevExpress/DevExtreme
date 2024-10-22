@@ -29,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoContextMenuShowSubmenuModeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get delay(): number | Record<string, any> | { hide: number, show: number } {
+    get delay(): number | Record<string, any> | { hide?: number, show?: number } {
         return this._getOption('delay');
     }
-    set delay(value: number | Record<string, any> | { hide: number, show: number }) {
+    set delay(value: number | Record<string, any> | { hide?: number, show?: number }) {
         this._setOption('delay', value);
     }
 

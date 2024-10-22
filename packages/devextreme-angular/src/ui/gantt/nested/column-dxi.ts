@@ -207,10 +207,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): Record<string, any> | { allowSearch: boolean, allowSelectAll: boolean, dataSource: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height: number | string, search: ColumnHeaderFilterSearchConfig, searchMode: "contains" | "startswith" | "equals", width: number | string } {
+    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: Record<string, any> | { allowSearch: boolean, allowSelectAll: boolean, dataSource: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height: number | string, search: ColumnHeaderFilterSearchConfig, searchMode: "contains" | "startswith" | "equals", width: number | string }) {
+    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store, groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year", height?: number | string, search?: ColumnHeaderFilterSearchConfig, searchMode?: "contains" | "startswith" | "equals", width?: number | string }) {
         this._setOption('headerFilter', value);
     }
 
