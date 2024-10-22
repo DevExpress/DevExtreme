@@ -3,7 +3,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import MessageBox from '__internal/ui/chat/messagebox';
+import MessageBox, { TYPING_START_DELAY } from '__internal/ui/chat/messagebox';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
 
@@ -295,7 +295,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
     });
 
     QUnit.module('onTypingStart event', () => {
-        QUnit.test('should be triggered if a character is entered in the input', function(assert) {
+        QUnit.test('should be triggered once if a character is entered in the input', function(assert) {
             const onTypingStartStub = sinon.stub();
 
             this.reinit({ onTypingStart: onTypingStartStub });
@@ -305,6 +305,49 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .type('n');
 
             assert.strictEqual(onTypingStartStub.callCount, 1);
+        });
+
+        ['', ' '].forEach(value => {
+            QUnit.test(`should not be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
+                const onTypingStartStub = sinon.stub();
+
+                this.reinit({ onTypingStart: onTypingStartStub });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type(value);
+
+                assert.strictEqual(onTypingStartStub.callCount, 0);
+            });
+        });
+
+        QUnit.test('must be called with a delay', function(assert) {
+            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+            const onTypingStartStub = sinon.stub();
+
+            this.reinit({ onTypingStart: onTypingStartStub });
+
+            try {
+                const keyboard = keyboardMock(this.$input);
+
+                keyboard
+                    .focus()
+                    .type('n');
+
+                assert.strictEqual(onTypingStartStub.callCount, 1, 'called once');
+
+                keyboard.type('no');
+
+                assert.strictEqual(onTypingStartStub.callCount, 1, 'called once still');
+
+                clock.tick(TYPING_START_DELAY);
+
+                keyboard.type('not');
+
+                assert.strictEqual(onTypingStartStub.callCount, 2, 'called twice');
+            } finally {
+                clock.restore();
+            }
         });
     });
 
