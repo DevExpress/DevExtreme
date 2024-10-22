@@ -93,7 +93,7 @@ const holidays = [
 ];
 const ariaDescription = () => {
   const disabledDates = holidays
-    .filter(date => !isWeekend(date))  // Filter out weekends first
+    .filter(date => !isWeekend(date))
     .map(date => new Date(date).toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
@@ -101,12 +101,12 @@ const ariaDescription = () => {
         day: 'numeric',
       })
     );
-    if (disabledDates?.length === 1) {
-      return `${disabledDates} is a disabled date`;
-    }
-    if (disabledDates?.length > 1) {
-      return `${disabledDates.join(', ')} are disabled dates`;
-    }
+  if (disabledDates?.length === 1) {
+    return `${disabledDates} is a disabled date`;
+  }
+  if (disabledDates?.length > 1) {
+    return `${disabledDates.join(', ')} are disabled dates`;
+  }
 };
 
 function notifyDisableDate() {
