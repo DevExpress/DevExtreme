@@ -21,6 +21,7 @@ import ChatHeader from './header';
 import type {
   MessageSendEvent as MessageBoxMessageSendEvent,
   Properties as MessageBoxProperties,
+  TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
 import MessageBox from './messagebox';
 import MessageList from './messagelist';
@@ -175,8 +176,8 @@ class Chat extends Widget<Properties> {
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
-      onTypingStart: () => {
-        this._typingStartHandler();
+      onTypingStart: (e) => {
+        this._typingStartHandler(e);
       },
       onTypingEnd: () => {
         this._typingEndHandler();
@@ -235,10 +236,11 @@ class Chat extends Widget<Properties> {
     this._messageSendAction?.({ message, event });
   }
 
-  _typingStartHandler(): void {
+  _typingStartHandler(e: MessageBoxTypingStartEvent): void {
+    const { event } = e;
     const { user } = this.option();
 
-    this._typingStartAction?.({ user });
+    this._typingStartAction?.({ user, event });
   }
 
   _typingEndHandler(): void {

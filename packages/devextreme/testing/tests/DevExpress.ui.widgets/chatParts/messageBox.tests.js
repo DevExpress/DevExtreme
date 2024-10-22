@@ -366,15 +366,16 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be triggered with correct arguments', function(assert) {
-            assert.expect(3);
+            assert.expect(4);
 
             this.reinit({
                 onTypingStart: (e) => {
-                    const { component, element } = e;
+                    const { component, element, event } = e;
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
                     assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                    assert.strictEqual(event.type, 'input', 'e.event.type is correct');
                 },
             });
 

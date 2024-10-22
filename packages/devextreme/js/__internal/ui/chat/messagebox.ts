@@ -8,7 +8,7 @@ import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_c
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
-import type { EnterKeyEvent } from '../../../ui/text_area';
+import type { EnterKeyEvent, InputEvent } from '../../../ui/text_area';
 import type dxTextArea from '../../../ui/text_area';
 import TextArea from '../m_text_area';
 
@@ -23,6 +23,8 @@ export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
   { text?: string };
 
+export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
+
 export interface Properties extends DOMComponentProperties<MessageBox> {
   activeStateEnabled?: boolean;
 
@@ -32,7 +34,7 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   onMessageSend?: (e: MessageSendEvent) => void;
 
-  onTypingStart?: (e: NativeEventInfo<MessageBox>) => void;
+  onTypingStart?: (e: TypingStartEvent) => void;
 
   onTypingEnd?: (e: NativeEventInfo<MessageBox>) => void;
 }
@@ -44,9 +46,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
-  _typingStartAction?: () => void;
+  _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
-  _throttledTriggerTypingStartAction?: () => void;
+  _throttledTriggerTypingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
   _typingEndAction?: () => void;
 
@@ -110,12 +112,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       autoResizeEnabled: true,
       valueChangeEvent: 'input',
       maxHeight: '8em',
-      onInput: (): void => {
+      onInput: (e: InputEvent): void => {
         const shouldButtonBeDisabled = !this._isValuableTextEntered();
 
         this._toggleButtonDisableState(shouldButtonBeDisabled);
 
-        this._onInputTriggerTypingEventsHandler();
+        this._onInputTriggerTypingEventsHandler(e);
       },
       onEnterKey: (e: EnterKeyEvent): void => {
         if (!e.event?.shiftKey) {
@@ -157,9 +159,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  _onInputTriggerTypingEventsHandler(): void {
+  _onInputTriggerTypingEventsHandler(e: InputEvent): void {
     if (this._isValuableTextEntered()) {
-      this._throttledTriggerTypingStartAction?.();
+      this._throttledTriggerTypingStartAction?.({ event: e.event });
     }
   }
 
@@ -184,14 +186,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     );
   }
 
-  _triggerTypingStartAction(): void {
+  _triggerTypingStartAction(e: InputEvent): void {
     clearTimeout(this._typingEndEventTimeout);
 
     this._typingEndEventTimeout = setTimeout(() => {
       this._typingEndAction?.();
     }, TYPING_END_DELAY);
 
-    this._typingStartAction?.();
+    this._typingStartAction?.({ event: e.event });
   }
 
   _sendHandler(e: ClickEvent | EnterKeyEvent): void {

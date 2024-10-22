@@ -342,16 +342,17 @@ QUnit.module('Chat', () => {
 
         QUnit.module('onTypingStart', moduleConfig, () => {
             QUnit.test('should be called with correct arguments', function(assert) {
-                assert.expect(4);
+                assert.expect(5);
 
                 const currentUser = { id: 1 };
 
                 this.instance.option({
                     user: currentUser,
-                    onTypingStart: ({ component, element, user }) => {
+                    onTypingStart: ({ component, element, event, user }) => {
                         assert.strictEqual(component, this.instance, 'component field is correct');
                         assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                         assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.strictEqual(event.type, 'input', 'e.event.type is correct');
                         assert.deepEqual(user, currentUser, 'user field is correct');
                     },
                 });
