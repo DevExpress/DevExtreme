@@ -5,7 +5,7 @@ import { createRef as infernoCreateRef } from 'inferno';
 
 import { format } from '../../core/utils/string';
 import messageLocalization from '../../localization/message';
-import { PagerDefaultProps, type PagerProps } from './common/pager_props';
+import { PaginationDefaultProps, type PaginationProps } from './common/pagination_props';
 
 export const PAGER_INFO_CLASS = 'dx-info';
 
@@ -13,12 +13,12 @@ export interface InfoTextProps {
   rootElementRef?: RefObject<HTMLDivElement>;
 }
 
-export type InfoTextPropsType = InfoTextProps & Pick<PagerProps, 'infoText' | 'pageIndex' | 'pageCount' | 'itemCount'>;
+export type InfoTextPropsType = InfoTextProps & Pick<PaginationProps, 'infoText' | 'pageIndex' | 'pageCount' | 'itemCount'>;
 
 const InfoTextDefaultProps: InfoTextPropsType = {
-  pageCount: PagerDefaultProps.pageCount,
-  pageIndex: PagerDefaultProps.pageIndex,
-  itemCount: PagerDefaultProps.itemCount,
+  pageCount: PaginationDefaultProps.pageCount,
+  pageIndex: PaginationDefaultProps.pageIndex,
+  itemCount: PaginationDefaultProps.itemCount,
 };
 
 export class InfoText extends BaseInfernoComponent<InfoTextPropsType> {
