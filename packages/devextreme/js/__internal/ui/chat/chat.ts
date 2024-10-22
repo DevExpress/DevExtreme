@@ -5,13 +5,13 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
-import type { NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
   MessageSendEvent,
   Properties as ChatProperties,
-  User,
+  TypingEndEvent,
+  TypingStartEvent,
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -29,14 +29,9 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
-type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
-
 type Properties = ChatProperties & {
   title: string;
   showDayHeaders: boolean;
-  onTypingStart?: ((e: TypingStartEvent) => void);
-  onTypingEnd?: ((e: TypingEndEvent) => void);
 };
 
 class Chat extends Widget<Properties> {
