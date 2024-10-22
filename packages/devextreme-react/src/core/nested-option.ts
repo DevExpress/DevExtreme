@@ -15,7 +15,7 @@ import {
 } from './configuration/react/element';
 
 import { useOptionScanning } from './use-option-scanning';
-import { NestedOptionContext, TemplateDiscoveryContext } from './helpers';
+import { NestedOptionContext, TemplateDiscoveryContext } from './contexts';
 
 interface INestedOptionMeta {
   optionName: string;

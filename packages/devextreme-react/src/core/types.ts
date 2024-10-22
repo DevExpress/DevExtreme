@@ -24,11 +24,6 @@ export interface RenderArgs {
   onRendered?: () => void;
 }
 
-export interface UpdateLocker {
-  lock: () => void;
-  unlock: () => void;
-}
-
 export type DXTemplateCollection = Record<string, DXTemplate>;
 
 export interface TemplateWrapperProps {

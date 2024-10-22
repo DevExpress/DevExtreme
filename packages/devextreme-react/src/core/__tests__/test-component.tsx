@@ -12,7 +12,7 @@ import {
   ReactElement,
 } from 'react';
 
-import { RestoreTreeContext } from '../helpers';
+import { RestoreTreeContext } from '../contexts';
 
 const eventHandlers: { [index: string]: ((e?: any) => void)[] } = {};
 

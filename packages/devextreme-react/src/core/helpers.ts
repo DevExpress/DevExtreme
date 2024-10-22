@@ -1,46 +1,5 @@
 /* eslint-disable max-classes-per-file, no-restricted-syntax */
-import {
-  Context,
-  createContext,
-} from 'react';
-
-import { TemplateInstantiationModel, UpdateLocker } from './types';
-import { IExpectedChild, IOptionDescriptor } from './configuration/react/element';
-import { IConfigNode } from './configuration/config-node';
-
-export const RemovalLockerContext: Context<UpdateLocker | undefined> = createContext<UpdateLocker | undefined>(undefined);
-
-// eslint-disable-next-line @typescript-eslint/no-extra-parens
-export const RestoreTreeContext: Context<(() => void) | undefined> = createContext<(() => void) | undefined>(undefined);
-
-export interface NestedOptionContextContent {
-  parentExpectedChildren: Record<string, IExpectedChild> | undefined;
-  parentFullName: string;
-  onChildOptionsReady: (
-    configNode: IConfigNode,
-    optionDescriptor: IOptionDescriptor,
-    childUpdateToken: symbol,
-    optionComponentKey: number
-  ) => void;
-  getOptionComponentKey: () => number;
-  treeUpdateToken: symbol;
-}
-
-export const NestedOptionContext = createContext<NestedOptionContextContent>({
-  parentExpectedChildren: {},
-  parentFullName: '',
-  onChildOptionsReady: () => undefined,
-  getOptionComponentKey: () => 0,
-  treeUpdateToken: Symbol('initial tree update token'),
-});
-
-export interface TemplateDiscoveryContextContent {
-  discoveryRendering: boolean;
-}
-
-export const TemplateDiscoveryContext = createContext<TemplateDiscoveryContextContent>({
-  discoveryRendering: false,
-});
+import { TemplateInstantiationModel } from './types';
 
 export function generateID(): string {
   return Math.random().toString(36).substring(2);

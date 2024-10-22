@@ -15,7 +15,7 @@ import {
 import { createPortal } from 'react-dom';
 import { DX_REMOVE_EVENT } from './component-base';
 import { DXRemoveCustomArgs, TemplateWrapperProps } from './types';
-import { RemovalLockerContext } from './helpers';
+import { RemovalLockerContext } from './contexts';
 
 const createHiddenNode = (
   containerNodeName: string,

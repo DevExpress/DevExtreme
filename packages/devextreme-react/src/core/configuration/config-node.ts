@@ -2,7 +2,7 @@ import * as React from 'react';
 import { separateProps } from '../widget-config';
 import { IOptionElement } from './react/element';
 import { getAnonymousTemplate } from './react/templates';
-import { TemplateDiscoveryContext } from '../helpers';
+import { TemplateDiscoveryContext } from '../contexts';
 
 interface IConfigNode {
   parentNode?: IConfigNode | undefined;

@@ -13,7 +13,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
-import { TemplateDiscoveryContext } from '../helpers';
+import { TemplateDiscoveryContext } from '../contexts';
 
 
 jest.useFakeTimers();

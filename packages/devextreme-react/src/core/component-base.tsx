@@ -19,13 +19,6 @@ import config from 'devextreme/core/config';
 
 import { createPortal } from 'react-dom';
 
-import {
-  RemovalLockerContext,
-  RestoreTreeContext,
-  NestedOptionContext,
-  TemplateDiscoveryContext,
-} from './helpers';
-
 import { useOptionScanning } from './use-option-scanning';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
@@ -34,6 +27,13 @@ import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
 import { ElementType } from './configuration/react/element';
 import { IConfigNode } from './configuration/config-node';
+
+import {
+  NestedOptionContext,
+  RemovalLockerContext,
+  RestoreTreeContext,
+  TemplateDiscoveryContext,
+} from './contexts';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
