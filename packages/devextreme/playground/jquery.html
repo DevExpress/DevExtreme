@@ -49,48 +49,13 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="chat1"></div>
+        <div id="button"></div>
         <script>
-            const user1 = {
-                id: 1,
-                name: 'Karl',
-            }
-
-            const user2 = {
-                id: 2,
-                name: 'James',
-            }
-
-            const items = [
-                {
-                    timestamp: new Date(2021, 9, 17, 14, 15),
-                    author: user1,
-                    text: 'message 1',
-                },
-                {
-                    timestamp: new Date(2021, 9, 17, 14, 15),
-                    author: user2,
-                    text: 'message 2',
-                },
-            ];
-
             $(function() {
-                const instance1 = $("#chat1").dxChat({
-                    items,
-                    user: user1,
-                    height: 500,
-                    onMessageSend: (e) => {
-                        e.component.renderMessage(e.message);
-                    },
-                    onTypingStart: (e) => {
-                        // debugger
-                        console.log('onTypingStart');
-                    },
-                    onTypingEnd: (e) => {
-                        // debugger
-                        console.log('onTypingEnd');
-                    },
-                }).dxChat('instance');
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
+                });
             });
         </script>
     </div>
