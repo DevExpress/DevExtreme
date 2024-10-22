@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
 import ErrorList from '__internal/ui/chat/errorlist';
-import MessageBox from '__internal/ui/chat/messagebox';
+import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -337,6 +337,58 @@ QUnit.module('Chat', () => {
                     .type(text);
 
                 this.$sendButton.trigger('dxclick');
+            });
+        });
+
+        QUnit.module('onTypingStart', moduleConfig, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(4);
+
+                const currentUser = { id: 1 };
+
+                this.instance.option({
+                    user: currentUser,
+                    onTypingStart: ({ component, element, user }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.deepEqual(user, currentUser, 'user field is correct');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+            });
+        });
+
+        QUnit.module('onTypingEnd', moduleConfig, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(4);
+
+                const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+
+                try {
+                    const currentUser = { id: 1 };
+
+                    this.instance.option({
+                        user: currentUser,
+                        onTypingEnd: ({ component, element, user }) => {
+                            assert.strictEqual(component, this.instance, 'component field is correct');
+                            assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                            assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                            assert.deepEqual(user, currentUser, 'user field is correct');
+                        },
+                    });
+
+                    keyboardMock(this.$input)
+                        .focus()
+                        .type('n');
+
+                    clock.tick(TYPING_END_DELAY);
+                } finally {
+                    clock.restore();
+                }
             });
         });
     });
