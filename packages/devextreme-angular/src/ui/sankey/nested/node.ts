@@ -29,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> {
+    get border(): Record<string, any> | { color: string, visible: boolean, width: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any>) {
+    set border(value: Record<string, any> | { color: string, visible: boolean, width: number }) {
         this._setOption('border', value);
     }
 
@@ -45,10 +45,10 @@ export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> {
+    get hoverStyle(): Record<string, any> | { border: Record<string, any>, color: string, hatching: Record<string, any>, opacity: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any>) {
+    set hoverStyle(value: Record<string, any> | { border: Record<string, any>, color: string, hatching: Record<string, any>, opacity: number }) {
         this._setOption('hoverStyle', value);
     }
 

@@ -14,7 +14,8 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import * as LocalizationTypes from 'devextreme/localization';
+import { ChartsColor, Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -70,10 +71,10 @@ export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption imp
     }
 
     @Input()
-    get border(): Record<string, any> {
+    get border(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any>) {
+    set border(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", visible: boolean, width: number }) {
         this._setOption('border', value);
     }
 
@@ -110,10 +111,10 @@ export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption imp
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> {
+    get hoverStyle(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any>) {
+    set hoverStyle(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number }) {
         this._setOption('hoverStyle', value);
     }
 
@@ -126,10 +127,10 @@ export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption imp
     }
 
     @Input()
-    get label(): Record<string, any> {
+    get label(): Record<string, any> | { argumentFormat: LocalizationTypes.Format, backgroundColor: string, border: Record<string, any>, connector: Record<string, any>, customizeText: ((pointInfo: any) => string), displayFormat: string, font: Font, format: LocalizationTypes.Format, position: "inside" | "outside", rotationAngle: number, showForZeroValues: boolean, visible: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any>) {
+    set label(value: Record<string, any> | { argumentFormat: LocalizationTypes.Format, backgroundColor: string, border: Record<string, any>, connector: Record<string, any>, customizeText: ((pointInfo: any) => string), displayFormat: string, font: Font, format: LocalizationTypes.Format, position: "inside" | "outside", rotationAngle: number, showForZeroValues: boolean, visible: boolean }) {
         this._setOption('label', value);
     }
 
@@ -166,10 +167,10 @@ export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption imp
     }
 
     @Input()
-    get point(): Record<string, any> {
+    get point(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hoverMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle: Record<string, any>, image: Record<string, any> | string, selectionMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle: Record<string, any>, size: number, symbol: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible: boolean } {
         return this._getOption('point');
     }
-    set point(value: Record<string, any>) {
+    set point(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, hoverMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle: Record<string, any>, image: Record<string, any> | string, selectionMode: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle: Record<string, any>, size: number, symbol: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible: boolean }) {
         this._setOption('point', value);
     }
 
@@ -190,10 +191,10 @@ export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption imp
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> {
+    get selectionStyle(): Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any>) {
+    set selectionStyle(value: Record<string, any> | { border: Record<string, any>, color: ChartsColor | string, dashStyle: "dash" | "dot" | "longDash" | "solid", hatching: Record<string, any>, highlight: boolean, width: number }) {
         this._setOption('selectionStyle', value);
     }
 
@@ -238,10 +239,10 @@ export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption imp
     }
 
     @Input()
-    get valueErrorBar(): Record<string, any> {
+    get valueErrorBar(): Record<string, any> | { color: string, displayMode: "auto" | "high" | "low" | "none", edgeLength: number, highValueField: string, lineWidth: number, lowValueField: string, opacity: number, type: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value: number } {
         return this._getOption('valueErrorBar');
     }
-    set valueErrorBar(value: Record<string, any>) {
+    set valueErrorBar(value: Record<string, any> | { color: string, displayMode: "auto" | "high" | "low" | "none", edgeLength: number, highValueField: string, lineWidth: number, lowValueField: string, opacity: number, type: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value: number }) {
         this._setOption('valueErrorBar', value);
     }
 

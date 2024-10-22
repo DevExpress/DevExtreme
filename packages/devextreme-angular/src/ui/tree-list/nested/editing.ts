@@ -138,10 +138,10 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get texts(): Record<string, any> {
+    get texts(): Record<string, any> | { addRow: string, addRowToNode: string, cancelAllChanges: string, cancelRowChanges: string, confirmDeleteMessage: string, confirmDeleteTitle: string, deleteRow: string, editRow: string, saveAllChanges: string, saveRowChanges: string, undeleteRow: string, validationCancelChanges: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any>) {
+    set texts(value: Record<string, any> | { addRow: string, addRowToNode: string, cancelAllChanges: string, cancelRowChanges: string, confirmDeleteMessage: string, confirmDeleteTitle: string, deleteRow: string, editRow: string, saveAllChanges: string, saveRowChanges: string, undeleteRow: string, validationCancelChanges: string }) {
         this._setOption('texts', value);
     }
 

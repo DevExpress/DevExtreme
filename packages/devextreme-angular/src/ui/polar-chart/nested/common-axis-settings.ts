@@ -14,6 +14,7 @@ import {
 
 
 
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -45,10 +46,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> {
+    get constantLineStyle(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, width: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any>) {
+    set constantLineStyle(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", label: Record<string, any>, width: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -69,10 +70,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get grid(): Record<string, any> {
+    get grid(): Record<string, any> | { color: string, opacity: number, visible: boolean, width: number } {
         return this._getOption('grid');
     }
-    set grid(value: Record<string, any>) {
+    set grid(value: Record<string, any> | { color: string, opacity: number, visible: boolean, width: number }) {
         this._setOption('grid', value);
     }
 
@@ -85,26 +86,26 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get label(): Record<string, any> {
+    get label(): Record<string, any> | { font: Font, indentFromAxis: number, overlappingBehavior: "hide" | "none", visible: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any>) {
+    set label(value: Record<string, any> | { font: Font, indentFromAxis: number, overlappingBehavior: "hide" | "none", visible: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get minorGrid(): Record<string, any> {
+    get minorGrid(): Record<string, any> | { color: string, opacity: number, visible: boolean, width: number } {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: Record<string, any>) {
+    set minorGrid(value: Record<string, any> | { color: string, opacity: number, visible: boolean, width: number }) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): Record<string, any> {
+    get minorTick(): Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: Record<string, any>) {
+    set minorTick(value: Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number }) {
         this._setOption('minorTick', value);
     }
 
@@ -117,18 +118,18 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get stripStyle(): Record<string, any> {
+    get stripStyle(): Record<string, any> | { label: Record<string, any> } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any>) {
+    set stripStyle(value: Record<string, any> | { label: Record<string, any> }) {
         this._setOption('stripStyle', value);
     }
 
     @Input()
-    get tick(): Record<string, any> {
+    get tick(): Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number } {
         return this._getOption('tick');
     }
-    set tick(value: Record<string, any>) {
+    set tick(value: Record<string, any> | { color: string, length: number, opacity: number, visible: boolean, width: number }) {
         this._setOption('tick', value);
     }
 

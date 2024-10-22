@@ -46,10 +46,10 @@ export class DxoBarGaugeBarGaugeTitleComponent extends NestedOption implements O
     }
 
     @Input()
-    get margin(): number | Record<string, any> {
+    get margin(): number | Record<string, any> | { bottom: number, left: number, right: number, top: number } {
         return this._getOption('margin');
     }
-    set margin(value: number | Record<string, any>) {
+    set margin(value: number | Record<string, any> | { bottom: number, left: number, right: number, top: number }) {
         this._setOption('margin', value);
     }
 
@@ -62,10 +62,10 @@ export class DxoBarGaugeBarGaugeTitleComponent extends NestedOption implements O
     }
 
     @Input()
-    get subtitle(): Record<string, any> | string {
+    get subtitle(): Record<string, any> | string | { font: Font, offset: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: Record<string, any> | string) {
+    set subtitle(value: Record<string, any> | string | { font: Font, offset: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" }) {
         this._setOption('subtitle', value);
     }
 

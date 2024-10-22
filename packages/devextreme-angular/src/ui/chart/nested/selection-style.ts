@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): Record<string, any> {
+    get border(): Record<string, any> | { color: string, visible: boolean, width: number, dashStyle: "dash" | "dot" | "longDash" | "solid" } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any>) {
+    set border(value: Record<string, any> | { color: string, visible: boolean, width: number, dashStyle: "dash" | "dot" | "longDash" | "solid" }) {
         this._setOption('border', value);
     }
 
@@ -62,10 +62,10 @@ export class DxoChartSelectionStyleComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get hatching(): Record<string, any> {
+    get hatching(): Record<string, any> | { direction: "left" | "none" | "right", opacity: number, step: number, width: number } {
         return this._getOption('hatching');
     }
-    set hatching(value: Record<string, any>) {
+    set hatching(value: Record<string, any> | { direction: "left" | "none" | "right", opacity: number, step: number, width: number }) {
         this._setOption('hatching', value);
     }
 

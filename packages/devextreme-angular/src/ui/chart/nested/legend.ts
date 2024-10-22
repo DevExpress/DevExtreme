@@ -38,10 +38,10 @@ export class DxoChartLegendComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get border(): Record<string, any> {
+    get border(): Record<string, any> | { color: string, cornerRadius: number, dashStyle: "dash" | "dot" | "longDash" | "solid", opacity: number, visible: boolean, width: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any>) {
+    set border(value: Record<string, any> | { color: string, cornerRadius: number, dashStyle: "dash" | "dot" | "longDash" | "solid", opacity: number, visible: boolean, width: number }) {
         this._setOption('border', value);
     }
 
@@ -126,10 +126,10 @@ export class DxoChartLegendComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get margin(): number | Record<string, any> {
+    get margin(): number | Record<string, any> | { bottom: number, left: number, right: number, top: number } {
         return this._getOption('margin');
     }
-    set margin(value: number | Record<string, any>) {
+    set margin(value: number | Record<string, any> | { bottom: number, left: number, right: number, top: number }) {
         this._setOption('margin', value);
     }
 
@@ -198,10 +198,10 @@ export class DxoChartLegendComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get title(): Record<string, any> | string {
+    get title(): Record<string, any> | string | { font: Font, horizontalAlignment: "center" | "left" | "right", margin: Record<string, any>, placeholderSize: number, subtitle: Record<string, any> | string, text: string, verticalAlignment: "bottom" | "top" } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | string) {
+    set title(value: Record<string, any> | string | { font: Font, horizontalAlignment: "center" | "left" | "right", margin: Record<string, any>, placeholderSize: number, subtitle: Record<string, any> | string, text: string, verticalAlignment: "bottom" | "top" }) {
         this._setOption('title', value);
     }
 

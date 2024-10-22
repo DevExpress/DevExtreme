@@ -78,10 +78,10 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get onClick(): ((e: ColumnButtonClickEvent) => void) {
+    get onClick(): ((e: ColumnButtonClickEvent<TRowData, TKey>) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
+    set onClick(value: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void)) {
         this._setOption('onClick', value);
     }
 

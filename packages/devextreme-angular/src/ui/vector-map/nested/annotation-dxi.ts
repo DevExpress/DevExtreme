@@ -62,10 +62,10 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get border(): Record<string, any> {
+    get border(): Record<string, any> | { color: string, cornerRadius: number, dashStyle: "dash" | "dot" | "longDash" | "solid", opacity: number, visible: boolean, width: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any>) {
+    set border(value: Record<string, any> | { color: string, cornerRadius: number, dashStyle: "dash" | "dot" | "longDash" | "solid", opacity: number, visible: boolean, width: number }) {
         this._setOption('border', value);
     }
 
@@ -126,10 +126,10 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get image(): Record<string, any> | string {
+    get image(): Record<string, any> | string | { height: number, url: string, width: number } {
         return this._getOption('image');
     }
-    set image(value: Record<string, any> | string) {
+    set image(value: Record<string, any> | string | { height: number, url: string, width: number }) {
         this._setOption('image', value);
     }
 
@@ -182,10 +182,10 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get shadow(): Record<string, any> {
+    get shadow(): Record<string, any> | { blur: number, color: string, offsetX: number, offsetY: number, opacity: number } {
         return this._getOption('shadow');
     }
-    set shadow(value: Record<string, any>) {
+    set shadow(value: Record<string, any> | { blur: number, color: string, offsetX: number, offsetY: number, opacity: number }) {
         this._setOption('shadow', value);
     }
 

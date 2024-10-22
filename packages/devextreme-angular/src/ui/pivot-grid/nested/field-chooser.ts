@@ -77,10 +77,10 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get texts(): Record<string, any> {
+    get texts(): Record<string, any> | { allFields: string, columnFields: string, dataFields: string, filterFields: string, rowFields: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any>) {
+    set texts(value: Record<string, any> | { allFields: string, columnFields: string, dataFields: string, filterFields: string, rowFields: string }) {
         this._setOption('texts', value);
     }
 

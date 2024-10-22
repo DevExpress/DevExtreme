@@ -12,6 +12,7 @@ import {
 
 
 
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -43,10 +44,10 @@ export class DxiPolarChartStripComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> {
+    get label(): Record<string, any> | { font: Font, text: string } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any>) {
+    set label(value: Record<string, any> | { font: Font, text: string }) {
         this._setOption('label', value);
     }
 

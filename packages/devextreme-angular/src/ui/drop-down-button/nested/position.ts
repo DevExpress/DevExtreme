@@ -29,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDropDownButtonPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get at(): Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" {
+    get at(): Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x: "center" | "left" | "right", y: "bottom" | "center" | "top" } {
         return this._getOption('at');
     }
-    set at(value: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") {
+    set at(value: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x: "center" | "left" | "right", y: "bottom" | "center" | "top" }) {
         this._setOption('at', value);
     }
 
@@ -45,26 +45,26 @@ export class DxoDropDownButtonPositionComponent extends NestedOption implements 
     }
 
     @Input()
-    get boundaryOffset(): Record<string, any> | string {
+    get boundaryOffset(): Record<string, any> | string | { x: number, y: number } {
         return this._getOption('boundaryOffset');
     }
-    set boundaryOffset(value: Record<string, any> | string) {
+    set boundaryOffset(value: Record<string, any> | string | { x: number, y: number }) {
         this._setOption('boundaryOffset', value);
     }
 
     @Input()
-    get collision(): Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" {
+    get collision(): Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x: "fit" | "flip" | "flipfit" | "none", y: "fit" | "flip" | "flipfit" | "none" } {
         return this._getOption('collision');
     }
-    set collision(value: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit") {
+    set collision(value: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x: "fit" | "flip" | "flipfit" | "none", y: "fit" | "flip" | "flipfit" | "none" }) {
         this._setOption('collision', value);
     }
 
     @Input()
-    get my(): Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" {
+    get my(): Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x: "center" | "left" | "right", y: "bottom" | "center" | "top" } {
         return this._getOption('my');
     }
-    set my(value: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") {
+    set my(value: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x: "center" | "left" | "right", y: "bottom" | "center" | "top" }) {
         this._setOption('my', value);
     }
 
@@ -77,10 +77,10 @@ export class DxoDropDownButtonPositionComponent extends NestedOption implements 
     }
 
     @Input()
-    get offset(): Record<string, any> | string {
+    get offset(): Record<string, any> | string | { x: number, y: number } {
         return this._getOption('offset');
     }
-    set offset(value: Record<string, any> | string) {
+    set offset(value: Record<string, any> | string | { x: number, y: number }) {
         this._setOption('offset', value);
     }
 

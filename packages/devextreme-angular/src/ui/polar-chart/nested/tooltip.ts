@@ -47,10 +47,10 @@ export class DxoPolarChartTooltipComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get border(): Record<string, any> {
+    get border(): Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", opacity: number, visible: boolean, width: number } {
         return this._getOption('border');
     }
-    set border(value: Record<string, any>) {
+    set border(value: Record<string, any> | { color: string, dashStyle: "dash" | "dot" | "longDash" | "solid", opacity: number, visible: boolean, width: number }) {
         this._setOption('border', value);
     }
 
@@ -151,10 +151,10 @@ export class DxoPolarChartTooltipComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get shadow(): Record<string, any> {
+    get shadow(): Record<string, any> | { blur: number, color: string, offsetX: number, offsetY: number, opacity: number } {
         return this._getOption('shadow');
     }
-    set shadow(value: Record<string, any>) {
+    set shadow(value: Record<string, any> | { blur: number, color: string, offsetX: number, offsetY: number, opacity: number }) {
         this._setOption('shadow', value);
     }
 
