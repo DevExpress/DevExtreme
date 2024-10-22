@@ -3,6 +3,8 @@ export {
   InitializedEvent,
   OptionChangedEvent,
   MessageSendEvent,
+  TypingStartEvent,
+  TypingEndEvent,
   User,
   ChatError,
   Message,
