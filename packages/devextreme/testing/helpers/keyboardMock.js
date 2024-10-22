@@ -242,7 +242,7 @@ let focused;
             throw Error('Unable to type text in non-editable element: ' + $element.get(0));
         }
 
-        let clock = $.now();
+        let clock = Date.now();
 
         return {
             triggerEvent: function(eventName, options) {
