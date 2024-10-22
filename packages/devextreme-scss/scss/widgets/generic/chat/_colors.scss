@@ -20,6 +20,7 @@ $chat-messagelist-empty-message-color: null !default;
 $chat-messagelist-empty-prompt-color: null !default;
 
 $chat-avatar-background-color: $base-border-color !default;
+$chat-errorlist-color: $base-invalid-color !default;
 
 @if $color == "light" {
   $chat-avatar-color: $base-text-color !default;
