@@ -54,12 +54,12 @@ export class AppComponent {
           day: 'numeric',
         })
       );
-      if (disabledDates?.length === 1) {
-        return `${disabledDates} is a disabled date`;
-      }
-      if (disabledDates?.length > 1) {
-        return `${disabledDates.join(', ')} are disabled dates`;
-      }
+    if (disabledDates?.length === 1) {
+      return `${disabledDates} is a disabled date`;
+    }
+    if (disabledDates?.length > 1) {
+      return `${disabledDates.join(', ')} are disabled dates`;
+    }
   };
 
   constructor(public dataService: DataService) {

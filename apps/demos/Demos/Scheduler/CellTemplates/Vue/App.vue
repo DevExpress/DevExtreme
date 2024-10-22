@@ -70,12 +70,12 @@ const ariaDescription = computed(() => {
         day: 'numeric',
       })
     );
-    if (disabledDates?.length === 1) {
-      return `${disabledDates} is a disabled date`;
-    }
-    if (disabledDates?.length > 1) {
-      return `${disabledDates.join(', ')} are disabled dates`;
-    }
+  if (disabledDates?.length === 1) {
+    return `${disabledDates} is a disabled date`;
+  }
+  if (disabledDates?.length > 1) {
+    return `${disabledDates.join(', ')} are disabled dates`;
+  }
 });
 
 function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
