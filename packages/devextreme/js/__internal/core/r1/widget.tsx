@@ -2,30 +2,32 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import '../../../events/click';
-import '../../../events/hover';
+import '@js/events/click';
+import '@js/events/hover';
 
 import {
   createReRenderEffect, InfernoEffect, InfernoWrapperComponent,
 } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
-import { createRef as infernoCreateRef } from 'inferno';
-
-import domAdapter from '../../../core/dom_adapter';
-import errors from '../../../core/errors';
-import { extend } from '../../../core/utils/extend';
-import resizeCallbacks from '../../../core/utils/resize_callbacks';
-import { normalizeStyleProp } from '../../../core/utils/style';
-import { isFunction } from '../../../core/utils/type';
+import domAdapter from '@js/core/dom_adapter';
+import errors from '@js/core/errors';
+import { extend } from '@js/core/utils/extend';
+import resizeCallbacks from '@js/core/utils/resize_callbacks';
+import { normalizeStyleProp } from '@js/core/utils/style';
+import { isFunction } from '@js/core/utils/type';
 import {
   dxClick, focus, keyboard, resize, visibility,
-} from '../../../events/short';
-import type { ConfigContextValue } from '../../core/r1/config_context';
-import { ConfigContext } from '../../core/r1/config_context';
-import { ConfigProvider } from '../../core/r1/config_provider';
-import type { EffectReturn } from '../../core/r1/utils/effect_return';
-import { combineClasses } from '../../core/r1/utils/render_utils';
-import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '../../core/r1/utils/resolve_rtl';
+} from '@js/events/short';
+import type { ConfigContextValue } from '@ts/core/r1/config_context';
+import { ConfigContext } from '@ts/core/r1/config_context';
+import { ConfigProvider } from '@ts/core/r1/config_provider';
+import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
+import { combineClasses } from '@ts/core/r1/utils/render_utils';
+import { resolveRtlEnabled, resolveRtlEnabledDefinition } from '@ts/core/r1/utils/resolve_rtl';
+import { createRef as infernoCreateRef } from 'inferno';
+
+import type { BaseWidgetProps } from './base_props';
+import { BaseWidgetDefaultProps } from './base_props';
 import {
   subscribeToDxActiveEvent,
   subscribeToDxFocusInEvent,
@@ -33,9 +35,7 @@ import {
   subscribeToDxHoverEndEvent,
   subscribeToDxHoverStartEvent,
   subscribeToDxInactiveEvent,
-} from '../../core/r1/utils/subscribe_to_event';
-import type { BaseWidgetProps } from '../base_props';
-import { BaseWidgetDefaultProps } from '../base_props';
+} from './utils/subscribe_to_event';
 
 const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
 const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;

@@ -3,6 +3,7 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
 import type { DisplayMode } from '@js/common';
+import { Widget } from '@ts/core/r1/widget';
 import { createRef as infernoCreateRef } from 'inferno';
 
 import { registerKeyboardAction } from '../../ui/shared/accessibility';
@@ -17,7 +18,6 @@ import { KeyboardActionContext } from './common/keyboard_action_context';
 import { PaginationConfigProvider } from './common/pagination_config_provider';
 import type { PaginationProps } from './common/pagination_props';
 import { PaginationDefaultProps } from './common/pagination_props';
-import { Widget } from './common/widget';
 import { InfoText } from './info';
 import { PageSizeSelector } from './page_size/selector';
 import { PageIndexSelector } from './pages/page_index_selector';
