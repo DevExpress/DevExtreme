@@ -70,7 +70,7 @@ export class AppComponent {
 
   onContentReady = (e: DxSchedulerTypes.ContentReadyEvent) => {
     this.setComponentAria(e.component?.$element());
-  }
+  };
 
   onOptionChanged = (e: DxSchedulerTypes.OptionChangedEvent) => {
     if (e.name === 'currentView') {
