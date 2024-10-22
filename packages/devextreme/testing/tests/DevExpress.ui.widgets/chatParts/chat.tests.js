@@ -346,7 +346,7 @@ QUnit.module('Chat', () => {
 
                 const currentUser = { id: 1 };
 
-                this.instance.option({
+                this.reinit({
                     user: currentUser,
                     onTypingStart: ({ component, element, event, user }) => {
                         assert.strictEqual(component, this.instance, 'component field is correct');
@@ -375,53 +375,50 @@ QUnit.module('Chat', () => {
             });
         });
 
-        QUnit.module('onTypingEnd', moduleConfig, () => {
+        QUnit.module('onTypingEnd', {
+            beforeEach: function() {
+                this.clock = sinon.useFakeTimers({ now: new Date().getTime() });
+
+                moduleConfig.beforeEach.apply(this, arguments);
+            },
+            afterEach: function() {
+                this.clock.restore();
+            }
+        }, () => {
             QUnit.test('should be called with correct arguments', function(assert) {
                 assert.expect(4);
 
-                const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+                const currentUser = { id: 1 };
 
-                try {
-                    const currentUser = { id: 1 };
+                this.reinit({
+                    user: currentUser,
+                    onTypingEnd: ({ component, element, user }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.deepEqual(user, currentUser, 'user field is correct');
+                    },
+                });
 
-                    this.instance.option({
-                        user: currentUser,
-                        onTypingEnd: ({ component, element, user }) => {
-                            assert.strictEqual(component, this.instance, 'component field is correct');
-                            assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
-                            assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
-                            assert.deepEqual(user, currentUser, 'user field is correct');
-                        },
-                    });
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
 
-                    keyboardMock(this.$input)
-                        .focus()
-                        .type('n');
-
-                    clock.tick(TYPING_END_DELAY);
-                } finally {
-                    clock.restore();
-                }
+                this.clock.tick(TYPING_END_DELAY);
             });
 
             QUnit.test('should be possible to change at runtime', function(assert) {
-                const clock = sinon.useFakeTimers({ now: new Date().getTime() });
                 const onTypingEnd = sinon.spy();
 
-                try {
+                this.instance.option({ onTypingEnd });
 
-                    this.instance.option({ onTypingEnd });
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
 
-                    keyboardMock(this.$input)
-                        .focus()
-                        .type('n');
+                this.clock.tick(TYPING_END_DELAY);
 
-                    clock.tick(TYPING_END_DELAY);
-
-                    assert.strictEqual(onTypingEnd.callCount, 1);
-                } finally {
-                    clock.restore();
-                }
+                assert.strictEqual(onTypingEnd.callCount, 1);
             });
         });
     });
