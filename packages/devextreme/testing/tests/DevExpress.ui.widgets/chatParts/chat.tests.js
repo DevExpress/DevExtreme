@@ -360,6 +360,18 @@ QUnit.module('Chat', () => {
                     .focus()
                     .type('n');
             });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onTypingStart = sinon.spy();
+
+                this.instance.option({ onTypingStart });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                assert.strictEqual(onTypingStart.callCount, 1);
+            });
         });
 
         QUnit.module('onTypingEnd', moduleConfig, () => {
@@ -386,6 +398,26 @@ QUnit.module('Chat', () => {
                         .type('n');
 
                     clock.tick(TYPING_END_DELAY);
+                } finally {
+                    clock.restore();
+                }
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+                const onTypingEnd = sinon.spy();
+
+                try {
+
+                    this.instance.option({ onTypingEnd });
+
+                    keyboardMock(this.$input)
+                        .focus()
+                        .type('n');
+
+                    clock.tick(TYPING_END_DELAY);
+
+                    assert.strictEqual(onTypingEnd.callCount, 1);
                 } finally {
                     clock.restore();
                 }

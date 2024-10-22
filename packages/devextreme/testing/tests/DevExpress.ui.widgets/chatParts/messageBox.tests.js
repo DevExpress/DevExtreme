@@ -310,6 +310,18 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onTypingStartStub.callCount, 1);
         });
 
+        QUnit.test('should be possible to update it at runtime', function(assert) {
+            const onTypingStartStub = sinon.stub();
+
+            this.instance.option('onTypingStart', onTypingStartStub);
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('n');
+
+            assert.strictEqual(onTypingStartStub.callCount, 1);
+        });
+
         ['', ' '].forEach(value => {
             QUnit.test(`should not be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
                 const onTypingStartStub = sinon.stub();
@@ -395,6 +407,25 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 clock.tick(500);
 
                 assert.strictEqual(onTypingEndStub.callCount, 1, 'is called once after delay');
+            } finally {
+                clock.restore();
+            }
+        });
+
+        QUnit.test('should be possible to update it at runtime', function(assert) {
+            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+            const onTypingEndStub = sinon.stub();
+
+            try {
+                this.instance.option('onTypingEnd', onTypingEndStub);
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                clock.tick(TYPING_END_DELAY);
+
+                assert.strictEqual(onTypingEndStub.callCount, 1);
             } finally {
                 clock.restore();
             }
