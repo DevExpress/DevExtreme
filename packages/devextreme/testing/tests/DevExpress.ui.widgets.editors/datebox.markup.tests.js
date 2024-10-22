@@ -135,7 +135,7 @@ QUnit.module('Rendering input', moduleConfig, () => {
     });
 
     QUnit.test('format should be correct when pickerType is calendar', function(assert) {
-        const date = new Date($.now());
+        const date = new Date(Date.now());
 
         this.createInstance({
             type: 'datetime',
