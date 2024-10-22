@@ -45,22 +45,21 @@ export class AppComponent {
   currentView = this.views[0];
 
   ariaDescription = () => {
-    const disabledDates = this.holidays.map(date => {
-        if (this.isWeekend(date)) {
-          return null;
-        }
-        return new Date(date).toLocaleDateString('en-US', {
+    const disabledDates = this.holidays
+      .filter(date => !this.isWeekend(date))
+      .map(date => new Date(date).toLocaleDateString('en-US', {
           weekday: 'long',
           year: 'numeric',
           month: 'long',
           day: 'numeric',
         })
+      );
+      if (disabledDates?.length === 1) {
+        return `${disabledDates} is a disabled date`;
       }
-    ).filter(dateText => dateText);
-    
-    if (disabledDates?.length > 0) {
-      return disabledDates.map(dateText => `${dateText} is a disabled date`).join('. ');
-    }
+      if (disabledDates?.length > 1) {
+        return `${disabledDates.join(', ')} are disabled dates`;
+      }
   };
 
   constructor(public dataService: DataService) {
@@ -174,9 +173,7 @@ export class AppComponent {
 
   setComponentAria(element): void {
     const prevAria = element?.attr('aria-label') || '';
-    element?.attr({
-      'aria-label': [prevAria, this.ariaDescription()].filter(Boolean).join(', '),
-    });
+    element?.attr('aria-label', `${prevAria} ${this.ariaDescription()}`);
   }
 }
 

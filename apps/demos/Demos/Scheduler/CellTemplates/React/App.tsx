@@ -14,23 +14,21 @@ import TimeCell from './TimeCell.tsx';
 const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek', 'month'];
 const ariaDescription = () => {
-  const disabledDates = holidays.map(date => 
-    {
-      if (Utils.isWeekend(date)) {
-        return null;
-      }
-      return new Date(date).toLocaleDateString('en-US', {
+  const disabledDates = holidays
+    .filter((date) => !Utils.isWeekend(date))
+    .map((date) => new Date(date).toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       })
+    );
+    if (disabledDates?.length === 1) {
+      return `${disabledDates} is a disabled date`;
     }
-  ).filter(dateText => dateText);
-  
-  if (disabledDates?.length > 0) {
-    return disabledDates.map(dateText => `${dateText} is a disabled date`).join('. ');
-  }
+    if (disabledDates?.length > 1) {
+      return `${disabledDates.join(', ')} are disabled dates`;
+    }
 };
 
 const notifyDisableDate = () => {
@@ -78,9 +76,7 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
 
 const setComponentAria = (element) => {
   const prevAria = element?.attr('aria-label') || '';
-  element?.attr({
-    'aria-label': [prevAria, ariaDescription()].filter(Boolean).join(', '),
-  });
+  element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
 }
 
 const App = () => {

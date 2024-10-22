@@ -62,22 +62,20 @@ const isMonthView = computed(() => currentView.value === 'month');
 
 const ariaDescription = computed(() => {
   const disabledDates = holidays
-    .map((date) => {
-      if (Utils.isWeekend(date)) {
-        return null;
-      }
-
-      return new Date(date).toLocaleDateString('en-US', {
+    .filter((date) => !Utils.isWeekend(date))
+    .map((date) => new Date(date).toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-      });
-    }).filter((dateText) => dateText);
-
-  if (disabledDates?.length > 0) {
-    return disabledDates.map((dateText) => `${dateText} is a disabled date`).join('. ');
-  }
+      })
+    );
+    if (disabledDates?.length === 1) {
+      return `${disabledDates} is a disabled date`;
+    }
+    if (disabledDates?.length > 1) {
+      return `${disabledDates.join(', ')} are disabled dates`;
+    }
 });
 
 function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
@@ -119,8 +117,6 @@ function applyDisableDatesToDateEditors(form) {
 
 function setComponentAria(element) {
   const prevAria = element?.attr('aria-label') || '';
-  element?.attr({
-    'aria-label': [prevAria, ariaDescription.value].filter(Boolean).join(', '),
-  });
+  element?.attr('aria-label', `${prevAria} ${ariaDescription.value}`);
 }
 </script>
