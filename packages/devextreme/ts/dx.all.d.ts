@@ -9526,7 +9526,14 @@ declare module DevExpress.ui {
      */
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChat> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxChatOptions;
+    export type Properties = dxChatOptions & {
+      title: string;
+      showDateHeaders: boolean;
+      showDayHeaders: boolean;
+      showAvatar: boolean;
+      showUsername: boolean;
+      showMessageTimestamp: boolean;
+    };
   }
   /**
    * [descr:dxChatOptions]
