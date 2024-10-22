@@ -19,7 +19,6 @@ import { DOCUMENT } from '@angular/common';
 
 
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -184,10 +183,10 @@ export class DxoSelectBoxOptionsComponent extends NestedOption implements AfterV
     }
 
     @Input()
-    get template(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

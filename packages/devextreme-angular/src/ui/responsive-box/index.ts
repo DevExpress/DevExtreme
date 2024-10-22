@@ -27,7 +27,6 @@ import DataSource from 'devextreme/data/data_source';
 import { dxResponsiveBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/responsive_box';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { template } from 'devextreme/core/templates/template';
 
 import DxResponsiveBox from 'devextreme/ui/responsive_box';
 
@@ -187,10 +186,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -397,7 +396,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
     

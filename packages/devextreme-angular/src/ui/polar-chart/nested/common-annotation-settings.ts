@@ -18,9 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig } from 'devextreme/viz/polar_chart';
+import { dxPolarChartAnnotationConfig } from 'devextreme/viz/polar_chart';
 import { Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -209,10 +208,10 @@ export class DxoPolarChartCommonAnnotationSettingsComponent extends NestedOption
     }
 
     @Input()
-    get template(): ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((annotation: dxPolarChartCommonAnnotationConfig | any, element: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -241,10 +240,10 @@ export class DxoPolarChartCommonAnnotationSettingsComponent extends NestedOption
     }
 
     @Input()
-    get tooltipTemplate(): ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template {
+    get tooltipTemplate(): any {
         return this._getOption('tooltipTemplate');
     }
-    set tooltipTemplate(value: ((annotation: dxPolarChartAnnotationConfig | any, element: any) => string | any) | template) {
+    set tooltipTemplate(value: any) {
         this._setOption('tooltipTemplate', value);
     }
 

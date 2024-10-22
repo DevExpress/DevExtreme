@@ -28,7 +28,6 @@ import { event } from 'devextreme/events/index';
 import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { template } from 'devextreme/core/templates/template';
 import { PositionConfig } from 'devextreme/animation/position';
 
 import DxContextMenu from 'devextreme/ui/context_menu';
@@ -326,10 +325,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -730,7 +729,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
     

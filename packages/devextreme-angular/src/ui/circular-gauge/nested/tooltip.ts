@@ -7,39 +7,29 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
+
 
 
 import * as LocalizationTypes from 'devextreme/localization';
-import { template } from 'devextreme/core/templates/template';
 import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-circular-gauge-tooltip',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxoCircularGaugeTooltipComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+export class DxoCircularGaugeTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -73,10 +63,10 @@ export class DxoCircularGaugeTooltipComponent extends NestedOption implements Af
     }
 
     @Input()
-    get contentTemplate(): ((scaleValue: { value: number, valueText: string }, element: any) => string | any) | template {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: ((scaleValue: { value: number, valueText: string }, element: any) => string | any) | template) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -175,22 +165,10 @@ export class DxoCircularGaugeTooltipComponent extends NestedOption implements Af
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

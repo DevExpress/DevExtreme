@@ -20,8 +20,6 @@ import {
 } from '@angular/core';
 
 
-import { dxBarGauge } from 'UNKNOWN_MODULE';
-import { template } from 'devextreme/core/templates/template';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bar_gauge';
 
 import DxBarGauge from 'devextreme/viz/bar_gauge';
@@ -155,10 +153,10 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get centerTemplate(): ((component: dxBarGauge, element: any) => string | any) | template {
+    get centerTemplate(): any {
         return this._getOption('centerTemplate');
     }
-    set centerTemplate(value: ((component: dxBarGauge, element: any) => string | any) | template) {
+    set centerTemplate(value: any) {
         this._setOption('centerTemplate', value);
     }
 
@@ -561,7 +559,7 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() centerTemplateChange: EventEmitter<((component: dxBarGauge, element: any) => string | any) | template>;
+    @Output() centerTemplateChange: EventEmitter<any>;
 
     /**
     

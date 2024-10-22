@@ -7,38 +7,28 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
 
 
-import { template } from 'devextreme/core/templates/template';
+
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-list-item-dragging',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxoListItemDraggingComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+export class DxoListItemDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowDropInsideItem(): boolean {
         return this._getOption('allowDropInsideItem');
@@ -112,10 +102,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements AfterV
     }
 
     @Input()
-    get dragTemplate(): ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template {
+    get dragTemplate(): any {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template) {
+    set dragTemplate(value: any) {
         this._setOption('dragTemplate', value);
     }
 
@@ -302,22 +292,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements AfterV
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

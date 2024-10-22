@@ -7,39 +7,29 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
+
 
 
 import * as LocalizationTypes from 'devextreme/localization';
 import { Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-sankey-tooltip',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxoSankeyTooltipComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+export class DxoSankeyTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -121,18 +111,18 @@ export class DxoSankeyTooltipComponent extends NestedOption implements AfterView
     }
 
     @Input()
-    get linkTooltipTemplate(): ((info: { source: string, target: string, weight: number }, element: any) => string | any) | template {
+    get linkTooltipTemplate(): any {
         return this._getOption('linkTooltipTemplate');
     }
-    set linkTooltipTemplate(value: ((info: { source: string, target: string, weight: number }, element: any) => string | any) | template) {
+    set linkTooltipTemplate(value: any) {
         this._setOption('linkTooltipTemplate', value);
     }
 
     @Input()
-    get nodeTooltipTemplate(): ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string | any) | template {
+    get nodeTooltipTemplate(): any {
         return this._getOption('nodeTooltipTemplate');
     }
-    set nodeTooltipTemplate(value: ((info: { label: string, weightIn: number, weightOut: number }, element: any) => string | any) | template) {
+    set nodeTooltipTemplate(value: any) {
         this._setOption('nodeTooltipTemplate', value);
     }
 
@@ -183,22 +173,10 @@ export class DxoSankeyTooltipComponent extends NestedOption implements AfterView
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

@@ -26,7 +26,6 @@ import DataSource from 'devextreme/data/data_source';
 import { dxDropDownButtonItem, ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/drop_down_button';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { template } from 'devextreme/core/templates/template';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 
 import DxDropDownButton from 'devextreme/ui/drop_down_button';
@@ -176,10 +175,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get dropDownContentTemplate(): ((data: Array<number | Record<string, any> | string> | DataSource, contentElement: any) => string | any) | template {
+    get dropDownContentTemplate(): any {
         return this._getOption('dropDownContentTemplate');
     }
-    set dropDownContentTemplate(value: ((data: Array<number | Record<string, any> | string> | DataSource, contentElement: any) => string | any) | template) {
+    set dropDownContentTemplate(value: any) {
         this._setOption('dropDownContentTemplate', value);
     }
 
@@ -293,10 +292,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -436,10 +435,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get template(): ((data: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((data: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -637,7 +636,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownContentTemplateChange: EventEmitter<((data: Array<number | Record<string, any> | string> | DataSource, contentElement: any) => string | any) | template>;
+    @Output() dropDownContentTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -700,7 +699,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -777,7 +776,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() templateChange: EventEmitter<((data: { icon: string, text: string }, contentElement: any) => string | any) | template>;
+    @Output() templateChange: EventEmitter<any>;
 
     /**
     

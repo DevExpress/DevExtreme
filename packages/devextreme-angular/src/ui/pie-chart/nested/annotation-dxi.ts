@@ -16,9 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig } from 'devextreme/viz/pie_chart';
+import { dxPieChartAnnotationConfig } from 'devextreme/viz/pie_chart';
 import { Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -207,10 +206,10 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get template(): ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((annotation: dxPieChartCommonAnnotationConfig | any, element: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -239,10 +238,10 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get tooltipTemplate(): ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any) | template {
+    get tooltipTemplate(): any {
         return this._getOption('tooltipTemplate');
     }
-    set tooltipTemplate(value: ((annotation: dxPieChartAnnotationConfig | any, element: any) => string | any) | template) {
+    set tooltipTemplate(value: any) {
         this._setOption('tooltipTemplate', value);
     }
 

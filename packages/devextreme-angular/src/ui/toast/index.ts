@@ -18,7 +18,6 @@ import {
 
 
 import { event } from 'devextreme/events/index';
-import { template } from 'devextreme/core/templates/template';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/toast';
 import { PositionConfig } from 'devextreme/animation/position';
 
@@ -149,10 +148,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get contentTemplate(): ((contentElement: any) => string | any) | template {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: ((contentElement: any) => string | any) | template) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -546,7 +545,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contentTemplateChange: EventEmitter<((contentElement: any) => string | any) | template>;
+    @Output() contentTemplateChange: EventEmitter<any>;
 
     /**
     

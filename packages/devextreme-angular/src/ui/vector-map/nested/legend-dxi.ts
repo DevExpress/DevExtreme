@@ -5,39 +5,29 @@ import {
     Component,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
+
 
 
 import { VectorMapLegendItem } from 'devextreme/viz/vector_map';
 import { Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-vector-map-legend',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxiVectorMapLegendComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -159,10 +149,10 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get markerTemplate(): ((legendItem: VectorMapLegendItem, element: any) => string | any) | template {
+    get markerTemplate(): any {
         return this._getOption('markerTemplate');
     }
-    set markerTemplate(value: ((legendItem: VectorMapLegendItem, element: any) => string | any) | template) {
+    set markerTemplate(value: any) {
         this._setOption('markerTemplate', value);
     }
 
@@ -245,22 +235,10 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption implemen
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

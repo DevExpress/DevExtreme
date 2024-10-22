@@ -25,7 +25,6 @@ import {
 
 
 import { TextEditorButton } from 'devextreme/common';
-import { template } from 'devextreme/core/templates/template';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/color_box';
 
@@ -228,10 +227,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get dropDownButtonTemplate(): any {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set dropDownButtonTemplate(value: any) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -280,10 +279,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get fieldTemplate(): ((value: string, fieldElement: any) => string | any) | template {
+    get fieldTemplate(): any {
         return this._getOption('fieldTemplate');
     }
-    set fieldTemplate(value: ((value: string, fieldElement: any) => string | any) | template) {
+    set fieldTemplate(value: any) {
         this._setOption('fieldTemplate', value);
     }
 
@@ -860,7 +859,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -888,7 +887,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldTemplateChange: EventEmitter<((value: string, fieldElement: any) => string | any) | template>;
+    @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
     

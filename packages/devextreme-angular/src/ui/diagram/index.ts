@@ -22,9 +22,7 @@ import {
 } from '@angular/core';
 
 
-import { dxSVGElement } from 'devextreme/core/element';
-import { dxDiagramShape, ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent } from 'devextreme/ui/diagram';
-import { template } from 'devextreme/core/templates/template';
+import { ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent } from 'devextreme/ui/diagram';
 
 import DxDiagram from 'devextreme/ui/diagram';
 
@@ -168,10 +166,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get customShapeTemplate(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
+    get customShapeTemplate(): any {
         return this._getOption('customShapeTemplate');
     }
-    set customShapeTemplate(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
+    set customShapeTemplate(value: any) {
         this._setOption('customShapeTemplate', value);
     }
 
@@ -181,10 +179,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get customShapeToolboxTemplate(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
+    get customShapeToolboxTemplate(): any {
         return this._getOption('customShapeToolboxTemplate');
     }
-    set customShapeToolboxTemplate(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
+    set customShapeToolboxTemplate(value: any) {
         this._setOption('customShapeToolboxTemplate', value);
     }
 
@@ -691,14 +689,14 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customShapeTemplateChange: EventEmitter<((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template>;
+    @Output() customShapeTemplateChange: EventEmitter<any>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customShapeToolboxTemplateChange: EventEmitter<((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template>;
+    @Output() customShapeToolboxTemplateChange: EventEmitter<any>;
 
     /**
     

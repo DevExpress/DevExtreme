@@ -24,7 +24,6 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/validation_summary';
 
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import { template } from 'devextreme/core/templates/template';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent } from 'devextreme/ui/validation_summary';
 
 import DxValidationSummary from 'devextreme/ui/validation_summary';
@@ -110,10 +109,10 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
     
      */
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -196,7 +195,7 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
     

@@ -27,7 +27,6 @@ import {
 import * as LocalizationTypes from 'devextreme/localization';
 import { TextEditorButton } from 'devextreme/common';
 import { dxCalendarOptions } from 'devextreme/ui/button';
-import { template } from 'devextreme/core/templates/template';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/date_range_box';
 
@@ -286,10 +285,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get dropDownButtonTemplate(): any {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set dropDownButtonTemplate(value: any) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -1149,7 +1148,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
 
     /**
     

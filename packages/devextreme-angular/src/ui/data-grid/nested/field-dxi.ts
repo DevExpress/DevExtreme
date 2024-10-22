@@ -5,39 +5,28 @@ import {
     Component,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
+
 
 
 import * as LocalizationTypes from 'devextreme/localization';
-import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-data-grid-field',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxiDataGridFieldComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+export class DxiDataGridFieldComponent extends CollectionNestedOption {
     @Input()
     get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
@@ -87,10 +76,10 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get editorTemplate(): ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template {
+    get editorTemplate(): any {
         return this._getOption('editorTemplate');
     }
-    set editorTemplate(value: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template) {
+    set editorTemplate(value: any) {
         this._setOption('editorTemplate', value);
     }
 
@@ -149,22 +138,10 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption implements
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

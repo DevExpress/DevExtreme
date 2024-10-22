@@ -26,8 +26,6 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import { TextEditorButton } from 'devextreme/common';
-import { dxDropDownBox } from 'UNKNOWN_MODULE';
-import { template } from 'devextreme/core/templates/template';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxPopupOptions } from 'devextreme/ui/popup';
@@ -169,10 +167,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get contentTemplate(): ((templateData: { component: dxDropDownBox, value: any }, contentElement: any) => string | any) | template {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: ((templateData: { component: dxDropDownBox, value: any }, contentElement: any) => string | any) | template) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -247,10 +245,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get dropDownButtonTemplate(): any {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set dropDownButtonTemplate(value: any) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -286,10 +284,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get fieldTemplate(): ((value: any, fieldElement: any) => string | any) | template {
+    get fieldTemplate(): any {
         return this._getOption('fieldTemplate');
     }
-    set fieldTemplate(value: ((value: any, fieldElement: any) => string | any) | template) {
+    set fieldTemplate(value: any) {
         this._setOption('fieldTemplate', value);
     }
 
@@ -870,7 +868,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contentTemplateChange: EventEmitter<((templateData: { component: dxDropDownBox, value: any }, contentElement: any) => string | any) | template>;
+    @Output() contentTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -912,7 +910,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -933,7 +931,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldTemplateChange: EventEmitter<((value: any, fieldElement: any) => string | any) | template>;
+    @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
     

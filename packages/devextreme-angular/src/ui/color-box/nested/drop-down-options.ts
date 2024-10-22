@@ -7,44 +7,34 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
+
 
 
 import dxOverlay from 'devextreme/ui/overlay';
 import DOMComponent from 'devextreme/core/dom_component';
 import dxPopup from 'devextreme/ui/popup';
 import { event, EventInfo } from 'devextreme/events/index';
-import { template } from 'devextreme/core/templates/template';
 import { Component } from 'devextreme/core/component';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-color-box-drop-down-options',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get accessKey(): string {
         return this._getOption('accessKey');
@@ -86,10 +76,10 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get contentTemplate(): ((contentElement: any) => string | any) | template {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: ((contentElement: any) => string | any) | template) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -406,10 +396,10 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get titleTemplate(): ((titleElement: any) => string | any) | template {
+    get titleTemplate(): any {
         return this._getOption('titleTemplate');
     }
-    set titleTemplate(value: ((titleElement: any) => string | any) | template) {
+    set titleTemplate(value: any) {
         this._setOption('titleTemplate', value);
     }
 
@@ -452,22 +442,10 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

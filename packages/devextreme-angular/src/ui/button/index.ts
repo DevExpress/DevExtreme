@@ -18,7 +18,6 @@ import {
 
 
 import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
-import { template } from 'devextreme/core/templates/template';
 
 import DxButton from 'devextreme/ui/button';
 
@@ -214,10 +213,10 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get template(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -428,7 +427,7 @@ export class DxButtonComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() templateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
+    @Output() templateChange: EventEmitter<any>;
 
     /**
     

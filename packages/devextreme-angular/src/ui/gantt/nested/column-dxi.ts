@@ -5,40 +5,28 @@ import {
     Component,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
 
 
-import dxTreeList from 'devextreme/ui/tree_list';
+
 import * as LocalizationTypes from 'devextreme/localization';
-import { dxTreeListColumn, dxTreeListRowObject } from 'devextreme/ui/tree_list';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-gantt-column',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxiGanttColumnComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()
     get alignment(): "center" | "left" | "right" {
         return this._getOption('alignment');
@@ -112,10 +100,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get cellTemplate(): ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, displayValue: any, oldValue: any, row: dxTreeListRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template {
+    get cellTemplate(): any {
         return this._getOption('cellTemplate');
     }
-    set cellTemplate(value: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, displayValue: any, oldValue: any, row: dxTreeListRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template) {
+    set cellTemplate(value: any) {
         this._setOption('cellTemplate', value);
     }
 
@@ -208,10 +196,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption implements A
     }
 
     @Input()
-    get headerCellTemplate(): ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template {
+    get headerCellTemplate(): any {
         return this._getOption('headerCellTemplate');
     }
-    set headerCellTemplate(value: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template) {
+    set headerCellTemplate(value: any) {
         this._setOption('headerCellTemplate', value);
     }
 
@@ -302,22 +290,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption implements A
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

@@ -23,7 +23,6 @@ import {
 
 
 import { dxGanttColumn, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttSorting, dxGanttStripLine, dxGanttToolbar } from 'devextreme/ui/gantt';
-import { template } from 'devextreme/core/templates/template';
 
 import DxGantt from 'devextreme/ui/gantt';
 
@@ -503,10 +502,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get taskContentTemplate(): ((container: any, item: { cellSize: Record<string, any>, isMilestone: boolean, taskData: Record<string, any>, taskHTML: Record<string, any>, taskPosition: Record<string, any>, taskResources: Array<Record<string, any>>, taskSize: Record<string, any> }) => string | any) | template {
+    get taskContentTemplate(): any {
         return this._getOption('taskContentTemplate');
     }
-    set taskContentTemplate(value: ((container: any, item: { cellSize: Record<string, any>, isMilestone: boolean, taskData: Record<string, any>, taskHTML: Record<string, any>, taskPosition: Record<string, any>, taskResources: Array<Record<string, any>>, taskSize: Record<string, any> }) => string | any) | template) {
+    set taskContentTemplate(value: any) {
         this._setOption('taskContentTemplate', value);
     }
 
@@ -529,10 +528,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get taskProgressTooltipContentTemplate(): ((container: any, item: { progress: number }) => string | any) | template {
+    get taskProgressTooltipContentTemplate(): any {
         return this._getOption('taskProgressTooltipContentTemplate');
     }
-    set taskProgressTooltipContentTemplate(value: ((container: any, item: { progress: number }) => string | any) | template) {
+    set taskProgressTooltipContentTemplate(value: any) {
         this._setOption('taskProgressTooltipContentTemplate', value);
     }
 
@@ -555,10 +554,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get taskTimeTooltipContentTemplate(): ((container: any, item: { end: Date, start: Date }) => string | any) | template {
+    get taskTimeTooltipContentTemplate(): any {
         return this._getOption('taskTimeTooltipContentTemplate');
     }
-    set taskTimeTooltipContentTemplate(value: ((container: any, item: { end: Date, start: Date }) => string | any) | template) {
+    set taskTimeTooltipContentTemplate(value: any) {
         this._setOption('taskTimeTooltipContentTemplate', value);
     }
 
@@ -581,10 +580,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get taskTooltipContentTemplate(): ((container: any, task: any) => string | any) | template {
+    get taskTooltipContentTemplate(): any {
         return this._getOption('taskTooltipContentTemplate');
     }
-    set taskTooltipContentTemplate(value: ((container: any, task: any) => string | any) | template) {
+    set taskTooltipContentTemplate(value: any) {
         this._setOption('taskTooltipContentTemplate', value);
     }
 
@@ -1103,7 +1102,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() taskContentTemplateChange: EventEmitter<((container: any, item: { cellSize: Record<string, any>, isMilestone: boolean, taskData: Record<string, any>, taskHTML: Record<string, any>, taskPosition: Record<string, any>, taskResources: Array<Record<string, any>>, taskSize: Record<string, any> }) => string | any) | template>;
+    @Output() taskContentTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1117,7 +1116,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() taskProgressTooltipContentTemplateChange: EventEmitter<((container: any, item: { progress: number }) => string | any) | template>;
+    @Output() taskProgressTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1131,7 +1130,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() taskTimeTooltipContentTemplateChange: EventEmitter<((container: any, item: { end: Date, start: Date }) => string | any) | template>;
+    @Output() taskTimeTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1145,7 +1144,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() taskTooltipContentTemplateChange: EventEmitter<((container: any, task: any) => string | any) | template>;
+    @Output() taskTooltipContentTemplateChange: EventEmitter<any>;
 
     /**
     

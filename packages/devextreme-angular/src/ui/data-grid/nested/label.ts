@@ -18,8 +18,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import dxForm from 'devextreme/ui/form';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -64,10 +62,10 @@ export class DxoDataGridLabelComponent extends NestedOption implements AfterView
     }
 
     @Input()
-    get template(): ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

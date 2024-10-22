@@ -23,10 +23,8 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/data_grid';
 
-import dxDataGrid from 'devextreme/ui/data_grid';
 import DataSource from 'devextreme/data/data_source';
 import { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxDataGridToolbar } from 'devextreme/ui/data_grid';
-import { template } from 'devextreme/core/templates/template';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
@@ -436,10 +434,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataRowTemplate(): ((rowElement: any, rowInfo: { columns: Array<dxDataGridColumn>, component: dxDataGrid, data: any, isExpanded: boolean, isSelected: boolean, key: any, rowIndex: number, values: Array<any> }) => any) | template {
+    get dataRowTemplate(): any {
         return this._getOption('dataRowTemplate');
     }
-    set dataRowTemplate(value: ((rowElement: any, rowInfo: { columns: Array<dxDataGridColumn>, component: dxDataGrid, data: any, isExpanded: boolean, isSelected: boolean, key: any, rowIndex: number, values: Array<any> }) => any) | template) {
+    set dataRowTemplate(value: any) {
         this._setOption('dataRowTemplate', value);
     }
 
@@ -919,10 +917,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get rowTemplate(): ((rowElement: any, rowInfo: { columns: Array<dxDataGridColumn>, component: dxDataGrid, data: any, groupIndex: number, isExpanded: boolean, isSelected: boolean, key: any, rowIndex: number, rowType: string, values: Array<any> }) => any) | template {
+    get rowTemplate(): any {
         return this._getOption('rowTemplate');
     }
-    set rowTemplate(value: ((rowElement: any, rowInfo: { columns: Array<dxDataGridColumn>, component: dxDataGrid, data: any, groupIndex: number, isExpanded: boolean, isSelected: boolean, key: any, rowIndex: number, rowType: string, values: Array<any> }) => any) | template) {
+    set rowTemplate(value: any) {
         this._setOption('rowTemplate', value);
     }
 
@@ -1644,7 +1642,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataRowTemplateChange: EventEmitter<((rowElement: any, rowInfo: { columns: Array<dxDataGridColumn>, component: dxDataGrid, data: any, isExpanded: boolean, isSelected: boolean, key: any, rowIndex: number, values: Array<any> }) => any) | template>;
+    @Output() dataRowTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1903,7 +1901,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowTemplateChange: EventEmitter<((rowElement: any, rowInfo: { columns: Array<dxDataGridColumn>, component: dxDataGrid, data: any, groupIndex: number, isExpanded: boolean, isSelected: boolean, key: any, rowIndex: number, rowType: string, values: Array<any> }) => any) | template>;
+    @Output() rowTemplateChange: EventEmitter<any>;
 
     /**
     

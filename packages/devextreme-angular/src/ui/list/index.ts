@@ -27,7 +27,6 @@ import DataSource from 'devextreme/data/data_source';
 import { dxListItem, ContentReadyEvent, DisposingEvent, GroupRenderedEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemDeletedEvent, ItemDeletingEvent, ItemHoldEvent, ItemRenderedEvent, ItemReorderedEvent, ItemSwipeEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectAllValueChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/list';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { template } from 'devextreme/core/templates/template';
 import { dxSortableOptions } from 'devextreme/ui/sortable';
 import { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
@@ -232,10 +231,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get groupTemplate(): ((groupData: any, groupIndex: number, groupElement: any) => string | any) | template {
+    get groupTemplate(): any {
         return this._getOption('groupTemplate');
     }
-    set groupTemplate(value: ((groupData: any, groupIndex: number, groupElement: any) => string | any) | template) {
+    set groupTemplate(value: any) {
         this._setOption('groupTemplate', value);
     }
 
@@ -349,10 +348,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -1032,7 +1031,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupTemplateChange: EventEmitter<((groupData: any, groupIndex: number, groupElement: any) => string | any) | template>;
+    @Output() groupTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1095,7 +1094,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
     

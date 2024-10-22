@@ -24,8 +24,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, PieChartSeries } from 'devextreme/viz/pie_chart';
-import { dxPieChart, dxChartSeriesTypes.CommonSeries.label, dxChartSeriesTypes.CommonSeries.point } from 'UNKNOWN_MODULE';
-import { template } from 'devextreme/core/templates/template';
+import { dxChartSeriesTypes.CommonSeries.label, dxChartSeriesTypes.CommonSeries.point } from 'UNKNOWN_MODULE';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
@@ -176,10 +175,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get centerTemplate(): ((component: dxPieChart, element: any) => string | any) | template {
+    get centerTemplate(): any {
         return this._getOption('centerTemplate');
     }
-    set centerTemplate(value: ((component: dxPieChart, element: any) => string | any) | template) {
+    set centerTemplate(value: any) {
         this._setOption('centerTemplate', value);
     }
 
@@ -501,10 +500,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get seriesTemplate(): Record<string, any> {
+    get seriesTemplate(): any {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: Record<string, any>) {
+    set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
 
@@ -745,7 +744,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() centerTemplateChange: EventEmitter<((component: dxPieChart, element: any) => string | any) | template>;
+    @Output() centerTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -920,7 +919,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesTemplateChange: EventEmitter<Record<string, any>>;
+    @Output() seriesTemplateChange: EventEmitter<any>;
 
     /**
     

@@ -7,41 +7,31 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
+
 
 
 import { event } from 'devextreme/events/index';
-import { template } from 'devextreme/core/templates/template';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-lookup-drop-down-options',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxoLookupDropDownOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get animation(): Record<string, any> {
         return this._getOption('animation');
@@ -75,10 +65,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements A
     }
 
     @Input()
-    get contentTemplate(): ((contentElement: any) => string | any) | template {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: ((contentElement: any) => string | any) | template) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -331,10 +321,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements A
     }
 
     @Input()
-    get titleTemplate(): ((titleElement: any) => string | any) | template {
+    get titleTemplate(): any {
         return this._getOption('titleTemplate');
     }
-    set titleTemplate(value: ((titleElement: any) => string | any) | template) {
+    set titleTemplate(value: any) {
         this._setOption('titleTemplate', value);
     }
 
@@ -377,22 +367,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements A
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

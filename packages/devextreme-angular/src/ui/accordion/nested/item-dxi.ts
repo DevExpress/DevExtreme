@@ -16,8 +16,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -62,10 +60,10 @@ export class DxiAccordionItemComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -86,10 +84,10 @@ export class DxiAccordionItemComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get titleTemplate(): (() => string | any) | template {
+    get titleTemplate(): any {
         return this._getOption('titleTemplate');
     }
-    set titleTemplate(value: (() => string | any) | template) {
+    set titleTemplate(value: any) {
         this._setOption('titleTemplate', value);
     }
 

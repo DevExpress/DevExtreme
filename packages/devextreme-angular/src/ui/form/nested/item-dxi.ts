@@ -16,10 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import dxForm from 'devextreme/ui/form';
 import * as CommonTypes from 'devextreme/common';
-import { template } from 'devextreme/core/templates/template';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { dxButtonOptions } from 'devextreme/ui/button';
@@ -75,18 +72,18 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get tabTemplate(): (() => string | any) | template {
+    get tabTemplate(): any {
         return this._getOption('tabTemplate');
     }
-    set tabTemplate(value: (() => string | any) | template) {
+    set tabTemplate(value: any) {
         this._setOption('tabTemplate', value);
     }
 
     @Input()
-    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -227,10 +224,10 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
     @Input()
-    get captionTemplate(): ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template {
+    get captionTemplate(): any {
         return this._getOption('captionTemplate');
     }
-    set captionTemplate(value: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template) {
+    set captionTemplate(value: any) {
         this._setOption('captionTemplate', value);
     }
 

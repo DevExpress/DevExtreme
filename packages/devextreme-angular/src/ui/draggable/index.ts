@@ -17,7 +17,6 @@ import {
 } from '@angular/core';
 
 
-import { template } from 'devextreme/core/templates/template';
 import { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/draggable';
 
 import DxDraggable from 'devextreme/ui/draggable';
@@ -151,10 +150,10 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dragTemplate(): ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template {
+    get dragTemplate(): any {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: ((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template) {
+    set dragTemplate(value: any) {
         this._setOption('dragTemplate', value);
     }
 
@@ -364,7 +363,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragTemplateChange: EventEmitter<((dragInfo: { itemData: any, itemElement: any }, containerElement: any) => string | any) | template>;
+    @Output() dragTemplateChange: EventEmitter<any>;
 
     /**
     

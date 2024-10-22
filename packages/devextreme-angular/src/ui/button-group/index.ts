@@ -22,7 +22,6 @@ import {
 } from '@angular/core';
 
 
-import { template } from 'devextreme/core/templates/template';
 import { dxButtonGroupItem } from 'devextreme/ui/button';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
 
@@ -96,10 +95,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get buttonTemplate(): ((buttonData: any, buttonContent: any) => string | any) | template {
+    get buttonTemplate(): any {
         return this._getOption('buttonTemplate');
     }
-    set buttonTemplate(value: ((buttonData: any, buttonContent: any) => string | any) | template) {
+    set buttonTemplate(value: any) {
         this._setOption('buttonTemplate', value);
     }
 
@@ -378,7 +377,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonTemplateChange: EventEmitter<((buttonData: any, buttonContent: any) => string | any) | template>;
+    @Output() buttonTemplateChange: EventEmitter<any>;
 
     /**
     

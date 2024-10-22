@@ -119,10 +119,10 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get seriesTemplate(): Record<string, any> {
+    get seriesTemplate(): any {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: Record<string, any>) {
+    set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
 

@@ -17,7 +17,6 @@ import {
 } from '@angular/core';
 
 
-import { template } from 'devextreme/core/templates/template';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import DxSortable from 'devextreme/ui/sortable';
@@ -164,10 +163,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get dragTemplate(): ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template {
+    get dragTemplate(): any {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: ((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template) {
+    set dragTemplate(value: any) {
         this._setOption('dragTemplate', value);
     }
 
@@ -468,7 +467,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragTemplateChange: EventEmitter<((dragInfo: { fromIndex: number, itemData: any, itemElement: any }, containerElement: any) => string | any) | template>;
+    @Output() dragTemplateChange: EventEmitter<any>;
 
     /**
     
