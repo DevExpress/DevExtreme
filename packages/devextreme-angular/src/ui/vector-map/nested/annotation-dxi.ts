@@ -18,7 +18,6 @@ import { DOCUMENT } from '@angular/common';
 
 import { dxVectorMapAnnotationConfig } from 'devextreme/viz/vector_map';
 import { Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -191,10 +190,10 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get template(): ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -223,10 +222,10 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get tooltipTemplate(): ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template {
+    get tooltipTemplate(): any {
         return this._getOption('tooltipTemplate');
     }
-    set tooltipTemplate(value: ((annotation: dxVectorMapAnnotationConfig | any, element: any) => string | any) | template) {
+    set tooltipTemplate(value: any) {
         this._setOption('tooltipTemplate', value);
     }
 

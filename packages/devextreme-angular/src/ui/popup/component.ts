@@ -26,7 +26,6 @@ import dxOverlay from 'devextreme/ui/overlay';
 import DOMComponent from 'devextreme/core/dom_component';
 import dxPopup from 'devextreme/ui/popup';
 import { event, EventInfo } from 'devextreme/events/index';
-import { template } from 'devextreme/core/templates/template';
 import { Component } from 'devextreme/core/component';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
@@ -149,10 +148,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get contentTemplate(): ((contentElement: any) => string | any) | template {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: ((contentElement: any) => string | any) | template) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -513,10 +512,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get titleTemplate(): ((titleElement: any) => string | any) | template {
+    get titleTemplate(): any {
         return this._getOption('titleTemplate');
     }
-    set titleTemplate(value: ((titleElement: any) => string | any) | template) {
+    set titleTemplate(value: any) {
         this._setOption('titleTemplate', value);
     }
 
@@ -701,7 +700,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contentTemplateChange: EventEmitter<((contentElement: any) => string | any) | template>;
+    @Output() contentTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -897,7 +896,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleTemplateChange: EventEmitter<((titleElement: any) => string | any) | template>;
+    @Output() titleTemplateChange: EventEmitter<any>;
 
     /**
     

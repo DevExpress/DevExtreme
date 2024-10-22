@@ -19,7 +19,6 @@ import { DOCUMENT } from '@angular/common';
 import DataSource from 'devextreme/data/data_source';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -56,10 +55,10 @@ export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -96,10 +95,10 @@ export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get template(): ((mentionData: { id: string | number, marker: string, value: any }, contentElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((mentionData: { id: string | number, marker: string, value: any }, contentElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

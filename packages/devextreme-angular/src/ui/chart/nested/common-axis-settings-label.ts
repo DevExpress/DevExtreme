@@ -19,7 +19,6 @@ import { DOCUMENT } from '@angular/common';
 
 
 import { Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -104,10 +103,10 @@ export class DxoChartCommonAxisSettingsLabelComponent extends NestedOption imple
     }
 
     @Input()
-    get template(): ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

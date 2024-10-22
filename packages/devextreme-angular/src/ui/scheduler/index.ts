@@ -23,8 +23,7 @@ import {
 
 
 import DataSource from 'devextreme/data/data_source';
-import { template } from 'devextreme/core/templates/template';
-import { AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerAppointment, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
+import { dxSchedulerAppointment, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
@@ -134,10 +133,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get appointmentCollectorTemplate(): ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template {
+    get appointmentCollectorTemplate(): any {
         return this._getOption('appointmentCollectorTemplate');
     }
-    set appointmentCollectorTemplate(value: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template) {
+    set appointmentCollectorTemplate(value: any) {
         this._setOption('appointmentCollectorTemplate', value);
     }
 
@@ -160,10 +159,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get appointmentTemplate(): ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template {
+    get appointmentTemplate(): any {
         return this._getOption('appointmentTemplate');
     }
-    set appointmentTemplate(value: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template) {
+    set appointmentTemplate(value: any) {
         this._setOption('appointmentTemplate', value);
     }
 
@@ -173,10 +172,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get appointmentTooltipTemplate(): ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template {
+    get appointmentTooltipTemplate(): any {
         return this._getOption('appointmentTooltipTemplate');
     }
-    set appointmentTooltipTemplate(value: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template) {
+    set appointmentTooltipTemplate(value: any) {
         this._setOption('appointmentTooltipTemplate', value);
     }
 
@@ -251,10 +250,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dataCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get dataCellTemplate(): any {
         return this._getOption('dataCellTemplate');
     }
-    set dataCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set dataCellTemplate(value: any) {
         this._setOption('dataCellTemplate', value);
     }
 
@@ -277,10 +276,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dateCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get dateCellTemplate(): any {
         return this._getOption('dateCellTemplate');
     }
-    set dateCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set dateCellTemplate(value: any) {
         this._setOption('dateCellTemplate', value);
     }
 
@@ -331,10 +330,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dropDownAppointmentTemplate(): ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template {
+    get dropDownAppointmentTemplate(): any {
         return this._getOption('dropDownAppointmentTemplate');
     }
-    set dropDownAppointmentTemplate(value: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template) {
+    set dropDownAppointmentTemplate(value: any) {
         this._setOption('dropDownAppointmentTemplate', value);
     }
 
@@ -617,10 +616,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get resourceCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get resourceCellTemplate(): any {
         return this._getOption('resourceCellTemplate');
     }
-    set resourceCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set resourceCellTemplate(value: any) {
         this._setOption('resourceCellTemplate', value);
     }
 
@@ -786,10 +785,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get timeCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get timeCellTemplate(): any {
         return this._getOption('timeCellTemplate');
     }
-    set timeCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set timeCellTemplate(value: any) {
         this._setOption('timeCellTemplate', value);
     }
 
@@ -1035,7 +1034,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() appointmentCollectorTemplateChange: EventEmitter<((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template>;
+    @Output() appointmentCollectorTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1049,14 +1048,14 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() appointmentTemplateChange: EventEmitter<((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template>;
+    @Output() appointmentTemplateChange: EventEmitter<any>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() appointmentTooltipTemplateChange: EventEmitter<((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template>;
+    @Output() appointmentTooltipTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1098,7 +1097,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataCellTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() dataCellTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1112,7 +1111,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dateCellTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() dateCellTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1140,7 +1139,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownAppointmentTemplateChange: EventEmitter<((itemData: any, itemIndex: number, contentElement: any) => string | any) | template>;
+    @Output() dropDownAppointmentTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1294,7 +1293,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourceCellTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() resourceCellTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1385,7 +1384,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() timeCellTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() timeCellTemplateChange: EventEmitter<any>;
 
     /**
     

@@ -18,7 +18,6 @@ import { DOCUMENT } from '@angular/common';
 
 import { dxChartAnnotationConfig } from 'devextreme/viz/chart';
 import { Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -207,10 +206,10 @@ export class DxiChartAnnotationComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get template(): ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -239,10 +238,10 @@ export class DxiChartAnnotationComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get tooltipTemplate(): ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template {
+    get tooltipTemplate(): any {
         return this._getOption('tooltipTemplate');
     }
-    set tooltipTemplate(value: ((annotation: dxChartAnnotationConfig | any, element: any) => string | any) | template) {
+    set tooltipTemplate(value: any) {
         this._setOption('tooltipTemplate', value);
     }
 

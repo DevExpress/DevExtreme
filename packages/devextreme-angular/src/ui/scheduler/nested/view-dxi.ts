@@ -5,38 +5,28 @@ import {
     Component,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
 
 
-import { template } from 'devextreme/core/templates/template';
-import { AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
+
+import { dxSchedulerScrolling } from 'devextreme/ui/scheduler';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-scheduler-view',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxiSchedulerViewComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+export class DxiSchedulerViewComponent extends CollectionNestedOption {
     @Input()
     get agendaDuration(): number {
         return this._getOption('agendaDuration');
@@ -54,26 +44,26 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get appointmentCollectorTemplate(): ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template {
+    get appointmentCollectorTemplate(): any {
         return this._getOption('appointmentCollectorTemplate');
     }
-    set appointmentCollectorTemplate(value: ((data: { appointmentCount: number, isCompact: boolean }, collectorElement: any) => string | any) | template) {
+    set appointmentCollectorTemplate(value: any) {
         this._setOption('appointmentCollectorTemplate', value);
     }
 
     @Input()
-    get appointmentTemplate(): ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template {
+    get appointmentTemplate(): any {
         return this._getOption('appointmentTemplate');
     }
-    set appointmentTemplate(value: ((model: AppointmentTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template) {
+    set appointmentTemplate(value: any) {
         this._setOption('appointmentTemplate', value);
     }
 
     @Input()
-    get appointmentTooltipTemplate(): ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template {
+    get appointmentTooltipTemplate(): any {
         return this._getOption('appointmentTooltipTemplate');
     }
-    set appointmentTooltipTemplate(value: ((model: AppointmentTooltipTemplateData | { appointmentData: Record<string, any>, targetedAppointmentData: Record<string, any> }, itemIndex: number, contentElement: any) => string | any) | template) {
+    set appointmentTooltipTemplate(value: any) {
         this._setOption('appointmentTooltipTemplate', value);
     }
 
@@ -86,26 +76,26 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get dataCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get dataCellTemplate(): any {
         return this._getOption('dataCellTemplate');
     }
-    set dataCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set dataCellTemplate(value: any) {
         this._setOption('dataCellTemplate', value);
     }
 
     @Input()
-    get dateCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get dateCellTemplate(): any {
         return this._getOption('dateCellTemplate');
     }
-    set dateCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set dateCellTemplate(value: any) {
         this._setOption('dateCellTemplate', value);
     }
 
     @Input()
-    get dropDownAppointmentTemplate(): ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template {
+    get dropDownAppointmentTemplate(): any {
         return this._getOption('dropDownAppointmentTemplate');
     }
-    set dropDownAppointmentTemplate(value: ((itemData: any, itemIndex: number, contentElement: any) => string | any) | template) {
+    set dropDownAppointmentTemplate(value: any) {
         this._setOption('dropDownAppointmentTemplate', value);
     }
 
@@ -182,10 +172,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get resourceCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get resourceCellTemplate(): any {
         return this._getOption('resourceCellTemplate');
     }
-    set resourceCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set resourceCellTemplate(value: any) {
         this._setOption('resourceCellTemplate', value);
     }
 
@@ -214,10 +204,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get timeCellTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get timeCellTemplate(): any {
         return this._getOption('timeCellTemplate');
     }
-    set timeCellTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set timeCellTemplate(value: any) {
         this._setOption('timeCellTemplate', value);
     }
 
@@ -236,22 +226,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption implements
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

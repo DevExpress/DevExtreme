@@ -18,7 +18,6 @@ import { DOCUMENT } from '@angular/common';
 
 import dxDataGrid from 'devextreme/ui/data_grid';
 import { dxDataGridColumn, dxDataGridRowObject, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -87,10 +86,10 @@ export class DxiDataGridButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get template(): ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, key: any, row: dxDataGridRowObject, rowIndex: number, rowType: string }) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

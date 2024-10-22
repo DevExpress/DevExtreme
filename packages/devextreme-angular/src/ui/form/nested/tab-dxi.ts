@@ -17,7 +17,6 @@ import { DOCUMENT } from '@angular/common';
 
 
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -94,18 +93,18 @@ export class DxiFormTabComponent extends CollectionNestedOption implements After
     }
 
     @Input()
-    get tabTemplate(): ((tabData: any, tabIndex: number, tabElement: any) => any) | template {
+    get tabTemplate(): any {
         return this._getOption('tabTemplate');
     }
-    set tabTemplate(value: ((tabData: any, tabIndex: number, tabElement: any) => any) | template) {
+    set tabTemplate(value: any) {
         this._setOption('tabTemplate', value);
     }
 
     @Input()
-    get template(): ((tabData: any, tabIndex: number, tabElement: any) => any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((tabData: any, tabIndex: number, tabElement: any) => any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

@@ -595,10 +595,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get seriesTemplate(): Record<string, any> {
+    get seriesTemplate(): any {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: Record<string, any>) {
+    set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
 
@@ -1070,7 +1070,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesTemplateChange: EventEmitter<Record<string, any>>;
+    @Output() seriesTemplateChange: EventEmitter<any>;
 
     /**
     

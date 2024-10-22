@@ -29,7 +29,6 @@ import { TextEditorButton } from 'devextreme/common';
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { template } from 'devextreme/core/templates/template';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/tag_box';
 
@@ -249,10 +248,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get dropDownButtonTemplate(): any {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set dropDownButtonTemplate(value: any) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -288,10 +287,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get fieldTemplate(): ((selectedItem: any, fieldElement: any) => string | any) | template {
+    get fieldTemplate(): any {
         return this._getOption('fieldTemplate');
     }
-    set fieldTemplate(value: ((selectedItem: any, fieldElement: any) => string | any) | template) {
+    set fieldTemplate(value: any) {
         this._setOption('fieldTemplate', value);
     }
 
@@ -327,10 +326,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get groupTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get groupTemplate(): any {
         return this._getOption('groupTemplate');
     }
-    set groupTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set groupTemplate(value: any) {
         this._setOption('groupTemplate', value);
     }
 
@@ -444,10 +443,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -821,10 +820,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get tagTemplate(): ((itemData: any, itemElement: any) => string | any) | template {
+    get tagTemplate(): any {
         return this._getOption('tagTemplate');
     }
-    set tagTemplate(value: ((itemData: any, itemElement: any) => string | any) | template) {
+    set tagTemplate(value: any) {
         this._setOption('tagTemplate', value);
     }
 
@@ -1226,7 +1225,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1247,7 +1246,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldTemplateChange: EventEmitter<((selectedItem: any, fieldElement: any) => string | any) | template>;
+    @Output() fieldTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1268,7 +1267,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() groupTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1331,7 +1330,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1534,7 +1533,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tagTemplateChange: EventEmitter<((itemData: any, itemElement: any) => string | any) | template>;
+    @Output() tagTemplateChange: EventEmitter<any>;
 
     /**
     

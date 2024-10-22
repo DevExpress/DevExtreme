@@ -800,10 +800,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get seriesTemplate(): Record<string, any> {
+    get seriesTemplate(): any {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: Record<string, any>) {
+    set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
 
@@ -1378,7 +1378,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesTemplateChange: EventEmitter<Record<string, any>>;
+    @Output() seriesTemplateChange: EventEmitter<any>;
 
     /**
     

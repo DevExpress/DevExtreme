@@ -16,9 +16,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxSVGElement } from 'devextreme/core/element';
-import { dxDiagramShape } from 'devextreme/ui/diagram';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -239,42 +236,42 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get template(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
     @Input()
-    get templateHeight(): number {
+    get templateHeight(): any {
         return this._getOption('templateHeight');
     }
-    set templateHeight(value: number) {
+    set templateHeight(value: any) {
         this._setOption('templateHeight', value);
     }
 
     @Input()
-    get templateLeft(): number {
+    get templateLeft(): any {
         return this._getOption('templateLeft');
     }
-    set templateLeft(value: number) {
+    set templateLeft(value: any) {
         this._setOption('templateLeft', value);
     }
 
     @Input()
-    get templateTop(): number {
+    get templateTop(): any {
         return this._getOption('templateTop');
     }
-    set templateTop(value: number) {
+    set templateTop(value: any) {
         this._setOption('templateTop', value);
     }
 
     @Input()
-    get templateWidth(): number {
+    get templateWidth(): any {
         return this._getOption('templateWidth');
     }
-    set templateWidth(value: number) {
+    set templateWidth(value: any) {
         this._setOption('templateWidth', value);
     }
 
@@ -319,10 +316,10 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get toolboxTemplate(): ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template {
+    get toolboxTemplate(): any {
         return this._getOption('toolboxTemplate');
     }
-    set toolboxTemplate(value: ((container: dxSVGElement, data: { item: dxDiagramShape }) => void) | template) {
+    set toolboxTemplate(value: any) {
         this._setOption('toolboxTemplate', value);
     }
 

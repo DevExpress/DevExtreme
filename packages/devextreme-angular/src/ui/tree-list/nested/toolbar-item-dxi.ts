@@ -16,8 +16,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { template } from 'devextreme/core/templates/template';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 
 import {
     NestedOptionHost,
@@ -78,10 +76,10 @@ export class DxiTreeListToolbarItemComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get menuItemTemplate(): (() => string | any) | template {
+    get menuItemTemplate(): any {
         return this._getOption('menuItemTemplate');
     }
-    set menuItemTemplate(value: (() => string | any) | template) {
+    set menuItemTemplate(value: any) {
         this._setOption('menuItemTemplate', value);
     }
 
@@ -102,10 +100,10 @@ export class DxiTreeListToolbarItemComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

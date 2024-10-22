@@ -19,7 +19,6 @@ import {
 
 import { event } from 'devextreme/events/index';
 import { DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/drawer';
-import { template } from 'devextreme/core/templates/template';
 
 import DxDrawer from 'devextreme/ui/drawer';
 
@@ -280,10 +279,10 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get template(): ((Element: any) => any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((Element: any) => any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
@@ -461,7 +460,7 @@ export class DxDrawerComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() templateChange: EventEmitter<((Element: any) => any) | template>;
+    @Output() templateChange: EventEmitter<any>;
 
     /**
     

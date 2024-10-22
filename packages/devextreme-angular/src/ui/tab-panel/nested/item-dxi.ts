@@ -16,8 +16,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { template } from 'devextreme/core/templates/template';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 
 import {
     NestedOptionHost,
@@ -70,18 +68,18 @@ export class DxiTabPanelItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get tabTemplate(): (() => string | any) | template {
+    get tabTemplate(): any {
         return this._getOption('tabTemplate');
     }
-    set tabTemplate(value: (() => string | any) | template) {
+    set tabTemplate(value: any) {
         this._setOption('tabTemplate', value);
     }
 
     @Input()
-    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

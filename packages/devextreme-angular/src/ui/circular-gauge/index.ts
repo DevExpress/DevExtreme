@@ -20,8 +20,6 @@ import {
 } from '@angular/core';
 
 
-import { dxCircularGauge } from 'UNKNOWN_MODULE';
-import { template } from 'devextreme/core/templates/template';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/circular_gauge';
 import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 
@@ -127,10 +125,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get centerTemplate(): ((component: dxCircularGauge, element: any) => string | any) | template {
+    get centerTemplate(): any {
         return this._getOption('centerTemplate');
     }
-    set centerTemplate(value: ((component: dxCircularGauge, element: any) => string | any) | template) {
+    set centerTemplate(value: any) {
         this._setOption('centerTemplate', value);
     }
 
@@ -486,7 +484,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() centerTemplateChange: EventEmitter<((component: dxCircularGauge, element: any) => string | any) | template>;
+    @Output() centerTemplateChange: EventEmitter<any>;
 
     /**
     

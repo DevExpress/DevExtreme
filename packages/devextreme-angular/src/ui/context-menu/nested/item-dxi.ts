@@ -17,8 +17,6 @@ import { DOCUMENT } from '@angular/common';
 
 
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -95,10 +93,10 @@ export class DxiContextMenuItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get template(): ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

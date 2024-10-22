@@ -5,42 +5,31 @@ import {
     Component,
     NgModule,
     Host,
-    ElementRef,
-    Renderer2,
-    Inject,
-    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
-import { DOCUMENT } from '@angular/common';
 
 
-import dxDataGrid from 'devextreme/ui/data_grid';
+
 import * as LocalizationTypes from 'devextreme/localization';
 import * as CommonTypes from 'devextreme/common';
-import { dxDataGridColumnButton, dxDataGridColumn, dxDataGridRowObject } from 'devextreme/ui/data_grid';
-import { template } from 'devextreme/core/templates/template';
+import { dxDataGridColumnButton, dxDataGridColumn } from 'devextreme/ui/data_grid';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 
 import {
     NestedOptionHost,
-    extractTemplate,
-    DxTemplateDirective,
-    IDxTemplateHost,
-    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-data-grid-column',
-    template: '<ng-content></ng-content>',
-    styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    template: '',
+    styles: [''],
+    providers: [NestedOptionHost]
 })
-export class DxiDataGridColumnComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+export class DxiDataGridColumnComponent extends CollectionNestedOption {
     @Input()
     get alignment(): "center" | "left" | "right" {
         return this._getOption('alignment');
@@ -202,10 +191,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get cellTemplate(): ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, oldValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template {
+    get cellTemplate(): any {
         return this._getOption('cellTemplate');
     }
-    set cellTemplate(value: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, oldValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, text: string, value: any, watch: (() => void) }) => any) | template) {
+    set cellTemplate(value: any) {
         this._setOption('cellTemplate', value);
     }
 
@@ -250,10 +239,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get editCellTemplate(): ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, setValue(newValue, newText): any, text: string, value: any, watch: (() => void) }) => any) | template {
+    get editCellTemplate(): any {
         return this._getOption('editCellTemplate');
     }
-    set editCellTemplate(value: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, row: dxDataGridRowObject, rowIndex: number, rowType: string, setValue(newValue, newText): any, text: string, value: any, watch: (() => void) }) => any) | template) {
+    set editCellTemplate(value: any) {
         this._setOption('editCellTemplate', value);
     }
 
@@ -346,10 +335,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get groupCellTemplate(): ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template {
+    get groupCellTemplate(): any {
         return this._getOption('groupCellTemplate');
     }
-    set groupCellTemplate(value: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template) {
+    set groupCellTemplate(value: any) {
         this._setOption('groupCellTemplate', value);
     }
 
@@ -362,10 +351,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get headerCellTemplate(): ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template {
+    get headerCellTemplate(): any {
         return this._getOption('headerCellTemplate');
     }
-    set headerCellTemplate(value: ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template) {
+    set headerCellTemplate(value: any) {
         this._setOption('headerCellTemplate', value);
     }
 
@@ -552,22 +541,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost,
-            private renderer: Renderer2,
-            @Inject(DOCUMENT) private document: any,
-            @Host() templateHost: DxTemplateHost,
-            private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
-        templateHost.setHost(this);
-    }
-
-    setTemplate(template: DxTemplateDirective) {
-        this.template = template;
-    }
-    ngAfterViewInit() {
-        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

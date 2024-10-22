@@ -29,7 +29,6 @@ import { TextEditorButton } from 'devextreme/common';
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { template } from 'devextreme/core/templates/template';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/autocomplete';
 
@@ -210,10 +209,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dropDownButtonTemplate(): ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template {
+    get dropDownButtonTemplate(): any {
         return this._getOption('dropDownButtonTemplate');
     }
-    set dropDownButtonTemplate(value: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template) {
+    set dropDownButtonTemplate(value: any) {
         this._setOption('dropDownButtonTemplate', value);
     }
 
@@ -275,10 +274,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get groupTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get groupTemplate(): any {
         return this._getOption('groupTemplate');
     }
-    set groupTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set groupTemplate(value: any) {
         this._setOption('groupTemplate', value);
     }
 
@@ -379,10 +378,10 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get itemTemplate(): ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template {
+    get itemTemplate(): any {
         return this._getOption('itemTemplate');
     }
-    set itemTemplate(value: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template) {
+    set itemTemplate(value: any) {
         this._setOption('itemTemplate', value);
     }
 
@@ -1021,7 +1020,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownButtonTemplateChange: EventEmitter<((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template>;
+    @Output() dropDownButtonTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1056,7 +1055,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() groupTemplateChange: EventEmitter<any>;
 
     /**
     
@@ -1112,7 +1111,7 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemTemplateChange: EventEmitter<((itemData: any, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() itemTemplateChange: EventEmitter<any>;
 
     /**
     

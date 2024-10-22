@@ -16,9 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import dxForm from 'devextreme/ui/form';
 import * as CommonTypes from 'devextreme/common';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -119,10 +117,10 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get template(): ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

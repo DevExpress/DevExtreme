@@ -22,7 +22,6 @@ import {
 } from '@angular/core';
 
 
-import { template } from 'devextreme/core/templates/template';
 import { DisabledDate, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/calendar';
 
 import DxCalendar from 'devextreme/ui/calendar';
@@ -102,10 +101,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get cellTemplate(): ((itemData: { date: Date, text: string, view: string }, itemIndex: number, itemElement: any) => string | any) | template {
+    get cellTemplate(): any {
         return this._getOption('cellTemplate');
     }
-    set cellTemplate(value: ((itemData: { date: Date, text: string, view: string }, itemIndex: number, itemElement: any) => string | any) | template) {
+    set cellTemplate(value: any) {
         this._setOption('cellTemplate', value);
     }
 
@@ -589,7 +588,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() cellTemplateChange: EventEmitter<((itemData: { date: Date, text: string, view: string }, itemIndex: number, itemElement: any) => string | any) | template>;
+    @Output() cellTemplateChange: EventEmitter<any>;
 
     /**
     

@@ -19,7 +19,6 @@ import { DOCUMENT } from '@angular/common';
 import dxTreeList from 'devextreme/ui/tree_list';
 import { dxTreeListColumn, dxTreeListRowObject } from 'devextreme/ui/tree_list';
 import { event } from 'devextreme/events/index';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -88,10 +87,10 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get template(): ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, key: any, row: dxTreeListRowObject, rowIndex: number, rowType: string }) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((cellElement: any, cellInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList, data: Record<string, any>, key: any, row: dxTreeListRowObject, rowIndex: number, rowType: string }) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 

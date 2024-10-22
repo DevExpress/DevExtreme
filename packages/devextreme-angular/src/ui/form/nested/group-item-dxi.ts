@@ -16,8 +16,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import dxForm from 'devextreme/ui/form';
-import { template } from 'devextreme/core/templates/template';
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
@@ -55,10 +53,10 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get captionTemplate(): ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template {
+    get captionTemplate(): any {
         return this._getOption('captionTemplate');
     }
-    set captionTemplate(value: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template) {
+    set captionTemplate(value: any) {
         this._setOption('captionTemplate', value);
     }
 
@@ -119,10 +117,10 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
     }
 
     @Input()
-    get template(): ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
