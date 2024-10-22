@@ -9,7 +9,6 @@ import {
 
 import {
     Cancelable,
-    AsyncCancelable,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -18,8 +17,7 @@ import {
 } from '../events/index';
 
 import {
-    SelectionChangingInfo,
-    SelectionChangedInfo,
+    SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -193,20 +191,12 @@ export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
 };
 
 /**
- * @docid _ui_tag_box_SelectionChangingEvent
- * @public
- * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
- */
-export type SelectionChangingEvent = AsyncCancelable & EventInfo<dxTagBox> & SelectionChangingInfo<string | number | any>;
-
-/**
  * @docid _ui_tag_box_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
+export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangeInfo<string | number | any>;
 
 /**
  * @docid _ui_tag_box_ValueChangedEvent
@@ -224,7 +214,7 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
  * @namespace DevExpress.ui
  * @docid
  */
-export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged' | 'onSelectionChanging'>> {
+export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Exclude<keyof dxSelectBoxOptions<dxTagBox>, 'onSelectionChanged'>> {
     /**
      * @docid
      * @default "instantly"
@@ -265,14 +255,6 @@ export interface dxTagBoxOptions extends Pick<dxSelectBoxOptions<dxTagBox>, Excl
      * @public
      */
     onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:{ui/tag_box:SelectionChangingEvent}
-     * @action
-     * @public
-     */
-    onSelectionChanging?: ((e: SelectionChangingEvent) => void);
     /**
      * @docid
      * @default null
@@ -353,7 +335,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onCopy' | 'onCut' | 'onPaste'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged' | 'onSelectionChanging'>;
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMultiTagPreparing' | 'onSelectAllValueChanged' | 'onSelectionChanged'>;
 
 /**
 * @hidden

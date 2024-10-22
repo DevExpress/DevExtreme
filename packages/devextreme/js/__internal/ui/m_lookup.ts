@@ -108,7 +108,7 @@ const Lookup = DropDownList.inherit({
           return getSize('height');
         },
         shading: true,
-        hideOnOutsideClick: false,
+        hideOnOutsideClick: true,
         position: undefined,
         animation: {},
         title: '',
@@ -192,7 +192,6 @@ const Lookup = DropDownList.inherit({
           dropDownCentered: true,
           _scrollToSelectedItemEnabled: true,
           dropDownOptions: {
-            hideOnOutsideClick: true,
             _ignoreFunctionValueDeprecation: true,
 
             width: () => getElementWidth(this.$element()),
@@ -542,7 +541,13 @@ const Lookup = DropDownList.inherit({
     return 'auto';
   },
 
-  _popupTabHandler: noop,
+  _popupTabHandler(e) {
+    const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
+
+    if (!shouldLoopFocusInsidePopup) {
+      this.callBase(e);
+    }
+  },
 
   _renderPopup() {
     if (this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
@@ -561,8 +566,10 @@ const Lookup = DropDownList.inherit({
   },
 
   _renderPopover() {
-    this._popup = this._createComponent(this._$popup, Popover, extend(
-      this._popupConfig(),
+    const popupConfig = this._popupConfig();
+
+    const options = extend(
+      popupConfig,
       this._options.cache('dropDownOptions'),
       {
         showEvent: null,
@@ -573,10 +580,12 @@ const Lookup = DropDownList.inherit({
         hideOnParentScroll: true,
         _fixWrapperPosition: false,
         width: this._isInitialOptionValue('dropDownOptions.width')
-          ? function () { return getOuterWidth(this.$element()); }.bind(this)
-          : this._popupConfig().width,
+          ? () => getOuterWidth(this.$element())
+          : popupConfig.width,
       },
-    ));
+    );
+
+    this._popup = this._createComponent(this._$popup, Popover, options);
 
     this._popup.$overlayContent().attr('role', 'dialog');
 
@@ -588,10 +597,11 @@ const Lookup = DropDownList.inherit({
       contentReady: this._contentReadyHandler.bind(this),
     });
 
-    if (this.option('_scrollToSelectedItemEnabled')) this._popup._$arrow.remove();
+    if (this.option('_scrollToSelectedItemEnabled')) {
+      this._popup._$arrow.remove();
+    }
 
     this._setPopupContentId(this._popup.$content());
-
     this._contentReadyHandler();
   },
 
@@ -610,23 +620,38 @@ const Lookup = DropDownList.inherit({
 
   _preventFocusOnPopup: noop,
 
+  _shouldLoopFocusInsidePopup(): boolean {
+    const {
+      usePopover,
+      dropDownCentered,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _scrollToSelectedItemEnabled,
+    } = this.option();
+
+    const result: boolean = _scrollToSelectedItemEnabled
+      ? dropDownCentered
+      : !usePopover;
+
+    return result;
+  },
+
   _popupConfig() {
+    const { dropDownOptions } = this.option();
+    const shouldLoopFocusInsidePopup = this._shouldLoopFocusInsidePopup();
+
     const result = extend(this.callBase(), {
-
       toolbarItems: this._getPopupToolbarItems(),
-
       hideOnParentScroll: false,
       onPositioned: null,
-
       maxHeight: '100vh',
-
-      showTitle: this.option('dropDownOptions.showTitle'),
-      title: this.option('dropDownOptions.title'),
+      showTitle: dropDownOptions.showTitle,
+      title: dropDownOptions.title,
       titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
-      onTitleRendered: this.option('dropDownOptions.onTitleRendered'),
-      fullScreen: this.option('dropDownOptions.fullScreen'),
-      shading: this.option('dropDownOptions.shading'),
-      hideOnOutsideClick: this.option('dropDownOptions.hideOnOutsideClick') || this.option('dropDownOptions.closeOnOutsideClick'),
+      onTitleRendered: dropDownOptions.onTitleRendered,
+      fullScreen: dropDownOptions.fullScreen,
+      shading: dropDownOptions.shading,
+      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick || dropDownOptions.closeOnOutsideClick,
+      _loopFocus: shouldLoopFocusInsidePopup,
     });
 
     delete result.animation;
@@ -647,7 +672,8 @@ const Lookup = DropDownList.inherit({
     }
 
     each(['position', 'animation', 'width', 'height'], (_, optionName) => {
-      const popupOptionValue = this.option(`dropDownOptions.${optionName}`);
+      const popupOptionValue = dropDownOptions[optionName];
+
       if (popupOptionValue !== undefined) {
         result[optionName] = popupOptionValue;
       }

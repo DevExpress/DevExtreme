@@ -6,7 +6,7 @@ import { isDefined } from '@js/core/utils/type';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import { CLASSES, StickyPosition } from './const';
-import { getColumnFixedPosition, isFixedEdge } from './utils';
+import { isFixedEdge } from './utils';
 
 const addStickyColumnBorderLeftClass = ($cell, addWidgetPrefix): void => {
   $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
@@ -16,9 +16,7 @@ const addStickyColumnBorderRightClass = ($cell, addWidgetPrefix): void => {
   $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnBorderRight));
 };
 
-const addStickyColumnClass = ($cell, stickyColumn, addWidgetPrefix): void => {
-  const fixedPosition = getColumnFixedPosition(stickyColumn);
-
+const addStickyColumnClass = ($cell, fixedPosition, addWidgetPrefix): void => {
   switch (fixedPosition) {
     case StickyPosition.Right:
       $cell.addClass(addWidgetPrefix(CLASSES.stickyColumnRight));
@@ -31,12 +29,12 @@ const addStickyColumnClass = ($cell, stickyColumn, addWidgetPrefix): void => {
   }
 };
 
-const addFirstHeaderClass = ($cell, addWidgetPrefix): void => {
-  $cell.addClass(addWidgetPrefix(CLASSES.firstHeader));
+const toggleFirstHeaderClass = ($cell, value, addWidgetPrefix): void => {
+  $cell.toggleClass(addWidgetPrefix(CLASSES.firstHeader), value);
 };
 
-const addColumnNoBorderClass = ($cell, addWidgetPrefix): void => {
-  $cell.addClass(addWidgetPrefix(CLASSES.columnNoBorder));
+const toggleColumnNoBorderClass = ($cell, value, addWidgetPrefix): void => {
+  $cell.toggleClass(addWidgetPrefix(CLASSES.columnNoBorder), value);
 };
 
 const toggleStickyColumnsClass = ($element, isStickyColumns, addWidgetPrefix): void => {
@@ -81,6 +79,13 @@ const isStickyCellPinnedToRight = (
   return Math.round(cellRight) >= Math.round(calculatedCellRight);
 };
 
+const isStickyCellPinned = (
+  $cell: dxElementWrapper,
+  $container: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => isStickyCellPinnedToLeft($cell, $container, addWidgetPrefix)
+  || isStickyCellPinnedToRight($cell, $container, addWidgetPrefix);
+
 const isFixedCellPinnedToRight = (
   $cell: dxElementWrapper,
   $container: dxElementWrapper,
@@ -99,6 +104,11 @@ const isFirstRightFixedCell = (
   addWidgetPrefix,
 ): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnRight))
     && $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumnBorderLeft));
+
+const isStickyCell = (
+  $cell: dxElementWrapper,
+  addWidgetPrefix,
+): boolean => $cell.hasClass(addWidgetPrefix(CLASSES.stickyColumn));
 
 const isFixedCell = (
   $cell: dxElementWrapper,
@@ -272,8 +282,8 @@ const doesGroupCellEndInFirstColumn = ($groupCell): boolean => {
 };
 
 export const GridCoreStickyColumnsDom = {
-  addFirstHeaderClass,
-  addColumnNoBorderClass,
+  toggleFirstHeaderClass,
+  toggleColumnNoBorderClass,
   addStickyColumnClass,
   addStickyColumnBorderLeftClass,
   addStickyColumnBorderRightClass,
@@ -285,4 +295,7 @@ export const GridCoreStickyColumnsDom = {
   noNeedToCreateResizingPoint,
   isFixedCellPinnedToRight,
   noNeedToCreateReorderingPoint,
+  isFixedCell,
+  isStickyCell,
+  isStickyCellPinned,
 };

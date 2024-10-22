@@ -787,4 +787,11 @@ export default {
 
     return borderWidth;
   },
+
+  isCustomCommandColumn(columns, commandColumn): boolean {
+    const customCommandColumns = columns
+      .filter((column) => column.type === commandColumn.type);
+
+    return !!customCommandColumns.length;
+  },
 };

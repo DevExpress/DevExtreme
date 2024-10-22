@@ -232,17 +232,11 @@ $datagrid-text-stub-background-image-path: null !default;
       border-right: none;
     }
 
-    &:not(.dx-header-multi-row) .dx-datagrid-table .dx-row {
-      .dx-datagrid-sticky-column-border-right + td {
+    .dx-datagrid-content .dx-datagrid-table .dx-row {
+      &.dx-column-lines > td.dx-datagrid-first-header,
+      .dx-datagrid-column-no-border {
         border-left: none;
       }
-    }
-  }
-
-  .dx-header-multi-row.dx-datagrid-sticky-columns .dx-datagrid-table .dx-row {
-    &.dx-column-lines > td.dx-datagrid-first-header,
-    .dx-datagrid-column-no-border {
-      border-left: none;
     }
   }
 
@@ -352,24 +346,14 @@ $datagrid-text-stub-background-image-path: null !default;
         }
       }
 
-      &:not(.dx-header-multi-row) .dx-row {
-        .dx-datagrid-sticky-column-border-left + td {
+      .dx-datagrid-content .dx-datagrid-table .dx-row {
+        &.dx-column-lines > td.dx-datagrid-first-header,
+        .dx-datagrid-column-no-border {
           border-right: none;
 
           &.dx-datagrid-sticky-column-border-left {
             border-left: 2px solid $datagrid-border-color;
           }
-        }
-      }
-    }
-
-    .dx-header-multi-row.dx-datagrid-sticky-columns .dx-datagrid-table .dx-row {
-      &.dx-column-lines > td.dx-datagrid-first-header,
-      .dx-datagrid-column-no-border {
-        border-right: none;
-
-        &.dx-datagrid-sticky-column-border-left {
-          border-left: 2px solid $datagrid-border-color;
         }
       }
     }

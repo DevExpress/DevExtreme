@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferUpdate, equalByValue, getKeyHash } from '@js/core/utils/common';
@@ -1193,12 +1194,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
     const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
     const atPosition = isOverlayVisible ? 'top left' : `bottom ${alignment}`;
 
-    // TODO: Don't forget to remove this code
-    //  after refactoring the fixed table position (or implementation).
-    const hasFixedColumns = this._columnsController.getFixedColumns()?.length > 0;
-    const $overlayContainer = hasFixedColumns
-      ? this.getView('rowsView').element()
-      : $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
+    const $overlayContainer = this.getValidationOverlayContainer($cell);
 
     let errorMessageText = '';
     messages && messages.forEach((message) => {
@@ -1443,6 +1439,10 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   private getEditorInstance($container) {
     const $editor = $container.find('.dx-texteditor').eq(0);
     return gridCoreUtils.getWidgetInstance($editor);
+  }
+
+  protected getValidationOverlayContainer($cell: dxElementWrapper): dxElementWrapper {
+    return $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
   }
 };
 

@@ -100,7 +100,7 @@ const MultiView = CollectionWidget.inherit({
     return this.option('items').length;
   },
 
-  _normalizeIndex(index) {
+  _normalizeIndex(index, direction, loop = true) {
     const count = this._itemsCount();
 
     if (index < 0) {
@@ -110,10 +110,11 @@ const MultiView = CollectionWidget.inherit({
       index -= count;
     }
 
-    const step = this._swipeDirection > 0 ? -1 : 1;
+    const step = direction > 0 ? -1 : 1;
+    const lastNotLoopedIndex = step === -1 ? 0 : count - 1;
 
-    while (!this._isItemVisible(index)) {
-      index = (index + step) % count;
+    while (!this._isItemVisible(index) && (loop || index !== lastNotLoopedIndex)) {
+      index = (index + step + count) % count;
     }
 
     return index;
@@ -142,14 +143,37 @@ const MultiView = CollectionWidget.inherit({
     this._initSwipeable();
   },
 
+  _ensureSelectedItemIsVisible(): void {
+    const { items, loop, selectedIndex: currentSelectedIndex } = this.option();
+
+    if (this._isItemVisible(currentSelectedIndex)) {
+      return;
+    }
+
+    const allItemsHidden = items.every((_, index) => !this._isItemVisible(index));
+    if (allItemsHidden) {
+      this.option('selectedIndex', 0);
+      return;
+    }
+
+    const direction = -1 * this._getRTLSignCorrection();
+    let newSelectedIndex = this._normalizeIndex(currentSelectedIndex, direction, loop);
+    if (newSelectedIndex === currentSelectedIndex) {
+      newSelectedIndex = this._normalizeIndex(currentSelectedIndex, -direction, loop);
+    }
+
+    this.option('selectedIndex', newSelectedIndex);
+  },
+
   _initMarkup() {
     this._deferredItems = [];
 
     this.callBase();
 
+    this._ensureSelectedItemIsVisible();
     const selectedItemIndices = this._getSelectedItemIndices();
-
     this._updateItemsVisibility(selectedItemIndices[0]);
+
     this._setElementAria();
     this._setItemsAria();
   },
@@ -391,20 +415,14 @@ const MultiView = CollectionWidget.inherit({
 
     e.maxLeftOffset = toNumber(loop || (rtl ? selectedIndex > firstAvailableIndex : selectedIndex < lastAvailableIndex));
     e.maxRightOffset = toNumber(loop || (rtl ? selectedIndex < lastAvailableIndex : selectedIndex > firstAvailableIndex));
-
-    this._swipeDirection = null;
   },
 
   _swipeUpdateHandler(e) {
     const { offset } = e;
     const swipeDirection = sign(offset) * this._getRTLSignCorrection();
 
-    if (swipeDirection !== this._swipeDirection) {
-      this._swipeDirection = swipeDirection;
-    }
-
     const selectedIndex = this.option('selectedIndex');
-    const newIndex = this._normalizeIndex(selectedIndex - swipeDirection);
+    const newIndex = this._normalizeIndex(selectedIndex - swipeDirection, swipeDirection);
 
     if (selectedIndex === newIndex) {
       return;
@@ -513,6 +531,15 @@ const MultiView = CollectionWidget.inherit({
     this.callBase();
   },
 
+  _itemOptionChanged(item, property) {
+    this.callBase(...arguments);
+
+    const { selectedItem } = this.option();
+    if (property === 'visible' && item === selectedItem) {
+      this._ensureSelectedItemIsVisible();
+    }
+  },
+
   _optionChanged(args) {
     const { value } = args;
 
@@ -532,6 +559,13 @@ const MultiView = CollectionWidget.inherit({
         this._updateSwipeDisabledState();
         this._findBoundaryIndices();
         this.callBase(args);
+        break;
+      case 'selectedIndex':
+        if (this._isItemVisible(value)) {
+          this.callBase(args);
+        } else {
+          this._ensureSelectedItemIsVisible();
+        }
         break;
       default:
         this.callBase(args);

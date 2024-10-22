@@ -12,6 +12,8 @@
         "Search": "搜索",
         "Back": "返回",
         "OK": "确定",
+        "Today": "今天",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "没有要显示的数据",
 
@@ -330,6 +332,7 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
+        "dxChat-errorListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
@@ -370,6 +373,15 @@
         "dxFilterBuilder-filterOperationBetween": "之间",
         "dxFilterBuilder-filterOperationAnyOf": "任何一个",
         "dxFilterBuilder-filterOperationNoneOf": "任何一个都不",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "更改字体颜色",
         "dxHtmlEditor-dialogBackgroundCaption": "更改背景颜色",

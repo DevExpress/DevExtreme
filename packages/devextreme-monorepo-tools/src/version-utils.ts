@@ -7,11 +7,15 @@ export function validateVersion(version: string | undefined): string {
 }
 
 export function formatVersion(version: string | undefined): string | undefined {
-  if (version?.length && version.length > 1000) {
+  if (version === undefined) {
+    return undefined;
+  }
+
+  if (version.length > 1000) {
     throw new Error("version string is too long");
   }
 
-  return version?.match(/(\d+\.\d+\.\d+)(\D|$)/)?.[1];
+  return version.match(/(\d+\.\d+\.\d+)(\D|$)/)?.[1];
 }
 
 const MSECS_IN_MIN = 1000 * 60;

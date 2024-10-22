@@ -74,3 +74,5 @@ export const initialMessages: ChatTypes.Message[] = [
         text: "Great! Looking forward to it!"
     }
 ];
+
+export const longError = { id: '1234', message: 'Error Message. An unexpected issue occurred while processing your request. Please check your internet connection or contact support for further assistance.' };
