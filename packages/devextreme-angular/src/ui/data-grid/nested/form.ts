@@ -78,10 +78,10 @@ export class DxoDataGridFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get colCountByScreen(): Record<string, any> {
+    get colCountByScreen(): Record<string, any> | { lg: number, md: number, sm: number, xs: number } {
         return this._getOption('colCountByScreen');
     }
-    set colCountByScreen(value: Record<string, any>) {
+    set colCountByScreen(value: Record<string, any> | { lg: number, md: number, sm: number, xs: number }) {
         this._setOption('colCountByScreen', value);
     }
 

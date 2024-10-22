@@ -13,6 +13,8 @@ import {
 
 
 import * as LocalizationTypes from 'devextreme/localization';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -108,10 +110,10 @@ export class DxiDataGridFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get lookup(): Record<string, any> {
+    get lookup(): Record<string, any> | { allowClearing: boolean, dataSource: Array<any> | DataSourceOptions | Store, displayExpr: ((data: any) => string) | string, valueExpr: ((data: any) => string | number | boolean) | string } {
         return this._getOption('lookup');
     }
-    set lookup(value: Record<string, any>) {
+    set lookup(value: Record<string, any> | { allowClearing: boolean, dataSource: Array<any> | DataSourceOptions | Store, displayExpr: ((data: any) => string) | string, valueExpr: ((data: any) => string | number | boolean) | string }) {
         this._setOption('lookup', value);
     }
 

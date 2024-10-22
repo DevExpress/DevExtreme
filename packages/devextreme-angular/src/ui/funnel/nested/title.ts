@@ -46,10 +46,10 @@ export class DxoFunnelTitleComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get margin(): Record<string, any> | number {
+    get margin(): Record<string, any> | number | { bottom: number, left: number, right: number, top: number } {
         return this._getOption('margin');
     }
-    set margin(value: Record<string, any> | number) {
+    set margin(value: Record<string, any> | number | { bottom: number, left: number, right: number, top: number }) {
         this._setOption('margin', value);
     }
 
@@ -62,10 +62,10 @@ export class DxoFunnelTitleComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get subtitle(): Record<string, any> | string {
+    get subtitle(): Record<string, any> | string | { font: Font, offset: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: Record<string, any> | string) {
+    set subtitle(value: Record<string, any> | string | { font: Font, offset: number, text: string, textOverflow: "ellipsis" | "hide" | "none", wordWrap: "normal" | "breakWord" | "none" }) {
         this._setOption('subtitle', value);
     }
 

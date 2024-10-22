@@ -46,10 +46,10 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get texts(): Record<string, any> {
+    get texts(): Record<string, any> | { clearFilter: string, createFilter: string, filterEnabledHint: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any>) {
+    set texts(value: Record<string, any> | { clearFilter: string, createFilter: string, filterEnabledHint: string }) {
         this._setOption('texts', value);
     }
 

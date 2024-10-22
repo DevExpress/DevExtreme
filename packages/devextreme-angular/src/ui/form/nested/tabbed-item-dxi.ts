@@ -13,6 +13,8 @@ import {
 
 
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -68,10 +70,10 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get tabs(): Array<Record<string, any>> {
+    get tabs(): Array<Record<string, any>> | { alignItemLabels: boolean, badge: string, colCount: number, colCountByScreen: Record<string, any>, disabled: boolean, icon: string, items: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title: string }[] {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<Record<string, any>>) {
+    set tabs(value: Array<Record<string, any>> | { alignItemLabels: boolean, badge: string, colCount: number, colCountByScreen: Record<string, any>, disabled: boolean, icon: string, items: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>, tabTemplate: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, template: ((tabData: any, tabIndex: number, tabElement: any) => any) | template, title: string }[]) {
         this._setOption('tabs', value);
     }
 

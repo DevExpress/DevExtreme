@@ -146,10 +146,10 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get texts(): any {
+    get texts(): any | { addRow: string, cancelAllChanges: string, cancelRowChanges: string, confirmDeleteMessage: string, confirmDeleteTitle: string, deleteRow: string, editRow: string, saveAllChanges: string, saveRowChanges: string, undeleteRow: string, validationCancelChanges: string } {
         return this._getOption('texts');
     }
-    set texts(value: any) {
+    set texts(value: any | { addRow: string, cancelAllChanges: string, cancelRowChanges: string, confirmDeleteMessage: string, confirmDeleteTitle: string, deleteRow: string, editRow: string, saveAllChanges: string, saveRowChanges: string, undeleteRow: string, validationCancelChanges: string }) {
         this._setOption('texts', value);
     }
 

@@ -14,6 +14,7 @@ import {
 
 
 
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -45,10 +46,10 @@ export class DxoPolarChartConstantLineStyleComponent extends NestedOption implem
     }
 
     @Input()
-    get label(): Record<string, any> {
+    get label(): Record<string, any> | { font: Font, visible: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any>) {
+    set label(value: Record<string, any> | { font: Font, visible: boolean }) {
         this._setOption('label', value);
     }
 

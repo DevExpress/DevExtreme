@@ -16,6 +16,7 @@ import DataSource from 'devextreme/data/data_source';
 import { MapLayerElement } from 'devextreme/viz/vector_map';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -135,10 +136,10 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> {
+    get label(): Record<string, any> | { dataField: string, enabled: boolean, font: Font } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any>) {
+    set label(value: Record<string, any> | { dataField: string, enabled: boolean, font: Font }) {
         this._setOption('label', value);
     }
 

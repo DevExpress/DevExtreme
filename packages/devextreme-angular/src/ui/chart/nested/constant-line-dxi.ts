@@ -12,6 +12,7 @@ import {
 
 
 
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -59,10 +60,10 @@ export class DxiChartConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get label(): Record<string, any> {
+    get label(): Record<string, any> | { font: Font, horizontalAlignment: "center" | "left" | "right", position: "inside" | "outside", text: string, verticalAlignment: "bottom" | "center" | "top", visible: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any>) {
+    set label(value: Record<string, any> | { font: Font, horizontalAlignment: "center" | "left" | "right", position: "inside" | "outside", text: string, verticalAlignment: "bottom" | "center" | "top", visible: boolean }) {
         this._setOption('label', value);
     }
 

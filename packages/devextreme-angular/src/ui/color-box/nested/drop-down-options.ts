@@ -17,6 +17,7 @@ import {
 import dxOverlay from 'devextreme/ui/overlay';
 import DOMComponent from 'devextreme/core/dom_component';
 import dxPopup from 'devextreme/ui/popup';
+import { AnimationConfig } from 'devextreme/animation/fx';
 import { event, EventInfo } from 'devextreme/events/index';
 import { Component } from 'devextreme/core/component';
 import { PositionConfig } from 'devextreme/animation/position';
@@ -44,10 +45,10 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get animation(): Record<string, any> {
+    get animation(): Record<string, any> | { hide: AnimationConfig, show: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any>) {
+    set animation(value: Record<string, any> | { hide: AnimationConfig, show: AnimationConfig }) {
         this._setOption('animation', value);
     }
 

@@ -124,10 +124,10 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
     }
 
     @Input()
-    get connectionPoints(): Array<Record<string, any>> {
+    get connectionPoints(): Array<Record<string, any>> | { x: number, y: number }[] {
         return this._getOption('connectionPoints');
     }
-    set connectionPoints(value: Array<Record<string, any>>) {
+    set connectionPoints(value: Array<Record<string, any>> | { x: number, y: number }[]) {
         this._setOption('connectionPoints', value);
     }
 

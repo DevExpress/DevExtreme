@@ -78,10 +78,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get cursorOffset(): Record<string, any> | string {
+    get cursorOffset(): Record<string, any> | string | { x: number, y: number } {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: Record<string, any> | string) {
+    set cursorOffset(value: Record<string, any> | string | { x: number, y: number }) {
         this._setOption('cursorOffset', value);
     }
 

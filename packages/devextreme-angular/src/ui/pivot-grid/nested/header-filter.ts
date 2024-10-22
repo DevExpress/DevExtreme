@@ -78,10 +78,10 @@ export class DxoPivotGridHeaderFilterComponent extends NestedOption implements O
     }
 
     @Input()
-    get texts(): Record<string, any> {
+    get texts(): Record<string, any> | { cancel: string, emptyValue: string, ok: string } {
         return this._getOption('texts');
     }
-    set texts(value: Record<string, any>) {
+    set texts(value: Record<string, any> | { cancel: string, emptyValue: string, ok: string }) {
         this._setOption('texts', value);
     }
 

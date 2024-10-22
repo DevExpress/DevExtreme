@@ -37,10 +37,10 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<Record<string, any>> {
+    get items(): Array<Record<string, any>> | { height: number, text: string, width: number }[] {
         return this._getOption('items');
     }
-    set items(value: Array<Record<string, any>>) {
+    set items(value: Array<Record<string, any>> | { height: number, text: string, width: number }[]) {
         this._setOption('items', value);
     }
 

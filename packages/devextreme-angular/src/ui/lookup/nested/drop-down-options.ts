@@ -14,6 +14,7 @@ import {
 
 
 
+import { AnimationConfig } from 'devextreme/animation/fx';
 import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
 import { PositionConfig } from 'devextreme/animation/position';
@@ -33,10 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get animation(): Record<string, any> {
+    get animation(): Record<string, any> | { hide: AnimationConfig, show: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any>) {
+    set animation(value: Record<string, any> | { hide: AnimationConfig, show: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -105,10 +106,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get hideEvent(): Record<string, any> | string {
+    get hideEvent(): Record<string, any> | string | { delay: number, name: string } {
         return this._getOption('hideEvent');
     }
-    set hideEvent(value: Record<string, any> | string) {
+    set hideEvent(value: Record<string, any> | string | { delay: number, name: string }) {
         this._setOption('hideEvent', value);
     }
 
@@ -289,10 +290,10 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get showEvent(): Record<string, any> | string {
+    get showEvent(): Record<string, any> | string | { delay: number, name: string } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: Record<string, any> | string) {
+    set showEvent(value: Record<string, any> | string | { delay: number, name: string }) {
         this._setOption('showEvent', value);
     }
 

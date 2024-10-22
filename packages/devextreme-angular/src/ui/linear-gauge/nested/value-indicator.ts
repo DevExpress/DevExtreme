@@ -14,7 +14,8 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import * as LocalizationTypes from 'devextreme/localization';
+import { ChartsColor, Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -150,10 +151,10 @@ export class DxoLinearGaugeValueIndicatorComponent extends NestedOption implemen
     }
 
     @Input()
-    get text(): Record<string, any> {
+    get text(): Record<string, any> | { customizeText: ((indicatedValue: { value: number, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, indent: number } {
         return this._getOption('text');
     }
-    set text(value: Record<string, any>) {
+    set text(value: Record<string, any> | { customizeText: ((indicatedValue: { value: number, valueText: string }) => string), font: Font, format: LocalizationTypes.Format, indent: number }) {
         this._setOption('text', value);
     }
 
