@@ -8,7 +8,7 @@ import messageLocalization from '../../../localization/message';
 import { ConfigContext } from '../../core/r1/config_context';
 import type { LightButtonProps } from '../common/light_button';
 import { LightButton } from '../common/light_button';
-import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
+import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
 
@@ -39,7 +39,7 @@ export interface PageIndexSelectorProps {
   isLargeDisplayMode: boolean;
 }
 
-type PageIndexSelectorPropsType = Pick<PagerProps, 'hasKnownLastPage'
+type PageIndexSelectorPropsType = Pick<PaginationProps, 'hasKnownLastPage'
 | 'maxPagesCount'
 | 'pageCount'
 | 'pageIndex'
@@ -52,12 +52,12 @@ type PageIndexSelectorPropsType = Pick<PagerProps, 'hasKnownLastPage'
 
 const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   isLargeDisplayMode: true,
-  maxPagesCount: PagerDefaultProps.maxPagesCount,
-  pageCount: PagerDefaultProps.pageCount,
-  pageIndex: PagerDefaultProps.pageIndex,
-  pageIndexChangedInternal: PagerDefaultProps.pageIndexChangedInternal,
-  showNavigationButtons: PagerDefaultProps.showNavigationButtons,
-  itemCount: PagerDefaultProps.itemCount,
+  maxPagesCount: PaginationDefaultProps.maxPagesCount,
+  pageCount: PaginationDefaultProps.pageCount,
+  pageIndex: PaginationDefaultProps.pageIndex,
+  pageIndexChangedInternal: PaginationDefaultProps.pageIndexChangedInternal,
+  showNavigationButtons: PaginationDefaultProps.showNavigationButtons,
+  itemCount: PaginationDefaultProps.itemCount,
 };
 
 interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > {navigate: LightButtonProps['onClick']}
