@@ -1,3 +1,4 @@
+export * from './converter';
 export * from './file-uploader-options';
 export * from './image-upload';
 export * from './item-dxi';
