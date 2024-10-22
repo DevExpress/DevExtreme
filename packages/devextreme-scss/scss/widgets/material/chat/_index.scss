@@ -1,5 +1,6 @@
 @use "../../base/chat";
 @use "colors" as *;
+@use "../colors" as *;
 @use "sizes" as *;
 @use "../../base/chat/mixins" as *;
 
@@ -8,20 +9,29 @@
 @include chat(
   $chat-background-color,
   $chat-border-color,
-  $chat-border-radius
+  $chat-border-radius,
 );
 @include chat-avatar(
   $chat-avatar-size,
   $chat-avatar-color,
-  $chat-avatar-background-color
+  $chat-avatar-background-color,
 );
 @include chat-header($chat-header-padding);
+@include chat-errorlist(
+  $chat-errorlist-color,
+  $chat-errors-padding-block,
+  $chat-errors-padding-inline,
+  $chat-error-padding-block,
+  $chat-errors-row-gap,
+  $chat-error-icon-size,
+  $chat-error-content-column-gap,
+);
 @include chat-messagebox(
   $chat-messagebox-padding,
   $chat-messagebox-border-color,
   $chat-messagebox-gap,
   $chat-messagebox-textarea-border-radius,
-  $chat-messagebox-buton-gap
+  $chat-messagebox-buton-gap,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,
@@ -29,7 +39,7 @@
   $chat-bubble-background-color-secondary,
   $chat-bubble-color-primary,
   $chat-bubble-background-color-primary,
-  $chat-bubble-container-gap
+  $chat-bubble-container-gap,
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,
@@ -38,7 +48,7 @@
   $chat-messagegroup-padding,
   $chat-information-font-size,
   $chat-information-color,
-  $chat-information-gap
+  $chat-information-gap,
 );
 @include chat-messagelist-empty(
   $chat-messagelist-padding,
