@@ -97,16 +97,19 @@ type IErrorProps = React.PropsWithChildren<{
   id?: number | string;
   message?: string;
 }>
-const _componentError = memo(
-  (props: IErrorProps) => {
-    return React.createElement(NestedOption<IErrorProps>, { ...props });
-  }
-);
+const _componentError = (props: IErrorProps) => {
+  return React.createElement(NestedOption<IErrorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "errors",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const Error: typeof _componentError & IElementDescriptor = Object.assign(_componentError, {
-  OptionName: "errors",
-  IsCollectionItem: true,
-})
+const Error = Object.assign<typeof _componentError, NestedComponentMeta>(_componentError, {
+  componentType: "option",
+});
 
 // owners:
 // Chat
