@@ -28,7 +28,6 @@ const ariaDescription = () => {
     return `${disabledDates.join(', ')} are disabled dates`;
   }
 };
-
 const notifyDisableDate = () => {
   notify(
     'Cannot create or move an appointment/event to disabled time/date regions.',
