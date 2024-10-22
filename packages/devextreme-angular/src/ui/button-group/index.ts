@@ -22,8 +22,7 @@ import {
 } from '@angular/core';
 
 
-import { dxButtonGroupItem } from 'devextreme/ui/button';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
 
 import DxButtonGroup from 'devextreme/ui/button_group';
 
