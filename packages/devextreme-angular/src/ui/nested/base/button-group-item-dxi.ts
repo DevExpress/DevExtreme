@@ -8,7 +8,6 @@ import {
 import { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { User } from 'devextreme/ui/chat';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
@@ -145,27 +144,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set hint(value: string) {
         this._setOption('hint', value);
-    }
-
-    get author(): User | undefined {
-        return this._getOption('author');
-    }
-    set author(value: User | undefined) {
-        this._setOption('author', value);
-    }
-
-    get timestamp(): Date | number | string | undefined {
-        return this._getOption('timestamp');
-    }
-    set timestamp(value: Date | number | string | undefined) {
-        this._setOption('timestamp', value);
-    }
-
-    get typing(): boolean {
-        return this._getOption('typing');
-    }
-    set typing(value: boolean) {
-        this._setOption('typing', value);
     }
 
     get beginGroup(): boolean {
