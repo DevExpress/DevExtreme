@@ -17,7 +17,7 @@ const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
 export const TYPING_START_DELAY = 1500;
-const TYPING_END_DELAY = 2000;
+export const TYPING_END_DELAY = 2000;
 
 export type MessageSendEvent =
   NativeEventInfo<MessageBox, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> &
