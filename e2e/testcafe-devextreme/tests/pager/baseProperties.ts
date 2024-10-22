@@ -1,21 +1,21 @@
-import Pager from 'devextreme-testcafe-models/pager';
+import Pagination from 'devextreme-testcafe-models/pagination';
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture`Pager Base Properties`
+fixture`Pagination Base Properties`
   .page(url(__dirname, '../container.html'));
 
-test('Pager width and height property', async (t) => {
-  const pager = new Pager('#container');
+test('Pagination width and height property', async (t) => {
+  const pagination = new Pagination('#container');
   await t
-    .expect(pager.element.getStyleProperty('width'))
+    .expect(pagination.element.getStyleProperty('width'))
     .eql('270px')
-    .expect(pager.element.getStyleProperty('height'))
+    .expect(pagination.element.getStyleProperty('height'))
     .eql('95px')
-    .expect(pager.element.getAttribute('width'))
+    .expect(pagination.element.getAttribute('width'))
     .eql(null)
-    .expect(pager.element.getAttribute('height'))
+    .expect(pagination.element.getAttribute('height'))
     .eql(null);
 }).before(async () => createWidget('dxPagination', {
   width: 270,
@@ -23,12 +23,12 @@ test('Pager width and height property', async (t) => {
   itemCount: 50,
 }));
 
-test('Pager elementAttr property', async (t) => {
-  const pager = new Pager('#container');
+test('Pagination elementAttr property', async (t) => {
+  const pagination = new Pagination('#container');
   await t
-    .expect(pager.element.getAttribute('aria-label'))
+    .expect(pagination.element.getAttribute('aria-label'))
     .eql('some description')
-    .expect(pager.element.getAttribute('data-test'))
+    .expect(pagination.element.getAttribute('data-test'))
     .eql('custom data');
 }).before(async () => createWidget('dxPagination', {
   elementAttr: {
@@ -37,48 +37,48 @@ test('Pager elementAttr property', async (t) => {
   },
 }));
 
-test('Pager hint, disabled and accessKey properties', async (t) => {
-  const pager = new Pager('#container');
+test('Pagination hint, disabled and accessKey properties', async (t) => {
+  const pagination = new Pagination('#container');
   await t
-    .expect(pager.element.getAttribute('aria-disabled'))
+    .expect(pagination.element.getAttribute('aria-disabled'))
     .eql('true')
-    .expect(pager.element.hasClass('dx-state-disabled'))
+    .expect(pagination.element.hasClass('dx-state-disabled'))
     .ok()
-    .expect(pager.element.getAttribute('accesskey'))
+    .expect(pagination.element.getAttribute('accesskey'))
     .eql('F')
-    .expect(pager.element.getAttribute('title'))
-    .eql('Best Pager');
+    .expect(pagination.element.getAttribute('title'))
+    .eql('Best Pagination');
 }).before(async () => createWidget('dxPagination', {
-  hint: 'Best Pager',
+  hint: 'Best Pagination',
   disabled: true,
   accessKey: 'F',
   itemCount: 50,
 }));
 
-test('Pager tabindex and state properties', async (t) => {
-  const pager = new Pager('#container');
+test('Pagination tabindex and state properties', async (t) => {
+  const pagination = new Pagination('#container');
   await t
-    .expect(pager.element.getAttribute('tabindex'))
+    .expect(pagination.element.getAttribute('tabindex'))
     .eql('7')
 
-    .click(pager.getNavPage('3').element)
-    .expect(pager.element.hasClass('dx-state-focused'))
+    .click(pagination.getNavPage('3').element)
+    .expect(pagination.element.hasClass('dx-state-focused'))
     .ok()
-    .expect(pager.element.hasClass('dx-state-hover'))
+    .expect(pagination.element.hasClass('dx-state-hover'))
     .ok()
-    .expect(pager.element.hasClass('dx-state-active'))
+    .expect(pagination.element.hasClass('dx-state-active'))
     .notOk();
 
-  await ClientFunction((_pager) => {
-    const $root = $(_pager.element());
+  await ClientFunction((_pagination) => {
+    const $root = $(_pagination.element());
 
     $root.trigger($.Event('dxpointerdown', {
       pointers: [{ pointerId: 1 }],
     }));
-  })(pager);
+  })(pagination);
 
   await t
-    .expect(pager.element.hasClass('dx-state-active'))
+    .expect(pagination.element.hasClass('dx-state-active'))
     .ok();
 }).before(async () => createWidget('dxPagination', {
   itemCount: 50,
@@ -90,36 +90,36 @@ test('Pager tabindex and state properties', async (t) => {
   tabIndex: 7,
 }));
 
-test('Pager focus method without focusStateEnabled', async (t) => {
-  const pager = new Pager('#container');
+test('Pagination focus method without focusStateEnabled', async (t) => {
+  const pagination = new Pagination('#container');
   await t
-    .expect(pager.getPageSize(0).element.focused)
+    .expect(pagination.getPageSize(0).element.focused)
     .notOk();
 
-  await ClientFunction((_pager) => {
-    _pager.getInstance().focus();
-  })(pager);
+  await ClientFunction((_pagination) => {
+    _pagination.getInstance().focus();
+  })(pagination);
 
   await t
-    .expect(pager.getPageSize(0).element.focused)
+    .expect(pagination.getPageSize(0).element.focused)
     .ok();
 }).before(async () => createWidget('dxPagination', {
   focusStateEnabled: false,
   itemCount: 50,
 }));
 
-test('Pager focus method with focusStateEnabled', async (t) => {
-  const pager = new Pager('#container');
+test('Pagination focus method with focusStateEnabled', async (t) => {
+  const pagination = new Pagination('#container');
   await t
-    .expect(pager.element.focused)
+    .expect(pagination.element.focused)
     .notOk();
 
-  await ClientFunction((_pager) => {
-    _pager.getInstance().focus();
-  })(pager);
+  await ClientFunction((_pagination) => {
+    _pagination.getInstance().focus();
+  })(pagination);
 
   await t
-    .expect(pager.element.focused)
+    .expect(pagination.element.focused)
     .ok();
 }).before(async () => createWidget('dxPagination', {
   focusStateEnabled: true,
