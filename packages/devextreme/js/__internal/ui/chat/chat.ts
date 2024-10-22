@@ -320,7 +320,6 @@ class Chat extends Widget<Properties> {
     // @ts-expect-error
     const dataSource = this.getDataSource();
 
-    
     if (!isDefined(dataSource)) {
       this._insertNewItem(message);
       return;
