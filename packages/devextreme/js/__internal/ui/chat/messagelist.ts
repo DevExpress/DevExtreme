@@ -9,7 +9,7 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { isDate, isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
-import type { Message } from '@js/ui/chat';
+import type { Message, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -35,6 +35,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
+  typingUsers: User[];
   isLoading?: boolean;
 }
 

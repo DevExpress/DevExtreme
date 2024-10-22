@@ -35,6 +35,7 @@ type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
 type Properties = ChatProperties & {
   title: string;
   showDayHeaders: boolean;
+  typingUsers: User[];
   onTypingStart?: ((e: TypingStartEvent) => void);
   onTypingEnd?: ((e: TypingEndEvent) => void);
 };
@@ -66,6 +67,7 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       errors: [],
+      typingUsers: [],
       onMessageSend: undefined,
       onTypingStart: undefined,
       onTypingEnd: undefined,
@@ -130,19 +132,27 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const {
+      items = [],
+      user,
+      showDayHeaders,
+      typingUsers,
+    } = this.option();
 
-    const currentUserId = user?.id;
     const $messageList = $('<div>');
 
     this.$element().append($messageList);
+
+    // @ts-expect-error
+    const isLoading = this._dataController.isLoading();
+    const currentUserId = user?.id;
 
     this._messageList = this._createComponent($messageList, MessageList, {
       items,
       currentUserId,
       showDayHeaders,
-      // @ts-expect-error
-      isLoading: this._dataController.isLoading(),
+      typingUsers,
+      isLoading,
     });
   }
 
@@ -304,6 +314,9 @@ class Chat extends Widget<Properties> {
         this._createTypingEndAction();
         break;
       case 'showDayHeaders':
+        this._messageList.option(name, value);
+        break;
+      case 'typingUsers':
         this._messageList.option(name, value);
         break;
       default:
