@@ -71,6 +71,7 @@ const main = async function() {
 
     if(errors) {
         console.error('Check failure');
+        // eslint-disable-next-line no-process-exit
         process.exit(1);
     }
 };
