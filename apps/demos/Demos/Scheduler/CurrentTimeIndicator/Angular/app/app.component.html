@@ -21,7 +21,7 @@
       *ngIf="getMovieById | apply : model.appointmentData.movieId as movie"
     >
       <div class="movie">
-        <img [src]="movie.image" alt="{{movie.text}} poster"/>
+        <img [src]="movie.image" alt="{{ movie.text }} poster" />
         <div class="movie-text">{{ movie.text }}</div>
       </div>
     </ng-container>
