@@ -42,7 +42,7 @@ const getPreviousButtonOptions = (header) => ({
   icon: 'chevronprev',
   elementAttr: {
     class: PREVIOUS_BUTTON_CLASS,
-    'aria-label': `Previous ${getCurrentViewText(header)}`,
+    ...getCurrentViewText(header) ? { 'aria-label': `Previous ${getCurrentViewText(header)}` } : {},
   },
   clickHandler: () => header._updateDateByDirection(DIRECTION_LEFT),
   onContentReady: (e) => {
@@ -98,7 +98,7 @@ const getNextButtonOptions = (header) => ({
   icon: 'chevronnext',
   elementAttr: {
     class: NEXT_BUTTON_CLASS,
-    'aria-label': `Next ${getCurrentViewText(header)}`,
+    ...getCurrentViewText(header) ? { 'aria-label': `Next ${getCurrentViewText(header)}` } : {},
   },
   clickHandler: () => header._updateDateByDirection(DIRECTION_RIGHT),
   onContentReady: (e) => {
@@ -152,5 +152,11 @@ const isNextButtonDisabled = (header) => {
 
 const getCurrentViewText = (header) => {
   const { currentView } = header;
-  return currentView?.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase().split(' ').join(' ') || '';
+  return typeof currentView === 'string'
+    ? currentView
+      ?.replace(/([a-z])([A-Z])/g, '$1 $2')
+      .toLowerCase()
+      .split(' ')
+      .join(' ')
+    : '';
 };
