@@ -16,6 +16,9 @@ fixture.disablePageReloads`Column Fixing`.page(
     test('Fixed columns: add icons for context menu', async (t) => {
       const dataGrid = new DataGrid('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+      await t.expect(dataGrid.isReady()).ok();
+
       await t
         .rightClick(dataGrid.getHeaders().getHeaderRow(0).element)
         .click(dataGrid.getContextMenu().getItemByOrder(4))
