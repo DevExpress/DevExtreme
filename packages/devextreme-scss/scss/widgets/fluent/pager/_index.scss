@@ -10,7 +10,8 @@
 // adduse
 
 
-.dx-pager {
+.dx-pager,
+.dx-pagination {
   padding: $fluent-pagination-paddings $fluent-grid-base-cell-horizontal-padding;
 
   &.dx-light-mode {

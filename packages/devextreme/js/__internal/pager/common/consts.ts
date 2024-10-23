@@ -1,4 +1,5 @@
 export const PAGER_CLASS = 'dx-pager';
+export const PAGINATION_CLASS = 'dx-pagination';
 export const LIGHT_MODE_CLASS = 'dx-light-mode';
 export const PAGINATION_PAGES_CLASS = 'dx-pages';
 export const PAGINATION_PAGE_INDEXES_CLASS = 'dx-page-indexes';

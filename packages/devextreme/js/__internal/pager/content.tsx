@@ -10,7 +10,11 @@ import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
 import { combineClasses } from '../core/r1/utils/render_utils';
 import {
-  LIGHT_MODE_CLASS, PAGER_CLASS, PAGINATION_PAGE_INDEXES_CLASS, PAGINATION_PAGES_CLASS,
+  LIGHT_MODE_CLASS,
+  PAGER_CLASS,
+  PAGINATION_CLASS,
+  PAGINATION_PAGE_INDEXES_CLASS,
+  PAGINATION_PAGES_CLASS,
 } from './common/consts';
 import type { KeyboardActionContextType } from './common/keyboard_action_context';
 import { KeyboardActionContext } from './common/keyboard_action_context';
@@ -155,7 +159,8 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   getClasses(): string {
     const classesMap = {
       [`${this.props.className}`]: !!this.props.className,
-      [PAGER_CLASS]: true,
+      [PAGER_CLASS]: !!this.props.isGridCompatibilityMode,
+      [PAGINATION_CLASS]: !this.props.isGridCompatibilityMode,
       [LIGHT_MODE_CLASS]: !this.getIsLargeDisplayMode(),
     };
     return combineClasses(classesMap);

@@ -6,7 +6,8 @@
 $pagination-paddings: 8px;
 $pagination-info-paddings: 9px;
 
-.dx-pager {
+.dx-pager,
+.dx-pagination {
   overflow: hidden;
   width: 100%;
   padding-top: $pagination-paddings;
@@ -118,7 +119,9 @@ $pagination-info-paddings: 9px;
 }
 
 .dx-rtl .dx-pager,
-.dx-pager.dx-rtl {
+.dx-pager.dx-rtl,
+.dx-rtl .dx-pagination,
+.dx-pagination.dx-rtl {
   .dx-pages {
     float: left;
     direction: ltr;
