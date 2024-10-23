@@ -179,10 +179,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hideEvent(): Record<string, any> | string | { delay?: number, name?: string } {
+    get hideEvent(): string | { delay?: number, name?: string } {
         return this._getOption('hideEvent');
     }
-    set hideEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
+    set hideEvent(value: string | { delay?: number, name?: string }) {
         this._setOption('hideEvent', value);
     }
 
@@ -348,10 +348,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get showEvent(): Record<string, any> | string | { delay?: number, name?: string } {
+    get showEvent(): string | { delay?: number, name?: string } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
+    set showEvent(value: string | { delay?: number, name?: string }) {
         this._setOption('showEvent', value);
     }
 
@@ -525,7 +525,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideEventChange: EventEmitter<Record<string, any> | string | { delay?: number, name?: string }>;
+    @Output() hideEventChange: EventEmitter<string | { delay?: number, name?: string }>;
 
     /**
     
@@ -616,7 +616,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showEventChange: EventEmitter<Record<string, any> | string | { delay?: number, name?: string }>;
+    @Output() showEventChange: EventEmitter<string | { delay?: number, name?: string }>;
 
     /**
     

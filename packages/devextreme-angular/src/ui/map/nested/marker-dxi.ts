@@ -35,10 +35,10 @@ export class DxiMapMarkerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get location(): Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[] {
+    get location(): Array<number> | string | { lat?: number, lng?: number }[] {
         return this._getOption('location');
     }
-    set location(value: Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[]) {
+    set location(value: Array<number> | string | { lat?: number, lng?: number }[]) {
         this._setOption('location', value);
     }
 
@@ -51,10 +51,10 @@ export class DxiMapMarkerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get tooltip(): Record<string, any> | string | { isShown?: boolean, text?: string } {
+    get tooltip(): string | { isShown?: boolean, text?: string } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any> | string | { isShown?: boolean, text?: string }) {
+    set tooltip(value: string | { isShown?: boolean, text?: string }) {
         this._setOption('tooltip', value);
     }
 

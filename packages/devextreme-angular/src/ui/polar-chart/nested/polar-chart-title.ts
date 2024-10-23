@@ -62,10 +62,10 @@ export class DxoPolarChartPolarChartTitleComponent extends NestedOption implemen
     }
 
     @Input()
-    get subtitle(): Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('subtitle', value);
     }
 

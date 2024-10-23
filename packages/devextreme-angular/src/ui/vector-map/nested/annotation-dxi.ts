@@ -126,10 +126,10 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     }
 
     @Input()
-    get image(): Record<string, any> | string | { height?: number, url?: string, width?: number } {
+    get image(): string | { height?: number, url?: string, width?: number } {
         return this._getOption('image');
     }
-    set image(value: Record<string, any> | string | { height?: number, url?: string, width?: number }) {
+    set image(value: string | { height?: number, url?: string, width?: number }) {
         this._setOption('image', value);
     }
 

@@ -32,10 +32,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDiagramNodesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get autoLayout(): Record<string, any> | "auto" | "off" | "tree" | "layered" | { orientation?: "horizontal" | "vertical", type?: "auto" | "off" | "tree" | "layered" } {
+    get autoLayout(): "auto" | "off" | "tree" | "layered" | { orientation?: "horizontal" | "vertical", type?: "auto" | "off" | "tree" | "layered" } {
         return this._getOption('autoLayout');
     }
-    set autoLayout(value: Record<string, any> | "auto" | "off" | "tree" | "layered" | { orientation?: "horizontal" | "vertical", type?: "auto" | "off" | "tree" | "layered" }) {
+    set autoLayout(value: "auto" | "off" | "tree" | "layered" | { orientation?: "horizontal" | "vertical", type?: "auto" | "off" | "tree" | "layered" }) {
         this._setOption('autoLayout', value);
     }
 

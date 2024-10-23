@@ -62,10 +62,10 @@ export class DxoBarGaugeLegendTitleComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get subtitle(): Record<string, any> | string | { font?: Font, offset?: number, text?: string } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: Record<string, any> | string | { font?: Font, offset?: number, text?: string }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string }) {
         this._setOption('subtitle', value);
     }
 
