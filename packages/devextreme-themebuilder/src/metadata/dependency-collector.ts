@@ -14,8 +14,14 @@ const busyCache = {
   dependencies: {},
 };
 
-const REGEXP_IS_TS_NOT_DTS = /^(?!.*\.d\.ts$).*\.tsx?$/;
+const REGEXP_IS_TSX_NOT_DTS = /^(?!.*\.d\.ts$).*\.tsx$/;
 const REGEXP_IS_DTS = /\.d\.ts$/;
+const dxJsDir = path.resolve(__dirname, '../../../devextreme/js');
+const tsConfig = JSON.parse(
+    readFileSync(path.resolve(__dirname, '../../../devextreme/js/__internal/tsconfig.json'), 'utf8')
+        .replace(/\/\/[^\n]+/mg, '')
+        .replace(/,\s*([}\]])/mg, '$1')
+);
 
 export default class DependencyCollector {
   flatStylesDependencyTree: FlatStylesDependencies = {};
@@ -27,7 +33,7 @@ export default class DependencyCollector {
   static getWidgetFromAst(ast: SyntaxTree): string {
     if (ast.comments?.length) {
       const styleComment = ast.comments
-        .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
+          .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
 
       if (styleComment) {
         return stylesRegex.exec(styleComment.value)[1].toLowerCase();
@@ -45,10 +51,10 @@ export default class DependencyCollector {
 
   static isArraysEqual(array1: string[], array2: string[]): boolean {
     return array1.length === array2.length
-      && array1.every((value, index) => value === array2[index]);
+        && array1.every((value, index) => value === array2[index]);
   }
 
-  treeProcessor(node: ScriptsDependencyTree): string[] {
+  treeProcessor(node: ScriptsDependencyTree, cache: Map<string, any> = new Map() ): string[] {
     let result: string[] = [];
     const { widget, dependencies } = node;
 
@@ -57,8 +63,16 @@ export default class DependencyCollector {
       return DependencyCollector.getUniqueWidgets(cachedWidgets, widget);
     }
 
-    Object.values(dependencies).forEach((nextNode) => {
-      result.push(...this.treeProcessor(nextNode));
+    Object.entries(dependencies).forEach(([path, nextNode]) => {
+      const cached = cache.get(path);
+
+      const procResult = cached || this.treeProcessor(nextNode, cache);
+
+      result.push(...procResult);
+
+      if(!cached) {
+        cache.set(path, procResult)
+      }
     });
 
     result = DependencyCollector.getUniqueWidgets(result);
@@ -73,12 +87,12 @@ export default class DependencyCollector {
     return result;
   }
 
-  getFullDependencyTree(filePath: string): ScriptsDependencyTree {
-    let cacheItem = this.scriptsCache[filePath];
-    const isTsFile = REGEXP_IS_TS_NOT_DTS.test(filePath);
+  getFullDependencyTree(filePath: string, cache: Map<string, any> = new Map()): ScriptsDependencyTree {
+    let cacheScriptItem = this.scriptsCache[filePath];
+    const isTsxFile = REGEXP_IS_TSX_NOT_DTS.test(filePath);
     const filePathInProcess = filePathMap.get(filePath);
 
-    if (!filePathInProcess && cacheItem === undefined) {
+    if (!filePathInProcess && cacheScriptItem === undefined) {
       filePathMap.set(filePath, busyCache);
 
       const result = precinct.paperwork(filePath, {
@@ -86,39 +100,54 @@ export default class DependencyCollector {
         ts: { skipTypeImports : true }
       });
 
-      const deps = result.map((relativeDependency: string): string => cabinet({
-        partial: relativeDependency,
-        directory: path.resolve(__dirname, '../../../devextreme/js'),
-        filename: filePath,
-        ast: precinct.ast,
-        tsConfig: path.resolve(__dirname, '../../../devextreme/js/__internal/tsconfig.json'),
-      }))
-        // NOTE: Workaround for the filing-cabinet issue:
-        // https://github.com/dependents/node-filing-cabinet/issues/112
-        .map((path: string) => path.replace(REGEXP_IS_DTS, '.js'))
-        .filter((path: string): boolean => path !== null
-          && existsSync(path)
-          && !path.includes('node_modules')
-          && !path.includes('viz'));
+      const deps = result.map((relativeDependency: string): string => {
+        const absDepPath = relativeDependency.startsWith('.')
+            ? path.resolve(path.dirname(filePath), relativeDependency)
+            : relativeDependency;
 
-      cacheItem = {
-        widget: isTsFile
-          ? ''
-          : DependencyCollector.getWidgetFromAst(precinct.ast),
+        const cachedRes = cache.get(absDepPath);
+        if(cachedRes) {
+          return cachedRes;
+        }
+
+        const cabinetResult = cabinet({
+          partial: relativeDependency,
+          directory: dxJsDir,
+          filename: filePath,
+          ast: precinct.ast,
+          tsConfig: tsConfig,
+        });
+
+        cache.set(absDepPath, cabinetResult);
+
+        return cabinetResult;
+      })
+          // NOTE: Workaround for the filing-cabinet issue:
+          // https://github.com/dependents/node-filing-cabinet/issues/112
+          .map((path: string) => path.replace(REGEXP_IS_DTS, '.js'))
+          .filter((path: string): boolean => path !== null
+              && existsSync(path)
+              && !path.includes('node_modules')
+              && !path.includes('viz'));
+
+      cacheScriptItem = {
+        widget: isTsxFile
+            ? ''
+            : DependencyCollector.getWidgetFromAst(precinct.ast),
         dependencies: {},
       };
 
       deps.forEach((absolutePath: string) => {
-        const node = this.getFullDependencyTree(absolutePath);
+        const node = this.getFullDependencyTree(absolutePath, cache);
         if (node) {
-          cacheItem.dependencies[absolutePath] = node;
+          cacheScriptItem.dependencies[absolutePath] = node;
         }
       });
 
-      this.scriptsCache[filePath] = cacheItem;
+      this.scriptsCache[filePath] = cacheScriptItem;
     }
 
-    return cacheItem;
+    return cacheScriptItem;
   }
 
   validate(): void {
@@ -126,9 +155,9 @@ export default class DependencyCollector {
       const indexFileName = path.resolve(__dirname, `../../../devextreme-scss/scss/widgets/${theme}/_index.scss`);
       const indexContent = readFileSync(indexFileName, 'utf8');
       const indexPublicWidgetsList = new WidgetsHandler([], '', {})
-        .getIndexWidgetItems(indexContent)
-        .map((item: WidgetItem): string => item.widgetName.toLowerCase())
-        .sort();
+          .getIndexWidgetItems(indexContent)
+          .map((item: WidgetItem): string => item.widgetName.toLowerCase())
+          .sort();
 
       const dependenciesWidgets = Object.keys(this.flatStylesDependencyTree).sort();
 
