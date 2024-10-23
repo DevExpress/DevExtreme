@@ -417,10 +417,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showEvent(): Record<string, any> | string | { delay?: number, name?: string } {
+    get showEvent(): string | { delay?: number, name?: string } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
+    set showEvent(value: string | { delay?: number, name?: string }) {
         this._setOption('showEvent', value);
     }
 
@@ -430,10 +430,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showSubmenuMode(): Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
+    get showSubmenuMode(): "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
+    set showSubmenuMode(value: "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -779,14 +779,14 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showEventChange: EventEmitter<Record<string, any> | string | { delay?: number, name?: string }>;
+    @Output() showEventChange: EventEmitter<string | { delay?: number, name?: string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
+    @Output() showSubmenuModeChange: EventEmitter<"onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
 
     /**
     

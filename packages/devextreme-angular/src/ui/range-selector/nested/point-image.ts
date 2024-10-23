@@ -37,10 +37,10 @@ export class DxoRangeSelectorPointImageComponent extends NestedOption implements
     }
 
     @Input()
-    get url(): Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string } {
+    get url(): string | { rangeMaxPoint?: string, rangeMinPoint?: string } {
         return this._getOption('url');
     }
-    set url(value: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }) {
+    set url(value: string | { rangeMaxPoint?: string, rangeMinPoint?: string }) {
         this._setOption('url', value);
     }
 

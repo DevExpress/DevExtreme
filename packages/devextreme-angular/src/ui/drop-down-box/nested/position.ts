@@ -29,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDropDownBoxPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get at(): Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" } {
+    get at(): "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" } {
         return this._getOption('at');
     }
-    set at(value: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" }) {
+    set at(value: "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" }) {
         this._setOption('at', value);
     }
 
@@ -45,26 +45,26 @@ export class DxoDropDownBoxPositionComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get boundaryOffset(): Record<string, any> | string | { x?: number, y?: number } {
+    get boundaryOffset(): string | { x?: number, y?: number } {
         return this._getOption('boundaryOffset');
     }
-    set boundaryOffset(value: Record<string, any> | string | { x?: number, y?: number }) {
+    set boundaryOffset(value: string | { x?: number, y?: number }) {
         this._setOption('boundaryOffset', value);
     }
 
     @Input()
-    get collision(): Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x?: "fit" | "flip" | "flipfit" | "none", y?: "fit" | "flip" | "flipfit" | "none" } {
+    get collision(): "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x?: "fit" | "flip" | "flipfit" | "none", y?: "fit" | "flip" | "flipfit" | "none" } {
         return this._getOption('collision');
     }
-    set collision(value: Record<string, any> | "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x?: "fit" | "flip" | "flipfit" | "none", y?: "fit" | "flip" | "flipfit" | "none" }) {
+    set collision(value: "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x?: "fit" | "flip" | "flipfit" | "none", y?: "fit" | "flip" | "flipfit" | "none" }) {
         this._setOption('collision', value);
     }
 
     @Input()
-    get my(): Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" } {
+    get my(): "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" } {
         return this._getOption('my');
     }
-    set my(value: Record<string, any> | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" }) {
+    set my(value: "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" }) {
         this._setOption('my', value);
     }
 
@@ -77,10 +77,10 @@ export class DxoDropDownBoxPositionComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get offset(): Record<string, any> | string | { x?: number, y?: number } {
+    get offset(): string | { x?: number, y?: number } {
         return this._getOption('offset');
     }
-    set offset(value: Record<string, any> | string | { x?: number, y?: number }) {
+    set offset(value: string | { x?: number, y?: number }) {
         this._setOption('offset', value);
     }
 
