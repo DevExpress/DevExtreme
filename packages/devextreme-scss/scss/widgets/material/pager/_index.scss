@@ -11,15 +11,15 @@
 
 
 .dx-pager {
-  padding: $material-pager-paddings $material-grid-base-cell-horizontal-padding;
+  padding: $material-pagination-paddings $material-grid-base-cell-horizontal-padding;
 
   &.dx-light-mode {
     .dx-page-sizes {
-      min-width: $material-pager-light-pagesizes-min-width;
+      min-width: $material-pagination-light-pagesizes-min-width;
     }
 
     .dx-page-index {
-      min-width: $material-pager-light-pageindex-min-width;
+      min-width: $material-pagination-light-pageindex-min-width;
     }
 
     .dx-pages {
@@ -36,19 +36,19 @@
 
   .dx-pages {
     .dx-page {
-      padding: $material-pager-page-padding;
-      line-height: $material-pager-page-line-height;
+      padding: $material-pagination-page-padding;
+      line-height: $material-pagination-page-line-height;
     }
 
     .dx-separator {
-      padding-left: $material-pager-separator-paddings;
-      padding-right: $material-pager-separator-paddings;
+      padding-left: $material-pagination-separator-paddings;
+      padding-right: $material-pagination-separator-paddings;
     }
 
     .dx-navigate-button {
       width: 9px;
-      height: $material-pager-navbutton-height;
-      padding: $material-pager-navbutton-paddings;
+      height: $material-pagination-navbutton-height;
+      padding: $material-pagination-navbutton-paddings;
     }
 
     .dx-prev-button {
@@ -67,10 +67,10 @@
 
   .dx-page,
   .dx-page-size {
-    font-size: $material-pager-page-font-size;
+    font-size: $material-pagination-page-font-size;
 
     &:hover {
-      background-color: $pager-page-hovered-bg;
+      background-color: $pagination-page-hovered-bg;
     }
 
     border-radius: 20px;
@@ -82,16 +82,16 @@
       margin-left: 0;
     }
 
-    padding: $material-pager-page-padding;
-    line-height: $material-pager-page-line-height;
+    padding: $material-pagination-page-padding;
+    line-height: $material-pagination-page-line-height;
   }
 
   .dx-pages,
   .dx-page-sizes {
     .dx-selection {
       font-weight: 500;
-      background-color: $pager-page-selected-bg;
-      color: $pager-page-selected-color;
+      background-color: $pagination-page-selected-bg;
+      color: $pagination-page-selected-color;
     }
   }
 }

@@ -10,8 +10,8 @@
 
 
 .dx-pager {
-  padding-top: $generic-pager-paddings;
-  padding-bottom: $generic-pager-paddings;
+  padding-top: $generic-pagination-paddings;
+  padding-bottom: $generic-pagination-paddings;
 
   &.dx-light-mode {
     .dx-page-sizes {
@@ -29,18 +29,18 @@
 
   .dx-pages {
     .dx-page {
-      padding: $generic-pager-page-padding-top $generic-pager-page-padding-left-right $generic-pager-page-padding-bottom;
+      padding: $generic-pagination-page-padding-top $generic-pagination-page-padding-left-right $generic-pagination-page-padding-bottom;
     }
 
     .dx-separator {
-      padding-left: $generic-pager-separator-paddings;
-      padding-right: $generic-pager-separator-paddings;
+      padding-left: $generic-pagination-separator-paddings;
+      padding-right: $generic-pagination-separator-paddings;
     }
 
     .dx-navigate-button {
       width: 9px;
-      height: $generic-pager-navbutton-height;
-      padding: $generic-pager-navbutton-paddings;
+      height: $generic-pagination-navbutton-height;
+      padding: $generic-pagination-navbutton-paddings;
     }
 
     .dx-prev-button {
@@ -59,25 +59,25 @@
 
   .dx-page,
   .dx-page-size {
-    border-radius: $pager-page-border-radius;
+    border-radius: $pagination-page-border-radius;
     border-style: solid;
     border-width: 1px;
     border-color: transparent;
   }
 
   .dx-page-sizes .dx-page-size {
-    padding-left: $generic-pager-pagesize-padding-left;
-    padding-right: $generic-pager-pagesize-padding-right;
-    padding-top: $generic-pager-pagesize-padding-top;
-    padding-bottom: $generic-pager-pagesize-padding-bottom;
+    padding-left: $generic-pagination-pagesize-padding-left;
+    padding-right: $generic-pagination-pagesize-padding-right;
+    padding-top: $generic-pagination-pagesize-padding-top;
+    padding-bottom: $generic-pagination-pagesize-padding-bottom;
   }
 
   .dx-pages,
   .dx-page-sizes {
     .dx-selection {
-      color: $pager-page-selected-color;
-      border-color: $pager-page-selected-border-color;
-      background-color: $pager-page-selected-bg;
+      color: $pagination-page-selected-color;
+      border-color: $pagination-page-selected-border-color;
+      background-color: $pagination-page-selected-bg;
     }
   }
 }
