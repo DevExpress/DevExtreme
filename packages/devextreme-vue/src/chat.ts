@@ -9,6 +9,7 @@ type AccessibleOptions = Pick<Properties,
   "dataSource" |
   "disabled" |
   "elementAttr" |
+  "errors" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -35,6 +36,7 @@ const componentConfig = {
     dataSource: {},
     disabled: Boolean,
     elementAttr: Object,
+    errors: Array,
     focusStateEnabled: Boolean,
     height: [Function, Number, String],
     hint: String,
@@ -57,6 +59,7 @@ const componentConfig = {
     "update:dataSource": null,
     "update:disabled": null,
     "update:elementAttr": null,
+    "update:errors": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,
@@ -80,6 +83,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = Chat;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
+      error: { isCollectionItem: true, optionName: "errors" },
       item: { isCollectionItem: true, optionName: "items" },
       user: { isCollectionItem: false, optionName: "user" }
     };
@@ -111,6 +115,26 @@ prepareConfigurationComponentConfig(DxAuthorConfig);
 const DxAuthor = defineComponent(DxAuthorConfig);
 
 (DxAuthor as any).$_optionName = "author";
+
+const DxErrorConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:id": null,
+    "update:message": null,
+  },
+  props: {
+    id: [Number, String],
+    message: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxErrorConfig);
+
+const DxError = defineComponent(DxErrorConfig);
+
+(DxError as any).$_optionName = "errors";
+(DxError as any).$_isCollectionItem = true;
 
 const DxItemConfig = {
   emits: {
@@ -164,6 +188,7 @@ export default DxChat;
 export {
   DxChat,
   DxAuthor,
+  DxError,
   DxItem,
   DxUser
 };
