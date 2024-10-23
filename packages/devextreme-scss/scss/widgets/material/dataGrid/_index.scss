@@ -71,6 +71,8 @@
     display: inline-block;
     position: sticky;
     background-color: $datagrid-group-row-bg;
+    width: 100%;
+    overflow: clip;
   }
 
   .dx-row.dx-group-row:first-child {
