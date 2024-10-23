@@ -1,8 +1,6 @@
 name: 'CodeQL'
 
 on:
-  schedule:
-    - cron: '0 1 * * *'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +15,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: [ '22_1', '22_2', '23_1' ]
         language: [ 'csharp', 'javascript' ]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
@@ -25,12 +22,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ matrix.branch }}
 
       - name: Get head SHA
         id: get-head-sha
-        run: echo "SHA=$(git rev-parse origin/${{ matrix.branch }})" >> "$GITHUB_OUTPUT"
+        run: echo "SHA=$(git rev-parse origin/${{ github.ref_name }})" >> "$GITHUB_OUTPUT"
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
@@ -46,7 +41,7 @@ jobs:
         uses: github/codeql-action/analyze@v2
         with:
           category: "/language:${{matrix.language}}"
-          ref: refs/heads/${{ matrix.branch }}
+          ref: refs/heads/${{ github.ref_name }}
           sha: ${{ steps.get-head-sha.outputs.SHA }}
 
   fetch:
@@ -80,8 +75,8 @@ jobs:
         id: notify-cache
         with:
           path: notify.json
-          key: ${{ runner.os }}-${{ matrix.branch }}-${{ matrix.language }}-${{ steps.get-date.outputs.date }}
-          restore-keys: ${{ runner.os }}-${{ matrix.branch }}-${{ matrix.language }}
+          key: ${{ runner.os }}-${{ github.ref_name }}-${{ matrix.language }}-${{ steps.get-date.outputs.date }}
+          restore-keys: ${{ runner.os }}-${{ github.ref_name }}-${{ matrix.language }}
 
       - name: Teams Notification
         uses: DevExpress/github-actions/send-teams-notification@main
