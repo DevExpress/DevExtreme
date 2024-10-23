@@ -62,19 +62,19 @@ const fakeFile = {
     name: 'fakefile.png',
     size: 100023,
     type: 'image/png',
-    lastModifiedDate: Date.now()
+    lastModifiedDate: $.now()
 };
 const fakeFile1 = {
     name: 'fakefile1.jpeg',
     size: 1063,
     type: 'image/jpeg',
-    lastModifiedDate: Date.now()
+    lastModifiedDate: $.now()
 };
 const fakeFile2 = {
     name: 'document.pdf',
     size: 4000,
     type: 'application/pdf',
-    lastModifiedDate: Date.now()
+    lastModifiedDate: $.now()
 };
 
 const getNewFile = function() {
@@ -85,7 +85,7 @@ const getNewFile = function() {
         name: 'fakefile' + randomId,
         size: randomSize,
         type: 'image/jpeg',
-        lastModifiedDate: Date.now()
+        lastModifiedDate: $.now()
     };
 };
 
@@ -1326,7 +1326,7 @@ QUnit.module('files rendering', moduleConfig, () => {
             name: 'very_very_very_very_very_very_very_very_very_long_name.png',
             size: 100023,
             type: 'image/png',
-            lastModifiedDate: Date.now()
+            lastModifiedDate: $.now()
         };
 
         simulateFileChoose($fileUploader, file);
@@ -3579,7 +3579,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
             name: 'fakefile2',
             size: 2048,
             type: 'text/plain',
-            lastModifiedDate: Date.now()
+            lastModifiedDate: $.now()
         };
 
         const $fileUploader = $('#fileuploader').dxFileUploader({

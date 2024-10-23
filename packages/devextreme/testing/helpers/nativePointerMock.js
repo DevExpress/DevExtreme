@@ -450,7 +450,7 @@
                     const createTouchByOptions = function(options) {
                         return new window.Touch({
                             target: options.target || document.body,
-                            identifier: options.identifier || Date.now(),
+                            identifier: options.identifier || $.now(),
                             pageX: options.pageX || 0,
                             pageY: options.pageY || 0,
                             screenX: options.screenX || 0,
@@ -605,7 +605,7 @@
                 // on the surface until it is lifted off the surface.
                 //
                 // values: unique ID of the Touch object
-                identifier: Date.now(), // The value for Touch.identifier
+                identifier: $.now(), // The value for Touch.identifier
 
                 // Coordinates of the touch point relative to the viewport,
                 // including any scroll offset.
@@ -806,7 +806,7 @@
                 _y = 0;
                 _scrollTop = 0;
                 _scrollLeft = 0;
-                _clock = Date.now();
+                _clock = $.now();
                 return this;
             },
 
