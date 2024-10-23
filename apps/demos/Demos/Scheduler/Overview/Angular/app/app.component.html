@@ -26,7 +26,7 @@
       <h2>{{ employee.text }}</h2>
     </div>
     <div class="avatar">
-      <img [src]="employee.data.avatar" />
+      <img [src]="employee.data.avatar" alt="{{employee.text}} photo"/>
     </div>
     <div class="info" [style.color]="employee.color">
       Age: {{ employee.data.age }}
