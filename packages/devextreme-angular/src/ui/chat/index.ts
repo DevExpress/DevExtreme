@@ -230,6 +230,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.showAvatar]
+    
+     */
+    @Input()
+    get showAvatar(): boolean {
+        return this._getOption('showAvatar');
+    }
+    set showAvatar(value: boolean) {
+        this._setOption('showAvatar', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.showDayHeaders]
     
      */
@@ -239,6 +252,32 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set showDayHeaders(value: boolean) {
         this._setOption('showDayHeaders', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.showMessageTimestamp]
+    
+     */
+    @Input()
+    get showMessageTimestamp(): boolean {
+        return this._getOption('showMessageTimestamp');
+    }
+    set showMessageTimestamp(value: boolean) {
+        this._setOption('showMessageTimestamp', value);
+    }
+
+
+    /**
+     * [descr:dxChatOptions.showUserName]
+    
+     */
+    @Input()
+    get showUserName(): boolean {
+        return this._getOption('showUserName');
+    }
+    set showUserName(value: boolean) {
+        this._setOption('showUserName', value);
     }
 
 
@@ -401,7 +440,28 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() showAvatarChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() showDayHeadersChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() showMessageTimestampChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() showUserNameChange: EventEmitter<boolean>;
 
     /**
     
@@ -495,7 +555,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'showAvatarChange' },
             { emit: 'showDayHeadersChange' },
+            { emit: 'showMessageTimestampChange' },
+            { emit: 'showUserNameChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }

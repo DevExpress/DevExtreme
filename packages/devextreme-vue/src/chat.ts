@@ -20,7 +20,10 @@ type AccessibleOptions = Pick<Properties,
   "onMessageSend" |
   "onOptionChanged" |
   "rtlEnabled" |
+  "showAvatar" |
   "showDayHeaders" |
+  "showMessageTimestamp" |
+  "showUserName" |
   "user" |
   "visible" |
   "width"
@@ -48,7 +51,10 @@ const componentConfig = {
     onMessageSend: Function,
     onOptionChanged: Function,
     rtlEnabled: Boolean,
+    showAvatar: Boolean,
     showDayHeaders: Boolean,
+    showMessageTimestamp: Boolean,
+    showUserName: Boolean,
     user: Object,
     visible: Boolean,
     width: [Function, Number, String]
@@ -72,7 +78,10 @@ const componentConfig = {
     "update:onMessageSend": null,
     "update:onOptionChanged": null,
     "update:rtlEnabled": null,
+    "update:showAvatar": null,
     "update:showDayHeaders": null,
+    "update:showMessageTimestamp": null,
+    "update:showUserName": null,
     "update:user": null,
     "update:visible": null,
     "update:width": null,

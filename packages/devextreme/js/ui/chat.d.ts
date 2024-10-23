@@ -176,6 +176,24 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     showDayHeaders?: boolean;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    showUserName?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showAvatar?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showMessageTimestamp?: boolean;
+    /**
+     * @docid
      * @default null
      * @type_function_param1 e:{ui/chat:MessageSendEvent}
      * @action
