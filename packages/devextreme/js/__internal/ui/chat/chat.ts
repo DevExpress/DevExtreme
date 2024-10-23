@@ -28,7 +28,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
-  showDayHeaders: boolean;
 };
 
 class Chat extends Widget<Properties> {
