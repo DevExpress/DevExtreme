@@ -13,6 +13,8 @@ $pagination-info-paddings: 9px;
   padding-bottom: $pagination-paddings;
   line-height: normal;
 
+  margin-top: -1px;
+
   @include user-select(none);
 
   .dx-pages {

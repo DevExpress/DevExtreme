@@ -964,25 +964,6 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
     background-color: $datagrid-base-background-color;
   }
 
-  .dx-#{$widget-name}-pager {
-    border-top: 1px solid $datagrid-border-color;
-
-    .dx-page,
-    .dx-page-size,
-    .dx-navigate-button {
-      outline: none;
-    }
-
-    &.dx-state-focused {
-      .dx-page:focus,
-      .dx-page-size:focus,
-      .dx-navigate-button:focus {
-        outline: 2px solid $datagrid-focused-border-color;
-        outline-offset: -2px;
-      }
-    }
-  }
-
   .dx-#{$widget-name}-summary-item {
     color: $datagrid-summary-color;
   }

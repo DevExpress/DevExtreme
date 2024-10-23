@@ -13,6 +13,23 @@
   padding-top: $generic-pagination-paddings;
   padding-bottom: $generic-pagination-paddings;
 
+  border-top: 1px solid $base-border-color;
+
+  .dx-page,
+  .dx-page-size,
+  .dx-navigate-button {
+    outline: none;
+  }
+
+  &.dx-state-focused {
+    .dx-page:focus,
+    .dx-page-size:focus,
+    .dx-navigate-button:focus {
+      outline: 2px solid $pagination-outline-color;
+      outline-offset: -2px;
+    }
+  }
+
   &.dx-light-mode {
     .dx-page-sizes {
       min-width: 42px;
