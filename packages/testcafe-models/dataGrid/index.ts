@@ -6,7 +6,7 @@ import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
 import FilterPanel from './filter/panel';
-import Pager from '../pager';
+import Pager from '../pagination';
 import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
