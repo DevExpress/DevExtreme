@@ -6,7 +6,6 @@ export {
   HtmlEditorImageUploadTab,
   HtmlEditorPredefinedContextMenuItem,
   HtmlEditorPredefinedToolbarItem,
-  MarkupType,
   ContentReadyEvent,
   DisposingEvent,
   FocusInEvent,

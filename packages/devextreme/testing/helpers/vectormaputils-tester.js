@@ -65,10 +65,12 @@ function getRequestInfo(url) {
 
 require('http').createServer(function(request, response) {
     const info = getRequestInfo(request.url);
-    const action = actions[info.action];
     response.writeHead(200, { 'Content-Type': 'text/plain' });
-    if(action && typeof action === 'function') {
-        action(info.arg, callback);
+    if(Object.hasOwn(actions, info.action)) {
+        const action = actions[info.action];
+        if(typeof action === 'function') {
+            action(info.arg, callback);
+        }
     }
     function callback(data) {
         response.end(JSON.stringify(data));

@@ -18,14 +18,13 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-    AsyncCancelable,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangingInfo,
-    SelectionChangedInfo,
+    SelectionChangeInfo,
+    SelectionChangingEventBase,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -259,17 +258,17 @@ export type SelectAllValueChangedEvent<TItem extends ItemLike = any, TKey = any>
  * @docid _ui_list_SelectionChangingEvent
  * @public
  * @type object
- * @inherits AsyncCancelable,EventInfo,SelectionChangingInfo
+ * @inherits AsyncCancelable,EventInfo,SelectionChangeInfo
  */
-export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = AsyncCancelable & EventInfo<dxList<TItem, TKey>> & SelectionChangingInfo<TItem>;
+export type SelectionChangingEvent<TItem extends ItemLike = any, TKey = any> = SelectionChangingEventBase<dxList<TItem, TKey>>;
 
 /**
  * @docid _ui_list_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangeInfo<TItem>;
 
 /**
  * @deprecated use Properties instead

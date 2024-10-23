@@ -1,7 +1,7 @@
 @use "../textEditor/colors" as *;
-@use "../sizes" as *;
-@use "../colors" as *;
 @use "colors" as *;
+@use "../colors" as *;
+@use "../sizes" as *;
 
 // adduse
 
@@ -22,6 +22,12 @@ $chat-messagegroup-alignment-start-template: auto 1fr !default;
 $chat-messagegroup-alignment-start-gap: 12px !default;
 $chat-header-padding: 20px !default;
 $chat-information-font-size: 12px !default;
+$chat-error-icon-size: null !default;
+$chat-error-content-column-gap: null !default;
+$chat-errors-padding-block: null !default;
+$chat-errors-padding-inline: null !default;
+$chat-errors-row-gap: null !default;
+$chat-error-padding-block: null !default;
 
 $chat-messagelist-empty-icon-box-size: null !default;
 $chat-messagelist-empty-icon-size: null !default;
@@ -29,12 +35,21 @@ $chat-messagelist-empty-icon-margin-bottom: null !default;
 $chat-messagelist-empty-row-gap: null !default;
 $chat-messagelist-empty-message-font-size: null !default;
 $chat-messagelist-empty-prompt-font-size: null !default;
+$chat-messagelist-day-header-padding-bottom: 12px !default;
+$chat-messagelist-day-header-first-padding-top: 20px !default;
 
 @if $size == "default" {
   $chat-bubble-padding: 8px 12px !default;
   $chat-messagebox-padding: 20px !default;
   $chat-messagelist-padding: 20px !default;
   $chat-messagegroup-padding: 24px !default;
+
+  $chat-error-icon-size: $generic-base-icon-size !default;
+  $chat-error-content-column-gap: 6px !default;
+  $chat-errors-padding-block: 16px !default;
+  $chat-errors-padding-inline: 20px !default;
+  $chat-errors-row-gap: 4px !default;
+  $chat-error-padding-block: 9px !default;
 
   $chat-messagelist-empty-icon-box-size: 64px !default;;
   $chat-messagelist-empty-icon-size: 40px !default;
@@ -49,6 +64,13 @@ $chat-messagelist-empty-prompt-font-size: null !default;
   $chat-messagebox-padding: 16px !default;
   $chat-messagelist-padding: 16px !default;
   $chat-messagegroup-padding: 12px !default;
+
+  $chat-error-icon-size: $generic-base-icon-size + 2px !default;
+  $chat-error-content-column-gap: 4px !default;
+  $chat-errors-padding-block: 12px !default;
+  $chat-errors-padding-inline: 16px !default;
+  $chat-errors-row-gap: 2px !default;
+  $chat-error-padding-block: 6px !default;
 
   $chat-messagelist-empty-icon-box-size: 48px !default;;
   $chat-messagelist-empty-icon-size: 32px !default;

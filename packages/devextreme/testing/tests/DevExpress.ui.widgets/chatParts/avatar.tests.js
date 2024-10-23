@@ -7,11 +7,8 @@ const AVATAR_INITIALS_CLASS = 'dx-avatar-initials';
 
 const moduleConfig = {
     beforeEach: function() {
-        const markup = '<div id="avatar"></div>';
-        $('#qunit-fixture').html(markup);
-
         const init = (options = {}) => {
-            this.instance = new ChatAvatar($('#avatar'), options);
+            this.instance = new ChatAvatar($('#component'), options);
             this.$element = $(this.instance.$element());
         };
 

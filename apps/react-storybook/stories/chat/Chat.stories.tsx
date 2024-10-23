@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {Chat, ChatTypes} from 'devextreme-react/chat'
 import type {Meta, StoryObj} from '@storybook/react';
-import { firstAuthor, secondAuthor, initialMessages } from './data';
+import DataSource from 'devextreme/data/data_source';
+import CustomStore from 'devextreme/data/custom_store';
+import { firstAuthor, secondAuthor, initialMessages, longError } from './data';
 import { Popup } from 'devextreme-react/popup';
 
 import './styles.css';
@@ -34,6 +36,7 @@ export const Overview: Story = {
     args: {
         items: initialMessages,
         user: firstAuthor,
+        errors: [],
         ...commonArgs,
     },
     argTypes: {
@@ -48,6 +51,23 @@ export const Overview: Story = {
         },
         hint: {
             control: 'text',
+        },
+        errors: {
+            control: 'select',
+            options: ['None', 'One error', 'One error with long text', 'Three errors'],
+            mapping: {
+                ['None']: [],
+                ['One error']: [
+                    { id: 1, message: 'Error Message 1. Error Description...' }
+                ],
+                ['One error with long text']: [longError],
+                ['Three errors']: [
+                    { id: 1, message: 'Error Message 1. Error Description...' },
+                    { id: 2, message: 'Error Message 2. Message was not sent' },
+                    longError,
+                ],
+            },
+            defaultValue: 'Empty',
         }
     },
     render: ({
@@ -57,6 +77,7 @@ export const Overview: Story = {
         rtlEnabled,
         user,
         items,
+        errors,
         visible,
         hint,
         activeStateEnabled,
@@ -84,6 +105,7 @@ export const Overview: Story = {
                     disabled={disabled}
                     rtlEnabled={rtlEnabled}
                     user={user}
+                    errors={errors}
                     onMessageSend={onMessageSend}
                     visible={visible}
                     hint={hint}
@@ -155,6 +177,74 @@ export const EmptyView: Story = {
                     rtlEnabled={rtlEnabled}
                     user={user}
                     onMessageSend={onMessageSend}
+                    visible={visible}
+                    hint={hint}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
+                >
+                </Chat>
+            </div>
+        );
+    }
+}
+
+export const DataLoading: Story = {
+    args: {
+        items: initialMessages,
+        user: firstAuthor,
+        ...commonArgs,
+    },
+    argTypes: {
+        user: {
+            control: 'select',
+            options: [firstAuthor.name, secondAuthor.name],
+            mapping: {
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
+            },
+            defaultValue: firstAuthor.name,
+        },
+        hint: {
+            control: 'text',
+        },
+    },
+    render: ({
+        width,
+        height,
+        disabled,
+        rtlEnabled,
+        user,
+        visible,
+        hint,
+        activeStateEnabled,
+        hoverStateEnabled,
+        focusStateEnabled,
+    }) => {       
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: () => {
+                  const promise = new Promise((resolve) => {
+                    setTimeout(() => {
+                      resolve(initialMessages);
+                    }, 3000);
+                  });
+          
+                  return promise;
+                },
+            }),
+            paginate: false,
+        });
+        
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    dataSource={dataSource}
+                    disabled={disabled}
+                    rtlEnabled={rtlEnabled}
+                    user={user}
                     visible={visible}
                     hint={hint}
                     activeStateEnabled={activeStateEnabled}

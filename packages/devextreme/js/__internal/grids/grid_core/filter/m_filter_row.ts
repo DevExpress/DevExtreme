@@ -766,6 +766,16 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       }
     });
   }
+
+  public getColumnElements(index?, bandColumnIndex?) {
+    const rows = this._getRows();
+
+    if (rows?.[index]?.rowType === 'filter' && arguments.length < 2) {
+      return this.getCellElements(index);
+    }
+
+    return super.getColumnElements(index, bandColumnIndex);
+  }
 };
 
 const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {

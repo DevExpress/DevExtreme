@@ -489,7 +489,7 @@ const TabPanel = MultiView.inherit({
         break;
       case 'focusedElement': {
         const id = value ? $(value).index() : value;
-        const newItem = value ? this._tabs._itemElements().eq(id) : value;
+        const newItem = value && this._tabs ? this._tabs._itemElements().eq(id) : value;
         this._setTabsOption('focusedElement', getPublicElement(newItem));
 
         if (value) {

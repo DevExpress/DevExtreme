@@ -23,7 +23,7 @@ import {
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo,
+    SelectionChangeInfo,
 } from './collection/ui.collection_widget.base';
 
 type ItemLike = string | Item | any;
@@ -104,9 +104,9 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
  * @docid _ui_accordion_SelectionChangedEvent
  * @public
  * @type object
- * @inherits EventInfo,SelectionChangedInfo
+ * @inherits EventInfo,SelectionChangeInfo
  */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & SelectionChangeInfo<TItem>;
 
 /**
  * @deprecated use Properties instead

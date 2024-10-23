@@ -50,6 +50,7 @@ const Chat = memo(
       }), []);
 
       const expectedChildren = useMemo(() => ({
+        error: { optionName: "errors", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
@@ -85,6 +86,23 @@ const _componentAuthor = memo(
 
 const Author: typeof _componentAuthor & IElementDescriptor = Object.assign(_componentAuthor, {
   OptionName: "author",
+})
+
+// owners:
+// Chat
+type IErrorProps = React.PropsWithChildren<{
+  id?: number | string;
+  message?: string;
+}>
+const _componentError = memo(
+  (props: IErrorProps) => {
+    return React.createElement(NestedOption<IErrorProps>, { ...props });
+  }
+);
+
+const Error: typeof _componentError & IElementDescriptor = Object.assign(_componentError, {
+  OptionName: "errors",
+  IsCollectionItem: true,
 })
 
 // owners:
@@ -133,6 +151,8 @@ export {
   ChatRef,
   Author,
   IAuthorProps,
+  Error,
+  IErrorProps,
   Item,
   IItemProps,
   User,

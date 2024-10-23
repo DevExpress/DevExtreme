@@ -2,7 +2,9 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { setWidth } from '@js/core/utils/size';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 
+import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type {
   ColumnsResizerViewController,
@@ -10,6 +12,7 @@ import type {
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
+import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { isGroupRow } from '../views/m_rows_view';
@@ -68,6 +71,47 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     }
   }
 
+  private updateBorderCellClasses(
+    $cell: dxElementWrapper,
+    column,
+    rowIndex: number | null,
+  ): void {
+    const columnsController = this._columnsController;
+    const isRowsView = this.name === 'rowsView';
+    const prevCellIsFixed = prevColumnIsFixed(
+      columnsController,
+      column,
+      rowIndex,
+      isRowsView,
+    );
+    const isFirstColumn = columnsController?.isFirstColumn(column, rowIndex);
+
+    GridCoreStickyColumnsDom
+      .toggleColumnNoBorderClass($cell, prevCellIsFixed, this.addWidgetPrefix.bind(this));
+    GridCoreStickyColumnsDom
+      .toggleFirstHeaderClass($cell, isFirstColumn, this.addWidgetPrefix.bind(this));
+  }
+
+  private _updateBorderClasses(): void {
+    const isColumnHeadersView = this.name === 'columnHeadersView';
+    const $rows = this._getRowElementsCore().not(`.${MASTER_DETAIL_CLASSES.detailRow}`).toArray();
+
+    $rows.forEach((row: Element, index: number) => {
+      const rowIndex = isColumnHeadersView ? index : null;
+      const columns = this.getColumns(rowIndex);
+      const $cells = $(row).children('td').toArray();
+
+      $cells.forEach((cell: Element, cellIndex: number) => {
+        const $cell = $(cell);
+        const column = columns[cellIndex];
+
+        if (column.visibleWidth !== HIDDEN_COLUMNS_WIDTH) {
+          this.updateBorderCellClasses($cell, column, rowIndex);
+        }
+      });
+    });
+  }
+
   protected _isStickyColumns(): boolean {
     const stickyColumns = this._columnsController?.getStickyColumns();
 
@@ -92,41 +136,45 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const { rowType } = options;
     const $cell = super._createCell(options);
     const isStickyColumns = this._isStickyColumns();
+    const rowIndex = rowType === 'header' ? options.rowIndex : null;
 
-    if (isStickyColumns && column.fixed) {
-      const rowIndex = rowType === 'header' ? options.rowIndex : null;
-      const fixedPosition = getColumnFixedPosition(column);
+    if (isStickyColumns) {
+      this.updateBorderCellClasses($cell, column, rowIndex);
 
-      GridCoreStickyColumnsDom.addStickyColumnClass(
-        $cell,
-        column,
-        this.addWidgetPrefix.bind(this),
-      );
+      if (column.fixed) {
+        const fixedPosition = getColumnFixedPosition(this._columnsController, column);
 
-      switch (fixedPosition) {
-        case StickyPosition.Right: {
-          this._addStickyColumnBorderLeftClass(
-            $cell,
-            column,
-            rowIndex,
-            false,
-            StickyPosition.Right,
-          );
-          break;
-        }
-        case StickyPosition.Sticky: {
-          this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
-          this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
-          break;
-        }
-        default: {
-          this._addStickyColumnBorderRightClass(
-            $cell,
-            column,
-            rowIndex,
-            false,
-            StickyPosition.Left,
-          );
+        GridCoreStickyColumnsDom.addStickyColumnClass(
+          $cell,
+          fixedPosition,
+          this.addWidgetPrefix.bind(this),
+        );
+
+        switch (fixedPosition) {
+          case StickyPosition.Right: {
+            this._addStickyColumnBorderLeftClass(
+              $cell,
+              column,
+              rowIndex,
+              false,
+              StickyPosition.Right,
+            );
+            break;
+          }
+          case StickyPosition.Sticky: {
+            this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
+            this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
+            break;
+          }
+          default: {
+            this._addStickyColumnBorderRightClass(
+              $cell,
+              column,
+              rowIndex,
+              false,
+              StickyPosition.Left,
+            );
+          }
         }
       }
     }
@@ -137,6 +185,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
   protected setStickyOffsets(rowIndex?: number, offsets?: Record<number, Record<string, number>>): void {
     let columns = this.getColumns(rowIndex);
     let widths = this.getColumnWidths(undefined, rowIndex);
+    const columnsController = this._columnsController;
     const rtlEnabled = this.option('rtlEnabled') as boolean;
 
     if (rtlEnabled) {
@@ -147,7 +196,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     columns.forEach((column, columnIndex) => {
       if (column.fixed) {
         const visibleColumnIndex = rtlEnabled ? columns.length - columnIndex - 1 : columnIndex;
-        const offset = getStickyOffset(columns, widths, columnIndex, offsets);
+        const offset = getStickyOffset(columnsController, columns, widths, columnIndex, offsets);
 
         if (offsets) {
           offsets[column.index] = offset;
@@ -174,11 +223,17 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
 
   protected _resizeCore() {
     const isStickyColumns = this._isStickyColumns();
+    const adaptiveColumns = this.getController('adaptiveColumns');
+    const hidingColumnsQueue = adaptiveColumns?.getHidingColumnsQueue();
 
     super._resizeCore.apply(this, arguments as any);
 
     if (isStickyColumns) {
       this.setStickyOffsets();
+
+      if (hidingColumnsQueue?.length) {
+        this._updateBorderClasses();
+      }
     }
   }
 };
@@ -188,33 +243,13 @@ const columnHeadersView = (
 ) => class ColumnHeadersViewStickyColumnsExtender extends baseStickyColumns(Base) {
   protected setStickyOffsets() {
     const offsets: Record<number, Record<string, number>> = {};
-    const rowCount = this.getRowCount();
+    const rows = this._getRows();
 
-    for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-      super.setStickyOffsets(rowIndex, offsets);
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+      const isFilterRow = rows?.[rowIndex]?.rowType === 'filter';
+
+      super.setStickyOffsets(rowIndex, isFilterRow ? undefined : offsets);
     }
-  }
-
-  protected _createCell(options: any): dxElementWrapper {
-    const $cell = super._createCell(options);
-    const rowCount = this.getRowCount();
-    const { column, rowIndex } = options;
-    const isStickyColumns = this._isStickyColumns();
-    const columnsController = this._columnsController;
-
-    if (isStickyColumns && rowCount > 1) {
-      const prevCellIsFixed = prevColumnIsFixed(columnsController, column, rowIndex);
-
-      if (prevCellIsFixed) {
-        GridCoreStickyColumnsDom.addColumnNoBorderClass($cell, this.addWidgetPrefix.bind(this));
-      }
-
-      if (columnsController?.isFirstColumn(column, rowIndex)) {
-        GridCoreStickyColumnsDom.addFirstHeaderClass($cell, this.addWidgetPrefix.bind(this));
-      }
-    }
-
-    return $cell;
   }
 
   public getContextMenuItems(options) {
@@ -272,7 +307,7 @@ const columnHeadersView = (
             text: columnFixingOptions.texts.stickyPosition,
             icon: columnFixingOptions.icons.stickyPosition,
             value: 'sticky',
-            disabled: column.fixed && getColumnFixedPosition(column) === StickyPosition.Sticky,
+            disabled: column.fixed && column.fixedPosition === StickyPosition.Sticky,
             onItemClick,
           });
         }
@@ -324,9 +359,12 @@ const rowsView = (
   }
 
   private _updateMasterDetailWidths() {
+    const width = this._getMasterDetailWidth();
+    const $masterDetailCells = this._getRowElements().children('.dx-master-detail-cell');
+
     setWidth(
-      this._$element?.find('.dx-master-detail-cell'),
-      this._getMasterDetailWidth(),
+      $masterDetailCells,
+      `${width}px`,
     );
   }
 
@@ -363,6 +401,26 @@ const rowsView = (
     ) {
       GridCoreStickyColumnsDom
         .addStickyColumnBorderRightClass($groupCell, this.addWidgetPrefix.bind(this));
+    }
+  }
+
+  protected _handleScroll(e): void {
+    const editorFactoryController = this.getController('editorFactory');
+    const $focusOverlay = editorFactoryController.getFocusOverlay();
+
+    super._handleScroll(e);
+
+    if (!$focusOverlay?.hasClass(CLASSES.hidden)
+      && $focusOverlay?.hasClass(CLASSES.focusedFixedCell)) {
+      const $element = this.component.$element();
+      // @ts-expect-error
+      const $focusedCell = $element.find(`.${CLASSES.focused}`);
+      const isStickyCell = GridCoreStickyColumnsDom
+        .isStickyCell($focusedCell, this.addWidgetPrefix.bind(this));
+
+      if (isStickyCell) {
+        editorFactoryController.updateFocusOverlay($focusedCell);
+      }
     }
   }
 };
@@ -455,7 +513,7 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
     const { sourceLocation, sourceColumn } = options;
 
     if (isStickyColumns && sourceLocation === 'headers') {
-      const columnFixedPosition = getColumnFixedPosition(sourceColumn);
+      const columnFixedPosition = getColumnFixedPosition(this._columnsController, sourceColumn);
 
       switch (true) {
         case sourceColumn.fixed && columnFixedPosition === StickyPosition.Left:
@@ -505,6 +563,32 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
   }
 };
 
+const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryStickyColumnsExtender extends Base {
+  public updateFocusOverlay($element: dxElementWrapper, isHideBorder = false): void {
+    if (!isHideBorder) {
+      const scrollable = this._rowsView.getScrollable();
+      const $container = $(scrollable?.container());
+      const isFixedCell = GridCoreStickyColumnsDom
+        .isFixedCell($element, this.addWidgetPrefix.bind(this));
+      const isStickyCell = GridCoreStickyColumnsDom
+        .isStickyCell($element, this.addWidgetPrefix.bind(this));
+      const isStickyCellPinned = isStickyCell && $container.length
+        && GridCoreStickyColumnsDom
+          .isStickyCellPinned($element, $container, this.addWidgetPrefix.bind(this));
+
+      this._$focusOverlay.toggleClass(CLASSES.focusedFixedCell, isFixedCell);
+
+      if (isFixedCell && (!isStickyCell || isStickyCellPinned)) {
+        this._$focusOverlay.css('position', 'fixed');
+      } else {
+        this._$focusOverlay.css('position', '');
+      }
+    }
+
+    super.updateFocusOverlay($element, isHideBorder);
+  }
+};
+
 export const stickyColumnsModule = {
   extenders: {
     views: {
@@ -515,6 +599,7 @@ export const stickyColumnsModule = {
     controllers: {
       columnsResizer,
       draggingHeader,
+      editorFactory,
     },
   },
 };

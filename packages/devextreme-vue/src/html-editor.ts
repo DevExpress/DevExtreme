@@ -41,7 +41,6 @@ type AccessibleOptions = Pick<Properties,
   "validationMessagePosition" |
   "validationStatus" |
   "value" |
-  "valueType" |
   "variables" |
   "visible" |
   "width"
@@ -90,7 +89,6 @@ const componentConfig = {
     validationMessagePosition: String,
     validationStatus: String,
     value: {},
-    valueType: String,
     variables: Object,
     visible: Boolean,
     width: [Function, Number, String]
@@ -135,7 +133,6 @@ const componentConfig = {
     "update:validationMessagePosition": null,
     "update:validationStatus": null,
     "update:value": null,
-    "update:valueType": null,
     "update:variables": null,
     "update:visible": null,
     "update:width": null,

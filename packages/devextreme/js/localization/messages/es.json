@@ -12,6 +12,8 @@
         "Search": "Buscar",
         "Back": "Volver",
         "OK": "Aceptar",
+        "Today": "Hoy",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "Sin datos para mostrar",
 
@@ -330,6 +332,7 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
+        "dxChat-errorListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
@@ -370,6 +373,15 @@
         "dxFilterBuilder-filterOperationBetween": "Entre",
         "dxFilterBuilder-filterOperationAnyOf": "Alguno de",
         "dxFilterBuilder-filterOperationNoneOf": "Ningún de",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "Cambiar el color de la fuente",
         "dxHtmlEditor-dialogBackgroundCaption": "Cambiar el color de fondo",

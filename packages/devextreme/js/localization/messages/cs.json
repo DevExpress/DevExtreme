@@ -12,6 +12,8 @@
         "Search": "Hledat",
         "Back": "Zpět",
         "OK": "OK",
+        "Today": "Dnes",
+        "Yesterday": "Yesterday",
 
         "dxCollectionWidget-noDataText": "Žádná data k zobrazení",
 
@@ -330,6 +332,7 @@
         "dxChat-sendButtonAriaLabel": "Send",
         "dxChat-defaultUserName": "Unknown User",
         "dxChat-messageListAriaLabel": "Message list",
+        "dxChat-errorListAriaLabel": "Error list",
         "dxChat-emptyListMessage": "There are no messages in this chat",
         "dxChat-emptyListPrompt": "Write your first message",
 
@@ -370,6 +373,15 @@
         "dxFilterBuilder-filterOperationBetween": "Mezi",
         "dxFilterBuilder-filterOperationAnyOf": "Libovolný z",
         "dxFilterBuilder-filterOperationNoneOf": "Žádný z",
+        "dxFilterBuilder-filterAriaRootElement": "Filter builder",
+        "dxFilterBuilder-filterAriaGroupLevel": "Level {0}",
+        "dxFilterBuilder-filterAriaGroupItem": "Group item",
+        "dxFilterBuilder-filterAriaOperationButton": "Operation",
+        "dxFilterBuilder-filterAriaAddButton": "Add",
+        "dxFilterBuilder-filterAriaRemoveButton": "Remove {0}",
+        "dxFilterBuilder-filterAriaItemField": "Item field",
+        "dxFilterBuilder-filterAriaItemOperation": "Item operation",
+        "dxFilterBuilder-filterAriaItemValue": "Item value",
 
         "dxHtmlEditor-dialogColorCaption": "Změna barvy písma",
         "dxHtmlEditor-dialogBackgroundCaption": "Změna barvy pozadí",
