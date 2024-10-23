@@ -10,7 +10,7 @@ import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
 import { combineClasses } from '../core/r1/utils/render_utils';
 import {
-  LIGHT_MODE_CLASS, PAGER_CLASS, PAGER_PAGE_INDEXES_CLASS, PAGER_PAGES_CLASS,
+  LIGHT_MODE_CLASS, PAGER_CLASS, PAGINATION_PAGE_INDEXES_CLASS, PAGINATION_PAGES_CLASS,
 } from './common/consts';
 import type { KeyboardActionContextType } from './common/keyboard_action_context';
 import { KeyboardActionContext } from './common/keyboard_action_context';
@@ -241,7 +241,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
         )}
         {this.getPagesContainerVisible() && (
           <div
-            className={PAGER_PAGES_CLASS}
+            className={PAGINATION_PAGES_CLASS}
             style={{ visibility: this.getPagesContainerVisibility() }}
           >
             {this.getInfoVisible() && (
@@ -255,7 +255,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
             )}
             {this.getPageIndexSelectorVisible() && (
               <div
-                className={PAGER_PAGE_INDEXES_CLASS}
+                className={PAGINATION_PAGE_INDEXES_CLASS}
                 ref={pagesRef as any}
               >
                 <PageIndexSelector
