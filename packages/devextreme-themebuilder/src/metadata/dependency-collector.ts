@@ -16,15 +16,15 @@ const busyCache = {
 
 const REGEXP_IS_TSX_NOT_DTS = /^(?!.*\.d\.ts$).*\.tsx$/;
 const REGEXP_IS_DTS = /\.d\.ts$/;
-const dxJsDir = path.resolve(__dirname, '../../../devextreme/js');
-const tsConfig = JSON.parse(
-    readFileSync(path.resolve(__dirname, '../../../devextreme/js/__internal/tsconfig.json'), 'utf8')
-        .replace(/\/\/[^\n]+/mg, '')
-        .replace(/,\s*([}\]])/mg, '$1')
-);
 
 export default class DependencyCollector {
   flatStylesDependencyTree: FlatStylesDependencies = {};
+
+/*  tsConfig = JSON.parse(
+      readFileSync(path.resolve(__dirname, '../../../devextreme/js/__internal/tsconfig.json'), 'utf8')
+          .replace(/\/\/[^\n]+/mg, '')
+          .replace(/,\s*([}\]])/mg, '$1')
+  );*/
 
   scriptsCache: ScriptsDependencyCache = {};
 
@@ -112,10 +112,10 @@ export default class DependencyCollector {
 
         const cabinetResult = cabinet({
           partial: relativeDependency,
-          directory: dxJsDir,
+          directory: path.resolve(__dirname, '../../../devextreme/js'),
           filename: filePath,
           ast: precinct.ast,
-          tsConfig: tsConfig,
+          tsConfig: path.resolve(__dirname, '../../../devextreme/js/__internal/tsconfig.json'),
         });
 
         cache.set(absDepPath, cabinetResult);
@@ -169,8 +169,12 @@ export default class DependencyCollector {
   }
 
   collect(): void {
+    let START = Date.now();
     const fullDependencyTree = this.getFullDependencyTree(path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js'));
+    console.log('----TIME 1------>', (Date.now() - START) / 1000);
+    START = Date.now();
     this.treeProcessor(fullDependencyTree);
+    console.log('----TIME 2------>', (Date.now() - START) / 1000);
     this.validate();
   }
 }
