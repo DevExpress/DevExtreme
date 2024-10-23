@@ -124,7 +124,13 @@ fixture.disablePageReloads`a11y - appointment`
       .eql(expectedAriaLabels[currentView].next);
   }).before(async () => {
     await createWidget('dxScheduler', {
-      dataSource: [],
+      dataSource: [
+        {
+          text: 'App 1',
+          startDate: new Date(2021, 1, 1, 12),
+          endDate: new Date(2021, 1, 1, 13),
+        }
+      ],
       views: ['week', 'workWeek', 'month'],
       currentView,
       currentDate: new Date(2021, 3, 27),
