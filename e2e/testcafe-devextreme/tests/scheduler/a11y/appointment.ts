@@ -129,7 +129,7 @@ fixture.disablePageReloads`a11y - appointment`
           text: 'App 1',
           startDate: new Date(2021, 1, 1, 12),
           endDate: new Date(2021, 1, 1, 13),
-        }
+        },
       ],
       views: ['week', 'workWeek', 'month'],
       currentView,
