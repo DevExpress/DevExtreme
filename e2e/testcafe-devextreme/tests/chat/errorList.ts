@@ -33,7 +33,13 @@ test.clientScripts([
   });
 
   const darkTheme = getFullThemeName().replace('light', 'dark');
-  await testScreenshot(t, takeScreenshot, 'Errorlist with long text in error.png', { element: '#container', theme: darkTheme });
+  await testScreenshot(t, takeScreenshot, 'Errorlist with long text in error.png', {
+    element: '#container',
+    theme: darkTheme,
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await chat.option('rtlEnabled', true);
 
