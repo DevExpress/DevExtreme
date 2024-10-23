@@ -5,12 +5,12 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { Fragment } from 'inferno';
 
 import { format } from '../../../core/utils/string';
-import messageLocalization from '../../../localization/message';
 import { combineClasses } from '../../core/r1/utils/render_utils';
 import { FIRST_CHILD_CLASS, PAGINATION_PAGE_SIZE_CLASS, PAGINATION_SELECTED_PAGE_SIZE_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
 import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 
 export interface PageSizeLargeProps {
   allowedPageSizes: FullPageSize[];
@@ -72,7 +72,10 @@ export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> 
         return {
           className,
           click: this.onPageSizeChange(processedPageSize),
-          label: format(messageLocalization.getFormatter('dxPager-pageSize'), processedPageSize || messageLocalization.getFormatter('dxPager-pageSizesAllText')),
+          label: format(
+            getLocalizationMessage(this.context, 'dxPagination-pageSize'),
+            processedPageSize || getLocalizationMessage(this.context, 'dxPagination-pageSizesAllText'),
+          ),
           text,
         };
       });

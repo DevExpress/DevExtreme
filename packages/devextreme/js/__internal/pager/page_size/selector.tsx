@@ -6,17 +6,13 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
 import { createRef as infernoCreateRef } from 'inferno';
 
-import messageLocalization from '../../../localization/message';
 import { PAGINATION_PAGE_SIZES_CLASS } from '../common/consts';
 import type { PaginationProps } from '../common/pagination_props';
 import { PaginationDefaultProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { PageSizeLarge } from './large';
 import { PageSizeSmall } from './small';
-
-function getAllText(): string {
-  return messageLocalization.getFormatter('dxPager-pageSizesAllText')();
-}
 
 export interface PageSizeSelectorProps {
   isLargeDisplayMode: boolean;
@@ -64,12 +60,16 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
     }
   }
 
+  getAllText(): string {
+    return getLocalizationMessage(this.context, 'dxPagination-pageSizesAllText');
+  }
+
   getNormalizedPageSizes(): FullPageSize[] {
     if (this.__getterCache.normalizedPageSizes !== undefined) {
       return this.__getterCache.normalizedPageSizes;
     }
     const mapFunction = (p): FullPageSize => (p === 'all' || p === 0 ? {
-      text: getAllText(),
+      text: this.getAllText(),
       value: 0,
     } : {
       text: String(p),
