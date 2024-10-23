@@ -64,18 +64,18 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get constantLines(): Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any>, value?: Date | number | string, width?: number }[] {
+    get constantLines(): Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[] {
         return this._getOption('constantLines');
     }
-    set constantLines(value: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any>, value?: Date | number | string, width?: number }[]) {
+    set constantLines(value: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[]) {
         this._setOption('constantLines', value);
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -208,18 +208,18 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get strips(): Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any>, startValue?: Date | number | string }[] {
+    get strips(): Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[] {
         return this._getOption('strips');
     }
-    set strips(value: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any>, startValue?: Date | number | string }[]) {
+    set strips(value: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[]) {
         this._setOption('strips', value);
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label?: Record<string, any> } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font } } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label?: Record<string, any> }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font } }) {
         this._setOption('stripStyle', value);
     }
 

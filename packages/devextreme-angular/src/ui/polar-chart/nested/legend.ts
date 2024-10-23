@@ -190,10 +190,10 @@ export class DxoPolarChartLegendComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any>, placeholderSize?: number, subtitle?: Record<string, any> | string, text?: string, verticalAlignment?: "bottom" | "top" } {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any>, placeholderSize?: number, subtitle?: Record<string, any> | string, text?: string, verticalAlignment?: "bottom" | "top" }) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }) {
         this._setOption('title', value);
     }
 

@@ -24,12 +24,18 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/tree_list';
 
 import DataSource from 'devextreme/data/data_source';
-import { dxTreeListColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
+import dxTreeList from 'devextreme/ui/tree_list';
+import dxSortable from 'devextreme/ui/sortable';
+import dxDraggable from 'devextreme/ui/draggable';
+import { PositionConfig } from 'devextreme/animation/position';
+import { ColumnChooserSearchConfig, ColumnChooserSelectionConfig, DataChange, GridBase, HeaderFilterSearchConfig, Pager } from 'devextreme/common/grids';
+import { dxTreeListColumn, dxTreeListRowObject, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
-import { Pager } from 'devextreme/common/grids';
+import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { event } from 'devextreme/events/index';
 
 import DxTreeList from 'devextreme/ui/tree_list';
 
@@ -320,10 +326,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnChooser(): Record<string, any> {
+    get columnChooser(): Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: "dragAndDrop" | "select", position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: "asc" | "desc", title?: string, width?: number | string } {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: Record<string, any>) {
+    set columnChooser(value: Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: "dragAndDrop" | "select", position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: "asc" | "desc", title?: string, width?: number | string }) {
         this._setOption('columnChooser', value);
     }
 
@@ -333,10 +339,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnFixing(): Record<string, any> {
+    get columnFixing(): Record<string, any> | { enabled?: boolean, icons?: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } } {
         return this._getOption('columnFixing');
     }
-    set columnFixing(value: Record<string, any>) {
+    set columnFixing(value: Record<string, any> | { enabled?: boolean, icons?: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }) {
         this._setOption('columnFixing', value);
     }
 
@@ -476,10 +482,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get editing(): Record<string, any> {
+    get editing(): Record<string, any> | { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: "batch" | "cell" | "row" | "form" | "popup", popup?: dxPopupOptions<any>, refreshMode?: "full" | "reshape" | "repaint", selectTextOnEditStart?: boolean, startEditAction?: "click" | "dblClick", texts?: Record<string, any> | { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: Record<string, any>) {
+    set editing(value: Record<string, any> | { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: "batch" | "cell" | "row" | "form" | "popup", popup?: dxPopupOptions<any>, refreshMode?: "full" | "reshape" | "repaint", selectTextOnEditStart?: boolean, startEditAction?: "click" | "dblClick", texts?: Record<string, any> | { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -580,10 +586,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterPanel(): Record<string, any> {
+    get filterPanel(): Record<string, any> | { customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: Record<string, any> | { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean } {
         return this._getOption('filterPanel');
     }
-    set filterPanel(value: Record<string, any>) {
+    set filterPanel(value: Record<string, any> | { customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: Record<string, any> | { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }) {
         this._setOption('filterPanel', value);
     }
 
@@ -593,10 +599,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get filterRow(): Record<string, any> {
+    get filterRow(): Record<string, any> | { applyFilter?: "auto" | "onClick", applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean } {
         return this._getOption('filterRow');
     }
-    set filterRow(value: Record<string, any>) {
+    set filterRow(value: Record<string, any> | { applyFilter?: "auto" | "onClick", applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }) {
         this._setOption('filterRow', value);
     }
 
@@ -697,10 +703,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get headerFilter(): Record<string, any> {
+    get headerFilter(): Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: Record<string, any> | { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: Record<string, any>) {
+    set headerFilter(value: Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: Record<string, any> | { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }) {
         this._setOption('headerFilter', value);
     }
 
@@ -775,10 +781,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get keyboardNavigation(): Record<string, any> {
+    get keyboardNavigation(): Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: "startEdit" | "moveFocus", enterKeyDirection?: "none" | "column" | "row" } {
         return this._getOption('keyboardNavigation');
     }
-    set keyboardNavigation(value: Record<string, any>) {
+    set keyboardNavigation(value: Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: "startEdit" | "moveFocus", enterKeyDirection?: "none" | "column" | "row" }) {
         this._setOption('keyboardNavigation', value);
     }
 
@@ -801,10 +807,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get loadPanel(): Record<string, any> {
+    get loadPanel(): Record<string, any> | { enabled?: boolean | "auto", height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string } {
         return this._getOption('loadPanel');
     }
-    set loadPanel(value: Record<string, any>) {
+    set loadPanel(value: Record<string, any> | { enabled?: boolean | "auto", height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }) {
         this._setOption('loadPanel', value);
     }
 
@@ -840,10 +846,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get paging(): Record<string, any> {
+    get paging(): Record<string, any> | { enabled?: boolean, pageIndex?: number, pageSize?: number } {
         return this._getOption('paging');
     }
-    set paging(value: Record<string, any>) {
+    set paging(value: Record<string, any> | { enabled?: boolean, pageIndex?: number, pageSize?: number }) {
         this._setOption('paging', value);
     }
 
@@ -866,10 +872,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get remoteOperations(): Record<string, any> | "auto" {
+    get remoteOperations(): Record<string, any> | "auto" | { filtering?: boolean, grouping?: boolean, sorting?: boolean } {
         return this._getOption('remoteOperations');
     }
-    set remoteOperations(value: Record<string, any> | "auto") {
+    set remoteOperations(value: Record<string, any> | "auto" | { filtering?: boolean, grouping?: boolean, sorting?: boolean }) {
         this._setOption('remoteOperations', value);
     }
 
@@ -931,10 +937,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get rowDragging(): Record<string, any> {
+    get rowDragging(): Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: Record<string, any> | string | { x?: number, y?: number }, data?: any, dragDirection?: "both" | "horizontal" | "vertical", dragTemplate?: any, dropFeedbackMode?: "push" | "indicate", filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean } {
         return this._getOption('rowDragging');
     }
-    set rowDragging(value: Record<string, any>) {
+    set rowDragging(value: Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: Record<string, any> | string | { x?: number, y?: number }, data?: any, dragDirection?: "both" | "horizontal" | "vertical", dragTemplate?: any, dropFeedbackMode?: "push" | "indicate", filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }) {
         this._setOption('rowDragging', value);
     }
 
@@ -957,10 +963,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get scrolling(): Record<string, any> {
+    get scrolling(): Record<string, any> | { columnRenderingMode?: "standard" | "virtual", mode?: "standard" | "virtual", preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: "standard" | "virtual", scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: "always" | "never" | "onHover" | "onScroll", useNative?: boolean | "auto" } {
         return this._getOption('scrolling');
     }
-    set scrolling(value: Record<string, any>) {
+    set scrolling(value: Record<string, any> | { columnRenderingMode?: "standard" | "virtual", mode?: "standard" | "virtual", preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: "standard" | "virtual", scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: "always" | "never" | "onHover" | "onScroll", useNative?: boolean | "auto" }) {
         this._setOption('scrolling', value);
     }
 
@@ -970,10 +976,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get searchPanel(): Record<string, any> {
+    get searchPanel(): Record<string, any> | { highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string } {
         return this._getOption('searchPanel');
     }
-    set searchPanel(value: Record<string, any>) {
+    set searchPanel(value: Record<string, any> | { highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string }) {
         this._setOption('searchPanel', value);
     }
 
@@ -996,10 +1002,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get selection(): Record<string, any> {
+    get selection(): Record<string, any> | { allowSelectAll?: boolean, mode?: "single" | "multiple" | "none", recursive?: boolean } {
         return this._getOption('selection');
     }
-    set selection(value: Record<string, any>) {
+    set selection(value: Record<string, any> | { allowSelectAll?: boolean, mode?: "single" | "multiple" | "none", recursive?: boolean }) {
         this._setOption('selection', value);
     }
 
@@ -1061,10 +1067,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get sorting(): Record<string, any> {
+    get sorting(): Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: "single" | "multiple" | "none", showSortIndexes?: boolean } {
         return this._getOption('sorting');
     }
-    set sorting(value: Record<string, any>) {
+    set sorting(value: Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: "single" | "multiple" | "none", showSortIndexes?: boolean }) {
         this._setOption('sorting', value);
     }
 
@@ -1074,10 +1080,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get stateStoring(): Record<string, any> {
+    get stateStoring(): Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: "custom" | "localStorage" | "sessionStorage" } {
         return this._getOption('stateStoring');
     }
-    set stateStoring(value: Record<string, any>) {
+    set stateStoring(value: Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: "custom" | "localStorage" | "sessionStorage" }) {
         this._setOption('stateStoring', value);
     }
 
@@ -1568,14 +1574,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<Record<string, any>>;
+    @Output() columnChooserChange: EventEmitter<Record<string, any> | { allowSearch?: boolean, container?: any | string, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: "dragAndDrop" | "select", position?: PositionConfig, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: "asc" | "desc", title?: string, width?: number | string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnFixingChange: EventEmitter<Record<string, any>>;
+    @Output() columnFixingChange: EventEmitter<Record<string, any> | { enabled?: boolean, icons?: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string }, texts?: Record<string, any> | { fix?: string, leftPosition?: string, rightPosition?: string, stickyPosition?: string, unfix?: string } }>;
 
     /**
     
@@ -1652,7 +1658,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<Record<string, any>>;
+    @Output() editingChange: EventEmitter<Record<string, any> | { allowAdding?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowDeleting?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), allowUpdating?: boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean), changes?: Array<DataChange>, confirmDelete?: boolean, editColumnName?: string, editRowKey?: any, form?: dxFormOptions, mode?: "batch" | "cell" | "row" | "form" | "popup", popup?: dxPopupOptions<any>, refreshMode?: "full" | "reshape" | "repaint", selectTextOnEditStart?: boolean, startEditAction?: "click" | "dblClick", texts?: Record<string, any> | { addRow?: string, addRowToNode?: string, cancelAllChanges?: string, cancelRowChanges?: string, confirmDeleteMessage?: string, confirmDeleteTitle?: string, deleteRow?: string, editRow?: string, saveAllChanges?: string, saveRowChanges?: string, undeleteRow?: string, validationCancelChanges?: string }, useIcons?: boolean }>;
 
     /**
     
@@ -1708,14 +1714,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterPanelChange: EventEmitter<Record<string, any>>;
+    @Output() filterPanelChange: EventEmitter<Record<string, any> | { customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string), filterEnabled?: boolean, texts?: Record<string, any> | { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterRowChange: EventEmitter<Record<string, any>>;
+    @Output() filterRowChange: EventEmitter<Record<string, any> | { applyFilter?: "auto" | "onClick", applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean }>;
 
     /**
     
@@ -1771,7 +1777,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() headerFilterChange: EventEmitter<Record<string, any>>;
+    @Output() headerFilterChange: EventEmitter<Record<string, any> | { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: Record<string, any> | { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }>;
 
     /**
     
@@ -1813,7 +1819,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyboardNavigationChange: EventEmitter<Record<string, any>>;
+    @Output() keyboardNavigationChange: EventEmitter<Record<string, any> | { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: "startEdit" | "moveFocus", enterKeyDirection?: "none" | "column" | "row" }>;
 
     /**
     
@@ -1827,7 +1833,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadPanelChange: EventEmitter<Record<string, any>>;
+    @Output() loadPanelChange: EventEmitter<Record<string, any> | { enabled?: boolean | "auto", height?: number | string, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number | string }>;
 
     /**
     
@@ -1848,7 +1854,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pagingChange: EventEmitter<Record<string, any>>;
+    @Output() pagingChange: EventEmitter<Record<string, any> | { enabled?: boolean, pageIndex?: number, pageSize?: number }>;
 
     /**
     
@@ -1862,7 +1868,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() remoteOperationsChange: EventEmitter<Record<string, any> | "auto">;
+    @Output() remoteOperationsChange: EventEmitter<Record<string, any> | "auto" | { filtering?: boolean, grouping?: boolean, sorting?: boolean }>;
 
     /**
     
@@ -1897,7 +1903,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowDraggingChange: EventEmitter<Record<string, any>>;
+    @Output() rowDraggingChange: EventEmitter<Record<string, any> | { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: any | string, container?: any | string, cursorOffset?: Record<string, any> | string | { x?: number, y?: number }, data?: any, dragDirection?: "both" | "horizontal" | "vertical", dragTemplate?: any, dropFeedbackMode?: "push" | "indicate", filter?: string, group?: string, handle?: string, onAdd?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragChange?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragEnd?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragMove?: ((e: { cancel: boolean, component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onDragStart?: ((e: { cancel: boolean, component: GridBase, event: event, fromData: any, fromIndex: number, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: GridBase, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), onReorder?: ((e: { component: GridBase, dropInsideItem: boolean, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, fromIndex: number, itemData: any, itemElement: any, promise: any, toComponent: dxSortable | dxDraggable, toData: any, toIndex: number }) => void), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean }>;
 
     /**
     
@@ -1911,14 +1917,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<Record<string, any>>;
+    @Output() scrollingChange: EventEmitter<Record<string, any> | { columnRenderingMode?: "standard" | "virtual", mode?: "standard" | "virtual", preloadEnabled?: boolean, renderAsync?: boolean, rowRenderingMode?: "standard" | "virtual", scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: "always" | "never" | "onHover" | "onScroll", useNative?: boolean | "auto" }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchPanelChange: EventEmitter<Record<string, any>>;
+    @Output() searchPanelChange: EventEmitter<Record<string, any> | { highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number | string }>;
 
     /**
     
@@ -1932,7 +1938,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionChange: EventEmitter<Record<string, any>>;
+    @Output() selectionChange: EventEmitter<Record<string, any> | { allowSelectAll?: boolean, mode?: "single" | "multiple" | "none", recursive?: boolean }>;
 
     /**
     
@@ -1967,14 +1973,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortingChange: EventEmitter<Record<string, any>>;
+    @Output() sortingChange: EventEmitter<Record<string, any> | { ascendingText?: string, clearText?: string, descendingText?: string, mode?: "single" | "multiple" | "none", showSortIndexes?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stateStoringChange: EventEmitter<Record<string, any>>;
+    @Output() stateStoringChange: EventEmitter<Record<string, any> | { customLoad?: (() => any), customSave?: ((gridState: any) => void), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: "custom" | "localStorage" | "sessionStorage" }>;
 
     /**
     

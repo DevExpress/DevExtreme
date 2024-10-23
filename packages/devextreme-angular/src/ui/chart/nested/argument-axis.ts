@@ -17,7 +17,6 @@ import {
 import * as LocalizationTypes from 'devextreme/localization';
 import * as CommonChartTypes from 'devextreme/common/charts';
 import { ScaleBreak, Font } from 'devextreme/common/charts';
-import { template } from 'devextreme/core/templates/template';
 
 import {
     NestedOptionHost,
@@ -121,18 +120,18 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get constantLines(): Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[] {
+    get constantLines(): Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", text?: string, verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[] {
         return this._getOption('constantLines');
     }
-    set constantLines(value: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[]) {
+    set constantLines(value: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", text?: string, verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, value?: Date | number | string, width?: number }[]) {
         this._setOption('constantLines', value);
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", position?: "inside" | "outside", verticalAlignment?: "bottom" | "center" | "top", visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -201,10 +200,10 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
+    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: ((data: { value: Date | number | string, valueText: string }, element: any) => string | any) | template, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
+    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), displayMode?: "rotate" | "stagger" | "standard", font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "rotate" | "stagger" | "none" | "hide", position?: "inside" | "outside" | "bottom" | "left" | "right" | "top", rotationAngle?: number, staggeringSpacing?: number, template?: any, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean, wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('label', value);
     }
 
@@ -321,18 +320,18 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get strips(): Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[] {
+    get strips(): Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", text?: string, verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[] {
         return this._getOption('strips');
     }
-    set strips(value: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[]) {
+    set strips(value: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", text?: string, verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number, startValue?: Date | number | string }[]) {
         this._setOption('strips', value);
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label?: Record<string, any>, paddingLeftRight?: number, paddingTopBottom?: number }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font, horizontalAlignment?: "center" | "left" | "right", verticalAlignment?: "bottom" | "center" | "top" }, paddingLeftRight?: number, paddingTopBottom?: number }) {
         this._setOption('stripStyle', value);
     }
 

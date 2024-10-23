@@ -166,10 +166,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get colCountByScreen(): Record<string, any> {
+    get colCountByScreen(): Record<string, any> | { lg?: number, md?: number, sm?: number, xs?: number } {
         return this._getOption('colCountByScreen');
     }
-    set colCountByScreen(value: Record<string, any>) {
+    set colCountByScreen(value: Record<string, any> | { lg?: number, md?: number, sm?: number, xs?: number }) {
         this._setOption('colCountByScreen', value);
     }
 
@@ -625,7 +625,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colCountByScreenChange: EventEmitter<Record<string, any>>;
+    @Output() colCountByScreenChange: EventEmitter<Record<string, any> | { lg?: number, md?: number, sm?: number, xs?: number }>;
 
     /**
     

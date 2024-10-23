@@ -293,10 +293,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get itemView(): Record<string, any> {
+    get itemView(): Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: "details" | "thumbnails", showFolders?: boolean, showParentFolder?: boolean } {
         return this._getOption('itemView');
     }
-    set itemView(value: Record<string, any>) {
+    set itemView(value: Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: "details" | "thumbnails", showFolders?: boolean, showParentFolder?: boolean }) {
         this._setOption('itemView', value);
     }
 
@@ -306,10 +306,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get notifications(): Record<string, any> {
+    get notifications(): Record<string, any> | { showPanel?: boolean, showPopup?: boolean } {
         return this._getOption('notifications');
     }
-    set notifications(value: Record<string, any>) {
+    set notifications(value: Record<string, any> | { showPanel?: boolean, showPopup?: boolean }) {
         this._setOption('notifications', value);
     }
 
@@ -319,10 +319,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get permissions(): Record<string, any> {
+    get permissions(): Record<string, any> | { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean } {
         return this._getOption('permissions');
     }
-    set permissions(value: Record<string, any>) {
+    set permissions(value: Record<string, any> | { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean }) {
         this._setOption('permissions', value);
     }
 
@@ -410,10 +410,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get upload(): Record<string, any> {
+    get upload(): Record<string, any> | { chunkSize?: number, maxFileSize?: number } {
         return this._getOption('upload');
     }
-    set upload(value: Record<string, any>) {
+    set upload(value: Record<string, any> | { chunkSize?: number, maxFileSize?: number }) {
         this._setOption('upload', value);
     }
 
@@ -760,21 +760,21 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemViewChange: EventEmitter<Record<string, any>>;
+    @Output() itemViewChange: EventEmitter<Record<string, any> | { details?: Record<string, any> | { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: "details" | "thumbnails", showFolders?: boolean, showParentFolder?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() notificationsChange: EventEmitter<Record<string, any>>;
+    @Output() notificationsChange: EventEmitter<Record<string, any> | { showPanel?: boolean, showPopup?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() permissionsChange: EventEmitter<Record<string, any>>;
+    @Output() permissionsChange: EventEmitter<Record<string, any> | { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean }>;
 
     /**
     
@@ -823,7 +823,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() uploadChange: EventEmitter<Record<string, any>>;
+    @Output() uploadChange: EventEmitter<Record<string, any> | { chunkSize?: number, maxFileSize?: number }>;
 
     /**
     

@@ -374,10 +374,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get menuItems(): Array<Record<string, any>> {
+    get menuItems(): Array<Record<string, any>> | { action?: ((itemElement: any, itemData: any) => void), text?: string }[] {
         return this._getOption('menuItems');
     }
-    set menuItems(value: Array<Record<string, any>>) {
+    set menuItems(value: Array<Record<string, any>> | { action?: ((itemElement: any, itemData: any) => void), text?: string }[]) {
         this._setOption('menuItems', value);
     }
 
@@ -1108,7 +1108,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() menuItemsChange: EventEmitter<Array<Record<string, any>>>;
+    @Output() menuItemsChange: EventEmitter<Array<Record<string, any>> | { action?: ((itemElement: any, itemData: any) => void), text?: string }[]>;
 
     /**
     

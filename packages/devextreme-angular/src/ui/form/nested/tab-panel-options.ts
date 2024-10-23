@@ -185,106 +185,106 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get onContentReady(): ((e: ContentReadyEvent<TItem, TKey>) => void) {
+    get onContentReady(): ((e: ContentReadyEvent) => void) {
         return this._getOption('onContentReady');
     }
-    set onContentReady(value: ((e: ContentReadyEvent<TItem, TKey>) => void)) {
+    set onContentReady(value: ((e: ContentReadyEvent) => void)) {
         this._setOption('onContentReady', value);
     }
 
     @Input()
-    get onDisposing(): ((e: DisposingEvent<TItem, TKey>) => void) {
+    get onDisposing(): ((e: DisposingEvent) => void) {
         return this._getOption('onDisposing');
     }
-    set onDisposing(value: ((e: DisposingEvent<TItem, TKey>) => void)) {
+    set onDisposing(value: ((e: DisposingEvent) => void)) {
         this._setOption('onDisposing', value);
     }
 
     @Input()
-    get onInitialized(): ((e: InitializedEvent<TItem, TKey>) => void) {
+    get onInitialized(): ((e: InitializedEvent) => void) {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: InitializedEvent<TItem, TKey>) => void)) {
+    set onInitialized(value: ((e: InitializedEvent) => void)) {
         this._setOption('onInitialized', value);
     }
 
     @Input()
-    get onItemClick(): ((e: ItemClickEvent<TItem, TKey>) => void) {
+    get onItemClick(): ((e: ItemClickEvent) => void) {
         return this._getOption('onItemClick');
     }
-    set onItemClick(value: ((e: ItemClickEvent<TItem, TKey>) => void)) {
+    set onItemClick(value: ((e: ItemClickEvent) => void)) {
         this._setOption('onItemClick', value);
     }
 
     @Input()
-    get onItemContextMenu(): ((e: ItemContextMenuEvent<TItem, TKey>) => void) {
+    get onItemContextMenu(): ((e: ItemContextMenuEvent) => void) {
         return this._getOption('onItemContextMenu');
     }
-    set onItemContextMenu(value: ((e: ItemContextMenuEvent<TItem, TKey>) => void)) {
+    set onItemContextMenu(value: ((e: ItemContextMenuEvent) => void)) {
         this._setOption('onItemContextMenu', value);
     }
 
     @Input()
-    get onItemHold(): ((e: ItemHoldEvent<TItem, TKey>) => void) {
+    get onItemHold(): ((e: ItemHoldEvent) => void) {
         return this._getOption('onItemHold');
     }
-    set onItemHold(value: ((e: ItemHoldEvent<TItem, TKey>) => void)) {
+    set onItemHold(value: ((e: ItemHoldEvent) => void)) {
         this._setOption('onItemHold', value);
     }
 
     @Input()
-    get onItemRendered(): ((e: ItemRenderedEvent<TItem, TKey>) => void) {
+    get onItemRendered(): ((e: ItemRenderedEvent) => void) {
         return this._getOption('onItemRendered');
     }
-    set onItemRendered(value: ((e: ItemRenderedEvent<TItem, TKey>) => void)) {
+    set onItemRendered(value: ((e: ItemRenderedEvent) => void)) {
         this._setOption('onItemRendered', value);
     }
 
     @Input()
-    get onOptionChanged(): ((e: OptionChangedEvent<TItem, TKey>) => void) {
+    get onOptionChanged(): ((e: OptionChangedEvent) => void) {
         return this._getOption('onOptionChanged');
     }
-    set onOptionChanged(value: ((e: OptionChangedEvent<TItem, TKey>) => void)) {
+    set onOptionChanged(value: ((e: OptionChangedEvent) => void)) {
         this._setOption('onOptionChanged', value);
     }
 
     @Input()
-    get onSelectionChanged(): ((e: SelectionChangedEvent<TItem, TKey>) => void) {
+    get onSelectionChanged(): ((e: SelectionChangedEvent) => void) {
         return this._getOption('onSelectionChanged');
     }
-    set onSelectionChanged(value: ((e: SelectionChangedEvent<TItem, TKey>) => void)) {
+    set onSelectionChanged(value: ((e: SelectionChangedEvent) => void)) {
         this._setOption('onSelectionChanged', value);
     }
 
     @Input()
-    get onSelectionChanging(): ((e: SelectionChangingEvent<TItem, TKey>) => void) {
+    get onSelectionChanging(): ((e: SelectionChangingEvent) => void) {
         return this._getOption('onSelectionChanging');
     }
-    set onSelectionChanging(value: ((e: SelectionChangingEvent<TItem, TKey>) => void)) {
+    set onSelectionChanging(value: ((e: SelectionChangingEvent) => void)) {
         this._setOption('onSelectionChanging', value);
     }
 
     @Input()
-    get onTitleClick(): ((e: TitleClickEvent<TItem, TKey>) => void) {
+    get onTitleClick(): ((e: TitleClickEvent) => void) {
         return this._getOption('onTitleClick');
     }
-    set onTitleClick(value: ((e: TitleClickEvent<TItem, TKey>) => void)) {
+    set onTitleClick(value: ((e: TitleClickEvent) => void)) {
         this._setOption('onTitleClick', value);
     }
 
     @Input()
-    get onTitleHold(): ((e: TitleHoldEvent<TItem, TKey>) => void) {
+    get onTitleHold(): ((e: TitleHoldEvent) => void) {
         return this._getOption('onTitleHold');
     }
-    set onTitleHold(value: ((e: TitleHoldEvent<TItem, TKey>) => void)) {
+    set onTitleHold(value: ((e: TitleHoldEvent) => void)) {
         this._setOption('onTitleHold', value);
     }
 
     @Input()
-    get onTitleRendered(): ((e: TitleRenderedEvent<TItem, TKey>) => void) {
+    get onTitleRendered(): ((e: TitleRenderedEvent) => void) {
         return this._getOption('onTitleRendered');
     }
-    set onTitleRendered(value: ((e: TitleRenderedEvent<TItem, TKey>) => void)) {
+    set onTitleRendered(value: ((e: TitleRenderedEvent) => void)) {
         this._setOption('onTitleRendered', value);
     }
 

@@ -24,6 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/menu';
 
 import DataSource from 'devextreme/data/data_source';
+import { AnimationConfig } from 'devextreme/animation/fx';
 import { dxMenuItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -139,10 +140,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get animation(): Record<string, any> {
+    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any>) {
+    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -412,10 +413,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get showFirstSubmenuMode(): Record<string, any> | "onClick" | "onHover" {
+    get showFirstSubmenuMode(): Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
         return this._getOption('showFirstSubmenuMode');
     }
-    set showFirstSubmenuMode(value: Record<string, any> | "onClick" | "onHover") {
+    set showFirstSubmenuMode(value: Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
         this._setOption('showFirstSubmenuMode', value);
     }
 
@@ -425,10 +426,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get showSubmenuMode(): Record<string, any> | "onClick" | "onHover" {
+    get showSubmenuMode(): Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: Record<string, any> | "onClick" | "onHover") {
+    set showSubmenuMode(value: Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -606,7 +607,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<Record<string, any>>;
+    @Output() animationChange: EventEmitter<Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
     
@@ -753,14 +754,14 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showFirstSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover">;
+    @Output() showFirstSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover">;
+    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
 
     /**
     

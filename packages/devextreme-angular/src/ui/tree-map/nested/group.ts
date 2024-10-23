@@ -62,10 +62,10 @@ export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, color?: string } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, color?: string }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }) {
         this._setOption('hoverStyle', value);
     }
 
@@ -86,10 +86,10 @@ export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border?: Record<string, any>, color?: string } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border?: Record<string, any>, color?: string }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }) {
         this._setOption('selectionStyle', value);
     }
 

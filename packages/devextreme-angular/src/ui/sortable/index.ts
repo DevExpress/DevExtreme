@@ -124,10 +124,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get cursorOffset(): Record<string, any> | string {
+    get cursorOffset(): Record<string, any> | string | { x?: number, y?: number } {
         return this._getOption('cursorOffset');
     }
-    set cursorOffset(value: Record<string, any> | string) {
+    set cursorOffset(value: Record<string, any> | string | { x?: number, y?: number }) {
         this._setOption('cursorOffset', value);
     }
 
@@ -446,7 +446,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() cursorOffsetChange: EventEmitter<Record<string, any> | string>;
+    @Output() cursorOffsetChange: EventEmitter<Record<string, any> | string | { x?: number, y?: number }>;
 
     /**
     

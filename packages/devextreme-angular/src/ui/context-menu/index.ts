@@ -24,6 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/context_menu';
 
 import DataSource from 'devextreme/data/data_source';
+import { AnimationConfig } from 'devextreme/animation/fx';
 import { event } from 'devextreme/events/index';
 import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -128,10 +129,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get animation(): Record<string, any> {
+    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any>) {
+    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -416,10 +417,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showEvent(): Record<string, any> | string {
+    get showEvent(): Record<string, any> | string | { delay?: number, name?: string } {
         return this._getOption('showEvent');
     }
-    set showEvent(value: Record<string, any> | string) {
+    set showEvent(value: Record<string, any> | string | { delay?: number, name?: string }) {
         this._setOption('showEvent', value);
     }
 
@@ -429,10 +430,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get showSubmenuMode(): Record<string, any> | "onClick" | "onHover" {
+    get showSubmenuMode(): Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" } {
         return this._getOption('showSubmenuMode');
     }
-    set showSubmenuMode(value: Record<string, any> | "onClick" | "onHover") {
+    set showSubmenuMode(value: Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }) {
         this._setOption('showSubmenuMode', value);
     }
 
@@ -624,7 +625,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<Record<string, any>>;
+    @Output() animationChange: EventEmitter<Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
     
@@ -778,14 +779,14 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showEventChange: EventEmitter<Record<string, any> | string>;
+    @Output() showEventChange: EventEmitter<Record<string, any> | string | { delay?: number, name?: string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover">;
+    @Output() showSubmenuModeChange: EventEmitter<Record<string, any> | "onClick" | "onHover" | { delay?: number | Record<string, any> | { hide?: number, show?: number }, name?: "onClick" | "onHover" }>;
 
     /**
     
