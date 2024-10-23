@@ -230,6 +230,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
     /**
+     * [descr:dxChatOptions.showDayHeaders]
+    
+     */
+    @Input()
+    get showDayHeaders(): boolean {
+        return this._getOption('showDayHeaders');
+    }
+    set showDayHeaders(value: boolean) {
+        this._setOption('showDayHeaders', value);
+    }
+
+
+    /**
      * [descr:dxChatOptions.user]
     
      */
@@ -388,6 +401,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() showDayHeadersChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() userChange: EventEmitter<User>;
 
     /**
@@ -475,6 +495,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'hoverStateEnabledChange' },
             { emit: 'itemsChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'showDayHeadersChange' },
             { emit: 'userChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }

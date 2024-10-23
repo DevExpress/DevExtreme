@@ -170,6 +170,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     errors?: Array<ChatError>;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    showDayHeaders?: boolean;
+    /**
+     * @docid
      * @default null
      * @type_function_param1 e:{ui/chat:MessageSendEvent}
      * @action
@@ -204,13 +210,7 @@ export type ExplicitTypes = {
 };
 
 /** @public */
-export type Properties = dxChatOptions & { title: string;
-    showDateHeaders: boolean;
-    showDayHeaders: boolean;
-    showAvatar: boolean;
-    showUsername: boolean;
-    showMessageTimestamp: boolean;
-};
+export type Properties = dxChatOptions;
 
 ///#DEBUG
 // eslint-disable-next-line import/first
