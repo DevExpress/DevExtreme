@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
+import type { Format } from '@js/localization';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
@@ -29,6 +30,8 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 type Properties = ChatProperties & {
   title: string;
   showDayHeaders: boolean;
+  dayHeaderFormat: null | Format;
+  messageTimestampFormat: null | Format;
 };
 
 class Chat extends Widget<Properties> {
@@ -54,6 +57,8 @@ class Chat extends Widget<Properties> {
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
       showDayHeaders: true,
+      dayHeaderFormat: null,
+      messageTimestampFormat: null,
       errors: [],
     };
   }
@@ -115,7 +120,9 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const {
+      items = [], user, showDayHeaders, dayHeaderFormat, messageTimestampFormat,
+    } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>');
@@ -128,6 +135,8 @@ class Chat extends Widget<Properties> {
       showDayHeaders,
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
+      dayHeaderFormat,
+      messageTimestampFormat,
     });
   }
 
@@ -250,6 +259,8 @@ class Chat extends Widget<Properties> {
         this._createMessageSendAction();
         break;
       case 'showDayHeaders':
+      case 'dayHeaderFormat':
+      case 'messageTimestampFormat':
         this._messageList.option(name, value);
         break;
       default:

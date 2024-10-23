@@ -65,6 +65,37 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             assert.strictEqual($time.text(), '21:34');
         });
+
+        QUnit.test('time should have formatted value if messageTimestampFormat is specified on init', function(assert) {
+            const messageTime = new Date(2021, 9, 17, 4, 20);
+
+            this.reinit({
+                items: [
+                    { timestamp: messageTime },
+                ],
+                messageTimestampFormat: 'hh_mm',
+            });
+
+            const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
+
+            assert.strictEqual($time.text(), '04_20');
+        });
+
+        QUnit.test('time should have formatted value if messageTimestampFormat is specified at runtime', function(assert) {
+            const messageTime = new Date(2021, 9, 17, 4, 20);
+
+            this.reinit({
+                items: [
+                    { timestamp: messageTime },
+                ],
+            });
+
+            this.instance.option('messageTimestampFormat', 'hh...mm');
+
+            const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
+
+            assert.strictEqual($time.text(), '04...20');
+        });
     });
 
     QUnit.module('Author name', () => {
