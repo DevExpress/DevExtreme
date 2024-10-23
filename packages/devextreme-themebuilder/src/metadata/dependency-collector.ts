@@ -95,6 +95,7 @@ export default class DependencyCollector {
     if (!filePathInProcess && cacheScriptItem === undefined) {
       filePathMap.set(filePath, busyCache);
 
+      precinct.ast = [];
       const result = precinct.paperwork(filePath, {
         es6: { mixedImports: true },
         ts: { skipTypeImports : true }

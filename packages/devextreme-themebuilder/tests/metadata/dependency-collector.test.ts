@@ -68,7 +68,7 @@ const simpleDependencies: ScriptsDependencyTree = {
               widget: '',
             },
           },
-          widget: 'datagrid',
+          widget: '',
         },
       },
       widget: 'datagrid',
@@ -234,8 +234,6 @@ describe('DependencyCollector', () => {
     const dependencyCollector = new DependencyCollector();
     const fullDependencyTree = dependencyCollector.getFullDependencyTree('dx.all.js');
 
-    console.log('---------fullDependencyTree->', JSON.stringify(fullDependencyTree));
-    console.log('---------simpleDependencies->', JSON.stringify(simpleDependencies));
     expect(fullDependencyTree).toEqual(simpleDependencies);
   });
 
