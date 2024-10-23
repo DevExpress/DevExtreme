@@ -82,10 +82,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get cols(): Array<Record<string, any>> {
+    get cols(): Array<Record<string, any>> | { baseSize?: number | string, ratio?: number, screen?: string, shrink?: number }[] {
         return this._getOption('cols');
     }
-    set cols(value: Array<Record<string, any>>) {
+    set cols(value: Array<Record<string, any>> | { baseSize?: number | string, ratio?: number, screen?: string, shrink?: number }[]) {
         this._setOption('cols', value);
     }
 
@@ -199,10 +199,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get rows(): Array<Record<string, any>> {
+    get rows(): Array<Record<string, any>> | { baseSize?: number | string, ratio?: number, screen?: string, shrink?: number }[] {
         return this._getOption('rows');
     }
-    set rows(value: Array<Record<string, any>>) {
+    set rows(value: Array<Record<string, any>> | { baseSize?: number | string, ratio?: number, screen?: string, shrink?: number }[]) {
         this._setOption('rows', value);
     }
 
@@ -340,7 +340,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colsChange: EventEmitter<Array<Record<string, any>>>;
+    @Output() colsChange: EventEmitter<Array<Record<string, any>> | { baseSize?: number | string, ratio?: number, screen?: string, shrink?: number }[]>;
 
     /**
     
@@ -403,7 +403,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowsChange: EventEmitter<Array<Record<string, any>>>;
+    @Output() rowsChange: EventEmitter<Array<Record<string, any>> | { baseSize?: number | string, ratio?: number, screen?: string, shrink?: number }[]>;
 
     /**
     

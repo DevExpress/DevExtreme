@@ -184,10 +184,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get filterOperationDescriptions(): Record<string, any> {
+    get filterOperationDescriptions(): Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
         return this._getOption('filterOperationDescriptions');
     }
-    set filterOperationDescriptions(value: Record<string, any>) {
+    set filterOperationDescriptions(value: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
         this._setOption('filterOperationDescriptions', value);
     }
 
@@ -210,10 +210,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get groupOperationDescriptions(): Record<string, any> {
+    get groupOperationDescriptions(): Record<string, any> | { and?: string, notAnd?: string, notOr?: string, or?: string } {
         return this._getOption('groupOperationDescriptions');
     }
-    set groupOperationDescriptions(value: Record<string, any>) {
+    set groupOperationDescriptions(value: Record<string, any> | { and?: string, notAnd?: string, notOr?: string, or?: string }) {
         this._setOption('groupOperationDescriptions', value);
     }
 
@@ -457,7 +457,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterOperationDescriptionsChange: EventEmitter<Record<string, any>>;
+    @Output() filterOperationDescriptionsChange: EventEmitter<Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }>;
 
     /**
     
@@ -471,7 +471,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() groupOperationDescriptionsChange: EventEmitter<Record<string, any>>;
+    @Output() groupOperationDescriptionsChange: EventEmitter<Record<string, any> | { and?: string, notAnd?: string, notOr?: string, or?: string }>;
 
     /**
     

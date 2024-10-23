@@ -94,10 +94,10 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
      */
     @Input()
-    get adapter(): Record<string, any> {
+    get adapter(): Record<string, any> | { applyValidationResults?: (() => void), bypass?: (() => void), focus?: (() => void), getValue?: (() => void), reset?: (() => void), validationRequestsCallbacks?: Array<(() => void)> } {
         return this._getOption('adapter');
     }
-    set adapter(value: Record<string, any>) {
+    set adapter(value: Record<string, any> | { applyValidationResults?: (() => void), bypass?: (() => void), focus?: (() => void), getValue?: (() => void), reset?: (() => void), validationRequestsCallbacks?: Array<(() => void)> }) {
         this._setOption('adapter', value);
     }
 
@@ -216,7 +216,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() adapterChange: EventEmitter<Record<string, any>>;
+    @Output() adapterChange: EventEmitter<Record<string, any> | { applyValidationResults?: (() => void), bypass?: (() => void), focus?: (() => void), getValue?: (() => void), reset?: (() => void), validationRequestsCallbacks?: Array<(() => void)> }>;
 
     /**
     

@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 
 
+import { AnimationConfig } from 'devextreme/animation/fx';
 import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
 import { PositionConfig } from 'devextreme/animation/position';
@@ -81,10 +82,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get animation(): Record<string, any> {
+    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any>) {
+    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -484,7 +485,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<Record<string, any>>;
+    @Output() animationChange: EventEmitter<Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
     

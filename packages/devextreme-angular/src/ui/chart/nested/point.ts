@@ -54,18 +54,18 @@ export class DxoChartPointComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get image(): Record<string, any> | string | { height?: number | Record<string, any>, url?: Record<string, any> | string, width?: number | Record<string, any> } {
+    get image(): Record<string, any> | string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } } {
         return this._getOption('image');
     }
-    set image(value: Record<string, any> | string | { height?: number | Record<string, any>, url?: Record<string, any> | string, width?: number | Record<string, any> }) {
+    set image(value: Record<string, any> | string | { height?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: Record<string, any> | string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } }) {
         this._setOption('image', value);
     }
 
@@ -78,10 +78,10 @@ export class DxoChartPointComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }) {
         this._setOption('selectionStyle', value);
     }
 

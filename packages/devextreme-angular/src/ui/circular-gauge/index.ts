@@ -20,6 +20,8 @@ import {
 } from '@angular/core';
 
 
+import * as LocalizationTypes from 'devextreme/localization';
+import { Font, ChartsColor } from 'devextreme/common/charts';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/circular_gauge';
 import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 
@@ -112,10 +114,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get animation(): Record<string, any> {
+    get animation(): Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean } {
         return this._getOption('animation');
     }
-    set animation(value: Record<string, any>) {
+    set animation(value: Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean }) {
         this._setOption('animation', value);
     }
 
@@ -177,10 +179,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get export(): Record<string, any> {
+    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
         return this._getOption('export');
     }
-    set export(value: Record<string, any>) {
+    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
         this._setOption('export', value);
     }
 
@@ -190,10 +192,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get geometry(): Record<string, any> {
+    get geometry(): Record<string, any> | { endAngle?: number, startAngle?: number } {
         return this._getOption('geometry');
     }
-    set geometry(value: Record<string, any>) {
+    set geometry(value: Record<string, any> | { endAngle?: number, startAngle?: number }) {
         this._setOption('geometry', value);
     }
 
@@ -203,10 +205,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get loadingIndicator(): Record<string, any> {
+    get loadingIndicator(): Record<string, any> | { backgroundColor?: string, font?: Font, show?: boolean, text?: string } {
         return this._getOption('loadingIndicator');
     }
-    set loadingIndicator(value: Record<string, any>) {
+    set loadingIndicator(value: Record<string, any> | { backgroundColor?: string, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
 
@@ -216,10 +218,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get margin(): Record<string, any> {
+    get margin(): Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: Record<string, any>) {
+    set margin(value: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -242,10 +244,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get rangeContainer(): Record<string, any> {
+    get rangeContainer(): Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: "center" | "inside" | "outside", palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number } {
         return this._getOption('rangeContainer');
     }
-    set rangeContainer(value: Record<string, any>) {
+    set rangeContainer(value: Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: "center" | "inside" | "outside", palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }) {
         this._setOption('rangeContainer', value);
     }
 
@@ -281,10 +283,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get scale(): Record<string, any> {
+    get scale(): Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: "center" | "inside" | "outside", scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number } {
         return this._getOption('scale');
     }
-    set scale(value: Record<string, any>) {
+    set scale(value: Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: "center" | "inside" | "outside", scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number }) {
         this._setOption('scale', value);
     }
 
@@ -294,10 +296,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get size(): Record<string, any> {
+    get size(): Record<string, any> | { height?: number, width?: number } {
         return this._getOption('size');
     }
-    set size(value: Record<string, any>) {
+    set size(value: Record<string, any> | { height?: number, width?: number }) {
         this._setOption('size', value);
     }
 
@@ -307,10 +309,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get subvalueIndicator(): GaugeIndicator {
+    get subvalueIndicator(): GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" } {
         return this._getOption('subvalueIndicator');
     }
-    set subvalueIndicator(value: GaugeIndicator) {
+    set subvalueIndicator(value: GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }) {
         this._setOption('subvalueIndicator', value);
     }
 
@@ -346,10 +348,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get title(): Record<string, any> | string {
+    get title(): Record<string, any> | string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('title');
     }
-    set title(value: Record<string, any> | string) {
+    set title(value: Record<string, any> | string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('title', value);
     }
 
@@ -359,10 +361,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get tooltip(): Record<string, any> {
+    get tooltip(): Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any>) {
+    set tooltip(value: Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }) {
         this._setOption('tooltip', value);
     }
 
@@ -385,10 +387,10 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get valueIndicator(): GaugeIndicator {
+    get valueIndicator(): GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" } {
         return this._getOption('valueIndicator');
     }
-    set valueIndicator(value: GaugeIndicator) {
+    set valueIndicator(value: GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }) {
         this._setOption('valueIndicator', value);
     }
 
@@ -477,7 +479,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<Record<string, any>>;
+    @Output() animationChange: EventEmitter<Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean }>;
 
     /**
     
@@ -512,28 +514,28 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<Record<string, any>>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() geometryChange: EventEmitter<Record<string, any>>;
+    @Output() geometryChange: EventEmitter<Record<string, any> | { endAngle?: number, startAngle?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadingIndicatorChange: EventEmitter<Record<string, any>>;
+    @Output() loadingIndicatorChange: EventEmitter<Record<string, any> | { backgroundColor?: string, font?: Font, show?: boolean, text?: string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() marginChange: EventEmitter<Record<string, any>>;
+    @Output() marginChange: EventEmitter<Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }>;
 
     /**
     
@@ -547,7 +549,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rangeContainerChange: EventEmitter<Record<string, any>>;
+    @Output() rangeContainerChange: EventEmitter<Record<string, any> | { backgroundColor?: ChartsColor | string, offset?: number, orientation?: "center" | "inside" | "outside", palette?: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office", paletteExtensionMode?: "alternate" | "blend" | "extrapolate", ranges?: Array<Record<string, any>> | { color?: ChartsColor | string, endValue?: number, startValue?: number }[], width?: number }>;
 
     /**
     
@@ -568,21 +570,21 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<Record<string, any>>;
+    @Output() scaleChange: EventEmitter<Record<string, any> | { allowDecimals?: boolean, customMinorTicks?: Array<number>, customTicks?: Array<number>, endValue?: number, label?: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, hideFirstOrLast?: "first" | "last", indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickInterval?: number, orientation?: "center" | "inside" | "outside", scaleDivisionFactor?: number, startValue?: number, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sizeChange: EventEmitter<Record<string, any>>;
+    @Output() sizeChange: EventEmitter<Record<string, any> | { height?: number, width?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() subvalueIndicatorChange: EventEmitter<GaugeIndicator>;
+    @Output() subvalueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }>;
 
     /**
     
@@ -603,14 +605,14 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<Record<string, any> | string>;
+    @Output() titleChange: EventEmitter<Record<string, any> | string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: Record<string, any> | string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any>>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((scaleValue: { value: number, valueText: string }) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number }>;
 
     /**
     
@@ -624,7 +626,7 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueIndicatorChange: EventEmitter<GaugeIndicator>;
+    @Output() valueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }>;
 
 
 

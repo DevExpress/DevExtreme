@@ -143,10 +143,10 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get marker(): Record<string, any> | { label?: Record<string, any>, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean } {
+    get marker(): Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean } {
         return this._getOption('marker');
     }
-    set marker(value: Record<string, any> | { label?: Record<string, any>, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }) {
+    set marker(value: Record<string, any> | { label?: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }) {
         this._setOption('marker', value);
     }
 

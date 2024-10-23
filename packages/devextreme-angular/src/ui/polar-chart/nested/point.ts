@@ -54,10 +54,10 @@ export class DxoPolarChartPointComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }) {
         this._setOption('hoverStyle', value);
     }
 
@@ -78,10 +78,10 @@ export class DxoPolarChartPointComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get selectionStyle(): Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: Record<string, any> | { border?: Record<string, any>, color?: ChartsColor | string, size?: number }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }) {
         this._setOption('selectionStyle', value);
     }
 

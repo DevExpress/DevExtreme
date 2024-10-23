@@ -109,10 +109,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get apiKey(): Record<string, any> | string {
+    get apiKey(): Record<string, any> | string | { azure?: string, bing?: string, google?: string, googleStatic?: string } {
         return this._getOption('apiKey');
     }
-    set apiKey(value: Record<string, any> | string) {
+    set apiKey(value: Record<string, any> | string | { azure?: string, bing?: string, google?: string, googleStatic?: string }) {
         this._setOption('apiKey', value);
     }
 
@@ -135,10 +135,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get center(): Array<number> | Record<string, any> | string {
+    get center(): Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[] {
         return this._getOption('center');
     }
-    set center(value: Array<number> | Record<string, any> | string) {
+    set center(value: Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[]) {
         this._setOption('center', value);
     }
 
@@ -252,10 +252,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get markers(): Array<Record<string, any>> {
+    get markers(): Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[], onClick?: (() => void), tooltip?: Record<string, any> | string | { isShown?: boolean, text?: string } }[] {
         return this._getOption('markers');
     }
-    set markers(value: Array<Record<string, any>>) {
+    set markers(value: Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[], onClick?: (() => void), tooltip?: Record<string, any> | string | { isShown?: boolean, text?: string } }[]) {
         this._setOption('markers', value);
     }
 
@@ -278,10 +278,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get providerConfig(): Record<string, any> {
+    get providerConfig(): Record<string, any> | { mapId?: string, useAdvancedMarkers?: boolean } {
         return this._getOption('providerConfig');
     }
-    set providerConfig(value: Record<string, any>) {
+    set providerConfig(value: Record<string, any> | { mapId?: string, useAdvancedMarkers?: boolean }) {
         this._setOption('providerConfig', value);
     }
 
@@ -291,10 +291,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get routes(): Array<Record<string, any>> {
+    get routes(): Array<Record<string, any>> | { color?: string, locations?: Array<Record<string, any>> | { lat?: number, lng?: number }[], mode?: "driving" | "walking", opacity?: number, weight?: number }[] {
         return this._getOption('routes');
     }
-    set routes(value: Array<Record<string, any>>) {
+    set routes(value: Array<Record<string, any>> | { color?: string, locations?: Array<Record<string, any>> | { lat?: number, lng?: number }[], mode?: "driving" | "walking", opacity?: number, weight?: number }[]) {
         this._setOption('routes', value);
     }
 
@@ -467,7 +467,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() apiKeyChange: EventEmitter<Record<string, any> | string>;
+    @Output() apiKeyChange: EventEmitter<Record<string, any> | string | { azure?: string, bing?: string, google?: string, googleStatic?: string }>;
 
     /**
     
@@ -481,7 +481,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() centerChange: EventEmitter<Array<number> | Record<string, any> | string>;
+    @Output() centerChange: EventEmitter<Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[]>;
 
     /**
     
@@ -544,7 +544,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() markersChange: EventEmitter<Array<Record<string, any>>>;
+    @Output() markersChange: EventEmitter<Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | Record<string, any> | string | { lat?: number, lng?: number }[], onClick?: (() => void), tooltip?: Record<string, any> | string | { isShown?: boolean, text?: string } }[]>;
 
     /**
     
@@ -558,14 +558,14 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() providerConfigChange: EventEmitter<Record<string, any>>;
+    @Output() providerConfigChange: EventEmitter<Record<string, any> | { mapId?: string, useAdvancedMarkers?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() routesChange: EventEmitter<Array<Record<string, any>>>;
+    @Output() routesChange: EventEmitter<Array<Record<string, any>> | { color?: string, locations?: Array<Record<string, any>> | { lat?: number, lng?: number }[], mode?: "driving" | "walking", opacity?: number, weight?: number }[]>;
 
     /**
     

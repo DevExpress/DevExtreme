@@ -53,10 +53,10 @@ export class DxoSankeyLinkComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get hoverStyle(): Record<string, any> | { border?: Record<string, any>, color?: string, hatching?: Record<string, any>, opacity?: number } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, opacity?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: Record<string, any> | { border?: Record<string, any>, color?: string, hatching?: Record<string, any>, opacity?: number }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, opacity?: number }) {
         this._setOption('hoverStyle', value);
     }
 

@@ -22,6 +22,7 @@ import {
 } from '@angular/core';
 
 
+import * as LocalizationTypes from 'devextreme/localization';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/slider';
 
 import DxSlider from 'devextreme/ui/slider';
@@ -224,10 +225,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get label(): Record<string, any> {
+    get label(): Record<string, any> | { format?: LocalizationTypes.Format, position?: "bottom" | "top", visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: Record<string, any>) {
+    set label(value: Record<string, any> | { format?: LocalizationTypes.Format, position?: "bottom" | "top", visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -341,10 +342,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get tooltip(): Record<string, any> {
+    get tooltip(): Record<string, any> | { enabled?: boolean, format?: LocalizationTypes.Format, position?: "bottom" | "top", showMode?: "always" | "onHover" } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: Record<string, any>) {
+    set tooltip(value: Record<string, any> | { enabled?: boolean, format?: LocalizationTypes.Format, position?: "bottom" | "top", showMode?: "always" | "onHover" }) {
         this._setOption('tooltip', value);
     }
 
@@ -587,7 +588,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelChange: EventEmitter<Record<string, any>>;
+    @Output() labelChange: EventEmitter<Record<string, any> | { format?: LocalizationTypes.Format, position?: "bottom" | "top", visible?: boolean }>;
 
     /**
     
@@ -650,7 +651,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<Record<string, any>>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { enabled?: boolean, format?: LocalizationTypes.Format, position?: "bottom" | "top", showMode?: "always" | "onHover" }>;
 
     /**
     

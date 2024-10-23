@@ -46,10 +46,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any>, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
@@ -118,10 +118,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get stripStyle(): Record<string, any> | { label?: Record<string, any> } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font } } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: Record<string, any> | { label?: Record<string, any> }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font } }) {
         this._setOption('stripStyle', value);
     }
 
