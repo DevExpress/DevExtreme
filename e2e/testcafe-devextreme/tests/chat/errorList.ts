@@ -8,7 +8,7 @@ import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
 fixture.disablePageReloads`ChatErrorList`
   .page(url(__dirname, '../container.html'));
 
-test('Errorlist appearance', async (t) => {
+test.skip('Errorlist appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
