@@ -57,6 +57,10 @@ $(() => {
       return itemElement.append(element);
     },
 
+    onContentReady(e) {
+      setComponentAria(e.component.$element());
+    },
+
     onAppointmentFormOpening(e) {
       const startDate = new Date(e.appointmentData.startDate);
       if (!isValidAppointmentDate(startDate)) {
@@ -87,6 +91,23 @@ const holidays = [
   new Date(2021, 3, 29),
   new Date(2021, 5, 6),
 ];
+const ariaDescription = () => {
+  const disabledDates = holidays
+    .filter(date => !isWeekend(date))
+    .map(date => new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    );
+  if (disabledDates?.length === 1) {
+    return `${disabledDates} is a disabled date`;
+  }
+  if (disabledDates?.length > 1) {
+    return `${disabledDates.join(', ')} are disabled dates`;
+  }
+};
 
 function notifyDisableDate() {
   DevExpress.ui.notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
@@ -155,4 +176,9 @@ function applyDisableDatesToDateEditors(form) {
 
   const endDateEditor = form.getEditor('endDate');
   endDateEditor.option('disabledDates', holidays);
+}
+
+function setComponentAria(element) {
+  const prevAria = element?.attr('aria-label') || '';
+  element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
 }

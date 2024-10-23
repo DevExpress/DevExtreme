@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import Pager from 'devextreme-testcafe-models/pager';
+import Pagination from 'devextreme-testcafe-models/pagination';
 import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { testScreenshot } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`Pager`
+fixture.disablePageReloads`Pagination`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<any> = {
@@ -28,18 +28,18 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   } = optionConfiguration;
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const pager = new Pager('#container');
+  const pagination = new Pagination('#container');
 
   await testScreenshot(
     t,
     takeScreenshot,
-    `pager-dm_${displayMode}-`
+    `pagination-dm_${displayMode}-`
             + `${infoText ? 'has' : 'has_no'}_it-`
             + `si_${showInfo.toString()}-`
             + `snb_${showNavigationButtons.toString()}-`
             + `spss_${showPageSizeSelector.toString()}`
             + '.png',
-    { element: pager.element },
+    { element: pagination.element },
   );
   await t
     .expect(compareResults.isValid())

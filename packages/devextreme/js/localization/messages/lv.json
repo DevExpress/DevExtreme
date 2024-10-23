@@ -218,6 +218,17 @@
         "dxPager-ariaPageSize": "Lapas izmērs",
         "dxPager-ariaPageNumber": "Lapas numurs",
 
+        "dxPagination-infoText": "Lapa {0} no {1} ({2} rindas)",
+        "dxPagination-pagesCountText": "no",
+        "dxPagination-pageSize": "Rindas lapā: {0}",
+        "dxPagination-pageSizesAllText": "Viss",
+        "dxPagination-page": "Lapa {0}",
+        "dxPagination-prevPage": "Iepriekšējā Lapa",
+        "dxPagination-nextPage": "Nākamā Lapa",
+        "dxPagination-ariaLabel": "Lapu Navigācija",
+        "dxPagination-ariaPageSize": "Lapas izmērs",
+        "dxPagination-ariaPageNumber": "Lapas numurs",
+
         "dxPivotGrid-grandTotal": "Kopsummā",
         "dxPivotGrid-total": "{0} Summā",
         "dxPivotGrid-fieldChooserTitle": "Lauka izvēle",
