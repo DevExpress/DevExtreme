@@ -19,7 +19,7 @@ export default class MetadataCollector {
   static getStringFromObject(
     object: ThemesMetadata | string[] | FlatStylesDependencies,
   ): string {
-    return JSON.stringify(object).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
+    return JSON.stringify(object, null, 2).replace(/"/g, '\'').replace(/'(ON|OFF)'/g, '"$1"');
   }
 
   async getFileList(dirName: string): Promise<string[]> {
