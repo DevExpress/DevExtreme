@@ -7,6 +7,7 @@ import {
 
 import { getImageSourceType } from '@js/core/utils/icon';
 import { combineClasses } from '@ts/core/utils/combine_classes';
+import { getTemplate } from '@ts/core/r1/utils';
 
 const _excluded = ['iconTemplate', 'position', 'source'];
 
@@ -30,7 +31,6 @@ export const IconProps = {
   source: '',
 };
 
-const getTemplate = (TemplateProp) => TemplateProp && (TemplateProp.defaultProps ? (props) => normalizeProps(createComponentVNode(2, TemplateProp, _extends({}, props))) : TemplateProp);
 export class Icon extends BaseInfernoComponent {
   constructor(props) {
     super(props);
