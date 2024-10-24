@@ -12,6 +12,7 @@ export * from './charts-color';
 export * from './chat-error-dxi';
 export * from './column-chooser-search-config';
 export * from './column-chooser-selection-config';
+export * from './converter';
 export * from './data-change-dxi';
 export * from './data-grid-column-dxi';
 export * from './data-grid-toolbar';

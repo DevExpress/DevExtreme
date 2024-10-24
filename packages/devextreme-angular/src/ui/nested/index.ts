@@ -49,6 +49,7 @@ export * from './constant-line-style';
 export * from './context-menu';
 export * from './context-toolbox';
 export * from './control-bar';
+export * from './converter';
 export * from './crosshair';
 export * from './cursor-offset';
 export * from './custom-operation-dxi';

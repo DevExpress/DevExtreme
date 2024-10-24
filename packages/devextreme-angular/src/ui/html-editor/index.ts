@@ -25,7 +25,7 @@ import {
 
 
 import { EditorStyle, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
+import { ContentReadyEvent, Converter, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
 
 import DxHtmlEditor from 'devextreme/ui/html_editor';
 
@@ -44,6 +44,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
+import { DxoConverterModule } from 'devextreme-angular/ui/nested';
 import { DxoImageUploadModule } from 'devextreme-angular/ui/nested';
 import { DxoFileUploaderOptionsModule } from 'devextreme-angular/ui/nested';
 import { DxiTabModule } from 'devextreme-angular/ui/nested';
@@ -55,6 +56,7 @@ import { DxoTableResizingModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
 import { DxoVariablesModule } from 'devextreme-angular/ui/nested';
 
+import { DxoHtmlEditorConverterModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorImageUploadModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorFileUploaderOptionsModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxiHtmlEditorTabModule } from 'devextreme-angular/ui/html-editor/nested';
@@ -131,6 +133,19 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     }
     set allowSoftLineBreak(value: boolean) {
         this._setOption('allowSoftLineBreak', value);
+    }
+
+
+    /**
+     * [descr:dxHtmlEditorOptions.converter]
+    
+     */
+    @Input()
+    get converter(): Converter | undefined {
+        return this._getOption('converter');
+    }
+    set converter(value: Converter | undefined) {
+        this._setOption('converter', value);
     }
 
 
@@ -605,6 +620,13 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() converterChange: EventEmitter<Converter | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() customizeModulesChange: EventEmitter<Function>;
 
     /**
@@ -866,6 +888,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'allowSoftLineBreakChange' },
+            { emit: 'converterChange' },
             { emit: 'customizeModulesChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
@@ -965,6 +988,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
 @NgModule({
   imports: [
+    DxoConverterModule,
     DxoImageUploadModule,
     DxoFileUploaderOptionsModule,
     DxiTabModule,
@@ -975,6 +999,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoTableResizingModule,
     DxoToolbarModule,
     DxoVariablesModule,
+    DxoHtmlEditorConverterModule,
     DxoHtmlEditorImageUploadModule,
     DxoHtmlEditorFileUploaderOptionsModule,
     DxiHtmlEditorTabModule,
@@ -993,6 +1018,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
   ],
   exports: [
     DxHtmlEditorComponent,
+    DxoConverterModule,
     DxoImageUploadModule,
     DxoFileUploaderOptionsModule,
     DxiTabModule,
@@ -1003,6 +1029,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxoTableResizingModule,
     DxoToolbarModule,
     DxoVariablesModule,
+    DxoHtmlEditorConverterModule,
     DxoHtmlEditorImageUploadModule,
     DxoHtmlEditorFileUploaderOptionsModule,
     DxiHtmlEditorTabModule,

@@ -61,6 +61,7 @@ const HtmlEditor = memo(
       }), []);
 
       const expectedChildren = useMemo(() => ({
+        converter: { optionName: "converter", isCollectionItem: false },
         imageUpload: { optionName: "imageUpload", isCollectionItem: false },
         mediaResizing: { optionName: "mediaResizing", isCollectionItem: false },
         mention: { optionName: "mentions", isCollectionItem: true },
@@ -85,6 +86,22 @@ const HtmlEditor = memo(
   ),
 ) as (props: React.PropsWithChildren<IHtmlEditorOptions> & { ref?: Ref<HtmlEditorRef> }) => ReactElement | null;
 
+
+// owners:
+// HtmlEditor
+type IConverterProps = React.PropsWithChildren<{
+  fromHtml?: ((value: string) => string);
+  toHtml?: ((value: string) => string);
+}>
+const _componentConverter = memo(
+  (props: IConverterProps) => {
+    return React.createElement(NestedOption<IConverterProps>, { ...props });
+  }
+);
+
+const Converter: typeof _componentConverter & IElementDescriptor = Object.assign(_componentConverter, {
+  OptionName: "converter",
+})
 
 // owners:
 // ImageUpload
@@ -471,6 +488,8 @@ export {
   HtmlEditor,
   IHtmlEditorOptions,
   HtmlEditorRef,
+  Converter,
+  IConverterProps,
   FileUploaderOptions,
   IFileUploaderOptionsProps,
   ImageUpload,
