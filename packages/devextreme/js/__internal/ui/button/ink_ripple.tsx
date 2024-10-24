@@ -64,8 +64,11 @@ export class InkRipple extends BaseInfernoComponent {
     }
   }
 
-  render() {
-    return normalizeProps(createVNode(1, 'div', 'dx-inkripple', null, 1, _extends({}, this.restAttributes)));
+  render(): JSX.Element {
+    return <div
+      className="dx-inkripple"
+      {...this.restAttributes}
+    />;
   }
 }
 
