@@ -2166,6 +2166,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
+    await t.expect(dataGrid.isReady()).ok();
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2248,6 +2249,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
   test(`The cell focus should be restored on pressing shift and tab keys when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the left side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
+    await t.expect(dataGrid.isReady()).ok();
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2329,6 +2331,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
+    await t.expect(dataGrid.isReady()).ok();
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2414,6 +2417,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');
+    await t.expect(dataGrid.isReady()).ok();
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
@@ -2481,6 +2485,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
   test(`The cell focus should be restored on pressing shift and tab keys when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
+    await t.expect(dataGrid.isReady()).ok();
 
     async function checkNavigationOfAllCells(): Promise<void> {
       await t
