@@ -14,6 +14,9 @@ safeSizeTest('Sticky columns with master-detail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiExpandRow(1);
 
   await takeScreenshot('masterdetail-scroll-begin.png', dataGrid.element);
