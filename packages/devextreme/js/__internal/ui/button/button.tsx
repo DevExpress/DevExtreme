@@ -69,6 +69,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
   private readonly widgetRef = infernoCreateRef<Widget>();
 
   private readonly __getterCache: any = {};
+
   constructor(props: ButtonProps) {
     super(props);
     this.state = {};
