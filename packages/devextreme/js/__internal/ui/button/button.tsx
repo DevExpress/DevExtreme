@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import _extends from '@babel/runtime/helpers/esm/extends';
 import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
@@ -207,11 +206,10 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
           break;
       }
     }
-    return _extends({
+    return {
       role: 'button',
-    }, label ? {
-      label,
-    } : {});
+      ...label ? { label } : {},
+    };
   }
 
   get cssClasses() {
@@ -243,15 +241,8 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
   }
 
   get buttonTemplateData() {
-    const {
-      icon,
-      templateData,
-      text,
-    } = this.props;
-    return _extends({
-      icon,
-      text,
-    }, templateData);
+    const { icon, text, templateData } = this.props;
+    return { icon, text, ...templateData };
   }
 
   get restAttributes() {
