@@ -540,24 +540,15 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   }
 
   getAttributesCore(props: Record<string, string>): Record<string, string> {
-    const {
-      height,
-      width,
-      activeStateEnabled,
-      hoverStateEnabled,
-      focusStateEnabled,
-      _feedbackHideTimeout,
-      _feedbackShowTimeout,
-      addWidgetClass,
-      rootElementRef,
-      rtlEnabled,
-      aria,
-      hint,
-      cssText,
-      classes,
-      name,
-      ...result
-    } = props;
+    const result = { ...props };
+
+    [
+      '_feedbackHideTimeout', '_feedbackShowTimeout', 'accessKey', 'activeStateEnabled', 'activeStateUnit', 'addWidgetClass', 'aria', 'children', 'className', 'classes', 'cssText', 'disabled', 'focusStateEnabled', 'height', 'hint', 'hoverStateEnabled', 'name', 'onActive', 'onClick', 'onDimensionChanged', 'onFocusIn', 'onFocusOut', 'onHoverEnd', 'onHoverStart', 'onInactive', 'onKeyDown', 'onRootElementRendered', 'onVisibilityChange', 'rootElementRef', 'rtlEnabled', 'tabIndex', 'visible', 'width',
+    ].forEach((exclude) => {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete result[exclude];
+    });
+
     return result;
   }
 
