@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import {
@@ -21,8 +20,6 @@ import { InkRipple } from './ink_ripple';
 import type { ButtonProps } from './props';
 import { defaultButtonProps } from './props';
 import { getTemplate } from '@ts/core/r1/utils';
-
-const _excluded = ['accessKey', 'activeStateEnabled', 'children', 'className', 'disabled', 'focusStateEnabled', 'height', 'hint', 'hoverStateEnabled', 'icon', 'iconPosition', 'iconTemplate', 'onClick', 'onKeyDown', 'onSubmit', 'pressed', 'rtlEnabled', 'stylingMode', 'tabIndex', 'template', 'templateData', 'text', 'type', 'useInkRipple', 'useSubmitBehavior', 'visible', 'width'];
 
 const stylingModes = ['outlined', 'text', 'contained'];
 
@@ -245,9 +242,15 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     return { icon, text, ...templateData };
   }
 
-  get restAttributes() {
-    const _this$props = this.props;
-    const restProps = _objectWithoutPropertiesLoose(_this$props, _excluded);
+  get restAttributes(): any {
+    const restProps = {...this.props};
+
+    [
+      'accessKey', 'activeStateEnabled', 'children', 'className', 'disabled', 'focusStateEnabled', 'height', 'hint', 'hoverStateEnabled', 'icon', 'iconPosition', 'iconTemplate', 'onClick', 'onKeyDown', 'onSubmit', 'pressed', 'rtlEnabled', 'stylingMode', 'tabIndex', 'template', 'templateData', 'text', 'type', 'useInkRipple', 'useSubmitBehavior', 'visible', 'width'
+    ].forEach((excluded) => {
+      delete restProps[excluded];
+    });
+
     return restProps;
   }
 
