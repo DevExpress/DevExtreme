@@ -29,6 +29,14 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChatUserComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get avatarAlt(): string {
+        return this._getOption('avatarAlt');
+    }
+    set avatarAlt(value: string) {
+        this._setOption('avatarAlt', value);
+    }
+
+    @Input()
     get avatarUrl(): string {
         return this._getOption('avatarUrl');
     }

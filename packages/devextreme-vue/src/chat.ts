@@ -99,11 +99,13 @@ const DxAuthorConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:avatarAlt": null,
     "update:avatarUrl": null,
     "update:id": null,
     "update:name": null,
   },
   props: {
+    avatarAlt: String,
     avatarUrl: String,
     id: [Number, String],
     name: String
@@ -167,11 +169,13 @@ const DxUserConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:avatarAlt": null,
     "update:avatarUrl": null,
     "update:id": null,
     "update:name": null,
   },
   props: {
+    avatarAlt: String,
     avatarUrl: String,
     id: [Number, String],
     name: String
