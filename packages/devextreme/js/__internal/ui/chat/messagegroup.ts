@@ -2,6 +2,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDefined } from '@js/core/utils/type';
+import type { Format } from '@js/localization';
+import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -24,6 +26,7 @@ export type MessageGroupAlignment = 'start' | 'end';
 export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
+  messageTimestampFormat: null | Format;
 }
 
 class MessageGroup extends Widget<Properties> {
@@ -36,6 +39,7 @@ class MessageGroup extends Widget<Properties> {
       ...super._getDefaultOptions(),
       items: [],
       alignment: 'start',
+      messageTimestampFormat: null,
     };
   }
 
@@ -139,9 +143,16 @@ class MessageGroup extends Widget<Properties> {
   _getTimeValue(timestamp: Date | string | number): string {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
     const date = dateSerialization.deserializeDate(timestamp);
+    const { messageTimestampFormat } = this.option();
+
+    let formattedTime = date.toLocaleTimeString(undefined, options);
+
+    if (messageTimestampFormat) {
+      formattedTime = dateLocalization.format(date, messageTimestampFormat);
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return date.toLocaleTimeString(undefined, options);
+    return formattedTime;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -150,6 +161,7 @@ class MessageGroup extends Widget<Properties> {
     switch (name) {
       case 'items':
       case 'alignment':
+      case 'messageTimestampFormat':
         this._invalidate();
         break;
       default:

@@ -7,6 +7,8 @@ import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDate, isDefined } from '@js/core/utils/type';
+import type { Format } from '@js/localization';
+import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
 import type { Message } from '@js/ui/chat';
@@ -35,6 +37,8 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
+  dayHeaderFormat: null | Format;
+  messageTimestampFormat: null | Format;
   isLoading?: boolean;
 }
 
@@ -53,6 +57,8 @@ class MessageList extends Widget<Properties> {
       items: [],
       currentUserId: '',
       showDayHeaders: true,
+      dayHeaderFormat: null,
+      messageTimestampFormat: null,
       isLoading: false,
     };
   }
@@ -162,10 +168,12 @@ class MessageList extends Widget<Properties> {
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
     const $messageGroup = $('<div>').appendTo(this._$content());
+    const { messageTimestampFormat } = this.option();
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
+      messageTimestampFormat,
     });
 
     this._messageGroups?.push(messageGroup);
@@ -211,6 +219,12 @@ class MessageList extends Widget<Properties> {
       month: '2-digit',
       year: 'numeric',
     }).replace(/[/-]/g, '.');
+
+    const { dayHeaderFormat } = this.option();
+
+    if (dayHeaderFormat) {
+      headerDate = dateLocalization.format(deserializedDate, dayHeaderFormat);
+    }
 
     if (dateUtils.sameDate(deserializedDate, today)) {
       headerDate = `${messageLocalization.format('Today')} ${headerDate}`;
@@ -415,6 +429,8 @@ class MessageList extends Widget<Properties> {
         this._processItemsUpdating(value ?? [], previousValue ?? []);
         break;
       case 'showDayHeaders':
+      case 'dayHeaderFormat':
+      case 'messageTimestampFormat':
         this._invalidate();
         break;
       case 'isLoading':

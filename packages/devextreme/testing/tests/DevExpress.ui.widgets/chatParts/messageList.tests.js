@@ -357,13 +357,69 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             let $dayHeaders = this.getDayHeaders();
 
-            assert.strictEqual($dayHeaders.length, 1, 'day header was aaded');
+            assert.strictEqual($dayHeaders.length, 1, 'day header was added');
 
             this.instance.option({ items });
 
             $dayHeaders = this.getDayHeaders();
 
             assert.strictEqual($dayHeaders.length, 1, 'day header is not removed after invalidate');
+        });
+
+        [{
+            timestamp: new Date(),
+            dayHeaderPrefix: 'Today ',
+            scenario: 'today',
+        },
+        {
+            timestamp: new Date(Date.now() - MS_IN_DAY),
+            dayHeaderPrefix: 'Yesterday ',
+            scenario: 'yesterday',
+        }, {
+            timestamp: new Date('10.10.2024'),
+            dayHeaderPrefix: '',
+            scenario: '10.10.2024',
+        }].forEach(({ timestamp, dayHeaderPrefix, scenario }) => {
+            QUnit.test(`Day header should be formatted when dayHeaderFormat is specified on init (timestamp=${scenario})`, function(assert) {
+                const items = [{
+                    timestamp,
+                    text: 'A',
+                }];
+
+                this.reinit({
+                    items,
+                    dayHeaderFormat: 'dd of MMMM, yyyy',
+                });
+
+                const $dayHeaders = this.getDayHeaders();
+                const expectedMonth = timestamp.toLocaleString(undefined, { month: 'long' });
+                const expectedYear = timestamp.getFullYear();
+                const expectedDate = timestamp.getDate();
+                const expectedDayHeaderText = `${dayHeaderPrefix}${expectedDate} of ${expectedMonth}, ${expectedYear}`;
+
+                assert.strictEqual($dayHeaders.text(), expectedDayHeaderText, 'day header has formatted text');
+            });
+
+            QUnit.test(`Day header should be formatted when dayHeaderFormat is specified at runtime (timestamp=${scenario})`, function(assert) {
+                const items = [{
+                    timestamp,
+                    text: 'A',
+                }];
+
+                this.reinit({
+                    items,
+                });
+
+                this.instance.option('dayHeaderFormat', 'dd of MMMM, yyyy');
+
+                const $dayHeaders = this.getDayHeaders();
+                const expectedMonth = timestamp.toLocaleString(undefined, { month: 'long' });
+                const expectedYear = timestamp.getFullYear();
+                const expectedDate = timestamp.getDate();
+                const expectedDayHeaderText = `${dayHeaderPrefix}${expectedDate} of ${expectedMonth}, ${expectedYear}`;
+
+                assert.strictEqual($dayHeaders.text(), expectedDayHeaderText, 'day header has formatted text');
+            });
         });
 
         QUnit.test('loading indicator should be hidden if isLoading is set to false', function(assert) {
@@ -635,6 +691,17 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($messageGroups.length, 2, 'correct messagegroup count');
             assert.strictEqual($firstMessageGroupBubbles.length, 2, 'correct bubble count');
             assert.strictEqual($secondMessageGroupBubbles.length, 1, 'correct bubble count');
+        });
+
+        QUnit.test('messageTimestampFormat should be passed to message group', function(assert) {
+            this.reinit({
+                items: [{ timestamp: '2024-09-26T14:00:00', text: 'text' }],
+                messageTimestampFormat: 'hh.mm',
+            });
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTimestampFormat'), 'hh.mm');
         });
     });
 
