@@ -1,0 +1,71 @@
+/**
+* DevExtreme (esm/renovation/ui/common/ink_ripple.js)
+* Version: 24.2.0
+* Build date: Tue Oct 22 2024
+*
+* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
+* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
+*/
+import _extends from '@babel/runtime/helpers/esm/extends';
+import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
+import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
+import { createVNode, normalizeProps } from 'inferno';
+
+import { hideWave, initConfig, showWave } from '../../../ui/widget/utils.ink_ripple';
+
+const _excluded = ['config'];
+export const viewFunction = (model) => normalizeProps(createVNode(1, 'div', 'dx-inkripple', null, 1, _extends({}, model.restAttributes)));
+export const InkRippleProps = {
+  config: Object.freeze({}),
+};
+export class InkRipple extends BaseInfernoComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.__getterCache = {};
+    this.hideWave = this.hideWave.bind(this);
+    this.showWave = this.showWave.bind(this);
+  }
+
+  get getConfig() {
+    if (this.__getterCache.getConfig !== undefined) {
+      return this.__getterCache.getConfig;
+    }
+    return this.__getterCache.getConfig = (() => {
+      const {
+        config,
+      } = this.props;
+      return initConfig(config);
+    })();
+  }
+
+  get restAttributes() {
+    const _this$props = this.props;
+    const restProps = _objectWithoutPropertiesLoose(_this$props, _excluded);
+    return restProps;
+  }
+
+  hideWave(opts) {
+    hideWave(this.getConfig, opts);
+  }
+
+  showWave(opts) {
+    showWave(this.getConfig, opts);
+  }
+
+  componentWillUpdate(nextProps, nextState, context) {
+    if (this.props.config !== nextProps.config) {
+      this.__getterCache.getConfig = undefined;
+    }
+  }
+
+  render() {
+    const { props } = this;
+    return viewFunction({
+      props: _extends({}, props),
+      getConfig: this.getConfig,
+      restAttributes: this.restAttributes,
+    });
+  }
+}
+InkRipple.defaultProps = InkRippleProps;
