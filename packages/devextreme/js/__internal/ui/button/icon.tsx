@@ -5,8 +5,8 @@ import {
   createComponentVNode, createFragment, createVNode, Fragment, normalizeProps,
 } from 'inferno';
 
-import { getImageSourceType } from '../../../core/utils/icon';
-import { combineClasses } from '../../utils/combine_classes';
+import { getImageSourceType } from '@js/core/utils/icon';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 
 const _excluded = ['iconTemplate', 'position', 'source'];
 
