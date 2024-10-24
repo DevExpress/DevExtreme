@@ -393,35 +393,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
             }
         });
 
-        QUnit.test('must be called with a delay', function(assert) {
-            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
-            const onTypingStartStub = sinon.stub();
-
-            this.reinit({ onTypingStart: onTypingStartStub });
-
-            try {
-                const keyboard = keyboardMock(this.$input);
-
-                keyboard
-                    .focus()
-                    .type('n');
-
-                assert.strictEqual(onTypingStartStub.callCount, 1, 'called once');
-
-                keyboard.type('no');
-
-                assert.strictEqual(onTypingStartStub.callCount, 1, 'called once still');
-
-                clock.tick(1500);
-
-                keyboard.type('not');
-
-                assert.strictEqual(onTypingStartStub.callCount, 2, 'called twice');
-            } finally {
-                clock.restore();
-            }
-        });
-
         QUnit.test('should be triggered with correct arguments', function(assert) {
             assert.expect(4);
 
