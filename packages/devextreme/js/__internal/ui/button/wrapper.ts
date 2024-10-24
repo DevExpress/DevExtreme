@@ -1,52 +1,138 @@
-/**
-* DevExtreme (esm/renovation/ui/button.j.js)
-* Version: 24.2.0
-* Build date: Tue Oct 22 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
-import registerComponent from '../../core/component_registrator';
-import BaseComponent from '../component_wrapper/button';
-import { Button as ButtonComponent, defaultOptions } from './button';
-export default class Button extends BaseComponent {
-  getProps() {
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+// eslint-disable-next-line import/named
+import { dxElementWrapper } from '../../core/renderer';
+import ValidationEngine from '../../ui/validation_engine';
+import Component from './common/component';
+import type { Button } from '../ui/button';
+import { Option } from './common/types';
+import { getImageSourceType } from '../../core/utils/icon';
+
+export default class ButtonWrapper extends Component {
+  _clickAction!: (...args) => unknown;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get _validationGroupConfig(): any {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return ValidationEngine.getGroupConfig(this._findGroup());
+  }
+
+  getDefaultTemplateNames(): string[] {
+    return ['content'];
+  }
+
+  getSupportedKeyNames(): string[] {
+    return ['space', 'enter'];
+  }
+
+  getProps(): Record<string, unknown> {
     const props = super.getProps();
-    props.onKeyDown = this._wrapKeyDownHandler(props.onKeyDown);
+
+    props.onClick = ({ event }): void => {
+      this._clickAction({ event, validationGroup: this._validationGroupConfig });
+    };
+
+    const iconType = getImageSourceType(props.icon);
+    if (iconType === 'svg') {
+      props.iconTemplate = this._createTemplateComponent(() => props.icon);
+    }
+
     return props;
   }
-  focus() {
-    var _this$viewRef;
-    return (_this$viewRef = this.viewRef) === null || _this$viewRef === void 0 ? void 0 : _this$viewRef.focus(...arguments);
+
+  get _templatesInfo(): Record<string, string> {
+    return { template: 'content' };
   }
-  activate() {
-    var _this$viewRef2;
-    return (_this$viewRef2 = this.viewRef) === null || _this$viewRef2 === void 0 ? void 0 : _this$viewRef2.activate(...arguments);
+
+  _toggleActiveState(_: HTMLElement, value: boolean): void {
+    const button = this.viewRef as Button;
+    value ? button.activate() : button.deactivate();
   }
-  deactivate() {
-    var _this$viewRef3;
-    return (_this$viewRef3 = this.viewRef) === null || _this$viewRef3 === void 0 ? void 0 : _this$viewRef3.deactivate(...arguments);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getSubmitAction(): any {
+    let needValidate = true;
+    let validationStatus = 'valid';
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (this as any)._createAction(({ event, submitInput }) => {
+      if (needValidate) {
+        const validationGroup = this._validationGroupConfig;
+
+        if (validationGroup !== undefined && validationGroup !== '') {
+          const validationResult = validationGroup.validate();
+
+          validationStatus = validationResult.status;
+
+          if (validationResult.status === 'pending') {
+            needValidate = false;
+            this.option('disabled', true);
+
+            validationResult.complete.then(({ status }) => {
+              this.option('disabled', false);
+
+              validationStatus = status;
+              validationStatus === 'valid' && submitInput.click();
+              needValidate = true;
+            });
+          }
+        }
+      }
+
+      validationStatus !== 'valid' && event.preventDefault();
+      event.stopPropagation();
+    });
   }
-  _getActionConfigs() {
-    return {
-      onClick: {
-        excludeValidators: ['readOnly']
-      },
-      onSubmit: {}
-    };
+
+  _initializeComponent(): void {
+    super._initializeComponent();
+    this._addAction('onSubmit', this._getSubmitAction());
+    this._clickAction = this._createClickAction();
   }
-  get _propsInfo() {
-    return {
-      twoWay: [],
-      allowNull: [],
-      elements: ['onSubmit'],
-      templates: ['template', 'iconTemplate'],
-      props: ['activeStateEnabled', 'hoverStateEnabled', 'icon', 'iconPosition', 'onClick', 'onSubmit', 'pressed', 'stylingMode', 'template', 'iconTemplate', 'text', 'type', 'useInkRipple', 'useSubmitBehavior', 'templateData', 'className', 'accessKey', 'disabled', 'focusStateEnabled', 'height', 'hint', 'onKeyDown', 'rtlEnabled', 'tabIndex', 'visible', 'width']
-    };
+
+  _initMarkup(): void {
+    super._initMarkup();
+
+    const $content = (this.$element() as unknown as dxElementWrapper).find('.dx-button-content').first();
+    const $template = $content.children().filter('.dx-template-wrapper');
+    const $input = $content.children().filter('.dx-button-submit-input');
+
+    if ($template.length) {
+      $template.addClass('dx-button-content');
+      $template.append($input);
+      $content.replaceWith($template);
+    }
   }
-  get _viewComponent() {
-    return ButtonComponent;
+
+  _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
+    return super._patchOptionValues({ ...options, templateData: options._templateData });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _findGroup(): any {
+    const $element = this.$element();
+    const validationGroup = this.option('validationGroup');
+    return validationGroup !== undefined && validationGroup !== ''
+      ? validationGroup
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+  }
+
+  _createClickAction(): (...args) => unknown {
+    return this._createActionByOption('onClick', {
+      excludeValidators: ['readOnly'],
+    });
+  }
+
+  _optionChanged(option: Option): void {
+    switch (option.name) {
+      case 'onClick':
+        this._clickAction = this._createClickAction();
+        break;
+      default:
+        break;
+    }
+
+    super._optionChanged(option);
   }
 }
-registerComponent('dxButton', Button);
-Button.defaultOptions = defaultOptions;
+/* eslint-enable @typescript-eslint/no-unsafe-member-access */
