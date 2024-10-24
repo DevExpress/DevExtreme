@@ -9528,7 +9528,7 @@ declare module DevExpress.ui {
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
     /**
-     * [descr:_ui_chat_TypingStartEvent]
+     * [descr:_ui_chat_TypingEndEvent]
      */
     export type TypingEndEvent = DevExpress.events.NativeEventInfo<dxChat> & {
       /**
