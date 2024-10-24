@@ -150,8 +150,6 @@ export class Appointment extends DOMComponent {
     this._renderDragSourceClass();
     this._renderDirection();
 
-    const text = ExpressionUtils.getField(this.option('dataAccessors'), 'text', this.rawAppointment);
-    (this.$element() as any).attr('title', text);
     (this.$element() as any).data('dxAppointmentStartDate', this.option('startDate'));
     (this.$element() as any).attr('role', 'button');
 
