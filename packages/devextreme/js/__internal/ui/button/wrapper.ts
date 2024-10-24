@@ -118,6 +118,7 @@ export default class ButtonWrapper extends ComponentWrapper {
   }
 
   _createClickAction(): (...args) => unknown {
+    // @ts-expect-error
     return this._createActionByOption('onClick', {
       excludeValidators: ['readOnly'],
     });
