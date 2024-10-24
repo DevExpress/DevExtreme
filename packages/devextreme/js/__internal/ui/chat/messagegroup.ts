@@ -83,10 +83,12 @@ class MessageGroup extends Widget<Properties> {
     const { author } = items[0];
     const authorName = author?.name;
     const authorAvatarUrl = author?.avatarUrl;
+    const authorAvatarAlt = author?.avatarAlt;
 
     this._avatar = this._createComponent($avatar, Avatar, {
       name: authorName,
       url: authorAvatarUrl,
+      alt: authorAvatarAlt,
     });
   }
 

@@ -13,6 +13,7 @@ const AVATAR_IMAGE_CLASS = 'dx-avatar-image';
 export interface Properties extends WidgetOptions<Avatar> {
   name?: string;
   url?: string;
+  alt?: string;
 }
 
 class Avatar extends Widget<Properties> {
@@ -23,6 +24,7 @@ class Avatar extends Widget<Properties> {
       ...super._getDefaultOptions(),
       name: 'Unknown User',
       url: '',
+      alt: 'Avatar',
     };
   }
 
@@ -82,10 +84,10 @@ class Avatar extends Widget<Properties> {
   }
 
   _updateAlt(): void {
-    const { name } = this.option();
+    const { alt, name } = this.option();
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._$content?.attr('alt', name || messageLocalization.format('dxAvatar-defaultImageAlt'));
+    this._$content?.attr('alt', alt || name || messageLocalization.format('dxAvatar-defaultImageAlt'));
   }
 
   _isValuableUrl(): boolean {
@@ -119,6 +121,7 @@ class Avatar extends Widget<Properties> {
     const { name } = args;
 
     switch (name) {
+      case 'alt':
       case 'name':
       case 'url':
         this._renderAvatarContent();
