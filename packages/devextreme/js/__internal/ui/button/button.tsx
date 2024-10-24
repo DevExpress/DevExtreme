@@ -44,52 +44,6 @@ const getCssClasses = (model) => {
   return combineClasses(classesMap);
 };
 
-export const viewFunction = (viewModel) => {
-  const {
-    children,
-    iconPosition,
-    iconTemplate: IconTemplate,
-    template: ButtonTemplate,
-    text,
-  } = viewModel.props;
-  const renderText = !viewModel.props.template && !children && text !== '';
-  const isIconLeft = iconPosition === 'left';
-  const iconComponent = !viewModel.props.template && !children && (viewModel.iconSource || viewModel.props.iconTemplate) && createComponentVNode(2, Icon, {
-    source: viewModel.iconSource,
-    position: iconPosition,
-    iconTemplate: IconTemplate,
-  });
-  return normalizeProps(createComponentVNode(2, Widget, _extends({
-    accessKey: viewModel.props.accessKey,
-    activeStateEnabled: viewModel.props.activeStateEnabled,
-    aria: viewModel.aria,
-    className: viewModel.props.className,
-    classes: viewModel.cssClasses,
-    disabled: viewModel.props.disabled,
-    focusStateEnabled: viewModel.props.focusStateEnabled,
-    height: viewModel.props.height,
-    hint: viewModel.props.hint,
-    hoverStateEnabled: viewModel.props.hoverStateEnabled,
-    onActive: viewModel.onActive,
-    onClick: viewModel.onWidgetClick,
-    onInactive: viewModel.onInactive,
-    onKeyDown: viewModel.keyDown,
-    rtlEnabled: viewModel.props.rtlEnabled,
-    tabIndex: viewModel.props.tabIndex,
-    visible: viewModel.props.visible,
-    width: viewModel.props.width,
-  }, viewModel.restAttributes, {
-    children: createVNode(1, 'div', 'dx-button-content', [viewModel.props.template && ButtonTemplate({
-      data: viewModel.buttonTemplateData,
-    }), !viewModel.props.template && children, isIconLeft && iconComponent, renderText && createVNode(1, 'span', 'dx-button-text', text, 0), !isIconLeft && iconComponent, viewModel.props.useSubmitBehavior && createVNode(64, 'input', 'dx-button-submit-input', null, 1, {
-      type: 'submit',
-      tabIndex: -1,
-    }, null, viewModel.submitInputRef), viewModel.props.useInkRipple && createComponentVNode(2, InkRipple, {
-      config: viewModel.inkRippleConfig,
-    }, null, viewModel.inkRippleRef)], 0, null, null, viewModel.contentRef),
-  }), null, viewModel.widgetRef));
-};
-
 export const defaultOptionRules = createDefaultOptionRules([{
   device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
   options: {
@@ -314,28 +268,52 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
   }
 
   render() {
-    const { props } = this;
-    return viewFunction({
-      props: _extends({}, props, {
-        template: getTemplate(props.template),
-        iconTemplate: getTemplate(props.iconTemplate),
-      }),
-      contentRef: this.contentRef,
-      submitInputRef: this.submitInputRef,
-      inkRippleRef: this.inkRippleRef,
-      widgetRef: this.widgetRef,
-      onActive: this.onActive,
-      onInactive: this.onInactive,
-      onWidgetClick: this.onWidgetClick,
-      keyDown: this.keyDown,
-      emitClickEvent: this.emitClickEvent,
-      aria: this.aria,
-      cssClasses: this.cssClasses,
-      iconSource: this.iconSource,
-      inkRippleConfig: this.inkRippleConfig,
-      buttonTemplateData: this.buttonTemplateData,
-      restAttributes: this.restAttributes,
+    const {
+      children,
+      iconPosition,
+      text,
+    } = this.props;
+
+    const ButtonTemplate = getTemplate(this.props.template);
+    const IconTemplate = getTemplate(this.props.iconTemplate);
+
+    const renderText = !this.props.template && !children && text !== '';
+    const isIconLeft = iconPosition === 'left';
+    const iconComponent = !this.props.template && !children && (this.iconSource || this.props.iconTemplate) && createComponentVNode(2, Icon, {
+      source: this.iconSource,
+      position: iconPosition,
+      iconTemplate: IconTemplate,
     });
+
+    return normalizeProps(createComponentVNode(2, Widget, _extends({
+      accessKey: this.props.accessKey,
+      activeStateEnabled: this.props.activeStateEnabled,
+      aria: this.aria,
+      className: this.props.className,
+      classes: this.cssClasses,
+      disabled: this.props.disabled,
+      focusStateEnabled: this.props.focusStateEnabled,
+      height: this.props.height,
+      hint: this.props.hint,
+      hoverStateEnabled: this.props.hoverStateEnabled,
+      onActive: this.onActive,
+      onClick: this.onWidgetClick,
+      onInactive: this.onInactive,
+      onKeyDown: this.keyDown,
+      rtlEnabled: this.props.rtlEnabled,
+      tabIndex: this.props.tabIndex,
+      visible: this.props.visible,
+      width: this.props.width,
+    }, this.restAttributes, {
+      children: createVNode(1, 'div', 'dx-button-content', [this.props.template && ButtonTemplate({
+        data: this.buttonTemplateData,
+      }), !this.props.template && children, isIconLeft && iconComponent, renderText && createVNode(1, 'span', 'dx-button-text', text, 0), !isIconLeft && iconComponent, this.props.useSubmitBehavior && createVNode(64, 'input', 'dx-button-submit-input', null, 1, {
+        type: 'submit',
+        tabIndex: -1,
+      }, null, this.submitInputRef), this.props.useInkRipple && createComponentVNode(2, InkRipple, {
+        config: this.inkRippleConfig,
+      }, null, this.inkRippleRef)], 0, null, null, this.contentRef),
+    }), null, this.widgetRef));
   }
 }
 Button.defaultProps = defaultButtonProps;
