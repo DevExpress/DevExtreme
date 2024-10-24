@@ -1,4 +1,3 @@
-import _extends from '@babel/runtime/helpers/esm/extends';
 import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import {
@@ -30,31 +29,24 @@ export class Icon extends BaseInfernoComponent {
     return this.props.position !== 'left' ? 'dx-icon-right' : '';
   }
 
-  get iconClassName() {
+  get iconClassName(): string {
     const generalClasses = {
       'dx-icon': true,
       [this.cssClass]: !!this.cssClass,
     };
-    const {
-      source,
-    } = this.props;
+    const { source } = this.props;
+
     if (this.sourceType === 'dxIcon') {
-      return combineClasses(_extends({}, generalClasses, {
-        [`dx-icon-${source}`]: true,
-      }));
+      return combineClasses({ ...generalClasses, [`dx-icon-${source}`]: true });
     }
     if (this.sourceType === 'fontIcon') {
-      return combineClasses(_extends({}, generalClasses, {
-        [String(source)]: !!source,
-      }));
+      return combineClasses({ ...generalClasses, [String(source)]: !!source });
     }
     if (this.sourceType === 'image') {
       return combineClasses(generalClasses);
     }
     if (this.sourceType === 'svg') {
-      return combineClasses(_extends({}, generalClasses, {
-        'dx-svg-icon': true,
-      }));
+      return combineClasses({ ...generalClasses, 'dx-svg-icon': true });
     }
     return '';
   }
