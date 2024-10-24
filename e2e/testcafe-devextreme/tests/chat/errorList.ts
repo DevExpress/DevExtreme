@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
+import { ClientFunction } from 'testcafe';
 import { createUser } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
@@ -8,7 +9,10 @@ import { getFullThemeName, testScreenshot } from '../../helpers/themeUtils';
 fixture.disablePageReloads`ChatErrorList`
   .page(url(__dirname, '../container.html'));
 
-test('Errorlist appearance', async (t) => {
+test.clientScripts([
+  { module: 'mockdate' },
+  { content: 'window.MockDate = MockDate;' },
+])('Errorlist appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const chat = new Chat('#container');
 
@@ -29,7 +33,13 @@ test('Errorlist appearance', async (t) => {
   });
 
   const darkTheme = getFullThemeName().replace('light', 'dark');
-  await testScreenshot(t, takeScreenshot, 'Errorlist with long text in error.png', { element: '#container', theme: darkTheme });
+  await testScreenshot(t, takeScreenshot, 'Errorlist with long text in error.png', {
+    element: '#container',
+    theme: darkTheme,
+    themeChanged: async () => {
+      await chat.repaint();
+    },
+  });
 
   await chat.option('rtlEnabled', true);
 
@@ -39,10 +49,14 @@ test('Errorlist appearance', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.set('2024/10/18');
+  })();
+
   const userFirst = createUser(1, 'First');
   const userSecond = createUser(2, 'Second');
   const msInDay = 86400000;
-  const today = new Date().setHours(7, 22, 0, 0);
+  const today = new Date('2024/10/18').setHours(7, 22, 0, 0);
   const yesterday = today - msInDay;
 
   const items = [{
@@ -74,4 +88,9 @@ test('Errorlist appearance', async (t) => {
     height: 600,
     errors: [{ id: 1, message: 'Error Message 1. Error Description...' }],
   });
+  // eslint-disable-next-line @typescript-eslint/require-await
+}).after(async () => {
+  await ClientFunction(() => {
+    (window as any).MockDate.reset();
+  })();
 });

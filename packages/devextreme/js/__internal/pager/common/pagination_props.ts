@@ -1,7 +1,7 @@
 import type { EventCallback } from '../../core/r1/event_callback';
-import { BasePagerDefaultProps, type BasePagerProps } from './base_pager_props';
+import { BasePaginationDefaultProps, type BasePaginationProps } from './base_pagination_props';
 
-export interface PagerProps extends BasePagerProps {
+export interface PaginationProps extends BasePaginationProps {
   [key: string]: unknown;
   pageSize: number;
   pageIndex: number;
@@ -11,8 +11,8 @@ export interface PagerProps extends BasePagerProps {
   pageSizeChangedInternal: EventCallback<number>;
 }
 
-export const PagerDefaultProps: PagerProps = {
-  ...BasePagerDefaultProps,
+export const PaginationDefaultProps: PaginationProps = {
+  ...BasePaginationDefaultProps,
   pageSize: 5,
   pageIndex: 1,
   pageIndexChangedInternal: () => { },

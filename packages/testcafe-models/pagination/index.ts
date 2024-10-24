@@ -8,11 +8,11 @@ import { WidgetName } from '../types';
 import SelectBox from '../selectBox';
 
 const CLASS = {
-  pagerPageSize: 'dx-page-size',
-  pagerPageSizes: 'dx-page-sizes',
-  pagerPrevNavButton: 'dx-prev-button',
-  pagerNextNavButton: 'dx-next-button',
-  pagerPageIndex: 'dx-page-index',
+  paginationPageSize: 'dx-page-size',
+  paginationPageSizes: 'dx-page-sizes',
+  paginationPrevNavButton: 'dx-prev-button',
+  paginationNextNavButton: 'dx-next-button',
+  paginationPageIndex: 'dx-page-index',
 
   info: 'dx-info',
   select: 'dx-selectbox',
@@ -23,21 +23,21 @@ const CLASS = {
   focusedState: 'dx-state-focused',
 };
 
-export default class Pager extends Widget {
+export default class Pagination extends Widget {
   getName(): WidgetName { return 'dxPagination'; }
 
   getPageSize(index: number): SelectableElement {
     return new SelectableElement(this.element
-      .find(`.${CLASS.pagerPageSize}`)
+      .find(`.${CLASS.paginationPageSize}`)
       .nth(index));
   }
 
   getPrevNavButton(): FocusableElement {
-    return new FocusableElement(this.element.find(`.${CLASS.pagerPrevNavButton}`));
+    return new FocusableElement(this.element.find(`.${CLASS.paginationPrevNavButton}`));
   }
 
   getNextNavButton(): FocusableElement {
-    return new FocusableElement(this.element.find(`.${CLASS.pagerNextNavButton}`));
+    return new FocusableElement(this.element.find(`.${CLASS.paginationNextNavButton}`));
   }
 
   getNavPage(pageIndexText: string): NavPage {
@@ -45,7 +45,7 @@ export default class Pager extends Widget {
   }
 
   getPageSizeSelectBox() : SelectBox {
-    return new SelectBox(this.element.find(`.${CLASS.pagerPageSizes} .${CLASS.select}`));
+    return new SelectBox(this.element.find(`.${CLASS.paginationPageSizes} .${CLASS.select}`));
   }
 
   getPopupPageSizes(): Selector {
@@ -53,7 +53,7 @@ export default class Pager extends Widget {
   }
 
   getPageIndexWidget(): Selector {
-    return this.element.find(`.${CLASS.pagerPageIndex}.${CLASS.numberBox}`);
+    return this.element.find(`.${CLASS.paginationPageIndex}.${CLASS.numberBox}`);
   }
 
   getInfoText(): Selector {

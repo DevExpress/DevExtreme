@@ -1,14 +1,14 @@
-import Pager from 'devextreme-testcafe-models/pager';
+import Pagination from 'devextreme-testcafe-models/pagination';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture`Pager Base Properties`
+fixture`Pagination Base Properties`
   .page(url(__dirname, '../container.html'));
 
-test('Pager visibile property', async (t) => {
-  const pager = new Pager('#container');
+test('Pagination visibile property', async (t) => {
+  const pagination = new Pagination('#container');
   await t
-    .expect(pager.element.hasClass('dx-state-invisible'))
+    .expect(pagination.element.hasClass('dx-state-invisible'))
     .ok();
 }).before(async () => createWidget('dxPagination', {
   itemCount: 50,
@@ -16,11 +16,11 @@ test('Pager visibile property', async (t) => {
 }));
 
 test('PageSize selector test', async (t) => {
-  const pager = new Pager('#container');
+  const pagination = new Pagination('#container');
 
   await t
-    .click(pager.getPageSize(1).element)
-    .expect(pager.option('pageCount'))
+    .click(pagination.getPageSize(1).element)
+    .expect(pagination.option('pageCount'))
     .eql(13);
 }).before(async () => createWidget('dxPagination', {
   itemCount: 50,
@@ -30,13 +30,13 @@ test('PageSize selector test', async (t) => {
 }));
 
 test('PageIndex test', async (t) => {
-  const pager = new Pager('#container');
+  const pagination = new Pagination('#container');
 
   await t
-    .expect(pager.option('pageIndex'))
+    .expect(pagination.option('pageIndex'))
     .eql(1)
-    .click(pager.getNavPage('5').element)
-    .expect(pager.option('pageIndex'))
+    .click(pagination.getNavPage('5').element)
+    .expect(pagination.option('pageIndex'))
     .eql(5);
 }).before(async () => createWidget('dxPagination', {
   itemCount: 50,
@@ -45,13 +45,13 @@ test('PageIndex test', async (t) => {
 }));
 
 test('PageIndex correction test', async (t) => {
-  const pager = new Pager('#container');
+  const pagination = new Pagination('#container');
 
   await t
-    .expect(pager.option('pageIndex'))
+    .expect(pagination.option('pageIndex'))
     .eql(10)
-    .click(pager.getPageSize(1).element)
-    .expect(pager.option('pageIndex'))
+    .click(pagination.getPageSize(1).element)
+    .expect(pagination.option('pageIndex'))
     .eql(5);
 }).before(async () => createWidget('dxPagination', {
   itemCount: 50,
