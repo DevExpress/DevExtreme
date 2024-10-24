@@ -53,7 +53,12 @@
         <script>
             $(function() {
                 $("#button").dxChat({
-                    
+                    onTypingStart: (e) => {
+                        console.log('onTypingStart');
+                    },
+                    onTypingEnd: (e) => {
+                        console.log('onTypingEnd');
+                    }
                 });
             });
         </script>
