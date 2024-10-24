@@ -185,7 +185,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     
     
      */
-    @Output() onDisposing: EventEmitter<EventInfo>;
+    @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
     
