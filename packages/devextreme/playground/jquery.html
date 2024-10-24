@@ -52,13 +52,9 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxChat({
-                    onTypingStart: (e) => {
-                        console.log('onTypingStart');
-                    },
-                    onTypingEnd: (e) => {
-                        console.log('onTypingEnd');
-                    }
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
         </script>
