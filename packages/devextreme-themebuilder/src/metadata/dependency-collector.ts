@@ -20,12 +20,6 @@ const REGEXP_IS_DTS = /\.d\.ts$/;
 export default class DependencyCollector {
   flatStylesDependencyTree: FlatStylesDependencies = {};
 
-/*  tsConfig = JSON.parse(
-      readFileSync(path.resolve(__dirname, '../../../devextreme/js/__internal/tsconfig.json'), 'utf8')
-          .replace(/\/\/[^\n]+/mg, '')
-          .replace(/,\s*([}\]])/mg, '$1')
-  );*/
-
   scriptsCache: ScriptsDependencyCache = {};
 
   themes = ['generic', 'material'];
@@ -58,11 +52,6 @@ export default class DependencyCollector {
     let result: string[] = [];
     const { widget, dependencies } = node;
 
-    if (this.flatStylesDependencyTree[widget] !== undefined) {
-      const cachedWidgets = this.flatStylesDependencyTree[widget];
-      return DependencyCollector.getUniqueWidgets(cachedWidgets, widget);
-    }
-
     Object.entries(dependencies).forEach(([path, nextNode]) => {
       const cached = cache.get(path);
 
@@ -79,6 +68,7 @@ export default class DependencyCollector {
 
     if (widget) {
       this.flatStylesDependencyTree[widget] = [...result];
+
       if (!result.includes(widget)) {
         result.push(widget);
       }
@@ -170,12 +160,8 @@ export default class DependencyCollector {
   }
 
   collect(): void {
-    let START = Date.now();
     const fullDependencyTree = this.getFullDependencyTree(path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js'));
-    console.log('----TIME 1------>', (Date.now() - START) / 1000);
-    START = Date.now();
     this.treeProcessor(fullDependencyTree);
-    console.log('----TIME 2------>', (Date.now() - START) / 1000);
     this.validate();
   }
 }
