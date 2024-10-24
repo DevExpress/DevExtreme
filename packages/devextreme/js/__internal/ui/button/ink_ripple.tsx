@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/ui/common/ink_ripple.js)
-* Version: 24.2.0
-* Build date: Tue Oct 22 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import _extends from '@babel/runtime/helpers/esm/extends';
 import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
@@ -14,10 +6,14 @@ import { createVNode, normalizeProps } from 'inferno';
 import { hideWave, initConfig, showWave } from '../../../ui/widget/utils.ink_ripple';
 
 const _excluded = ['config'];
+
 export const viewFunction = (model) => normalizeProps(createVNode(1, 'div', 'dx-inkripple', null, 1, _extends({}, model.restAttributes)));
+
 export const InkRippleProps = {
   config: Object.freeze({}),
+
 };
+
 export class InkRipple extends BaseInfernoComponent {
   constructor(props) {
     super(props);
