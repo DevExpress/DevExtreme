@@ -117,7 +117,6 @@ export interface MentionTemplateData {
 /**
  * @docid
  * @namespace DevExpress.ui.dxHtmlEditor
- * @type object
  * @public
  */
 export type Converter = {
