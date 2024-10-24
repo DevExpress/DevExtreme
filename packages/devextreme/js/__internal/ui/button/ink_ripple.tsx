@@ -9,10 +9,21 @@ const _excluded = ['config'];
 
 export const viewFunction = (model) => normalizeProps(createVNode(1, 'div', 'dx-inkripple', null, 1, _extends({}, model.restAttributes)));
 
-export const InkRippleProps = {
-  config: Object.freeze({}),
+export interface InkRippleConfig {
+  isCentered?: boolean;
+  useHoldAnimation?: boolean;
+  waveSizeCoefficient?: number;
+  wavesNumber?: number;
+  durations?: {
+    showingScale: number;
+    hidingScale: number;
+    hidingOpacity: number;
+  };
+}
 
-};
+export interface InkRippleProps {
+  config?: InkRippleConfig;
+}
 
 export class InkRipple extends BaseInfernoComponent {
   constructor(props) {
@@ -64,4 +75,7 @@ export class InkRipple extends BaseInfernoComponent {
     });
   }
 }
-InkRipple.defaultProps = InkRippleProps;
+
+InkRipple.defaultProps = {
+  config: {},
+};
