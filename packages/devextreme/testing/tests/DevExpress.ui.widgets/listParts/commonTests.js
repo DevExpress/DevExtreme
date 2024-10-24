@@ -3,7 +3,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import errors from 'ui/widget/ui.errors';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';

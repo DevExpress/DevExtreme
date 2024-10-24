@@ -918,7 +918,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
 
   private scrollToRowElement(key) {
     const rowIndex = this._dataController.getRowIndexByKey(key);
-    // @ts-expect-error
     const $row = $(this.getRow(rowIndex));
 
     return this.scrollToElementVertically($row);

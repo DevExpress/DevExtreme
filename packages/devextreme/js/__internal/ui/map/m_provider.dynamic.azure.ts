@@ -477,7 +477,6 @@ const AzureProvider = DynamicProvider.inherit({
 });
 
 /// #DEBUG
-// @ts-expect-error
 AzureProvider.remapConstant = (newValue: string): void => {
   AZURE_JS_URL = newValue;
   AZURE_CSS_URL = newValue;

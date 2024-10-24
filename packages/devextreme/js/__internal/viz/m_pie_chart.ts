@@ -250,7 +250,7 @@ const dxPieChart = BaseChart.inherit({
 
     const items = [];
     _each(itemsByArgument, (_, points) => {
-      (points as any).forEach((point, index) => {
+      points.forEach((point, index) => {
         if (index === 0) {
           items.push(this._getLegendOptions(point) as never);
           return;

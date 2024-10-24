@@ -1,6 +1,5 @@
 import Class from '@js/core/class';
 import { noop } from '@js/core/utils/common';
-// @ts-expect-error
 import { compileGetter, toComparable } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { Deferred, when } from '@js/core/utils/deferred';

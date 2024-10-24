@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const renderer = require('core/renderer');
-const eventsEngine = require('events/core/events_engine');
-const fx = require('animation/fx');
-const translator = require('animation/translator');
-const animationFrame = require('animation/frame');
-const support = require('core/utils/support');
-const positionUtils = require('animation/position');
+import $ from 'jquery';
+import renderer from 'core/renderer';
+import eventsEngine from 'events/core/events_engine';
+import fx from 'animation/fx';
+import translator from 'animation/translator';
+import animationFrame from 'animation/frame';
+import positionUtils from 'animation/position';
+import support from '__internal/core/utils/m_support';
 
 QUnit.testStart(function() {
     const markup =

@@ -1461,7 +1461,6 @@ export class KeyboardNavigationController extends modules.ViewController {
           .removeAttr('tabindex');
       }
 
-      // @ts-expect-error
       eventsEngine.one($focusElement, 'blur', (e) => {
         if (e.relatedTarget) {
           $focusElement
@@ -2145,7 +2144,6 @@ export class KeyboardNavigationController extends modules.ViewController {
 
           const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
-          // @ts-expect-error
           eventsEngine.one($widgetContainer, 'focusout', () => {
             // @ts-expect-error
             eventsEngine.trigger($input, 'change');

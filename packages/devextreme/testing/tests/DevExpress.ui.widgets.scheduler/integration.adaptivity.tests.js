@@ -8,7 +8,7 @@ import {
     TOOLBAR_BOTTOM_LOCATION } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import 'ui/switch';
 
 import 'generic_light.css!';

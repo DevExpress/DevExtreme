@@ -4,7 +4,7 @@ import positionUtils from 'animation/position';
 import { locate } from 'animation/translator';
 import 'generic_light.css!';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import { Template } from 'core/templates/template';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
