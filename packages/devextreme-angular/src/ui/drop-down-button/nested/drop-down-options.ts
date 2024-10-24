@@ -19,7 +19,7 @@ import DOMComponent from 'devextreme/core/dom_component';
 import dxPopup from 'devextreme/ui/popup';
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { event, EventInfo } from 'devextreme/events/index';
-import { Component } from 'devextreme/core/component';
+import { Component as CoreComponent } from 'devextreme/core/component';
 import { PositionConfig } from 'devextreme/animation/position';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
@@ -253,10 +253,10 @@ export class DxoDropDownButtonDropDownOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get onInitialized(): ((e: { component: Component<any>, element: any }) => void) {
+    get onInitialized(): ((e: { component: CoreComponent<any>, element: any }) => void) {
         return this._getOption('onInitialized');
     }
-    set onInitialized(value: ((e: { component: Component<any>, element: any }) => void)) {
+    set onInitialized(value: ((e: { component: CoreComponent<any>, element: any }) => void)) {
         this._setOption('onInitialized', value);
     }
 

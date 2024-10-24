@@ -284,10 +284,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get dropDownOptions(): dxPopoverOptions {
+    get dropDownOptions(): dxPopoverOptions<any> {
         return this._getOption('dropDownOptions');
     }
-    set dropDownOptions(value: dxPopoverOptions) {
+    set dropDownOptions(value: dxPopoverOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
 
@@ -1215,7 +1215,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownOptionsChange: EventEmitter<dxPopoverOptions>;
+    @Output() dropDownOptionsChange: EventEmitter<dxPopoverOptions<any>>;
 
     /**
     

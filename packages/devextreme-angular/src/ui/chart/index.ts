@@ -26,8 +26,7 @@ import DataSource from 'devextreme/data/data_source';
 import * as LocalizationTypes from 'devextreme/localization';
 import * as CommonChartTypes from 'devextreme/common/charts';
 import { dxChartAnnotationConfig, dxChartCommonAnnotationConfig, chartPointAggregationInfoObject, chartSeriesObject, chartPointObject, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/chart';
-import { ScaleBreak, Font, ChartsColor, LegendItem } from 'devextreme/common/charts';
-import { dxChartSeriesTypes.CommonSeries.label, dxChartSeriesTypes.CommonSeries.point } from 'UNKNOWN_MODULE';
+import { ScaleBreak, Font, ChartsColor, SeriesLabel, SeriesPoint, LegendItem } from 'devextreme/common/charts';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { ChartSeries } from 'devextreme/viz/common';
@@ -452,10 +451,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get customizeLabel(): ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.label) {
+    get customizeLabel(): ((pointInfo: any) => SeriesLabel) {
         return this._getOption('customizeLabel');
     }
-    set customizeLabel(value: ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.label)) {
+    set customizeLabel(value: ((pointInfo: any) => SeriesLabel)) {
         this._setOption('customizeLabel', value);
     }
 
@@ -465,10 +464,10 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get customizePoint(): ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.point) {
+    get customizePoint(): ((pointInfo: any) => SeriesPoint) {
         return this._getOption('customizePoint');
     }
-    set customizePoint(value: ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.point)) {
+    set customizePoint(value: ((pointInfo: any) => SeriesPoint)) {
         this._setOption('customizePoint', value);
     }
 
@@ -1192,14 +1191,14 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeLabelChange: EventEmitter<((pointInfo: any) => dxChartSeriesTypes.CommonSeries.label)>;
+    @Output() customizeLabelChange: EventEmitter<((pointInfo: any) => SeriesLabel)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizePointChange: EventEmitter<((pointInfo: any) => dxChartSeriesTypes.CommonSeries.point)>;
+    @Output() customizePointChange: EventEmitter<((pointInfo: any) => SeriesPoint)>;
 
     /**
     

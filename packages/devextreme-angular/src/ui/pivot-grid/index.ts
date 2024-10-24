@@ -20,7 +20,8 @@ import {
 } from '@angular/core';
 
 
-import { PivotGridDataSource, PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
+import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
+import { PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
 import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/pivot_grid';
 

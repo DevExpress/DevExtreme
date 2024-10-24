@@ -482,10 +482,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get searchEditorOptions(): dxTextBoxOptions {
+    get searchEditorOptions(): dxTextBoxOptions<any> {
         return this._getOption('searchEditorOptions');
     }
-    set searchEditorOptions(value: dxTextBoxOptions) {
+    set searchEditorOptions(value: dxTextBoxOptions<any>) {
         this._setOption('searchEditorOptions', value);
     }
 
@@ -1023,7 +1023,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions>;
+    @Output() searchEditorOptionsChange: EventEmitter<dxTextBoxOptions<any>>;
 
     /**
     
