@@ -532,6 +532,7 @@
         width: $grid-command-expand-column-width;
         min-width: $grid-command-expand-column-width;
         max-width: $grid-command-expand-column-width;
+        z-index: 1;
 
         @include user-select(none);
       }
