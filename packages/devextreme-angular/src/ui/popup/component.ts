@@ -578,7 +578,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onContentReady: EventEmitter<EventInfo>;
+    @Output() onContentReady: EventEmitter<EventInfo<any>>;
 
     /**
     
@@ -586,7 +586,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onDisposing: EventEmitter<EventInfo>;
+    @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
     
@@ -594,7 +594,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onHidden: EventEmitter<EventInfo>;
+    @Output() onHidden: EventEmitter<EventInfo<any>>;
 
     /**
     
@@ -658,7 +658,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
     
      */
-    @Output() onShown: EventEmitter<EventInfo>;
+    @Output() onShown: EventEmitter<EventInfo<any>>;
 
     /**
     

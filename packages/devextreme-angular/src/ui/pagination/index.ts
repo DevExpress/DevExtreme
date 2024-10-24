@@ -272,7 +272,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
     
      */
-    @Output() onContentReady: EventEmitter<EventInfo>;
+    @Output() onContentReady: EventEmitter<EventInfo<any>>;
 
     /**
     
@@ -280,7 +280,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
     
      */
-    @Output() onDisposing: EventEmitter<EventInfo>;
+    @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
     
