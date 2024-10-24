@@ -1,8 +1,2 @@
-import { TemplateBase } from './template_base';
-
-export class ChildDefaultTemplate extends TemplateBase {
-    constructor(name) {
-        super();
-        this.name = name;
-    }
-}
+// deprecated
+export { ChildDefaultTemplate } from '../../__internal/core/templates/m_child_default_template';

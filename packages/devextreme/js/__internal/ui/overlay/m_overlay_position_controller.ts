@@ -10,10 +10,11 @@ import {
   isString,
   isWindow,
 } from '@js/core/utils/type';
-import { getWindow } from '@js/core/utils/window';
 import swatch from '@js/ui/widget/swatch_container';
 
-const window = getWindow();
+import windowUtils from '../../core/utils/m_window';
+
+const window = windowUtils.getWindow();
 
 const OVERLAY_POSITION_ALIASES = {
   top: { my: 'top center', at: 'top center' },
@@ -236,7 +237,6 @@ class OverlayPositionController {
     if (positionOf) {
       return $(positionOf);
     }
-    // @ts-expect-error
     return $(window);
   }
 

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import animationFrame from 'animation/frame';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'generic_light.css!';

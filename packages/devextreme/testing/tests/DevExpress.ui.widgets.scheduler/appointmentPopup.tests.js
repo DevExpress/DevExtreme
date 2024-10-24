@@ -3,7 +3,7 @@ import 'generic_light.css!';
 import { initTestMarkup, createWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 import $ from 'jquery';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import SelectBox from 'ui/select_box';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';

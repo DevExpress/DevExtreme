@@ -10,7 +10,6 @@ import { extend } from '@js/core/utils/extend';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
-import { nativeScrolling } from '@js/core/utils/support';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
@@ -18,6 +17,7 @@ import scrollEvents from '@js/events/gesture/emitter.gesture.scroll';
 import { addNamespace } from '@js/events/utils/index';
 import { getElementLocationInternal } from '@js/renovation/ui/scroll_view/utils/get_element_location_internal';
 
+import supportUtils from '../../core/utils/m_support';
 import { deviceDependentOptions } from './m_scrollable.device';
 import NativeStrategy from './m_scrollable.native';
 import { SimulatedStrategy } from './m_scrollable.simulated';
@@ -61,7 +61,7 @@ const Scrollable = (DOMComponent as any).inherit({
     return this.callBase().concat(deviceDependentOptions(), [
       {
         device() {
-          return nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
+          return supportUtils.nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
         },
         options: {
           useSimulatedScrollbar: true,

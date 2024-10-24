@@ -918,7 +918,7 @@ const XmlaStore = Class.inherit((function () {
     };
 
     each($(xml).find('row'), function () {
-      const $row = $(this as any);
+      const $row = $(this);
       const type = $row.children('DIMENSION_TYPE').text();
       const dimensionName = type === MD_DIMTYPE_MEASURE ? MEASURE_DEMENSION_KEY : $row.children('DIMENSION_UNIQUE_NAME').text();
 

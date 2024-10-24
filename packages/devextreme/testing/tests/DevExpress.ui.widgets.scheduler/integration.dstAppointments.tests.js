@@ -6,7 +6,7 @@ import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import '__internal/scheduler/m_scheduler';
 
 import 'generic_light.css!';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 
 QUnit.testStart(() => initTestMarkup());
 const isDeviceDesktop = function(assert) {

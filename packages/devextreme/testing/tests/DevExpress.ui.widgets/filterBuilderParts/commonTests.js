@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { isRenderer } from 'core/utils/type';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import config from 'core/config';
 import renderer from 'core/renderer';
 import fields from '../../../helpers/filterBuilderTestData.js';

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import ArrayStore from 'data/array_store';
 import Autocomplete from 'ui/autocomplete';
 import config from 'core/config';
-import devices from 'core/devices';
+import devices from '__internal/core/m_devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
