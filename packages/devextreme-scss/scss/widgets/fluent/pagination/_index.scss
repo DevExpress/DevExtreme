@@ -4,22 +4,23 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../../base/pager";
+@use "../../base/pagination";
 @use "../gridBase/sizes" as *;
 
 // adduse
 
 
-.dx-pager {
-  padding: $material-pager-paddings $material-grid-base-cell-horizontal-padding;
+.dx-pager,
+.dx-pagination {
+  padding: $fluent-pagination-paddings $fluent-grid-base-cell-horizontal-padding;
 
   &.dx-light-mode {
     .dx-page-sizes {
-      min-width: $material-pager-light-pagesizes-min-width;
+      min-width: $fluent-pagination-light-pagesizes-min-width;
     }
 
     .dx-page-index {
-      min-width: $material-pager-light-pageindex-min-width;
+      min-width: $fluent-pagination-light-pageindex-min-width;
     }
 
     .dx-pages {
@@ -36,19 +37,19 @@
 
   .dx-pages {
     .dx-page {
-      padding: $material-pager-page-padding;
-      line-height: $material-pager-page-line-height;
+      padding: $fluent-pagination-page-padding;
+      line-height: $fluent-pagination-page-line-height;
     }
 
     .dx-separator {
-      padding-left: $material-pager-separator-paddings;
-      padding-right: $material-pager-separator-paddings;
+      padding-left: $fluent-pagination-separator-paddings;
+      padding-right: $fluent-pagination-separator-paddings;
     }
 
     .dx-navigate-button {
       width: 9px;
-      height: $material-pager-navbutton-height;
-      padding: $material-pager-navbutton-paddings;
+      height: $fluent-pagination-navbutton-height;
+      padding: $fluent-pagination-navbutton-paddings;
     }
 
     .dx-prev-button {
@@ -61,16 +62,16 @@
 
     .dx-prev-button,
     .dx-next-button {
-      @include dx-icon-font-centered-sizing(21px);
+      @include dx-icon-font-centered-sizing($fluent-pagination-navbutton-icon-size);
     }
   }
 
   .dx-page,
   .dx-page-size {
-    font-size: $material-pager-page-font-size;
+    font-size: $fluent-pagination-page-font-size;
 
     &:hover {
-      background-color: $pager-page-hovered-bg;
+      background-color: $pagination-page-hovered-bg;
     }
 
     border-radius: 20px;
@@ -82,16 +83,16 @@
       margin-left: 0;
     }
 
-    padding: $material-pager-page-padding;
-    line-height: $material-pager-page-line-height;
+    padding: $fluent-pagination-page-padding;
+    line-height: $fluent-pagination-page-line-height;
   }
 
   .dx-pages,
   .dx-page-sizes {
     .dx-selection {
       font-weight: 500;
-      background-color: $pager-page-selected-bg;
-      color: $pager-page-selected-color;
+      background-color: $pagination-page-selected-bg;
+      color: $pagination-page-selected-color;
     }
   }
 }

@@ -6,7 +6,7 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
 import { createRef as infernoCreateRef } from 'inferno';
 
-import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
+import { PAGINATION_PAGE_SIZES_CLASS } from '../common/consts';
 import type { PaginationProps } from '../common/pagination_props';
 import { PaginationDefaultProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
@@ -96,7 +96,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
       isLargeDisplayMode,
     } = this.props;
     return (
-      <div ref={this.htmlRef} className={PAGER_PAGE_SIZES_CLASS}>
+      <div ref={this.htmlRef} className={PAGINATION_PAGE_SIZES_CLASS}>
         {isLargeDisplayMode && (
         <PageSizeLarge
           allowedPageSizes={this.getNormalizedPageSizes()}

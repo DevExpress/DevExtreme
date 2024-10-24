@@ -3,14 +3,15 @@
 // adduse
 
 
-$pager-paddings: 8px;
-$pager-info-paddings: 9px;
+$pagination-paddings: 8px;
+$pagination-info-paddings: 9px;
 
-.dx-pager {
+.dx-pager,
+.dx-pagination {
   overflow: hidden;
   width: 100%;
-  padding-top: $pager-paddings;
-  padding-bottom: $pager-paddings;
+  padding-top: $pagination-paddings;
+  padding-bottom: $pagination-paddings;
   line-height: normal;
 
   @include user-select(none);
@@ -39,7 +40,7 @@ $pager-info-paddings: 9px;
 
     .dx-info {
       display: inline-block;
-      margin-right: $pager-info-paddings;
+      margin-right: $pagination-info-paddings;
       opacity: 0.7;
     }
 
@@ -49,7 +50,7 @@ $pager-info-paddings: 9px;
       cursor: pointer;
       display: inline-block;
       vertical-align: top;
-      padding: $pager-paddings - 1px 13px;
+      padding: $pagination-paddings - 1px 13px;
       box-sizing: content-box;
 
       &.dx-button-disable {
@@ -117,7 +118,9 @@ $pager-info-paddings: 9px;
 }
 
 .dx-rtl .dx-pager,
-.dx-pager.dx-rtl {
+.dx-pager.dx-rtl,
+.dx-rtl .dx-pagination,
+.dx-pagination.dx-rtl {
   .dx-pages {
     float: left;
     direction: ltr;
@@ -132,7 +135,7 @@ $pager-info-paddings: 9px;
 
     .dx-info {
       direction: rtl;
-      margin-left: $pager-info-paddings;
+      margin-left: $pagination-info-paddings;
       margin-right: 0;
     }
   }

@@ -93,7 +93,8 @@ function() {
         const $pageSizeButton = $pagination.find('.dx-page-size').first();
         const $pageNumberButton = $pagination.find('.dx-page').eq(2);
 
-        assert.ok($pagination.hasClass('dx-pager'), 'pagination class');
+        assert.notOk($pagination.hasClass('dx-pager'), 'compatibility pager class');
+        assert.ok($pagination.hasClass('dx-pagination'), 'pagination class');
         assert.notStrictEqual($pagination.css('display'), 'none', 'element is visible');
 
         assert.strictEqual($pagination.find('.dx-pages').length, 1, 'pages chooser element');
@@ -167,7 +168,7 @@ function() {
 
         instance._render();
 
-        assert.equal($('.' + 'dx-pager').length, 1, 'drawn one pagination only');
+        assert.equal($('.' + 'dx-pagination').length, 1, 'drawn one pagination only');
     });
 
 
@@ -413,7 +414,7 @@ function() {
     QUnit.test('Pagination is not displayed when visible is false', function(assert) {
         const $pagination = $('#container').dxPagination({ maxPagesCount: 8, pageCount: 10, allowedPageSizes: [5, 10, 20], visible: false });
 
-        assert.strictEqual($('.' + 'dx-pager').length, 1, 'pagination is rendered');
+        assert.strictEqual($('.' + 'dx-pagination').length, 1, 'pagination is rendered');
         assert.equal($pagination.css('display'), 'none', 'pagination is hidden');
     });
 
@@ -1650,16 +1651,16 @@ function() {
         localization.loadMessages(dictionary);
         localization.locale('en');
 
-        const pagerElement = $('#container').dxPagination({
+        const paginationElement = $('#container').dxPagination({
             allowedPageSizes: ['all'],
             showNavigationButtons: true,
             showInfo: true
         });
 
-        let pageSize = pagerElement.find('.dx-page-size');
-        let buttonNext = pagerElement.find('.dx-next-button');
-        let buttonPrev = pagerElement.find('.dx-prev-button');
-        let page = pagerElement.find('.dx-page');
+        let pageSize = paginationElement.find('.dx-page-size');
+        let buttonNext = paginationElement.find('.dx-next-button');
+        let buttonPrev = paginationElement.find('.dx-prev-button');
+        let page = paginationElement.find('.dx-page');
 
         assert.equal(pageSize.attr('aria-label'), dictionary['en']['dxPagination-pageSize'].replace('{0}', dictionary['en']['dxPagination-pageSizesAllText']), 'correct aria-label for page size on initial render');
         assert.equal(page.attr('aria-label'), dictionary['en']['dxPagination-page'].replace('{0}', '1'), 'correct aria-label for page on initial render');
@@ -1667,12 +1668,12 @@ function() {
         assert.equal(buttonPrev.attr('aria-label'), dictionary['en']['dxPagination-prevPage'], 'correct aria-label for prev page on initial render');
 
         localization.locale('fr');
-        pagerElement.dxPagination('instance').repaint();
+        paginationElement.dxPagination('instance').repaint();
 
-        pageSize = pagerElement.find('.dx-page-size');
-        buttonNext = pagerElement.find('.dx-next-button');
-        buttonPrev = pagerElement.find('.dx-prev-button');
-        page = pagerElement.find('.dx-page');
+        pageSize = paginationElement.find('.dx-page-size');
+        buttonNext = paginationElement.find('.dx-next-button');
+        buttonPrev = paginationElement.find('.dx-prev-button');
+        page = paginationElement.find('.dx-page');
 
         assert.equal(pageSize.attr('aria-label'), dictionary['fr']['dxPagination-pageSize'].replace('{0}', dictionary['fr']['dxPagination-pageSizesAllText']), 'correct aria-label for page size on locale change');
         assert.equal(page.attr('aria-label'), dictionary['fr']['dxPagination-page'].replace('{0}', '1'), 'correct aria-label for page on locale change');
