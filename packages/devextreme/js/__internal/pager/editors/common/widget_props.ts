@@ -1,6 +1,6 @@
+import { BaseWidgetDefaultProps } from '@ts/core/r1/base_props';
 import type { RefObject } from 'inferno';
 
-import { BaseWidgetDefaultProps } from '../../base_props';
 import type { BaseWidgetProps } from './base_widget_props';
 
 const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
