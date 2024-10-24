@@ -87,6 +87,8 @@ safeSizeTest('Headers navigation by Tab key when there are fixed columns', async
   const headersScrollContainer = headers.getContent();
   const headerRow = headers.getHeaderRow(0);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // assert
   await checkScrollPadding(t, headersScrollContainer, '130px', '285px');
 
@@ -140,6 +142,8 @@ safeSizeTest('Headers navigation by Shift and Tab keys when there are fixed colu
   const headersScrollContainer = headers.getContent();
   const headerRow = headers.getHeaderRow(0);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // assert
   await checkScrollPadding(t, headersScrollContainer, '130px', '285px');
 
@@ -191,6 +195,8 @@ safeSizeTest('Data cells navigation by Tab key when there are fixed columns', as
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const scrollContainer = dataGrid.getScrollContainer();
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.click(dataGrid.getDataCell(0, 0).element);
   await navigateToNextCell(t, dataGrid.getDataCell(0, 1), scrollContainer);
@@ -225,6 +231,8 @@ safeSizeTest('Data cells navigation by Shift and Tab keys when there are fixed c
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const scrollContainer = dataGrid.getScrollContainer();
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t.click(dataGrid.getDataCell(0, 6).element);
