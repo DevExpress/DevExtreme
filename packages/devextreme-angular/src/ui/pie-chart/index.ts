@@ -25,8 +25,7 @@ import {
 import DataSource from 'devextreme/data/data_source';
 import * as LocalizationTypes from 'devextreme/localization';
 import { dxPieChartAnnotationConfig, dxPieChartCommonAnnotationConfig, PieChartLegendItem, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, PieChartSeries } from 'devextreme/viz/pie_chart';
-import { ChartsColor, Font } from 'devextreme/common/charts';
-import { dxChartSeriesTypes.CommonSeries.label, dxChartSeriesTypes.CommonSeries.point } from 'UNKNOWN_MODULE';
+import { ChartsColor, Font, SeriesLabel, SeriesPoint } from 'devextreme/common/charts';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
@@ -229,10 +228,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get customizeLabel(): ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.label) {
+    get customizeLabel(): ((pointInfo: any) => SeriesLabel) {
         return this._getOption('customizeLabel');
     }
-    set customizeLabel(value: ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.label)) {
+    set customizeLabel(value: ((pointInfo: any) => SeriesLabel)) {
         this._setOption('customizeLabel', value);
     }
 
@@ -242,10 +241,10 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Input()
-    get customizePoint(): ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.point) {
+    get customizePoint(): ((pointInfo: any) => SeriesPoint) {
         return this._getOption('customizePoint');
     }
-    set customizePoint(value: ((pointInfo: any) => dxChartSeriesTypes.CommonSeries.point)) {
+    set customizePoint(value: ((pointInfo: any) => SeriesPoint)) {
         this._setOption('customizePoint', value);
     }
 
@@ -774,14 +773,14 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeLabelChange: EventEmitter<((pointInfo: any) => dxChartSeriesTypes.CommonSeries.label)>;
+    @Output() customizeLabelChange: EventEmitter<((pointInfo: any) => SeriesLabel)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizePointChange: EventEmitter<((pointInfo: any) => dxChartSeriesTypes.CommonSeries.point)>;
+    @Output() customizePointChange: EventEmitter<((pointInfo: any) => SeriesPoint)>;
 
     /**
     

@@ -24,10 +24,10 @@ import {
 } from '@angular/core';
 
 
+import dxDateBox from 'devextreme/ui/date_box';
 import * as LocalizationTypes from 'devextreme/localization';
 import { TextEditorButton } from 'devextreme/common';
-import { dxCalendarOptions } from 'devextreme/ui/button';
-import { dxDateBox } from 'UNKNOWN_MODULE';
+import { dxCalendarOptions } from 'devextreme/ui/calendar';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/date_box';
 
