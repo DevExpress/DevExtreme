@@ -1,4 +1,3 @@
-import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import {
   createComponentVNode, createFragment, createVNode, Fragment, normalizeProps,
@@ -7,8 +6,6 @@ import {
 import { getImageSourceType } from '@js/core/utils/icon';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import { getTemplate } from '@ts/core/r1/utils';
-
-const _excluded = ['iconTemplate', 'position', 'source'];
 
 export const IconProps = {
   position: 'left',
@@ -52,8 +49,12 @@ export class Icon extends BaseInfernoComponent {
   }
 
   get restAttributes() {
-    const _this$props = this.props;
-    const restProps = _objectWithoutPropertiesLoose(_this$props, _excluded);
+    const restProps = {...this.props};
+
+    ['iconTemplate', 'position', 'source'].forEach((excluded) => {
+      delete restProps[excluded];
+    });
+
     return restProps;
   }
 

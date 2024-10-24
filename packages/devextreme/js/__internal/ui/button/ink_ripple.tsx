@@ -1,9 +1,6 @@
-import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 
 import { hideWave, initConfig, showWave } from '@js/ui/widget/utils.ink_ripple';
-
-const _excluded = ['config'];
 
 export interface InkRippleConfig {
   isCentered?: boolean;
@@ -47,8 +44,8 @@ export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
   }
 
   get restAttributes() {
-    const _this$props = this.props;
-    const restProps = _objectWithoutPropertiesLoose(_this$props, _excluded);
+    const restProps = { ...this.props };
+    delete restProps.config;
     return restProps;
   }
 
