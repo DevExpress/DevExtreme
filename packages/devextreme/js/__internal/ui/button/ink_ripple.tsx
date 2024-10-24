@@ -23,8 +23,8 @@ export interface InkRippleProps {
   config?: InkRippleConfig;
 }
 
-export class InkRipple extends BaseInfernoComponent {
-  constructor(props) {
+export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
+  constructor(props: InkRippleProps) {
     super(props);
     this.state = {};
     this.__getterCache = {};
