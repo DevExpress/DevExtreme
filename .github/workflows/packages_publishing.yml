@@ -56,9 +56,13 @@ jobs:
           token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
           path: deps-scanner
 
+      - name: Build deps scanner
+        working-directory: deps-scanner
+        run: dotnet build npmDepsScanner.csproj /p:Configuration=Release
+
       - name: Run deps scanner
         run: |
-          ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+          ./deps-scanner/bin/Release/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
           mkdir -p ./artifacts/deps-scanner
           cp reportGithub.json ./artifacts/deps-scanner/
 
