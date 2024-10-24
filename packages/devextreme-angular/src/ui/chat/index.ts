@@ -24,7 +24,7 @@ import {
 
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ChatError, DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent, User } from 'devextreme/ui/chat';
+import { ChatError, DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 
 import DxChat from 'devextreme/ui/chat';
 
@@ -301,6 +301,22 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
+     * [descr:dxChatOptions.onTypingEnd]
+    
+    
+     */
+    @Output() onTypingEnd: EventEmitter<TypingEndEvent>;
+
+    /**
+    
+     * [descr:dxChatOptions.onTypingStart]
+    
+    
+     */
+    @Output() onTypingStart: EventEmitter<TypingStartEvent>;
+
+    /**
+    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
@@ -463,6 +479,8 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'messageSend', emit: 'onMessageSend' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+            { subscribe: 'typingEnd', emit: 'onTypingEnd' },
+            { subscribe: 'typingStart', emit: 'onTypingStart' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'dataSourceChange' },

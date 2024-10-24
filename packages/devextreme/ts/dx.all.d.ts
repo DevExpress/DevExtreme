@@ -9527,6 +9527,27 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChat> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
+    /**
+     * [descr:_ui_chat_TypingEndEvent]
+     */
+    export type TypingEndEvent = DevExpress.events.NativeEventInfo<dxChat> & {
+      /**
+       * [descr:_ui_chat_TypingEndEvent.user]
+       */
+      readonly user?: User;
+    };
+    /**
+     * [descr:_ui_chat_TypingStartEvent]
+     */
+    export type TypingStartEvent = DevExpress.events.NativeEventInfo<
+      dxChat,
+      UIEvent & { target: HTMLInputElement }
+    > & {
+      /**
+       * [descr:_ui_chat_TypingStartEvent.user]
+       */
+      readonly user?: User;
+    };
   }
   /**
    * [descr:dxChatOptions]
@@ -9565,6 +9586,14 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.onMessageSend]
      */
     onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
+    /**
+     * [descr:dxChatOptions.onTypingStart]
+     */
+    onTypingStart?: (e: DevExpress.ui.dxChat.TypingEndEvent) => void;
+    /**
+     * [descr:dxChatOptions.onTypingEnd]
+     */
+    onTypingEnd?: (e: DevExpress.ui.dxChat.TypingEndEvent) => void;
   }
   /**
    * [descr:dxCheckBox]
