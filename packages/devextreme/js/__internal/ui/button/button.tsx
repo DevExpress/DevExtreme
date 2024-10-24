@@ -297,35 +297,51 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
       iconTemplate: IconTemplate,
     });
 
-    return normalizeProps(createComponentVNode(2, Widget, _extends({
-      accessKey: this.props.accessKey,
-      activeStateEnabled: this.props.activeStateEnabled,
-      aria: this.aria,
-      className: this.props.className,
-      classes: this.cssClasses,
-      disabled: this.props.disabled,
-      focusStateEnabled: this.props.focusStateEnabled,
-      height: this.props.height,
-      hint: this.props.hint,
-      hoverStateEnabled: this.props.hoverStateEnabled,
-      onActive: this.onActive,
-      onClick: this.onWidgetClick,
-      onInactive: this.onInactive,
-      onKeyDown: this.keyDown,
-      rtlEnabled: this.props.rtlEnabled,
-      tabIndex: this.props.tabIndex,
-      visible: this.props.visible,
-      width: this.props.width,
-    }, this.restAttributes, {
-      children: createVNode(1, 'div', 'dx-button-content', [this.props.template && ButtonTemplate({
-        data: this.buttonTemplateData,
-      }), !this.props.template && children, isIconLeft && iconComponent, renderText && createVNode(1, 'span', 'dx-button-text', text, 0), !isIconLeft && iconComponent, this.props.useSubmitBehavior && createVNode(64, 'input', 'dx-button-submit-input', null, 1, {
-        type: 'submit',
-        tabIndex: -1,
-      }, null, this.submitInputRef), this.props.useInkRipple && createComponentVNode(2, InkRipple, {
-        config: this.inkRippleConfig,
-      }, null, this.inkRippleRef)], 0, null, null, this.contentRef),
-    }), null, this.widgetRef));
+    return (
+      <Widget // eslint-disable-line jsx-a11y/no-access-key
+        ref={this.widgetRef}
+        accessKey={this.props.accessKey}
+        activeStateEnabled={this.props.activeStateEnabled}
+        aria={this.aria}
+        className={this.props.className}
+        classes={this.cssClasses}
+        disabled={this.props.disabled}
+        focusStateEnabled={this.props.focusStateEnabled}
+        height={this.props.height}
+        hint={this.props.hint}
+        hoverStateEnabled={this.props.hoverStateEnabled}
+        onActive={this.onActive}
+        onClick={this.onWidgetClick}
+        onInactive={this.onInactive}
+        onKeyDown={this.keyDown}
+        rtlEnabled={this.props.rtlEnabled}
+        tabIndex={this.props.tabIndex}
+        visible={this.props.visible}
+        width={this.props.width}
+        {...this.restAttributes}
+      >
+        <div className="dx-button-content" ref={this.contentRef}>
+          {ButtonTemplate && (<ButtonTemplate data={this.buttonTemplateData} />)}
+          {!ButtonTemplate && children}
+          {isIconLeft && iconComponent}
+          {renderText && (<span className="dx-button-text">{text}</span>)}
+          {!isIconLeft && iconComponent}
+          {this.props.useSubmitBehavior
+            && (
+              <input ref={this.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />
+            )
+          }
+          {this.props.useInkRipple
+            && (
+              <InkRipple
+                config={this.inkRippleConfig}
+                ref={this.inkRippleRef as any}
+              />
+            )
+          }
+        </div>
+      </Widget>
+    );
   }
 }
 Button.defaultProps = defaultButtonProps;
