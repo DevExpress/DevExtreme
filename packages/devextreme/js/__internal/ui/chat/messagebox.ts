@@ -246,7 +246,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _clean(): void {
-    clearTimeout(this._typingEndTimeoutId);
+    this._clearTypingEndTimeout();
 
     super._clean();
   }
