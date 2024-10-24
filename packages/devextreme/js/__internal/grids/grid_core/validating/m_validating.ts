@@ -1011,7 +1011,9 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       });
       when(currentValidator && this._validatingController.validateCell(currentValidator))
         .done((validationResult) => {
-          this._editorFactoryController.refocus();
+          if (validationResult) {
+            this._editorFactoryController.refocus();
+          }
           deferred.resolve(validationResult);
         });
     });
