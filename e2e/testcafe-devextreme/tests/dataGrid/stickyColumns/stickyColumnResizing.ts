@@ -18,6 +18,8 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     const columnIndex = rtlEnabled ? 23 : 1;
     const scrollLeft = rtlEnabled ? -10000 : 10000;
 
+    await t.expect(dataGrid.isReady()).ok();
+
     // act
     await dataGrid.resizeHeader(columnIndex, 100);
 
@@ -53,6 +55,8 @@ fixture.disablePageReloads`Resize columns - nextColumn mode`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const columnIndex = rtlEnabled ? 0 : 24;
     const scrollLeft = rtlEnabled ? -10000 : 10000;
+
+    await t.expect(dataGrid.isReady()).ok();
 
     // act
     await dataGrid.resizeHeader(columnIndex, -100);
@@ -95,6 +99,8 @@ fixture.disablePageReloads`Resize columns - widget mode`
     const columnIndex = rtlEnabled ? 23 : 1;
     const scrollLeft = rtlEnabled ? -10000 : 10000;
 
+    await t.expect(dataGrid.isReady()).ok();
+
     // act
     await dataGrid.resizeHeader(columnIndex, 100);
 
@@ -131,6 +137,8 @@ fixture.disablePageReloads`Resize columns - widget mode`
     const columnIndex = rtlEnabled ? 0 : 24;
     const scrollLeft = rtlEnabled ? -10000 : 10000;
 
+    await t.expect(dataGrid.isReady()).ok();
+
     // act
     await dataGrid.resizeHeader(columnIndex, -100);
 
@@ -166,6 +174,8 @@ fixture.disablePageReloads`Resize columns - widget mode`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const columnIndex = rtlEnabled ? 1 : 23;
     const scrollLeft = rtlEnabled ? -10000 : 10000;
+
+    await t.expect(dataGrid.isReady()).ok();
 
     // act
     await dataGrid.resizeHeader(columnIndex, -100);

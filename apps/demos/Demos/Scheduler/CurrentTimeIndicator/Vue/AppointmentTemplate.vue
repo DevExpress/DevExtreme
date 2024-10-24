@@ -1,6 +1,6 @@
 <template>
   <div class="movie">
-    <img :src="movieInfo.image">
+    <img :src="movieInfo.image" :alt="`${movieInfo.text} poster`">
     <div class="movie-text">{{ movieInfo.text }}</div>
   </div>
 </template>

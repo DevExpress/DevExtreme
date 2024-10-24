@@ -34,9 +34,9 @@ if (window && window.config.packageConfigPaths) {
 export class AppComponent {
   dataSource: DataSource;
 
-  dinnerTime = this.dataService.getDinnerTime();
+  dinnerTime: { from: number, to: number };
 
-  holidays = this.dataService.getHolidays();
+  holidays: Date[];
 
   currentDate = new Date(2021, 3, 27);
 
@@ -63,6 +63,8 @@ export class AppComponent {
   };
 
   constructor(public dataService: DataService) {
+    this.dinnerTime = this.dataService.getDinnerTime();
+    this.holidays = this.dataService.getHolidays();
     this.dataSource = new DataSource({
       store: dataService.getData(),
     });

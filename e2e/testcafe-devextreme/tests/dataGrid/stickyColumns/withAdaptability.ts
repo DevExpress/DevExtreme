@@ -16,6 +16,8 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const scrollLeft = rtlEnabled ? -10000 : 10000;
 
+    await t.expect(dataGrid.isReady()).ok();
+
     await dataGrid.apiExpandAdaptiveDetailRow(1);
 
     await takeScreenshot(`adaptability_sticky_columns_with_adaptive_detail_row_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
@@ -46,6 +48,8 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
   safeSizeTest(`Sticky columns with sticky positions (rtlEnabled = ${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t.expect(dataGrid.isReady()).ok();
 
     await takeScreenshot(`adaptability_sticky_columns_with_sticky_positions_1_(rtlEnabled_=_${rtlEnabled}).png`, dataGrid.element);
 
@@ -85,6 +89,8 @@ fixture.disablePageReloads`Sticky columns - Adaptability`
 safeSizeTest('Sticky columns with sticky positions when columnHidingEnabled = false and columns have hidingPriority', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await takeScreenshot('adaptability_sticky_columns_with_sticky_positions_and_hiding_priority_1.png', dataGrid.element);
 

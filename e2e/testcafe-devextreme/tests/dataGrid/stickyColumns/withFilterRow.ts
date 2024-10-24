@@ -17,6 +17,8 @@ fixture.disablePageReloads`Sticky columns - Filter row`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+    await t.expect(dataGrid.isReady()).ok();
+
     await t.click(dataGrid.getHeaders().getFilterRow().getFilterCell(1).element);
 
     await takeScreenshot(`filter_row_with_sticky_columns_1_(${theme}).png`, dataGrid.element);
