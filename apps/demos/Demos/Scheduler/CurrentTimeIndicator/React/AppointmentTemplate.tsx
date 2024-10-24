@@ -16,7 +16,7 @@ const AppointmentTemplate = (props: AppointmentTemplateProps) => {
 
   return (
     <div className="movie">
-      <img src={movieInfo.image} />
+      <img src={movieInfo.image} alt={movieInfo.text + ' poster'} />
       <div className="movie-text">{movieInfo.text}</div>
     </div>
   );
