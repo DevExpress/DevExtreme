@@ -338,7 +338,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     );
   }
 }
-Button.defaultProps = defaultButtonProps;
+Button.defaultProps = {...defaultButtonProps, ...convertRulesToOptions(defaultOptionRules)};
 
 const __defaultOptionRules: any = [];
 export function defaultOptions(rule) {
