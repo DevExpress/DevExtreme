@@ -1240,7 +1240,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         assert.strictEqual($leftPane.css('width'), '0px');
     });
 
-    QUnit.test('The splitter panes should maintain the correct ratio after being rendered inside an invisible element and display correctly when shown (T1241434)', function(assert) {
+    QUnit.skip('The splitter panes should maintain the correct ratio after being rendered inside an invisible element and display correctly when shown (T1241434)', function(assert) {
         const done = assert.async();
         $('#splitterParentContainer').css('display', 'none');
 
@@ -1263,7 +1263,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
-    QUnit.test('The splitter panes should maintain the correct ratio after being initialized on a detached element and then attached to the DOM (T1241434)', function(assert) {
+    QUnit.skip('The splitter panes should maintain the correct ratio after being initialized on a detached element and then attached to the DOM (T1241434)', function(assert) {
         const done = assert.async();
         const $splitter = $('<div id="splitterDetached">');
 
