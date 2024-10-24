@@ -37,10 +37,8 @@ export default class DependencyCollector {
     return '';
   }
 
-  static getUniqueWidgets(widgetsArray: string[], currentWidget?: string): string[] {
-    const fullArray = currentWidget ? [...widgetsArray, currentWidget] : widgetsArray;
-
-    return [...new Set(fullArray)];
+  static getUniqueWidgets(widgetsArray: string[]): string[] {
+    return [...new Set(widgetsArray)];
   }
 
   static isArraysEqual(array1: string[], array2: string[]): boolean {
@@ -92,12 +90,14 @@ export default class DependencyCollector {
       });
 
       const deps = result.map((relativeDependency: string): string => {
-        const absDepPath = relativeDependency.startsWith('.')
-            ? path.resolve(path.dirname(filePath), relativeDependency)
-            : relativeDependency;
+        let absDepPath = relativeDependency
+
+        if (relativeDependency.startsWith('.')) {
+          absDepPath = path.resolve(path.dirname(filePath), relativeDependency)
+        }
 
         const cachedRes = cache.get(absDepPath);
-        if(cachedRes) {
+        if (cachedRes) {
           return cachedRes;
         }
 
@@ -121,10 +121,14 @@ export default class DependencyCollector {
               && !path.includes('node_modules')
               && !path.includes('viz'));
 
+      let widget = '';
+
+      if (!isTsxFile) {
+        widget = DependencyCollector.getWidgetFromAst(precinct.ast)
+      }
+
       cacheScriptItem = {
-        widget: isTsxFile
-            ? ''
-            : DependencyCollector.getWidgetFromAst(precinct.ast),
+        widget,
         dependencies: {},
       };
 
