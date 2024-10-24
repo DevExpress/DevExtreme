@@ -19,7 +19,7 @@ import { Widget } from '@ts/core/r1/widget';
 import { InkRipple } from './ink_ripple';
 import type { ButtonProps } from './props';
 import { defaultButtonProps } from './props';
-import { getTemplate } from '@ts/core/r1/utils';
+import { getTemplate } from '@ts/core/r1/utils/index';
 
 const stylingModes = ['outlined', 'text', 'contained'];
 

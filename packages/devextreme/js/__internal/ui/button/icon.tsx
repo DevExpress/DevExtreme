@@ -5,7 +5,7 @@ import {
 
 import { getImageSourceType } from '@js/core/utils/icon';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import { getTemplate } from '@ts/core/r1/utils';
+import { getTemplate } from '@ts/core/r1/utils/index';
 
 export const IconProps = {
   position: 'left',
