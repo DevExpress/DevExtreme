@@ -164,7 +164,7 @@ function run_test_impl {
                 tput setaf 9
             fi
             google-chrome-stable --version
-            eval "$chrome_command ${chrome_args[@]} '$url'" &>chrome.log &
+            eval "$chrome_command ${chrome_args[@]} '$url'" &
         ;;
 
     esac

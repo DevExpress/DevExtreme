@@ -292,8 +292,8 @@ importers:
         specifier: 7.4.11
         version: 7.4.11
       jquery:
-        specifier: 3.6.3
-        version: 3.6.3
+        specifier: 4.0.0-beta.2
+        version: 4.0.0-beta.2
       jspdf:
         specifier: 2.5.1
         version: 2.5.1
@@ -701,8 +701,8 @@ importers:
         specifier: 1.7.0
         version: 1.7.0
       jquery:
-        specifier: 3.7.1
-        version: 3.7.1
+        specifier: 4.0.0-beta.2
+        version: 4.0.0-beta.2
       minimist:
         specifier: 1.2.8
         version: 1.2.8
@@ -731,14 +731,14 @@ importers:
         specifier: 11.2.14
         version: 11.2.14(@angular/core@17.3.12(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1)
       '@types/jquery':
-        specifier: 3.5.29
-        version: 3.5.29
+        specifier: 3.5.31
+        version: 3.5.31
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       jquery:
-        specifier: 3.7.1
-        version: 3.7.1
+        specifier: 4.0.0-beta.2
+        version: 4.0.0-beta.2
       typescript:
         specifier: 4.9.5
         version: 4.9.5
@@ -752,8 +752,8 @@ importers:
         specifier: 3.5.0
         version: 3.5.0(axe-core@4.10.0)(testcafe@2.5.0(encoding@0.1.13))
       '@types/jquery':
-        specifier: 3.5.29
-        version: 3.5.29
+        specifier: 3.5.31
+        version: 3.5.31
       axe-core:
         specifier: 4.10.0
         version: 4.10.0
@@ -855,8 +855,8 @@ importers:
         specifier: 3.10.18
         version: 3.10.18
       '@types/jquery':
-        specifier: 3.5.29
-        version: 3.5.29
+        specifier: 3.5.31
+        version: 3.5.31
       '@types/react':
         specifier: 16.14.34
         version: 16.14.34
@@ -1098,8 +1098,8 @@ importers:
         specifier: 26.6.2
         version: 26.6.2
       jquery:
-        specifier: 3.7.1
-        version: 3.7.1
+        specifier: 4.0.0-beta.2
+        version: 4.0.0-beta.2
       jquery.tmpl:
         specifier: 0.0.2
         version: 0.0.2
@@ -1503,7 +1503,7 @@ importers:
         version: 10.4.17(postcss@8.4.38)
       bootstrap4:
         specifier: npm:bootstrap@^4.6.0
-        version: bootstrap@4.6.2(jquery@3.7.1)(popper.js@1.16.1)
+        version: bootstrap@4.6.2(jquery@4.0.0-beta.2)(popper.js@1.16.1)
       bootstrap5:
         specifier: npm:bootstrap@^5.3.0
         version: bootstrap@5.3.2(@popperjs/core@2.11.8)
@@ -5263,8 +5263,8 @@ packages:
   '@types/jest@29.5.12':
     resolution: {integrity: sha512-eDC8bTvT/QhYdxJAulQikueigY5AsdBRH2yDKW3yveW7svY3+DzN84/2NUgkw10RTiJbWqZrTtoGVdYlvFJdLw==}
 
-  '@types/jquery@3.5.29':
-    resolution: {integrity: sha512-oXQQC9X9MOPRrMhPHHOsXqeQDnWeCDT3PelUIg/Oy8FAbzSZtFHRjc7IpbfFVmpLtJ+UOoywpRsuO5Jxjybyeg==}
+  '@types/jquery@3.5.31':
+    resolution: {integrity: sha512-rf/iB+cPJ/YZfMwr+FVuQbm7IaWC4y3FVYfVDxRGqmUCFjjPII0HWaP0vTPJGp6m4o13AXySCcMbWfrWtBFAKw==}
 
   '@types/jsdom@20.0.1':
     resolution: {integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==}
@@ -9291,7 +9291,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -10986,11 +10986,11 @@ packages:
   jquery.tmpl@0.0.2:
     resolution: {integrity: sha512-ONpdW9JcxJxi5Eu9s640SdN0y/nSjnXAP24s3X/LeWlG4xA+hyuIcxEdTWZPy9scWC7owkEeSU6ReQvpbWhs7A==}
 
-  jquery@3.6.3:
-    resolution: {integrity: sha512-bZ5Sy3YzKo9Fyc8wH2iIQK4JImJ6R0GWI9kL1/k7Z91ZBNgkRXE6U0JfHIizZbort8ZunhSI3jw9I6253ahKfg==}
-
   jquery@3.7.1:
     resolution: {integrity: sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==}
+
+  jquery@4.0.0-beta.2:
+    resolution: {integrity: sha512-2/cB7q2vtwltOGph8cNaNBRfVRdewrgdmYipXJ9ZYLQOPYjBKHH8+l5ZLVTFV7emKVIPXwDP3excXS0zUcx9kw==}
 
   jqueryify@0.0.3:
     resolution: {integrity: sha512-9WKxzVa00eYc3RWHV4qlmts71OjdPbGOBoeLepfQSFbs6/NBwY4HDEG02EP2X2aH1MSmtG1tRcXx7VQzoz9Azg==}
@@ -22500,7 +22500,7 @@ snapshots:
       expect: 29.7.0
       pretty-format: 29.7.0
 
-  '@types/jquery@3.5.29':
+  '@types/jquery@3.5.31':
     dependencies:
       '@types/sizzle': 2.3.8
 
@@ -24533,9 +24533,9 @@ snapshots:
 
   boolbase@1.0.0: {}
 
-  bootstrap@4.6.2(jquery@3.7.1)(popper.js@1.16.1):
+  bootstrap@4.6.2(jquery@4.0.0-beta.2)(popper.js@1.16.1):
     dependencies:
-      jquery: 3.7.1
+      jquery: 4.0.0-beta.2
       popper.js: 1.16.1
 
   bootstrap@5.3.2(@popperjs/core@2.11.8):
@@ -29771,7 +29771,7 @@ snapshots:
       jest-environment-jsdom: 26.6.2
       jest-environment-node: 26.6.2
       jest-get-type: 26.3.0
-      jest-jasmine2: 26.6.3
+      jest-jasmine2: 26.6.3(ts-node@10.9.2(@swc/core@1.4.17(@swc/helpers@0.5.11))(@types/node@20.12.8)(typescript@5.4.5))
       jest-regex-util: 26.0.0
       jest-resolve: 26.6.2
       jest-util: 26.6.2
@@ -30069,7 +30069,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  jest-jasmine2@26.6.3:
+  jest-jasmine2@26.6.3(ts-node@10.9.2(@swc/core@1.4.17(@swc/helpers@0.5.11))(@types/node@20.12.8)(typescript@5.4.5)):
     dependencies:
       '@babel/traverse': 7.24.5
       '@jest/environment': 26.6.2
@@ -30090,7 +30090,11 @@ snapshots:
       pretty-format: 26.6.2
       throat: 5.0.0
     transitivePeerDependencies:
+      - bufferutil
+      - canvas
       - supports-color
+      - ts-node
+      - utf-8-validate
 
   jest-leak-detector@26.6.2:
     dependencies:
@@ -30512,9 +30516,9 @@ snapshots:
     dependencies:
       jqueryify: 0.0.3
 
-  jquery@3.6.3: {}
-
   jquery@3.7.1: {}
+
+  jquery@4.0.0-beta.2: {}
 
   jqueryify@0.0.3: {}
 
