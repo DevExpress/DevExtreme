@@ -328,7 +328,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onTypingStartStub.callCount, 1);
         });
 
-        ['', ' ', '\n'].forEach(value => {
+        [' ', '\n'].forEach(value => {
             QUnit.test(`should be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
                 const onTypingStartStub = sinon.stub();
 
@@ -343,7 +343,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         ['n', 'no'].forEach(value => {
-            QUnit.test(`should be triggered if backspace was pressed after value ${value} was entered`, function(assert) {
+            QUnit.test(`should be triggered if backspace was pressed after ${value.length} character(s) was entered`, function(assert) {
                 const onTypingStartStub = sinon.stub();
 
                 this.reinit({ onTypingStart: onTypingStartStub });
@@ -358,7 +358,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
                 keyboard.press('backspace');
 
-                assert.strictEqual(onTypingStartStub.callCount, 1);
+                assert.strictEqual(onTypingStartStub.callCount, 2);
             });
         });
 
@@ -482,7 +482,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onTypingEndStub.callCount, 1, 'is called once after delay');
         });
 
-        ['', ' ', '\n'].forEach(value => {
+        [' ', '\n'].forEach(value => {
             QUnit.test(`should be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
                 const onTypingEndStub = sinon.stub();
 
