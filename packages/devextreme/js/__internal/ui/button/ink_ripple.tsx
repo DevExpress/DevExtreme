@@ -1,7 +1,5 @@
-import _extends from '@babel/runtime/helpers/esm/extends';
 import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import { createVNode, normalizeProps } from 'inferno';
 
 import { hideWave, initConfig, showWave } from '../../../ui/widget/utils.ink_ripple';
 
