@@ -25,7 +25,7 @@ export default class Pagination extends PaginationWrapper {
         'defaultPageIndex',
         'pageIndexChanged',
         'pageIndexChangedInternal',
-        'gridCompatibility',
+        'isGridCompatibilityMode',
         'className',
         'showInfo',
         'infoText',

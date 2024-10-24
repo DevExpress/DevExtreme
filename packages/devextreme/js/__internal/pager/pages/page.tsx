@@ -3,11 +3,11 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 
 import { format } from '../../../core/utils/string';
-import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
 import { combineClasses } from '../../core/r1/utils/render_utils';
 import { PAGER_PAGE_CLASS, PAGER_SELECTION_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 
 // for angular type inference (onClick type in angular changes to EventEmitter)
 export interface PagePropsInterface {
@@ -29,7 +29,7 @@ export class Page extends BaseInfernoComponent<PagePropsInterface> {
   public refs: any = null;
 
   getLabel(): string {
-    return format(messageLocalization.getFormatter('dxPager-page'), this.getValue()) as string;
+    return format(getLocalizationMessage(this.context, 'dxPagination-page'), this.getValue()) as string;
   }
 
   getValue(): number {
