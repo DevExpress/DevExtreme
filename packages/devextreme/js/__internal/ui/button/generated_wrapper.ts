@@ -7,11 +7,12 @@
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
 */
 import registerComponent from '@js/core/component_registrator';
-import BaseComponent from '../component_wrapper/button';
+import BaseComponent from './wrapper';
 import { Button as ButtonComponent, defaultOptions } from './button';
 export default class Button extends BaseComponent {
   getProps() {
     const props = super.getProps();
+    // @ts-expect-error
     props.onKeyDown = this._wrapKeyDownHandler(props.onKeyDown);
     return props;
   }
@@ -44,6 +45,7 @@ export default class Button extends BaseComponent {
       props: ['activeStateEnabled', 'hoverStateEnabled', 'icon', 'iconPosition', 'onClick', 'onSubmit', 'pressed', 'stylingMode', 'template', 'iconTemplate', 'text', 'type', 'useInkRipple', 'useSubmitBehavior', 'templateData', 'className', 'accessKey', 'disabled', 'focusStateEnabled', 'height', 'hint', 'onKeyDown', 'rtlEnabled', 'tabIndex', 'visible', 'width']
     };
   }
+  // @ts-expect-error
   get _viewComponent() {
     return ButtonComponent;
   }
