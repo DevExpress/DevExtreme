@@ -1,5 +1,4 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-
 import { hideWave, initConfig, showWave } from '@js/ui/widget/utils.ink_ripple';
 
 export interface InkRippleConfig {
@@ -43,7 +42,7 @@ export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
     })();
   }
 
-  get restAttributes() {
+  get restAttributes(): Record<string, unknown> {
     const restProps = { ...this.props };
     delete restProps.config;
     return restProps;

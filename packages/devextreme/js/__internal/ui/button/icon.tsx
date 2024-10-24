@@ -1,16 +1,12 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import {
-  createComponentVNode, createFragment, createVNode, Fragment, normalizeProps,
-} from 'inferno';
-
 import { getImageSourceType } from '@js/core/utils/icon';
-import { combineClasses } from '@ts/core/utils/combine_classes';
 import { getTemplate } from '@ts/core/r1/utils/index';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 
 export interface IconProps {
-  position?: string
+  position?: string;
 
-  source?: string
+  source?: string;
 
   iconTemplate?: (props) => JSX.Element;
 }
@@ -21,16 +17,16 @@ export const defaultIconProps = {
 };
 
 export class Icon extends BaseInfernoComponent<IconProps> {
-  constructor(props) {
+  constructor(props: IconProps) {
     super(props);
     this.state = {};
   }
 
-  get sourceType() {
+  get sourceType(): false | 'svg' | 'image' | 'dxIcon' | 'fontIcon' {
     return getImageSourceType(this.props.source);
   }
 
-  get cssClass() {
+  get cssClass(): string {
     return this.props.position !== 'left' ? 'dx-icon-right' : '';
   }
 
@@ -56,17 +52,18 @@ export class Icon extends BaseInfernoComponent<IconProps> {
     return '';
   }
 
-  get restAttributes() {
-    const restProps = {...this.props};
+  get restAttributes(): Record<string, unknown> {
+    const restProps = { ...this.props };
 
     ['iconTemplate', 'position', 'source'].forEach((excluded) => {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete restProps[excluded];
     });
 
     return restProps;
   }
 
-  render() {
+  render(): JSX.Element {
     const {
       iconClassName,
       props: {
@@ -84,7 +81,7 @@ export class Icon extends BaseInfernoComponent<IconProps> {
         {sourceType === 'image' && (<img className={iconClassName} alt="" src={source} />)}
         {IconTemplate && (<i className={iconClassName}><IconTemplate /></i>)}
       </>
-    )
+    );
   }
 }
 Icon.defaultProps = defaultIconProps;

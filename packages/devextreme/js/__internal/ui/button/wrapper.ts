@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // eslint-disable-next-line import/named
-import { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import { getImageSourceType } from '@js/core/utils/icon';
 import ValidationEngine from '@js/ui/validation_engine';
 import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
+import type { Option } from '@ts/core/r1/types';
+
 import type { Button } from './button';
-import { Option } from '@ts/core/r1/types';
-import { getImageSourceType } from '@js/core/utils/icon';
 
 export default class ButtonWrapper extends ComponentWrapper {
   _clickAction!: (...args) => unknown;
