@@ -21,6 +21,7 @@ import { Widget } from '@ts/core/r1/widget';
 import { InkRipple } from './ink_ripple';
 import type { ButtonProps } from './props';
 import { defaultButtonProps } from './props';
+import { getTemplate } from '@ts/core/r1/utils';
 
 const _excluded = ['accessKey', 'activeStateEnabled', 'children', 'className', 'disabled', 'focusStateEnabled', 'height', 'hint', 'hoverStateEnabled', 'icon', 'iconPosition', 'iconTemplate', 'onClick', 'onKeyDown', 'onSubmit', 'pressed', 'rtlEnabled', 'stylingMode', 'tabIndex', 'template', 'templateData', 'text', 'type', 'useInkRipple', 'useSubmitBehavior', 'visible', 'width'];
 
@@ -58,7 +59,6 @@ export const defaultOptionRules = createDefaultOptionRules([{
   },
 }]);
 
-const getTemplate = (TemplateProp) => TemplateProp && (TemplateProp.defaultProps ? (props) => normalizeProps(createComponentVNode(2, TemplateProp, _extends({}, props))) : TemplateProp);
 export class Button extends InfernoWrapperComponent<ButtonProps> {
   private readonly contentRef = infernoCreateRef<HTMLDivElement>();
 
@@ -286,8 +286,8 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
       text,
     } = this.props;
 
-    const ButtonTemplate = getTemplate(this.props.template);
-    const IconTemplate = getTemplate(this.props.iconTemplate);
+    const ButtonTemplate: any = getTemplate(this.props.template);
+    const IconTemplate: any = getTemplate(this.props.iconTemplate);
 
     const renderText = !this.props.template && !children && text !== '';
     const isIconLeft = iconPosition === 'left';
