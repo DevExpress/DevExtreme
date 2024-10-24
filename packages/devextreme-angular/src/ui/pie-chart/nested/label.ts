@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -31,50 +31,50 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): LocalizationTypes.Format {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: LocalizationTypes.Format) {
         this._setOption('argumentFormat', value);
     }
 
     @Input()
-    get backgroundColor(): string | undefined {
+    get backgroundColor(): string {
         return this._getOption('backgroundColor');
     }
-    set backgroundColor(value: string | undefined) {
+    set backgroundColor(value: string) {
         this._setOption('backgroundColor', value);
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): { color?: string | undefined, visible?: boolean, width?: number } {
+    get connector(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('connector');
     }
-    set connector(value: { color?: string | undefined, visible?: boolean, width?: number }) {
+    set connector(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('connector', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((pointInfo: any) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((pointInfo: any) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get displayFormat(): string | undefined {
+    get displayFormat(): string {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: string | undefined) {
+    set displayFormat(value: string) {
         this._setOption('displayFormat', value);
     }
 
@@ -87,18 +87,18 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get position(): LabelPosition {
+    get position(): "columns" | "inside" | "outside" {
         return this._getOption('position');
     }
-    set position(value: LabelPosition) {
+    set position(value: "columns" | "inside" | "outside") {
         this._setOption('position', value);
     }
 
@@ -119,10 +119,10 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get textOverflow(): TextOverflow {
+    get textOverflow(): "ellipsis" | "hide" | "none" {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: TextOverflow) {
+    set textOverflow(value: "ellipsis" | "hide" | "none") {
         this._setOption('textOverflow', value);
     }
 
@@ -135,10 +135,10 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get wordWrap(): WordWrap {
+    get wordWrap(): "normal" | "breakWord" | "none" {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: WordWrap) {
+    set wordWrap(value: "normal" | "breakWord" | "none") {
         this._setOption('wordWrap', value);
     }
 

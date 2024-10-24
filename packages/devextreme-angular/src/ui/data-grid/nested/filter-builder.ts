@@ -8,25 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { ContentReadyEvent, DisposingEvent, dxFilterBuilderCustomOperation, dxFilterBuilderField, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import { dxFilterBuilderCustomOperation, dxFilterBuilderField, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridCustomOperationComponent } from './custom-operation-dxi';
-import { DxiDataGridFieldComponent } from './field-dxi';
 
 
 @Component({
@@ -37,10 +30,10 @@ import { DxiDataGridFieldComponent } from './field-dxi';
 })
 export class DxoDataGridFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -61,6 +54,14 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
+    get bindingOptions(): Record<string, any> {
+        return this._getOption('bindingOptions');
+    }
+    set bindingOptions(value: Record<string, any>) {
+        this._setOption('bindingOptions', value);
+    }
+
+    @Input()
     get customOperations(): Array<dxFilterBuilderCustomOperation> {
         return this._getOption('customOperations');
     }
@@ -77,10 +78,10 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -93,10 +94,10 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get filterOperationDescriptions(): { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
+    get filterOperationDescriptions(): Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
         return this._getOption('filterOperationDescriptions');
     }
-    set filterOperationDescriptions(value: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
+    set filterOperationDescriptions(value: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
         this._setOption('filterOperationDescriptions', value);
     }
 
@@ -109,34 +110,34 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get groupOperationDescriptions(): { and?: string, notAnd?: string, notOr?: string, or?: string } {
+    get groupOperationDescriptions(): Record<string, any> | { and?: string, notAnd?: string, notOr?: string, or?: string } {
         return this._getOption('groupOperationDescriptions');
     }
-    set groupOperationDescriptions(value: { and?: string, notAnd?: string, notOr?: string, or?: string }) {
+    set groupOperationDescriptions(value: Record<string, any> | { and?: string, notAnd?: string, notOr?: string, or?: string }) {
         this._setOption('groupOperationDescriptions', value);
     }
 
     @Input()
-    get groupOperations(): any | Array<GroupOperation> {
+    get groupOperations(): Array<"and" | "or" | "notAnd" | "notOr"> {
         return this._getOption('groupOperations');
     }
-    set groupOperations(value: any | Array<GroupOperation>) {
+    set groupOperations(value: Array<"and" | "or" | "notAnd" | "notOr">) {
         this._setOption('groupOperations', value);
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -149,10 +150,10 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get maxGroupLevel(): number | undefined {
+    get maxGroupLevel(): number {
         return this._getOption('maxGroupLevel');
     }
-    set maxGroupLevel(value: number | undefined) {
+    set maxGroupLevel(value: number) {
         this._setOption('maxGroupLevel', value);
     }
 
@@ -229,10 +230,10 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get value(): any {
+    get value(): Array<any> | (() => any) | string {
         return this._getOption('value');
     }
-    set value(value: any) {
+    set value(value: Array<any> | (() => any) | string) {
         this._setOption('value', value);
     }
 
@@ -245,49 +246,22 @@ export class DxoDataGridFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() valueChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'filterBuilder';
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridCustomOperationComponent))
-    get customOperationsChildren(): QueryList<DxiDataGridCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsChildren(value) {
-        this.setChildren('customOperations', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiDataGridFieldComponent))
-    get fieldsChildren(): QueryList<DxiDataGridFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsChildren(value) {
-        this.setChildren('fields', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'valueChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

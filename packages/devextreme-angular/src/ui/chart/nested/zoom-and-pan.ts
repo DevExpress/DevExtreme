@@ -14,7 +14,6 @@ import {
 
 
 
-import { ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
 
 import {
     NestedOptionHost,
@@ -46,18 +45,18 @@ export class DxoChartZoomAndPanComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get argumentAxis(): ChartZoomAndPanMode {
+    get argumentAxis(): "both" | "none" | "pan" | "zoom" {
         return this._getOption('argumentAxis');
     }
-    set argumentAxis(value: ChartZoomAndPanMode) {
+    set argumentAxis(value: "both" | "none" | "pan" | "zoom") {
         this._setOption('argumentAxis', value);
     }
 
     @Input()
-    get dragBoxStyle(): { color?: string | undefined, opacity?: number | undefined } {
+    get dragBoxStyle(): Record<string, any> | { color?: string, opacity?: number } {
         return this._getOption('dragBoxStyle');
     }
-    set dragBoxStyle(value: { color?: string | undefined, opacity?: number | undefined }) {
+    set dragBoxStyle(value: Record<string, any> | { color?: string, opacity?: number }) {
         this._setOption('dragBoxStyle', value);
     }
 
@@ -70,18 +69,18 @@ export class DxoChartZoomAndPanComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get panKey(): EventKeyModifier {
+    get panKey(): "alt" | "ctrl" | "meta" | "shift" {
         return this._getOption('panKey');
     }
-    set panKey(value: EventKeyModifier) {
+    set panKey(value: "alt" | "ctrl" | "meta" | "shift") {
         this._setOption('panKey', value);
     }
 
     @Input()
-    get valueAxis(): ChartZoomAndPanMode {
+    get valueAxis(): "both" | "none" | "pan" | "zoom" {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: ChartZoomAndPanMode) {
+    set valueAxis(value: "both" | "none" | "pan" | "zoom") {
         this._setOption('valueAxis', value);
     }
 

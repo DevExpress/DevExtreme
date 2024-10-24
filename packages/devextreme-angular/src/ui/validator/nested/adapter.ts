@@ -29,50 +29,50 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoValidatorAdapterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get applyValidationResults(): Function {
+    get applyValidationResults(): (() => void) {
         return this._getOption('applyValidationResults');
     }
-    set applyValidationResults(value: Function) {
+    set applyValidationResults(value: (() => void)) {
         this._setOption('applyValidationResults', value);
     }
 
     @Input()
-    get bypass(): Function {
+    get bypass(): (() => void) {
         return this._getOption('bypass');
     }
-    set bypass(value: Function) {
+    set bypass(value: (() => void)) {
         this._setOption('bypass', value);
     }
 
     @Input()
-    get focus(): Function {
+    get focus(): (() => void) {
         return this._getOption('focus');
     }
-    set focus(value: Function) {
+    set focus(value: (() => void)) {
         this._setOption('focus', value);
     }
 
     @Input()
-    get getValue(): Function {
+    get getValue(): (() => void) {
         return this._getOption('getValue');
     }
-    set getValue(value: Function) {
+    set getValue(value: (() => void)) {
         this._setOption('getValue', value);
     }
 
     @Input()
-    get reset(): Function {
+    get reset(): (() => void) {
         return this._getOption('reset');
     }
-    set reset(value: Function) {
+    set reset(value: (() => void)) {
         this._setOption('reset', value);
     }
 
     @Input()
-    get validationRequestsCallbacks(): Array<Function> {
+    get validationRequestsCallbacks(): Array<(() => void)> {
         return this._getOption('validationRequestsCallbacks');
     }
-    set validationRequestsCallbacks(value: Array<Function>) {
+    set validationRequestsCallbacks(value: Array<(() => void)>) {
         this._setOption('validationRequestsCallbacks', value);
     }
 

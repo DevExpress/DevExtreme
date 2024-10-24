@@ -29,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPolarChartConnectorComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get color(): string | undefined {
+    get color(): string {
         return this._getOption('color');
     }
-    set color(value: string | undefined) {
+    set color(value: string) {
         this._setOption('color', value);
     }
 

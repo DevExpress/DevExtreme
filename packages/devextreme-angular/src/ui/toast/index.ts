@@ -18,8 +18,9 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
+import { event } from 'devextreme/events/index';
+import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/toast';
 import { PositionConfig } from 'devextreme/animation/position';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, ToastType } from 'devextreme/ui/toast';
 
 import DxToast from 'devextreme/ui/toast';
 
@@ -46,16 +47,16 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
 import { DxoToastAnimationModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoToastHideModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoToastFromModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoToastPositionModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastAtModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastBoundaryOffsetModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastCollisionModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastFromModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastHideModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastMyModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastOffsetModule } from 'devextreme-angular/ui/toast/nested';
-import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastPositionModule } from 'devextreme-angular/ui/toast/nested';
 import { DxoToastShowModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToastToModule } from 'devextreme-angular/ui/toast/nested';
 
 
 
@@ -81,10 +82,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -94,10 +95,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -122,10 +123,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
@@ -200,10 +201,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -213,10 +214,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hideOnOutsideClick(): boolean | Function {
+    get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('hideOnOutsideClick');
     }
-    set hideOnOutsideClick(value: boolean | Function) {
+    set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
 
@@ -239,10 +240,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -265,10 +266,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxHeight(): number | Function | string {
+    get maxHeight(): (() => number | string) | number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: number | Function | string) {
+    set maxHeight(value: (() => number | string) | number | string) {
         this._setOption('maxHeight', value);
     }
 
@@ -278,10 +279,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxWidth(): number | Function | string {
+    get maxWidth(): (() => number | string) | number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: number | Function | string) {
+    set maxWidth(value: (() => number | string) | number | string) {
         this._setOption('maxWidth', value);
     }
 
@@ -304,10 +305,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minHeight(): number | Function | string {
+    get minHeight(): (() => number | string) | number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: number | Function | string) {
+    set minHeight(value: (() => number | string) | number | string) {
         this._setOption('minHeight', value);
     }
 
@@ -317,10 +318,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minWidth(): number | Function | string {
+    get minWidth(): (() => number | string) | number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | Function | string) {
+    set minWidth(value: (() => number | string) | number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -395,10 +396,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get type(): ToastType {
+    get type(): "custom" | "error" | "info" | "success" | "warning" {
         return this._getOption('type');
     }
-    set type(value: ToastType) {
+    set type(value: "custom" | "error" | "info" | "success" | "warning") {
         this._setOption('type', value);
     }
 
@@ -421,10 +422,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -510,14 +511,14 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
+    @Output() animationChange: EventEmitter<Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
     
@@ -531,7 +532,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -573,14 +574,14 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -594,7 +595,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -608,14 +609,14 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxHeightChange: EventEmitter<number | Function | string>;
+    @Output() maxHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxWidthChange: EventEmitter<number | Function | string>;
+    @Output() maxWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -629,14 +630,14 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minHeightChange: EventEmitter<number | Function | string>;
+    @Output() minHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minWidthChange: EventEmitter<number | Function | string>;
+    @Output() minWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -678,7 +679,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() typeChange: EventEmitter<ToastType>;
+    @Output() typeChange: EventEmitter<"custom" | "error" | "info" | "success" | "warning">;
 
     /**
     
@@ -692,7 +693,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -783,16 +784,16 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     DxoToModule,
     DxoShowModule,
     DxoToastAnimationModule,
-    DxoToastHideModule,
-    DxoToastFromModule,
-    DxoToastPositionModule,
     DxoToastAtModule,
     DxoToastBoundaryOffsetModule,
     DxoToastCollisionModule,
+    DxoToastFromModule,
+    DxoToastHideModule,
     DxoToastMyModule,
     DxoToastOffsetModule,
-    DxoToastToModule,
+    DxoToastPositionModule,
     DxoToastShowModule,
+    DxoToastToModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -813,16 +814,16 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     DxoToModule,
     DxoShowModule,
     DxoToastAnimationModule,
-    DxoToastHideModule,
-    DxoToastFromModule,
-    DxoToastPositionModule,
     DxoToastAtModule,
     DxoToastBoundaryOffsetModule,
     DxoToastCollisionModule,
+    DxoToastFromModule,
+    DxoToastHideModule,
     DxoToastMyModule,
     DxoToastOffsetModule,
-    DxoToastToModule,
+    DxoToastPositionModule,
     DxoToastShowModule,
+    DxoToastToModule,
     DxTemplateModule
   ]
 })

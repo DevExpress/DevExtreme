@@ -14,9 +14,8 @@ import {
 
 
 
-import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { ChartsColor, Font, Palette } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { ChartsColor, Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -48,10 +47,10 @@ export class DxoLinearGaugeSubvalueIndicatorComponent extends NestedOption imple
     }
 
     @Input()
-    get baseValue(): number | undefined {
+    get baseValue(): number {
         return this._getOption('baseValue');
     }
-    set baseValue(value: number | undefined) {
+    set baseValue(value: number) {
         this._setOption('baseValue', value);
     }
 
@@ -72,10 +71,10 @@ export class DxoLinearGaugeSubvalueIndicatorComponent extends NestedOption imple
     }
 
     @Input()
-    get horizontalOrientation(): HorizontalEdge {
+    get horizontalOrientation(): "left" | "right" {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: HorizontalEdge) {
+    set horizontalOrientation(value: "left" | "right") {
         this._setOption('horizontalOrientation', value);
     }
 
@@ -104,10 +103,10 @@ export class DxoLinearGaugeSubvalueIndicatorComponent extends NestedOption imple
     }
 
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
@@ -152,26 +151,26 @@ export class DxoLinearGaugeSubvalueIndicatorComponent extends NestedOption imple
     }
 
     @Input()
-    get text(): { customizeText?: Function | undefined, font?: Font, format?: Format | string | undefined, indent?: number } {
+    get text(): Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indent?: number } {
         return this._getOption('text');
     }
-    set text(value: { customizeText?: Function | undefined, font?: Font, format?: Format | string | undefined, indent?: number }) {
+    set text(value: Record<string, any> | { customizeText?: ((indicatedValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indent?: number }) {
         this._setOption('text', value);
     }
 
     @Input()
-    get type(): string {
+    get type(): "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle" {
         return this._getOption('type');
     }
-    set type(value: string) {
+    set type(value: "circle" | "rangeBar" | "rectangle" | "rectangleNeedle" | "rhombus" | "textCloud" | "triangleMarker" | "triangleNeedle" | "twoColorNeedle") {
         this._setOption('type', value);
     }
 
     @Input()
-    get verticalOrientation(): VerticalEdge {
+    get verticalOrientation(): "bottom" | "top" {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: VerticalEdge) {
+    set verticalOrientation(value: "bottom" | "top") {
         this._setOption('verticalOrientation', value);
     }
 

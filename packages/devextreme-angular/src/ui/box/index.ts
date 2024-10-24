@@ -23,9 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/box';
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxBoxOptions } from 'devextreme/ui/box';
+import DataSource from 'devextreme/data/data_source';
+import { dxBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxBox from 'devextreme/ui/box';
 
@@ -44,7 +45,6 @@ import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoBoxModule } from 'devextreme-angular/ui/nested';
 
 import { DxiBoxItemModule } from 'devextreme-angular/ui/box/nested';
-import { DxoBoxBoxModule } from 'devextreme-angular/ui/box/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -73,10 +73,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get align(): Distribution {
+    get align(): "center" | "end" | "space-around" | "space-between" | "start" {
         return this._getOption('align');
     }
-    set align(value: Distribution) {
+    set align(value: "center" | "end" | "space-around" | "space-between" | "start") {
         this._setOption('align', value);
     }
 
@@ -86,10 +86,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get crossAlign(): CrosswiseDistribution {
+    get crossAlign(): "center" | "end" | "start" | "stretch" {
         return this._getOption('crossAlign');
     }
-    set crossAlign(value: CrosswiseDistribution) {
+    set crossAlign(value: "center" | "end" | "start" | "stretch") {
         this._setOption('crossAlign', value);
     }
 
@@ -99,10 +99,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxBoxItem | string | any> {
+    get dataSource(): Array<any | dxBoxItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxBoxItem | string | any>) {
+    set dataSource(value: Array<any | dxBoxItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -112,10 +112,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get direction(): BoxDirection {
+    get direction(): "col" | "row" {
         return this._getOption('direction');
     }
-    set direction(value: BoxDirection) {
+    set direction(value: "col" | "row") {
         this._setOption('direction', value);
     }
 
@@ -138,10 +138,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -151,10 +151,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -190,10 +190,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get items(): Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | dxBoxItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | dxBoxItem | string>) {
         this._setOption('items', value);
     }
 
@@ -242,10 +242,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -318,28 +318,28 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() alignChange: EventEmitter<Distribution>;
+    @Output() alignChange: EventEmitter<"center" | "end" | "space-around" | "space-between" | "start">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() crossAlignChange: EventEmitter<CrosswiseDistribution>;
+    @Output() crossAlignChange: EventEmitter<"center" | "end" | "start" | "stretch">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxBoxItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxBoxItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() directionChange: EventEmitter<BoxDirection>;
+    @Output() directionChange: EventEmitter<"col" | "row">;
 
     /**
     
@@ -353,14 +353,14 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -381,7 +381,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxBoxItem | string>>;
 
     /**
     
@@ -409,7 +409,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 
@@ -520,7 +520,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     DxiItemModule,
     DxoBoxModule,
     DxiBoxItemModule,
-    DxoBoxBoxModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -532,7 +531,6 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     DxiItemModule,
     DxoBoxModule,
     DxiBoxItemModule,
-    DxoBoxBoxModule,
     DxTemplateModule
   ]
 })

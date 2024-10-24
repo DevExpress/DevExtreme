@@ -12,9 +12,8 @@ import {
 
 
 
-import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { VectorMapMarkerShape } from 'devextreme/viz/vector_map';
+import { VectorMapLegendItem } from 'devextreme/viz/vector_map';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     @Input()
-    get backgroundColor(): string | undefined {
+    get backgroundColor(): string {
         return this._getOption('backgroundColor');
     }
-    set backgroundColor(value: string | undefined) {
+    set backgroundColor(value: string) {
         this._setOption('backgroundColor', value);
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -62,26 +61,26 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeItems(): Function {
+    get customizeItems(): ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>) {
         return this._getOption('customizeItems');
     }
-    set customizeItems(value: Function) {
+    set customizeItems(value: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>)) {
         this._setOption('customizeItems', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: { color: string, end: number, index: number, size: number, start: number }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -94,50 +93,50 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get horizontalAlignment(): HorizontalAlignment {
+    get horizontalAlignment(): "center" | "left" | "right" {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: HorizontalAlignment) {
+    set horizontalAlignment(value: "center" | "left" | "right") {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get itemsAlignment(): HorizontalAlignment | undefined {
+    get itemsAlignment(): "center" | "left" | "right" {
         return this._getOption('itemsAlignment');
     }
-    set itemsAlignment(value: HorizontalAlignment | undefined) {
+    set itemsAlignment(value: "center" | "left" | "right") {
         this._setOption('itemsAlignment', value);
     }
 
     @Input()
-    get itemTextPosition(): Position | undefined {
+    get itemTextPosition(): "bottom" | "left" | "right" | "top" {
         return this._getOption('itemTextPosition');
     }
-    set itemTextPosition(value: Position | undefined) {
+    set itemTextPosition(value: "bottom" | "left" | "right" | "top") {
         this._setOption('itemTextPosition', value);
     }
 
     @Input()
-    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
     @Input()
-    get markerColor(): string | undefined {
+    get markerColor(): string {
         return this._getOption('markerColor');
     }
-    set markerColor(value: string | undefined) {
+    set markerColor(value: string) {
         this._setOption('markerColor', value);
     }
 
     @Input()
-    get markerShape(): VectorMapMarkerShape {
+    get markerShape(): "circle" | "square" {
         return this._getOption('markerShape');
     }
-    set markerShape(value: VectorMapMarkerShape) {
+    set markerShape(value: "circle" | "square") {
         this._setOption('markerShape', value);
     }
 
@@ -150,18 +149,18 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get markerTemplate(): any | undefined {
+    get markerTemplate(): any {
         return this._getOption('markerTemplate');
     }
-    set markerTemplate(value: any | undefined) {
+    set markerTemplate(value: any) {
         this._setOption('markerTemplate', value);
     }
 
     @Input()
-    get orientation(): Orientation | undefined {
+    get orientation(): "horizontal" | "vertical" {
         return this._getOption('orientation');
     }
-    set orientation(value: Orientation | undefined) {
+    set orientation(value: "horizontal" | "vertical") {
         this._setOption('orientation', value);
     }
 
@@ -198,26 +197,26 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get source(): { grouping?: string, layer?: string } {
+    get source(): Record<string, any> | { grouping?: string, layer?: string } {
         return this._getOption('source');
     }
-    set source(value: { grouping?: string, layer?: string }) {
+    set source(value: Record<string, any> | { grouping?: string, layer?: string }) {
         this._setOption('source', value);
     }
 
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge } {
+    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }) {
+    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }) {
         this._setOption('title', value);
     }
 
     @Input()
-    get verticalAlignment(): VerticalEdge {
+    get verticalAlignment(): "bottom" | "top" {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: VerticalEdge) {
+    set verticalAlignment(value: "bottom" | "top") {
         this._setOption('verticalAlignment', value);
     }
 

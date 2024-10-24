@@ -14,8 +14,9 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { chartPointObject } from 'devextreme/viz/chart';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -39,10 +40,10 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
@@ -55,34 +56,34 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get horizontalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get horizontalLine(): boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('horizontalLine');
     }
-    set horizontalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set horizontalLine(value: boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('horizontalLine', value);
     }
 
     @Input()
-    get label(): { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean } {
+    get label(): Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }) {
+    set label(value: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
     @Input()
-    get verticalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get verticalLine(): boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('verticalLine');
     }
-    set verticalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set verticalLine(value: boolean | Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('verticalLine', value);
     }
 

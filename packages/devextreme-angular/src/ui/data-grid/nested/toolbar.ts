@@ -8,22 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { DataGridPredefinedToolbarItem, dxDataGridToolbarItem } from 'devextreme/ui/data_grid';
+import { dxDataGridToolbarItem } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridItemComponent } from './item-dxi';
 
 
 @Component({
@@ -42,18 +38,18 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem> {
+    get items(): Array<dxDataGridToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel"> {
         return this._getOption('items');
     }
-    set items(value: Array<dxDataGridToolbarItem | DataGridPredefinedToolbarItem>) {
+    set items(value: Array<dxDataGridToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel">) {
         this._setOption('items', value);
     }
 
     @Input()
-    get visible(): boolean | undefined {
+    get visible(): boolean {
         return this._getOption('visible');
     }
-    set visible(value: boolean | undefined) {
+    set visible(value: boolean) {
         this._setOption('visible', value);
     }
 
@@ -62,14 +58,6 @@ export class DxoDataGridToolbarComponent extends NestedOption implements OnDestr
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDataGridItemComponent))
-    get itemsChildren(): QueryList<DxiDataGridItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

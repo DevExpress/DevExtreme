@@ -14,7 +14,8 @@ import {
 
 
 
-import { Font, TextOverflow } from 'devextreme/common/charts';
+import { dxSankeyNode } from 'devextreme/viz/sankey';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,18 +31,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((itemInfo: dxSankeyNode) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((itemInfo: dxSankeyNode) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -62,18 +63,18 @@ export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get overlappingBehavior(): TextOverflow {
+    get overlappingBehavior(): "ellipsis" | "hide" | "none" {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: TextOverflow) {
+    set overlappingBehavior(value: "ellipsis" | "hide" | "none") {
         this._setOption('overlappingBehavior', value);
     }
 
     @Input()
-    get shadow(): { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
+    get shadow(): Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
         return this._getOption('shadow');
     }
-    set shadow(value: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
+    set shadow(value: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
         this._setOption('shadow', value);
     }
 

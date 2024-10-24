@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import { NativeEventInfo } from 'devextreme/events/index';
 
 import {
     NestedOptionHost,
@@ -53,18 +53,18 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get onClick(): Function {
+    get onClick(): ((e: NativeEventInfo<any>) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: Function) {
+    set onClick(value: ((e: NativeEventInfo<any>) => void)) {
         this._setOption('onClick', value);
     }
 
     @Input()
-    get stylingMode(): ButtonStyle {
+    get stylingMode(): "text" | "outlined" | "contained" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: ButtonStyle) {
+    set stylingMode(value: "text" | "outlined" | "contained") {
         this._setOption('stylingMode', value);
     }
 
@@ -85,10 +85,10 @@ export class DxiActionSheetItemComponent extends CollectionNestedOption implemen
     }
 
     @Input()
-    get type(): ButtonType {
+    get type(): "danger" | "default" | "normal" | "success" {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: "danger" | "default" | "normal" | "success") {
         this._setOption('type', value);
     }
 

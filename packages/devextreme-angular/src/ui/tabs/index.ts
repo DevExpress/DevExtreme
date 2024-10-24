@@ -23,10 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tabs';
 
-import { Orientation, SingleOrMultiple, TabsIconPosition, TabsStyle } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxTabsItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/tabs';
+import DataSource from 'devextreme/data/data_source';
+import { dxTabsItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent } from 'devextreme/ui/tabs';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxTabs from 'devextreme/ui/tabs';
 
@@ -72,10 +72,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -85,10 +85,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxTabsItem | string | any> {
+    get dataSource(): Array<any | dxTabsItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxTabsItem | string | any>) {
+    set dataSource(value: Array<any | dxTabsItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -111,10 +111,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -137,10 +137,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -150,10 +150,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -176,10 +176,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get iconPosition(): TabsIconPosition {
+    get iconPosition(): "top" | "end" | "bottom" | "start" {
         return this._getOption('iconPosition');
     }
-    set iconPosition(value: TabsIconPosition) {
+    set iconPosition(value: "top" | "end" | "bottom" | "start") {
         this._setOption('iconPosition', value);
     }
 
@@ -202,10 +202,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get items(): Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | dxTabsItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | dxTabsItem | string>) {
         this._setOption('items', value);
     }
 
@@ -228,10 +228,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): (() => void) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: (() => void) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -254,10 +254,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get orientation(): Orientation {
+    get orientation(): "horizontal" | "vertical" {
         return this._getOption('orientation');
     }
-    set orientation(value: Orientation) {
+    set orientation(value: "horizontal" | "vertical") {
         this._setOption('orientation', value);
     }
 
@@ -371,10 +371,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get selectionMode(): SingleOrMultiple {
+    get selectionMode(): "single" | "multiple" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: SingleOrMultiple) {
+    set selectionMode(value: "single" | "multiple") {
         this._setOption('selectionMode', value);
     }
 
@@ -397,10 +397,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get stylingMode(): TabsStyle {
+    get stylingMode(): "primary" | "secondary" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: TabsStyle) {
+    set stylingMode(value: "primary" | "secondary") {
         this._setOption('stylingMode', value);
     }
 
@@ -436,10 +436,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -528,14 +528,14 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxTabsItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxTabsItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -549,7 +549,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -563,14 +563,14 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -584,7 +584,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() iconPositionChange: EventEmitter<TabsIconPosition>;
+    @Output() iconPositionChange: EventEmitter<"top" | "end" | "bottom" | "start">;
 
     /**
     
@@ -598,7 +598,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { badge?: string, disabled?: boolean, html?: string, icon?: string, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxTabsItem | string>>;
 
     /**
     
@@ -612,7 +612,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
@@ -626,7 +626,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() orientationChange: EventEmitter<Orientation>;
+    @Output() orientationChange: EventEmitter<"horizontal" | "vertical">;
 
     /**
     
@@ -689,7 +689,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() selectionModeChange: EventEmitter<SingleOrMultiple>;
+    @Output() selectionModeChange: EventEmitter<"single" | "multiple">;
 
     /**
     
@@ -703,7 +703,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<TabsStyle>;
+    @Output() stylingModeChange: EventEmitter<"primary" | "secondary">;
 
     /**
     
@@ -724,7 +724,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

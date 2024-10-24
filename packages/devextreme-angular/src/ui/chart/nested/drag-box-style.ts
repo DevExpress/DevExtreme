@@ -29,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartDragBoxStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get color(): string | undefined {
+    get color(): string {
         return this._getOption('color');
     }
-    set color(value: string | undefined) {
+    set color(value: string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 

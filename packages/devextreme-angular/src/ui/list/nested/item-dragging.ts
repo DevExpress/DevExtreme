@@ -14,8 +14,6 @@ import {
 
 
 
-import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import {
@@ -56,18 +54,26 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get boundary(): UserDefinedElement | string | undefined {
+    get bindingOptions(): Record<string, any> {
+        return this._getOption('bindingOptions');
+    }
+    set bindingOptions(value: Record<string, any>) {
+        this._setOption('bindingOptions', value);
+    }
+
+    @Input()
+    get boundary(): any | string {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | undefined) {
+    set boundary(value: any | string) {
         this._setOption('boundary', value);
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
@@ -80,42 +86,42 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get data(): any | undefined {
+    get data(): any {
         return this._getOption('data');
     }
-    set data(value: any | undefined) {
+    set data(value: any) {
         this._setOption('data', value);
     }
 
     @Input()
-    get dragDirection(): DragDirection {
+    get dragDirection(): "both" | "horizontal" | "vertical" {
         return this._getOption('dragDirection');
     }
-    set dragDirection(value: DragDirection) {
+    set dragDirection(value: "both" | "horizontal" | "vertical") {
         this._setOption('dragDirection', value);
     }
 
     @Input()
-    get dragTemplate(): any | undefined {
+    get dragTemplate(): any {
         return this._getOption('dragTemplate');
     }
-    set dragTemplate(value: any | undefined) {
+    set dragTemplate(value: any) {
         this._setOption('dragTemplate', value);
     }
 
     @Input()
-    get dropFeedbackMode(): DragHighlight {
+    get dropFeedbackMode(): "push" | "indicate" {
         return this._getOption('dropFeedbackMode');
     }
-    set dropFeedbackMode(value: DragHighlight) {
+    set dropFeedbackMode(value: "push" | "indicate") {
         this._setOption('dropFeedbackMode', value);
     }
 
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -128,10 +134,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get group(): string | undefined {
+    get group(): string {
         return this._getOption('group');
     }
-    set group(value: string | undefined) {
+    set group(value: string) {
         this._setOption('group', value);
     }
 
@@ -144,18 +150,18 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get itemOrientation(): Orientation {
+    get itemOrientation(): "horizontal" | "vertical" {
         return this._getOption('itemOrientation');
     }
-    set itemOrientation(value: Orientation) {
+    set itemOrientation(value: "horizontal" | "vertical") {
         this._setOption('itemOrientation', value);
     }
 
@@ -272,10 +278,10 @@ export class DxoListItemDraggingComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 

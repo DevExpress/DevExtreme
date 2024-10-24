@@ -14,9 +14,6 @@ import {
 
 
 
-import { SelectAllMode, SingleMultipleOrNone } from 'devextreme/common';
-import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
-import { SelectionSensitivity } from 'devextreme/ui/data_grid';
 
 import {
     NestedOptionHost,
@@ -40,6 +37,46 @@ export class DxoDataGridSelectionComponent extends NestedOption implements OnDes
     }
 
     @Input()
+    get deferred(): boolean {
+        return this._getOption('deferred');
+    }
+    set deferred(value: boolean) {
+        this._setOption('deferred', value);
+    }
+
+    @Input()
+    get mode(): "single" | "multiple" | "none" {
+        return this._getOption('mode');
+    }
+    set mode(value: "single" | "multiple" | "none") {
+        this._setOption('mode', value);
+    }
+
+    @Input()
+    get selectAllMode(): "allPages" | "page" {
+        return this._getOption('selectAllMode');
+    }
+    set selectAllMode(value: "allPages" | "page") {
+        this._setOption('selectAllMode', value);
+    }
+
+    @Input()
+    get sensitivity(): "base" | "accent" | "case" | "variant" {
+        return this._getOption('sensitivity');
+    }
+    set sensitivity(value: "base" | "accent" | "case" | "variant") {
+        this._setOption('sensitivity', value);
+    }
+
+    @Input()
+    get showCheckBoxesMode(): "always" | "none" | "onClick" | "onLongTap" {
+        return this._getOption('showCheckBoxesMode');
+    }
+    set showCheckBoxesMode(value: "always" | "none" | "onClick" | "onLongTap") {
+        this._setOption('showCheckBoxesMode', value);
+    }
+
+    @Input()
     get recursive(): boolean {
         return this._getOption('recursive');
     }
@@ -53,46 +90,6 @@ export class DxoDataGridSelectionComponent extends NestedOption implements OnDes
     }
     set selectByClick(value: boolean) {
         this._setOption('selectByClick', value);
-    }
-
-    @Input()
-    get deferred(): boolean {
-        return this._getOption('deferred');
-    }
-    set deferred(value: boolean) {
-        this._setOption('deferred', value);
-    }
-
-    @Input()
-    get mode(): SingleMultipleOrNone {
-        return this._getOption('mode');
-    }
-    set mode(value: SingleMultipleOrNone) {
-        this._setOption('mode', value);
-    }
-
-    @Input()
-    get selectAllMode(): SelectAllMode {
-        return this._getOption('selectAllMode');
-    }
-    set selectAllMode(value: SelectAllMode) {
-        this._setOption('selectAllMode', value);
-    }
-
-    @Input()
-    get sensitivity(): SelectionSensitivity {
-        return this._getOption('sensitivity');
-    }
-    set sensitivity(value: SelectionSensitivity) {
-        this._setOption('sensitivity', value);
-    }
-
-    @Input()
-    get showCheckBoxesMode(): SelectionColumnDisplayMode {
-        return this._getOption('showCheckBoxesMode');
-    }
-    set showCheckBoxesMode(value: SelectionColumnDisplayMode) {
-        this._setOption('showCheckBoxesMode', value);
     }
 
 

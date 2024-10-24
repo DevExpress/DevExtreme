@@ -29,34 +29,34 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFormColCountByScreenComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get lg(): number | undefined {
+    get lg(): number {
         return this._getOption('lg');
     }
-    set lg(value: number | undefined) {
+    set lg(value: number) {
         this._setOption('lg', value);
     }
 
     @Input()
-    get md(): number | undefined {
+    get md(): number {
         return this._getOption('md');
     }
-    set md(value: number | undefined) {
+    set md(value: number) {
         this._setOption('md', value);
     }
 
     @Input()
-    get sm(): number | undefined {
+    get sm(): number {
         return this._getOption('sm');
     }
-    set sm(value: number | undefined) {
+    set sm(value: number) {
         this._setOption('sm', value);
     }
 
     @Input()
-    get xs(): number | undefined {
+    get xs(): number {
         return this._getOption('xs');
     }
-    set xs(value: number | undefined) {
+    set xs(value: number) {
         this._setOption('xs', value);
     }
 

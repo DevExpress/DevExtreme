@@ -14,8 +14,9 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { chartPointObject } from 'devextreme/viz/chart';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -39,26 +40,26 @@ export class DxoChartVerticalLineComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
     @Input()
-    get label(): { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean } {
+    get label(): Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }) {
+    set label(value: Record<string, any> | { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, visible?: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 

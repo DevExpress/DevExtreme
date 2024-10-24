@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor, PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,58 +30,58 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPolarChartPointComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get color(): ChartsColor | string | undefined {
+    get color(): ChartsColor | string {
         return this._getOption('color');
     }
-    set color(value: ChartsColor | string | undefined) {
+    set color(value: ChartsColor | string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get hoverMode(): PointInteractionMode {
+    get hoverMode(): "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint" {
         return this._getOption('hoverMode');
     }
-    set hoverMode(value: PointInteractionMode) {
+    set hoverMode(value: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint") {
         this._setOption('hoverMode', value);
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get image(): string | undefined | { height?: number, url?: string | undefined, width?: number } {
+    get image(): string | { height?: number, url?: string, width?: number } {
         return this._getOption('image');
     }
-    set image(value: string | undefined | { height?: number, url?: string | undefined, width?: number }) {
+    set image(value: string | { height?: number, url?: string, width?: number }) {
         this._setOption('image', value);
     }
 
     @Input()
-    get selectionMode(): PointInteractionMode {
+    get selectionMode(): "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint" {
         return this._getOption('selectionMode');
     }
-    set selectionMode(value: PointInteractionMode) {
+    set selectionMode(value: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint") {
         this._setOption('selectionMode', value);
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }) {
         this._setOption('selectionStyle', value);
     }
 
@@ -94,10 +94,10 @@ export class DxoPolarChartPointComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get symbol(): PointSymbol {
+    get symbol(): "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp" {
         return this._getOption('symbol');
     }
-    set symbol(value: PointSymbol) {
+    set symbol(value: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp") {
         this._setOption('symbol', value);
     }
 

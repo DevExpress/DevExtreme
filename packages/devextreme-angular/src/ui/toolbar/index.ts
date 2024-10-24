@@ -23,10 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/toolbar';
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxToolbarItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, LocateInMenuMode, OptionChangedEvent, ShowTextMode } from 'devextreme/ui/toolbar';
+import DataSource from 'devextreme/data/data_source';
+import { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/toolbar';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxToolbar from 'devextreme/ui/toolbar';
 
@@ -72,10 +72,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxToolbarItem | string | any> {
+    get dataSource(): Array<any | dxToolbarItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxToolbarItem | string | any>) {
+    set dataSource(value: Array<any | dxToolbarItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -98,10 +98,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -111,10 +111,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -150,10 +150,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get items(): Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent }> {
+    get items(): Array<any | dxToolbarItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent }>) {
+    set items(value: Array<any | dxToolbarItem | string>) {
         this._setOption('items', value);
     }
 
@@ -241,10 +241,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -317,7 +317,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxToolbarItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxToolbarItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -331,14 +331,14 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -359,7 +359,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, visible?: boolean, widget?: ToolbarItemComponent }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxToolbarItem | string>>;
 
     /**
     
@@ -408,7 +408,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

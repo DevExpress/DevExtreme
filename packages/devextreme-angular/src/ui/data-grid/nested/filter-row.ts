@@ -14,7 +14,6 @@ import {
 
 
 
-import { ApplyFilterMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -30,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get applyFilter(): ApplyFilterMode {
+    get applyFilter(): "auto" | "onClick" {
         return this._getOption('applyFilter');
     }
-    set applyFilter(value: ApplyFilterMode) {
+    set applyFilter(value: "auto" | "onClick") {
         this._setOption('applyFilter', value);
     }
 
@@ -62,10 +61,10 @@ export class DxoDataGridFilterRowComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get operationDescriptions(): { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
+    get operationDescriptions(): Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string } {
         return this._getOption('operationDescriptions');
     }
-    set operationDescriptions(value: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
+    set operationDescriptions(value: Record<string, any> | { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }) {
         this._setOption('operationDescriptions', value);
     }
 

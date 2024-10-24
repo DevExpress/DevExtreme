@@ -8,14 +8,13 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    Output,
-    EventEmitter
+    Input
 } from '@angular/core';
 
 
 
 
+import { GridBase } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -31,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -47,10 +46,10 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get texts(): { clearFilter?: string, createFilter?: string, filterEnabledHint?: string } {
+    get texts(): Record<string, any> | { clearFilter?: string, createFilter?: string, filterEnabledHint?: string } {
         return this._getOption('texts');
     }
-    set texts(value: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }) {
+    set texts(value: Record<string, any> | { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }) {
         this._setOption('texts', value);
     }
 
@@ -63,12 +62,6 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     }
 
 
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() filterEnabledChange: EventEmitter<boolean>;
     protected get _optionPath() {
         return 'filterPanel';
     }
@@ -77,11 +70,6 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
-        this._createEventEmitters([
-            { emit: 'filterEnabledChange' }
-        ]);
-
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
     }

@@ -12,7 +12,7 @@ import {
 
 
 
-import { DataType } from 'devextreme/common';
+import { dxFilterBuilderField } from 'devextreme/ui/filter_builder';
 
 import {
     NestedOptionHost,
@@ -28,34 +28,34 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption {
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
     @Input()
-    get caption(): string | undefined {
+    get caption(): string {
         return this._getOption('caption');
     }
-    set caption(value: string | undefined) {
+    set caption(value: string) {
         this._setOption('caption', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get dataTypes(): any | undefined | Array<DataType> {
+    get dataTypes(): Array<"string" | "number" | "date" | "boolean" | "object" | "datetime"> {
         return this._getOption('dataTypes');
     }
-    set dataTypes(value: any | undefined | Array<DataType>) {
+    set dataTypes(value: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">) {
         this._setOption('dataTypes', value);
     }
 
@@ -76,18 +76,18 @@ export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOp
     }
 
     @Input()
-    get icon(): string | undefined {
+    get icon(): string {
         return this._getOption('icon');
     }
-    set icon(value: string | undefined) {
+    set icon(value: string) {
         this._setOption('icon', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 

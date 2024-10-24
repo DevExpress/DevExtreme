@@ -14,7 +14,6 @@ import {
 
 
 
-import { DashStyle } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,34 +29,34 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoFunnelBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get color(): string | undefined {
+    get color(): string {
         return this._getOption('color');
     }
-    set color(value: string | undefined) {
+    set color(value: string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get visible(): boolean | undefined {
+    get visible(): boolean {
         return this._getOption('visible');
     }
-    set visible(value: boolean | undefined) {
+    set visible(value: boolean) {
         this._setOption('visible', value);
     }
 
     @Input()
-    get width(): number | undefined {
+    get width(): number {
         return this._getOption('width');
     }
-    set width(value: number | undefined) {
+    set width(value: number) {
         this._setOption('width', value);
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): "dash" | "dot" | "longDash" | "solid" {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: "dash" | "dot" | "longDash" | "solid") {
         this._setOption('dashStyle', value);
     }
 
@@ -70,10 +69,10 @@ export class DxoFunnelBorderComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 

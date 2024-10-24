@@ -14,9 +14,8 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { Font, LabelOverlap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -32,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowDecimals(): boolean | undefined {
+    get allowDecimals(): boolean {
         return this._getOption('allowDecimals');
     }
-    set allowDecimals(value: boolean | undefined) {
+    set allowDecimals(value: boolean) {
         this._setOption('allowDecimals', value);
     }
 
@@ -64,34 +63,34 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get horizontalOrientation(): HorizontalAlignment {
+    get horizontalOrientation(): "center" | "left" | "right" {
         return this._getOption('horizontalOrientation');
     }
-    set horizontalOrientation(value: HorizontalAlignment) {
+    set horizontalOrientation(value: "center" | "left" | "right") {
         this._setOption('horizontalOrientation', value);
     }
 
     @Input()
-    get label(): { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean } {
+    get label(): Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromTick?: number, overlappingBehavior?: LabelOverlap, useRangeColors?: boolean, visible?: boolean }) {
+    set label(value: Record<string, any> | { customizeText?: ((scaleValue: { value: number, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromTick?: number, overlappingBehavior?: "hide" | "none", useRangeColors?: boolean, visible?: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get minorTick(): { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
+    get minorTick(): Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
     @Input()
-    get minorTickInterval(): number | undefined {
+    get minorTickInterval(): number {
         return this._getOption('minorTickInterval');
     }
-    set minorTickInterval(value: number | undefined) {
+    set minorTickInterval(value: number) {
         this._setOption('minorTickInterval', value);
     }
 
@@ -112,26 +111,26 @@ export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get tick(): { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
+    get tick(): Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
+    set tick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('tick', value);
     }
 
     @Input()
-    get tickInterval(): number | undefined {
+    get tickInterval(): number {
         return this._getOption('tickInterval');
     }
-    set tickInterval(value: number | undefined) {
+    set tickInterval(value: number) {
         this._setOption('tickInterval', value);
     }
 
     @Input()
-    get verticalOrientation(): VerticalAlignment {
+    get verticalOrientation(): "bottom" | "center" | "top" {
         return this._getOption('verticalOrientation');
     }
-    set verticalOrientation(value: VerticalAlignment) {
+    set verticalOrientation(value: "bottom" | "center" | "top") {
         this._setOption('verticalOrientation', value);
     }
 

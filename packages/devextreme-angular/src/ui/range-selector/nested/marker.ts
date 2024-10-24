@@ -14,7 +14,7 @@ import {
 
 
 
-import { Format } from 'devextreme/localization';
+import * as LocalizationTypes from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorMarkerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get label(): { customizeText?: Function, format?: Format | string | undefined } {
+    get label(): Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format } {
         return this._getOption('label');
     }
-    set label(value: { customizeText?: Function, format?: Format | string | undefined }) {
+    set label(value: Record<string, any> | { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: LocalizationTypes.Format }) {
         this._setOption('label', value);
     }
 

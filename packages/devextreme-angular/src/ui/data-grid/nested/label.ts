@@ -18,8 +18,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { HorizontalAlignment } from 'devextreme/common';
-import { LabelLocation } from 'devextreme/ui/form';
 
 import {
     NestedOptionHost,
@@ -40,18 +38,18 @@ import { NestedOption } from 'devextreme-angular/core';
 export class DxoDataGridLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
     @Input()
-    get alignment(): HorizontalAlignment {
+    get alignment(): "center" | "left" | "right" {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment) {
+    set alignment(value: "center" | "left" | "right") {
         this._setOption('alignment', value);
     }
 
     @Input()
-    get location(): LabelLocation {
+    get location(): "left" | "right" | "top" {
         return this._getOption('location');
     }
-    set location(value: LabelLocation) {
+    set location(value: "left" | "right" | "top") {
         this._setOption('location', value);
     }
 
@@ -72,10 +70,10 @@ export class DxoDataGridLabelComponent extends NestedOption implements AfterView
     }
 
     @Input()
-    get text(): string | undefined {
+    get text(): string {
         return this._getOption('text');
     }
-    set text(value: string | undefined) {
+    set text(value: string) {
         this._setOption('text', value);
     }
 

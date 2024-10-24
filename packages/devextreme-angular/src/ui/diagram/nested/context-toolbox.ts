@@ -14,7 +14,6 @@ import {
 
 
 
-import { ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDiagramContextToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get category(): ShapeCategory | string {
+    get category(): "general" | "flowchart" | "orgChart" | "containers" | "custom" {
         return this._getOption('category');
     }
-    set category(value: ShapeCategory | string) {
+    set category(value: "general" | "flowchart" | "orgChart" | "containers" | "custom") {
         this._setOption('category', value);
     }
 
     @Input()
-    get displayMode(): ToolboxDisplayMode {
+    get displayMode(): "icons" | "texts" {
         return this._getOption('displayMode');
     }
-    set displayMode(value: ToolboxDisplayMode) {
+    set displayMode(value: "icons" | "texts") {
         this._setOption('displayMode', value);
     }
 
@@ -62,10 +61,10 @@ export class DxoDiagramContextToolboxComponent extends NestedOption implements O
     }
 
     @Input()
-    get shapes(): Array<ShapeType | string> {
+    get shapes(): Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight"> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<ShapeType | string>) {
+    set shapes(value: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">) {
         this._setOption('shapes', value);
     }
 

@@ -5,28 +5,39 @@ import {
     Component,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
     Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
+import dxTreeList from 'devextreme/ui/tree_list';
+import { dxTreeListColumn, dxTreeListRowObject } from 'devextreme/ui/tree_list';
+import { event } from 'devextreme/events/index';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxi-tree-list-button',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxiTreeListButtonComponent extends CollectionNestedOption {
+export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,
+    IDxTemplateHost {
     @Input()
     get cssClass(): string {
         return this._getOption('cssClass');
@@ -36,10 +47,10 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get disabled(): boolean | Function {
+    get disabled(): boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('disabled');
     }
-    set disabled(value: boolean | Function) {
+    set disabled(value: boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('disabled', value);
     }
 
@@ -60,18 +71,18 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get name(): TreeListPredefinedColumnButton | string {
+    get name(): "add" | "cancel" | "delete" | "edit" | "save" | "undelete" {
         return this._getOption('name');
     }
-    set name(value: TreeListPredefinedColumnButton | string) {
+    set name(value: "add" | "cancel" | "delete" | "edit" | "save" | "undelete") {
         this._setOption('name', value);
     }
 
     @Input()
-    get onClick(): Function {
+    get onClick(): ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: Function) {
+    set onClick(value: ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void)) {
         this._setOption('onClick', value);
     }
 
@@ -92,10 +103,10 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get visible(): boolean | Function {
+    get visible(): boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('visible');
     }
-    set visible(value: boolean | Function) {
+    set visible(value: boolean | ((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean)) {
         this._setOption('visible', value);
     }
 
@@ -106,10 +117,22 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption {
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

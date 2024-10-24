@@ -18,10 +18,9 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
-import { PositionAlignment } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
+import { event } from 'devextreme/events/index';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
+import { PositionConfig } from 'devextreme/animation/position';
 
 import DxLoadPanel from 'devextreme/ui/load_panel';
 
@@ -48,16 +47,16 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
 import { DxoShowModule } from 'devextreme-angular/ui/nested';
 
 import { DxoLoadPanelAnimationModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoLoadPanelHideModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoLoadPanelFromModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoLoadPanelPositionModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelAtModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelBoundaryOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelCollisionModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelFromModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelHideModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelMyModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
-import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelPositionModule } from 'devextreme-angular/ui/load-panel/nested';
 import { DxoLoadPanelShowModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
 
 
 
@@ -83,10 +82,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
+    get animation(): Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
     }
-    set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
+    set animation(value: Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
     }
 
@@ -98,10 +97,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get closeOnOutsideClick(): boolean | Function {
+    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('closeOnOutsideClick');
     }
-    set closeOnOutsideClick(value: boolean | Function) {
+    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('closeOnOutsideClick', value);
     }
 
@@ -111,10 +110,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
@@ -163,10 +162,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): number | Function | string {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -176,10 +175,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hideOnOutsideClick(): boolean | Function {
+    get hideOnOutsideClick(): boolean | ((event: event) => boolean) {
         return this._getOption('hideOnOutsideClick');
     }
-    set hideOnOutsideClick(value: boolean | Function) {
+    set hideOnOutsideClick(value: boolean | ((event: event) => boolean)) {
         this._setOption('hideOnOutsideClick', value);
     }
 
@@ -202,10 +201,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -241,10 +240,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxHeight(): number | Function | string {
+    get maxHeight(): (() => number | string) | number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: number | Function | string) {
+    set maxHeight(value: (() => number | string) | number | string) {
         this._setOption('maxHeight', value);
     }
 
@@ -254,10 +253,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxWidth(): number | Function | string {
+    get maxWidth(): (() => number | string) | number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: number | Function | string) {
+    set maxWidth(value: (() => number | string) | number | string) {
         this._setOption('maxWidth', value);
     }
 
@@ -280,10 +279,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minHeight(): number | Function | string {
+    get minHeight(): (() => number | string) | number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: number | Function | string) {
+    set minHeight(value: (() => number | string) | number | string) {
         this._setOption('minHeight', value);
     }
 
@@ -293,10 +292,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minWidth(): number | Function | string {
+    get minWidth(): (() => number | string) | number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | Function | string) {
+    set minWidth(value: (() => number | string) | number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -306,10 +305,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): PositionAlignment | PositionConfig | Function {
+    get position(): (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" {
         return this._getOption('position');
     }
-    set position(value: PositionAlignment | PositionConfig | Function) {
+    set position(value: (() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top") {
         this._setOption('position', value);
     }
 
@@ -397,10 +396,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): number | Function | string {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -486,21 +485,21 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<{ hide?: AnimationConfig, show?: AnimationConfig }>;
+    @Output() animationChange: EventEmitter<Record<string, any> | { hide?: AnimationConfig, show?: AnimationConfig }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() containerChange: EventEmitter<any | string>;
 
     /**
     
@@ -528,14 +527,14 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hideOnOutsideClickChange: EventEmitter<boolean | Function>;
+    @Output() hideOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
 
     /**
     
@@ -549,7 +548,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -570,14 +569,14 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxHeightChange: EventEmitter<number | Function | string>;
+    @Output() maxHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxWidthChange: EventEmitter<number | Function | string>;
+    @Output() maxWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -591,21 +590,21 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minHeightChange: EventEmitter<number | Function | string>;
+    @Output() minHeightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minWidthChange: EventEmitter<number | Function | string>;
+    @Output() minWidthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionAlignment | PositionConfig | Function>;
+    @Output() positionChange: EventEmitter<(() => void) | PositionConfig | "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top">;
 
     /**
     
@@ -654,7 +653,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -743,16 +742,16 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoToModule,
     DxoShowModule,
     DxoLoadPanelAnimationModule,
-    DxoLoadPanelHideModule,
-    DxoLoadPanelFromModule,
-    DxoLoadPanelPositionModule,
     DxoLoadPanelAtModule,
     DxoLoadPanelBoundaryOffsetModule,
     DxoLoadPanelCollisionModule,
+    DxoLoadPanelFromModule,
+    DxoLoadPanelHideModule,
     DxoLoadPanelMyModule,
     DxoLoadPanelOffsetModule,
-    DxoLoadPanelToModule,
+    DxoLoadPanelPositionModule,
     DxoLoadPanelShowModule,
+    DxoLoadPanelToModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -773,16 +772,16 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     DxoToModule,
     DxoShowModule,
     DxoLoadPanelAnimationModule,
-    DxoLoadPanelHideModule,
-    DxoLoadPanelFromModule,
-    DxoLoadPanelPositionModule,
     DxoLoadPanelAtModule,
     DxoLoadPanelBoundaryOffsetModule,
     DxoLoadPanelCollisionModule,
+    DxoLoadPanelFromModule,
+    DxoLoadPanelHideModule,
     DxoLoadPanelMyModule,
     DxoLoadPanelOffsetModule,
-    DxoLoadPanelToModule,
+    DxoLoadPanelPositionModule,
     DxoLoadPanelShowModule,
+    DxoLoadPanelToModule,
     DxTemplateModule
   ]
 })

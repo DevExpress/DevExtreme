@@ -14,8 +14,6 @@ import {
 
 
 
-import { FieldChooserLayout } from 'devextreme/common';
-import { ApplyChangesMode } from 'devextreme/common/grids';
 
 import {
     NestedOptionHost,
@@ -39,10 +37,10 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get applyChangesMode(): ApplyChangesMode {
+    get applyChangesMode(): "instantly" | "onDemand" {
         return this._getOption('applyChangesMode');
     }
-    set applyChangesMode(value: ApplyChangesMode) {
+    set applyChangesMode(value: "instantly" | "onDemand") {
         this._setOption('applyChangesMode', value);
     }
 
@@ -63,10 +61,10 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get layout(): FieldChooserLayout {
+    get layout(): 0 | 1 | 2 {
         return this._getOption('layout');
     }
-    set layout(value: FieldChooserLayout) {
+    set layout(value: 0 | 1 | 2) {
         this._setOption('layout', value);
     }
 
@@ -79,10 +77,10 @@ export class DxoPivotGridFieldChooserComponent extends NestedOption implements O
     }
 
     @Input()
-    get texts(): { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string } {
+    get texts(): Record<string, any> | { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string } {
         return this._getOption('texts');
     }
-    set texts(value: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }) {
+    set texts(value: Record<string, any> | { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }) {
         this._setOption('texts', value);
     }
 

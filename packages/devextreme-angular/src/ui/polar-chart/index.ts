@@ -22,13 +22,13 @@ import {
 } from '@angular/core';
 
 
-import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleOrMultiple, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, ArgumentAxisHoverMode, AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, LegendHoverMode, Palette, PaletteExtensionMode, TextOverflow, Theme, TimeInterval, VisualRange, WordWrap } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
-import { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, PolarChartSeries, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ValueAxisVisualRangeUpdateMode, ZoomEndEvent, ZoomStartEvent } from 'devextreme/viz/polar_chart';
+import DataSource from 'devextreme/data/data_source';
+import * as LocalizationTypes from 'devextreme/localization';
+import * as CommonChartTypes from 'devextreme/common/charts';
+import { dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, PolarChartSeries } from 'devextreme/viz/polar_chart';
+import { Font, ChartsColor, SeriesLabel, SeriesPoint, LegendItem } from 'devextreme/common/charts';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxPolarChart from 'devextreme/viz/polar_chart';
 
@@ -96,52 +96,73 @@ import { DxoMinVisualRangeLengthModule } from 'devextreme-angular/ui/nested';
 import { DxoPolarChartAdaptiveLayoutModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartAnimationModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxiPolarChartAnnotationModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartBorderModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartFontModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartImageModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartShadowModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartAnnotationBorderModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartArgumentAxisModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartArgumentAxisMinorTickModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartArgumentAxisTickModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartArgumentFormatModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartAxisLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartBorderModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartColorModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonAnnotationSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonAxisSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonAxisSettingsLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonAxisSettingsMinorTickModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonAxisSettingsTickModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonSeriesSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonSeriesSettingsHoverStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonSeriesSettingsLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartCommonSeriesSettingsSelectionStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartConnectorModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxiPolarChartConstantLineModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartConstantLineLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartConstantLineStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartGridModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartConstantLineStyleLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartDataPrepareSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartExportModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartFontModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartFormatModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartGridModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartHatchingModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartHoverStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartImageModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartLegendModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartLegendTitleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartLegendTitleSubtitleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartLengthModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartLoadingIndicatorModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartMarginModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartMinorGridModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartMinorTickModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartMinorTickIntervalModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartMinVisualRangeLengthModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartPointModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartPointBorderModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartPointHoverStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartPointSelectionStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartPolarChartTitleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartPolarChartTitleSubtitleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartSelectionStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxiPolarChartSeriesModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartSeriesBorderModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartSeriesTemplateModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartShadowModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartSizeModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxiPolarChartStripModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartStripLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartStripStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartStripStyleLabelModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartSubtitleModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartTickModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartTickIntervalModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartCommonAnnotationSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartCommonAxisSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartCommonSeriesSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartAreaModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartHoverStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartHatchingModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartConnectorModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartPointModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartSelectionStyleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartValueErrorBarModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartBarModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartColorModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartArgumentFormatModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartLineModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartScatterModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartStackedbarModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartDataPrepareSettingsModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartExportModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartLegendModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartMarginModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartTitleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartSubtitleModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartLoadingIndicatorModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiPolarChartSeriesModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartSeriesTemplateModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartSizeModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartTooltipModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartTooltipBorderModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartValueAxisModule } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxoPolarChartMinVisualRangeLengthModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartValueErrorBarModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartVisualRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
+import { DxoPolarChartWholeRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
 
 import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
 import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
@@ -173,10 +194,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get adaptiveLayout(): { height?: number, keepLabels?: boolean, width?: number } {
+    get adaptiveLayout(): Record<string, any> | { height?: number, keepLabels?: boolean, width?: number } {
         return this._getOption('adaptiveLayout');
     }
-    set adaptiveLayout(value: { height?: number, keepLabels?: boolean, width?: number }) {
+    set adaptiveLayout(value: Record<string, any> | { height?: number, keepLabels?: boolean, width?: number }) {
         this._setOption('adaptiveLayout', value);
     }
 
@@ -186,10 +207,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get animation(): boolean | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number } {
+    get animation(): boolean | Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean, maxPointCountSupported?: number } {
         return this._getOption('animation');
     }
-    set animation(value: boolean | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number }) {
+    set animation(value: boolean | Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean, maxPointCountSupported?: number }) {
         this._setOption('animation', value);
     }
 
@@ -199,10 +220,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get annotations(): Array<dxPolarChartAnnotationConfig | any> {
+    get annotations(): Array<any | dxPolarChartAnnotationConfig> {
         return this._getOption('annotations');
     }
-    set annotations(value: Array<dxPolarChartAnnotationConfig | any>) {
+    set annotations(value: Array<any | dxPolarChartAnnotationConfig>) {
         this._setOption('annotations', value);
     }
 
@@ -212,10 +233,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get argumentAxis(): { allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, firstPointOnStartAngle?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, originValue?: number | undefined, period?: number | undefined, startAngle?: number, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, visible?: boolean, width?: number } {
+    get argumentAxis(): Record<string, any> | { allowDecimals?: boolean, argumentType?: "datetime" | "numeric" | "string", axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[], constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, firstPointOnStartAngle?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, hoverMode?: "allArgumentPoints" | "none", inverted?: boolean, label?: Record<string, any> | { customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, linearThreshold?: number, logarithmBase?: number, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number, originValue?: number, period?: number, startAngle?: number, strips?: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[], stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic", visible?: boolean, width?: number } {
         return this._getOption('argumentAxis');
     }
-    set argumentAxis(value: { allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, firstPointOnStartAngle?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, originValue?: number | undefined, period?: number | undefined, startAngle?: number, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, visible?: boolean, width?: number }) {
+    set argumentAxis(value: Record<string, any> | { allowDecimals?: boolean, argumentType?: "datetime" | "numeric" | "string", axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[], constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, firstPointOnStartAngle?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, hoverMode?: "allArgumentPoints" | "none", inverted?: boolean, label?: Record<string, any> | { customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, linearThreshold?: number, logarithmBase?: number, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number, originValue?: number, period?: number, startAngle?: number, strips?: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[], stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic", visible?: boolean, width?: number }) {
         this._setOption('argumentAxis', value);
     }
 
@@ -238,10 +259,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get barGroupWidth(): number | undefined {
+    get barGroupWidth(): number {
         return this._getOption('barGroupWidth');
     }
-    set barGroupWidth(value: number | undefined) {
+    set barGroupWidth(value: number) {
         this._setOption('barGroupWidth', value);
     }
 
@@ -264,10 +285,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get commonAxisSettings(): { allowDecimals?: boolean | undefined, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, opacity?: number | undefined, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, visible?: boolean, width?: number } {
+    get commonAxisSettings(): Record<string, any> | { allowDecimals?: boolean, color?: string, constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, inverted?: boolean, label?: Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, opacity?: number, stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, visible?: boolean, width?: number } {
         return this._getOption('commonAxisSettings');
     }
-    set commonAxisSettings(value: { allowDecimals?: boolean | undefined, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, opacity?: number | undefined, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, visible?: boolean, width?: number }) {
+    set commonAxisSettings(value: Record<string, any> | { allowDecimals?: boolean, color?: string, constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, inverted?: boolean, label?: Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, opacity?: number, stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, visible?: boolean, width?: number }) {
         this._setOption('commonAxisSettings', value);
     }
 
@@ -277,10 +298,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get commonSeriesSettings(): any {
+    get commonSeriesSettings(): Record<string, any> | { area?: any, argumentField?: string, bar?: any, barPadding?: number, barWidth?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, closed?: boolean, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, ignoreEmptyPoints?: boolean, label?: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "inside" | "outside", rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean }, line?: any, maxLabelCount?: number, minBarSize?: number, opacity?: number, point?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, image?: string | { height?: number, url?: string, width?: number }, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, size?: number, symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible?: boolean }, scatter?: any, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, showInLegend?: boolean, stack?: string, stackedbar?: any, tagField?: string, type?: "area" | "bar" | "line" | "scatter" | "stackedbar", valueErrorBar?: Record<string, any> | { color?: string, displayMode?: "auto" | "high" | "low" | "none", edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value?: number }, valueField?: string, visible?: boolean, width?: number } {
         return this._getOption('commonSeriesSettings');
     }
-    set commonSeriesSettings(value: any) {
+    set commonSeriesSettings(value: Record<string, any> | { area?: any, argumentField?: string, bar?: any, barPadding?: number, barWidth?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, closed?: boolean, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, ignoreEmptyPoints?: boolean, label?: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "inside" | "outside", rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean }, line?: any, maxLabelCount?: number, minBarSize?: number, opacity?: number, point?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, image?: string | { height?: number, url?: string, width?: number }, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, size?: number, symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible?: boolean }, scatter?: any, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, showInLegend?: boolean, stack?: string, stackedbar?: any, tagField?: string, type?: "area" | "bar" | "line" | "scatter" | "stackedbar", valueErrorBar?: Record<string, any> | { color?: string, displayMode?: "auto" | "high" | "low" | "none", edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value?: number }, valueField?: string, visible?: boolean, width?: number }) {
         this._setOption('commonSeriesSettings', value);
     }
 
@@ -303,10 +324,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get customizeAnnotation(): Function | undefined {
+    get customizeAnnotation(): ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig) {
         return this._getOption('customizeAnnotation');
     }
-    set customizeAnnotation(value: Function | undefined) {
+    set customizeAnnotation(value: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig)) {
         this._setOption('customizeAnnotation', value);
     }
 
@@ -316,10 +337,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get customizeLabel(): Function {
+    get customizeLabel(): ((pointInfo: any) => SeriesLabel) {
         return this._getOption('customizeLabel');
     }
-    set customizeLabel(value: Function) {
+    set customizeLabel(value: ((pointInfo: any) => SeriesLabel)) {
         this._setOption('customizeLabel', value);
     }
 
@@ -329,10 +350,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get customizePoint(): Function {
+    get customizePoint(): ((pointInfo: any) => SeriesPoint) {
         return this._getOption('customizePoint');
     }
-    set customizePoint(value: Function) {
+    set customizePoint(value: ((pointInfo: any) => SeriesPoint)) {
         this._setOption('customizePoint', value);
     }
 
@@ -342,10 +363,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get dataPrepareSettings(): { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function } {
+    get dataPrepareSettings(): Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) } {
         return this._getOption('dataPrepareSettings');
     }
-    set dataPrepareSettings(value: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }) {
+    set dataPrepareSettings(value: Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }) {
         this._setOption('dataPrepareSettings', value);
     }
 
@@ -355,10 +376,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: Array<any> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -381,10 +402,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -394,10 +415,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get export(): { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined } {
+    get export(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) } {
         return this._getOption('export');
     }
-    set export(value: { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }) {
+    set export(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }) {
         this._setOption('export', value);
     }
 
@@ -407,10 +428,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get legend(): { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean } {
+    get legend(): Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>), customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", hoverMode?: "excludePoints" | "includePoints" | "none", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean } {
         return this._getOption('legend');
     }
-    set legend(value: { backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }) {
+    set legend(value: Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>), customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", hoverMode?: "excludePoints" | "includePoints" | "none", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean }) {
         this._setOption('legend', value);
     }
 
@@ -420,10 +441,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get loadingIndicator(): { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
+    get loadingIndicator(): Record<string, any> | { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string } {
         return this._getOption('loadingIndicator');
     }
-    set loadingIndicator(value: { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
+    set loadingIndicator(value: Record<string, any> | { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }) {
         this._setOption('loadingIndicator', value);
     }
 
@@ -433,10 +454,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get margin(): { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -459,10 +480,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get palette(): Palette | string | Array<string> {
+    get palette(): Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office" {
         return this._getOption('palette');
     }
-    set palette(value: Palette | string | Array<string>) {
+    set palette(value: Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office") {
         this._setOption('palette', value);
     }
 
@@ -472,10 +493,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get paletteExtensionMode(): PaletteExtensionMode {
+    get paletteExtensionMode(): "alternate" | "blend" | "extrapolate" {
         return this._getOption('paletteExtensionMode');
     }
-    set paletteExtensionMode(value: PaletteExtensionMode) {
+    set paletteExtensionMode(value: "alternate" | "blend" | "extrapolate") {
         this._setOption('paletteExtensionMode', value);
     }
 
@@ -498,10 +519,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get pointSelectionMode(): SingleOrMultiple {
+    get pointSelectionMode(): "single" | "multiple" {
         return this._getOption('pointSelectionMode');
     }
-    set pointSelectionMode(value: SingleOrMultiple) {
+    set pointSelectionMode(value: "single" | "multiple") {
         this._setOption('pointSelectionMode', value);
     }
 
@@ -524,10 +545,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get resolveLabelOverlapping(): LabelOverlap {
+    get resolveLabelOverlapping(): "hide" | "none" {
         return this._getOption('resolveLabelOverlapping');
     }
-    set resolveLabelOverlapping(value: LabelOverlap) {
+    set resolveLabelOverlapping(value: "hide" | "none") {
         this._setOption('resolveLabelOverlapping', value);
     }
 
@@ -550,10 +571,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get series(): PolarChartSeries | any | undefined | Array<PolarChartSeries | any> {
+    get series(): Array<PolarChartSeries> | PolarChartSeries {
         return this._getOption('series');
     }
-    set series(value: PolarChartSeries | any | undefined | Array<PolarChartSeries | any>) {
+    set series(value: Array<PolarChartSeries> | PolarChartSeries) {
         this._setOption('series', value);
     }
 
@@ -563,10 +584,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get seriesSelectionMode(): SingleOrMultiple {
+    get seriesSelectionMode(): "single" | "multiple" {
         return this._getOption('seriesSelectionMode');
     }
-    set seriesSelectionMode(value: SingleOrMultiple) {
+    set seriesSelectionMode(value: "single" | "multiple") {
         this._setOption('seriesSelectionMode', value);
     }
 
@@ -576,10 +597,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get seriesTemplate(): { customizeSeries?: Function, nameField?: string } {
+    get seriesTemplate(): any {
         return this._getOption('seriesTemplate');
     }
-    set seriesTemplate(value: { customizeSeries?: Function, nameField?: string }) {
+    set seriesTemplate(value: any) {
         this._setOption('seriesTemplate', value);
     }
 
@@ -589,10 +610,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get size(): { height?: number | undefined, width?: number | undefined } {
+    get size(): Record<string, any> | { height?: number, width?: number } {
         return this._getOption('size');
     }
-    set size(value: { height?: number | undefined, width?: number | undefined }) {
+    set size(value: Record<string, any> | { height?: number, width?: number }) {
         this._setOption('size', value);
     }
 
@@ -602,10 +623,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get theme(): Theme {
+    get theme(): "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light" {
         return this._getOption('theme');
     }
-    set theme(value: Theme) {
+    set theme(value: "generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light") {
         this._setOption('theme', value);
     }
 
@@ -615,10 +636,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get title(): string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap } {
+    get title(): string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('title');
     }
-    set title(value: string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }) {
+    set title(value: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('title', value);
     }
 
@@ -628,10 +649,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get tooltip(): { argumentFormat?: Format | string | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined } {
+    get tooltip(): Record<string, any> | { argumentFormat?: LocalizationTypes.Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { argumentFormat?: Format | string | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }) {
+    set tooltip(value: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number }) {
         this._setOption('tooltip', value);
     }
 
@@ -654,10 +675,10 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get valueAxis(): { allowDecimals?: boolean | undefined, axisDivisionFactor?: number, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, showZero?: boolean | undefined, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number } {
+    get valueAxis(): Record<string, any> | { allowDecimals?: boolean, axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[], constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, inverted?: boolean, label?: Record<string, any> | { customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, linearThreshold?: number, logarithmBase?: number, maxValueMargin?: number, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number, minVisualRangeLength?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number, showZero?: boolean, strips?: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[], stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic", valueMarginsEnabled?: boolean, valueType?: "datetime" | "numeric" | "string", visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: "auto" | "keep" | "reset", wholeRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, width?: number } {
         return this._getOption('valueAxis');
     }
-    set valueAxis(value: { allowDecimals?: boolean | undefined, axisDivisionFactor?: number, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, showZero?: boolean | undefined, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number }) {
+    set valueAxis(value: Record<string, any> | { allowDecimals?: boolean, axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[], constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, inverted?: boolean, label?: Record<string, any> | { customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, linearThreshold?: number, logarithmBase?: number, maxValueMargin?: number, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number, minVisualRangeLength?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number, showZero?: boolean, strips?: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[], stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic", valueMarginsEnabled?: boolean, valueType?: "datetime" | "numeric" | "string", visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: "auto" | "keep" | "reset", wholeRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, width?: number }) {
         this._setOption('valueAxis', value);
     }
 
@@ -834,28 +855,28 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() adaptiveLayoutChange: EventEmitter<{ height?: number, keepLabels?: boolean, width?: number }>;
+    @Output() adaptiveLayoutChange: EventEmitter<Record<string, any> | { height?: number, keepLabels?: boolean, width?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() animationChange: EventEmitter<boolean | { duration?: number, easing?: AnimationEaseMode, enabled?: boolean, maxPointCountSupported?: number }>;
+    @Output() animationChange: EventEmitter<boolean | Record<string, any> | { duration?: number, easing?: "easeOutCubic" | "linear", enabled?: boolean, maxPointCountSupported?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() annotationsChange: EventEmitter<Array<dxPolarChartAnnotationConfig | any>>;
+    @Output() annotationsChange: EventEmitter<Array<any | dxPolarChartAnnotationConfig>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() argumentAxisChange: EventEmitter<{ allowDecimals?: boolean | undefined, argumentType?: ChartsDataType | undefined, axisDivisionFactor?: number, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, firstPointOnStartAngle?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, hoverMode?: ArgumentAxisHoverMode, inverted?: boolean, label?: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, originValue?: number | undefined, period?: number | undefined, startAngle?: number, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, shift?: number, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, visible?: boolean, width?: number }>;
+    @Output() argumentAxisChange: EventEmitter<Record<string, any> | { allowDecimals?: boolean, argumentType?: "datetime" | "numeric" | "string", axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[], constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, firstPointOnStartAngle?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, hoverMode?: "allArgumentPoints" | "none", inverted?: boolean, label?: Record<string, any> | { customizeHint?: ((argument: { value: Date | number | string, valueText: string }) => string), customizeText?: ((argument: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, linearThreshold?: number, logarithmBase?: number, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number, originValue?: number, period?: number, startAngle?: number, strips?: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[], stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic", visible?: boolean, width?: number }>;
 
     /**
     
@@ -869,7 +890,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() barGroupWidthChange: EventEmitter<number | undefined>;
+    @Output() barGroupWidthChange: EventEmitter<number>;
 
     /**
     
@@ -883,14 +904,14 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() commonAxisSettingsChange: EventEmitter<{ allowDecimals?: boolean | undefined, color?: string, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean | undefined, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, opacity?: number | undefined, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, visible?: boolean, width?: number }>;
+    @Output() commonAxisSettingsChange: EventEmitter<Record<string, any> | { allowDecimals?: boolean, color?: string, constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, inverted?: boolean, label?: Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, opacity?: number, stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, visible?: boolean, width?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() commonSeriesSettingsChange: EventEmitter<any>;
+    @Output() commonSeriesSettingsChange: EventEmitter<Record<string, any> | { area?: any, argumentField?: string, bar?: any, barPadding?: number, barWidth?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, closed?: boolean, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "nearestPoint" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, ignoreEmptyPoints?: boolean, label?: Record<string, any> | { argumentFormat?: LocalizationTypes.Format, backgroundColor?: string, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, connector?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), displayFormat?: string, font?: Font, format?: LocalizationTypes.Format, position?: "inside" | "outside", rotationAngle?: number, showForZeroValues?: boolean, visible?: boolean }, line?: any, maxLabelCount?: number, minBarSize?: number, opacity?: number, point?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, hoverMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", hoverStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, image?: string | { height?: number, url?: string, width?: number }, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: ChartsColor | string, size?: number }, size?: number, symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp", visible?: boolean }, scatter?: any, selectionMode?: "allArgumentPoints" | "allSeriesPoints" | "excludePoints" | "includePoints" | "none" | "onlyPoint", selectionStyle?: Record<string, any> | { border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }, color?: ChartsColor | string, dashStyle?: "dash" | "dot" | "longDash" | "solid", hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, highlight?: boolean, width?: number }, showInLegend?: boolean, stack?: string, stackedbar?: any, tagField?: string, type?: "area" | "bar" | "line" | "scatter" | "stackedbar", valueErrorBar?: Record<string, any> | { color?: string, displayMode?: "auto" | "high" | "low" | "none", edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance", value?: number }, valueField?: string, visible?: boolean, width?: number }>;
 
     /**
     
@@ -904,35 +925,35 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeAnnotationChange: EventEmitter<Function | undefined>;
+    @Output() customizeAnnotationChange: EventEmitter<((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeLabelChange: EventEmitter<Function>;
+    @Output() customizeLabelChange: EventEmitter<((pointInfo: any) => SeriesLabel)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizePointChange: EventEmitter<Function>;
+    @Output() customizePointChange: EventEmitter<((pointInfo: any) => SeriesPoint)>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataPrepareSettingsChange: EventEmitter<{ checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | Function }>;
+    @Output() dataPrepareSettingsChange: EventEmitter<Record<string, any> | { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number) }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -946,35 +967,35 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() exportChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: any | Array<ExportFormat>, margin?: number, printingEnabled?: boolean, svgToCanvas?: Function | undefined }>;
+    @Output() exportChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, fileName?: string, formats?: Array<"GIF" | "JPEG" | "PDF" | "PNG" | "SVG">, margin?: number, printingEnabled?: boolean, svgToCanvas?: ((svg: any, canvas: any) => any) }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() legendChange: EventEmitter<{ backgroundColor?: string | undefined, border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: Function, customizeItems?: Function, customizeText?: Function, font?: Font, horizontalAlignment?: HorizontalAlignment, hoverMode?: LegendHoverMode, itemsAlignment?: HorizontalAlignment | undefined, itemTextPosition?: Position | undefined, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any | undefined, orientation?: Orientation | undefined, paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: HorizontalAlignment | undefined, margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: VerticalEdge }, verticalAlignment?: VerticalEdge, visible?: boolean }>;
+    @Output() legendChange: EventEmitter<Record<string, any> | { backgroundColor?: string, border?: Record<string, any> | { color?: string, cornerRadius?: number, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, columnCount?: number, columnItemSpacing?: number, customizeHint?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>), customizeText?: ((seriesInfo: { seriesColor: string, seriesIndex: number, seriesName: any }) => string), font?: Font, horizontalAlignment?: "center" | "left" | "right", hoverMode?: "excludePoints" | "includePoints" | "none", itemsAlignment?: "center" | "left" | "right", itemTextPosition?: "bottom" | "left" | "right" | "top", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, markerSize?: number, markerTemplate?: any, orientation?: "horizontal" | "vertical", paddingLeftRight?: number, paddingTopBottom?: number, rowCount?: number, rowItemSpacing?: number, title?: string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string }, text?: string, verticalAlignment?: "bottom" | "top" }, verticalAlignment?: "bottom" | "top", visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() loadingIndicatorChange: EventEmitter<{ backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }>;
+    @Output() loadingIndicatorChange: EventEmitter<Record<string, any> | { backgroundColor?: string, enabled?: boolean, font?: Font, show?: boolean, text?: string }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() marginChange: EventEmitter<{ bottom?: number, left?: number, right?: number, top?: number }>;
+    @Output() marginChange: EventEmitter<Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }>;
 
     /**
     
@@ -988,14 +1009,14 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteChange: EventEmitter<Palette | string | Array<string>>;
+    @Output() paletteChange: EventEmitter<Array<string> | "Bright" | "Harmony Light" | "Ocean" | "Pastel" | "Soft" | "Soft Pastel" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Dark Violet" | "Green Mist" | "Soft Blue" | "Material" | "Office">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() paletteExtensionModeChange: EventEmitter<PaletteExtensionMode>;
+    @Output() paletteExtensionModeChange: EventEmitter<"alternate" | "blend" | "extrapolate">;
 
     /**
     
@@ -1009,7 +1030,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pointSelectionModeChange: EventEmitter<SingleOrMultiple>;
+    @Output() pointSelectionModeChange: EventEmitter<"single" | "multiple">;
 
     /**
     
@@ -1023,7 +1044,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resolveLabelOverlappingChange: EventEmitter<LabelOverlap>;
+    @Output() resolveLabelOverlappingChange: EventEmitter<"hide" | "none">;
 
     /**
     
@@ -1037,49 +1058,49 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesChange: EventEmitter<PolarChartSeries | any | undefined | Array<PolarChartSeries | any>>;
+    @Output() seriesChange: EventEmitter<Array<PolarChartSeries> | PolarChartSeries>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesSelectionModeChange: EventEmitter<SingleOrMultiple>;
+    @Output() seriesSelectionModeChange: EventEmitter<"single" | "multiple">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() seriesTemplateChange: EventEmitter<{ customizeSeries?: Function, nameField?: string }>;
+    @Output() seriesTemplateChange: EventEmitter<any>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sizeChange: EventEmitter<{ height?: number | undefined, width?: number | undefined }>;
+    @Output() sizeChange: EventEmitter<Record<string, any> | { height?: number, width?: number }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() themeChange: EventEmitter<Theme>;
+    @Output() themeChange: EventEmitter<"generic.dark" | "generic.light" | "generic.contrast" | "generic.carmine" | "generic.darkmoon" | "generic.darkviolet" | "generic.greenmist" | "generic.softblue" | "material.blue.light" | "material.lime.light" | "material.orange.light" | "material.purple.light" | "material.teal.light">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: HorizontalAlignment, margin?: number | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number | undefined, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }, text?: string, textOverflow?: TextOverflow, verticalAlignment?: VerticalEdge, wordWrap?: WordWrap }>;
+    @Output() titleChange: EventEmitter<string | { font?: Font, horizontalAlignment?: "center" | "left" | "right", margin?: number | Record<string, any> | { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }, text?: string, textOverflow?: "ellipsis" | "hide" | "none", verticalAlignment?: "bottom" | "top", wordWrap?: "normal" | "breakWord" | "none" }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ argumentFormat?: Format | string | undefined, arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<Record<string, any> | { argumentFormat?: LocalizationTypes.Format, arrowLength?: number, border?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }, color?: string, container?: any | string, contentTemplate?: any, cornerRadius?: number, customizeTooltip?: ((pointInfo: any) => Record<string, any>), enabled?: boolean, font?: Font, format?: LocalizationTypes.Format, interactive?: boolean, opacity?: number, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, shared?: boolean, zIndex?: number }>;
 
     /**
     
@@ -1093,7 +1114,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueAxisChange: EventEmitter<{ allowDecimals?: boolean | undefined, axisDivisionFactor?: number, categories?: Array<number | string | Date>, color?: string, constantLines?: Array<any | { color?: string, dashStyle?: DashStyle, displayBehindSeries?: boolean, extendAxis?: boolean, label?: { font?: Font, text?: string | undefined, visible?: boolean }, value?: Date | number | string | undefined, width?: number }>, constantLineStyle?: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, grid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, inverted?: boolean, label?: { customizeHint?: Function, customizeText?: Function, font?: Font, format?: Format | string | undefined, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }, linearThreshold?: number | undefined, logarithmBase?: number, maxValueMargin?: number | undefined, minorGrid?: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }, minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number | undefined, minVisualRangeLength?: TimeInterval | number | undefined | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number | undefined, showZero?: boolean | undefined, strips?: Array<any | { color?: string | undefined, endValue?: Date | number | string | undefined, label?: { font?: Font, text?: string | undefined }, startValue?: Date | number | string | undefined }>, stripStyle?: { label?: { font?: Font } }, tick?: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }, tickInterval?: TimeInterval | number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScaleType | undefined, valueMarginsEnabled?: boolean, valueType?: ChartsDataType | undefined, visible?: boolean, visualRange?: VisualRange | Array<number | string | Date>, visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode, wholeRange?: VisualRange | undefined | Array<number | string | Date>, width?: number }>;
+    @Output() valueAxisChange: EventEmitter<Record<string, any> | { allowDecimals?: boolean, axisDivisionFactor?: number, categories?: Array<Date | number | string>, color?: string, constantLines?: Array<Record<string, any>> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", displayBehindSeries?: boolean, extendAxis?: boolean, label?: Record<string, any> | { font?: Font, text?: string, visible?: boolean }, value?: Date | number | string, width?: number }[], constantLineStyle?: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }, discreteAxisDivisionMode?: "betweenLabels" | "crossLabels", endOnTick?: boolean, grid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, inverted?: boolean, label?: Record<string, any> | { customizeHint?: ((axisValue: { value: Date | number | string, valueText: string }) => string), customizeText?: ((axisValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: LocalizationTypes.Format, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }, linearThreshold?: number, logarithmBase?: number, maxValueMargin?: number, minorGrid?: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minValueMargin?: number, minVisualRangeLength?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, opacity?: number, showZero?: boolean, strips?: Array<Record<string, any>> | { color?: string, endValue?: Date | number | string, label?: Record<string, any> | { font?: Font, text?: string }, startValue?: Date | number | string }[], stripStyle?: Record<string, any> | { label?: Record<string, any> | { font?: Font } }, tick?: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }, tickInterval?: number | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: "continuous" | "discrete" | "logarithmic", valueMarginsEnabled?: boolean, valueType?: "datetime" | "numeric" | "string", visible?: boolean, visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, visualRangeUpdateMode?: "auto" | "keep" | "reset", wholeRange?: Array<Date | number | string> | CommonChartTypes.VisualRange, width?: number }>;
 
 
 
@@ -1313,52 +1334,73 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     DxoPolarChartAdaptiveLayoutModule,
     DxoPolarChartAnimationModule,
     DxiPolarChartAnnotationModule,
-    DxoPolarChartBorderModule,
-    DxoPolarChartFontModule,
-    DxoPolarChartImageModule,
-    DxoPolarChartShadowModule,
+    DxoPolarChartAnnotationBorderModule,
     DxoPolarChartArgumentAxisModule,
+    DxoPolarChartArgumentAxisMinorTickModule,
+    DxoPolarChartArgumentAxisTickModule,
+    DxoPolarChartArgumentFormatModule,
+    DxoPolarChartAxisLabelModule,
+    DxoPolarChartBorderModule,
+    DxoPolarChartColorModule,
+    DxoPolarChartCommonAnnotationSettingsModule,
+    DxoPolarChartCommonAxisSettingsModule,
+    DxoPolarChartCommonAxisSettingsLabelModule,
+    DxoPolarChartCommonAxisSettingsMinorTickModule,
+    DxoPolarChartCommonAxisSettingsTickModule,
+    DxoPolarChartCommonSeriesSettingsModule,
+    DxoPolarChartCommonSeriesSettingsHoverStyleModule,
+    DxoPolarChartCommonSeriesSettingsLabelModule,
+    DxoPolarChartCommonSeriesSettingsSelectionStyleModule,
+    DxoPolarChartConnectorModule,
     DxiPolarChartConstantLineModule,
-    DxoPolarChartLabelModule,
+    DxoPolarChartConstantLineLabelModule,
     DxoPolarChartConstantLineStyleModule,
-    DxoPolarChartGridModule,
+    DxoPolarChartConstantLineStyleLabelModule,
+    DxoPolarChartDataPrepareSettingsModule,
+    DxoPolarChartExportModule,
+    DxoPolarChartFontModule,
     DxoPolarChartFormatModule,
+    DxoPolarChartGridModule,
+    DxoPolarChartHatchingModule,
+    DxoPolarChartHoverStyleModule,
+    DxoPolarChartImageModule,
+    DxoPolarChartLabelModule,
+    DxoPolarChartLegendModule,
+    DxoPolarChartLegendTitleModule,
+    DxoPolarChartLegendTitleSubtitleModule,
+    DxoPolarChartLengthModule,
+    DxoPolarChartLoadingIndicatorModule,
+    DxoPolarChartMarginModule,
     DxoPolarChartMinorGridModule,
     DxoPolarChartMinorTickModule,
     DxoPolarChartMinorTickIntervalModule,
+    DxoPolarChartMinVisualRangeLengthModule,
+    DxoPolarChartPointModule,
+    DxoPolarChartPointBorderModule,
+    DxoPolarChartPointHoverStyleModule,
+    DxoPolarChartPointSelectionStyleModule,
+    DxoPolarChartPolarChartTitleModule,
+    DxoPolarChartPolarChartTitleSubtitleModule,
+    DxoPolarChartSelectionStyleModule,
+    DxiPolarChartSeriesModule,
+    DxoPolarChartSeriesBorderModule,
+    DxoPolarChartSeriesTemplateModule,
+    DxoPolarChartShadowModule,
+    DxoPolarChartSizeModule,
     DxiPolarChartStripModule,
+    DxoPolarChartStripLabelModule,
     DxoPolarChartStripStyleModule,
+    DxoPolarChartStripStyleLabelModule,
+    DxoPolarChartSubtitleModule,
     DxoPolarChartTickModule,
     DxoPolarChartTickIntervalModule,
-    DxoPolarChartCommonAnnotationSettingsModule,
-    DxoPolarChartCommonAxisSettingsModule,
-    DxoPolarChartCommonSeriesSettingsModule,
-    DxoPolarChartAreaModule,
-    DxoPolarChartHoverStyleModule,
-    DxoPolarChartHatchingModule,
-    DxoPolarChartConnectorModule,
-    DxoPolarChartPointModule,
-    DxoPolarChartSelectionStyleModule,
-    DxoPolarChartValueErrorBarModule,
-    DxoPolarChartBarModule,
-    DxoPolarChartColorModule,
-    DxoPolarChartArgumentFormatModule,
-    DxoPolarChartLineModule,
-    DxoPolarChartScatterModule,
-    DxoPolarChartStackedbarModule,
-    DxoPolarChartDataPrepareSettingsModule,
-    DxoPolarChartExportModule,
-    DxoPolarChartLegendModule,
-    DxoPolarChartMarginModule,
     DxoPolarChartTitleModule,
-    DxoPolarChartSubtitleModule,
-    DxoPolarChartLoadingIndicatorModule,
-    DxiPolarChartSeriesModule,
-    DxoPolarChartSeriesTemplateModule,
-    DxoPolarChartSizeModule,
     DxoPolarChartTooltipModule,
+    DxoPolarChartTooltipBorderModule,
     DxoPolarChartValueAxisModule,
-    DxoPolarChartMinVisualRangeLengthModule,
+    DxoPolarChartValueErrorBarModule,
+    DxoPolarChartVisualRangeModule,
+    DxoPolarChartWholeRangeModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1419,52 +1461,73 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     DxoPolarChartAdaptiveLayoutModule,
     DxoPolarChartAnimationModule,
     DxiPolarChartAnnotationModule,
-    DxoPolarChartBorderModule,
-    DxoPolarChartFontModule,
-    DxoPolarChartImageModule,
-    DxoPolarChartShadowModule,
+    DxoPolarChartAnnotationBorderModule,
     DxoPolarChartArgumentAxisModule,
+    DxoPolarChartArgumentAxisMinorTickModule,
+    DxoPolarChartArgumentAxisTickModule,
+    DxoPolarChartArgumentFormatModule,
+    DxoPolarChartAxisLabelModule,
+    DxoPolarChartBorderModule,
+    DxoPolarChartColorModule,
+    DxoPolarChartCommonAnnotationSettingsModule,
+    DxoPolarChartCommonAxisSettingsModule,
+    DxoPolarChartCommonAxisSettingsLabelModule,
+    DxoPolarChartCommonAxisSettingsMinorTickModule,
+    DxoPolarChartCommonAxisSettingsTickModule,
+    DxoPolarChartCommonSeriesSettingsModule,
+    DxoPolarChartCommonSeriesSettingsHoverStyleModule,
+    DxoPolarChartCommonSeriesSettingsLabelModule,
+    DxoPolarChartCommonSeriesSettingsSelectionStyleModule,
+    DxoPolarChartConnectorModule,
     DxiPolarChartConstantLineModule,
-    DxoPolarChartLabelModule,
+    DxoPolarChartConstantLineLabelModule,
     DxoPolarChartConstantLineStyleModule,
-    DxoPolarChartGridModule,
+    DxoPolarChartConstantLineStyleLabelModule,
+    DxoPolarChartDataPrepareSettingsModule,
+    DxoPolarChartExportModule,
+    DxoPolarChartFontModule,
     DxoPolarChartFormatModule,
+    DxoPolarChartGridModule,
+    DxoPolarChartHatchingModule,
+    DxoPolarChartHoverStyleModule,
+    DxoPolarChartImageModule,
+    DxoPolarChartLabelModule,
+    DxoPolarChartLegendModule,
+    DxoPolarChartLegendTitleModule,
+    DxoPolarChartLegendTitleSubtitleModule,
+    DxoPolarChartLengthModule,
+    DxoPolarChartLoadingIndicatorModule,
+    DxoPolarChartMarginModule,
     DxoPolarChartMinorGridModule,
     DxoPolarChartMinorTickModule,
     DxoPolarChartMinorTickIntervalModule,
+    DxoPolarChartMinVisualRangeLengthModule,
+    DxoPolarChartPointModule,
+    DxoPolarChartPointBorderModule,
+    DxoPolarChartPointHoverStyleModule,
+    DxoPolarChartPointSelectionStyleModule,
+    DxoPolarChartPolarChartTitleModule,
+    DxoPolarChartPolarChartTitleSubtitleModule,
+    DxoPolarChartSelectionStyleModule,
+    DxiPolarChartSeriesModule,
+    DxoPolarChartSeriesBorderModule,
+    DxoPolarChartSeriesTemplateModule,
+    DxoPolarChartShadowModule,
+    DxoPolarChartSizeModule,
     DxiPolarChartStripModule,
+    DxoPolarChartStripLabelModule,
     DxoPolarChartStripStyleModule,
+    DxoPolarChartStripStyleLabelModule,
+    DxoPolarChartSubtitleModule,
     DxoPolarChartTickModule,
     DxoPolarChartTickIntervalModule,
-    DxoPolarChartCommonAnnotationSettingsModule,
-    DxoPolarChartCommonAxisSettingsModule,
-    DxoPolarChartCommonSeriesSettingsModule,
-    DxoPolarChartAreaModule,
-    DxoPolarChartHoverStyleModule,
-    DxoPolarChartHatchingModule,
-    DxoPolarChartConnectorModule,
-    DxoPolarChartPointModule,
-    DxoPolarChartSelectionStyleModule,
-    DxoPolarChartValueErrorBarModule,
-    DxoPolarChartBarModule,
-    DxoPolarChartColorModule,
-    DxoPolarChartArgumentFormatModule,
-    DxoPolarChartLineModule,
-    DxoPolarChartScatterModule,
-    DxoPolarChartStackedbarModule,
-    DxoPolarChartDataPrepareSettingsModule,
-    DxoPolarChartExportModule,
-    DxoPolarChartLegendModule,
-    DxoPolarChartMarginModule,
     DxoPolarChartTitleModule,
-    DxoPolarChartSubtitleModule,
-    DxoPolarChartLoadingIndicatorModule,
-    DxiPolarChartSeriesModule,
-    DxoPolarChartSeriesTemplateModule,
-    DxoPolarChartSizeModule,
     DxoPolarChartTooltipModule,
+    DxoPolarChartTooltipBorderModule,
     DxoPolarChartValueAxisModule,
-    DxoPolarChartMinVisualRangeLengthModule,
+    DxoPolarChartValueErrorBarModule,
+    DxoPolarChartVisualRangeModule,
+    DxoPolarChartWholeRangeModule,
     DxTemplateModule
   ]
 })

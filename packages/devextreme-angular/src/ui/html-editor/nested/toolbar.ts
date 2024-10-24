@@ -8,23 +8,18 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { UserDefinedElement } from 'devextreme/core/element';
-import { dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
 
 
 @Component({
@@ -35,18 +30,18 @@ import { DxiHtmlEditorItemComponent } from './item-dxi';
 })
 export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get container(): UserDefinedElement | string {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
     @Input()
-    get items(): Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem> {
+    get items(): Array<dxHtmlEditorToolbarItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable"> {
         return this._getOption('items');
     }
-    set items(value: Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>) {
+    set items(value: Array<dxHtmlEditorToolbarItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">) {
         this._setOption('items', value);
     }
 
@@ -63,14 +58,6 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -14,7 +14,6 @@ import {
 
 
 
-import { SubmenuShowMode } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoContextMenuShowSubmenuModeComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get delay(): number | { hide?: number, show?: number } {
+    get delay(): number | Record<string, any> | { hide?: number, show?: number } {
         return this._getOption('delay');
     }
-    set delay(value: number | { hide?: number, show?: number }) {
+    set delay(value: number | Record<string, any> | { hide?: number, show?: number }) {
         this._setOption('delay', value);
     }
 
     @Input()
-    get name(): SubmenuShowMode {
+    get name(): "onClick" | "onHover" {
         return this._getOption('name');
     }
-    set name(value: SubmenuShowMode) {
+    set name(value: "onClick" | "onHover") {
         this._setOption('name', value);
     }
 

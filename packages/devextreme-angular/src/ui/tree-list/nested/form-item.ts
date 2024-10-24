@@ -7,110 +7,114 @@ import {
     OnDestroy,
     NgModule,
     Host,
+    ElementRef,
+    Renderer2,
+    Inject,
+    AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
+import { DOCUMENT } from '@angular/common';
 
 
-
-import { AsyncRule, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule } from 'devextreme/common';
-import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
+import * as CommonTypes from 'devextreme/common';
 
 import {
     NestedOptionHost,
+    extractTemplate,
+    DxTemplateDirective,
+    IDxTemplateHost,
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
     selector: 'dxo-tree-list-form-item',
-    template: '',
-    styles: [''],
-    providers: [NestedOptionHost]
+    template: '<ng-content></ng-content>',
+    styles: [':host { display: block; }'],
+    providers: [NestedOptionHost, DxTemplateHost]
 })
-export class DxoTreeListFormItemComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
+    IDxTemplateHost {
     @Input()
-    get colSpan(): number | undefined {
+    get colSpan(): number {
         return this._getOption('colSpan');
     }
-    set colSpan(value: number | undefined) {
+    set colSpan(value: number) {
         this._setOption('colSpan', value);
     }
 
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
     @Input()
-    get dataField(): string | undefined {
+    get dataField(): string {
         return this._getOption('dataField');
     }
-    set dataField(value: string | undefined) {
+    set dataField(value: string) {
         this._setOption('dataField', value);
     }
 
     @Input()
-    get editorOptions(): any | undefined {
+    get editorOptions(): any {
         return this._getOption('editorOptions');
     }
-    set editorOptions(value: any | undefined) {
+    set editorOptions(value: any) {
         this._setOption('editorOptions', value);
     }
 
     @Input()
-    get editorType(): FormItemComponent {
+    get editorType(): "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox" {
         return this._getOption('editorType');
     }
-    set editorType(value: FormItemComponent) {
+    set editorType(value: "dxAutocomplete" | "dxCalendar" | "dxCheckBox" | "dxColorBox" | "dxDateBox" | "dxDateRangeBox" | "dxDropDownBox" | "dxHtmlEditor" | "dxLookup" | "dxNumberBox" | "dxRadioGroup" | "dxRangeSlider" | "dxSelectBox" | "dxSlider" | "dxSwitch" | "dxTagBox" | "dxTextArea" | "dxTextBox") {
         this._setOption('editorType', value);
     }
 
     @Input()
-    get helpText(): string | undefined {
+    get helpText(): string {
         return this._getOption('helpText');
     }
-    set helpText(value: string | undefined) {
+    set helpText(value: string) {
         this._setOption('helpText', value);
     }
 
     @Input()
-    get isRequired(): boolean | undefined {
+    get isRequired(): boolean {
         return this._getOption('isRequired');
     }
-    set isRequired(value: boolean | undefined) {
+    set isRequired(value: boolean) {
         this._setOption('isRequired', value);
     }
 
     @Input()
-    get itemType(): FormItemType {
+    get itemType(): "empty" | "group" | "simple" | "tabbed" | "button" {
         return this._getOption('itemType');
     }
-    set itemType(value: FormItemType) {
+    set itemType(value: "empty" | "group" | "simple" | "tabbed" | "button") {
         this._setOption('itemType', value);
     }
 
     @Input()
-    get label(): { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean } {
+    get label(): Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: any, text?: string, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { alignment?: HorizontalAlignment, location?: LabelLocation, showColon?: boolean, template?: any, text?: string | undefined, visible?: boolean }) {
+    set label(value: Record<string, any> | { alignment?: "center" | "left" | "right", location?: "left" | "right" | "top", showColon?: boolean, template?: any, text?: string, visible?: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
@@ -123,10 +127,10 @@ export class DxoTreeListFormItemComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+    get validationRules(): Array<CommonTypes.ValidationRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+    set validationRules(value: Array<CommonTypes.ValidationRule>) {
         this._setOption('validationRules', value);
     }
 
@@ -139,10 +143,10 @@ export class DxoTreeListFormItemComponent extends NestedOption implements OnDest
     }
 
     @Input()
-    get visibleIndex(): number | undefined {
+    get visibleIndex(): number {
         return this._getOption('visibleIndex');
     }
-    set visibleIndex(value: number | undefined) {
+    set visibleIndex(value: number) {
         this._setOption('visibleIndex', value);
     }
 
@@ -152,19 +156,23 @@ export class DxoTreeListFormItemComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiTreeListValidationRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-            @Host() optionHost: NestedOptionHost) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        templateHost.setHost(this);
+    }
+
+    setTemplate(template: DxTemplateDirective) {
+        this.template = template;
+    }
+    ngAfterViewInit() {
+        extractTemplate(this, this.element, this.renderer, this.document);
     }
 
 

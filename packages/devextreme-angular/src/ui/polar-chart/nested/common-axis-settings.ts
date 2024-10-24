@@ -14,7 +14,7 @@ import {
 
 
 
-import { DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap } from 'devextreme/common/charts';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowDecimals(): boolean | undefined {
+    get allowDecimals(): boolean {
         return this._getOption('allowDecimals');
     }
-    set allowDecimals(value: boolean | undefined) {
+    set allowDecimals(value: boolean) {
         this._setOption('allowDecimals', value);
     }
 
@@ -46,34 +46,34 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number } {
+    get constantLineStyle(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }) {
+    set constantLineStyle(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", label?: Record<string, any> | { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 
     @Input()
-    get discreteAxisDivisionMode(): DiscreteAxisDivisionMode {
+    get discreteAxisDivisionMode(): "betweenLabels" | "crossLabels" {
         return this._getOption('discreteAxisDivisionMode');
     }
-    set discreteAxisDivisionMode(value: DiscreteAxisDivisionMode) {
+    set discreteAxisDivisionMode(value: "betweenLabels" | "crossLabels") {
         this._setOption('discreteAxisDivisionMode', value);
     }
 
     @Input()
-    get endOnTick(): boolean | undefined {
+    get endOnTick(): boolean {
         return this._getOption('endOnTick');
     }
-    set endOnTick(value: boolean | undefined) {
+    set endOnTick(value: boolean) {
         this._setOption('endOnTick', value);
     }
 
     @Input()
-    get grid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get grid(): Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('grid');
     }
-    set grid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set grid(value: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('grid', value);
     }
 
@@ -86,50 +86,50 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get label(): { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean } {
+    get label(): Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, indentFromAxis?: number, overlappingBehavior?: LabelOverlap, visible?: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, indentFromAxis?: number, overlappingBehavior?: "hide" | "none", visible?: boolean }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get minorGrid(): { color?: string, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get minorGrid(): Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorGrid');
     }
-    set minorGrid(value: { color?: string, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set minorGrid(value: Record<string, any> | { color?: string, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorGrid', value);
     }
 
     @Input()
-    get minorTick(): { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
+    get minorTick(): Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('minorTick');
     }
-    set minorTick(value: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
+    set minorTick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('minorTick', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
     @Input()
-    get stripStyle(): { label?: { font?: Font } } {
+    get stripStyle(): Record<string, any> | { label?: Record<string, any> | { font?: Font } } {
         return this._getOption('stripStyle');
     }
-    set stripStyle(value: { label?: { font?: Font } }) {
+    set stripStyle(value: Record<string, any> | { label?: Record<string, any> | { font?: Font } }) {
         this._setOption('stripStyle', value);
     }
 
     @Input()
-    get tick(): { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get tick(): Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('tick');
     }
-    set tick(value: { color?: string, length?: number, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set tick(value: Record<string, any> | { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('tick', value);
     }
 

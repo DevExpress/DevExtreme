@@ -14,7 +14,6 @@ import {
 
 
 
-import { HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,34 +29,34 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSankeyHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
+    get border(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
+    set border(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get color(): string | undefined {
+    get color(): string {
         return this._getOption('color');
     }
-    set color(value: string | undefined) {
+    set color(value: string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get hatching(): { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
+    get hatching(): Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number } {
         return this._getOption('hatching');
     }
-    set hatching(value: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
+    set hatching(value: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }) {
         this._setOption('hatching', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 

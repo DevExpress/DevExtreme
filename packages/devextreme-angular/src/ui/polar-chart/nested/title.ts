@@ -14,8 +14,7 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -39,34 +38,34 @@ export class DxoPolarChartTitleComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get horizontalAlignment(): HorizontalAlignment | undefined {
+    get horizontalAlignment(): "center" | "left" | "right" {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: HorizontalAlignment | undefined) {
+    set horizontalAlignment(value: "center" | "left" | "right") {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get margin(): { bottom?: number, left?: number, right?: number, top?: number } | number {
+    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: { bottom?: number, left?: number, right?: number, top?: number } | number) {
+    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
     @Input()
-    get placeholderSize(): number | undefined {
+    get placeholderSize(): number {
         return this._getOption('placeholderSize');
     }
-    set placeholderSize(value: number | undefined) {
+    set placeholderSize(value: number) {
         this._setOption('placeholderSize', value);
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string, textOverflow?: "ellipsis" | "hide" | "none", wordWrap?: "normal" | "breakWord" | "none" }) {
         this._setOption('subtitle', value);
     }
 
@@ -79,26 +78,26 @@ export class DxoPolarChartTitleComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get verticalAlignment(): VerticalEdge {
+    get verticalAlignment(): "bottom" | "top" {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: VerticalEdge) {
+    set verticalAlignment(value: "bottom" | "top") {
         this._setOption('verticalAlignment', value);
     }
 
     @Input()
-    get textOverflow(): TextOverflow {
+    get textOverflow(): "ellipsis" | "hide" | "none" {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: TextOverflow) {
+    set textOverflow(value: "ellipsis" | "hide" | "none") {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): WordWrap {
+    get wordWrap(): "normal" | "breakWord" | "none" {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: WordWrap) {
+    set wordWrap(value: "normal" | "breakWord" | "none") {
         this._setOption('wordWrap', value);
     }
 

@@ -12,7 +12,7 @@ import {
 
 
 
-import { ChartsColor, DashStyle } from 'devextreme/common/charts';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -36,26 +36,26 @@ export class DxiChartPaneComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get border(): { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { bottom?: boolean, color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { bottom?: boolean, color?: string, dashStyle?: DashStyle, left?: boolean, opacity?: number | undefined, right?: boolean, top?: boolean, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { bottom?: boolean, color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get height(): number | string | undefined {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: number | string | undefined) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 

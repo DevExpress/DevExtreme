@@ -14,9 +14,6 @@ import {
 
 
 
-import { CollisionResolution, CollisionResolutionCombination } from 'devextreme/animation/position';
-import { HorizontalAlignment, PositionAlignment, VerticalAlignment } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
 
 import {
     NestedOptionHost,
@@ -32,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoContextMenuPositionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
+    get at(): "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" } {
         return this._getOption('at');
     }
-    set at(value: PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment }) {
+    set at(value: "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" }) {
         this._setOption('at', value);
     }
 
     @Input()
-    get boundary(): UserDefinedElement | string | Window {
+    get boundary(): any | string {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | Window) {
+    set boundary(value: any | string) {
         this._setOption('boundary', value);
     }
 
@@ -56,26 +53,26 @@ export class DxoContextMenuPositionComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get collision(): CollisionResolutionCombination | { x?: CollisionResolution, y?: CollisionResolution } {
+    get collision(): "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x?: "fit" | "flip" | "flipfit" | "none", y?: "fit" | "flip" | "flipfit" | "none" } {
         return this._getOption('collision');
     }
-    set collision(value: CollisionResolutionCombination | { x?: CollisionResolution, y?: CollisionResolution }) {
+    set collision(value: "fit" | "fit flip" | "fit flipfit" | "fit none" | "flip" | "flip fit" | "flip none" | "flipfit" | "flipfit fit" | "flipfit none" | "none" | "none fit" | "none flip" | "none flipfit" | { x?: "fit" | "flip" | "flipfit" | "none", y?: "fit" | "flip" | "flipfit" | "none" }) {
         this._setOption('collision', value);
     }
 
     @Input()
-    get my(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
+    get my(): "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" } {
         return this._getOption('my');
     }
-    set my(value: PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment }) {
+    set my(value: "bottom" | "center" | "left" | "left bottom" | "left top" | "right" | "right bottom" | "right top" | "top" | { x?: "center" | "left" | "right", y?: "bottom" | "center" | "top" }) {
         this._setOption('my', value);
     }
 
     @Input()
-    get of(): UserDefinedElement | string | Window {
+    get of(): any | string {
         return this._getOption('of');
     }
-    set of(value: UserDefinedElement | string | Window) {
+    set of(value: any | string) {
         this._setOption('of', value);
     }
 

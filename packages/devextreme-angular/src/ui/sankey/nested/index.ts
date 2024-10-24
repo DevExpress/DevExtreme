@@ -10,9 +10,11 @@ export * from './link';
 export * from './loading-indicator';
 export * from './margin';
 export * from './node';
+export * from './sankeyborder';
 export * from './shadow';
 export * from './size';
 export * from './subtitle';
 export * from './title';
+export * from './tooltip-border';
 export * from './tooltip';
 

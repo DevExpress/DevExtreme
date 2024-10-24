@@ -12,11 +12,9 @@ import {
 
 
 
-import { DataType } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { Format } from 'devextreme/localization';
-import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
+import * as LocalizationTypes from 'devextreme/localization';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import {
     NestedOptionHost,
@@ -32,42 +30,42 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiTreeListFieldComponent extends CollectionNestedOption {
     @Input()
-    get calculateFilterExpression(): Function {
+    get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>) {
         return this._getOption('calculateFilterExpression');
     }
-    set calculateFilterExpression(value: Function) {
+    set calculateFilterExpression(value: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>)) {
         this._setOption('calculateFilterExpression', value);
     }
 
     @Input()
-    get caption(): string | undefined {
+    get caption(): string {
         return this._getOption('caption');
     }
-    set caption(value: string | undefined) {
+    set caption(value: string) {
         this._setOption('caption', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((fieldInfo: { value: string | number | Date, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((fieldInfo: { value: string | number | Date, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get dataField(): string | undefined {
+    get dataField(): string {
         return this._getOption('dataField');
     }
-    set dataField(value: string | undefined) {
+    set dataField(value: string) {
         this._setOption('dataField', value);
     }
 
     @Input()
-    get dataType(): DataType {
+    get dataType(): "string" | "number" | "date" | "boolean" | "object" | "datetime" {
         return this._getOption('dataType');
     }
-    set dataType(value: DataType) {
+    set dataType(value: "string" | "number" | "date" | "boolean" | "object" | "datetime") {
         this._setOption('dataType', value);
     }
 
@@ -96,34 +94,34 @@ export class DxiTreeListFieldComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get filterOperations(): Array<FilterBuilderOperation | string> {
+    get filterOperations(): Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string> {
         return this._getOption('filterOperations');
     }
-    set filterOperations(value: Array<FilterBuilderOperation | string>) {
+    set filterOperations(value: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>) {
         this._setOption('filterOperations', value);
     }
 
     @Input()
-    get format(): Format | string {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
     @Input()
-    get lookup(): { allowClearing?: boolean, dataSource?: Store | DataSourceOptions | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined } {
+    get lookup(): Record<string, any> | { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store, displayExpr?: ((data: any) => string) | string, valueExpr?: ((data: any) => string | number | boolean) | string } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, dataSource?: Store | DataSourceOptions | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined }) {
+    set lookup(value: Record<string, any> | { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store, displayExpr?: ((data: any) => string) | string, valueExpr?: ((data: any) => string | number | boolean) | string }) {
         this._setOption('lookup', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 

@@ -8,22 +8,17 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
 
 
-import { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramGroupComponent } from './group-dxi';
 
 
 @Component({
@@ -34,10 +29,10 @@ import { DxiDiagramGroupComponent } from './group-dxi';
 })
 export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get groups(): Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }> {
+    get groups(): Array<Record<string, any>> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", expanded?: boolean, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, title?: string }[] {
         return this._getOption('groups');
     }
-    set groups(value: Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }>) {
+    set groups(value: Array<Record<string, any>> | { category?: "general" | "flowchart" | "orgChart" | "containers" | "custom", displayMode?: "icons" | "texts", expanded?: boolean, shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">, title?: string }[]) {
         this._setOption('groups', value);
     }
 
@@ -58,18 +53,18 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get visibility(): PanelVisibility {
+    get visibility(): "auto" | "visible" | "collapsed" | "disabled" {
         return this._getOption('visibility');
     }
-    set visibility(value: PanelVisibility) {
+    set visibility(value: "auto" | "visible" | "collapsed" | "disabled") {
         this._setOption('visibility', value);
     }
 
     @Input()
-    get width(): number | undefined {
+    get width(): number {
         return this._getOption('width');
     }
-    set width(value: number | undefined) {
+    set width(value: number) {
         this._setOption('width', value);
     }
 
@@ -78,14 +73,6 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
         return 'toolbox';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent))
-    get groupsChildren(): QueryList<DxiDiagramGroupComponent> {
-        return this._getOption('groups');
-    }
-    set groupsChildren(value) {
-        this.setChildren('groups', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

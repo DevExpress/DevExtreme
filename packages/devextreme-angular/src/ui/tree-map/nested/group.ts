@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font, TextOverflow } from 'devextreme/common/charts';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string, width?: number } {
+    get border(): Record<string, any> | { color?: string, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -46,34 +46,34 @@ export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get headerHeight(): number | undefined {
+    get headerHeight(): number {
         return this._getOption('headerHeight');
     }
-    set headerHeight(value: number | undefined) {
+    set headerHeight(value: number) {
         this._setOption('headerHeight', value);
     }
 
     @Input()
-    get hoverEnabled(): boolean | undefined {
+    get hoverEnabled(): boolean {
         return this._getOption('hoverEnabled');
     }
-    set hoverEnabled(value: boolean | undefined) {
+    set hoverEnabled(value: boolean) {
         this._setOption('hoverEnabled', value);
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, width?: number | undefined }, color?: string | undefined }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }) {
         this._setOption('hoverStyle', value);
     }
 
     @Input()
-    get label(): { font?: Font, textOverflow?: TextOverflow, visible?: boolean } {
+    get label(): Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, textOverflow?: TextOverflow, visible?: boolean }) {
+    set label(value: Record<string, any> | { font?: Font, textOverflow?: "ellipsis" | "hide" | "none", visible?: boolean }) {
         this._setOption('label', value);
     }
 
@@ -86,10 +86,10 @@ export class DxoTreeMapGroupComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string, width?: number | undefined }, color?: string | undefined } {
+    get selectionStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string, width?: number | undefined }, color?: string | undefined }) {
+    set selectionStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, width?: number }, color?: string }) {
         this._setOption('selectionStyle', value);
     }
 

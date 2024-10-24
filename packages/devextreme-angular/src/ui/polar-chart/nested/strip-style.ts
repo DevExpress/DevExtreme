@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPolarChartStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get label(): { font?: Font } {
+    get label(): Record<string, any> | { font?: Font } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font }) {
+    set label(value: Record<string, any> | { font?: Font }) {
         this._setOption('label', value);
     }
 

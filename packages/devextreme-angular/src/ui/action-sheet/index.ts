@@ -23,11 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/action_sheet';
 
-import { ButtonStyle, ButtonType } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { CancelClickEvent, ContentReadyEvent, DisposingEvent, dxActionSheetItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/action_sheet';
+import DataSource from 'devextreme/data/data_source';
+import { dxActionSheetItem, CancelClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/action_sheet';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxActionSheet from 'devextreme/ui/action_sheet';
 
@@ -86,10 +85,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxActionSheetItem | string | any> {
+    get dataSource(): Array<any | dxActionSheetItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxActionSheetItem | string | any>) {
+    set dataSource(value: Array<any | dxActionSheetItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -112,10 +111,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -125,10 +124,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -138,10 +137,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -177,10 +176,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: ButtonStyle, template?: any, text?: string, type?: ButtonType }> {
+    get items(): Array<any | dxActionSheetItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: ButtonStyle, template?: any, text?: string, type?: ButtonType }>) {
+    set items(value: Array<any | dxActionSheetItem | string>) {
         this._setOption('items', value);
     }
 
@@ -242,10 +241,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get target(): UserDefinedElement | string {
+    get target(): any | string {
         return this._getOption('target');
     }
-    set target(value: UserDefinedElement | string) {
+    set target(value: any | string) {
         this._setOption('target', value);
     }
 
@@ -294,10 +293,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -385,7 +384,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxActionSheetItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxActionSheetItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -399,21 +398,21 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -434,7 +433,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, icon?: string, onClick?: Function, stylingMode?: ButtonStyle, template?: any, text?: string, type?: ButtonType }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxActionSheetItem | string>>;
 
     /**
     
@@ -469,7 +468,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() targetChange: EventEmitter<UserDefinedElement | string>;
+    @Output() targetChange: EventEmitter<any | string>;
 
     /**
     
@@ -497,7 +496,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

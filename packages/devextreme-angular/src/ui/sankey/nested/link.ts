@@ -14,8 +14,6 @@ import {
 
 
 
-import { HatchDirection } from 'devextreme/common/charts';
-import { SankeyColorMode } from 'devextreme/viz/sankey';
 
 import {
     NestedOptionHost,
@@ -31,10 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSankeyLinkComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -47,18 +45,18 @@ export class DxoSankeyLinkComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get colorMode(): SankeyColorMode {
+    get colorMode(): "none" | "source" | "target" | "gradient" {
         return this._getOption('colorMode');
     }
-    set colorMode(value: SankeyColorMode) {
+    set colorMode(value: "none" | "source" | "target" | "gradient") {
         this._setOption('colorMode', value);
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number } {
+    get hoverStyle(): Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, opacity?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }, color?: string | undefined, hatching?: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }, opacity?: number }) {
+    set hoverStyle(value: Record<string, any> | { border?: Record<string, any> | { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: Record<string, any> | { direction?: "left" | "none" | "right", opacity?: number, step?: number, width?: number }, opacity?: number }) {
         this._setOption('hoverStyle', value);
     }
 

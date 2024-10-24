@@ -16,9 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { dxHtmlEditorTableContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
     NestedOptionHost,
@@ -71,18 +69,18 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get items(): Array<HtmlEditorPredefinedContextMenuItem | any> {
+    get items(): Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties"> {
         return this._getOption('items');
     }
-    set items(value: Array<HtmlEditorPredefinedContextMenuItem | any>) {
+    set items(value: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">) {
         this._setOption('items', value);
     }
 
     @Input()
-    get name(): HtmlEditorPredefinedContextMenuItem | undefined | HtmlEditorPredefinedToolbarItem | string {
+    get name(): "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties" | "size" | "header" | "separator" {
         return this._getOption('name');
     }
-    set name(value: HtmlEditorPredefinedContextMenuItem | undefined | HtmlEditorPredefinedToolbarItem | string) {
+    set name(value: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties" | "size" | "header" | "separator") {
         this._setOption('name', value);
     }
 
@@ -127,34 +125,34 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get acceptedValues(): Array<string | number | boolean> {
+    get acceptedValues(): Array<boolean | number | string> {
         return this._getOption('acceptedValues');
     }
-    set acceptedValues(value: Array<string | number | boolean>) {
+    set acceptedValues(value: Array<boolean | number | string>) {
         this._setOption('acceptedValues', value);
     }
 
     @Input()
-    get cssClass(): string | undefined {
+    get cssClass(): string {
         return this._getOption('cssClass');
     }
-    set cssClass(value: string | undefined) {
+    set cssClass(value: string) {
         this._setOption('cssClass', value);
     }
 
     @Input()
-    get formatName(): HtmlEditorPredefinedToolbarItem | string {
+    get formatName(): "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" {
         return this._getOption('formatName');
     }
-    set formatName(value: HtmlEditorPredefinedToolbarItem | string) {
+    set formatName(value: "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable") {
         this._setOption('formatName', value);
     }
 
     @Input()
-    get formatValues(): Array<string | number | boolean> {
+    get formatValues(): Array<boolean | number | string> {
         return this._getOption('formatValues');
     }
-    set formatValues(value: Array<string | number | boolean>) {
+    set formatValues(value: Array<boolean | number | string>) {
         this._setOption('formatValues', value);
     }
 
@@ -167,18 +165,18 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get locateInMenu(): LocateInMenuMode {
+    get locateInMenu(): "always" | "auto" | "never" {
         return this._getOption('locateInMenu');
     }
-    set locateInMenu(value: LocateInMenuMode) {
+    set locateInMenu(value: "always" | "auto" | "never") {
         this._setOption('locateInMenu', value);
     }
 
     @Input()
-    get location(): ToolbarItemLocation {
+    get location(): "after" | "before" | "center" {
         return this._getOption('location');
     }
-    set location(value: ToolbarItemLocation) {
+    set location(value: "after" | "before" | "center") {
         this._setOption('location', value);
     }
 
@@ -199,18 +197,18 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get showText(): ShowTextMode {
+    get showText(): "always" | "inMenu" {
         return this._getOption('showText');
     }
-    set showText(value: ShowTextMode) {
+    set showText(value: "always" | "inMenu") {
         this._setOption('showText', value);
     }
 
     @Input()
-    get widget(): ToolbarItemComponent {
+    get widget(): "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox" {
         return this._getOption('widget');
     }
-    set widget(value: ToolbarItemComponent) {
+    set widget(value: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox") {
         this._setOption('widget', value);
     }
 

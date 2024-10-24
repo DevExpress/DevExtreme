@@ -10,10 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -28,7 +25,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiResponsiveBoxLocationComponent } from './location-dxi';
 
 
 @Component({
@@ -56,10 +52,10 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
     }
 
     @Input()
-    get location(): Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }> {
+    get location(): Array<Record<string, any>> | Record<string, any> | { col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }[] {
         return this._getOption('location');
     }
-    set location(value: Array<any | { col?: number, colspan?: number | undefined, row?: number, rowspan?: number | undefined, screen?: string | undefined }>) {
+    set location(value: Array<Record<string, any>> | Record<string, any> | { col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }[]) {
         this._setOption('location', value);
     }
 
@@ -92,14 +88,6 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiResponsiveBoxLocationComponent))
-    get locationChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
-        return this._getOption('location');
-    }
-    set locationChildren(value) {
-        this.setChildren('location', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

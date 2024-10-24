@@ -18,10 +18,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { ChartsAxisLabelOverlap, DashStyle, Font, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
-import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import * as LocalizationTypes from 'devextreme/localization';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -50,34 +48,26 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get horizontalAlignment(): HorizontalAlignment {
+    get horizontalAlignment(): "center" | "left" | "right" {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: HorizontalAlignment) {
+    set horizontalAlignment(value: "center" | "left" | "right") {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get position(): RelativePosition | Position {
+    get position(): "inside" | "outside" | "bottom" | "left" | "right" | "top" {
         return this._getOption('position');
     }
-    set position(value: RelativePosition | Position) {
+    set position(value: "inside" | "outside" | "bottom" | "left" | "right" | "top") {
         this._setOption('position', value);
     }
 
     @Input()
-    get text(): string | undefined {
-        return this._getOption('text');
-    }
-    set text(value: string | undefined) {
-        this._setOption('text', value);
-    }
-
-    @Input()
-    get verticalAlignment(): VerticalAlignment {
+    get verticalAlignment(): "bottom" | "center" | "top" {
         return this._getOption('verticalAlignment');
     }
-    set verticalAlignment(value: VerticalAlignment) {
+    set verticalAlignment(value: "bottom" | "center" | "top") {
         this._setOption('verticalAlignment', value);
     }
 
@@ -90,42 +80,50 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get alignment(): HorizontalAlignment | undefined {
+    get text(): string {
+        return this._getOption('text');
+    }
+    set text(value: string) {
+        this._setOption('text', value);
+    }
+
+    @Input()
+    get alignment(): "center" | "left" | "right" {
         return this._getOption('alignment');
     }
-    set alignment(value: HorizontalAlignment | undefined) {
+    set alignment(value: "center" | "left" | "right") {
         this._setOption('alignment', value);
     }
 
     @Input()
-    get customizeHint(): Function {
+    get customizeHint(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeHint');
     }
-    set customizeHint(value: Function) {
+    set customizeHint(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeHint', value);
     }
 
     @Input()
-    get customizeText(): Function {
+    get customizeText(): ((argument: { value: Date | number | string, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function) {
+    set customizeText(value: ((argument: { value: Date | number | string, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
     @Input()
-    get displayMode(): ChartLabelDisplayMode {
+    get displayMode(): "rotate" | "stagger" | "standard" {
         return this._getOption('displayMode');
     }
-    set displayMode(value: ChartLabelDisplayMode) {
+    set displayMode(value: "rotate" | "stagger" | "standard") {
         this._setOption('displayMode', value);
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
@@ -138,10 +136,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get overlappingBehavior(): ChartsAxisLabelOverlap {
+    get overlappingBehavior(): "rotate" | "stagger" | "none" | "hide" {
         return this._getOption('overlappingBehavior');
     }
-    set overlappingBehavior(value: ChartsAxisLabelOverlap) {
+    set overlappingBehavior(value: "rotate" | "stagger" | "none" | "hide") {
         this._setOption('overlappingBehavior', value);
     }
 
@@ -162,66 +160,66 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get template(): any | undefined {
+    get template(): any {
         return this._getOption('template');
     }
-    set template(value: any | undefined) {
+    set template(value: any) {
         this._setOption('template', value);
     }
 
     @Input()
-    get textOverflow(): TextOverflow {
+    get textOverflow(): "ellipsis" | "hide" | "none" {
         return this._getOption('textOverflow');
     }
-    set textOverflow(value: TextOverflow) {
+    set textOverflow(value: "ellipsis" | "hide" | "none") {
         this._setOption('textOverflow', value);
     }
 
     @Input()
-    get wordWrap(): WordWrap {
+    get wordWrap(): "normal" | "breakWord" | "none" {
         return this._getOption('wordWrap');
     }
-    set wordWrap(value: WordWrap) {
+    set wordWrap(value: "normal" | "breakWord" | "none") {
         this._setOption('wordWrap', value);
     }
 
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): LocalizationTypes.Format {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: LocalizationTypes.Format) {
         this._setOption('argumentFormat', value);
     }
 
     @Input()
-    get backgroundColor(): string | undefined {
+    get backgroundColor(): string {
         return this._getOption('backgroundColor');
     }
-    set backgroundColor(value: string | undefined) {
+    set backgroundColor(value: string) {
         this._setOption('backgroundColor', value);
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
     @Input()
-    get connector(): { color?: string | undefined, visible?: boolean, width?: number } {
+    get connector(): Record<string, any> | { color?: string, visible?: boolean, width?: number } {
         return this._getOption('connector');
     }
-    set connector(value: { color?: string | undefined, visible?: boolean, width?: number }) {
+    set connector(value: Record<string, any> | { color?: string, visible?: boolean, width?: number }) {
         this._setOption('connector', value);
     }
 
     @Input()
-    get displayFormat(): string | undefined {
+    get displayFormat(): string {
         return this._getOption('displayFormat');
     }
-    set displayFormat(value: string | undefined) {
+    set displayFormat(value: string) {
         this._setOption('displayFormat', value);
     }
 

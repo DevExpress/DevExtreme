@@ -24,12 +24,12 @@ import {
 } from '@angular/core';
 
 
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, PageLoadMode, Position, SimplifiedSearchMode, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import DataSource from 'devextreme/data/data_source';
 import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
+import { dxPopoverOptions } from 'devextreme/ui/popover';
 import { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/lookup';
-import { Properties as dxPopoverOptions } from 'devextreme/ui/popover';
 
 import DxLookup from 'devextreme/ui/lookup';
 
@@ -64,22 +64,22 @@ import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
 import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
-import { DxoLookupDropDownOptionsModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupAnimationModule } from 'devextreme-angular/ui/lookup/nested';
-import { DxoLookupHideModule } from 'devextreme-angular/ui/lookup/nested';
-import { DxoLookupFromModule } from 'devextreme-angular/ui/lookup/nested';
-import { DxoLookupPositionModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupAtModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupBoundaryOffsetModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupCollisionModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoLookupDropDownOptionsModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoLookupFromModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoLookupHideModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoLookupHideEventModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxiLookupItemModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupMyModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupOffsetModule } from 'devextreme-angular/ui/lookup/nested';
-import { DxoLookupToModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoLookupPositionModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupShowModule } from 'devextreme-angular/ui/lookup/nested';
-import { DxoLookupHideEventModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupShowEventModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoLookupToModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxiLookupToolbarItemModule } from 'devextreme-angular/ui/lookup/nested';
-import { DxiLookupItemModule } from 'devextreme-angular/ui/lookup/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -115,10 +115,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -154,10 +154,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get applyValueMode(): ApplyValueMode {
+    get applyValueMode(): "instantly" | "useButtons" {
         return this._getOption('applyValueMode');
     }
-    set applyValueMode(value: ApplyValueMode) {
+    set applyValueMode(value: "instantly" | "useButtons") {
         this._setOption('applyValueMode', value);
     }
 
@@ -206,10 +206,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any> {
+    get dataSource(): Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>) {
+    set dataSource(value: Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -245,10 +245,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get displayExpr(): Function | string | undefined {
+    get displayExpr(): ((item: any) => string) | string {
         return this._getOption('displayExpr');
     }
-    set displayExpr(value: Function | string | undefined) {
+    set displayExpr(value: ((item: any) => string) | string) {
         this._setOption('displayExpr', value);
     }
 
@@ -258,10 +258,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get displayValue(): string | undefined {
+    get displayValue(): string {
         return this._getOption('displayValue');
     }
-    set displayValue(value: string | undefined) {
+    set displayValue(value: string) {
         this._setOption('displayValue', value);
     }
 
@@ -284,10 +284,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get dropDownOptions(): dxPopoverOptions {
+    get dropDownOptions(): dxPopoverOptions<any> {
         return this._getOption('dropDownOptions');
     }
-    set dropDownOptions(value: dxPopoverOptions) {
+    set dropDownOptions(value: dxPopoverOptions<any>) {
         this._setOption('dropDownOptions', value);
     }
 
@@ -297,10 +297,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -377,10 +377,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -390,10 +390,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -455,10 +455,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get items(): Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | CollectionWidgetItem> {
         return this._getOption('items');
     }
-    set items(value: Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | CollectionWidgetItem>) {
         this._setOption('items', value);
     }
 
@@ -494,10 +494,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get labelMode(): LabelMode {
+    get labelMode(): "static" | "floating" | "hidden" | "outside" {
         return this._getOption('labelMode');
     }
-    set labelMode(value: LabelMode) {
+    set labelMode(value: "static" | "floating" | "hidden" | "outside") {
         this._setOption('labelMode', value);
     }
 
@@ -585,10 +585,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get pageLoadMode(): PageLoadMode {
+    get pageLoadMode(): "nextButton" | "scrollBottom" {
         return this._getOption('pageLoadMode');
     }
-    set pageLoadMode(value: PageLoadMode) {
+    set pageLoadMode(value: "nextButton" | "scrollBottom") {
         this._setOption('pageLoadMode', value);
     }
 
@@ -689,10 +689,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get searchExpr(): Function | string | Array<Function | string> {
+    get searchExpr(): Array<(() => any) | string> | (() => any) | string {
         return this._getOption('searchExpr');
     }
-    set searchExpr(value: Function | string | Array<Function | string>) {
+    set searchExpr(value: Array<(() => any) | string> | (() => any) | string) {
         this._setOption('searchExpr', value);
     }
 
@@ -702,10 +702,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get searchMode(): SimplifiedSearchMode {
+    get searchMode(): "contains" | "startswith" {
         return this._getOption('searchMode');
     }
-    set searchMode(value: SimplifiedSearchMode) {
+    set searchMode(value: "contains" | "startswith") {
         this._setOption('searchMode', value);
     }
 
@@ -806,10 +806,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get stylingMode(): EditorStyle {
+    get stylingMode(): "outlined" | "underlined" | "filled" {
         return this._getOption('stylingMode');
     }
-    set stylingMode(value: EditorStyle) {
+    set stylingMode(value: "outlined" | "underlined" | "filled") {
         this._setOption('stylingMode', value);
     }
 
@@ -910,10 +910,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessageMode(): ValidationMessageMode {
+    get validationMessageMode(): "always" | "auto" {
         return this._getOption('validationMessageMode');
     }
-    set validationMessageMode(value: ValidationMessageMode) {
+    set validationMessageMode(value: "always" | "auto") {
         this._setOption('validationMessageMode', value);
     }
 
@@ -923,10 +923,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationMessagePosition(): Position | Mode {
+    get validationMessagePosition(): "bottom" | "left" | "right" | "top" | "auto" {
         return this._getOption('validationMessagePosition');
     }
-    set validationMessagePosition(value: Position | Mode) {
+    set validationMessagePosition(value: "bottom" | "left" | "right" | "top" | "auto") {
         this._setOption('validationMessagePosition', value);
     }
 
@@ -936,10 +936,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get validationStatus(): ValidationStatus {
+    get validationStatus(): "valid" | "invalid" | "pending" {
         return this._getOption('validationStatus');
     }
-    set validationStatus(value: ValidationStatus) {
+    set validationStatus(value: "valid" | "invalid" | "pending") {
         this._setOption('validationStatus', value);
     }
 
@@ -977,10 +977,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get valueExpr(): Function | string {
+    get valueExpr(): ((item: any) => string | number | boolean) | string {
         return this._getOption('valueExpr');
     }
-    set valueExpr(value: Function | string) {
+    set valueExpr(value: ((item: any) => string | number | boolean) | string) {
         this._setOption('valueExpr', value);
     }
 
@@ -1003,10 +1003,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -1124,7 +1124,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -1145,7 +1145,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() applyValueModeChange: EventEmitter<ApplyValueMode>;
+    @Output() applyValueModeChange: EventEmitter<"instantly" | "useButtons">;
 
     /**
     
@@ -1173,7 +1173,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | CollectionWidgetItem> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1194,14 +1194,14 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayExprChange: EventEmitter<Function | string | undefined>;
+    @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() displayValueChange: EventEmitter<string | undefined>;
+    @Output() displayValueChange: EventEmitter<string>;
 
     /**
     
@@ -1215,14 +1215,14 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropDownOptionsChange: EventEmitter<dxPopoverOptions>;
+    @Output() dropDownOptionsChange: EventEmitter<dxPopoverOptions<any>>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1264,14 +1264,14 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -1306,7 +1306,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | CollectionWidgetItem>>;
 
     /**
     
@@ -1327,7 +1327,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() labelModeChange: EventEmitter<LabelMode>;
+    @Output() labelModeChange: EventEmitter<"static" | "floating" | "hidden" | "outside">;
 
     /**
     
@@ -1376,7 +1376,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() pageLoadModeChange: EventEmitter<PageLoadMode>;
+    @Output() pageLoadModeChange: EventEmitter<"nextButton" | "scrollBottom">;
 
     /**
     
@@ -1432,14 +1432,14 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchExprChange: EventEmitter<Function | string | Array<Function | string>>;
+    @Output() searchExprChange: EventEmitter<Array<(() => any) | string> | (() => any) | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchModeChange: EventEmitter<SimplifiedSearchMode>;
+    @Output() searchModeChange: EventEmitter<"contains" | "startswith">;
 
     /**
     
@@ -1495,7 +1495,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() stylingModeChange: EventEmitter<EditorStyle>;
+    @Output() stylingModeChange: EventEmitter<"outlined" | "underlined" | "filled">;
 
     /**
     
@@ -1551,21 +1551,21 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessageModeChange: EventEmitter<ValidationMessageMode>;
+    @Output() validationMessageModeChange: EventEmitter<"always" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationMessagePositionChange: EventEmitter<Position | Mode>;
+    @Output() validationMessagePositionChange: EventEmitter<"bottom" | "left" | "right" | "top" | "auto">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() validationStatusChange: EventEmitter<ValidationStatus>;
+    @Output() validationStatusChange: EventEmitter<"valid" | "invalid" | "pending">;
 
     /**
     
@@ -1586,7 +1586,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueExprChange: EventEmitter<Function | string>;
+    @Output() valueExprChange: EventEmitter<((item: any) => string | number | boolean) | string>;
 
     /**
     
@@ -1600,7 +1600,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
@@ -1825,22 +1825,22 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxoHideEventModule,
     DxoShowEventModule,
     DxiItemModule,
-    DxoLookupDropDownOptionsModule,
     DxoLookupAnimationModule,
-    DxoLookupHideModule,
-    DxoLookupFromModule,
-    DxoLookupPositionModule,
     DxoLookupAtModule,
     DxoLookupBoundaryOffsetModule,
     DxoLookupCollisionModule,
+    DxoLookupDropDownOptionsModule,
+    DxoLookupFromModule,
+    DxoLookupHideModule,
+    DxoLookupHideEventModule,
+    DxiLookupItemModule,
     DxoLookupMyModule,
     DxoLookupOffsetModule,
-    DxoLookupToModule,
+    DxoLookupPositionModule,
     DxoLookupShowModule,
-    DxoLookupHideEventModule,
     DxoLookupShowEventModule,
+    DxoLookupToModule,
     DxiLookupToolbarItemModule,
-    DxiLookupItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -1864,22 +1864,22 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxoHideEventModule,
     DxoShowEventModule,
     DxiItemModule,
-    DxoLookupDropDownOptionsModule,
     DxoLookupAnimationModule,
-    DxoLookupHideModule,
-    DxoLookupFromModule,
-    DxoLookupPositionModule,
     DxoLookupAtModule,
     DxoLookupBoundaryOffsetModule,
     DxoLookupCollisionModule,
+    DxoLookupDropDownOptionsModule,
+    DxoLookupFromModule,
+    DxoLookupHideModule,
+    DxoLookupHideEventModule,
+    DxiLookupItemModule,
     DxoLookupMyModule,
     DxoLookupOffsetModule,
-    DxoLookupToModule,
+    DxoLookupPositionModule,
     DxoLookupShowModule,
-    DxoLookupHideEventModule,
     DxoLookupShowEventModule,
+    DxoLookupToModule,
     DxiLookupToolbarItemModule,
-    DxiLookupItemModule,
     DxTemplateModule
   ]
 })

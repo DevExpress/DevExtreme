@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
+import { dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
     NestedOptionHost,
@@ -45,10 +45,10 @@ export class DxiSplitterItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get collapsedSize(): number | string | undefined {
+    get collapsedSize(): number | string {
         return this._getOption('collapsedSize');
     }
-    set collapsedSize(value: number | string | undefined) {
+    set collapsedSize(value: number | string) {
         this._setOption('collapsedSize', value);
     }
 
@@ -61,18 +61,18 @@ export class DxiSplitterItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get maxSize(): number | string | undefined {
+    get maxSize(): number | string {
         return this._getOption('maxSize');
     }
-    set maxSize(value: number | string | undefined) {
+    set maxSize(value: number | string) {
         this._setOption('maxSize', value);
     }
 
     @Input()
-    get minSize(): number | string | undefined {
+    get minSize(): number | string {
         return this._getOption('minSize');
     }
-    set minSize(value: number | string | undefined) {
+    set minSize(value: number | string) {
         this._setOption('minSize', value);
     }
 
@@ -85,18 +85,18 @@ export class DxiSplitterItemComponent extends CollectionNestedOption implements 
     }
 
     @Input()
-    get size(): number | string | undefined {
+    get size(): number | string {
         return this._getOption('size');
     }
-    set size(value: number | string | undefined) {
+    set size(value: number | string) {
         this._setOption('size', value);
     }
 
     @Input()
-    get splitter(): dxSplitterOptions | undefined {
+    get splitter(): dxSplitterOptions {
         return this._getOption('splitter');
     }
-    set splitter(value: dxSplitterOptions | undefined) {
+    set splitter(value: dxSplitterOptions) {
         this._setOption('splitter', value);
     }
 

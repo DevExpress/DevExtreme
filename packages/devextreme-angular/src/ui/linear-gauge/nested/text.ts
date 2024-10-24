@@ -14,8 +14,8 @@ import {
 
 
 
+import * as LocalizationTypes from 'devextreme/localization';
 import { Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/localization';
 
 import {
     NestedOptionHost,
@@ -31,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoLinearGaugeTextComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): Function | undefined {
+    get customizeText(): ((indicatedValue: { value: number, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: Function | undefined) {
+    set customizeText(value: ((indicatedValue: { value: number, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -47,10 +47,10 @@ export class DxoLinearGaugeTextComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 

@@ -22,10 +22,14 @@ import {
 } from '@angular/core';
 
 
-import { FirstDayOfWeek, Orientation } from 'devextreme/common';
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { AllDayPanelMode, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellAppointmentsLimit, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, dxSchedulerAppointment, dxSchedulerScrolling, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, ViewType } from 'devextreme/ui/scheduler';
+import dxScheduler from 'devextreme/ui/scheduler';
+import dxSortable from 'devextreme/ui/sortable';
+import dxDraggable from 'devextreme/ui/draggable';
+import DataSource from 'devextreme/data/data_source';
+import { event } from 'devextreme/events/index';
+import { dxSchedulerAppointment, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxScheduler from 'devextreme/ui/scheduler';
 
@@ -81,10 +85,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -120,10 +124,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get allDayPanelMode(): AllDayPanelMode {
+    get allDayPanelMode(): "all" | "allDay" | "hidden" {
         return this._getOption('allDayPanelMode');
     }
-    set allDayPanelMode(value: AllDayPanelMode) {
+    set allDayPanelMode(value: "all" | "allDay" | "hidden") {
         this._setOption('allDayPanelMode', value);
     }
 
@@ -146,10 +150,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get appointmentDragging(): { autoScroll?: boolean, data?: any | undefined, group?: string | undefined, onAdd?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, scrollSensitivity?: number, scrollSpeed?: number } {
+    get appointmentDragging(): Record<string, any> | { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void), onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragStart?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void), scrollSensitivity?: number, scrollSpeed?: number } {
         return this._getOption('appointmentDragging');
     }
-    set appointmentDragging(value: { autoScroll?: boolean, data?: any | undefined, group?: string | undefined, onAdd?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, scrollSensitivity?: number, scrollSpeed?: number }) {
+    set appointmentDragging(value: Record<string, any> | { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void), onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragStart?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void), scrollSensitivity?: number, scrollSpeed?: number }) {
         this._setOption('appointmentDragging', value);
     }
 
@@ -224,10 +228,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get currentView(): ViewType {
+    get currentView(): "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" {
         return this._getOption('currentView');
     }
-    set currentView(value: ViewType) {
+    set currentView(value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") {
         this._setOption('currentView', value);
     }
 
@@ -237,10 +241,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get customizeDateNavigatorText(): Function | undefined {
+    get customizeDateNavigatorText(): ((info: { endDate: Date, startDate: Date, text: string }) => string) {
         return this._getOption('customizeDateNavigatorText');
     }
-    set customizeDateNavigatorText(value: Function | undefined) {
+    set customizeDateNavigatorText(value: ((info: { endDate: Date, startDate: Date, text: string }) => string)) {
         this._setOption('customizeDateNavigatorText', value);
     }
 
@@ -263,10 +267,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxSchedulerAppointment> {
+    get dataSource(): Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxSchedulerAppointment>) {
+    set dataSource(value: Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -289,10 +293,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dateSerializationFormat(): string | undefined {
+    get dateSerializationFormat(): string {
         return this._getOption('dateSerializationFormat');
     }
-    set dateSerializationFormat(value: string | undefined) {
+    set dateSerializationFormat(value: string) {
         this._setOption('dateSerializationFormat', value);
     }
 
@@ -343,10 +347,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get editing(): boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean } {
+    get editing(): boolean | Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean } {
         return this._getOption('editing');
     }
-    set editing(value: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }) {
+    set editing(value: boolean | Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }) {
         this._setOption('editing', value);
     }
 
@@ -356,10 +360,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -408,10 +412,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -460,10 +464,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -473,10 +477,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -499,10 +503,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get max(): Date | number | string | undefined {
+    get max(): Date | number | string {
         return this._getOption('max');
     }
-    set max(value: Date | number | string | undefined) {
+    set max(value: Date | number | string) {
         this._setOption('max', value);
     }
 
@@ -512,10 +516,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get maxAppointmentsPerCell(): CellAppointmentsLimit | number {
+    get maxAppointmentsPerCell(): number | "auto" | "unlimited" {
         return this._getOption('maxAppointmentsPerCell');
     }
-    set maxAppointmentsPerCell(value: CellAppointmentsLimit | number) {
+    set maxAppointmentsPerCell(value: number | "auto" | "unlimited") {
         this._setOption('maxAppointmentsPerCell', value);
     }
 
@@ -525,10 +529,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get min(): Date | number | string | undefined {
+    get min(): Date | number | string {
         return this._getOption('min');
     }
-    set min(value: Date | number | string | undefined) {
+    set min(value: Date | number | string) {
         this._setOption('min', value);
     }
 
@@ -564,10 +568,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get recurrenceEditMode(): RecurrenceEditMode {
+    get recurrenceEditMode(): "dialog" | "occurrence" | "series" {
         return this._getOption('recurrenceEditMode');
     }
-    set recurrenceEditMode(value: RecurrenceEditMode) {
+    set recurrenceEditMode(value: "dialog" | "occurrence" | "series") {
         this._setOption('recurrenceEditMode', value);
     }
 
@@ -629,10 +633,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get resources(): Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }> {
+    get resources(): Array<Record<string, any>> | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: (() => void) | string }[] {
         return this._getOption('resources');
     }
-    set resources(value: Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }>) {
+    set resources(value: Array<Record<string, any>> | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: (() => void) | string }[]) {
         this._setOption('resources', value);
     }
 
@@ -824,10 +828,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get views(): string | Array<string | any | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: ViewType | undefined }> {
+    get views(): Array<string> | { agendaDuration?: number, allDayPanelMode?: "all" | "allDay" | "hidden", appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: "horizontal" | "vertical", groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | "auto" | "unlimited", name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" }[] {
         return this._getOption('views');
     }
-    set views(value: string | Array<string | any | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: ViewType | undefined }>) {
+    set views(value: Array<string> | { agendaDuration?: number, allDayPanelMode?: "all" | "allDay" | "hidden", appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: "horizontal" | "vertical", groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | "auto" | "unlimited", name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" }[]) {
         this._setOption('views', value);
     }
 
@@ -850,10 +854,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -1006,7 +1010,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -1027,7 +1031,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() allDayPanelModeChange: EventEmitter<AllDayPanelMode>;
+    @Output() allDayPanelModeChange: EventEmitter<"all" | "allDay" | "hidden">;
 
     /**
     
@@ -1041,7 +1045,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() appointmentDraggingChange: EventEmitter<{ autoScroll?: boolean, data?: any | undefined, group?: string | undefined, onAdd?: Function, onDragEnd?: Function, onDragMove?: Function, onDragStart?: Function, onRemove?: Function, scrollSensitivity?: number, scrollSpeed?: number }>;
+    @Output() appointmentDraggingChange: EventEmitter<Record<string, any> | { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragEnd?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any, toItemData: any }) => void), onDragMove?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable, toData: any }) => void), onDragStart?: ((e: { cancel: boolean, component: dxScheduler, event: event, fromData: any, itemData: any, itemElement: any }) => void), onRemove?: ((e: { component: dxScheduler, event: event, fromComponent: dxSortable | dxDraggable, fromData: any, itemData: any, itemElement: any, toComponent: dxSortable | dxDraggable }) => void), scrollSensitivity?: number, scrollSpeed?: number }>;
 
     /**
     
@@ -1083,14 +1087,14 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() currentViewChange: EventEmitter<ViewType>;
+    @Output() currentViewChange: EventEmitter<"agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customizeDateNavigatorTextChange: EventEmitter<Function | undefined>;
+    @Output() customizeDateNavigatorTextChange: EventEmitter<((info: { endDate: Date, startDate: Date, text: string }) => string)>;
 
     /**
     
@@ -1104,7 +1108,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxSchedulerAppointment>>;
+    @Output() dataSourceChange: EventEmitter<Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -1118,7 +1122,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dateSerializationFormatChange: EventEmitter<string | undefined>;
+    @Output() dateSerializationFormatChange: EventEmitter<string>;
 
     /**
     
@@ -1146,14 +1150,14 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() editingChange: EventEmitter<boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }>;
+    @Output() editingChange: EventEmitter<boolean | Record<string, any> | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1181,7 +1185,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() firstDayOfWeekChange: EventEmitter<FirstDayOfWeek | undefined>;
+    @Output() firstDayOfWeekChange: EventEmitter<0 | 1 | 2 | 3 | 4 | 5 | 6>;
 
     /**
     
@@ -1209,14 +1213,14 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -1230,21 +1234,21 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | number | string | undefined>;
+    @Output() maxChange: EventEmitter<Date | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxAppointmentsPerCellChange: EventEmitter<CellAppointmentsLimit | number>;
+    @Output() maxAppointmentsPerCellChange: EventEmitter<number | "auto" | "unlimited">;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | number | string | undefined>;
+    @Output() minChange: EventEmitter<Date | number | string>;
 
     /**
     
@@ -1265,7 +1269,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() recurrenceEditModeChange: EventEmitter<RecurrenceEditMode>;
+    @Output() recurrenceEditModeChange: EventEmitter<"dialog" | "occurrence" | "series">;
 
     /**
     
@@ -1300,7 +1304,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourcesChange: EventEmitter<Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }>>;
+    @Output() resourcesChange: EventEmitter<Array<Record<string, any>> | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Array<any> | DataSource | DataSourceOptions | null | Store | string, displayExpr?: ((resource: any) => string) | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: (() => void) | string }[]>;
 
     /**
     
@@ -1405,7 +1409,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewsChange: EventEmitter<string | Array<string | any | { agendaDuration?: number, allDayPanelMode?: AllDayPanelMode, appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: FirstDayOfWeek | undefined, groupByDate?: boolean, groupOrientation?: Orientation, groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: CellAppointmentsLimit | number, name?: string | undefined, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string | undefined, startDayHour?: number, timeCellTemplate?: any, type?: ViewType | undefined }>>;
+    @Output() viewsChange: EventEmitter<Array<string> | { agendaDuration?: number, allDayPanelMode?: "all" | "allDay" | "hidden", appointmentCollectorTemplate?: any, appointmentTemplate?: any, appointmentTooltipTemplate?: any, cellDuration?: number, dataCellTemplate?: any, dateCellTemplate?: any, dropDownAppointmentTemplate?: any, endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: "horizontal" | "vertical", groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | "auto" | "unlimited", name?: string, offset?: number, resourceCellTemplate?: any, scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: any, type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" }[]>;
 
     /**
     
@@ -1419,7 +1423,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

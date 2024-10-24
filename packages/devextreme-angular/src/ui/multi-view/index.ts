@@ -23,9 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/multi_view';
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxMultiViewItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/multi_view';
+import DataSource from 'devextreme/data/data_source';
+import { dxMultiViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/multi_view';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxMultiView from 'devextreme/ui/multi_view';
 
@@ -71,10 +72,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -110,10 +111,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxMultiViewItem | string | any> {
+    get dataSource(): Array<any | dxMultiViewItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxMultiViewItem | string | any>) {
+    set dataSource(value: Array<any | dxMultiViewItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -149,10 +150,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -175,10 +176,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -188,10 +189,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -227,10 +228,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<any | dxMultiViewItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<any | dxMultiViewItem | string>) {
         this._setOption('items', value);
     }
 
@@ -357,10 +358,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -441,7 +442,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -462,7 +463,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxMultiViewItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxMultiViewItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -483,7 +484,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -497,14 +498,14 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -525,7 +526,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, html?: string, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxMultiViewItem | string>>;
 
     /**
     
@@ -595,7 +596,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

@@ -28,34 +28,34 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiPolarChartStripComponent extends CollectionNestedOption {
     @Input()
-    get color(): string | undefined {
+    get color(): string {
         return this._getOption('color');
     }
-    set color(value: string | undefined) {
+    set color(value: string) {
         this._setOption('color', value);
     }
 
     @Input()
-    get endValue(): Date | number | string | undefined {
+    get endValue(): Date | number | string {
         return this._getOption('endValue');
     }
-    set endValue(value: Date | number | string | undefined) {
+    set endValue(value: Date | number | string) {
         this._setOption('endValue', value);
     }
 
     @Input()
-    get label(): { font?: Font, text?: string | undefined } {
+    get label(): Record<string, any> | { font?: Font, text?: string } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, text?: string | undefined }) {
+    set label(value: Record<string, any> | { font?: Font, text?: string }) {
         this._setOption('label', value);
     }
 
     @Input()
-    get startValue(): Date | number | string | undefined {
+    get startValue(): Date | number | string {
         return this._getOption('startValue');
     }
-    set startValue(value: Date | number | string | undefined) {
+    set startValue(value: Date | number | string) {
         this._setOption('startValue', value);
     }
 

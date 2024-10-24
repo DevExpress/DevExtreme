@@ -29,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTooltipHideEventComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get delay(): number | undefined {
+    get delay(): number {
         return this._getOption('delay');
     }
-    set delay(value: number | undefined) {
+    set delay(value: number) {
         this._setOption('delay', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 

@@ -23,9 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/accordion';
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxAccordionItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/accordion';
+import DataSource from 'devextreme/data/data_source';
+import { dxAccordionItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/accordion';
+import { DataSourceOptions } from 'devextreme/data/data_source';
+import { Store } from 'devextreme/data/store';
 
 import DxAccordion from 'devextreme/ui/accordion';
 
@@ -71,10 +72,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get accessKey(): string | undefined {
+    get accessKey(): string {
         return this._getOption('accessKey');
     }
-    set accessKey(value: string | undefined) {
+    set accessKey(value: string) {
         this._setOption('accessKey', value);
     }
 
@@ -123,10 +124,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxAccordionItem | string | any> {
+    get dataSource(): Array<any | dxAccordionItem | string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxAccordionItem | string | any>) {
+    set dataSource(value: Array<any | dxAccordionItem | string> | DataSource | DataSourceOptions | null | Store | string) {
         this._setOption('dataSource', value);
     }
 
@@ -162,10 +163,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get elementAttr(): any {
+    get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
     }
-    set elementAttr(value: any) {
+    set elementAttr(value: Record<string, any>) {
         this._setOption('elementAttr', value);
     }
 
@@ -188,10 +189,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get height(): number | Function | string | undefined {
+    get height(): (() => number | string) | number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: (() => number | string) | number | string) {
         this._setOption('height', value);
     }
 
@@ -201,10 +202,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get hint(): string | undefined {
+    get hint(): string {
         return this._getOption('hint');
     }
-    set hint(value: string | undefined) {
+    set hint(value: string) {
         this._setOption('hint', value);
     }
 
@@ -240,10 +241,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get items(): Array<string | any | { disabled?: boolean, html?: string, icon?: string, template?: any, text?: string, title?: string, titleTemplate?: any, visible?: boolean }> {
+    get items(): Array<any | dxAccordionItem | string> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { disabled?: boolean, html?: string, icon?: string, template?: any, text?: string, title?: string, titleTemplate?: any, visible?: boolean }>) {
+    set items(value: Array<any | dxAccordionItem | string>) {
         this._setOption('items', value);
     }
 
@@ -279,10 +280,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get keyExpr(): Function | string {
+    get keyExpr(): (() => void) | string {
         return this._getOption('keyExpr');
     }
-    set keyExpr(value: Function | string) {
+    set keyExpr(value: (() => void) | string) {
         this._setOption('keyExpr', value);
     }
 
@@ -422,10 +423,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get width(): number | Function | string | undefined {
+    get width(): (() => number | string) | number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: (() => number | string) | number | string) {
         this._setOption('width', value);
     }
 
@@ -514,7 +515,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() accessKeyChange: EventEmitter<string | undefined>;
+    @Output() accessKeyChange: EventEmitter<string>;
 
     /**
     
@@ -542,7 +543,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxAccordionItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<Array<any | dxAccordionItem | string> | DataSource | DataSourceOptions | null | Store | string>;
 
     /**
     
@@ -563,7 +564,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() elementAttrChange: EventEmitter<any>;
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -577,14 +578,14 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string | undefined>;
+    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() hintChange: EventEmitter<string | undefined>;
+    @Output() hintChange: EventEmitter<string>;
 
     /**
     
@@ -605,7 +606,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { disabled?: boolean, html?: string, icon?: string, template?: any, text?: string, title?: string, titleTemplate?: any, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxAccordionItem | string>>;
 
     /**
     
@@ -626,7 +627,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() keyExprChange: EventEmitter<Function | string>;
+    @Output() keyExprChange: EventEmitter<(() => void) | string>;
 
     /**
     
@@ -703,7 +704,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string | undefined>;
+    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
 
 

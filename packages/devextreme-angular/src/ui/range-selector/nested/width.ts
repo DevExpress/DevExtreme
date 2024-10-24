@@ -29,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorWidthComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get rangeMaxPoint(): number | undefined {
+    get rangeMaxPoint(): number {
         return this._getOption('rangeMaxPoint');
     }
-    set rangeMaxPoint(value: number | undefined) {
+    set rangeMaxPoint(value: number) {
         this._setOption('rangeMaxPoint', value);
     }
 
     @Input()
-    get rangeMinPoint(): number | undefined {
+    get rangeMinPoint(): number {
         return this._getOption('rangeMinPoint');
     }
-    set rangeMinPoint(value: number | undefined) {
+    set rangeMinPoint(value: number) {
         this._setOption('rangeMinPoint', value);
     }
 

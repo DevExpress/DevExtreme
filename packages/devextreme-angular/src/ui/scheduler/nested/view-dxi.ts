@@ -12,8 +12,7 @@ import {
 
 
 
-import { FirstDayOfWeek, Orientation } from 'devextreme/common';
-import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
+import { dxSchedulerScrolling } from 'devextreme/ui/scheduler';
 
 import {
     NestedOptionHost,
@@ -37,10 +36,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get allDayPanelMode(): AllDayPanelMode {
+    get allDayPanelMode(): "all" | "allDay" | "hidden" {
         return this._getOption('allDayPanelMode');
     }
-    set allDayPanelMode(value: AllDayPanelMode) {
+    set allDayPanelMode(value: "all" | "allDay" | "hidden") {
         this._setOption('allDayPanelMode', value);
     }
 
@@ -109,10 +108,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get firstDayOfWeek(): FirstDayOfWeek | undefined {
+    get firstDayOfWeek(): 0 | 1 | 2 | 3 | 4 | 5 | 6 {
         return this._getOption('firstDayOfWeek');
     }
-    set firstDayOfWeek(value: FirstDayOfWeek | undefined) {
+    set firstDayOfWeek(value: 0 | 1 | 2 | 3 | 4 | 5 | 6) {
         this._setOption('firstDayOfWeek', value);
     }
 
@@ -125,10 +124,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get groupOrientation(): Orientation {
+    get groupOrientation(): "horizontal" | "vertical" {
         return this._getOption('groupOrientation');
     }
-    set groupOrientation(value: Orientation) {
+    set groupOrientation(value: "horizontal" | "vertical") {
         this._setOption('groupOrientation', value);
     }
 
@@ -149,18 +148,18 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get maxAppointmentsPerCell(): CellAppointmentsLimit | number {
+    get maxAppointmentsPerCell(): number | "auto" | "unlimited" {
         return this._getOption('maxAppointmentsPerCell');
     }
-    set maxAppointmentsPerCell(value: CellAppointmentsLimit | number) {
+    set maxAppointmentsPerCell(value: number | "auto" | "unlimited") {
         this._setOption('maxAppointmentsPerCell', value);
     }
 
     @Input()
-    get name(): string | undefined {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
@@ -189,10 +188,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get startDate(): Date | number | string | undefined {
+    get startDate(): Date | number | string {
         return this._getOption('startDate');
     }
-    set startDate(value: Date | number | string | undefined) {
+    set startDate(value: Date | number | string) {
         this._setOption('startDate', value);
     }
 
@@ -213,10 +212,10 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get type(): ViewType | undefined {
+    get type(): "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek" {
         return this._getOption('type');
     }
-    set type(value: ViewType | undefined) {
+    set type(value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") {
         this._setOption('type', value);
     }
 

@@ -14,7 +14,6 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -30,18 +29,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTooltipAtComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get x(): HorizontalAlignment {
+    get x(): "center" | "left" | "right" {
         return this._getOption('x');
     }
-    set x(value: HorizontalAlignment) {
+    set x(value: "center" | "left" | "right") {
         this._setOption('x', value);
     }
 
     @Input()
-    get y(): VerticalAlignment {
+    get y(): "bottom" | "center" | "top" {
         return this._getOption('y');
     }
-    set y(value: VerticalAlignment) {
+    set y(value: "bottom" | "center" | "top") {
         this._setOption('y', value);
     }
 

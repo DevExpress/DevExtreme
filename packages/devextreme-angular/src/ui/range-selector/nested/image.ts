@@ -14,7 +14,6 @@ import {
 
 
 
-import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -30,34 +29,34 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorImageComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get location(): BackgroundImageLocation {
+    get location(): "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop" {
         return this._getOption('location');
     }
-    set location(value: BackgroundImageLocation) {
+    set location(value: "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop") {
         this._setOption('location', value);
     }
 
     @Input()
-    get url(): string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined } {
+    get url(): string | Record<string, any> | { rangeMaxPoint?: string, rangeMinPoint?: string } {
         return this._getOption('url');
     }
-    set url(value: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }) {
+    set url(value: string | Record<string, any> | { rangeMaxPoint?: string, rangeMinPoint?: string }) {
         this._setOption('url', value);
     }
 
     @Input()
-    get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
+    get height(): number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } {
         return this._getOption('height');
     }
-    set height(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
+    set height(value: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }) {
         this._setOption('height', value);
     }
 
     @Input()
-    get width(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
+    get width(): number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number } {
         return this._getOption('width');
     }
-    set width(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
+    set width(value: number | Record<string, any> | { rangeMaxPoint?: number, rangeMinPoint?: number }) {
         this._setOption('width', value);
     }
 

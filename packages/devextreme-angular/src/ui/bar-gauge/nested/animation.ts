@@ -14,7 +14,6 @@ import {
 
 
 
-import { AnimationEaseMode } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +37,10 @@ export class DxoBarGaugeAnimationComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get easing(): AnimationEaseMode {
+    get easing(): "easeOutCubic" | "linear" {
         return this._getOption('easing');
     }
-    set easing(value: AnimationEaseMode) {
+    set easing(value: "easeOutCubic" | "linear") {
         this._setOption('easing', value);
     }
 

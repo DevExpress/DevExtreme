@@ -14,10 +14,8 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { Format } from 'devextreme/localization';
-import { ChartTooltipLocation } from 'devextreme/viz/chart';
+import * as LocalizationTypes from 'devextreme/localization';
+import { Font } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -33,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get argumentFormat(): Format | string | undefined {
+    get argumentFormat(): LocalizationTypes.Format {
         return this._getOption('argumentFormat');
     }
-    set argumentFormat(value: Format | string | undefined) {
+    set argumentFormat(value: LocalizationTypes.Format) {
         this._setOption('argumentFormat', value);
     }
 
@@ -49,10 +47,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: Record<string, any> | { color?: string, dashStyle?: "dash" | "dot" | "longDash" | "solid", opacity?: number, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -65,18 +63,18 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): any | string {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: any | string) {
         this._setOption('container', value);
     }
 
     @Input()
-    get contentTemplate(): any | undefined {
+    get contentTemplate(): any {
         return this._getOption('contentTemplate');
     }
-    set contentTemplate(value: any | undefined) {
+    set contentTemplate(value: any) {
         this._setOption('contentTemplate', value);
     }
 
@@ -89,10 +87,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get customizeTooltip(): Function | undefined {
+    get customizeTooltip(): ((pointInfo: any) => Record<string, any>) {
         return this._getOption('customizeTooltip');
     }
-    set customizeTooltip(value: Function | undefined) {
+    set customizeTooltip(value: ((pointInfo: any) => Record<string, any>)) {
         this._setOption('customizeTooltip', value);
     }
 
@@ -113,10 +111,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): LocalizationTypes.Format {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: LocalizationTypes.Format) {
         this._setOption('format', value);
     }
 
@@ -129,18 +127,18 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get location(): ChartTooltipLocation {
+    get location(): "center" | "edge" {
         return this._getOption('location');
     }
-    set location(value: ChartTooltipLocation) {
+    set location(value: "center" | "edge") {
         this._setOption('location', value);
     }
 
     @Input()
-    get opacity(): number | undefined {
+    get opacity(): number {
         return this._getOption('opacity');
     }
-    set opacity(value: number | undefined) {
+    set opacity(value: number) {
         this._setOption('opacity', value);
     }
 
@@ -161,10 +159,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get shadow(): { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
+    get shadow(): Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
         return this._getOption('shadow');
     }
-    set shadow(value: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
+    set shadow(value: Record<string, any> | { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }) {
         this._setOption('shadow', value);
     }
 
@@ -177,10 +175,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get zIndex(): number | undefined {
+    get zIndex(): number {
         return this._getOption('zIndex');
     }
-    set zIndex(value: number | undefined) {
+    set zIndex(value: number) {
         this._setOption('zIndex', value);
     }
 

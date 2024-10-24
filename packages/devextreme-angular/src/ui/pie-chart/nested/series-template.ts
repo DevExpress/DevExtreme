@@ -14,6 +14,7 @@ import {
 
 
 
+import { PieChartSeries } from 'devextreme/viz/pie_chart';
 
 import {
     NestedOptionHost,
@@ -29,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoPieChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeSeries(): Function {
+    get customizeSeries(): ((seriesName: any) => PieChartSeries) {
         return this._getOption('customizeSeries');
     }
-    set customizeSeries(value: Function) {
+    set customizeSeries(value: ((seriesName: any) => PieChartSeries)) {
         this._setOption('customizeSeries', value);
     }
 
