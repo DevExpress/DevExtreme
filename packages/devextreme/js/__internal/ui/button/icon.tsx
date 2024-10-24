@@ -77,10 +77,14 @@ export class Icon extends BaseInfernoComponent<IconProps> {
 
     const IconTemplate = getTemplate(this.props.iconTemplate);
 
-    return createFragment([sourceType === 'dxIcon' && createVNode(1, 'i', iconClassName), sourceType === 'fontIcon' && createVNode(1, 'i', iconClassName), sourceType === 'image' && createVNode(1, 'img', iconClassName, null, 1, {
-      alt: '',
-      src: source,
-    }), IconTemplate && createVNode(1, 'i', iconClassName, IconTemplate({}), 0)], 0);
+    return (
+      <>
+        {sourceType === 'dxIcon' && (<i className={iconClassName} />)}
+        {sourceType === 'fontIcon' && (<i className={iconClassName} />)}
+        {sourceType === 'image' && (<img className={iconClassName} alt="" src={source} />)}
+        {IconTemplate && (<i className={iconClassName}><IconTemplate /></i>)}
+      </>
+    )
   }
 }
 Icon.defaultProps = defaultIconProps;
