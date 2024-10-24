@@ -46,13 +46,13 @@ jobs:
       - name: Get pnpm store directory
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: |
-            ${{ env.STORE_PATH }}
+            ${{ env.PNPM_STORE_PATH }}
             .nx/cache
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
@@ -72,18 +72,22 @@ jobs:
           BUILD_INTERNAL_PACKAGE: true
         run: pnpm run all:build
 
-#      - name: Clone deps scanner
-#        uses: actions/checkout@v4
-#        with:
-#          repository: DevExpress/npmdeps-scanner
-#          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
-#          path: deps-scanner
-#
-#      - name: Run deps scanner
-#        run: |
-#          ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
-#          mkdir -p ./artifacts/deps-scanner
-#          cp reportGithub.json ./artifacts/deps-scanner/
+      - name: Clone deps scanner
+        uses: actions/checkout@v4
+        with:
+          repository: DevExpress/npmdeps-scanner
+          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
+          path: deps-scanner
+
+      - name: Build deps scanner
+        working-directory: deps-scanner
+        run: dotnet build npmDepsScanner.csproj /p:Configuration=Release
+
+      - name: Run deps scanner
+        run: |
+          ./deps-scanner/bin/Release/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+          mkdir -p ./artifacts/deps-scanner
+          cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
@@ -136,13 +140,13 @@ jobs:
       - name: Get pnpm store directory
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: |
-            ${{ env.STORE_PATH }}
+            ${{ env.PNPM_STORE_PATH }}
             .nx/cache
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |

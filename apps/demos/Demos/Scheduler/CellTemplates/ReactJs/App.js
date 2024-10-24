@@ -11,12 +11,32 @@ import TimeCell from './TimeCell.js';
 
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek', 'month'];
+const ariaDescription = () => {
+  const disabledDates = holidays
+    .filter((date) => !Utils.isWeekend(date))
+    .map((date) =>
+      new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }));
+  if (disabledDates?.length === 1) {
+    return `${disabledDates} is a disabled date`;
+  }
+  if (disabledDates?.length > 1) {
+    return `${disabledDates.join(', ')} are disabled dates`;
+  }
+};
 const notifyDisableDate = () => {
   notify(
     'Cannot create or move an appointment/event to disabled time/date regions.',
     'warning',
     1000,
   );
+};
+const onContentReady = (e) => {
+  setComponentAria(e.component?.$element());
 };
 const applyDisableDatesToDateEditors = (form) => {
   const startDateEditor = form.getEditor('startDate');
@@ -47,6 +67,10 @@ const onAppointmentUpdating = (e) => {
     e.cancel = true;
     notifyDisableDate();
   }
+};
+const setComponentAria = (element) => {
+  const prevAria = element?.attr('aria-label') || '';
+  element?.attr('aria-label', `${prevAria} ${ariaDescription()}`);
 };
 const App = () => {
   const [currentView, setCurrentView] = useState(views[0]);
@@ -79,6 +103,7 @@ const App = () => {
       dataCellComponent={DataCellComponent}
       dateCellRender={renderDateCell}
       timeCellComponent={TimeCell}
+      onContentReady={onContentReady}
       onAppointmentFormOpening={onAppointmentFormOpening}
       onAppointmentAdding={onAppointmentAdding}
       onAppointmentUpdating={onAppointmentUpdating}

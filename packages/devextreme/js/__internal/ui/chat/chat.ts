@@ -5,11 +5,13 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
+import type { NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
   MessageSendEvent,
   Properties as ChatProperties,
+  User,
 } from '@js/ui/chat';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -19,6 +21,7 @@ import ChatHeader from './header';
 import type {
   MessageSendEvent as MessageBoxMessageSendEvent,
   Properties as MessageBoxProperties,
+  TypingStartEvent as MessageBoxTypingStartEvent,
 } from './messagebox';
 import MessageBox from './messagebox';
 import MessageList from './messagelist';
@@ -26,8 +29,13 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
+type TypingStartEvent = NativeEventInfo<Chat> & { user?: User };
+type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
+
 type Properties = ChatProperties & {
   title: string;
+  onTypingStart?: ((e: TypingStartEvent) => void);
+  onTypingEnd?: ((e: TypingEndEvent) => void);
 };
 
 class Chat extends Widget<Properties> {
@@ -41,19 +49,25 @@ class Chat extends Widget<Properties> {
 
   _messageSendAction?: (e: Partial<MessageSendEvent>) => void;
 
+  _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
+
+  _typingEndAction?: (e: Partial<TypingEndEvent>) => void;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
+      title: '',
+      showDayHeaders: true,
       activeStateEnabled: true,
       focusStateEnabled: true,
       hoverStateEnabled: true,
-      title: '',
       items: [],
       dataSource: null,
       user: { id: new Guid().toString() },
-      onMessageSend: undefined,
-      showDayHeaders: true,
       errors: [],
+      onMessageSend: undefined,
+      onTypingStart: undefined,
+      onTypingEnd: undefined,
     };
   }
 
@@ -62,11 +76,12 @@ class Chat extends Widget<Properties> {
 
     // @ts-expect-error
     this._initDataController();
-
     // @ts-expect-error
     this._refreshDataSource();
 
     this._createMessageSendAction();
+    this._createTypingStartAction();
+    this._createTypingEndAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -160,6 +175,12 @@ class Chat extends Widget<Properties> {
       onMessageSend: (e) => {
         this._messageSendHandler(e);
       },
+      onTypingStart: (e) => {
+        this._typingStartHandler(e);
+      },
+      onTypingEnd: () => {
+        this._typingEndHandler();
+      },
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
@@ -183,7 +204,21 @@ class Chat extends Widget<Properties> {
   _createMessageSendAction(): void {
     this._messageSendAction = this._createActionByOption(
       'onMessageSend',
-      { excludeValidators: ['disabled', 'readOnly'] },
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createTypingStartAction(): void {
+    this._typingStartAction = this._createActionByOption(
+      'onTypingStart',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createTypingEndAction(): void {
+    this._typingEndAction = this._createActionByOption(
+      'onTypingEnd',
+      { excludeValidators: ['disabled'] },
     );
   }
 
@@ -198,6 +233,19 @@ class Chat extends Widget<Properties> {
     };
 
     this._messageSendAction?.({ message, event });
+  }
+
+  _typingStartHandler(e: MessageBoxTypingStartEvent): void {
+    const { event } = e;
+    const { user } = this.option();
+
+    this._typingStartAction?.({ user, event });
+  }
+
+  _typingEndHandler(): void {
+    const { user } = this.option();
+
+    this._typingEndAction?.({ user });
   }
 
   _focusTarget(): dxElementWrapper {
@@ -247,6 +295,12 @@ class Chat extends Widget<Properties> {
         break;
       case 'onMessageSend':
         this._createMessageSendAction();
+        break;
+      case 'onTypingStart':
+        this._createTypingStartAction();
+        break;
+      case 'onTypingEnd':
+        this._createTypingEndAction();
         break;
       case 'showDayHeaders':
         this._messageList.option(name, value);

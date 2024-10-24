@@ -3,7 +3,7 @@ import $ from 'jquery';
 import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
 import ErrorList from '__internal/ui/chat/errorlist';
-import MessageBox from '__internal/ui/chat/messagebox';
+import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -337,6 +337,88 @@ QUnit.module('Chat', () => {
                     .type(text);
 
                 this.$sendButton.trigger('dxclick');
+            });
+        });
+
+        QUnit.module('onTypingStart', moduleConfig, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(5);
+
+                const currentUser = { id: 1 };
+
+                this.reinit({
+                    user: currentUser,
+                    onTypingStart: ({ component, element, event, user }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.strictEqual(event.type, 'input', 'e.event.type is correct');
+                        assert.deepEqual(user, currentUser, 'user field is correct');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onTypingStart = sinon.spy();
+
+                this.instance.option({ onTypingStart });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                assert.strictEqual(onTypingStart.callCount, 1);
+            });
+        });
+
+        QUnit.module('onTypingEnd', {
+            beforeEach: function() {
+                this.clock = sinon.useFakeTimers();
+
+                moduleConfig.beforeEach.apply(this, arguments);
+            },
+            afterEach: function() {
+                this.clock.restore();
+            }
+        }, () => {
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(4);
+
+                const currentUser = { id: 1 };
+
+                this.reinit({
+                    user: currentUser,
+                    onTypingEnd: ({ component, element, user }) => {
+                        assert.strictEqual(component, this.instance, 'component field is correct');
+                        assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                        assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                        assert.deepEqual(user, currentUser, 'user field is correct');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                this.clock.tick(TYPING_END_DELAY);
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onTypingEnd = sinon.spy();
+
+                this.instance.option({ onTypingEnd });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('n');
+
+                this.clock.tick(TYPING_END_DELAY);
+
+                assert.strictEqual(onTypingEnd.callCount, 1);
             });
         });
     });
