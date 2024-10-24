@@ -54,7 +54,7 @@ export type TypingStartEvent = NativeEventInfo<dxChat, UIEvent & { target: HTMLI
 };
 
 /**
- * @docid _ui_chat_TypingStartEvent
+ * @docid _ui_chat_TypingEndEvent
  * @public
  * @type object
  * @inherits NativeEventInfo
