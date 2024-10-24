@@ -24,11 +24,8 @@ import {
     QueryList
 } from '@angular/core';
 
-
-import DOMComponent from 'devextreme/core/dom_component';
 import * as CommonTypes from 'devextreme/common';
 import { EventInfo } from 'devextreme/events/index';
-import { Component } from 'devextreme/core/component';
 
 import DxValidator from 'devextreme/ui/validator';
 
@@ -91,7 +88,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.adapter]
-    
+
      */
     @Input()
     get adapter(): Record<string, any> | { applyValidationResults?: (() => void), bypass?: (() => void), focus?: (() => void), getValue?: (() => void), reset?: (() => void), validationRequestsCallbacks?: Array<(() => void)> } {
@@ -104,7 +101,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
+
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -117,7 +114,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.height]
-    
+
      */
     @Input()
     get height(): (() => number | string) | number | string {
@@ -130,7 +127,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.name]
-    
+
      */
     @Input()
     get name(): string {
@@ -143,7 +140,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationGroup]
-    
+
      */
     @Input()
     get validationGroup(): string {
@@ -156,7 +153,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationRules]
-    
+
      */
     @Input()
     get validationRules(): Array<CommonTypes.ValidationRule> {
@@ -169,7 +166,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.width]
-    
+
      */
     @Input()
     get width(): (() => number | string) | number | string {
@@ -180,169 +177,86 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     }
 
     /**
-    
+
      * [descr:DOMComponentOptions.onDisposing]
-    
-    
+
+
      */
     @Output() onDisposing: EventEmitter<EventInfo<any>>;
 
     /**
-    
+
      * [descr:ComponentOptions.onInitialized]
-    
-    
+
+
      */
     @Output() onInitialized: EventEmitter<Object>;
 
     /**
-    
+
      * [descr:DOMComponentOptions.onOptionChanged]
-    
-    
+
+
      */
     @Output() onOptionChanged: EventEmitter<Object>;
 
     /**
-    
+
      * [descr:dxValidatorOptions.onValidated]
-    
-    
+
+
      */
     @Output() onValidated: EventEmitter<Object>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() adapterChange: EventEmitter<Record<string, any> | { applyValidationResults?: (() => void), bypass?: (() => void), focus?: (() => void), getValue?: (() => void), reset?: (() => void), validationRequestsCallbacks?: Array<(() => void)> }>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() validationGroupChange: EventEmitter<string>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() validationRulesChange: EventEmitter<Array<CommonTypes.ValidationRule>>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
 
-
-
-
-    @ContentChildren(DxiValidatorAsyncRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorAsyncRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorAsyncRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorCompareRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorCompareRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorCompareRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorCustomRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorCustomRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorCustomRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorEmailRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorEmailRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorEmailRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorNumericRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorNumericRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorNumericRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorPatternRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorPatternRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorPatternRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorRangeRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorRangeRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorRangeRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorRequiredRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorRequiredRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorRequiredRuleComponent');
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(DxiValidatorStringLengthRuleComponent)
-    get validationRulesChildren(): QueryList<DxiValidatorStringLengthRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setContentChildren('validationRules', value, 'DxiValidatorStringLengthRuleComponent');
-        this.setChildren('validationRules', value);
-    }
 
     @ContentChildren(DxiValidatorValidationRuleComponent)
     get validationRulesChildren(): QueryList<DxiValidatorValidationRuleComponent> {
