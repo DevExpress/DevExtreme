@@ -180,7 +180,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._typingEndTimeoutId = setTimeout(() => {
       this._typingEndAction?.();
 
-      this._typingEndTimeoutId = undefined;
+      this._clearTypingEndTimeout();
     }, TYPING_END_DELAY);
   }
 
