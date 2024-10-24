@@ -184,13 +184,18 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     }, TYPING_END_DELAY);
   }
 
+  _clearTypingEndTimeout(): void {
+    clearTimeout(this._typingEndTimeoutId);
+
+    this._typingEndTimeoutId = undefined;
+  }
+
   _sendHandler(e: ClickEvent | EnterKeyEvent): void {
     if (!this._isValuableTextEntered()) {
       return;
     }
 
-    clearTimeout(this._typingEndTimeoutId);
-
+    this._clearTypingEndTimeout();
     this._typingEndAction?.();
 
     const { text } = this._textArea.option();
