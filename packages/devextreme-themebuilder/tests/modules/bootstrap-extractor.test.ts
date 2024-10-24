@@ -3,18 +3,12 @@ import BootstrapExtractor from '../../src/modules/bootstrap-extractor';
 
 describe('BootstrapExtractor', () => {
   test('constructor set the right compiler and processor', () => {
-    const lessExtractor = new BootstrapExtractor('', 3);
-    const sassExtractor = new BootstrapExtractor('', 4);
     const sassExtractorFor5 = new BootstrapExtractor('', 5);
     const defaultExtractor = new BootstrapExtractor('', 10);
 
-    expect(lessExtractor.compiler).toBe(BootstrapExtractor.lessRender);
-    expect(sassExtractor.compiler).toBe(BootstrapExtractor.sassRender);
     expect(sassExtractorFor5.compiler).toBe(BootstrapExtractor.sassRender);
     expect(defaultExtractor.compiler).toBe(BootstrapExtractor.sassRender);
 
-    expect(lessExtractor.sourceProcessor).toBe(lessExtractor.lessProcessor);
-    expect(sassExtractor.sourceProcessor).toBe(sassExtractor.sassProcessor);
     expect(defaultExtractor.sourceProcessor).toBe(defaultExtractor.sassProcessor);
   });
 
@@ -40,35 +34,14 @@ describe('BootstrapExtractor', () => {
     .rejects
     .toBe('Unrecognised input. Possibly missing something'));
 
-  test('sassProcessor (bootstrap4)', async () => {
-    const testSassString = 'test string';
-    const setterServiceCode = 'setter';
-    const collectorServiceCode = 'collector';
-    const extractor = new BootstrapExtractor(testSassString, 4);
-    const functionsPath = require.resolve('bootstrap4/scss/_functions.scss');
-    const variablesPath = require.resolve('bootstrap4/scss/_variables.scss');
-    const functions = readFileSync(functionsPath);
-    const variables = readFileSync(variablesPath);
-    extractor.getSetterServiceCode = (): string => setterServiceCode;
-    extractor.getCollectorServiceCode = (): string => collectorServiceCode;
-
-    expect(await extractor.sassProcessor())
-      .toBe(`${functions.toString()}
-${variables.toString()}
-
-${testSassString}
-${setterServiceCode}
-${collectorServiceCode}`);
-  });
-
   test('sassProcessor (bootstrap5)', async () => {
     const testSassString = 'test string';
     const setterServiceCode = 'setter';
     const collectorServiceCode = 'collector';
     const extractor = new BootstrapExtractor(testSassString, 5);
-    const functionsPath = require.resolve('bootstrap5/scss/_functions.scss');
-    const variablesPath = require.resolve('bootstrap5/scss/_variables.scss');
-    const variablesDarkPath = require.resolve('bootstrap5/scss/_variables-dark.scss');
+    const functionsPath = require.resolve('bootstrap/scss/_functions.scss');
+    const variablesPath = require.resolve('bootstrap/scss/_variables.scss');
+    const variablesDarkPath = require.resolve('bootstrap/scss/_variables-dark.scss');
     const functions = readFileSync(functionsPath);
     const variables = readFileSync(variablesPath);
     const variablesDark = readFileSync(variablesDarkPath);
@@ -124,73 +97,22 @@ ${collectorServiceCode}`);
     expect(extractor.getCollectorServiceCode()).toBe(expectedStyleStringWithoutPostfix);
   });
 
-  test('extract (bootstrap 3)', async () => {
-    const input = '@var1: test1;@var2: test2;@custom-var: test3;';
-    const extractor = new BootstrapExtractor(input, 3);
-    extractor.meta = {
-      'dx-var1': '@var1',
-      'dx-var2': '@var2',
-      'dx-var3': '@var3',
-    };
-
-    expect(await extractor.extract()).toEqual([
-      { key: '$dx-var1', value: 'test1' },
-      { key: '$dx-var2', value: 'test2' },
-    ]);
-  });
-
-  test('extract (bootstrap 4)', async () => {
-    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;';
-    const extractor = new BootstrapExtractor(input, 4);
-    extractor.meta = {
-      'dx-var1': '$var1',
-      'dx-var2': '$var2',
-      'dx-var3': '$var3',
-    };
-
-    expect(await extractor.extract()).toEqual([
-      { key: '$dx-var1', value: 'test1' },
-      { key: '$dx-var2', value: 'test2' },
-    ]);
-  });
-
   test('extract (bootstrap 5)', async () => {
-    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;$var4: var(--bs-blue);';
+    const input = '$var1: test1;$var2: test2 !default;$custom-var: test3;$var4: var(--bs-blue);$var5: -.25rem;';
     const extractor = new BootstrapExtractor(input, 5);
     extractor.meta = {
       'dx-var1': '$var1',
       'dx-var2': '$var2',
       'dx-var3': '$var3',
       'dx-var4': '$var4',
+      'dx-var5': '$var5',
     };
 
     expect(await extractor.extract()).toEqual([
       { key: '$dx-var1', value: 'test1' },
       { key: '$dx-var2', value: 'test2' },
       { key: '$dx-var4', value: '#0d6efd' },
-    ]);
-  });
-
-  test('extract variable with rem (bootstrap 4) (T951945)', async () => {
-    const input = `
-    $var1: -.25rem;
-    $var2: 0.34rem !default;
-    $custom-var: 12rem;
-    $var3: 2rem 1rem;
-    $var4: 0 .5rem 1rem red !default;`;
-    const extractor = new BootstrapExtractor(input, 4);
-    extractor.meta = {
-      'dx-var1': '$var1',
-      'dx-var2': '$var2',
-      'dx-var3': '$var3',
-      'dx-var4': '$var4',
-    };
-
-    expect(await extractor.extract()).toEqual([
-      { key: '$dx-var1', value: '-4px' },
-      { key: '$dx-var2', value: '5px' },
-      { key: '$dx-var3', value: '32px 16px' },
-      { key: '$dx-var4', value: '0 8px 16px red' },
+      { key: '$dx-var5', value: '-4px' },
     ]);
   });
 });
