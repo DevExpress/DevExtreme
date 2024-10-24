@@ -328,6 +328,20 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onTypingStartStub.callCount, 1);
         });
 
+        QUnit.test('should be possible to update it at runtime if init value is function', function(assert) {
+            this.reinit({ onTypingStart: () => {} });
+
+            const onTypingStartStub = sinon.stub();
+
+            this.instance.option('onTypingStart', onTypingStartStub);
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('n');
+
+            assert.strictEqual(onTypingStartStub.callCount, 1);
+        });
+
         [' ', '\n'].forEach(value => {
             QUnit.test(`should be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
                 const onTypingStartStub = sinon.stub();
