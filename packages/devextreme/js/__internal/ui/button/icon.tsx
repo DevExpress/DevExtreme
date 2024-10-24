@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/ui/common/icon.js)
-* Version: 24.2.0
-* Build date: Tue Oct 22 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import _extends from '@babel/runtime/helpers/esm/extends';
 import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
@@ -17,6 +9,7 @@ import { getImageSourceType } from '../../../core/utils/icon';
 import { combineClasses } from '../../utils/combine_classes';
 
 const _excluded = ['iconTemplate', 'position', 'source'];
+
 export const viewFunction = (_ref) => {
   const {
     iconClassName,
@@ -31,10 +24,12 @@ export const viewFunction = (_ref) => {
     src: source,
   }), IconTemplate && createVNode(1, 'i', iconClassName, IconTemplate({}), 0)], 0);
 };
+
 export const IconProps = {
   position: 'left',
   source: '',
 };
+
 const getTemplate = (TemplateProp) => TemplateProp && (TemplateProp.defaultProps ? (props) => normalizeProps(createComponentVNode(2, TemplateProp, _extends({}, props))) : TemplateProp);
 export class Icon extends BaseInfernoComponent {
   constructor(props) {
