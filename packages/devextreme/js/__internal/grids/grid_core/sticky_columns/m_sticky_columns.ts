@@ -131,6 +131,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const $cell = super._createCell(options);
     const hasStickyColumns = this.hasStickyColumns();
     const rowIndex = rowType === 'header' ? options.rowIndex : null;
+    const isSummary = rowType === 'groupFooter' || rowType === 'totalFooter' || rowType === 'group';
 
     if (hasStickyColumns) {
       this.updateBorderCellClasses($cell, column, rowIndex);
@@ -144,30 +145,32 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
           this.addWidgetPrefix.bind(this),
         );
 
-        switch (fixedPosition) {
-          case StickyPosition.Right: {
-            this._addStickyColumnBorderLeftClass(
-              $cell,
-              column,
-              rowIndex,
-              false,
-              StickyPosition.Right,
-            );
-            break;
-          }
-          case StickyPosition.Sticky: {
-            this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
-            this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
-            break;
-          }
-          default: {
-            this._addStickyColumnBorderRightClass(
-              $cell,
-              column,
-              rowIndex,
-              false,
-              StickyPosition.Left,
-            );
+        if (!isSummary) {
+          switch (fixedPosition) {
+            case StickyPosition.Right: {
+              this._addStickyColumnBorderLeftClass(
+                $cell,
+                column,
+                rowIndex,
+                false,
+                StickyPosition.Right,
+              );
+              break;
+            }
+            case StickyPosition.Sticky: {
+              this._addStickyColumnBorderLeftClass($cell, column, rowIndex, true);
+              this._addStickyColumnBorderRightClass($cell, column, rowIndex, true);
+              break;
+            }
+            default: {
+              this._addStickyColumnBorderRightClass(
+                $cell,
+                column,
+                rowIndex,
+                false,
+                StickyPosition.Left,
+              );
+            }
           }
         }
       }
