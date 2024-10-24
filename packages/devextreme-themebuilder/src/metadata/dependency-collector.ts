@@ -8,7 +8,7 @@ import precinct from 'precinct';
 import WidgetsHandler from '../modules/widgets-handler';
 
 export const filePathMap = new Map();
-const stylesRegex = /\sSTYLE (.*)/;
+
 const busyCache = {
   widget: '',
   dependencies: {},
@@ -25,6 +25,8 @@ export default class DependencyCollector {
   themes = ['generic', 'material'];
 
   static getWidgetFromAst(ast: SyntaxTree): string {
+    const stylesRegex = /\sSTYLE (.*)/;
+
     if (ast.comments?.length) {
       const styleComment = ast.comments
           .find((comment: AstComment): boolean => comment.value.includes('STYLE'));
@@ -35,6 +37,13 @@ export default class DependencyCollector {
     }
 
     return '';
+  }
+
+  static getWidgetFromSource(filePath: string): string {
+    const stylesRegex = /^\s*\/\/\s?STYLE (.*)/m;
+    const fileContent = readFileSync(filePath, 'utf8');
+
+    return stylesRegex.exec(fileContent)?.[1].toLowerCase() || '';
   }
 
   static getUniqueWidgets(widgetsArray: string[]): string[] {
@@ -65,7 +74,7 @@ export default class DependencyCollector {
     result = DependencyCollector.getUniqueWidgets(result);
 
     if (widget) {
-      this.flatStylesDependencyTree[widget] = [...result];
+      this.flatStylesDependencyTree[widget] = [...result].sort();
 
       if (!result.includes(widget)) {
         result.push(widget);
@@ -80,10 +89,13 @@ export default class DependencyCollector {
     const isTsxFile = REGEXP_IS_TSX_NOT_DTS.test(filePath);
     const filePathInProcess = filePathMap.get(filePath);
 
+
+
     if (!filePathInProcess && cacheScriptItem === undefined) {
       filePathMap.set(filePath, busyCache);
 
-      precinct.ast = [];
+      precinct.ast = null;
+
       const result = precinct.paperwork(filePath, {
         es6: { mixedImports: true },
         ts: { skipTypeImports : true }
@@ -124,7 +136,9 @@ export default class DependencyCollector {
       let widget = '';
 
       if (!isTsxFile) {
-        widget = DependencyCollector.getWidgetFromAst(precinct.ast)
+        widget = precinct.ast
+            ? DependencyCollector.getWidgetFromAst(precinct.ast)
+            : DependencyCollector.getWidgetFromSource(filePath)
       }
 
       cacheScriptItem = {
@@ -165,6 +179,7 @@ export default class DependencyCollector {
 
   collect(): void {
     const fullDependencyTree = this.getFullDependencyTree(path.resolve(__dirname, '../../../devextreme/js/bundles/dx.all.js'));
+
     this.treeProcessor(fullDependencyTree);
     this.validate();
   }

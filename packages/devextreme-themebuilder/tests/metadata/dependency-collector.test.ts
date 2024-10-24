@@ -67,22 +67,27 @@ const simpleDependencies: ScriptsDependencyTree = {
               dependencies: {},
               widget: '',
             },
+            'grid_column.ts': {
+              dependencies : {},
+              widget: 'column',
+            },
           },
-          widget: '',
-        },
-      },
-      widget: 'datagrid',
-    },
-  },
-  widget: '',
+widget: '',
+},
+},
+widget: 'datagrid',
+},
+},
+widget: '',
 };
 
 const tsFilesSet = new Set<string>([
   'grid_core',
+  'grid_column',
 ]);
 
 const filesContent: { [key: string]: string } = {
-  'dx.all.js': 'import t from \'./toolbar\';import b from \'./button\'; import grid from \'./data_grid\';',
+  'dx.all.js': 'import l from \'./list\';import t from \'./toolbar\';import b from \'./button\'; import grid from \'./data_grid\';',
   'toolbar.js': 'import m from \'./menu\';import u from \'./utils\';\n// STYLE toolbar',
   'menu.js': '// STYLE menu',
   'button.js': 'import u from \'./utils\';\n// STYLE button',
@@ -91,7 +96,8 @@ const filesContent: { [key: string]: string } = {
   'render.js': 'import t from \'./utils\';',
   'fx.js': '',
   'data_grid.js': 'import core from \'./grid_core\'; // STYLE dataGrid',
-  'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';',
+  'grid_core.ts': 'import menu from \'./menu\'; import r from \'./render\';import col from \'./grid_column\';',
+  'grid_column.ts': '// STYLE column',
 
   // validation tests
   [path.resolve(__dirname, '../../../devextreme-scss/scss/widgets/righttheme/_index.scss')]: '// public widgets\n@use "./toolbar";@use "./button";',
@@ -115,7 +121,10 @@ const sortDependencies = (dependencies: Record<string, string[]>): void => {
 };
 
 jest.mock('fs', () => ({
-  readFileSync: jest.fn().mockImplementation((path: string): string => filesContent[path] || ''),
+  readFileSync: jest.fn().mockImplementation((path: string): string => {
+    !filesContent[path] && console.log('---------->', path);
+    return filesContent[path] || ''
+  }),
   existsSync: (path: string): boolean => filesContent[path] !== undefined,
   // eslint-disable-next-line spellcheck/spell-checker
   realpathSync: (): void => { }, // https://github.com/facebook/jest/issues/10012
@@ -217,9 +226,9 @@ describe('DependencyCollector', () => {
     };
 
     const expectedStylesDependencyTree: FlatStylesDependencies = {
-      k: ['l', 'm', 'o', 'n'],
+      k: ['l', 'm', 'n', 'o'],
       l: [],
-      m: ['m', 'o', 'n'],
+      m: ['m', 'n', 'o'],
       n: ['m', 'o'],
       o: ['m'],
     };
@@ -243,7 +252,7 @@ describe('DependencyCollector', () => {
 
     expect(fs.readFileSync).toHaveBeenCalledTimes(10);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
-      toolbar: ['menu', 'icon'],
+      toolbar: ['icon', 'menu'],
       button: ['icon'],
       menu: [],
       icon: [],

@@ -27,8 +27,6 @@ import {
   updateConditionByOperation,
 } from './m_utils';
 
-// STYLE filterBuilder
-
 const FILTER_BUILDER_CLASS = 'dx-filterbuilder';
 const FILTER_BUILDER_GROUP_CLASS = `${FILTER_BUILDER_CLASS}-group`;
 const FILTER_BUILDER_GROUP_ITEM_CLASS = `${FILTER_BUILDER_GROUP_CLASS}-item`;
