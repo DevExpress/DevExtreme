@@ -113,24 +113,28 @@ createTestCafe({
             quarantineMode: { successThreshold: 1, attemptLimit: 5 },
         };
 
-        if(args.componentFolder.trim() !== 'renovation') {
-            runOptions.hooks = {
-                test: {
-                    before: async() => {
-                        if(args.shadowDom) {
-                            await addShadowRootTree();
-                        }
+        runOptions.hooks = {
+            test: {
+                before: async() => {
+                    if(args.shadowDom) {
+                        await addShadowRootTree();
+                    }
 
-                        if(args.theme) {
-                            await changeTheme(args.theme);
-                        }
-                    },
-                    after: async() => {
-                        await testPageUtils.clearTestPage();
+                    if(args.theme) {
+                        await changeTheme(args.theme);
                     }
                 },
-            };
-        }
+                after: async(t) => {
+                    await testPageUtils.clearTestPage(t);
+
+                    await createTestCafe.ClientFunction(() => {
+                        document.body.style.minHeight = '100px';
+                    }).with({ boundTestRun: t })();
+
+                    await t.click(createTestCafe.Selector('body'), { offsetX: -1, offsetY: 1 });
+                }
+            },
+        };
 
         if(args.browsers === 'chrome:docker') {
             runOptions.disableScreenshots = true;
@@ -158,7 +162,7 @@ function setShadowDom(args) {
 function expandBrowserAlias(browser) {
     switch(browser) {
         case 'chrome:devextreme-shr2':
-            return 'chrome:headless --disable-gpu --window-size=1200,800';
+            return 'chrome --headless=old --disable-gpu --window-size=1200,800';
         case 'chrome:docker':
             return 'chromium:headless --no-sandbox --disable-gpu --window-size=1200,800';
     }
