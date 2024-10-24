@@ -377,7 +377,7 @@ QUnit.module('Chat', () => {
 
         QUnit.module('onTypingEnd', {
             beforeEach: function() {
-                this.clock = sinon.useFakeTimers({ now: new Date().getTime() });
+                this.clock = sinon.useFakeTimers();
 
                 moduleConfig.beforeEach.apply(this, arguments);
             },
