@@ -335,7 +335,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
         ['n', 'no'].forEach(value => {
             QUnit.test(`should be triggered if backspace was pressed after value ${value} was entered`, function(assert) {
-                const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+                const clock = sinon.useFakeTimers();
                 const onTypingStartStub = sinon.stub();
 
                 this.reinit({ onTypingStart: onTypingStartStub });
@@ -415,7 +415,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
     QUnit.module('onTypingEnd event', () => {
         QUnit.test('should be triggered once if a character is entered in the input', function(assert) {
-            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+            const clock = sinon.useFakeTimers();
             const onTypingEndStub = sinon.stub();
 
             this.reinit({ onTypingEnd: onTypingEndStub });
@@ -442,7 +442,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be possible to update it at runtime', function(assert) {
-            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+            const clock = sinon.useFakeTimers();
             const onTypingEndStub = sinon.stub();
 
             try {
@@ -461,7 +461,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should not be called if the user continues to enter text during the delay', function(assert) {
-            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+            const clock = sinon.useFakeTimers();
             const onTypingEndStub = sinon.stub();
 
             this.reinit({ onTypingEnd: onTypingEndStub });
@@ -473,11 +473,11 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     .focus()
                     .type('n');
 
-                clock.tick(TYPING_END_DELAY - 1);
+                clock.tick(TYPING_END_DELAY - 10);
 
                 keyboard.type('n');
 
-                clock.tick(2);
+                clock.tick(20);
 
                 assert.strictEqual(onTypingEndStub.callCount, 0, 'is not called');
 
@@ -489,9 +489,9 @@ QUnit.module('MessageBox', moduleConfig, () => {
             }
         });
 
-        ['', ' '].forEach(value => {
-            QUnit.test(`should not be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
-                const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+        ['', ' ', '\n'].forEach(value => {
+            QUnit.test(`should be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
+                const clock = sinon.useFakeTimers();
                 const onTypingEndStub = sinon.stub();
 
                 this.reinit({ onTypingEnd: onTypingEndStub });
@@ -503,7 +503,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
                     clock.tick(TYPING_END_DELAY);
 
-                    assert.strictEqual(onTypingEndStub.callCount, 0);
+                    assert.strictEqual(onTypingEndStub.callCount, 1);
                 } finally {
                     clock.restore();
                 }
@@ -513,7 +513,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         QUnit.test('should be triggered with correct arguments', function(assert) {
             assert.expect(3);
 
-            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+            const clock = sinon.useFakeTimers();
 
             try {
                 this.reinit({
@@ -537,7 +537,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should be called after sending a message', function(assert) {
-            const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+            const clock = sinon.useFakeTimers();
             const onTypingEndStub = sinon.stub();
 
             this.reinit({ onTypingEnd: onTypingEndStub });
