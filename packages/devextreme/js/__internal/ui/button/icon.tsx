@@ -7,12 +7,20 @@ import { getImageSourceType } from '@js/core/utils/icon';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
-export const IconProps = {
+export interface IconProps {
+  position?: string
+
+  source?: string
+
+  iconTemplate?: (props) => JSX.Element;
+}
+
+export const defaultIconProps = {
   position: 'left',
   source: '',
 };
 
-export class Icon extends BaseInfernoComponent {
+export class Icon extends BaseInfernoComponent<IconProps> {
   constructor(props) {
     super(props);
     this.state = {};
@@ -75,4 +83,4 @@ export class Icon extends BaseInfernoComponent {
     }), IconTemplate && createVNode(1, 'i', iconClassName, IconTemplate({}), 0)], 0);
   }
 }
-Icon.defaultProps = IconProps;
+Icon.defaultProps = defaultIconProps;
