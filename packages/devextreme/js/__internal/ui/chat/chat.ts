@@ -34,7 +34,6 @@ type TypingEndEvent = NativeEventInfo<Chat> & { user?: User };
 
 type Properties = ChatProperties & {
   title: string;
-  showDayHeaders: boolean;
   onTypingStart?: ((e: TypingStartEvent) => void);
   onTypingEnd?: ((e: TypingEndEvent) => void);
 };
@@ -130,7 +129,7 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const { items = [], user, showDayHeaders = true } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>');
