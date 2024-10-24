@@ -7,8 +7,6 @@ import { hideWave, initConfig, showWave } from '../../../ui/widget/utils.ink_rip
 
 const _excluded = ['config'];
 
-export const viewFunction = (model) => normalizeProps(createVNode(1, 'div', 'dx-inkripple', null, 1, _extends({}, model.restAttributes)));
-
 export interface InkRippleConfig {
   isCentered?: boolean;
   useHoldAnimation?: boolean;
@@ -67,12 +65,7 @@ export class InkRipple extends BaseInfernoComponent {
   }
 
   render() {
-    const { props } = this;
-    return viewFunction({
-      props: _extends({}, props),
-      getConfig: this.getConfig,
-      restAttributes: this.restAttributes,
-    });
+    return normalizeProps(createVNode(1, 'div', 'dx-inkripple', null, 1, _extends({}, this.restAttributes)));
   }
 }
 
