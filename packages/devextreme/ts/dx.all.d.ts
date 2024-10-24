@@ -30708,6 +30708,10 @@ declare module DevExpress.ui.dxChat {
      * [descr:User.avatarUrl]
      */
     avatarUrl?: string;
+    /**
+     * [descr:User.avatarAlt]
+     */
+    avatarAlt?: string;
   };
 }
 declare module DevExpress.ui.dxContextMenu {
