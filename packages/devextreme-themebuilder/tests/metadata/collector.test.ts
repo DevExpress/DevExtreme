@@ -89,7 +89,16 @@ describe('MetadataCollector', () => {
 
     collector.generator.metadata = meta;
 
-    let metaContent = 'export const metadata: ThemesMetadata = {\'generic\':[{\'Key\':\'$var\',\'Value\':\'"ON"\'}],\'material\':[],\'fluent\':[]};\n';
+    let metaContent = `export const metadata: ThemesMetadata = {
+  'generic': [
+    {
+      'Key': '$var',
+      'Value': '"ON"'
+    }
+  ],
+  'material': [],
+  'fluent': []
+};\n`;
     metaContent += `export const version: string = '${version}';\n`;
     metaContent += 'export const browsersList: Array<string> = [];\n';
     metaContent += 'export const dependencies: FlatStylesDependencies = {};\n';

@@ -72,13 +72,13 @@ const simpleDependencies: ScriptsDependencyTree = {
               widget: 'column',
             },
           },
-widget: '',
-},
-},
-widget: 'datagrid',
-},
-},
-widget: '',
+          widget: '',
+        },
+      },
+      widget: 'datagrid',
+    },
+  },
+  widget: '',
 };
 
 const tsFilesSet = new Set<string>([
@@ -122,7 +122,6 @@ const sortDependencies = (dependencies: Record<string, string[]>): void => {
 
 jest.mock('fs', () => ({
   readFileSync: jest.fn().mockImplementation((path: string): string => {
-    !filesContent[path] && console.log('---------->', path);
     return filesContent[path] || ''
   }),
   existsSync: (path: string): boolean => filesContent[path] !== undefined,

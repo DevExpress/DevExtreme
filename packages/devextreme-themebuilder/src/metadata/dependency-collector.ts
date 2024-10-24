@@ -89,8 +89,6 @@ export default class DependencyCollector {
     const isTsxFile = REGEXP_IS_TSX_NOT_DTS.test(filePath);
     const filePathInProcess = filePathMap.get(filePath);
 
-
-
     if (!filePathInProcess && cacheScriptItem === undefined) {
       filePathMap.set(filePath, busyCache);
 
