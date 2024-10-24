@@ -124,7 +124,56 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             assert.strictEqual($img.length, 0);
         });
 
-        QUnit.test('img element should have correct alt attribute', function(assert) {
+        QUnit.test('img should have default alt attribute if alt and name is not defined', function(assert) {
+            this.reinit({
+                name: '',
+                url: 'url',
+            });
+
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
+
+            assert.strictEqual($img.attr('alt'), 'Avatar');
+        });
+
+        QUnit.test('img should have correct alt attribute using alt option', function(assert) {
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+                alt: 'Test Name'
+            });
+
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
+
+            assert.strictEqual($img.attr('alt'), 'Test Name');
+        });
+
+        QUnit.test('img element should have correct alt attribute if alt was changed in runtime', function(assert) {
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+                alt: 'Test Name'
+            });
+
+            this.instance.option({ alt: 'New name' });
+
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
+
+            assert.strictEqual($img.attr('alt'), 'New name');
+        });
+
+        QUnit.test('img element should have correct alt attribute if alt is empty', function(assert) {
+            this.reinit({
+                name: 'Test Name',
+                url: 'url',
+                alt: '',
+            });
+
+            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
+
+            assert.strictEqual($img.attr('alt'), 'Test Name');
+        });
+
+        QUnit.test('img element should have correct alt attribute using name option', function(assert) {
             this.reinit({
                 name: 'User name',
                 url: 'url',

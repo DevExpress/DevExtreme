@@ -24,7 +24,7 @@ class Avatar extends Widget<Properties> {
       ...super._getDefaultOptions(),
       name: 'Unknown User',
       url: '',
-      alt: 'Avatar',
+      alt: '',
     };
   }
 
