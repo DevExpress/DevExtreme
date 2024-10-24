@@ -319,8 +319,8 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onTypingStartStub.callCount, 1);
         });
 
-        ['', ' '].forEach(value => {
-            QUnit.test(`should not be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
+        ['', ' ', '\n'].forEach(value => {
+            QUnit.test(`should be triggered if an empty character is entered in the input, value is '${value}'`, function(assert) {
                 const onTypingStartStub = sinon.stub();
 
                 this.reinit({ onTypingStart: onTypingStartStub });
@@ -329,8 +329,68 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     .focus()
                     .type(value);
 
-                assert.strictEqual(onTypingStartStub.callCount, 0);
+                assert.strictEqual(onTypingStartStub.callCount, 1);
             });
+        });
+
+        ['n', 'no'].forEach(value => {
+            QUnit.test(`should be triggered if backspace was pressed after value ${value} was entered`, function(assert) {
+                const clock = sinon.useFakeTimers({ now: new Date().getTime() });
+                const onTypingStartStub = sinon.stub();
+
+                this.reinit({ onTypingStart: onTypingStartStub });
+
+                try {
+                    const keyboard = keyboardMock(this.$input);
+
+                    keyboard
+                        .focus()
+                        .type(value);
+
+                    clock.tick(TYPING_END_DELAY);
+
+                    keyboard.press('backspace');
+
+                    assert.strictEqual(onTypingStartStub.callCount, 1);
+                } finally {
+                    clock.restore();
+                }
+            });
+        });
+
+        QUnit.test('should be triggered only once during continuous typing', function(assert) {
+            const clock = sinon.useFakeTimers();
+            const onTypingStartStub = sinon.stub();
+
+            try {
+                this.reinit({ onTypingStart: onTypingStartStub });
+
+                const keyboard = keyboardMock(this.$input);
+
+                keyboard
+                    .focus()
+                    .type('n');
+
+                assert.strictEqual(onTypingStartStub.callCount, 1, 'called once');
+
+                keyboard.type('o');
+
+                assert.strictEqual(onTypingStartStub.callCount, 1, 'still called once');
+
+                clock.tick(TYPING_END_DELAY - 500);
+
+                keyboard.type('t');
+
+                assert.strictEqual(onTypingStartStub.callCount, 1, 'still called once');
+
+                clock.tick(TYPING_END_DELAY + 500);
+
+                keyboard.type('e');
+
+                assert.strictEqual(onTypingStartStub.callCount, 2, 'called again after typing end');
+            } finally {
+                clock.restore();
+            }
         });
 
         QUnit.test('must be called with a delay', function(assert) {
