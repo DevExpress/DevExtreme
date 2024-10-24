@@ -72,11 +72,6 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
   constructor(props: ButtonProps) {
     super(props);
     this.state = {};
-    this.contentRef = infernoCreateRef();
-    this.inkRippleRef = infernoCreateRef();
-    this.submitInputRef = infernoCreateRef();
-    this.widgetRef = infernoCreateRef();
-    this.__getterCache = {};
     this.focus = this.focus.bind(this);
     this.activate = this.activate.bind(this);
     this.deactivate = this.deactivate.bind(this);
