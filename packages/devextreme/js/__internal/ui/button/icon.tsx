@@ -11,21 +11,6 @@ import { getTemplate } from '@ts/core/r1/utils';
 
 const _excluded = ['iconTemplate', 'position', 'source'];
 
-export const viewFunction = (_ref) => {
-  const {
-    iconClassName,
-    props: {
-      iconTemplate: IconTemplate,
-      source,
-    },
-    sourceType,
-  } = _ref;
-  return createFragment([sourceType === 'dxIcon' && createVNode(1, 'i', iconClassName), sourceType === 'fontIcon' && createVNode(1, 'i', iconClassName), sourceType === 'image' && createVNode(1, 'img', iconClassName, null, 1, {
-    alt: '',
-    src: source,
-  }), IconTemplate && createVNode(1, 'i', iconClassName, IconTemplate({}), 0)], 0);
-};
-
 export const IconProps = {
   position: 'left',
   source: '',
@@ -81,16 +66,20 @@ export class Icon extends BaseInfernoComponent {
   }
 
   render() {
-    const { props } = this;
-    return viewFunction({
-      props: _extends({}, props, {
-        iconTemplate: getTemplate(props.iconTemplate),
-      }),
-      sourceType: this.sourceType,
-      cssClass: this.cssClass,
-      iconClassName: this.iconClassName,
-      restAttributes: this.restAttributes,
-    });
+    const {
+      iconClassName,
+      props: {
+        source,
+      },
+      sourceType,
+    } = this;
+
+    const IconTemplate = getTemplate(this.props.iconTemplate);
+
+    return createFragment([sourceType === 'dxIcon' && createVNode(1, 'i', iconClassName), sourceType === 'fontIcon' && createVNode(1, 'i', iconClassName), sourceType === 'image' && createVNode(1, 'img', iconClassName, null, 1, {
+      alt: '',
+      src: source,
+    }), IconTemplate && createVNode(1, 'i', iconClassName, IconTemplate({}), 0)], 0);
   }
 }
 Icon.defaultProps = IconProps;
