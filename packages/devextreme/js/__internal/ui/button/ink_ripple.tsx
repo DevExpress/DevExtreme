@@ -24,19 +24,23 @@ export interface InkRippleProps {
 }
 
 export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly __getterCache: any = {};
+
   constructor(props: InkRippleProps) {
     super(props);
     this.state = {};
-    this.__getterCache = {};
     this.hideWave = this.hideWave.bind(this);
     this.showWave = this.showWave.bind(this);
   }
 
-  get getConfig() {
+  get getConfig(): InkRippleConfig {
     if (this.__getterCache.getConfig !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return this.__getterCache.getConfig;
     }
-    return this.__getterCache.getConfig = (() => {
+    // eslint-disable-next-line no-return-assign
+    return this.__getterCache.getConfig = ((): InkRippleConfig => {
       const {
         config,
       } = this.props;
@@ -50,15 +54,17 @@ export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
     return restProps;
   }
 
-  hideWave(opts) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  hideWave(opts): void {
     hideWave(this.getConfig, opts);
   }
 
-  showWave(opts) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  showWave(opts): void {
     showWave(this.getConfig, opts);
   }
 
-  componentWillUpdate(nextProps, nextState, context) {
+  componentWillUpdate(nextProps: InkRippleProps): void {
     if (this.props.config !== nextProps.config) {
       this.__getterCache.getConfig = undefined;
     }
