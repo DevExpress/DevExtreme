@@ -6822,6 +6822,40 @@ QUnit.module('performance', () => {
         assert.ok($.isFunction(filter), 'filter is function');
     });
 
+    [false, true].forEach(changeAtRuntime => {
+        QUnit.test(`tag labels should be correctly displayed when valueExpr is function and hideSelectedItems enabled ${changeAtRuntime ? 'at runtime' : ''} (T1234032)`, function(assert) {
+            const dataSource = [
+                { id: 1, scheme: 'schema 1', name: 'item1' },
+                { id: 2, scheme: 'schema 2', name: 'item2' },
+            ];
+
+            const $tagBox = $('#tagBox').dxTagBox({
+                dataSource,
+                value: [{ id: 0, scheme: 'schema 0', name: 'item0' }],
+                valueExpr(x) {
+                    return x && x.name + ' ' + x.scheme;
+                },
+                displayExpr: 'name',
+                hideSelectedItems: !changeAtRuntime,
+                opened: true,
+            });
+
+            const tagBox = $tagBox.dxTagBox('instance');
+            const $list = tagBox._list.$element();
+
+            tagBox.option('hideSelectedItems', true);
+
+            $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+
+            tagBox.open();
+            $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+
+            const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+            assert.strictEqual($.trim($tagContainer.text()), 'item1item0item2', 'label values are displayed correctly');
+        });
+    });
+
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2' }]);
 
