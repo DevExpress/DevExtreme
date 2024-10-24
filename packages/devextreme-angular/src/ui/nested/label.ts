@@ -76,10 +76,10 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
 
     @Input()
-    get format(): Format | string | undefined {
+    get format(): Format | string | undefined | Function {
         return this._getOption('format');
     }
-    set format(value: Format | string | undefined) {
+    set format(value: Format | string | undefined | Function) {
         this._setOption('format', value);
     }
 
@@ -332,6 +332,14 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
 
     @Input()
+    get enabled(): boolean {
+        return this._getOption('enabled');
+    }
+    set enabled(value: boolean) {
+        this._setOption('enabled', value);
+    }
+
+    @Input()
     get shadow(): { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number } {
         return this._getOption('shadow');
     }
@@ -353,14 +361,6 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
     set dataField(value: string) {
         this._setOption('dataField', value);
-    }
-
-    @Input()
-    get enabled(): boolean {
-        return this._getOption('enabled');
-    }
-    set enabled(value: boolean) {
-        this._setOption('enabled', value);
     }
 
 
