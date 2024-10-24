@@ -1,7 +1,7 @@
 import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 
-import { hideWave, initConfig, showWave } from '../../../ui/widget/utils.ink_ripple';
+import { hideWave, initConfig, showWave } from '@js/ui/widget/utils.ink_ripple';
 
 const _excluded = ['config'];
 
