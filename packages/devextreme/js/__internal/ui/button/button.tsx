@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import _extends from '@babel/runtime/helpers/esm/extends';
 import _objectWithoutPropertiesLoose from '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose';
 import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import {
   createComponentVNode, createRef as infernoCreateRef, createVNode, normalizeProps,
 } from 'inferno';
@@ -57,6 +60,15 @@ export const defaultOptionRules = createDefaultOptionRules([{
 
 const getTemplate = (TemplateProp) => TemplateProp && (TemplateProp.defaultProps ? (props) => normalizeProps(createComponentVNode(2, TemplateProp, _extends({}, props))) : TemplateProp);
 export class Button extends InfernoWrapperComponent<ButtonProps> {
+  private readonly contentRef = infernoCreateRef<HTMLDivElement>();
+
+  private readonly inkRippleRef = infernoCreateRef<InkRipple>();
+
+  private readonly submitInputRef = infernoCreateRef<HTMLInputElement>();
+
+  private readonly widgetRef = infernoCreateRef<Widget>();
+
+  private readonly __getterCache: any = {};
   constructor(props: ButtonProps) {
     super(props);
     this.state = {};
@@ -76,16 +88,18 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     this.emitClickEvent = this.emitClickEvent.bind(this);
   }
 
-  createEffects() {
-    return [new InfernoEffect(this.submitEffect, [this.props.onSubmit, this.props.useSubmitBehavior]), createReRenderEffect()];
+  createEffects(): InfernoEffect[] {
+    return [
+      new InfernoEffect(this.submitEffect, [this.props.onSubmit, this.props.useSubmitBehavior]),
+      createReRenderEffect(),
+    ];
   }
 
-  updateEffects() {
-    let _this$_effects$;
-    (_this$_effects$ = this._effects[0]) === null || _this$_effects$ === void 0 || _this$_effects$.update([this.props.onSubmit, this.props.useSubmitBehavior]);
+  updateEffects(): void {
+    this._effects[0]?.update([this.props.onSubmit, this.props.useSubmitBehavior]);
   }
 
-  submitEffect() {
+  submitEffect(): EffectReturn {
     const namespace = 'UIFeedback';
     const {
       onSubmit,
@@ -98,6 +112,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
       }), {
         namespace,
       });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return () => click.off(this.submitInputRef.current, {
         namespace,
       });
@@ -105,21 +120,23 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     return undefined;
   }
 
-  onActive(event) {
+  onActive(event): void {
     const {
       useInkRipple,
     } = this.props;
-    useInkRipple && this.inkRippleRef.current.showWave({
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    useInkRipple && this.inkRippleRef.current!.showWave({
       element: this.contentRef.current,
       event,
     });
   }
 
-  onInactive(event) {
+  onInactive(event): void {
     const {
       useInkRipple,
     } = this.props;
-    useInkRipple && this.inkRippleRef.current.hideWave({
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    useInkRipple && this.inkRippleRef.current!.hideWave({
       element: this.contentRef.current,
       event,
     });
@@ -133,7 +150,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     onClick === null || onClick === void 0 || onClick({
       event,
     });
-    useSubmitBehavior && this.submitInputRef.current.click();
+    useSubmitBehavior && this.submitInputRef.current!.click();
   }
 
   keyDown(e) {
@@ -157,7 +174,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
   }
 
   emitClickEvent() {
-    this.contentRef.current.click();
+    this.contentRef.current!.click();
   }
 
   get aria() {
@@ -248,15 +265,15 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
   }
 
   focus() {
-    this.widgetRef.current.focus();
+    this.widgetRef.current!.focus();
   }
 
   activate() {
-    this.widgetRef.current.activate();
+    this.widgetRef.current!.activate();
   }
 
   deactivate() {
-    this.widgetRef.current.deactivate();
+    this.widgetRef.current!.deactivate();
   }
 
   componentWillUpdate(nextProps, nextState, context) {
@@ -317,7 +334,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
 }
 Button.defaultProps = defaultButtonProps;
 
-const __defaultOptionRules = [];
+const __defaultOptionRules: any = [];
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
   Button.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(Button.defaultProps), Object.getOwnPropertyDescriptors(convertRulesToOptions(defaultOptionRules)), Object.getOwnPropertyDescriptors(convertRulesToOptions(__defaultOptionRules))));
