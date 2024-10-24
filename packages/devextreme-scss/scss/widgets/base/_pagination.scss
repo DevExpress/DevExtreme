@@ -13,7 +13,6 @@ $pagination-info-paddings: 9px;
   padding-top: $pagination-paddings;
   padding-bottom: $pagination-paddings;
   line-height: normal;
-  margin-top: -1px;
 
   @include user-select(none);
 

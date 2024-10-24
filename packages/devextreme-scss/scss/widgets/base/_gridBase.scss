@@ -60,6 +60,10 @@
       border-bottom: 0;
     }
 
+    > .dx-pager {
+      margin-top: -1px;
+    }
+
     > .dx-#{$widget-name}-rowsview.dx-last-row-border {
       tbody:last-child > .dx-data-row:nth-last-child(2) {
         &,
