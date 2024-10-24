@@ -1025,8 +1025,15 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     super._afterRowPrepared(e);
   }
 
-  public _scrollToElement($element) {
-    super._scrollToElement($element, this.getFixedColumnsOffset());
+  public _scrollToElement($element, offset?) {
+    let scrollOffset = offset;
+    const isFixedColumns = this.isFixedColumns();
+
+    if (isFixedColumns) {
+      scrollOffset = this.getFixedColumnsOffset();
+    }
+
+    super._scrollToElement($element, scrollOffset);
   }
 };
 
