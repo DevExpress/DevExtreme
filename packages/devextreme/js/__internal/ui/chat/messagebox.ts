@@ -1,5 +1,4 @@
 import $ from '@js/core/renderer';
-import { throttle } from '@js/core/utils/throttle';
 import type { NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { ClickEvent } from '@js/ui/button';
@@ -16,7 +15,6 @@ const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
 const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
 
-export const TYPING_START_DELAY = 1500;
 export const TYPING_END_DELAY = 2000;
 
 export type MessageSendEvent =
@@ -48,11 +46,9 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _typingStartAction?: (e: Partial<TypingStartEvent>) => void;
 
-  _throttledTriggerTypingStartAction?: (e: Partial<TypingStartEvent>) => void;
-
   _typingEndAction?: () => void;
 
-  _typingEndEventTimeout?: ReturnType<typeof setTimeout>;
+  _typingEndTimeoutId?: ReturnType<typeof setTimeout> | undefined;
 
   _getDefaultOptions(): Properties {
     return {
@@ -72,15 +68,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._createMessageSendAction();
     this._createTypingStartAction();
     this._createTypingEndAction();
-
-    this._wrapTriggerTypingStartEvent();
-  }
-
-  _wrapTriggerTypingStartEvent(): void {
-    this._throttledTriggerTypingStartAction = throttle(
-      this._triggerTypingStartAction,
-      TYPING_START_DELAY,
-    );
   }
 
   _initMarkup(): void {
@@ -117,7 +104,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
         this._toggleButtonDisableState(shouldButtonBeDisabled);
 
-        this._onInputTriggerTypingEventsHandler(e);
+        this._triggerTypingStartAction(e);
+        this._updateTypingEndTimeout();
       },
       onEnterKey: (e: EnterKeyEvent): void => {
         if (!e.event?.shiftKey) {
@@ -159,12 +147,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  _onInputTriggerTypingEventsHandler(e: InputEvent): void {
-    if (this._isValuableTextEntered()) {
-      this._throttledTriggerTypingStartAction?.({ event: e.event });
-    }
-  }
-
   _createMessageSendAction(): void {
     this._messageSendAction = this._createActionByOption(
       'onMessageSend',
@@ -187,13 +169,19 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _triggerTypingStartAction(e: InputEvent): void {
-    clearTimeout(this._typingEndEventTimeout);
+    if (!this._typingEndTimeoutId) {
+      this._typingStartAction?.({ event: e.event });
+    }
+  }
 
-    this._typingEndEventTimeout = setTimeout(() => {
+  _updateTypingEndTimeout(): void {
+    clearTimeout(this._typingEndTimeoutId);
+
+    this._typingEndTimeoutId = setTimeout(() => {
       this._typingEndAction?.();
-    }, TYPING_END_DELAY);
 
-    this._typingStartAction?.({ event: e.event });
+      this._typingEndTimeoutId = undefined;
+    }, TYPING_END_DELAY);
   }
 
   _sendHandler(e: ClickEvent | EnterKeyEvent): void {
@@ -201,7 +189,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       return;
     }
 
-    clearTimeout(this._typingEndEventTimeout);
+    clearTimeout(this._typingEndTimeoutId);
 
     this._typingEndAction?.();
 
@@ -253,7 +241,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   }
 
   _clean(): void {
-    clearTimeout(this._typingEndEventTimeout);
+    clearTimeout(this._typingEndTimeoutId);
 
     super._clean();
   }

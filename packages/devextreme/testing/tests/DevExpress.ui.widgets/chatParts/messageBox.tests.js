@@ -3,10 +3,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import MessageBox, {
-    TYPING_START_DELAY,
-    TYPING_END_DELAY,
-} from '__internal/ui/chat/messagebox';
+import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
 
@@ -355,7 +352,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
                 assert.strictEqual(onTypingStartStub.callCount, 1, 'called once still');
 
-                clock.tick(TYPING_START_DELAY);
+                clock.tick(1500);
 
                 keyboard.type('not');
 
