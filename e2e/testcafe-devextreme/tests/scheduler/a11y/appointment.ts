@@ -95,6 +95,47 @@ fixture.disablePageReloads`a11y - appointment`
       ],
     });
   });
+
+  test(`Scheduler a11y: Disabled time ranges are not supported (${currentView})`, async (t) => {
+    const scheduler = new Scheduler('#container');
+    const { nextButton } = scheduler.toolbar.navigator;
+    const { prevButton } = scheduler.toolbar.navigator;
+    const expectedAriaLabels = {
+      day: {
+        prev: 'Previous day',
+        next: 'Next day',
+      },
+      week: {
+        prev: 'Previous week',
+        next: 'Next week',
+      },
+      month: {
+        prev: 'Previous month',
+        next: 'Next month',
+      },
+    };
+    const actualPrevAriaLabel = await prevButton.getAttribute('aria-label');
+    const actualNextAriaLabel = await nextButton.getAttribute('aria-label');
+
+    await t
+      .expect(actualPrevAriaLabel)
+      .eql(expectedAriaLabels[currentView].prev)
+      .expect(actualNextAriaLabel)
+      .eql(expectedAriaLabels[currentView].next);
+  }).before(async () => {
+    await createWidget('dxScheduler', {
+      dataSource: [
+        {
+          text: 'App 1',
+          startDate: new Date(2021, 1, 1, 12),
+          endDate: new Date(2021, 1, 1, 13),
+        },
+      ],
+      views: ['week', 'workWeek', 'month'],
+      currentView,
+      currentDate: new Date(2021, 3, 27),
+    });
+  });
 });
 
 [

@@ -40,7 +40,10 @@ export const getDateNavigator = (header, item) => {
 const getPreviousButtonOptions = (header) => ({
   key: 'previous',
   icon: 'chevronprev',
-  elementAttr: { class: PREVIOUS_BUTTON_CLASS },
+  elementAttr: {
+    class: PREVIOUS_BUTTON_CLASS,
+    ...getCurrentViewText(header) ? { 'aria-label': `Previous ${getCurrentViewText(header)}` } : {},
+  },
   clickHandler: () => header._updateDateByDirection(DIRECTION_LEFT),
   onContentReady: (e) => {
     const previousButton = e.component;
@@ -93,7 +96,10 @@ const getCalendarButtonOptions = (header) => ({
 const getNextButtonOptions = (header) => ({
   key: 'next',
   icon: 'chevronnext',
-  elementAttr: { class: NEXT_BUTTON_CLASS },
+  elementAttr: {
+    class: NEXT_BUTTON_CLASS,
+    ...getCurrentViewText(header) ? { 'aria-label': `Next ${getCurrentViewText(header)}` } : {},
+  },
   clickHandler: () => header._updateDateByDirection(DIRECTION_RIGHT),
   onContentReady: (e) => {
     const nextButton = e.component;
@@ -142,4 +148,15 @@ const isNextButtonDisabled = (header) => {
 
   const nextDate = header._getNextDate(1, caption.startDate);
   return nextDate > max;
+};
+
+const getCurrentViewText = (header) => {
+  const { currentView } = header;
+  return typeof currentView === 'string'
+    ? currentView
+      ?.replace(/([a-z])([A-Z])/g, '$1 $2')
+      .toLowerCase()
+      .split(' ')
+      .join(' ')
+    : '';
 };
