@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // eslint-disable-next-line import/named
-import { dxElementWrapper } from '../../core/renderer';
-import ValidationEngine from '../../ui/validation_engine';
-import Component from './common/component';
-import type { Button } from '../ui/button';
-import { Option } from './common/types';
-import { getImageSourceType } from '../../core/utils/icon';
+import type { dxElementWrapper } from '@js/core/renderer';
+import { getImageSourceType } from '@js/core/utils/icon';
+import ValidationEngine from '@js/ui/validation_engine';
+import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
+import type { Option } from '@ts/core/r1/types';
 
-export default class ButtonWrapper extends Component {
+import type { Button } from './button';
+
+export default class ButtonWrapper extends ComponentWrapper {
   _clickAction!: (...args) => unknown;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,6 +121,7 @@ export default class ButtonWrapper extends Component {
   }
 
   _createClickAction(): (...args) => unknown {
+    // @ts-expect-error
     return this._createActionByOption('onClick', {
       excludeValidators: ['readOnly'],
     });
