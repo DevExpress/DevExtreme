@@ -12,7 +12,7 @@ import {
   ReactElement,
 } from 'react';
 
-import { RestoreTreeContext } from '../helpers';
+import { RestoreTreeContext } from '../contexts';
 
 const eventHandlers: { [index: string]: ((e?: any) => void)[] } = {};
 
@@ -62,6 +62,7 @@ const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestCompon
 
   const afterCreateWidget = useCallback(() => {
     Widget.option.mockReset();
+    Widget.resetOption.mockReset();
   }, []);
 
   useImperativeHandle(ref, () => {

@@ -5,6 +5,10 @@ interface DXTemplate {
   render: RenderFunc;
 }
 
+export interface NestedComponentMeta {
+  componentType: 'option' | 'extension';
+}
+
 type RenderFunc = (arg: RenderArgs) => HTMLElement;
 
 interface TemplateArgs {
@@ -18,11 +22,6 @@ export interface RenderArgs {
   container: any;
   index?: any;
   onRendered?: () => void;
-}
-
-export interface UpdateLocker {
-  lock: () => void;
-  unlock: () => void;
 }
 
 export type DXTemplateCollection = Record<string, DXTemplate>;

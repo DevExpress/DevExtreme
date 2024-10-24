@@ -5,7 +5,7 @@ import dxTreeMap, {
     Properties
 } from "devextreme/viz/tree_map";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, dxTreeMapNode } from "devextreme/viz/tree_map";
@@ -103,15 +103,18 @@ type IBorderProps = React.PropsWithChildren<{
   opacity?: number;
   visible?: boolean;
 }>
-const _componentBorder = memo(
-  (props: IBorderProps) => {
-    return React.createElement(NestedOption<IBorderProps>, { ...props });
-  }
-);
+const _componentBorder = (props: IBorderProps) => {
+  return React.createElement(NestedOption<IBorderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "border",
+    },
+  });
+};
 
-const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
-  OptionName: "border",
-})
+const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_componentBorder, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -123,15 +126,18 @@ type IColorizerProps = React.PropsWithChildren<{
   range?: Array<number>;
   type?: "discrete" | "gradient" | "none" | "range";
 }>
-const _componentColorizer = memo(
-  (props: IColorizerProps) => {
-    return React.createElement(NestedOption<IColorizerProps>, { ...props });
-  }
-);
+const _componentColorizer = (props: IColorizerProps) => {
+  return React.createElement(NestedOption<IColorizerProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "colorizer",
+    },
+  });
+};
 
-const Colorizer: typeof _componentColorizer & IElementDescriptor = Object.assign(_componentColorizer, {
-  OptionName: "colorizer",
-})
+const Colorizer = Object.assign<typeof _componentColorizer, NestedComponentMeta>(_componentColorizer, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -144,15 +150,18 @@ type IExportProps = React.PropsWithChildren<{
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-const _componentExport = memo(
-  (props: IExportProps) => {
-    return React.createElement(NestedOption<IExportProps>, { ...props });
-  }
-);
+const _componentExport = (props: IExportProps) => {
+  return React.createElement(NestedOption<IExportProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "export",
+    },
+  });
+};
 
-const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
-  OptionName: "export",
-})
+const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_componentExport, {
+  componentType: "option",
+});
 
 // owners:
 // GroupLabel
@@ -168,15 +177,18 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-const _componentFont = memo(
-  (props: IFontProps) => {
-    return React.createElement(NestedOption<IFontProps>, { ...props });
-  }
-);
+const _componentFont = (props: IFontProps) => {
+  return React.createElement(NestedOption<IFontProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "font",
+    },
+  });
+};
 
-const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
-  OptionName: "font",
-})
+const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componentFont, {
+  componentType: "option",
+});
 
 // owners:
 // Tooltip
@@ -188,15 +200,18 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = memo(
-  (props: IFormatProps) => {
-    return React.createElement(NestedOption<IFormatProps>, { ...props });
-  }
-);
+const _componentFormat = (props: IFormatProps) => {
+  return React.createElement(NestedOption<IFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "format",
+    },
+  });
+};
 
-const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
-  OptionName: "format",
-})
+const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -229,23 +244,26 @@ type IGroupProps = React.PropsWithChildren<{
     color?: string;
   };
 }>
-const _componentGroup = memo(
-  (props: IGroupProps) => {
-    return React.createElement(NestedOption<IGroupProps>, { ...props });
-  }
-);
+const _componentGroup = (props: IGroupProps) => {
+  return React.createElement(NestedOption<IGroupProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "group",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        groupLabel: { optionName: "label", isCollectionItem: false },
+        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        treeMapborder: { optionName: "border", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Group: typeof _componentGroup & IElementDescriptor = Object.assign(_componentGroup, {
-  OptionName: "group",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    groupLabel: { optionName: "label", isCollectionItem: false },
-    hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-    label: { optionName: "label", isCollectionItem: false },
-    selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
-    treeMapborder: { optionName: "border", isCollectionItem: false }
-  },
-})
+const Group = Object.assign<typeof _componentGroup, NestedComponentMeta>(_componentGroup, {
+  componentType: "option",
+});
 
 // owners:
 // Group
@@ -254,18 +272,21 @@ type IGroupLabelProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   visible?: boolean;
 }>
-const _componentGroupLabel = memo(
-  (props: IGroupLabelProps) => {
-    return React.createElement(NestedOption<IGroupLabelProps>, { ...props });
-  }
-);
+const _componentGroupLabel = (props: IGroupLabelProps) => {
+  return React.createElement(NestedOption<IGroupLabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const GroupLabel: typeof _componentGroupLabel & IElementDescriptor = Object.assign(_componentGroupLabel, {
-  OptionName: "label",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const GroupLabel = Object.assign<typeof _componentGroupLabel, NestedComponentMeta>(_componentGroupLabel, {
+  componentType: "option",
+});
 
 // owners:
 // Group
@@ -277,15 +298,18 @@ type IHoverStyleProps = React.PropsWithChildren<{
   };
   color?: string;
 }>
-const _componentHoverStyle = memo(
-  (props: IHoverStyleProps) => {
-    return React.createElement(NestedOption<IHoverStyleProps>, { ...props });
-  }
-);
+const _componentHoverStyle = (props: IHoverStyleProps) => {
+  return React.createElement(NestedOption<IHoverStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "hoverStyle",
+    },
+  });
+};
 
-const HoverStyle: typeof _componentHoverStyle & IElementDescriptor = Object.assign(_componentHoverStyle, {
-  OptionName: "hoverStyle",
-})
+const HoverStyle = Object.assign<typeof _componentHoverStyle, NestedComponentMeta>(_componentHoverStyle, {
+  componentType: "option",
+});
 
 // owners:
 // Group
@@ -296,15 +320,18 @@ type ILabelProps = React.PropsWithChildren<{
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentLabel = memo(
-  (props: ILabelProps) => {
-    return React.createElement(NestedOption<ILabelProps>, { ...props });
-  }
-);
+const _componentLabel = (props: ILabelProps) => {
+  return React.createElement(NestedOption<ILabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+    },
+  });
+};
 
-const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
-  OptionName: "label",
-})
+const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_componentLabel, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -317,21 +344,24 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-const _componentLoadingIndicator = memo(
-  (props: ILoadingIndicatorProps) => {
-    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
-  }
-);
+const _componentLoadingIndicator = (props: ILoadingIndicatorProps) => {
+  return React.createElement(NestedOption<ILoadingIndicatorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "loadingIndicator",
+      DefaultsProps: {
+        defaultShow: "show"
+      },
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
-  OptionName: "loadingIndicator",
-  DefaultsProps: {
-    defaultShow: "show"
-  },
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const LoadingIndicator = Object.assign<typeof _componentLoadingIndicator, NestedComponentMeta>(_componentLoadingIndicator, {
+  componentType: "option",
+});
 
 // owners:
 // Title
@@ -341,15 +371,18 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-const _componentMargin = memo(
-  (props: IMarginProps) => {
-    return React.createElement(NestedOption<IMarginProps>, { ...props });
-  }
-);
+const _componentMargin = (props: IMarginProps) => {
+  return React.createElement(NestedOption<IMarginProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "margin",
+    },
+  });
+};
 
-const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
-  OptionName: "margin",
-})
+const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_componentMargin, {
+  componentType: "option",
+});
 
 // owners:
 // Group
@@ -361,15 +394,18 @@ type ISelectionStyleProps = React.PropsWithChildren<{
   };
   color?: string;
 }>
-const _componentSelectionStyle = memo(
-  (props: ISelectionStyleProps) => {
-    return React.createElement(NestedOption<ISelectionStyleProps>, { ...props });
-  }
-);
+const _componentSelectionStyle = (props: ISelectionStyleProps) => {
+  return React.createElement(NestedOption<ISelectionStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "selectionStyle",
+    },
+  });
+};
 
-const SelectionStyle: typeof _componentSelectionStyle & IElementDescriptor = Object.assign(_componentSelectionStyle, {
-  OptionName: "selectionStyle",
-})
+const SelectionStyle = Object.assign<typeof _componentSelectionStyle, NestedComponentMeta>(_componentSelectionStyle, {
+  componentType: "option",
+});
 
 // owners:
 // Tooltip
@@ -380,15 +416,18 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-const _componentShadow = memo(
-  (props: IShadowProps) => {
-    return React.createElement(NestedOption<IShadowProps>, { ...props });
-  }
-);
+const _componentShadow = (props: IShadowProps) => {
+  return React.createElement(NestedOption<IShadowProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "shadow",
+    },
+  });
+};
 
-const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
-  OptionName: "shadow",
-})
+const Shadow = Object.assign<typeof _componentShadow, NestedComponentMeta>(_componentShadow, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -396,15 +435,18 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-const _componentSize = memo(
-  (props: ISizeProps) => {
-    return React.createElement(NestedOption<ISizeProps>, { ...props });
-  }
-);
+const _componentSize = (props: ISizeProps) => {
+  return React.createElement(NestedOption<ISizeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "size",
+    },
+  });
+};
 
-const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
-  OptionName: "size",
-})
+const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componentSize, {
+  componentType: "option",
+});
 
 // owners:
 // Title
@@ -415,18 +457,21 @@ type ISubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentSubtitle = memo(
-  (props: ISubtitleProps) => {
-    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
-  }
-);
+const _componentSubtitle = (props: ISubtitleProps) => {
+  return React.createElement(NestedOption<ISubtitleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "subtitle",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
-  OptionName: "subtitle",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_componentSubtitle, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -457,23 +502,26 @@ type ITileProps = React.PropsWithChildren<{
     color?: string;
   };
 }>
-const _componentTile = memo(
-  (props: ITileProps) => {
-    return React.createElement(NestedOption<ITileProps>, { ...props });
-  }
-);
+const _componentTile = (props: ITileProps) => {
+  return React.createElement(NestedOption<ITileProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tile",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        tileLabel: { optionName: "label", isCollectionItem: false },
+        treeMapborder: { optionName: "border", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Tile: typeof _componentTile & IElementDescriptor = Object.assign(_componentTile, {
-  OptionName: "tile",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-    label: { optionName: "label", isCollectionItem: false },
-    selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
-    tileLabel: { optionName: "label", isCollectionItem: false },
-    treeMapborder: { optionName: "border", isCollectionItem: false }
-  },
-})
+const Tile = Object.assign<typeof _componentTile, NestedComponentMeta>(_componentTile, {
+  componentType: "option",
+});
 
 // owners:
 // Tile
@@ -483,18 +531,21 @@ type ITileLabelProps = React.PropsWithChildren<{
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentTileLabel = memo(
-  (props: ITileLabelProps) => {
-    return React.createElement(NestedOption<ITileLabelProps>, { ...props });
-  }
-);
+const _componentTileLabel = (props: ITileLabelProps) => {
+  return React.createElement(NestedOption<ITileLabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const TileLabel: typeof _componentTileLabel & IElementDescriptor = Object.assign(_componentTileLabel, {
-  OptionName: "label",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const TileLabel = Object.assign<typeof _componentTileLabel, NestedComponentMeta>(_componentTileLabel, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -520,20 +571,23 @@ type ITitleProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentTitle = memo(
-  (props: ITitleProps) => {
-    return React.createElement(NestedOption<ITitleProps>, { ...props });
-  }
-);
+const _componentTitle = (props: ITitleProps) => {
+  return React.createElement(NestedOption<ITitleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "title",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false },
+        subtitle: { optionName: "subtitle", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
-  OptionName: "title",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false },
-    margin: { optionName: "margin", isCollectionItem: false },
-    subtitle: { optionName: "subtitle", isCollectionItem: false }
-  },
-})
+const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_componentTitle, {
+  componentType: "option",
+});
 
 // owners:
 // TreeMap
@@ -568,27 +622,30 @@ type ITooltipProps = React.PropsWithChildren<{
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
 }>
-const _componentTooltip = memo(
-  (props: ITooltipProps) => {
-    return React.createElement(NestedOption<ITooltipProps>, { ...props });
-  }
-);
+const _componentTooltip = (props: ITooltipProps) => {
+  return React.createElement(NestedOption<ITooltipProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tooltip",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false },
+        shadow: { optionName: "shadow", isCollectionItem: false },
+        tooltipBorder: { optionName: "border", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "contentTemplate",
+        render: "contentRender",
+        component: "contentComponent"
+      }],
+    },
+  });
+};
 
-const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
-  OptionName: "tooltip",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    font: { optionName: "font", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false },
-    shadow: { optionName: "shadow", isCollectionItem: false },
-    tooltipBorder: { optionName: "border", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "contentTemplate",
-    render: "contentRender",
-    component: "contentComponent"
-  }],
-})
+const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_componentTooltip, {
+  componentType: "option",
+});
 
 // owners:
 // Tooltip
@@ -599,15 +656,18 @@ type ITooltipBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentTooltipBorder = memo(
-  (props: ITooltipBorderProps) => {
-    return React.createElement(NestedOption<ITooltipBorderProps>, { ...props });
-  }
-);
+const _componentTooltipBorder = (props: ITooltipBorderProps) => {
+  return React.createElement(NestedOption<ITooltipBorderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "border",
+    },
+  });
+};
 
-const TooltipBorder: typeof _componentTooltipBorder & IElementDescriptor = Object.assign(_componentTooltipBorder, {
-  OptionName: "border",
-})
+const TooltipBorder = Object.assign<typeof _componentTooltipBorder, NestedComponentMeta>(_componentTooltipBorder, {
+  componentType: "option",
+});
 
 // owners:
 // Group
@@ -620,15 +680,18 @@ type ITreeMapborderProps = React.PropsWithChildren<{
   color?: string;
   width?: number;
 }>
-const _componentTreeMapborder = memo(
-  (props: ITreeMapborderProps) => {
-    return React.createElement(NestedOption<ITreeMapborderProps>, { ...props });
-  }
-);
+const _componentTreeMapborder = (props: ITreeMapborderProps) => {
+  return React.createElement(NestedOption<ITreeMapborderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "border",
+    },
+  });
+};
 
-const TreeMapborder: typeof _componentTreeMapborder & IElementDescriptor = Object.assign(_componentTreeMapborder, {
-  OptionName: "border",
-})
+const TreeMapborder = Object.assign<typeof _componentTreeMapborder, NestedComponentMeta>(_componentTreeMapborder, {
+  componentType: "option",
+});
 
 export default TreeMap;
 export {

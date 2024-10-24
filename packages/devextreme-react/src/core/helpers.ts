@@ -1,11 +1,5 @@
 /* eslint-disable max-classes-per-file, no-restricted-syntax */
-import { createContext, Context } from 'react';
-import { TemplateInstantiationModel, UpdateLocker } from './types';
-
-export const RemovalLockerContext: Context<UpdateLocker | undefined> = createContext<UpdateLocker | undefined>(undefined);
-
-// eslint-disable-next-line @typescript-eslint/no-extra-parens
-export const RestoreTreeContext: Context<(() => void) | undefined> = createContext<(() => void) | undefined>(undefined);
+import { TemplateInstantiationModel } from './types';
 
 export function generateID(): string {
   return Math.random().toString(36).substring(2);
