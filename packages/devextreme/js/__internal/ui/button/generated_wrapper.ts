@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/ui/button.j.js)
-* Version: 24.2.0
-* Build date: Tue Oct 22 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import registerComponent from '@js/core/component_registrator';
 import BaseComponent from './wrapper';
 import { Button as ButtonComponent, defaultOptions } from './button';
