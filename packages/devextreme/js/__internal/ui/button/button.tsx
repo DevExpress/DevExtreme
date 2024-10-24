@@ -5,18 +5,17 @@ import {
   createComponentVNode, createRef as infernoCreateRef, createVNode, normalizeProps,
 } from 'inferno';
 
-import devices from '../../core/devices';
-import { convertRulesToOptions, createDefaultOptionRules } from '../../core/options/utils';
-import { getImageSourceType } from '../../core/utils/icon';
-import { camelize } from '../../core/utils/inflector';
-import { click } from '../../events/short';
-import messageLocalization from '../../localization/message';
-import { current, isMaterial } from '../../ui/themes';
-import { combineClasses } from '../utils/combine_classes';
-import { BaseWidgetProps } from './common/base_props';
-import { Icon } from './common/icon';
-import { InkRipple } from './common/ink_ripple';
-import { Widget } from './common/widget';
+import devices from '@js/core/devices';
+import { convertRulesToOptions, createDefaultOptionRules } from '@js/core/options/utils';
+import { getImageSourceType } from '@js/core/utils/icon';
+import { camelize } from '@js/core/utils/inflector';
+import { click } from '@js/events/short';
+import messageLocalization from '@js/localization/message';
+import { current, isMaterial } from '@js/ui/themes';
+import { combineClasses } from '@ts/core/utils/combine_classes';
+import { Icon } from './icon';
+import { Widget } from '@ts/core/r1/widget';
+import { InkRipple } from './ink_ripple';
 import type { ButtonProps } from './props';
 import { defaultButtonProps } from './props';
 
