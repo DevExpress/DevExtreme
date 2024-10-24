@@ -168,21 +168,21 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _createMessageSendAction(): void {
     this._messageSendAction = this._createActionByOption(
       'onMessageSend',
-      { excludeValidators: ['disabled', 'readOnly'] },
+      { excludeValidators: ['disabled'] },
     );
   }
 
   _createTypingStartAction(): void {
     this._typingStartAction = this._createActionByOption(
       'onTypingStart',
-      { excludeValidators: ['disabled', 'readOnly'] },
+      { excludeValidators: ['disabled'] },
     );
   }
 
   _createTypingEndAction(): void {
     this._typingEndAction = this._createActionByOption(
       'onTypingEnd',
-      { excludeValidators: ['disabled', 'readOnly'] },
+      { excludeValidators: ['disabled'] },
     );
   }
 
