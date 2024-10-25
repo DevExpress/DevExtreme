@@ -10,10 +10,10 @@ import {
     template: ''
 })
 export abstract class DxoUser extends NestedOption {
-    get avatarAlt(): string {
+    get avatarAlt(): string | undefined {
         return this._getOption('avatarAlt');
     }
-    set avatarAlt(value: string) {
+    set avatarAlt(value: string | undefined) {
         this._setOption('avatarAlt', value);
     }
 
