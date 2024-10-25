@@ -170,23 +170,23 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
         QUnit.test('avatar component should be initialized with correct alt property', function(assert) {
             [
-                { items: [{}], passedUrlValue: undefined },
-                { items: [{ author: {} }], passedUrlValue: undefined },
-                { items: [{ author: undefined }], passedUrlValue: undefined },
-                { items: [{ author: { avatarAlt: undefined } }], passedUrlValue: undefined },
-                { items: [{ author: { avatarAlt: null } }], passedUrlValue: null },
-                { items: [{ author: { avatarAlt: '' } }], passedUrlValue: '' },
-                { items: [{ author: { avatarAlt: ' ' } }], passedUrlValue: ' ' },
-                { items: [{ author: { avatarAlt: 888 } }], passedUrlValue: 888 },
-                { items: [{ author: { avatarAlt: NaN } }], passedUrlValue: NaN },
-            ].forEach(({ items, passedUrlValue }) => {
+                { items: [{}], passedAltValue: undefined },
+                { items: [{ author: {} }], passedAltValue: undefined },
+                { items: [{ author: undefined }], passedAltValue: undefined },
+                { items: [{ author: { avatarAlt: undefined } }], passedAltValue: undefined },
+                { items: [{ author: { avatarAlt: null } }], passedAltValue: null },
+                { items: [{ author: { avatarAlt: '' } }], passedAltValue: '' },
+                { items: [{ author: { avatarAlt: ' ' } }], passedAltValue: ' ' },
+                { items: [{ author: { avatarAlt: 888 } }], passedAltValue: 888 },
+                { items: [{ author: { avatarAlt: NaN } }], passedAltValue: NaN },
+            ].forEach(({ items, passedAltValue }) => {
                 this.reinit({
                     items,
                 });
 
                 const avatar = ChatAvatar.getInstance(this.$element.find(`.${AVATAR_CLASS}`));
 
-                assert.deepEqual(avatar.option('alt'), passedUrlValue);
+                assert.deepEqual(avatar.option('alt'), passedAltValue);
             });
         });
     });
