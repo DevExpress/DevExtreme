@@ -24,9 +24,13 @@ export type MessageGroupAlignment = 'start' | 'end';
 export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
+  // eslint-disable-next-line
+  messageTemplate: any;
 }
 
 class MessageGroup extends Widget<Properties> {
+  private _messageBubbles?: MessageBubble[];
+
   _avatar?: Avatar;
 
   _$messageBubbleContainer!: dxElementWrapper;
@@ -36,6 +40,7 @@ class MessageGroup extends Widget<Properties> {
       ...super._getDefaultOptions(),
       items: [],
       alignment: 'start',
+      messageTemplate: null,
     };
   }
 
@@ -72,6 +77,8 @@ class MessageGroup extends Widget<Properties> {
       this._renderAvatar();
     }
 
+    this._messageBubbles = [];
+
     this._renderMessageGroupInformation(items?.[0]);
     this._renderMessageBubbles(items);
   }
@@ -92,10 +99,15 @@ class MessageGroup extends Widget<Properties> {
 
   _renderMessageBubble(message: Message): void {
     const $bubble = $('<div>');
+    const { messageTemplate } = this.option();
 
-    this._createComponent($bubble, MessageBubble, {
+    const messageBubble = this._createComponent($bubble, MessageBubble, {
       text: message.text,
+      template: messageTemplate,
+      author: message.author,
     });
+
+    this._messageBubbles?.push(messageBubble);
 
     this._$messageBubbleContainer.append($bubble);
   }
@@ -136,6 +148,10 @@ class MessageGroup extends Widget<Properties> {
     $information.appendTo(this.element());
   }
 
+  _updateIsLastOptionOfLastMessage(isLast: boolean): void {
+    this._messageBubbles?.at(-1)?.option('isLast', isLast);
+  }
+
   _getTimeValue(timestamp: Date | string | number): string {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
     const date = dateSerialization.deserializeDate(timestamp);
@@ -144,12 +160,19 @@ class MessageGroup extends Widget<Properties> {
     return date.toLocaleTimeString(undefined, options);
   }
 
+  _clean(): void {
+    this._messageBubbles = [];
+
+    super._clean();
+  }
+
   _optionChanged(args: OptionChanged<Properties>): void {
     const { name } = args;
 
     switch (name) {
       case 'items':
       case 'alignment':
+      case 'messageTemplate':
         this._invalidate();
         break;
       default:

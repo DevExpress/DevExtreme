@@ -35,6 +35,8 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
+  // eslint-disable-next-line
+  messageTemplate: any;
   isLoading?: boolean;
 }
 
@@ -54,6 +56,7 @@ class MessageList extends Widget<Properties> {
       currentUserId: '',
       showDayHeaders: true,
       isLoading: false,
+      messageTemplate: null,
     };
   }
 
@@ -162,10 +165,12 @@ class MessageList extends Widget<Properties> {
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
     const $messageGroup = $('<div>').appendTo(this._$content());
+    const { messageTemplate } = this.option();
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
+      messageTemplate,
     });
 
     this._messageGroups?.push(messageGroup);
@@ -281,6 +286,9 @@ class MessageList extends Widget<Properties> {
 
       if (items.length - 1 === index) {
         this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
+
+        const lastMessageGroup = this._messageGroups?.at(-1);
+        lastMessageGroup?._updateIsLastOptionOfLastMessage(true);
       }
     });
 
@@ -292,8 +300,10 @@ class MessageList extends Widget<Properties> {
   _renderMessage(message: Message): void {
     const { author, timestamp } = message;
 
-    const lastMessageGroup = this._messageGroups?.[this._messageGroups.length - 1];
+    let lastMessageGroup = this._messageGroups?.at(-1);
     const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
+
+    lastMessageGroup?._updateIsLastOptionOfLastMessage(false);
 
     if (lastMessageGroup) {
       const { items } = lastMessageGroup.option();
@@ -303,6 +313,8 @@ class MessageList extends Widget<Properties> {
 
       if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded && !shouldCreateDayHeader) {
         lastMessageGroup.renderMessage(message);
+        lastMessageGroup._updateIsLastOptionOfLastMessage(true);
+
         this._scrollContentToLastMessage();
 
         return;
@@ -316,6 +328,9 @@ class MessageList extends Widget<Properties> {
     this._createMessageGroupComponent([message], author?.id);
 
     this._scrollContentToLastMessage();
+
+    lastMessageGroup = this._messageGroups?.at(-1);
+    lastMessageGroup?._updateIsLastOptionOfLastMessage(true);
   }
 
   _$content(): dxElementWrapper {
@@ -415,6 +430,7 @@ class MessageList extends Widget<Properties> {
         this._processItemsUpdating(value ?? [], previousValue ?? []);
         break;
       case 'showDayHeaders':
+      case 'messageTemplate':
         this._invalidate();
         break;
       case 'isLoading':

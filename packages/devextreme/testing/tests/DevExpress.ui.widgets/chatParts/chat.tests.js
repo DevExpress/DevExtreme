@@ -207,6 +207,29 @@ QUnit.module('Chat', () => {
 
             assert.strictEqual(messageList.option('showDayHeaders'), false, 'showDayHeaders is passed on runtime');
         });
+
+        QUnit.test('Chat should pass messageTemplate to messageList on init', function(assert) {
+            const messageTemplate = () => { return $('<div>'); };
+            this.reinit({
+                messageTemplate,
+            });
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('messageList'), messageTemplate, 'messageList is passed on init');
+        });
+
+        QUnit.test('Chat should pass messageTemplate to messageList at runtime', function(assert) {
+            this.reinit({ });
+
+            const messageTemplate = () => { return $('<div>'); };
+            const messageList = this.getMessageList();
+
+            this.instance.option('messageTemplate', messageTemplate);
+
+
+            assert.strictEqual(messageList.option('messageTemplate'), false, 'messageTemplate is passed on runtime');
+        });
     });
 
     QUnit.module('Events', () => {

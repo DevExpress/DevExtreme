@@ -1,4 +1,5 @@
 import $ from '@js/core/renderer';
+import type { User } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -7,6 +8,10 @@ const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 
 export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
+  // eslint-disable-next-line
+  template?: null | any;
+  isLast?: boolean;
+  author?: User;
 }
 
 class MessageBubble extends Widget<Properties> {
@@ -14,6 +19,9 @@ class MessageBubble extends Widget<Properties> {
     return {
       ...super._getDefaultOptions(),
       text: '',
+      template: null,
+      isLast: false,
+      author: undefined,
     };
   }
 
@@ -23,11 +31,33 @@ class MessageBubble extends Widget<Properties> {
 
     super._initMarkup();
 
-    this._updateText();
+    this._updateContent();
   }
 
-  _updateText(): void {
-    const { text = '' } = this.option();
+  _updateContent(): void {
+    const {
+      text = '', template = null, isLast, author,
+    } = this.option();
+
+    if (template) {
+      $(this.element()).empty();
+
+      const messageTemplate = this._getTemplateByOption('template');
+
+      const templateData = {
+        component: this,
+        text,
+        isLast,
+        author,
+      };
+
+      messageTemplate.render({
+        container: this.element(),
+        model: templateData,
+      });
+
+      return;
+    }
 
     $(this.element()).text(text);
   }
@@ -37,7 +67,10 @@ class MessageBubble extends Widget<Properties> {
 
     switch (name) {
       case 'text':
-        this._updateText();
+      case 'isLast':
+      case 'template':
+      case 'author':
+        this._updateContent();
         break;
       default:
         super._optionChanged(args);

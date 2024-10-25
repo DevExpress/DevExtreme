@@ -38,6 +38,39 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             assert.strictEqual(this.$element.text(), 'new message text');
         });
+
+        QUnit.test('template option should set message bubble content on init', function(assert) {
+            const template = (data, container) => {
+                $('<h1>').text(`${data.author.name}: ${data.text}`).appendTo(container);
+            };
+            this.reinit({
+                template,
+                author: { name: 'name' },
+                text: 'text'
+            });
+
+            const $bubbleContent = $(this.$element.children());
+
+            assert.strictEqual($bubbleContent.prop('tagName'), 'H1', 'content tag is correct');
+            assert.strictEqual($bubbleContent.text(), 'name: text', 'content text is correct');
+        });
+
+        QUnit.test('template option should set message bubble content at runtime', function(assert) {
+            const template = (data, container) => {
+                $('<h1>').text(`${data.author.name}: ${data.text}`).appendTo(container);
+            };
+            this.reinit({
+                author: { name: 'name' },
+                text: 'text'
+            });
+
+            this.instance.option('template', template);
+
+            const $bubbleContent = $(this.$element.children());
+
+            assert.strictEqual($bubbleContent.prop('tagName'), 'H1', 'content tag is correct');
+            assert.strictEqual($bubbleContent.text(), 'name: text', 'content text is correct');
+        });
     });
 });
 

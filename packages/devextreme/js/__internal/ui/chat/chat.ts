@@ -21,7 +21,12 @@ import MessageList from './messagelist';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-type Properties = ChatProperties & { title: string; showDayHeaders: boolean };
+type Properties = ChatProperties & {
+  title: string;
+  showDayHeaders: boolean;
+  // eslint-disable-next-line
+  messageTemplate: any;
+};
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
@@ -43,6 +48,7 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       onMessageSend: undefined,
+      messageTemplate: null,
       showDayHeaders: true,
     };
   }
@@ -103,7 +109,12 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const {
+      items = [],
+      user,
+      showDayHeaders,
+      messageTemplate,
+    } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>');
@@ -114,6 +125,7 @@ class Chat extends Widget<Properties> {
       items,
       currentUserId,
       showDayHeaders,
+      messageTemplate,
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
     });
@@ -223,6 +235,7 @@ class Chat extends Widget<Properties> {
         this._createMessageSendAction();
         break;
       case 'showDayHeaders':
+      case 'messageTemplate':
         this._messageList.option(name, value);
         break;
       default:
