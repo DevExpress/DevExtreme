@@ -693,11 +693,23 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($secondMessageGroupBubbles.length, 1, 'correct bubble count');
         });
 
-        QUnit.test('messageTimestampFormat should be passed to message group', function(assert) {
+        QUnit.test('messageTimestampFormat should be passed to message group on init', function(assert) {
             this.reinit({
                 items: [{ timestamp: '2024-09-26T14:00:00', text: 'text' }],
                 messageTimestampFormat: 'hh.mm',
             });
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTimestampFormat'), 'hh.mm');
+        });
+
+        QUnit.test('messageTimestampFormat should be passed to message group at runtime', function(assert) {
+            this.reinit({
+                items: [{ timestamp: '2024-09-26T14:00:00', text: 'text' }],
+            });
+
+            this.instance.option('messageTimestampFormat', 'hh.mm');
 
             const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
 
