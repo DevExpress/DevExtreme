@@ -619,11 +619,15 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   }
 
   activate(): void {
-    this.state.active = true;
+    this.setState({
+      active: true,
+    });
   }
 
   deactivate(): void {
-    this.state.active = false;
+    this.setState({
+      active: false,
+    });
   }
 
   render(): JSX.Element {
