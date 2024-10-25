@@ -3,7 +3,6 @@ import { ClientFunction } from 'testcafe';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Focus`
   .page(url(__dirname, '../../container.html'));
@@ -207,8 +206,8 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
   }).before(async () => {
     const initStore = ClientFunction(() => {
       (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
-        key: 'field_0',
-        data: getData(40, 1),
+        key: 'id',
+        data: new Array(40).fill(null).map((_, index) => ({ id: index + 1, text: `item ${index + 1}` })),
       });
     });
 
@@ -216,7 +215,7 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
 
     return await createWidget('dxDataGrid', {
       dataSource: {
-        key: 'field_0',
+        key: 'id',
         load(loadOptions) {
           return new Promise((resolve) => {
             setTimeout(() => {
