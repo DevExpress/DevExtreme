@@ -534,12 +534,14 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
     const props = {
       ...extend({}, accessKey && { accessKey }) as Record<string, string>,
       ...getAria({ ...aria, disabled, hidden: !visible }),
-      ...extend({}, this.props) as Record<string, string>,
+      ...extend({}, this.getRestAttributes(
+        this.props as Record<string, unknown>,
+      )) as Record<string, string>,
     };
-    return this.getAttributesCore(props);
+    return props;
   }
 
-  getAttributesCore(props: Record<string, string>): Record<string, string> {
+  getRestAttributes(props: Record<string, unknown>): Record<string, unknown> {
     const result = { ...props };
 
     [
