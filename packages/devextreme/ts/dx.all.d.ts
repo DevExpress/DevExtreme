@@ -19381,6 +19381,10 @@ declare module DevExpress.ui {
      */
     customizeModules?: (config: any) => void;
     /**
+     * [descr:dxHtmlEditorOptions.converter]
+     */
+    converter?: DevExpress.ui.dxHtmlEditor.Converter;
+    /**
      * [descr:dxHtmlEditorOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;
@@ -30939,6 +30943,19 @@ declare module DevExpress.ui.dxGantt {
 }
 declare module DevExpress.ui.dxHtmlEditor {
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+  /**
+   * [descr:Converter]
+   */
+  export type Converter = {
+    /**
+     * [descr:Converter.toHtml]
+     */
+    toHtml?: (value: string) => string;
+    /**
+     * [descr:Converter.fromHtml]
+     */
+    fromHtml?: (value: string) => string;
+  };
   export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }

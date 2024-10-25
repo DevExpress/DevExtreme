@@ -5,7 +5,7 @@ import dxDraggable, {
     Properties
 } from "devextreme/ui/draggable";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent } from "devextreme/ui/draggable";
@@ -79,15 +79,18 @@ type ICursorOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-const _componentCursorOffset = memo(
-  (props: ICursorOffsetProps) => {
-    return React.createElement(NestedOption<ICursorOffsetProps>, { ...props });
-  }
-);
+const _componentCursorOffset = (props: ICursorOffsetProps) => {
+  return React.createElement(NestedOption<ICursorOffsetProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "cursorOffset",
+    },
+  });
+};
 
-const CursorOffset: typeof _componentCursorOffset & IElementDescriptor = Object.assign(_componentCursorOffset, {
-  OptionName: "cursorOffset",
-})
+const CursorOffset = Object.assign<typeof _componentCursorOffset, NestedComponentMeta>(_componentCursorOffset, {
+  componentType: "option",
+});
 
 export default Draggable;
 export {

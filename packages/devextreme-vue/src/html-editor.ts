@@ -7,6 +7,7 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
   "allowSoftLineBreak" |
+  "converter" |
   "customizeModules" |
   "disabled" |
   "elementAttr" |
@@ -55,6 +56,7 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowSoftLineBreak: Boolean,
+    converter: Object,
     customizeModules: Function,
     disabled: Boolean,
     elementAttr: Object,
@@ -99,6 +101,7 @@ const componentConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:allowSoftLineBreak": null,
+    "update:converter": null,
     "update:customizeModules": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -147,6 +150,7 @@ const componentConfig = {
     (this as any).$_WidgetClass = HtmlEditor;
     (this as any).$_hasAsyncTemplate = true;
     (this as any).$_expectedChildren = {
+      converter: { isCollectionItem: false, optionName: "converter" },
       imageUpload: { isCollectionItem: false, optionName: "imageUpload" },
       mediaResizing: { isCollectionItem: false, optionName: "mediaResizing" },
       mention: { isCollectionItem: true, optionName: "mentions" },
@@ -162,6 +166,25 @@ prepareComponentConfig(componentConfig);
 
 const DxHtmlEditor = defineComponent(componentConfig);
 
+
+const DxConverterConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:fromHtml": null,
+    "update:toHtml": null,
+  },
+  props: {
+    fromHtml: Function,
+    toHtml: Function
+  }
+};
+
+prepareConfigurationComponentConfig(DxConverterConfig);
+
+const DxConverter = defineComponent(DxConverterConfig);
+
+(DxConverter as any).$_optionName = "converter";
 
 const DxFileUploaderOptionsConfig = {
   emits: {
@@ -645,6 +668,7 @@ const DxVariables = defineComponent(DxVariablesConfig);
 export default DxHtmlEditor;
 export {
   DxHtmlEditor,
+  DxConverter,
   DxFileUploaderOptions,
   DxImageUpload,
   DxItem,

@@ -1,7 +1,7 @@
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
-import Pagination from '@ts/pager/wrappers/pagination';
+import Pagination from '@ts/pagination/wrappers/pagination';
 
 import modules from '../m_modules';
 
@@ -98,6 +98,7 @@ export class PagerView extends modules.View {
       itemCount: dataController.totalCount(),
       hasKnownLastPage: dataController.hasKnownLastPage(),
       rtlEnabled: that.option('rtlEnabled'),
+      isGridCompatibilityMode: true,
       _skipValidation: true,
       pageIndexChanged(pageIndex) {
         if (dataController.pageIndex() !== pageIndex - 1) {
