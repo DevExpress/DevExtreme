@@ -15,6 +15,8 @@ safeSizeTest('Move left fixed column to the right', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).element, 400, 0);
 
@@ -44,6 +46,8 @@ safeSizeTest('Move right fixed column to the left', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(24).element, -400, 0);
 
@@ -72,6 +76,8 @@ safeSizeTest('Move fixed column with fixedPosition = \'sticky\' to the right', a
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(5).element, 200, 0);
@@ -108,6 +114,8 @@ safeSizeTest('Move left fixed band column to the right', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 500, 0);
 
@@ -142,6 +150,8 @@ safeSizeTest('Move right fixed band column to the left', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(3).element, -500, 0);
 
@@ -175,6 +185,8 @@ safeSizeTest('Move fixed band column with fixedPosition=\'sticky\' to the right'
   // arrange
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await t.drag(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).element, 400, 0);

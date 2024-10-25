@@ -7,6 +7,7 @@ import type { PaginationProps } from './common/pagination_props';
 import { PaginationDefaultProps } from './common/pagination_props';
 import { PaginationContent } from './content';
 import { ResizableContainer } from './resizable_container';
+import { isGridCompatibilityMode } from './utils/compatibility_utils';
 
 export class Pagination extends InfernoWrapperComponent<PaginationProps> {
   public __getterCache = {};
@@ -42,8 +43,7 @@ export class Pagination extends InfernoWrapperComponent<PaginationProps> {
 
   getClassName(): string | undefined {
     return combineClasses({
-      // TODO: check if the class needed
-      'dx-datagrid-pager': true,
+      'dx-datagrid-pager': isGridCompatibilityMode(this.context),
       [`${this.props.className}`]: !!this.props.className,
     });
   }

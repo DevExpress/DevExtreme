@@ -42,7 +42,7 @@ $(() => {
 
       const avatar = $('<div>')
         .addClass('avatar')
-        .html(`<img src=${cellData.data.avatar}>`)
+        .html(`<img src=${cellData.data.avatar} alt="${cellData.text} photo">`)
         .attr('title', cellData.text);
 
       const info = $('<div>')
