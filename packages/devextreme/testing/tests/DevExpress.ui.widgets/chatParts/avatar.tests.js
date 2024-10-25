@@ -133,7 +133,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             assert.strictEqual(this.getImage().attr('alt'), 'Avatar');
         });
 
-        QUnit.test('img should have correct alt attribute using alt option', function(assert) {
+        QUnit.test('img alt should be set to "alt" option value if it is passed', function(assert) {
             this.reinit({
                 name: 'User name',
                 url: 'url',
@@ -143,7 +143,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             assert.strictEqual(this.getImage().attr('alt'), 'Test Name');
         });
 
-        QUnit.test('img element should have correct alt attribute using name option', function(assert) {
+        QUnit.test('img alt should be set to "name" option if it is passed but "alt" is not passed', function(assert) {
             this.reinit({
                 name: 'User name',
                 url: 'url',
