@@ -104,11 +104,13 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
         });
     });
 
-    QUnit.module('Image rendering', () => {
+    QUnit.module('Image rendering', {
+        beforeEach: function() {
+            this.getImage = () => this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
+        }
+    }, () => {
         QUnit.test('img element should not be rendered if url is empty', function(assert) {
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.length, 0);
+            assert.strictEqual(this.getImage().length, 0);
         });
 
         QUnit.test('img element should not be rendered if url became empty in runtime', function(assert) {
@@ -119,9 +121,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
 
             this.instance.option({ url: '' });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.length, 0);
+            assert.strictEqual(this.getImage().length, 0);
         });
 
         QUnit.test('img should have default alt attribute if alt and name is not defined', function(assert) {
@@ -130,9 +130,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
                 url: 'url',
             });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.attr('alt'), 'Avatar');
+            assert.strictEqual(this.getImage().attr('alt'), 'Avatar');
         });
 
         QUnit.test('img should have correct alt attribute using alt option', function(assert) {
@@ -142,9 +140,16 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
                 alt: 'Test Name'
             });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
+            assert.strictEqual(this.getImage().attr('alt'), 'Test Name');
+        });
 
-            assert.strictEqual($img.attr('alt'), 'Test Name');
+        QUnit.test('img element should have correct alt attribute using name option', function(assert) {
+            this.reinit({
+                name: 'User name',
+                url: 'url',
+            });
+
+            assert.strictEqual(this.getImage().attr('alt'), 'User name');
         });
 
         QUnit.test('img element should have correct alt attribute if alt was changed in runtime', function(assert) {
@@ -156,32 +161,7 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
 
             this.instance.option({ alt: 'New name' });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.attr('alt'), 'New name');
-        });
-
-        QUnit.test('img element should have correct alt attribute if alt is empty', function(assert) {
-            this.reinit({
-                name: 'Test Name',
-                url: 'url',
-                alt: '',
-            });
-
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.attr('alt'), 'Test Name');
-        });
-
-        QUnit.test('img element should have correct alt attribute using name option', function(assert) {
-            this.reinit({
-                name: 'User name',
-                url: 'url',
-            });
-
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.attr('alt'), 'User name');
+            assert.strictEqual(this.getImage().attr('alt'), 'New name');
         });
 
         QUnit.test('img element should have correct alt attribute if name was changed in runtime', function(assert) {
@@ -191,9 +171,17 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
             });
             this.instance.option({ name: 'New name' });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
+            assert.strictEqual(this.getImage().attr('alt'), 'New name');
+        });
 
-            assert.strictEqual($img.attr('alt'), 'New name');
+        QUnit.test('img element should have correct alt attribute if alt is empty', function(assert) {
+            this.reinit({
+                name: 'Test Name',
+                url: 'url',
+                alt: '',
+            });
+
+            assert.strictEqual(this.getImage().attr('alt'), 'Test Name');
         });
 
         QUnit.test('img element should have correct alt attribute if name is empty', function(assert) {
@@ -202,26 +190,20 @@ QUnit.module('ChatAvatar', moduleConfig, () => {
                 url: 'url',
             });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.attr('alt'), 'Avatar');
+            assert.strictEqual(this.getImage().attr('alt'), 'Avatar');
         });
 
         QUnit.test('img element should have correct src attribute', function(assert) {
             this.reinit({ url: 'url' });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.attr('src'), 'url');
+            assert.strictEqual(this.getImage().attr('src'), 'url');
         });
 
         QUnit.test('img element should have correct src attribute if url was changed in runtime', function(assert) {
             this.reinit({ url: 'url' });
             this.instance.option({ url: 'New url' });
 
-            const $img = this.$element.find(`.${AVATAR_IMAGE_CLASS}`);
-
-            assert.strictEqual($img.attr('src'), 'New url');
+            assert.strictEqual(this.getImage().attr('src'), 'New url');
         });
     });
 });

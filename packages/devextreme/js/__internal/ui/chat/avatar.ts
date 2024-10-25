@@ -86,8 +86,10 @@ class Avatar extends Widget<Properties> {
   _updateAlt(): void {
     const { alt, name } = this.option();
 
+    const altText = alt || name || messageLocalization.format('dxAvatar-defaultImageAlt');
+
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._$content?.attr('alt', alt || name || messageLocalization.format('dxAvatar-defaultImageAlt'));
+    this._$content?.attr('alt', altText);
   }
 
   _isValuableUrl(): boolean {
