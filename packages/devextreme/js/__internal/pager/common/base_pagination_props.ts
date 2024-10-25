@@ -5,8 +5,8 @@ import messageLocalization from '../../../localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
 import { BaseWidgetDefaultProps, type BaseWidgetProps } from '../base_props';
 
-export interface BasePagerProps extends BaseWidgetProps {
-  gridCompatibility?: boolean;
+export interface BasePaginationProps extends BaseWidgetProps {
+  isGridCompatibilityMode?: boolean;
   className?: string;
   showInfo?: boolean;
   infoText?: string;
@@ -27,9 +27,9 @@ export interface BasePagerProps extends BaseWidgetProps {
   onKeyDown?: EventCallback<Event>;
 }
 
-export const BasePagerDefaultProps: BasePagerProps = {
+export const BasePaginationDefaultProps: BasePaginationProps = {
   ...BaseWidgetDefaultProps,
-  gridCompatibility: true,
+  isGridCompatibilityMode: false,
   showInfo: false,
   displayMode: 'adaptive',
   maxPagesCount: 10,
@@ -41,5 +41,5 @@ export const BasePagerDefaultProps: BasePagerProps = {
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   itemCount: 1,
-  label: messageLocalization.format('dxPager-ariaLabel'),
+  label: messageLocalization.format('dxPagination-ariaLabel'),
 };

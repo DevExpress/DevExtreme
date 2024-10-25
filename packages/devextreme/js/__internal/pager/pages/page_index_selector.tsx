@@ -4,11 +4,11 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { Fragment } from 'inferno';
 
-import messageLocalization from '../../../localization/message';
 import { ConfigContext } from '../../core/r1/config_context';
 import type { LightButtonProps } from '../common/light_button';
 import { LightButton } from '../common/light_button';
-import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
+import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
 
@@ -16,9 +16,6 @@ const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
 const PAGER_NEXT_BUTTON_CLASS = 'dx-next-button';
 export const PAGER_BUTTON_DISABLE_CLASS = 'dx-button-disable';
-
-const getNextButtonLabel = (): string => messageLocalization.getFormatter('dxPager-nextPage')();
-const getPrevButtonLabel = (): string => messageLocalization.getFormatter('dxPager-prevPage')();
 
 const classNames = {
   nextEnabledClass: `${PAGER_NAVIGATE_BUTTON} ${PAGER_NEXT_BUTTON_CLASS}`,
@@ -39,7 +36,7 @@ export interface PageIndexSelectorProps {
   isLargeDisplayMode: boolean;
 }
 
-type PageIndexSelectorPropsType = Pick<PagerProps, 'hasKnownLastPage'
+type PageIndexSelectorPropsType = Pick<PaginationProps, 'hasKnownLastPage'
 | 'maxPagesCount'
 | 'pageCount'
 | 'pageIndex'
@@ -52,12 +49,12 @@ type PageIndexSelectorPropsType = Pick<PagerProps, 'hasKnownLastPage'
 
 const PageIndexSelectorDefaultProps: PageIndexSelectorPropsType = {
   isLargeDisplayMode: true,
-  maxPagesCount: PagerDefaultProps.maxPagesCount,
-  pageCount: PagerDefaultProps.pageCount,
-  pageIndex: PagerDefaultProps.pageIndex,
-  pageIndexChangedInternal: PagerDefaultProps.pageIndexChangedInternal,
-  showNavigationButtons: PagerDefaultProps.showNavigationButtons,
-  itemCount: PagerDefaultProps.itemCount,
+  maxPagesCount: PaginationDefaultProps.maxPagesCount,
+  pageCount: PaginationDefaultProps.pageCount,
+  pageIndex: PaginationDefaultProps.pageIndex,
+  pageIndexChangedInternal: PaginationDefaultProps.pageIndexChangedInternal,
+  showNavigationButtons: PaginationDefaultProps.showNavigationButtons,
+  itemCount: PaginationDefaultProps.itemCount,
 };
 
 interface NavigationButtonProps extends Pick<LightButtonProps, 'className' | 'tabIndex' > {navigate: LightButtonProps['onClick']}
@@ -174,6 +171,14 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
     }
   }
 
+  getPrevButtonLabel(): string {
+    return getLocalizationMessage(this.context, 'dxPagination-prevPage');
+  }
+
+  getNextButtonLabel(): string {
+    return getLocalizationMessage(this.context, 'dxPagination-nextPage');
+  }
+
   render(): JSX.Element {
     const {
       className,
@@ -193,7 +198,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
       <Fragment>
         {this.getRenderPrevButton() && (
           <LightButton
-            label={getPrevButtonLabel()}
+            label={this.getPrevButtonLabel()}
             className={className}
             tabIndex={tabIndex}
             onClick={navigate}
@@ -217,7 +222,7 @@ export class PageIndexSelector extends BaseInfernoComponent<PageIndexSelectorPro
         )}
         {this.getRenderNextButton() && (
           <LightButton
-            label={getNextButtonLabel()}
+            label={this.getNextButtonLabel()}
             className={this.getNextButtonProps().className}
             tabIndex={this.getNextButtonProps().tabIndex}
             onClick={this.getNextButtonProps().navigate}

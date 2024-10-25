@@ -27,7 +27,7 @@ if (window && window.config.packageConfigPaths) {
 export class AppComponent {
   cities: City[];
 
-  weatherData: City;
+  weatherData: City['data'];
 
   constructor(service: Service) {
     this.cities = service.getCities();

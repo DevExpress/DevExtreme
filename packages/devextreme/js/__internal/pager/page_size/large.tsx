@@ -5,24 +5,24 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { Fragment } from 'inferno';
 
 import { format } from '../../../core/utils/string';
-import messageLocalization from '../../../localization/message';
 import { combineClasses } from '../../core/r1/utils/render_utils';
 import { FIRST_CHILD_CLASS, PAGER_PAGE_SIZE_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
-import { PagerDefaultProps, type PagerProps } from '../common/pager_props';
+import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 
 export interface PageSizeLargeProps {
   allowedPageSizes: FullPageSize[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeLargePropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal'> & PageSizeLargeProps;
+type PageSizeLargePropsType = Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal'> & PageSizeLargeProps;
 
 export const PageSizeLargeDefaultProps: PageSizeLargePropsType = {
   allowedPageSizes: [],
-  pageSize: PagerDefaultProps.pageSize,
-  pageSizeChangedInternal: PagerDefaultProps.pageSizeChangedInternal,
+  pageSize: PaginationDefaultProps.pageSize,
+  pageSizeChangedInternal: PaginationDefaultProps.pageSizeChangedInternal,
 };
 
 export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> {
@@ -72,7 +72,10 @@ export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> 
         return {
           className,
           click: this.onPageSizeChange(processedPageSize),
-          label: format(messageLocalization.getFormatter('dxPager-pageSize'), processedPageSize || messageLocalization.getFormatter('dxPager-pageSizesAllText')),
+          label: format(
+            getLocalizationMessage(this.context, 'dxPagination-pageSize'),
+            processedPageSize || getLocalizationMessage(this.context, 'dxPagination-pageSizesAllText'),
+          ),
           text,
         };
       });

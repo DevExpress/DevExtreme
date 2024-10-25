@@ -6,17 +6,13 @@ import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
 import { createRef as infernoCreateRef } from 'inferno';
 
-import messageLocalization from '../../../localization/message';
 import { PAGER_PAGE_SIZES_CLASS } from '../common/consts';
-import type { PagerProps } from '../common/pager_props';
-import { PagerDefaultProps } from '../common/pager_props';
+import type { PaginationProps } from '../common/pagination_props';
+import { PaginationDefaultProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
+import { getLocalizationMessage } from '../utils/compatibility_utils';
 import { PageSizeLarge } from './large';
 import { PageSizeSmall } from './small';
-
-function getAllText(): string {
-  return messageLocalization.getFormatter('dxPager-pageSizesAllText')();
-}
 
 export interface PageSizeSelectorProps {
   isLargeDisplayMode: boolean;
@@ -24,13 +20,13 @@ export interface PageSizeSelectorProps {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
 
 const PageSizeSelectorDefaultProps: PageSizeSelectorPropsType = {
   isLargeDisplayMode: true,
-  pageSize: PagerDefaultProps.pageSize,
-  pageSizeChangedInternal: PagerDefaultProps.pageSizeChangedInternal,
-  allowedPageSizes: PagerDefaultProps.allowedPageSizes,
+  pageSize: PaginationDefaultProps.pageSize,
+  pageSizeChangedInternal: PaginationDefaultProps.pageSizeChangedInternal,
+  allowedPageSizes: PaginationDefaultProps.allowedPageSizes,
 };
 
 export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType> {
@@ -64,12 +60,16 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
     }
   }
 
+  getAllText(): string {
+    return getLocalizationMessage(this.context, 'dxPagination-pageSizesAllText');
+  }
+
   getNormalizedPageSizes(): FullPageSize[] {
     if (this.__getterCache.normalizedPageSizes !== undefined) {
       return this.__getterCache.normalizedPageSizes;
     }
     const mapFunction = (p): FullPageSize => (p === 'all' || p === 0 ? {
-      text: getAllText(),
+      text: this.getAllText(),
       value: 0,
     } : {
       text: String(p),

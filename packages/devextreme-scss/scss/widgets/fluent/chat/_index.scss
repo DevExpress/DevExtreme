@@ -8,20 +8,29 @@
 @include chat(
   $chat-background-color,
   $chat-border-color,
-  $chat-border-radius
+  $chat-border-radius,
 );
 @include chat-avatar(
   $chat-avatar-size,
   $chat-avatar-color,
-  $chat-avatar-background-color
+  $chat-avatar-background-color,
 );
 @include chat-header($chat-header-padding);
+@include chat-errorlist(
+  $chat-errorlist-color,
+  $chat-errors-padding-block,
+  $chat-errors-padding-inline,
+  $chat-error-padding-block,
+  $chat-errors-row-gap,
+  $chat-error-icon-size,
+  $chat-error-content-column-gap,
+);
 @include chat-messagebox(
   $chat-messagebox-padding,
   $chat-messagebox-border-color,
   $chat-messagebox-gap,
   $chat-messagebox-textarea-border-radius,
-  $chat-messagebox-buton-gap
+  $chat-messagebox-buton-gap,
 );
 @include chat-messagebubble(
   $chat-bubble-padding,

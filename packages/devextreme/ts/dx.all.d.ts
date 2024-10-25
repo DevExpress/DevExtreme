@@ -9558,6 +9558,10 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
+     * [descr:dxChatOptions.errors]
+     */
+    errors?: Array<DevExpress.ui.dxChat.ChatError>;
+    /**
      * [descr:dxChatOptions.onMessageSend]
      */
     onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
@@ -30654,6 +30658,19 @@ declare module DevExpress.ui.dxButtonGroup {
   export type Item = dxButtonGroupItem;
 }
 declare module DevExpress.ui.dxChat {
+  /**
+   * [descr:ChatError]
+   */
+  export type ChatError = {
+    /**
+     * [descr:ChatError.id]
+     */
+    id?: number | string;
+    /**
+     * [descr:ChatError.message]
+     */
+    message?: string;
+  };
   /**
    * [descr:Message]
    */
