@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-optional-chain */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
@@ -329,7 +330,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
         {...this.restAttributes}
       >
         <div className="dx-button-content" ref={this.contentRef}>
-          {ButtonTemplate && (<ButtonTemplate data={this.buttonTemplateData} />)}
+          {ButtonTemplate && ButtonTemplate({ data: this.buttonTemplateData }) }
           {!ButtonTemplate && children}
           {isIconLeft && iconComponent}
           {renderText && (<span className="dx-button-text">{text}</span>)}
