@@ -22,6 +22,7 @@ export default ContextMenu;
 
 /**
  * @name dxContextMenuOptions.onSelectionChanging
+ * @action
  * @hidden
  */
 

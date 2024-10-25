@@ -15,6 +15,7 @@
     "devextreme-screenshot-comparer": "2.0.17",
     "devextreme-testcafe-models": "workspace:*",
     "minimist": "1.2.8",
+    "mockdate": "3.0.5",
     "nconf": "0.12.1",
     "testcafe": "2.5.0"
   }

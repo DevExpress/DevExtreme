@@ -9558,6 +9558,10 @@ declare module DevExpress.ui {
      */
     dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
+     * [descr:dxChatOptions.errors]
+     */
+    errors?: Array<DevExpress.ui.dxChat.ChatError>;
+    /**
      * [descr:dxChatOptions.onMessageSend]
      */
     onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
@@ -19376,6 +19380,10 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.customizeModules]
      */
     customizeModules?: (config: any) => void;
+    /**
+     * [descr:dxHtmlEditorOptions.converter]
+     */
+    converter?: DevExpress.ui.dxHtmlEditor.Converter;
     /**
      * [descr:dxHtmlEditorOptions.focusStateEnabled]
      */
@@ -30655,6 +30663,19 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxChat {
   /**
+   * [descr:ChatError]
+   */
+  export type ChatError = {
+    /**
+     * [descr:ChatError.id]
+     */
+    id?: number | string;
+    /**
+     * [descr:ChatError.message]
+     */
+    message?: string;
+  };
+  /**
    * [descr:Message]
    */
   export type Message = {
@@ -30922,6 +30943,19 @@ declare module DevExpress.ui.dxGantt {
 }
 declare module DevExpress.ui.dxHtmlEditor {
   export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+  /**
+   * [descr:Converter]
+   */
+  export type Converter = {
+    /**
+     * [descr:Converter.toHtml]
+     */
+    toHtml?: (value: string) => string;
+    /**
+     * [descr:Converter.fromHtml]
+     */
+    fromHtml?: (value: string) => string;
+  };
   export type ImageUploadTab = dxHtmlEditorImageUploadTabItem;
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }

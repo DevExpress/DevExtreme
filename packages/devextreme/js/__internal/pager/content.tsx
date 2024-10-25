@@ -10,18 +10,23 @@ import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
 import { combineClasses } from '../core/r1/utils/render_utils';
 import {
-  LIGHT_MODE_CLASS, PAGER_CLASS, PAGER_PAGE_INDEXES_CLASS, PAGER_PAGES_CLASS,
+  LIGHT_MODE_CLASS,
+  PAGER_CLASS,
+  PAGINATION_CLASS,
+  PAGINATION_PAGE_INDEXES_CLASS,
+  PAGINATION_PAGES_CLASS,
 } from './common/consts';
 import type { KeyboardActionContextType } from './common/keyboard_action_context';
 import { KeyboardActionContext } from './common/keyboard_action_context';
-import type { PagerProps } from './common/pager_props';
-import { PagerDefaultProps } from './common/pager_props';
+import { PaginationConfigProvider } from './common/pagination_config_provider';
+import type { PaginationProps } from './common/pagination_props';
+import { PaginationDefaultProps } from './common/pagination_props';
 import { Widget } from './common/widget';
 import { InfoText } from './info';
 import { PageSizeSelector } from './page_size/selector';
 import { PageIndexSelector } from './pages/page_index_selector';
 
-export interface PagerContentProps extends PagerProps {
+export interface PaginationContentProps extends PaginationProps {
   infoTextVisible: boolean;
   isLargeDisplayMode: boolean;
   rootElementRef?: RefObject<HTMLDivElement>;
@@ -30,13 +35,13 @@ export interface PagerContentProps extends PagerProps {
   infoTextRef?: RefObject<HTMLDivElement>;
 }
 
-export const PagerContentDefaultProps: PagerContentProps = {
-  ...PagerDefaultProps,
+export const PaginationContentDefaultProps: PaginationContentProps = {
+  ...PaginationDefaultProps,
   infoTextVisible: true,
   isLargeDisplayMode: true,
 };
 
-export class PagerContent extends InfernoComponent<PagerContentProps> {
+export class PaginationContent extends InfernoComponent<PaginationContentProps> {
   public state: any = {};
 
   public refs: any = null;
@@ -100,8 +105,8 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     return {
       registerKeyboardAction:
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
-          const fakePagerInstance = this.createFakeInstance();
-          return registerKeyboardAction('pager', fakePagerInstance, element, undefined, action);
+          const fakePaginationInstance = this.createFakeInstance();
+          return registerKeyboardAction('pager', fakePaginationInstance, element, undefined, action);
         },
     };
   }
@@ -154,7 +159,8 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
   getClasses(): string {
     const classesMap = {
       [`${this.props.className}`]: !!this.props.className,
-      [PAGER_CLASS]: true,
+      [PAGER_CLASS]: !!this.props.isGridCompatibilityMode,
+      [PAGINATION_CLASS]: !this.props.isGridCompatibilityMode,
       [LIGHT_MODE_CLASS]: !this.getIsLargeDisplayMode(),
     };
     return combineClasses(classesMap);
@@ -167,7 +173,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
     };
   }
 
-  componentWillUpdate(nextProps: PagerContentProps): void {
+  componentWillUpdate(nextProps: PaginationContentProps): void {
     super.componentWillUpdate();
     if (this.props.onKeyDown !== nextProps.onKeyDown) {
       this.__getterCache.keyboardAction = undefined;
@@ -176,6 +182,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
 
   render(): JSX.Element {
     const {
+      isGridCompatibilityMode,
       rtlEnabled,
       visible,
       showPageSizeSelector,
@@ -209,7 +216,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
       hoverStateEnabled,
     } = this.props;
 
-    return (
+    const content = (
       <Widget
         rootElementRef={this.widgetRootElementRef}
         rtlEnabled={rtlEnabled}
@@ -241,7 +248,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
         )}
         {this.getPagesContainerVisible() && (
           <div
-            className={PAGER_PAGES_CLASS}
+            className={PAGINATION_PAGES_CLASS}
             style={{ visibility: this.getPagesContainerVisibility() }}
           >
             {this.getInfoVisible() && (
@@ -255,7 +262,7 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
             )}
             {this.getPageIndexSelectorVisible() && (
               <div
-                className={PAGER_PAGE_INDEXES_CLASS}
+                className={PAGINATION_PAGE_INDEXES_CLASS}
                 ref={pagesRef as any}
               >
                 <PageIndexSelector
@@ -275,6 +282,12 @@ export class PagerContent extends InfernoComponent<PagerContentProps> {
         )}
       </Widget>
     );
+
+    return (
+      <PaginationConfigProvider isGridCompatibilityMode={isGridCompatibilityMode}>
+        {content}
+      </PaginationConfigProvider>
+    );
   }
 }
-PagerContent.defaultProps = PagerContentDefaultProps;
+PaginationContent.defaultProps = PaginationContentDefaultProps;
