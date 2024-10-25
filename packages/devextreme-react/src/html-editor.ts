@@ -93,15 +93,18 @@ type IConverterProps = React.PropsWithChildren<{
   fromHtml?: ((value: string) => string);
   toHtml?: ((value: string) => string);
 }>
-const _componentConverter = memo(
-  (props: IConverterProps) => {
-    return React.createElement(NestedOption<IConverterProps>, { ...props });
-  }
-);
+const _componentConverter = (props: IConverterProps) => {
+  return React.createElement(NestedOption<IConverterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "converter",
+    },
+  });
+};
 
-const Converter: typeof _componentConverter & IElementDescriptor = Object.assign(_componentConverter, {
-  OptionName: "converter",
-})
+const Converter = Object.assign<typeof _componentConverter, NestedComponentMeta>(_componentConverter, {
+  componentType: "option",
+});
 
 // owners:
 // ImageUpload
