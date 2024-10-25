@@ -17,5 +17,4 @@ export const PaginationDefaultProps: PaginationProps = {
   pageIndex: 1,
   pageIndexChangedInternal: () => { },
   pageSizeChangedInternal: () => { },
-  focusStateEnabled: true,
 };
