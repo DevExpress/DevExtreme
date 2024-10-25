@@ -1,0 +1,67 @@
+@mixin chat-typingindicator(
+  $template,
+  $padding,
+  $row-gap,
+  $column-gap,
+  $font-size,
+  $color,
+  $bubble-height,
+  $bubble-width,
+  $bubble-border-radius,
+  $bubble-bg-color,
+  $bubble-column-gap,
+  $circle-size,
+  $circle-size-center,
+  $circle-border-radius,
+  $circle-bg-color,
+  $circle-bg-color-center,
+) {
+  .dx-chat-typingindicator-content {
+    grid-template-columns: $template;
+    padding-bottom: $padding;
+    row-gap: $row-gap;
+    column-gap: $column-gap;
+  }
+
+  .dx-chat-typingindicator-text {
+    font-size: $font-size;
+    color: $color;
+  }
+  
+  .dx-chat-typingindicator-bubble {
+    height: $bubble-height;
+    width: $bubble-width;
+    border-radius: $bubble-border-radius;
+    background-color: $bubble-bg-color;
+    column-gap: $bubble-column-gap;
+  }
+
+  .dx-chat-typingindicator-circle {
+    width: $circle-size;
+    height: $circle-size;
+    border-radius: $circle-border-radius;
+
+    &:nth-child(1),
+    &:nth-child(3) {
+      background-color: $circle-bg-color;
+    }
+
+    &:nth-child(2) {
+      width: $circle-size-center;
+      height: $circle-size-center;
+      background-color: $circle-bg-color-center;
+    }
+  }
+}
+
+@mixin chat-typingindicator-scale($name, $scale) {
+  @keyframes #{$name} {
+    0%, 100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale($scale);
+    }
+  }
+}

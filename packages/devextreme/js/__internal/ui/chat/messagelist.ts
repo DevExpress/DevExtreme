@@ -9,7 +9,7 @@ import { isElementInDom } from '@js/core/utils/dom';
 import { isDate, isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import { getScrollTopMax } from '@js/renovation/ui/scroll_view/utils/get_scroll_top_max';
-import type { Message } from '@js/ui/chat';
+import type { Message, User } from '@js/ui/chat';
 import ScrollView from '@js/ui/scroll_view';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -18,8 +18,10 @@ import Widget from '@ts/core/widget/widget';
 import { isElementVisible } from '../splitter/utils/layout';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup from './messagegroup';
+import TypingIndicator from './typingindicator';
 
 const CHAT_MESSAGELIST_CLASS = 'dx-chat-messagelist';
+const CHAT_MESSAGELIST_CONTENT_CLASS = 'dx-chat-messagelist-content';
 const CHAT_MESSAGELIST_EMPTY_CLASS = 'dx-chat-messagelist-empty';
 
 const CHAT_MESSAGELIST_EMPTY_VIEW_CLASS = 'dx-chat-messagelist-empty-view';
@@ -35,6 +37,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
+  typingUsers: User[];
   isLoading?: boolean;
 }
 
@@ -47,12 +50,17 @@ class MessageList extends Widget<Properties> {
 
   private _scrollView!: ScrollView;
 
+  private _typingIndicator!: TypingIndicator;
+
+  private _$content!: dxElementWrapper;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       items: [],
       currentUserId: '',
       showDayHeaders: true,
+      typingUsers: [],
       isLoading: false,
     };
   }
@@ -71,6 +79,9 @@ class MessageList extends Widget<Properties> {
 
     this._renderScrollView();
     this._renderMessageListContent();
+    this._renderEmptyView();
+    this._renderMessageGroups();
+    this._renderTypingIndicator();
     this._updateAria();
   }
 
@@ -96,7 +107,7 @@ class MessageList extends Widget<Properties> {
     const newHeight = contentRect.height;
 
     if (isInitialRendering) {
-      this._scrollContentToLastMessage();
+      this._scrollDownContent();
     } else {
       const heightChange = this._containerClientHeight - newHeight;
       const isHeightDecreasing = heightChange > 0;
@@ -136,12 +147,24 @@ class MessageList extends Widget<Properties> {
       .addClass(CHAT_MESSAGELIST_EMPTY_PROMPT_CLASS)
       .text(promptText);
 
-    $emptyView.appendTo(this._$content());
+    $emptyView.appendTo(this._$content);
+  }
+
+  _renderTypingIndicator(): void {
+    const { typingUsers } = this.option();
+
+    const $typingIndicator = $('<div>').appendTo(this._$scrollViewContent());
+
+    this._typingIndicator = this._createComponent($typingIndicator, TypingIndicator, {
+      typingUsers,
+    });
+
+    this._scrollDownContent();
   }
 
   _removeEmptyView(): void {
     this.$element().removeClass(CHAT_MESSAGELIST_EMPTY_CLASS);
-    this._$content().empty();
+    this._$content.empty();
   }
 
   _isEmpty(): boolean {
@@ -161,7 +184,7 @@ class MessageList extends Widget<Properties> {
   }
 
   _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
-    const $messageGroup = $('<div>').appendTo(this._$content());
+    const $messageGroup = $('<div>').appendTo(this._$content);
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
@@ -178,9 +201,9 @@ class MessageList extends Widget<Properties> {
     this._scrollView = this._createComponent($scrollable, ScrollView, {
       useKeyboard: false,
       bounceEnabled: false,
-      onReachBottom: noop,
       reachBottomText: '',
       indicateLoading: false,
+      onReachBottom: noop,
     });
   }
 
@@ -223,7 +246,7 @@ class MessageList extends Widget<Properties> {
     $('<div>')
       .addClass(CHAT_MESSAGELIST_DAY_HEADER_CLASS)
       .text(headerDate)
-      .appendTo(this._$content());
+      .appendTo(this._$content);
   }
 
   _updateLoadingState(isLoading: boolean): void {
@@ -236,6 +259,12 @@ class MessageList extends Widget<Properties> {
   }
 
   _renderMessageListContent(): void {
+    this._$content = $('<div>')
+      .addClass(CHAT_MESSAGELIST_CONTENT_CLASS)
+      .appendTo(this._$scrollViewContent());
+  }
+
+  _renderEmptyView(): void {
     const { isLoading } = this.option();
 
     this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_CLASS, this._isEmpty() && !isLoading);
@@ -243,11 +272,15 @@ class MessageList extends Widget<Properties> {
     if (this._isEmpty() && !isLoading) {
       this._renderEmptyViewContent();
       this._updateLoadingState(false);
+    }
+  }
 
+  _renderMessageGroups(): void {
+    const { isLoading, items } = this.option();
+
+    if (this._isEmpty() && !isLoading) {
       return;
     }
-
-    const { items } = this.option();
 
     let currentMessageGroupUserId = items[0]?.author?.id;
     let currentMessageGroupItems: Message[] = [];
@@ -256,6 +289,7 @@ class MessageList extends Widget<Properties> {
       const newMessageGroupItem = item ?? {};
       const id = newMessageGroupItem.author?.id;
       const shouldCreateDayHeader = this._shouldAddDayHeader(newMessageGroupItem.timestamp);
+
       const isTimeoutExceeded = this._isTimeoutExceeded(
         currentMessageGroupItems[currentMessageGroupItems.length - 1] ?? {},
         item,
@@ -286,7 +320,7 @@ class MessageList extends Widget<Properties> {
 
     // @ts-expect-error
     this._updateLoadingState(isLoading);
-    this._scrollContentToLastMessage();
+    this._scrollDownContent();
   }
 
   _renderMessage(message: Message): void {
@@ -303,7 +337,7 @@ class MessageList extends Widget<Properties> {
 
       if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded && !shouldCreateDayHeader) {
         lastMessageGroup.renderMessage(message);
-        this._scrollContentToLastMessage();
+        this._scrollDownContent();
 
         return;
       }
@@ -315,14 +349,10 @@ class MessageList extends Widget<Properties> {
 
     this._createMessageGroupComponent([message], author?.id);
 
-    this._scrollContentToLastMessage();
+    this._scrollDownContent();
   }
 
-  _$content(): dxElementWrapper {
-    return $(this._scrollView.content());
-  }
-
-  _scrollContentToLastMessage(): void {
+  _scrollDownContent(): void {
     this._scrollView.scrollTo({
       top: getScrollTopMax(this._scrollableContainer()),
     });
@@ -397,6 +427,10 @@ class MessageList extends Widget<Properties> {
     this.setAria(aria);
   }
 
+  _$scrollViewContent(): dxElementWrapper {
+    return $(this._scrollView.content());
+  }
+
   _clean(): void {
     this._messageGroups = [];
     this._lastMessageDate = null;
@@ -417,6 +451,10 @@ class MessageList extends Widget<Properties> {
       case 'showDayHeaders':
         this._invalidate();
         break;
+      case 'typingUsers':
+        this._typingIndicator.option(name, value);
+        this._scrollDownContent();
+        break;
       case 'isLoading':
         break;
       default:
@@ -426,7 +464,7 @@ class MessageList extends Widget<Properties> {
 
   getEmptyViewId(): string | null {
     if (this._isEmpty()) {
-      const $emptyView = this._$content().find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
+      const $emptyView = this._$content.find(`.${CHAT_MESSAGELIST_EMPTY_VIEW_CLASS}`);
       const emptyViewId = $emptyView.attr('id') ?? null;
 
       return emptyViewId;

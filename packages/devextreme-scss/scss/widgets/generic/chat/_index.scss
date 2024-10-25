@@ -70,3 +70,21 @@
   $chat-messagelist-day-header-padding-bottom,
   $chat-messagelist-day-header-first-padding-top,
 );
+@include chat-typingindicator(
+  $chat-typingindicator-template,
+  $chat-typingindicator-padding,
+  $chat-typingindicator-row-gap,
+  $chat-typingindicator-column-gap,
+  $chat-typingindicator-font-size,
+  $chat-typingindicator-color,
+  $chat-typingindicator-bubble-height,
+  $chat-typingindicator-bubble-width,
+  $chat-typingindicator-bubble-border-radius,
+  $chat-typingindicator-bubble-bg-color,
+  $chat-typingindicator-bubble-column-gap,
+  $chat-typingindicator-circle-size,
+  $chat-typingindicator-circle-size-center,
+  $chat-typingindicator-circle-border-radius,
+  $chat-typingindicator-circle-bg-color,
+  $chat-typingindicator-circle-bg-color-center,
+);

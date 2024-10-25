@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -49,13 +50,143 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+
+        <div style="display: flex; gap: 20px;">
+            <div id="chat1"></div>
+            <div id="chat2"></div>
+        </div>
+
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            const user1 = {
+                id: 1,
+                name: 'Karl',
+                // name: 'KarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarlKarl',
+            }
+
+            const user2 = {
+                id: 2,
+                name: 'James',
+            }
+
+            const user3 = {
+                id: 3,
+                name: 'Mark',
+            }
+
+            const user4 = {
+                id: 3,
+                name: 'Sam',
+            }
+
+            const items = [
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user1,
+                    text: 'message 1',
+                },
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user2,
+                    text: 'message 2',
+                },
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user2,
+                    text: 'message 2',
+                },
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user2,
+                    text: 'message 2',
+                },
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user2,
+                    text: 'message 2',
+                },
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user2,
+                    text: 'message 2',
+                },
+                {
+                    timestamp: new Date(2021, 9, 17, 14, 15),
+                    author: user2,
+                    text: 'message 2',
+                },
+            ];
+
+            $(function () {
+                let users1 = [];
+                let users2 = [];
+
+                const updateTypingUsersOption = (instance, value) => {
+                    instance.option({ typingUsers: value })
+                };
+
+                const updateState = (index, newValue) => {
+                    index ? users2 = [...newValue] : users1 = [...newValue]
+                }
+
+                const addUser = (e, users, instance) => {
+                    users.push(e.user)
+
+                    updateTypingUsersOption(instance, users)
+                }
+
+                const removeUser = (e, users, instance, index) => {
+                    const newValue = users.filter(user => user.id !== e.user.id)
+
+                    updateTypingUsersOption(instance, newValue)
+                    updateState(index, newValue)
+                }
+
+                const sendToSockets = (e, eventName, users, instance, index) => {
+                    if (eventName === 'start') {
+                        addUser(e, users, instance)
+
+                        return;
+                    }
+
+                    removeUser(e, users, instance, index)
+                };
+
+                const instance1 = $("#chat1").dxChat({
+                    items,
+                    user: user1,
+                    height: 500,
+                    onMessageSend: (e) => {
+                        e.component.renderMessage(e.message)
+                        instance2.renderMessage(e.message)
+                    },
+                    onTypingStart: (e) => {
+                        sendToSockets(e, 'start', users1, instance2, 0)
+                    },
+                    onTypingEnd: (e) => {
+                        sendToSockets(e, 'end', users1, instance2, 0)
+                    },
+                }).dxChat('instance')
+
+                const instance2 = $("#chat2").dxChat({
+                    items,
+                    user: user2,
+                    height: 500,
+                    // typingUsers: [{}],
+                    // typingUsers: [user1],
+                    // typingUsers: [user1, user2],
+                    // typingUsers: [user1, user2, user3],
+                    // typingUsers: [user1, user2, user3, user4],
+                    onMessageSend: (e) => {
+                        e.component.renderMessage(e.message)
+                        instance1.renderMessage(e.message)
+                    },
+                    onTypingStart: (e) => {
+                        sendToSockets(e, 'start', users2, instance1, 1)
+                    },
+                    onTypingEnd: (e) => {
+                        sendToSockets(e, 'end', users2, instance1, 1)
+                    },
+                }).dxChat('instance')
             });
         </script>
     </div>

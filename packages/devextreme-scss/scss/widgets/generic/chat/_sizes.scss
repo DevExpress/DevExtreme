@@ -38,6 +38,19 @@ $chat-messagelist-empty-prompt-font-size: null !default;
 $chat-messagelist-day-header-padding-bottom: 12px !default;
 $chat-messagelist-day-header-first-padding-top: 20px !default;
 
+$chat-typingindicator-template: $chat-messagegroup-alignment-start-template !default;
+$chat-typingindicator-padding: null !default;
+$chat-typingindicator-row-gap: $chat-messagegroup-gap !default;
+$chat-typingindicator-column-gap: $chat-messagegroup-alignment-start-gap !default;
+$chat-typingindicator-font-size: $chat-information-font-size !default;
+$chat-typingindicator-bubble-height: null !default;
+$chat-typingindicator-bubble-width: null !default;
+$chat-typingindicator-bubble-border-radius: null !default;
+$chat-typingindicator-bubble-column-gap: 4px !default;
+$chat-typingindicator-circle-size: 0.571429em !default;
+$chat-typingindicator-circle-size-center: 0.857143em !default;
+$chat-typingindicator-circle-border-radius: 999em !default;
+
 @if $size == "default" {
   $chat-bubble-padding: 8px 12px !default;
   $chat-messagebox-padding: 20px !default;
@@ -51,12 +64,17 @@ $chat-messagelist-day-header-first-padding-top: 20px !default;
   $chat-errors-row-gap: 4px !default;
   $chat-error-padding-block: 9px !default;
 
-  $chat-messagelist-empty-icon-box-size: 64px !default;;
+  $chat-messagelist-empty-icon-box-size: 64px !default;
   $chat-messagelist-empty-icon-size: 40px !default;
   $chat-messagelist-empty-icon-margin-bottom: 12px !default;
   $chat-messagelist-empty-row-gap: 4px !default;
   $chat-messagelist-empty-message-font-size: 18px !default;
   $chat-messagelist-empty-prompt-font-size: 14px !default;
+
+  $chat-typingindicator-bubble-height: 2.571429em !default;
+  $chat-typingindicator-bubble-width: 5.428571em !default;
+  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+  $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
 }
 
 @else if $size == "compact" {
@@ -78,4 +96,9 @@ $chat-messagelist-day-header-first-padding-top: 20px !default;
   $chat-messagelist-empty-row-gap: 2px !default;
   $chat-messagelist-empty-message-font-size: 14px !default;
   $chat-messagelist-empty-prompt-font-size: 12px !default;
+
+  $chat-typingindicator-bubble-height: 2.333333em !default;
+  $chat-typingindicator-bubble-width: 5em !default;
+  $chat-typingindicator-padding: $chat-messagegroup-padding !default;
+  $chat-typingindicator-bubble-border-radius: $chat-bubble-border-radius !default;
 }

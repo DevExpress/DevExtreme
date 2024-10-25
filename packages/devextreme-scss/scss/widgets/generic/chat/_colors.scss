@@ -7,6 +7,7 @@
 $chat-background-color: $base-bg !default;
 $chat-border-color: $base-border-color !default;
 $chat-avatar-color: null !default;
+$chat-avatar-background-color: $base-border-color !default;
 $chat-messagebox-border-color: $base-border-color !default;
 $chat-bubble-color-primary: null !default;
 $chat-bubble-background-color-primary: null !default;
@@ -19,8 +20,12 @@ $chat-messagelist-empty-icon-background-color: null !default;
 $chat-messagelist-empty-message-color: null !default;
 $chat-messagelist-empty-prompt-color: null !default;
 
-$chat-avatar-background-color: $base-border-color !default;
 $chat-errorlist-color: $base-invalid-color !default;
+
+$chat-typingindicator-color: null !default;
+$chat-typingindicator-bubble-bg-color: null !default;
+$chat-typingindicator-circle-bg-color: null !default;
+$chat-typingindicator-circle-bg-color-center: null !default;
 
 @if $color == "light" {
   $chat-avatar-color: $base-text-color !default;
@@ -34,6 +39,11 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: darken($base-bg, 7.84) !default;
   $chat-messagelist-empty-message-color: darken($base-text-color, 6.67) !default;
   $chat-messagelist-empty-prompt-color: lighten($base-label-color, 38.43) !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
+  $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
 }
 
 @if $color == "dark" {
@@ -48,6 +58,11 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: lighten($base-bg, 7.84) !default;
   $chat-messagelist-empty-message-color: lighten($base-text-color, 12.94) !default;
   $chat-messagelist-empty-prompt-color: darken($base-label-color, 38.04) !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: lighten($base-bg, 32.55) !default;
+  $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 41.07) !default;
 }
 
 @if $color == "carmine" {
@@ -62,6 +77,11 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: darken($base-bg, 7.84) !default;
   $chat-messagelist-empty-message-color: $base-text-color !default;
   $chat-messagelist-empty-prompt-color: $base-label-color !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
+  $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
 }
 
 @if $color == "contrast" {
@@ -76,6 +96,11 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: $base-inverted-bg !default;
   $chat-messagelist-empty-message-color: $base-text-color !default;
   $chat-messagelist-empty-prompt-color: $base-text-color !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: lighten($base-bg, 32.55) !default;
+  $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 41.07) !default;
 }
 
 @if $color == "darkmoon" {
@@ -90,6 +115,11 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: darken($base-bg, 7.84) !default;
   $chat-messagelist-empty-message-color: $base-text-color !default;
   $chat-messagelist-empty-prompt-color: $base-label-color !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: lighten($base-bg, 32.55) !default;
+  $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 41.07) !default;
 }
 
 @if $color == "darkviolet" {
@@ -104,6 +134,11 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: lighten($base-bg, 7.84) !default;
   $chat-messagelist-empty-message-color: lighten($base-text-color, 12.94) !default;
   $chat-messagelist-empty-prompt-color: darken($base-label-color, 38.04) !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: lighten($base-bg, 32.55) !default;
+  $chat-typingindicator-circle-bg-color-center: lighten($base-bg, 41.07) !default;
 }
 
 @if $color == "greenmist" {
@@ -117,6 +152,11 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: darken($base-bg, 7.84) !default;
   $chat-messagelist-empty-message-color: $base-text-color !default;
   $chat-messagelist-empty-prompt-color: $base-label-color !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
+  $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
 }
 
 @if $color == "softblue" {
@@ -131,4 +171,9 @@ $chat-errorlist-color: $base-invalid-color !default;
   $chat-messagelist-empty-icon-background-color: darken($base-bg, 7.84) !default;
   $chat-messagelist-empty-message-color: $base-text-color !default;
   $chat-messagelist-empty-prompt-color: $base-label-color !default;
+
+  $chat-typingindicator-color: $chat-information-color !default;
+  $chat-typingindicator-bubble-bg-color: $chat-bubble-background-color-secondary !default;
+  $chat-typingindicator-circle-bg-color: darken($base-bg, 31.57) !default;
+  $chat-typingindicator-circle-bg-color-center: darken($base-bg, 46.57) !default;
 }

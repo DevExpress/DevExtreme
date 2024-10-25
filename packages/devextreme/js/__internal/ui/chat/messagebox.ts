@@ -48,6 +48,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _typingEndAction?: () => void;
 
+  // eslint-disable-next-line no-restricted-globals
   _typingEndTimeoutId?: ReturnType<typeof setTimeout> | undefined;
 
   _getDefaultOptions(): Properties {
@@ -177,6 +178,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _updateTypingEndTimeout(): void {
     clearTimeout(this._typingEndTimeoutId);
 
+    // eslint-disable-next-line no-restricted-globals
     this._typingEndTimeoutId = setTimeout(() => {
       this._typingEndAction?.();
 
