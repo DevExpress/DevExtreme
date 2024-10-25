@@ -119,7 +119,7 @@ QUnit.module('Filtering', () => {
                 const dateFilter = filter[0][0];
                 const zeroDurationFilter = filter[0][4];
 
-                assert.ok($.isArray(filter), 'Filter is array');
+                assert.ok(Array.isArray(filter), 'Filter is array');
 
                 assert.equal(filter[0].length, 5, 'Filter size is OK');
 

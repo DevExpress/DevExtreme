@@ -2646,7 +2646,7 @@ QUnit.module('Grouping with basic remoteOperations. Second level', {
 });
 
 function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOptions) {
-    if($.isArray(options.store) || (options.store && options.store.type === 'array') || options.load) {
+    if(Array.isArray(options.store) || (options.store && options.store.type === 'array') || options.load) {
         const arrayStore = new ArrayStore(options.store || []);
         options.executeAsync = options.executeAsync || function(func) { func(); };
         brokeOptions = brokeOptions || {};
