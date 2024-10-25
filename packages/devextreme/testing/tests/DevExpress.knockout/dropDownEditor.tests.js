@@ -30,7 +30,7 @@ QUnit.test('fieldTemplate', function(assert) {
     const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
-    assert.equal($.trim($dropDownEditor.text()), 'test', 'template rendered');
+    assert.equal($dropDownEditor.text().trim(), 'test', 'template rendered');
 });
 
 QUnit.test('drop button template', function(assert) {
@@ -40,7 +40,7 @@ QUnit.test('drop button template', function(assert) {
     const $dropDownEditor = $('#dropDownEditorWithButtonTemplate');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
-    assert.equal($.trim($('.dx-button-content').text()), 'V', 'template was rendered');
+    assert.equal($('.dx-button-content').text().trim(), 'V', 'template was rendered');
 });
 
 QUnit.test('fieldTemplate is rendered after changing value', function(assert) {
@@ -49,7 +49,7 @@ QUnit.test('fieldTemplate is rendered after changing value', function(assert) {
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
     $dropDownEditor.dxDropDownEditor('option', 'value', 'newtest');
-    assert.equal($.trim($dropDownEditor.text()), 'newtest', 'template rendered');
+    assert.equal($dropDownEditor.text().trim(), 'newtest', 'template rendered');
 });
 
 

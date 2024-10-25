@@ -2218,7 +2218,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         this.clock.tick(400);
 
-        assert.equal($.trim($list.find('.dx-list-item').text()), '012');
+        assert.equal($list.find('.dx-list-item').text().trim(), '012');
     });
 
     QUnit.test('shared data source', function(assert) {

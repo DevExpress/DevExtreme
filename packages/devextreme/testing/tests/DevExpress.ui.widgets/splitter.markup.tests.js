@@ -98,7 +98,7 @@ QUnit.module('Render', moduleConfig, () => {
             ]
         });
 
-        assert.strictEqual($.trim($splitter.text()), 'Nested_Splitter_Pane_1', 'nested splitter item with template was rendered');
+        assert.strictEqual($splitter.text().trim(), 'Nested_Splitter_Pane_1', 'nested splitter item with template was rendered');
     });
 
     QUnit.test('with nested splitter that has two panes inside using itemTemplate ', function(assert) {
@@ -113,7 +113,7 @@ QUnit.module('Render', moduleConfig, () => {
             itemTemplate: (item) => { return `Pane_${item.paneIndex()}`; }
         });
 
-        assert.strictEqual($.trim(this.$element.text()), 'Pane_1Pane_2', 'nested items were rendered correctly');
+        assert.strictEqual(this.$element.text().trim(), 'Pane_1Pane_2', 'nested items were rendered correctly');
     });
 
     QUnit.test('items in nested splitter with two panes usind parent itemTemplate option', function(assert) {
@@ -128,7 +128,7 @@ QUnit.module('Render', moduleConfig, () => {
             itemTemplate: (item) => { return `Pane_${item.paneIndex()}`; }
         });
 
-        assert.strictEqual($.trim(this.$element.text()), 'Pane_1Pane_2', 'nested items were rendered correctly');
+        assert.strictEqual(this.$element.text().trim(), 'Pane_1Pane_2', 'nested items were rendered correctly');
     });
 
     QUnit.test('itemTemplate option in a nested splitter is more prioritized than itemTemplate in parent splitter', function(assert) {
@@ -144,7 +144,7 @@ QUnit.module('Render', moduleConfig, () => {
             itemTemplate: (item) => `Pane_${item.paneIndex()}`
         });
 
-        assert.strictEqual($.trim(this.$element.text()), 'NestedPane_1NestedPane_2', 'nested items were rendered correctly');
+        assert.strictEqual(this.$element.text().trim(), 'NestedPane_1NestedPane_2', 'nested items were rendered correctly');
     });
 
     QUnit.test('item.template option in a nested splitter is more prioritized than itemTemplate', function(assert) {
@@ -159,7 +159,7 @@ QUnit.module('Render', moduleConfig, () => {
             ],
         });
 
-        assert.strictEqual($.trim(this.$element.text()), 'TemplatedPane_1NestedPane_2', 'nested items were rendered correctly');
+        assert.strictEqual(this.$element.text().trim(), 'TemplatedPane_1NestedPane_2', 'nested items were rendered correctly');
     });
 });
 

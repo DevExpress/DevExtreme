@@ -272,8 +272,8 @@ QUnit.module('Layout manager', () => {
         const $requiredItem = $items.eq(0);
         const $optionalItem = $items.eq(1);
 
-        assert.equal($.trim($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text()), '+', 'custom required mark');
-        assert.equal($.trim($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text()), '-', 'custom optional mark');
+        assert.equal($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text().trim(), '+', 'custom required mark');
+        assert.equal($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text().trim(), '-', 'custom optional mark');
     });
 
     test('Change marks', function(assert) {
@@ -297,8 +297,8 @@ QUnit.module('Layout manager', () => {
         const $requiredItem = $items.eq(0);
         const $optionalItem = $items.eq(1);
 
-        assert.equal($.trim($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text()), '+', 'custom required mark');
-        assert.equal($.trim($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text()), '-', 'custom optional mark');
+        assert.equal($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text().trim(), '+', 'custom required mark');
+        assert.equal($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text().trim(), '-', 'custom optional mark');
     });
 
     test('Change marks visibility', function(assert) {

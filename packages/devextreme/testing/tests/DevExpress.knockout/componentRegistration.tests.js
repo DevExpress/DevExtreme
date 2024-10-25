@@ -873,13 +873,13 @@ moduleWithoutCsp(
             vm.innerText('new innerText');
 
             const outer = markup;
-            assert.equal($.trim(outer.find('.dx-content:first > span').text()), 'new outerText');
+            assert.equal(outer.find('.dx-content:first > span').text().trim(), 'new outerText');
 
             const middle = markup.find('.middle');
-            assert.equal($.trim(middle.find('.dx-content:first > span').text()), 'new middleText');
+            assert.equal(middle.find('.dx-content:first > span').text().trim(), 'new middleText');
 
             const inner = markup.find('.inner');
-            assert.equal($.trim(inner.find('span').text()), 'new innerText');
+            assert.equal(inner.find('span').text().trim(), 'new innerText');
         });
     }
 );
@@ -1352,7 +1352,7 @@ moduleWithoutCsp('Template w/o ko scenario', function() {
 
             $markup.dxTestContainer();
             assert.equal($markup.find('.content').length, 1, 'template rendered');
-            assert.equal($.trim($markup.text()), 'Test', 'template rendered correctly');
+            assert.equal($markup.text().trim(), 'Test', 'template rendered correctly');
         } finally {
             cleanComponentRegistrations('dxTestContainer');
         }

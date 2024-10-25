@@ -54,7 +54,7 @@ QUnit.test('lookup should delegate templates to child widgets (T131530)', functi
 
     const $list = $(toSelector(LIST_CLASS));
 
-    assert.equal($.trim($list.find('.dx-list-item').text()), 'TemplateTemplate');
+    assert.equal($list.find('.dx-list-item').text().trim(), 'TemplateTemplate');
 });
 
 QUnit.test('lookup with item template', function(assert) {
@@ -67,5 +67,5 @@ QUnit.test('lookup with item template', function(assert) {
 
     const $list = $(toSelector(LIST_CLASS));
 
-    assert.equal($.trim($list.find('.dx-list-item').text()), 'Template');
+    assert.equal($list.find('.dx-list-item').text().trim(), 'Template');
 });

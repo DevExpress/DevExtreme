@@ -27,7 +27,7 @@ QUnit.test('template should receive dxshown event when attached to container', f
         container: $container
     });
 
-    assert.equal($.trim($container.text()), 'text', 'template result was patched');
+    assert.equal($container.text().trim(), 'text', 'template result was patched');
 
     templateRendered.remove(patcher);
 });

@@ -27,5 +27,5 @@ QUnit.test('contentTemplate', function(assert) {
     const $dropDownEditor = $('#dropDownBoxWithContentTemplate');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
-    assert.equal($.trim($('.dx-popup-wrapper').text()), 'test', 'content rendered');
+    assert.equal($('.dx-popup-wrapper').text().trim(), 'test', 'content rendered');
 });
