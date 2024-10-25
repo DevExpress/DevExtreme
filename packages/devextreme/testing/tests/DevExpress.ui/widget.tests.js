@@ -1043,7 +1043,7 @@ QUnit.module('templates support', {}, () => {
             let disposed = false;
 
             Template.prototype.dispose = function() {
-                if($.trim(this.render({ model: {}, container: $('<div>') }).text()) === text) {
+                if(this.render({ model: {}, container: $('<div>') }).text().trim() === text) {
                     disposed = true;
                 }
             };
@@ -1072,7 +1072,7 @@ QUnit.module('templates support', {}, () => {
             const $container = $('#container');
 
             Template.prototype.dispose = () => {
-                if($.trim(this.render({ model: {}, container: $('<div>') }).text()) === text) {
+                if(this.render({ model: {}, container: $('<div>') }).text().trim() === text) {
                     disposed = true;
                 }
             };

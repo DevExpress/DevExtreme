@@ -507,7 +507,7 @@ QUnit.module('tags', moduleSetup, () => {
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
 
-        assert.equal($.trim($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text()), '01', 'selected first and second items');
+        assert.equal($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text().trim(), '01', 'selected first and second items');
     });
 
     QUnit.test('tag should have correct value when item value is an empty string', function(assert) {
@@ -1975,7 +1975,7 @@ QUnit.module('tag template', moduleSetup, () => {
 
         const $tagContainer = $element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        assert.equal($.trim($tagContainer.text()), 'onetwo', 'selected values are rendered correctly');
+        assert.equal($tagContainer.text().trim(), 'onetwo', 'selected values are rendered correctly');
     });
 
     QUnit.test('value should be correct if the default tag template is used and the displayExpr is specified', function(assert) {
@@ -3664,7 +3664,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const $listItems = $('.dx-list-item');
-        assert.equal($.trim($listItems.text()), 'test', 'items filtered');
+        assert.equal($listItems.text().trim(), 'test', 'items filtered');
     });
 
     QUnit.test('renders all tags after search', function(assert) {
@@ -3687,7 +3687,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         assert.equal($tagContainer.find('.' + TAGBOX_TAG_CONTENT_CLASS).length, 2, 'selected tags rendered');
-        assert.equal($.trim($tagContainer.text()), 'MoscowLondon', 'selected values are rendered');
+        assert.equal($tagContainer.text().trim(), 'MoscowLondon', 'selected values are rendered');
     });
 
     QUnit.test('input is positioned on the right of last tag', function(assert) {
@@ -4994,7 +4994,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), ['item1', 'test'], 'value was added to values');
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($.trim($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text()), 'item1test', 'all tags rendered');
+        assert.equal($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text().trim(), 'item1test', 'all tags rendered');
     });
 
     QUnit.test('acceptCustomValue should not add empty tag', function(assert) {
@@ -7022,7 +7022,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         $('.dx-item').trigger('dxclick');
 
         $($input).trigger('dxclick');
-        assert.equal($.trim($('.dx-item').first().text()), '0', 'first item loaded');
+        assert.equal($('.dx-item').first().text().trim(), '0', 'first item loaded');
     });
 
     QUnit.test('\'byKey\' should not be called on initialization (T533200)', function(assert) {
@@ -7888,7 +7888,7 @@ QUnit.module('regression', {
 
         const $tagContainer = tagBox.$element().find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        assert.equal($.trim($tagContainer.text()), 'Item14Item41', 'selected values are rendered correctly');
+        assert.equal($tagContainer.text().trim(), 'Item14Item41', 'selected values are rendered correctly');
     });
 
     QUnit.test('T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item', function(assert) {
@@ -7982,7 +7982,7 @@ QUnit.module('regression', {
         const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         assert.equal($tagContainer.find('.' + TAGBOX_TAG_CONTENT_CLASS).length, 2, 'selected tags rendered');
-        assert.equal($.trim($tagContainer.text()), 'Item1Item3', 'selected values are rendered');
+        assert.equal($tagContainer.text().trim(), 'Item1Item3', 'selected values are rendered');
     });
 
     QUnit.test('selection should work with pregrouped data without paging and with preloaded datasource', function(assert) {
