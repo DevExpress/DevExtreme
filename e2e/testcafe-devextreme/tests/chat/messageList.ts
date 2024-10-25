@@ -233,6 +233,7 @@ test('Messagelist with messageTemplate', async (t) => {
     height: 600,
     showDayHeaders: false,
     onMessageSend: ({ component, message }) => {
+      message.timestamp = undefined;
       component.renderMessage(message);
     },
     messageTemplate: ({ text, author, isLast }, container) => {
