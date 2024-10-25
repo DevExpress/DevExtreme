@@ -5,7 +5,7 @@ import dxScheduler, {
     Properties
 } from "devextreme/ui/scheduler";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerScrolling } from "devextreme/ui/scheduler";
@@ -172,15 +172,18 @@ type IAppointmentDraggingProps = React.PropsWithChildren<{
   scrollSensitivity?: number;
   scrollSpeed?: number;
 }>
-const _componentAppointmentDragging = memo(
-  (props: IAppointmentDraggingProps) => {
-    return React.createElement(NestedOption<IAppointmentDraggingProps>, { ...props });
-  }
-);
+const _componentAppointmentDragging = (props: IAppointmentDraggingProps) => {
+  return React.createElement(NestedOption<IAppointmentDraggingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "appointmentDragging",
+    },
+  });
+};
 
-const AppointmentDragging: typeof _componentAppointmentDragging & IElementDescriptor = Object.assign(_componentAppointmentDragging, {
-  OptionName: "appointmentDragging",
-})
+const AppointmentDragging = Object.assign<typeof _componentAppointmentDragging, NestedComponentMeta>(_componentAppointmentDragging, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
@@ -192,15 +195,18 @@ type IEditingProps = React.PropsWithChildren<{
   allowTimeZoneEditing?: boolean;
   allowUpdating?: boolean;
 }>
-const _componentEditing = memo(
-  (props: IEditingProps) => {
-    return React.createElement(NestedOption<IEditingProps>, { ...props });
-  }
-);
+const _componentEditing = (props: IEditingProps) => {
+  return React.createElement(NestedOption<IEditingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "editing",
+    },
+  });
+};
 
-const Editing: typeof _componentEditing & IElementDescriptor = Object.assign(_componentEditing, {
-  OptionName: "editing",
-})
+const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
@@ -214,16 +220,19 @@ type IResourceProps = React.PropsWithChildren<{
   useColorAsDefault?: boolean;
   valueExpr?: (() => void) | string;
 }>
-const _componentResource = memo(
-  (props: IResourceProps) => {
-    return React.createElement(NestedOption<IResourceProps>, { ...props });
-  }
-);
+const _componentResource = (props: IResourceProps) => {
+  return React.createElement(NestedOption<IResourceProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "resources",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const Resource: typeof _componentResource & IElementDescriptor = Object.assign(_componentResource, {
-  OptionName: "resources",
-  IsCollectionItem: true,
-})
+const Resource = Object.assign<typeof _componentResource, NestedComponentMeta>(_componentResource, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
@@ -231,15 +240,18 @@ const Resource: typeof _componentResource & IElementDescriptor = Object.assign(_
 type IScrollingProps = React.PropsWithChildren<{
   mode?: "standard" | "virtual";
 }>
-const _componentScrolling = memo(
-  (props: IScrollingProps) => {
-    return React.createElement(NestedOption<IScrollingProps>, { ...props });
-  }
-);
+const _componentScrolling = (props: IScrollingProps) => {
+  return React.createElement(NestedOption<IScrollingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "scrolling",
+    },
+  });
+};
 
-const Scrolling: typeof _componentScrolling & IElementDescriptor = Object.assign(_componentScrolling, {
-  OptionName: "scrolling",
-})
+const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>(_componentScrolling, {
+  componentType: "option",
+});
 
 // owners:
 // Scheduler
@@ -285,52 +297,55 @@ type IViewProps = React.PropsWithChildren<{
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
 }>
-const _componentView = memo(
-  (props: IViewProps) => {
-    return React.createElement(NestedOption<IViewProps>, { ...props });
-  }
-);
+const _componentView = (props: IViewProps) => {
+  return React.createElement(NestedOption<IViewProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "views",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        scrolling: { optionName: "scrolling", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "appointmentCollectorTemplate",
+        render: "appointmentCollectorRender",
+        component: "appointmentCollectorComponent"
+      }, {
+        tmplOption: "appointmentTemplate",
+        render: "appointmentRender",
+        component: "appointmentComponent"
+      }, {
+        tmplOption: "appointmentTooltipTemplate",
+        render: "appointmentTooltipRender",
+        component: "appointmentTooltipComponent"
+      }, {
+        tmplOption: "dataCellTemplate",
+        render: "dataCellRender",
+        component: "dataCellComponent"
+      }, {
+        tmplOption: "dateCellTemplate",
+        render: "dateCellRender",
+        component: "dateCellComponent"
+      }, {
+        tmplOption: "dropDownAppointmentTemplate",
+        render: "dropDownAppointmentRender",
+        component: "dropDownAppointmentComponent"
+      }, {
+        tmplOption: "resourceCellTemplate",
+        render: "resourceCellRender",
+        component: "resourceCellComponent"
+      }, {
+        tmplOption: "timeCellTemplate",
+        render: "timeCellRender",
+        component: "timeCellComponent"
+      }],
+    },
+  });
+};
 
-const View: typeof _componentView & IElementDescriptor = Object.assign(_componentView, {
-  OptionName: "views",
-  IsCollectionItem: true,
-  ExpectedChildren: {
-    scrolling: { optionName: "scrolling", isCollectionItem: false }
-  },
-  TemplateProps: [{
-    tmplOption: "appointmentCollectorTemplate",
-    render: "appointmentCollectorRender",
-    component: "appointmentCollectorComponent"
-  }, {
-    tmplOption: "appointmentTemplate",
-    render: "appointmentRender",
-    component: "appointmentComponent"
-  }, {
-    tmplOption: "appointmentTooltipTemplate",
-    render: "appointmentTooltipRender",
-    component: "appointmentTooltipComponent"
-  }, {
-    tmplOption: "dataCellTemplate",
-    render: "dataCellRender",
-    component: "dataCellComponent"
-  }, {
-    tmplOption: "dateCellTemplate",
-    render: "dateCellRender",
-    component: "dateCellComponent"
-  }, {
-    tmplOption: "dropDownAppointmentTemplate",
-    render: "dropDownAppointmentRender",
-    component: "dropDownAppointmentComponent"
-  }, {
-    tmplOption: "resourceCellTemplate",
-    render: "resourceCellRender",
-    component: "resourceCellComponent"
-  }, {
-    tmplOption: "timeCellTemplate",
-    render: "timeCellRender",
-    component: "timeCellComponent"
-  }],
-})
+const View = Object.assign<typeof _componentView, NestedComponentMeta>(_componentView, {
+  componentType: "option",
+});
 
 export default Scheduler;
 export {
