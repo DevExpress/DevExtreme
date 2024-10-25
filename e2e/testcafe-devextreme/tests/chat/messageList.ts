@@ -231,6 +231,7 @@ test('Messagelist with messageTemplate', async (t) => {
     user: userFirst,
     width: 400,
     height: 600,
+    showDayHeaders: false,
     onMessageSend: ({ component, message }) => {
       component.renderMessage(message);
     },
