@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "Kuvaus",
         "dxScheduler-editorLabelRecurrence": "Toista",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "Avaa tapaaminen",
 
         "dxScheduler-recurrenceNever": "Ei koskaan",

@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "الوصف",
         "dxScheduler-editorLabelRecurrence": "تكرار",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "فتح موعد",
 
         "dxScheduler-recurrenceNever": "مطلقًا",

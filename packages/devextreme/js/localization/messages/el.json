@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "Περιγραφή",
         "dxScheduler-editorLabelRecurrence": "Επανάληψη",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "Άνοιγμα ραντεβού",
 
         "dxScheduler-recurrenceNever": "Ποτέ",

@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "شرح",
         "dxScheduler-editorLabelRecurrence": "تکرار",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "قرار ملاقات آزاد",
 
         "dxScheduler-recurrenceNever": "هرگز",

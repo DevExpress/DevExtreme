@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "Popis",
         "dxScheduler-editorLabelRecurrence": "Opakovat",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "Otevřít schůzku",
 
         "dxScheduler-recurrenceNever": "Nikdy",

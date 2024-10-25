@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "Mô tả",
         "dxScheduler-editorLabelRecurrence": "Lặp lại",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "Mở lịch hẹn",
 
         "dxScheduler-recurrenceNever": "Không bao giờ",

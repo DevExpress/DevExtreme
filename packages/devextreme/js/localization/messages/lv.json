@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "Apraksts",
         "dxScheduler-editorLabelRecurrence": "Atkārtot",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "Atvērt apmeklējumu",
 
         "dxScheduler-recurrenceNever": "Nekad",

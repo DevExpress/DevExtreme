@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "Aprašymas",
         "dxScheduler-editorLabelRecurrence": "Kartojimas",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "Atidaryti paskyrimą",
 
         "dxScheduler-recurrenceNever": "Niekada",

@@ -98,8 +98,10 @@ fixture.disablePageReloads`a11y - appointment`
 
   test(`Scheduler a11y: Disabled time ranges are not supported (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
-    const { nextButton } = scheduler.toolbar.navigator;
-    const { prevButton } = scheduler.toolbar.navigator;
+    const {
+      nextButton,
+      prevButton,
+    } = scheduler.toolbar.navigator;
     const expectedAriaLabels = {
       day: {
         prev: 'Previous day',

@@ -1,4 +1,5 @@
 import dateUtils from '@js/core/utils/date';
+import messageLocalization from '@js/localization/message';
 import { isMaterialBased } from '@js/ui/themes';
 
 const { trimTime } = dateUtils;
@@ -37,31 +38,36 @@ export const getDateNavigator = (header, item) => {
   };
 };
 
-const getPreviousButtonOptions = (header) => ({
-  key: 'previous',
-  icon: 'chevronprev',
-  elementAttr: {
-    class: PREVIOUS_BUTTON_CLASS,
-    ...getCurrentViewText(header) ? { 'aria-label': `Previous ${getCurrentViewText(header)}` } : {},
-  },
-  clickHandler: () => header._updateDateByDirection(DIRECTION_LEFT),
-  onContentReady: (e) => {
-    const previousButton = e.component;
-    previousButton.option('disabled', isPreviousButtonDisabled(header));
+const getPreviousButtonOptions = (header) => {
+  // @ts-expect-error text
+  const ariaMessage = messageLocalization.format('dxScheduler-navigationPrevious', getCurrentViewText(header));
 
-    header._addEvent('min', () => {
+  return {
+    key: 'previous',
+    icon: 'chevronprev',
+    elementAttr: {
+      class: PREVIOUS_BUTTON_CLASS,
+      'aria-label': ariaMessage,
+    },
+    clickHandler: () => header._updateDateByDirection(DIRECTION_LEFT),
+    onContentReady: (e) => {
+      const previousButton = e.component;
       previousButton.option('disabled', isPreviousButtonDisabled(header));
-    });
 
-    header._addEvent('currentDate', () => {
-      previousButton.option('disabled', isPreviousButtonDisabled(header));
-    });
+      header._addEvent('min', () => {
+        previousButton.option('disabled', isPreviousButtonDisabled(header));
+      });
 
-    header._addEvent('startViewDate', () => {
-      previousButton.option('disabled', isPreviousButtonDisabled(header));
-    });
-  },
-});
+      header._addEvent('currentDate', () => {
+        previousButton.option('disabled', isPreviousButtonDisabled(header));
+      });
+
+      header._addEvent('startViewDate', () => {
+        previousButton.option('disabled', isPreviousButtonDisabled(header));
+      });
+    },
+  };
+};
 
 const getCalendarButtonOptions = (header) => ({
   key: 'calendar',
@@ -93,32 +99,37 @@ const getCalendarButtonOptions = (header) => ({
   },
 });
 
-const getNextButtonOptions = (header) => ({
-  key: 'next',
-  icon: 'chevronnext',
-  elementAttr: {
-    class: NEXT_BUTTON_CLASS,
-    ...getCurrentViewText(header) ? { 'aria-label': `Next ${getCurrentViewText(header)}` } : {},
-  },
-  clickHandler: () => header._updateDateByDirection(DIRECTION_RIGHT),
-  onContentReady: (e) => {
-    const nextButton = e.component;
+const getNextButtonOptions = (header) => {
+  // @ts-expect-error text
+  const ariaMessage = messageLocalization.format('dxScheduler-navigationNext', getCurrentViewText(header));
 
-    nextButton.option('disabled', isNextButtonDisabled(header));
+  return {
+    key: 'next',
+    icon: 'chevronnext',
+    elementAttr: {
+      class: NEXT_BUTTON_CLASS,
+      'aria-label': ariaMessage,
+    },
+    clickHandler: () => header._updateDateByDirection(DIRECTION_RIGHT),
+    onContentReady: (e) => {
+      const nextButton = e.component;
 
-    header._addEvent('min', () => {
       nextButton.option('disabled', isNextButtonDisabled(header));
-    });
 
-    header._addEvent('currentDate', () => {
-      nextButton.option('disabled', isNextButtonDisabled(header));
-    });
+      header._addEvent('min', () => {
+        nextButton.option('disabled', isNextButtonDisabled(header));
+      });
 
-    header._addEvent('startViewDate', () => {
-      nextButton.option('disabled', isNextButtonDisabled(header));
-    });
-  },
-});
+      header._addEvent('currentDate', () => {
+        nextButton.option('disabled', isNextButtonDisabled(header));
+      });
+
+      header._addEvent('startViewDate', () => {
+        nextButton.option('disabled', isNextButtonDisabled(header));
+      });
+    },
+  };
+};
 
 const isPreviousButtonDisabled = (header) => {
   let min = header.option('min');
@@ -152,11 +163,13 @@ const isNextButtonDisabled = (header) => {
 
 const getCurrentViewText = (header) => {
   const { currentView } = header;
-  return typeof currentView === 'string'
-    ? currentView
-      ?.replace(/([a-z])([A-Z])/g, '$1 $2')
-      .toLowerCase()
-      .split(' ')
-      .join(' ')
-    : '';
+  if (!currentView || typeof currentView !== 'string') {
+    return '';
+  }
+
+  return currentView
+    ?.replace(/([a-z])([A-Z])/g, '$1 $2')
+    .toLowerCase()
+    .split(' ')
+    .join(' ');
 };

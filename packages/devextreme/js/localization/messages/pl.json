@@ -245,6 +245,9 @@
         "dxScheduler-editorLabelDescription": "Opis",
         "dxScheduler-editorLabelRecurrence": "Powtórz",
 
+        "dxScheduler-navigationPrevious": "Previous {0}",
+        "dxScheduler-navigationNext": "Next {0}",
+
         "dxScheduler-openAppointment": "Otwórz termin",
 
         "dxScheduler-recurrenceNever": "Nigdy",
