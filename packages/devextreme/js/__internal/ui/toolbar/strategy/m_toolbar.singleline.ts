@@ -201,7 +201,7 @@ export class SingleLineStrategy {
 
   _hideOverflowItems(width?: number) {
     // @ts-expect-error
-    const overflowItems = this._toolbar.$element().find(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}`);
+    let overflowItems = this._toolbar.$element().find(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}`);
 
     if (!overflowItems.length) {
       return;
@@ -216,7 +216,7 @@ export class SingleLineStrategy {
       const $item = overflowItems.eq(-1);
       $item.addClass(TOOLBAR_HIDDEN_ITEM);
       itemsWidth = this._getItemsWidth();
-      overflowItems.splice(-1, 1);
+      overflowItems = overflowItems.slice(0, -1);
     }
   }
 
