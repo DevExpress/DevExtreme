@@ -26,7 +26,7 @@ export type MessageGroupAlignment = 'start' | 'end';
 export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
-  messageTimestampFormat: null | Format;
+  messageTimestampFormat: Format;
 }
 
 class MessageGroup extends Widget<Properties> {
@@ -39,7 +39,7 @@ class MessageGroup extends Widget<Properties> {
       ...super._getDefaultOptions(),
       items: [],
       alignment: 'start',
-      messageTimestampFormat: null,
+      messageTimestampFormat: 'HH:mm',
     };
   }
 
@@ -141,18 +141,12 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _getTimeValue(timestamp: Date | string | number): string {
-    const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
     const date = dateSerialization.deserializeDate(timestamp);
     const { messageTimestampFormat } = this.option();
 
-    let formattedTime = date.toLocaleTimeString(undefined, options);
+    const formattedTime = dateLocalization.format(date, messageTimestampFormat);
 
-    if (messageTimestampFormat) {
-      formattedTime = dateLocalization.format(date, messageTimestampFormat);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return formattedTime;
+    return `${formattedTime}`;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {

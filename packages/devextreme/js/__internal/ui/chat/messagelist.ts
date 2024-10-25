@@ -37,8 +37,8 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
-  dayHeaderFormat: null | Format;
-  messageTimestampFormat: null | Format;
+  dayHeaderFormat: Format;
+  messageTimestampFormat: Format;
   isLoading?: boolean;
 }
 
@@ -57,8 +57,8 @@ class MessageList extends Widget<Properties> {
       items: [],
       currentUserId: '',
       showDayHeaders: true,
-      dayHeaderFormat: null,
-      messageTimestampFormat: null,
+      dayHeaderFormat: 'shortdate',
+      messageTimestampFormat: 'HH:mm',
       isLoading: false,
     };
   }
@@ -173,7 +173,7 @@ class MessageList extends Widget<Properties> {
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
-      messageTimestampFormat,
+      messageTimestampFormat: messageTimestampFormat ?? 'HH:mm',
     });
 
     this._messageGroups?.push(messageGroup);
@@ -212,19 +212,10 @@ class MessageList extends Widget<Properties> {
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
     const today = new Date();
     const yesterday = new Date(new Date().setDate(today.getDate() - 1));
+    const { dayHeaderFormat } = this.option();
     this._lastMessageDate = deserializedDate;
 
-    let headerDate = deserializedDate.toLocaleDateString(undefined, {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).replace(/[/-]/g, '.');
-
-    const { dayHeaderFormat } = this.option();
-
-    if (dayHeaderFormat) {
-      headerDate = dateLocalization.format(deserializedDate, dayHeaderFormat);
-    }
+    let headerDate = dateLocalization.format(deserializedDate, dayHeaderFormat);
 
     if (dateUtils.sameDate(deserializedDate, today)) {
       headerDate = `${messageLocalization.format('Today')} ${headerDate}`;
@@ -236,7 +227,7 @@ class MessageList extends Widget<Properties> {
 
     $('<div>')
       .addClass(CHAT_MESSAGELIST_DAY_HEADER_CLASS)
-      .text(headerDate)
+      .text(`${headerDate}`)
       .appendTo(this._$content());
   }
 

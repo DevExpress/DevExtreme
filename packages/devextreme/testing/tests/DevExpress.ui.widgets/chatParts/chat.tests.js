@@ -210,7 +210,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(messageList.option('showDayHeaders'), false, 'showDayHeaders is passed on runtime');
         });
 
-        QUnit.test('Chat should pass dayHeaderFormat to messageList on init', function(assert) {
+        QUnit.test('dayHeaderFormat option value should be passed to messageList on init', function(assert) {
             const dayHeaderFormat = 'dd of MMMM, yyyy';
 
             this.reinit({
@@ -222,7 +222,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(messageList.option('dayHeaderFormat'), dayHeaderFormat, 'dayHeaderFormat is passed on init');
         });
 
-        QUnit.test('Chat should pass messageTimestampFormat to messageList on init', function(assert) {
+        QUnit.test('messageTimestampFormat option value should be passed to messageList on init', function(assert) {
             const messageTimestampFormat = 'hh hours and mm minutes';
 
             this.reinit({
@@ -234,7 +234,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(messageList.option('messageTimestampFormat'), messageTimestampFormat, 'messageTimestampFormat is passed on init');
         });
 
-        QUnit.test('Chat should pass dayHeaderFormat to messageList at runtime', function(assert) {
+        QUnit.test('dayHeaderFormat option value should be passed to messageList at runtime', function(assert) {
             const dayHeaderFormat = 'dd of MMMM, yyyy';
 
             this.reinit({
@@ -248,7 +248,7 @@ QUnit.module('Chat', () => {
             assert.strictEqual(messageList.option('dayHeaderFormat'), dayHeaderFormat, 'dayHeaderFormat is updated at runtime');
         });
 
-        QUnit.test('Chat should pass messageTimestampFormat to messageList at runtime', function(assert) {
+        QUnit.test('messageTimestampFormat option value should be passed to messageList at runtime', function(assert) {
             const messageTimestampFormat = 'hh hours and mm minutes';
 
             this.reinit({
