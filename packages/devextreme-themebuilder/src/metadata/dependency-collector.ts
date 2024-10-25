@@ -74,7 +74,7 @@ export default class DependencyCollector {
     result = DependencyCollector.getUniqueWidgets(result);
 
     if (widget) {
-      this.flatStylesDependencyTree[widget] = [...result].sort();
+      this.flatStylesDependencyTree[widget] = [...result];
 
       if (!result.includes(widget)) {
         result.push(widget);

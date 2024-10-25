@@ -225,9 +225,9 @@ describe('DependencyCollector', () => {
     };
 
     const expectedStylesDependencyTree: FlatStylesDependencies = {
-      k: ['l', 'm', 'n', 'o'],
+      k: ['l', 'm', 'o', 'n'],
       l: [],
-      m: ['m', 'n', 'o'],
+      m: ['m', 'o', 'n'],
       n: ['m', 'o'],
       o: ['m'],
     };
@@ -251,7 +251,7 @@ describe('DependencyCollector', () => {
 
     expect(fs.readFileSync).toHaveBeenCalledTimes(10);
     expect(dependencyCollector.flatStylesDependencyTree).toEqual({
-      toolbar: ['icon', 'menu'],
+      toolbar: ['menu', 'icon'],
       button: ['icon'],
       menu: [],
       icon: [],
