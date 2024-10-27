@@ -69,7 +69,7 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       dayHeaderFormat: 'shortdate',
-      messageTimestampFormat: 'HH:mm',
+      messageTimestampFormat: 'shorttime',
       errors: [],
       onMessageSend: undefined,
       onTypingStart: undefined,

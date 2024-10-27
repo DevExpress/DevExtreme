@@ -39,7 +39,7 @@ class MessageGroup extends Widget<Properties> {
       ...super._getDefaultOptions(),
       items: [],
       alignment: 'start',
-      messageTimestampFormat: 'HH:mm',
+      messageTimestampFormat: 'shorttime',
     };
   }
 

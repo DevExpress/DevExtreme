@@ -58,7 +58,7 @@ class MessageList extends Widget<Properties> {
       currentUserId: '',
       showDayHeaders: true,
       dayHeaderFormat: 'shortdate',
-      messageTimestampFormat: 'HH:mm',
+      messageTimestampFormat: 'shorttime',
       isLoading: false,
     };
   }
@@ -173,7 +173,7 @@ class MessageList extends Widget<Properties> {
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
-      messageTimestampFormat: messageTimestampFormat ?? 'HH:mm',
+      messageTimestampFormat: messageTimestampFormat ?? 'shorttime',
     });
 
     this._messageGroups?.push(messageGroup);

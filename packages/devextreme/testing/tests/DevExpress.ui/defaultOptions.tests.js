@@ -1353,7 +1353,7 @@ testComponentDefaults(Chat,
         dataSource: undefined,
         showDayHeaders: true,
         dayHeaderFormat: 'shortdate',
-        messageTimestampFormat: 'HH:mm',
+        messageTimestampFormat: 'shorttime',
     }
 );
 
@@ -1394,7 +1394,7 @@ testComponentDefaults(ChatMessageGroup,
     {},
     {
         alignment: 'start',
-        messageTimestampFormat: 'HH:mm',
+        messageTimestampFormat: 'shorttime',
     }
 );
 
@@ -1406,7 +1406,7 @@ testComponentDefaults(ChatMessageList,
         showDayHeaders: true,
         isLoading: false,
         dayHeaderFormat: 'shortdate',
-        messageTimestampFormat: 'HH:mm',
+        messageTimestampFormat: 'shorttime',
     }
 );
 
