@@ -30,7 +30,7 @@ const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
-export const NOW = '1721747399083';
+export const NOW = 1721747399083;
 
 export const userFirst = {
     id: MOCK_COMPANION_USER_ID,

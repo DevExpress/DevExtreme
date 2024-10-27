@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { isDefined } from '@js/core/utils/type';
+import { isDate } from '@js/core/utils/type';
 import type { Format } from '@js/localization';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
@@ -136,18 +136,22 @@ class MessageGroup extends Widget<Properties> {
       .addClass(CHAT_MESSAGEGROUP_TIME_CLASS)
       .appendTo($information);
 
-    if (isDefined(timestamp)) {
-      $time.text(this._getTimeValue(timestamp));
+    const timeValue = this._getTimeValue(timestamp);
+    if (timeValue) {
+      $time.text(timeValue);
     }
 
     $information.appendTo(this.element());
   }
 
-  _getTimeValue(timestamp: Date | string | number): string {
-    const date = dateSerialization.deserializeDate(timestamp);
-    const { messageTimestampFormat } = this.option();
+  _getTimeValue(timestamp: Date | string | number | undefined): string | boolean {
+    const deserializedDate = dateSerialization.deserializeDate(timestamp);
 
-    const formattedTime = dateLocalization.format(date, messageTimestampFormat);
+    if (!isDate(deserializedDate) || isNaN(deserializedDate.getTime())) {
+      return false;
+    }
+    const { messageTimestampFormat } = this.option();
+    const formattedTime = dateLocalization.format(deserializedDate, messageTimestampFormat);
 
     return `${formattedTime}`;
   }

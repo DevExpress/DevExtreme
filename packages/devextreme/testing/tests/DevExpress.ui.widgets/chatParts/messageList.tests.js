@@ -11,7 +11,7 @@ import {
 } from './chat.tests.js';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import localization from 'localization';
-import dateLocalization from '/localization/date';
+import dateLocalization from 'localization/date';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
@@ -25,7 +25,7 @@ const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
 const MS_IN_DAY = 86400000;
 
 const getStringDate = (date) => {
-    dateLocalization.format(date, 'shortdate');
+    return dateLocalization.format(date, 'shortdate');
 };
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 
