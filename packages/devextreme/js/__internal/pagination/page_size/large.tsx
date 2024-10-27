@@ -6,7 +6,7 @@ import { Fragment } from 'inferno';
 
 import { format } from '../../../core/utils/string';
 import { combineClasses } from '../../core/r1/utils/render_utils';
-import { FIRST_CHILD_CLASS, PAGER_PAGE_SIZE_CLASS, PAGER_SELECTED_PAGE_SIZE_CLASS } from '../common/consts';
+import { FIRST_CHILD_CLASS, PAGINATION_PAGE_SIZE_CLASS, PAGINATION_SELECTED_PAGE_SIZE_CLASS } from '../common/consts';
 import { LightButton } from '../common/light_button';
 import { PaginationDefaultProps, type PaginationProps } from '../common/pagination_props';
 import type { FullPageSize } from '../common/types';
@@ -66,7 +66,7 @@ export class PageSizeLarge extends BaseInfernoComponent<PageSizeLargePropsType> 
         } = _ref3;
         const selected = processedPageSize === pageSize;
         const className = combineClasses({
-          [selected ? PAGER_SELECTED_PAGE_SIZE_CLASS : PAGER_PAGE_SIZE_CLASS]: true,
+          [selected ? PAGINATION_SELECTED_PAGE_SIZE_CLASS : PAGINATION_PAGE_SIZE_CLASS]: true,
           [FIRST_CHILD_CLASS]: index === 0,
         });
         return {

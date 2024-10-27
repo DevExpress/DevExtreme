@@ -12,10 +12,13 @@ function getPaginationConfig(context): PaginationConfigContextValue {
   return PaginationConfigContext.defaultValue;
 }
 
+export function isGridCompatibilityMode(context): boolean {
+  return !!getPaginationConfig(context)?.isGridCompatibilityMode;
+}
+
 export function getLocalizationMessage(context, key: string): string {
-  const isGridCompatibilityMode = getPaginationConfig(context)?.isGridCompatibilityMode;
   let actualKey = key;
-  if (isGridCompatibilityMode) {
+  if (isGridCompatibilityMode(context)) {
     actualKey = key.replace('dxPagination', 'dxPager');
   }
   return messageLocalization.getFormatter(actualKey)();

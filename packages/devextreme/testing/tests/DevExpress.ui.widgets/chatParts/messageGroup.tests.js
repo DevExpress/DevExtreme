@@ -167,6 +167,28 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 assert.deepEqual(avatar.option('url'), passedUrlValue);
             });
         });
+
+        QUnit.test('avatar component should be initialized with correct alt property', function(assert) {
+            [
+                { items: [{}], passedAltValue: undefined },
+                { items: [{ author: {} }], passedAltValue: undefined },
+                { items: [{ author: undefined }], passedAltValue: undefined },
+                { items: [{ author: { avatarAlt: undefined } }], passedAltValue: undefined },
+                { items: [{ author: { avatarAlt: null } }], passedAltValue: null },
+                { items: [{ author: { avatarAlt: '' } }], passedAltValue: '' },
+                { items: [{ author: { avatarAlt: ' ' } }], passedAltValue: ' ' },
+                { items: [{ author: { avatarAlt: 888 } }], passedAltValue: 888 },
+                { items: [{ author: { avatarAlt: NaN } }], passedAltValue: NaN },
+            ].forEach(({ items, passedAltValue }) => {
+                this.reinit({
+                    items,
+                });
+
+                const avatar = ChatAvatar.getInstance(this.$element.find(`.${AVATAR_CLASS}`));
+
+                assert.deepEqual(avatar.option('alt'), passedAltValue);
+            });
+        });
     });
 });
 
