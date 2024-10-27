@@ -150,6 +150,7 @@ class Chat extends Widget<Properties> {
       currentUserId,
       showDayHeaders,
       messageTemplate,
+      messageTemplateData: { component: this },
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
     });

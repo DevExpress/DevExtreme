@@ -16,6 +16,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import { isElementVisible } from '../splitter/utils/layout';
+import type Chat from './chat';
 import type { MessageGroupAlignment } from './messagegroup';
 import MessageGroup from './messagegroup';
 
@@ -37,6 +38,7 @@ export interface Properties extends WidgetOptions<MessageList> {
   showDayHeaders: boolean;
   // eslint-disable-next-line
   messageTemplate: any;
+  messageTemplateData: { component?: Chat };
   isLoading?: boolean;
 }
 
@@ -57,6 +59,7 @@ class MessageList extends Widget<Properties> {
       showDayHeaders: true,
       isLoading: false,
       messageTemplate: null,
+      messageTemplateData: { },
     };
   }
 
@@ -163,14 +166,20 @@ class MessageList extends Widget<Properties> {
     return this._isCurrentUser(id) ? 'end' : 'start';
   }
 
-  _createMessageGroupComponent(items: Message[], userId: string | number | undefined): void {
+  _createMessageGroupComponent(
+    items: Message[],
+    userId: string | number | undefined,
+    isLast = false,
+  ): void {
     const $messageGroup = $('<div>').appendTo(this._$content());
-    const { messageTemplate } = this.option();
+    const { messageTemplate, messageTemplateData } = this.option();
 
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
       messageTemplate,
+      messageTemplateData,
+      isLast,
     });
 
     this._messageGroups?.push(messageGroup);
@@ -285,10 +294,11 @@ class MessageList extends Widget<Properties> {
       }
 
       if (items.length - 1 === index) {
-        this._createMessageGroupComponent(currentMessageGroupItems, currentMessageGroupUserId);
-
-        const lastMessageGroup = this._messageGroups?.at(-1);
-        lastMessageGroup?._updateIsLastOptionOfLastMessage(true);
+        this._createMessageGroupComponent(
+          currentMessageGroupItems,
+          currentMessageGroupUserId,
+          true,
+        );
       }
     });
 
@@ -303,7 +313,7 @@ class MessageList extends Widget<Properties> {
     let lastMessageGroup = this._messageGroups?.at(-1);
     const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
 
-    lastMessageGroup?._updateIsLastOptionOfLastMessage(false);
+    lastMessageGroup?.updateIsLastOptionOfLastMessage(false);
 
     if (lastMessageGroup) {
       const { items } = lastMessageGroup.option();
@@ -313,7 +323,6 @@ class MessageList extends Widget<Properties> {
 
       if (author?.id === lastMessageGroupUserId && !isTimeoutExceeded && !shouldCreateDayHeader) {
         lastMessageGroup.renderMessage(message);
-        lastMessageGroup._updateIsLastOptionOfLastMessage(true);
 
         this._scrollContentToLastMessage();
 
@@ -325,12 +334,11 @@ class MessageList extends Widget<Properties> {
       this._createDayHeader(timestamp);
     }
 
-    this._createMessageGroupComponent([message], author?.id);
+    this._createMessageGroupComponent([message], author?.id, true);
 
     this._scrollContentToLastMessage();
 
     lastMessageGroup = this._messageGroups?.at(-1);
-    lastMessageGroup?._updateIsLastOptionOfLastMessage(true);
   }
 
   _$content(): dxElementWrapper {
