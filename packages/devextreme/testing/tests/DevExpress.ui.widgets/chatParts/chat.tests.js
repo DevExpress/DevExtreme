@@ -217,7 +217,7 @@ QUnit.module('Chat', () => {
             });
 
             const messageList = this.getMessageList();
-            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageList is passed on init');
+            assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on init');
         });
 
         QUnit.test('Chat should pass messageTemplate to messageList at runtime', function(assert) {
@@ -229,8 +229,15 @@ QUnit.module('Chat', () => {
 
             const messageList = this.getMessageList();
 
-
             assert.strictEqual(messageList.option('messageTemplate'), messageTemplate, 'messageTemplate is passed on runtime');
+        });
+
+        QUnit.test('Chat should pass messageTemplateData with chat instance to messageList', function(assert) {
+            this.reinit({ });
+
+            const messageList = this.getMessageList();
+            const messageTemplateData = messageList.option('messageTemplateData');
+            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData with chat instance is passed to messageList');
         });
     });
 

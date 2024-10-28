@@ -310,7 +310,7 @@ class MessageList extends Widget<Properties> {
   _renderMessage(message: Message): void {
     const { author, timestamp } = message;
 
-    let lastMessageGroup = this._messageGroups?.at(-1);
+    const lastMessageGroup = this._messageGroups?.at(-1);
     const shouldCreateDayHeader = this._shouldAddDayHeader(timestamp);
 
     lastMessageGroup?.updateIsLastOptionOfLastMessage(false);
@@ -337,8 +337,6 @@ class MessageList extends Widget<Properties> {
     this._createMessageGroupComponent([message], author?.id, true);
 
     this._scrollContentToLastMessage();
-
-    lastMessageGroup = this._messageGroups?.at(-1);
   }
 
   _$content(): dxElementWrapper {
