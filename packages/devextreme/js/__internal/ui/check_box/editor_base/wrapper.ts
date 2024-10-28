@@ -7,14 +7,27 @@ import { data } from '@js/core/element_data';
 import Callbacks from '@js/core/utils/callbacks';
 import OldEditor from '@js/ui/editor/editor';
 import { querySelectorInSameDocument } from '@ts/core/r1/utils/dom';
+
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
+
 export default class Editor extends ComponentWrapper {
+  showValidationMessageTimeout?: ReturnType<typeof setTimeout>;
+
+  validationRequest!: ReturnType<typeof Callbacks>;
+
+  _valueChangeAction!: Function;
+
+  _initialValue: unknown;
+
+  _valueChangeEventInstance?: Event;
+
   getProps() {
     const props = super.getProps();
     props.onFocusIn = () => {
       const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
       if (isValidationMessageShownOnFocus) {
+        // @ts-expect-error
         const $validationMessageWrapper = $(querySelectorInSameDocument(this.element(), '.dx-invalid-message.dx-overlay-wrapper'));
         $validationMessageWrapper === null || $validationMessageWrapper === void 0 || $validationMessageWrapper.removeClass(INVALID_MESSAGE_AUTO);
         const timeToWaitBeforeShow = 150;
@@ -47,12 +60,15 @@ export default class Editor extends ComponentWrapper {
   }
   _initializeComponent() {
     super._initializeComponent();
+    // @ts-expect-error
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly']
     });
   }
   _initOptions(options) {
+    // @ts-expect-error
     super._initOptions(options);
+    // @ts-expect-error
     this.option(ValidationEngine.initValidationOptions(options));
   }
   _getDefaultOptions() {
@@ -105,6 +121,7 @@ export default class Editor extends ComponentWrapper {
         this._raiseValueChangeAction(value, previousValue);
         break;
       case 'onValueChanged':
+        // @ts-expect-error
         this._valueChangeAction = this._createActionByOption('onValueChanged', {
           excludeValidators: ['disabled', 'readOnly']
         });
@@ -113,6 +130,7 @@ export default class Editor extends ComponentWrapper {
       case 'validationError':
       case 'validationErrors':
       case 'validationStatus':
+        // @ts-expect-error
         this.option(ValidationEngine.synchronizeValidationOptions(option, this.option()));
         break;
       default:
@@ -145,7 +163,11 @@ export default class Editor extends ComponentWrapper {
     }
   }
 }
+
+// @ts-expect-error
 const prevIsEditor = OldEditor.isEditor;
 const newIsEditor = instance => prevIsEditor(instance) || instance instanceof Editor;
+// @ts-expect-error
 Editor.isEditor = newIsEditor;
+// @ts-expect-error
 OldEditor.isEditor = newIsEditor;
