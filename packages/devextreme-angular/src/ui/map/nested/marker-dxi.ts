@@ -43,10 +43,10 @@ export class DxiMapMarkerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get onClick(): (() => void) {
+    get onClick(): Function {
         return this._getOption('onClick');
     }
-    set onClick(value: (() => void)) {
+    set onClick(value: Function) {
         this._setOption('onClick', value);
     }
 

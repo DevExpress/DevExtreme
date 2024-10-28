@@ -29,42 +29,42 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoValidatorAdapterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get applyValidationResults(): (() => void) {
+    get applyValidationResults(): Function {
         return this._getOption('applyValidationResults');
     }
-    set applyValidationResults(value: (() => void)) {
+    set applyValidationResults(value: Function) {
         this._setOption('applyValidationResults', value);
     }
 
     @Input()
-    get bypass(): (() => void) {
+    get bypass(): Function {
         return this._getOption('bypass');
     }
-    set bypass(value: (() => void)) {
+    set bypass(value: Function) {
         this._setOption('bypass', value);
     }
 
     @Input()
-    get focus(): (() => void) {
+    get focus(): Function {
         return this._getOption('focus');
     }
-    set focus(value: (() => void)) {
+    set focus(value: Function) {
         this._setOption('focus', value);
     }
 
     @Input()
-    get getValue(): (() => void) {
+    get getValue(): Function {
         return this._getOption('getValue');
     }
-    set getValue(value: (() => void)) {
+    set getValue(value: Function) {
         this._setOption('getValue', value);
     }
 
     @Input()
-    get reset(): (() => void) {
+    get reset(): Function {
         return this._getOption('reset');
     }
-    set reset(value: (() => void)) {
+    set reset(value: Function) {
         this._setOption('reset', value);
     }
 

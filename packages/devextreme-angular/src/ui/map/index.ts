@@ -252,10 +252,10 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
      */
     @Input()
-    get markers(): Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: (() => void), tooltip?: string | { isShown?: boolean, text?: string } }[] {
+    get markers(): Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[] {
         return this._getOption('markers');
     }
-    set markers(value: Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: (() => void), tooltip?: string | { isShown?: boolean, text?: string } }[]) {
+    set markers(value: Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]) {
         this._setOption('markers', value);
     }
 
@@ -544,7 +544,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() markersChange: EventEmitter<Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: (() => void), tooltip?: string | { isShown?: boolean, text?: string } }[]>;
+    @Output() markersChange: EventEmitter<Array<Record<string, any>> | { iconSrc?: string, location?: Array<number> | string | { lat?: number, lng?: number }[], onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }[]>;
 
     /**
     

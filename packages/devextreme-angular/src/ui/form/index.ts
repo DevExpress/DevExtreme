@@ -413,10 +413,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
      */
     @Input()
-    get screenByWidth(): (() => void) {
+    get screenByWidth(): Function {
         return this._getOption('screenByWidth');
     }
-    set screenByWidth(value: (() => void)) {
+    set screenByWidth(value: Function) {
         this._setOption('screenByWidth', value);
     }
 
@@ -758,7 +758,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
 
      */
-    @Output() screenByWidthChange: EventEmitter<(() => void)>;
+    @Output() screenByWidthChange: EventEmitter<Function>;
 
     /**
 

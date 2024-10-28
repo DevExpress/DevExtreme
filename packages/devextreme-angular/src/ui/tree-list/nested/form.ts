@@ -278,10 +278,10 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get screenByWidth(): (() => void) {
+    get screenByWidth(): Function {
         return this._getOption('screenByWidth');
     }
-    set screenByWidth(value: (() => void)) {
+    set screenByWidth(value: Function) {
         this._setOption('screenByWidth', value);
     }
 
