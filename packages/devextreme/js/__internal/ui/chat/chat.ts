@@ -33,7 +33,7 @@ type Properties = ChatProperties & {
   title: string;
   showDayHeaders: boolean;
   showAvatar: boolean;
-  showUsername: boolean;
+  showUserName: boolean;
   showMessageTimestamp: boolean;
 };
 
@@ -65,7 +65,7 @@ class Chat extends Widget<Properties> {
       user: { id: new Guid().toString() },
       errors: [],
       showAvatar: true,
-      showUsername: true,
+      showUserName: true,
       showMessageTimestamp: true,
       onMessageSend: undefined,
       onTypingStart: undefined,
@@ -136,7 +136,7 @@ class Chat extends Widget<Properties> {
       user,
       showDayHeaders,
       showAvatar,
-      showUsername,
+      showUserName,
       showMessageTimestamp,
     } = this.option();
 
@@ -152,7 +152,7 @@ class Chat extends Widget<Properties> {
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
       showAvatar,
-      showUsername,
+      showUserName,
       showMessageTimestamp,
     });
   }
@@ -316,7 +316,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'showDayHeaders':
       case 'showAvatar':
-      case 'showUsername':
+      case 'showUserName':
       case 'showMessageTimestamp':
         this._messageList.option(name, value);
         break;

@@ -25,7 +25,7 @@ export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
   showAvatar: boolean;
-  showUsername: boolean;
+  showUserName: boolean;
   showMessageTimestamp: boolean;
 }
 
@@ -40,7 +40,7 @@ class MessageGroup extends Widget<Properties> {
       items: [],
       alignment: 'start',
       showAvatar: true,
-      showUsername: true,
+      showUserName: true,
       showMessageTimestamp: true,
     };
   }
@@ -120,13 +120,13 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _renderMessageGroupInformation(message: Message): void {
-    const { alignment, showUsername, showMessageTimestamp } = this.option();
+    const { alignment, showUserName, showMessageTimestamp } = this.option();
     const { timestamp, author } = message;
 
     const $information = $('<div>')
       .addClass(CHAT_MESSAGEGROUP_INFORMATION_CLASS);
 
-    if (showUsername) {
+    if (showUserName) {
       const authorName = author?.name ?? messageLocalization.format('dxChat-defaultUserName');
       const authorNameText = alignment === 'start' ? authorName : '';
 
@@ -163,10 +163,8 @@ class MessageGroup extends Widget<Properties> {
     switch (name) {
       case 'items':
       case 'alignment':
-        this._invalidate();
-        break;
       case 'showAvatar':
-      case 'showUsername':
+      case 'showUserName':
       case 'showMessageTimestamp':
         this._invalidate();
         break;

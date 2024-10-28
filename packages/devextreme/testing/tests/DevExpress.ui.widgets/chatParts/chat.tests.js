@@ -188,7 +188,7 @@ QUnit.module('Chat', () => {
             assert.deepEqual(messageList.option('items'), newItems, 'items value is updated');
         });
 
-        ['showDayHeaders', 'showAvatar', 'showUsername', 'showMessageTimestamp'].forEach(option => {
+        ['showDayHeaders', 'showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
             QUnit.test(`Chat should pass ${option} to messageList on init`, function(assert) {
                 this.reinit({
                     [option]: false,
