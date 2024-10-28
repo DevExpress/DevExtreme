@@ -442,7 +442,7 @@ type IOptionsProps = React.PropsWithChildren<{
   tabIndex?: number;
   template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success";
+  type?: "danger" | "default" | "normal" | "success" | "string";
   useSubmitBehavior?: boolean;
   validationGroup?: string;
   visible?: boolean;

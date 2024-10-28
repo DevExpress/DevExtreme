@@ -1340,7 +1340,12 @@ declare module DevExpress.common {
     validationCallback?: (options: ValidationCallbackData) => PromiseLike<any>;
   };
   export type ButtonStyle = 'text' | 'outlined' | 'contained';
-  export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
+  export type ButtonType =
+    | 'danger'
+    | 'default'
+    | 'normal'
+    | 'success'
+    | 'string';
   /**
    * [descr:CompareRule]
    */
