@@ -5,7 +5,26 @@ import { createComponentVNode, normalizeProps } from "inferno";
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import LegacyValidationMessage from '@js/ui/validation_message';
 import { DomComponentWrapper } from '@ts/core/r1/dom_component_wrapper';
-import { BaseWidgetProps } from '@ts/core/r1/base_props';
+import { BaseWidgetProps, BaseWidgetDefaultProps } from '@ts/core/r1/base_props';
+
+export interface ValidationMessageProps extends BaseWidgetProps {
+  mode?: 'auto' | 'always';
+
+  validationErrors?: Record<string, unknown>[] | null;
+
+  positionSide?: string;
+
+  boundary?: string | Element | null;
+
+  visualContainer?: string | Element | null;
+
+  target?: string | Element | null;
+
+  offset?: Record<string, number>;
+
+  contentId?: string;
+}
+
 export const viewFunction = _ref => {
   let {
     componentProps,
@@ -17,7 +36,9 @@ export const viewFunction = _ref => {
     "templateNames": []
   }, restAttributes)));
 };
-export const ValidationMessageProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(BaseWidgetProps), Object.getOwnPropertyDescriptors({
+
+export const defaultValidationMessageProps = {
+  ...BaseWidgetDefaultProps,
   mode: 'auto',
   positionSide: 'top',
   offset: Object.freeze({
@@ -25,8 +46,9 @@ export const ValidationMessageProps = Object.create(Object.prototype, Object.ass
     v: 0
   }),
   isReactComponentWrapper: true
-})));
-export class ValidationMessage extends BaseInfernoComponent {
+}
+
+export class ValidationMessage extends BaseInfernoComponent<ValidationMessageProps> {
   constructor(props) {
     super(props);
     this.state = {};
@@ -48,4 +70,4 @@ export class ValidationMessage extends BaseInfernoComponent {
     });
   }
 }
-ValidationMessage.defaultProps = ValidationMessageProps;
+ValidationMessage.defaultProps = defaultValidationMessageProps;
