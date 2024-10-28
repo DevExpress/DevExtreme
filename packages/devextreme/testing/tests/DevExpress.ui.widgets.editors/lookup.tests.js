@@ -5,7 +5,7 @@ import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import errors from 'core/errors';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import messageLocalization from 'common/core/localization/message';
 
@@ -1568,7 +1568,7 @@ QUnit.module('options', {
         const popup = $lookup.find('.' + POPUP_CLASS).dxPopup('instance');
 
         let initialValue = popup.option('width');
-        if($.isFunction(initialValue)) {
+        if(isFunction(initialValue)) {
             initialValue = initialValue();
         }
 
@@ -1576,7 +1576,7 @@ QUnit.module('options', {
 
         instance.option('dropDownOptions.width', 'auto');
         let autoValue = popup.option('width');
-        if($.isFunction(autoValue)) {
+        if(isFunction(autoValue)) {
             autoValue = autoValue();
         }
 
@@ -1602,7 +1602,7 @@ QUnit.module('options', {
         const popup = $lookup.find('.' + POPUP_CLASS).dxPopup('instance');
 
         let initialValue = popup.option('height');
-        if($.isFunction(initialValue)) {
+        if(isFunction(initialValue)) {
             initialValue = initialValue();
         }
 
@@ -1610,7 +1610,7 @@ QUnit.module('options', {
 
         instance.option('dropDownOptions.height', 'auto');
         let autoValue = popup.option('height');
-        if($.isFunction(autoValue)) {
+        if(isFunction(autoValue)) {
             autoValue = autoValue();
         }
 

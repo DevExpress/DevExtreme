@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { createTextElementHiddenCopy } from '__internal/core/utils/m_dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import config from 'core/config';
@@ -7362,7 +7362,7 @@ QUnit.module('performance', () => {
 
         $item.trigger('dxclick');
         const filter = load.lastCall.args[0].filter;
-        assert.ok($.isFunction(filter[0]), 'filter is function');
+        assert.ok(isFunction(filter[0]), 'filter is function');
     });
 
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {
