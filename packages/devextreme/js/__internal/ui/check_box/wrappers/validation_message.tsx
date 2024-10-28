@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/ui/overlays/validation_message.js)
-* Version: 24.2.0
-* Build date: Fri Oct 25 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
 import _extends from "@babel/runtime/helpers/esm/extends";
 const _excluded = ["accessKey", "activeStateEnabled", "boundary", "className", "contentId", "disabled", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "mode", "offset", "onClick", "onKeyDown", "positionSide", "rtlEnabled", "tabIndex", "target", "validationErrors", "visible", "visualContainer", "width"];

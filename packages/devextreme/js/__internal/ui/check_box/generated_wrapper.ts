@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/ui/editors/check_box/check_box.j.js)
-* Version: 24.2.0
-* Build date: Fri Oct 25 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import registerComponent from '../../../../core/component_registrator';
 import BaseComponent from '../../../component_wrapper/editors/check_box';
 import { CheckBox as CheckBoxComponent, defaultOptions } from './check_box';

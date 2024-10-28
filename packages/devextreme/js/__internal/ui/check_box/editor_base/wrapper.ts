@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/component_wrapper/editors/editor.js)
-* Version: 24.2.0
-* Build date: Fri Oct 25 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import { isDefined } from '../../../core/utils/type';
 import Component from '../common/component';
 import ValidationEngine from '../../../ui/validation_engine';

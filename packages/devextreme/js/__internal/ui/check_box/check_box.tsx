@@ -1,11 +1,3 @@
-/**
-* DevExtreme (esm/renovation/ui/editors/check_box/check_box.js)
-* Version: 24.2.0
-* Build date: Fri Oct 25 2024
-*
-* Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-* Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
-*/
 import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
 import _extends from "@babel/runtime/helpers/esm/extends";
 const _excluded = ["accessKey", "activeStateEnabled", "aria", "className", "defaultValue", "disabled", "enableThreeStateBehavior", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "iconSize", "inputAttr", "isDirty", "isValid", "name", "onClick", "onFocusIn", "onKeyDown", "readOnly", "rtlEnabled", "saveValueChangeEvent", "tabIndex", "text", "validationError", "validationErrors", "validationMessageMode", "validationMessagePosition", "validationStatus", "value", "valueChange", "visible", "width"];
