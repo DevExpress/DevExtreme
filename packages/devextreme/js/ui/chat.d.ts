@@ -87,6 +87,12 @@ export type User = {
      * @public
      */
     avatarUrl?: string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    avatarAlt?: string;
 };
 
 /**
