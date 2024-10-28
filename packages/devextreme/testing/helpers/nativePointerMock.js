@@ -40,6 +40,7 @@
         const isString = function(val) { return typeof val === 'string'; };
         const isBoolean = function(val) { return typeof val === 'boolean'; };
         const isObject = function(val) { return typeof val === 'object'; };
+        const isNumeric = function(val) { return typeof val === 'number'; };
 
         const MOUSE_EVENTS = {
             'click': 1,
@@ -151,11 +152,11 @@
                 metaKey = false;
             }
 
-            if(!$.isNumeric(keyCode)) {
+            if(!isNumeric(keyCode)) {
                 keyCode = 0;
             }
 
-            if(!$.isNumeric(charCode)) {
+            if(!isNumeric(charCode)) {
                 charCode = 0;
             }
 
@@ -222,23 +223,23 @@
                 view = window;
             }
 
-            if(!$.isNumeric(detail)) {
+            if(!isNumeric(detail)) {
                 detail = 1;
             }
 
-            if(!$.isNumeric(screenX)) {
+            if(!isNumeric(screenX)) {
                 screenX = 0;
             }
 
-            if(!$.isNumeric(screenY)) {
+            if(!isNumeric(screenY)) {
                 screenY = 0;
             }
 
-            if(!$.isNumeric(clientX)) {
+            if(!isNumeric(clientX)) {
                 clientX = 0;
             }
 
-            if(!$.isNumeric(clientY)) {
+            if(!isNumeric(clientY)) {
                 clientY = 0;
             }
 
@@ -258,7 +259,7 @@
                 metaKey = false;
             }
 
-            if(!$.isNumeric(button)) {
+            if(!isNumeric(button)) {
                 button = 0;
             }
 
@@ -325,7 +326,7 @@
                     if(!isObject(view)) {
                         view = window;
 
-                        if(!$.isNumeric(detail)) {
+                        if(!isNumeric(detail)) {
                             detail = 1;
 
                             if($.isFunction(document.createEvent)) {
@@ -366,18 +367,18 @@
             if(!isBoolean(bubbles)) { bubbles = true; }
             if(!isBoolean(cancelable)) { cancelable = true; }
             if(!isObject(view)) { view = window; }
-            if(!$.isNumeric(detail)) { detail = 2; }
-            if(!$.isNumeric(screenX)) { screenX = 0; }
-            if(!$.isNumeric(screenY)) { screenY = 0; }
-            if(!$.isNumeric(clientX)) { clientX = 0; }
-            if(!$.isNumeric(clientY)) { clientY = 0; }
+            if(!isNumeric(detail)) { detail = 2; }
+            if(!isNumeric(screenX)) { screenX = 0; }
+            if(!isNumeric(screenY)) { screenY = 0; }
+            if(!isNumeric(clientX)) { clientX = 0; }
+            if(!isNumeric(clientY)) { clientY = 0; }
             if(!isBoolean(ctrlKey)) { ctrlKey = false; }
             if(!isBoolean(altKey)) { altKey = false; }
             if(!isBoolean(shiftKey)) { shiftKey = false; }
             if(!isBoolean(metaKey)) { metaKey = false; }
 
-            if(!$.isNumeric(scale)) { scale = 1.0; }
-            if(!$.isNumeric(rotation)) { rotation = 0.0; }
+            if(!isNumeric(scale)) { scale = 1.0; }
+            if(!isNumeric(rotation)) { rotation = 0.0; }
 
             const customEvent = document.createEvent('GestureEvent');
 
@@ -421,17 +422,17 @@
                 cancelable = (type !== 'touchcancel');
             }
             if(!isObject(view)) { view = window; }
-            if(!$.isNumeric(detail)) { detail = 1; }
-            if(!$.isNumeric(screenX)) { screenX = 0; }
-            if(!$.isNumeric(screenY)) { screenY = 0; }
-            if(!$.isNumeric(clientX)) { clientX = 0; }
-            if(!$.isNumeric(clientY)) { clientY = 0; }
+            if(!isNumeric(detail)) { detail = 1; }
+            if(!isNumeric(screenX)) { screenX = 0; }
+            if(!isNumeric(screenY)) { screenY = 0; }
+            if(!isNumeric(clientX)) { clientX = 0; }
+            if(!isNumeric(clientY)) { clientY = 0; }
             if(!isBoolean(ctrlKey)) { ctrlKey = false; }
             if(!isBoolean(altKey)) { altKey = false; }
             if(!isBoolean(shiftKey)) { shiftKey = false; }
             if(!isBoolean(metaKey)) { metaKey = false; }
-            if(!$.isNumeric(scale)) { scale = 1.0; }
-            if(!$.isNumeric(rotation)) { rotation = 0.0; }
+            if(!isNumeric(scale)) { scale = 1.0; }
+            if(!isNumeric(rotation)) { rotation = 0.0; }
 
             if(UA.android && !UA.chrome) {
                 customEvent = document.createEvent('MouseEvents');
