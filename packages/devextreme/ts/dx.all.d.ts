@@ -9530,7 +9530,7 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_chat_TypingEndEvent]
      */
-    export type TypingEndEvent = DevExpress.events.NativeEventInfo<dxChat> & {
+    export type TypingEndEvent = DevExpress.events.EventInfo<dxChat> & {
       /**
        * [descr:_ui_chat_TypingEndEvent.user]
        */
