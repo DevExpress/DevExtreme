@@ -7,6 +7,7 @@ import devices from 'core/devices';
 import themes from 'ui/themes';
 import support from 'core/utils/support';
 import publicComponentUtils from 'core/utils/public_component';
+import { isFunction } from 'core/utils/type';
 import { getNestedOptionValue } from 'core/options/utils';
 
 import ActionSheet from 'ui/action_sheet';
@@ -94,7 +95,7 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
             }
             const $container = $('#cmp');
             const component = new componentClass($container);
-            options = $.isFunction(options) ? options.call(component) : options;
+            options = isFunction(options) ? options.call(component) : options;
 
             const defaults = component.option();
             checkOptions.apply(component, [options, defaults, JSON.stringify(device), assert]);
@@ -111,7 +112,7 @@ const checkOptions = function(expectedOptions, resultOptions, deviceString, asse
     $.each(expectedOptions, function(optionName, expectedValue) {
         let resultValue = getNestedOptionValue(resultOptions, optionName);
 
-        resultValue = $.isFunction(resultValue) ? resultValue.call(that) : resultValue;
+        resultValue = isFunction(resultValue) ? resultValue.call(that) : resultValue;
 
         if($.isPlainObject(expectedValue)) {
             checkOptions(expectedValue, resultValue, null, assert);

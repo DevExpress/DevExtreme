@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
+import { isFunction } from 'core/utils/type';
 import vizMocks from '../../helpers/vizMocks.js';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import commons from './chartParts/commons.js';
@@ -1503,7 +1504,7 @@ const overlappingEnvironment = $.extend({}, environment, {
         });
 
         // assert
-        assert.ok($.isFunction(this.stubSeries.legendCallback), 'legend callback passed');
+        assert.ok(isFunction(this.stubSeries.legendCallback), 'legend callback passed');
     });
 
     QUnit.test('Legend callback', function(assert) {

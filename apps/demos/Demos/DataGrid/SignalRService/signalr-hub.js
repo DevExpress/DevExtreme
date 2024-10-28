@@ -15,6 +15,8 @@
     /// <param name="$" type="jQuery" />
     "use strict";
 
+    var isFunction = function(val) { return typeof val === 'function'; };
+
     if (typeof ($.signalR) !== "function") {
         throw new Error("SignalR: SignalR is not loaded. Please ensure jquery.signalR-x.js is referenced before ~/signalr/js.");
     }
@@ -53,7 +55,7 @@
                     if (hub.client.hasOwnProperty(memberKey)) {
                         memberValue = hub.client[memberKey];
 
-                        if (!$.isFunction(memberValue)) {
+                        if (!isFunction(memberValue)) {
                             // Not a client hub function
                             continue;
                         }

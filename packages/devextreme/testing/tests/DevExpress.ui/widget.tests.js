@@ -12,6 +12,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
 import { deferUpdate } from 'core/utils/common';
+import { isFunction } from 'core/utils/type';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import 'generic_light.css!';
@@ -441,7 +442,7 @@ QUnit.module('API', {
         const element = $('#widget');
         const instance = new NewWidget(element);
 
-        assert.ok($.isFunction(instance.repaint));
+        assert.ok(isFunction(instance.repaint));
 
         const children = element.children();
 
@@ -455,7 +456,7 @@ QUnit.module('API', {
         const $anotherElement = $('#another').dxWidget({ focusStateEnabled: true });
         const anotherInstance = $anotherElement.dxWidget('instance');
 
-        assert.ok($.isFunction(instance.focus), 'focus method exist');
+        assert.ok(isFunction(instance.focus), 'focus method exist');
 
         anotherInstance.focus();
         assert.ok($anotherElement.hasClass(FOCUSED_STATE_CLASS), '\'focus\' method focus the widget');

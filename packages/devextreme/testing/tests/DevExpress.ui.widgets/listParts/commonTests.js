@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from 'core/devices';
@@ -94,7 +94,7 @@ const ScrollViewMock = DOMComponent.inherit({
 
     pullDown() {
         const pullDownHandler = this.option('onPullDown');
-        if($.isFunction(pullDownHandler)) {
+        if(isFunction(pullDownHandler)) {
             pullDownHandler();
         }
     },
@@ -102,7 +102,7 @@ const ScrollViewMock = DOMComponent.inherit({
     scrollBottom() {
         const scrollBottomHandler = this.option('onReachBottom');
 
-        if($.isFunction(scrollBottomHandler)) {
+        if(isFunction(scrollBottomHandler)) {
             scrollBottomHandler();
         }
     },
@@ -2230,7 +2230,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         const widget = this.element.dxList('instance');
         const changedHandler = widget._proxiedDataSourceChangedHandler;
-        assert.ok($.isFunction(changedHandler));
+        assert.ok(isFunction(changedHandler));
         assert.ok(dataSource._eventsStrategy._events['changed'].has(changedHandler));
 
         widget._dispose();

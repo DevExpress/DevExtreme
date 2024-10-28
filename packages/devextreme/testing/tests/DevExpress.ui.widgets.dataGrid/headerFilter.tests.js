@@ -6,6 +6,7 @@ import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
 import { noop } from 'core/utils/common';
+import { isFunction } from 'core/utils/type';
 import ODataStore from 'data/odata/store';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
@@ -1764,7 +1765,7 @@ QUnit.module('Header Filter', {
 
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
-        assert.ok($.isFunction(list.option('searchExpr')), 'expr is correct');
+        assert.ok(isFunction(list.option('searchExpr')), 'expr is correct');
         assert.equal(list.option('searchTimeout'), 300, 'search timeout is assigned');
         assert.equal(list.option('searchMode'), 'contains', 'search mode is default');
     });
@@ -1803,7 +1804,7 @@ QUnit.module('Header Filter', {
 
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
-        assert.ok($.isFunction(list.option('searchExpr')), 'expr is correct');
+        assert.ok(isFunction(list.option('searchExpr')), 'expr is correct');
         assert.equal(list.option('searchTimeout'), 300, 'search timeout is assigned');
         assert.equal(list.option('searchMode'), 'equals', 'search mode is assigned');
     });

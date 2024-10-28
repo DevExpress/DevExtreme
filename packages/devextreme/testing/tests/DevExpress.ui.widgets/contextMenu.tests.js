@@ -9,7 +9,7 @@ import ContextMenu from 'ui/context_menu';
 import { addNamespace } from 'events/utils/index';
 import contextMenuEvent from 'events/contextmenu';
 import holdEvent from 'events/hold';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
@@ -1013,11 +1013,11 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
 
         let d = instance.show();
 
-        assert.ok($.isFunction(d.promise), 'type object is the Deferred');
+        assert.ok(isFunction(d.promise), 'type object is the Deferred');
 
         d = instance.hide();
 
-        assert.ok($.isFunction(d.promise), 'type object is the Deferred');
+        assert.ok(isFunction(d.promise), 'type object is the Deferred');
     });
 
     QUnit.test('overlay wrapper should have the same size as window (T1102095)', function(assert) {

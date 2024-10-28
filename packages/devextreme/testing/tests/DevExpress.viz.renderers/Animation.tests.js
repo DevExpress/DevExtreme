@@ -833,11 +833,11 @@ QUnit.module('SvgAnimationStep', {
 QUnit.test('animateSvgStep object', function(assert) {
     const step = this.animationStep;
     assert.ok(step);
-    assert.ok($.isFunction(step.segments), 'can animate segments');
-    assert.ok($.isFunction(step.transform), 'can animate transform');
-    assert.ok($.isFunction(step.complete), 'complete action for all animate');
-    assert.ok($.isFunction(step.base), 'can translate same attribute');
-    assert.ok($.isFunction(step._), 'no action step');
+    assert.ok(typeUtils.isFunction(step.segments), 'can animate segments');
+    assert.ok(typeUtils.isFunction(step.transform), 'can animate transform');
+    assert.ok(typeUtils.isFunction(step.complete), 'complete action for all animate');
+    assert.ok(typeUtils.isFunction(step.base), 'can translate same attribute');
+    assert.ok(typeUtils.isFunction(step._), 'no action step');
 });
 
 QUnit.test('Base step', function(assert) {

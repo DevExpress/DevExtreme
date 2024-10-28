@@ -3100,7 +3100,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         let reloadResolved = false;
         const d = dataGrid.refresh();
 
-        assert.ok($.isFunction(d.promise), 'type object is the Deferred');
+        assert.ok(typeUtils.isFunction(d.promise), 'type object is the Deferred');
         d.done(function() {
             reloadResolved = true;
         });

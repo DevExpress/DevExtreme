@@ -62,7 +62,7 @@ const processColumnsForCompare = function(columns, parameterNames, ignoreParamet
                     delete this[propertyName];
                 }
             } else {
-                if($.isFunction(this[propertyName])) {
+                if(isFunction(this[propertyName])) {
                     delete this[propertyName];
                 }
                 if([

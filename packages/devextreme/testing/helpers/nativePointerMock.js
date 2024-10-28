@@ -41,6 +41,7 @@
         const isBoolean = function(val) { return typeof val === 'boolean'; };
         const isObject = function(val) { return typeof val === 'object'; };
         const isNumeric = function(val) { return typeof val === 'number'; };
+        const isFunction = function(val) { return typeof val === 'function'; };
 
         const MOUSE_EVENTS = {
             'click': 1,
@@ -329,7 +330,7 @@
                         if(!isNumeric(detail)) {
                             detail = 1;
 
-                            if($.isFunction(document.createEvent)) {
+                            if(isFunction(document.createEvent)) {
 
                                 customEvent = document.createEvent('UIEvents');
                                 customEvent.initUIEvent(type, bubbles, cancelable, view, detail);
