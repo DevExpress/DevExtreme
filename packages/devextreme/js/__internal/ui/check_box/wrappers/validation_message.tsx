@@ -25,18 +25,6 @@ export interface ValidationMessageProps extends BaseWidgetProps {
   contentId?: string;
 }
 
-export const viewFunction = _ref => {
-  let {
-    componentProps,
-    restAttributes
-  } = _ref;
-  return normalizeProps(createComponentVNode(2, DomComponentWrapper, _extends({
-    "componentType": LegacyValidationMessage,
-    "componentProps": componentProps,
-    "templateNames": []
-  }, restAttributes)));
-};
-
 export const defaultValidationMessageProps = {
   ...BaseWidgetDefaultProps,
   mode: 'auto',
@@ -62,12 +50,14 @@ export class ValidationMessage extends BaseInfernoComponent<ValidationMessagePro
     return restProps;
   }
   render() {
-    const props = this.props;
-    return viewFunction({
-      props: _extends({}, props),
-      componentProps: this.componentProps,
-      restAttributes: this.restAttributes
-    });
+    return (
+      <DomComponentWrapper
+        componentType={LegacyValidationMessage}
+        componentProps={this.props}
+        templateNames={[]}
+        {...this.restAttributes}
+      />
+    );
   }
 }
 ValidationMessage.defaultProps = defaultValidationMessageProps;
