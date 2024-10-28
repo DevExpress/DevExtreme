@@ -1,7 +1,4 @@
-import _extends from "@babel/runtime/helpers/esm/extends";
-import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
-const _excluded = ["size"];
-import { createVNode, RefObject } from "inferno";
+import { RefObject } from "inferno";
 import { createRef as infernoCreateRef } from 'inferno';
 import { BaseInfernoComponent, normalizeStyles } from '@devextreme/runtime/inferno';
 import { normalizeStyleProp } from '@js/core/utils/style';
@@ -41,8 +38,7 @@ export class CheckBoxIcon extends BaseInfernoComponent {
   }
 
   get restAttributes() {
-    const _this$props = this.props,
-      restProps = _objectWithoutPropertiesLoose(_this$props, _excluded);
+    const { size, ...restProps } = this.props;
     return restProps;
   }
 
