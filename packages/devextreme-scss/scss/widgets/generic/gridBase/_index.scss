@@ -20,7 +20,7 @@
 // adduse
 @use "../scrollable";
 @use "../overlay";
-@use "../pager";
+@use "../pagination";
 
 $generic-grid-base-border-hidden: 1px solid transparent;
 $generic-grid-base-row-border: 1px solid transparent;
@@ -962,25 +962,6 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
   .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
     background-color: $datagrid-base-background-color;
-  }
-
-  .dx-#{$widget-name}-pager {
-    border-top: 1px solid $datagrid-border-color;
-
-    .dx-page,
-    .dx-page-size,
-    .dx-navigate-button {
-      outline: none;
-    }
-
-    &.dx-state-focused {
-      .dx-page:focus,
-      .dx-page-size:focus,
-      .dx-navigate-button:focus {
-        outline: 2px solid $datagrid-focused-border-color;
-        outline-offset: -2px;
-      }
-    }
   }
 
   .dx-#{$widget-name}-summary-item {

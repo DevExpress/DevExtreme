@@ -2,7 +2,7 @@ import { getChanges } from '../comparer';
 import { IConfigNode } from '../config-node';
 
 const emptyNode: IConfigNode = {
-  fullName: '',
+  name: '',
   predefinedOptions: {},
   initialOptions: {},
   options: {},
@@ -22,7 +22,7 @@ describe('child config nodes comparing', () => {
       configs: {
         option: {
           ...emptyNode,
-          fullName: 'option',
+          name: 'option',
           options: { a: 1 },
         },
       },
@@ -36,58 +36,99 @@ describe('child config nodes comparing', () => {
 
 describe('collections comparing', () => {
   it('detects additions', () => {
-    const prevConfig = {
+    const prevConfig: IConfigNode = {
       ...emptyNode,
-      fullName: 'items[0].items[0]',
+      name: 'items',
+      index: 0,
       configCollections: {
-        items: [
-          {
-            ...emptyNode,
-            fullName: 'items[0].items[0].items[0]',
-            options: {
-              a: 1,
-            },
-          },
-          {
-            ...emptyNode,
-            fullName: 'items[0].items[0].items[1]',
-            options: {
-              b: 2,
-            },
-          },
-        ],
+        items: [],
       },
     };
 
-    const currentConfig = {
+    prevConfig.configCollections.items.push(
+      {
+        ...emptyNode,
+        name: 'items',
+        index: 0,
+        parentNode: prevConfig,
+        configCollections: {
+          items: [],
+        },
+      }
+    );
+
+    prevConfig.configCollections.items[0].configCollections.items.push(
+      {
+        ...emptyNode,
+        name: 'items',
+        index: 0,
+        parentNode: prevConfig.configCollections.items[0],
+        options: {
+          a: 1,
+        },
+      },
+      {
+        ...emptyNode,
+        name: 'items',
+        index: 1,
+        parentNode: prevConfig.configCollections.items[0],
+        options: {
+          b: 2,
+        },
+      },
+    );
+
+
+    const currentConfig: IConfigNode = {
       ...emptyNode,
-      fullName: 'items[0].items[0]',
+      name: 'items',
+      index: 0,
       configCollections: {
-        items: [
-          {
-            ...emptyNode,
-            fullName: 'items[0].items[0].items[0]',
-            options: {
-              a: 11,
-            },
-          },
-          {
-            ...emptyNode,
-            fullName: 'items[0].items[0].items[1]',
-            options: {
-              b: 22,
-            },
-          },
-          {
-            ...emptyNode,
-            fullName: 'items[0].items[0].items[2]',
-            options: {
-              c: 33,
-            },
-          },
-        ],
+        items: [],
       },
     };
+
+    currentConfig.configCollections.items.push(
+      {
+        ...emptyNode,
+        name: 'items',
+        index: 0,
+        parentNode: currentConfig,
+        configCollections: {
+          items: [],
+        },
+      }
+    );
+
+    currentConfig.configCollections.items[0].configCollections.items.push(
+      {
+        ...emptyNode,
+        name: 'items',
+        index: 0,
+        parentNode: currentConfig.configCollections.items[0],
+        options: {
+          a: 11,
+        },
+      },
+      {
+        ...emptyNode,
+        name: 'items',
+        index: 1,
+        parentNode: currentConfig.configCollections.items[0],
+        options: {
+          b: 22,
+        },
+      },
+      {
+        ...emptyNode,
+        name: 'items',
+        index: 2,
+        parentNode: currentConfig.configCollections.items[0],
+        options: {
+          c: 33,
+        },
+      },
+    );
 
     const changes = getChanges(currentConfig, prevConfig);
     expect(Object.keys(changes.options).length).toEqual(1);
