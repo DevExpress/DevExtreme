@@ -113,6 +113,25 @@ export interface MentionTemplateData {
     readonly id?: string | number;
     readonly value?: any;
 }
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxHtmlEditor
+ * @public
+ */
+export type Converter = {
+     /**
+     * @docid
+     * @public
+     */
+    toHtml?: ((value: string) => string);
+     /**
+     * @docid
+     * @public
+     */
+    fromHtml?: ((value: string) => string);
+};
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -131,6 +150,12 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @public
      */
     customizeModules?: ((config: any) => void);
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    converter?: Converter;
     /**
      * @docid
      * @default true

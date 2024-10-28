@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule } from 'devextreme-angular';
-import { DxMenuModule } from 'devextreme-angular/ui/menu';
+import { DxMenuModule, DxMenuTypes } from 'devextreme-angular/ui/menu';
 import notify from 'devextreme/ui/notify';
 import { Product, Service } from './app.service';
 
@@ -33,13 +33,13 @@ export class AppComponent {
     this.products = service.getProducts();
   }
 
-  itemClick(e: ItemClickEvent) {
+  itemClick(e: DxMenuTypes.ItemClickEvent) {
     if (!e.itemData.items) {
       notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
     }
   }
 
-  onSubmenuShowing({ submenuContainer }: HTMLElement) {
+  onSubmenuShowing({ submenuContainer }: DxMenuTypes.SubmenuShowingEvent) {
     submenuContainer.style.maxHeight = this.limitSubmenuHeight ? `${this.SUBMENU_HEIGHT}px` : '';
   }
 }

@@ -8,25 +8,13 @@ const DEFAULT_OUT_COLOR_SCHEME = 'custom-scheme';
 
 const extname = (filename: string): string => filename.substring(filename.lastIndexOf('.'));
 
-const getBootstrapConfig = (fileName: string, configVersion: string | number): ConfigSettings => {
+const getBootstrapConfig = (fileName: string, configVersion: number): ConfigSettings => {
   const extension = extname(fileName);
-  let bootstrap = false;
-  let version = 0;
+  const isBootstrap = ['.scss'].includes(extension);
 
-  if (extension === '.scss') {
-    bootstrap = true;
-    version = 4;
-  } else if (extension === '.less') {
-    bootstrap = true;
-    version = 3;
-  }
-
-  if (version === 4 && (configVersion === 4 || configVersion === 5)) {
-    version = configVersion;
-  }
-
-  return { isBootstrap: bootstrap, bootstrapVersion: version };
+  return { isBootstrap, bootstrapVersion: isBootstrap ? configVersion : 0 };
 };
+
 
 const getOutParameters = (
   command: string,

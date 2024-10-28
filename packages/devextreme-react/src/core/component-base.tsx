@@ -9,6 +9,7 @@ import {
   useLayoutEffect,
   useCallback,
   useState,
+  useMemo,
   ReactElement,
 } from 'react';
 
@@ -18,13 +19,21 @@ import config from 'devextreme/core/config';
 
 import { createPortal } from 'react-dom';
 
-import { RemovalLockerContext, RestoreTreeContext } from './helpers';
+import { useOptionScanning } from './use-option-scanning';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
-import { buildConfigTree } from './configuration/react/tree';
 import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
+import { ElementType } from './configuration/react/element';
+import { IConfigNode } from './configuration/config-node';
+
+import {
+  NestedOptionContext,
+  RemovalLockerContext,
+  RestoreTreeContext,
+  TemplateDiscoveryContext,
+} from './contexts';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -33,7 +42,7 @@ config({
 });
 
 type ComponentBaseProps = ComponentProps & {
-  renderChildren?: () => Record<string, unknown>[] | null | undefined;
+  renderChildren?: () => React.ReactNode;
 };
 
 interface ComponentBaseRef {
@@ -67,7 +76,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       afterCreateWidget = () => undefined,
     } = props;
 
-    const [, setForceUpdateToken] = useState(0);
+    const [, setForceUpdateToken] = useState(Symbol('initial force update token'));
     const removalLocker = useContext(RemovalLockerContext);
     const restoreParentLink = useContext(RestoreTreeContext);
     const instance = useRef<any>();
@@ -85,6 +94,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const updateTemplates = useRef<(callback: () => void) => void>();
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
+
+    let widgetConfig: IConfigNode;
 
     const restoreTree = useCallback(() => {
       if (childElementsDetached.current && childNodes.current?.length && element.current) {
@@ -134,21 +145,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         );
       }
     }, [element.current]);
-
-    const getConfig = useCallback(() => buildConfigTree(
-      {
-        templates: templateProps,
-        initialValuesProps: defaults,
-        predefinedValuesProps: {},
-        expectedChildren,
-      },
-      props,
-    ), [
-      templateProps,
-      defaults,
-      expectedChildren,
-      props,
-    ]);
 
     const setTemplateManagerHooks = useCallback(({
       createDXTemplates: createDXTemplatesFn,
@@ -208,8 +204,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       el = el || element.current;
 
-      const widgetConfig = getConfig();
-
       let options: any = {
         templatesRenderAsynchronously: true,
         ...optionsManager.current.getInitialOptions(widgetConfig),
@@ -254,7 +248,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       instance.current,
       subscribableOptions,
       independentEvents,
-      getConfig,
     ]);
 
     const onTemplatesRendered = useCallback(() => {
@@ -271,8 +264,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       updateCssClasses(prevPropsRef.current, props);
 
-      const widgetConfig = getConfig();
-
       const templateOptions = optionsManager.current.getTemplateOptions(widgetConfig);
       const dxTemplates = createDXTemplates.current?.(templateOptions) || {};
 
@@ -286,7 +277,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       createDXTemplates.current,
       scheduleTemplatesUpdate,
       updateCssClasses,
-      getConfig,
       props,
     ]);
 
@@ -348,6 +338,29 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       shouldRestoreFocus.current,
     ]);
 
+    const templateContainer = useMemo(() => document.createElement('div'), []);
+
+    const options = useOptionScanning(
+      {
+        type: ElementType.Option,
+        descriptor: {
+          name: '',
+          isCollection: false,
+          templates: templateProps,
+          initialValuesProps: defaults,
+          predefinedValuesProps: {},
+          expectedChildren,
+        },
+        props,
+      },
+      props.children,
+      templateContainer,
+      Symbol('initial update token'),
+    );
+
+    [widgetConfig] = options;
+    const [, context] = options;
+
     useLayoutEffect(() => {
       onComponentMounted();
 
@@ -379,7 +392,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         return renderChildren();
       }
 
-      // @ts-expect-error TS2339
       const { children } = props;
       return children;
     }, [props, renderChildren]);
@@ -390,7 +402,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ), [portalContainer.current, _renderChildren]);
 
     const renderContent = useCallback(() => {
-      // @ts-expect-error TS2339
       const { children } = props;
 
       return isPortalComponent && children
@@ -398,7 +409,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           ref: (node: HTMLDivElement | null) => {
             if (node && portalContainer.current !== node) {
               portalContainer.current = node;
-              setForceUpdateToken(Math.random());
+              setForceUpdateToken(Symbol('force update token'));
             }
           },
           style: { display: 'contents' },
@@ -411,21 +422,30 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       _renderChildren,
     ]);
 
-    return React.createElement(
-      RestoreTreeContext.Provider,
-      {
-        value: restoreTree,
-      },
-      React.createElement(
-        'div',
-        getElementProps(),
-        renderContent(),
-        React.createElement(TemplateManager, {
-          init: setTemplateManagerHooks,
-          onTemplatesRendered,
-        }),
-      ),
-      isPortalComponent && renderPortal(),
+    return (
+      <RestoreTreeContext.Provider value={restoreTree}>
+        <TemplateDiscoveryContext.Provider value={{ discoveryRendering: false }}>
+          {
+            createPortal(
+              <TemplateDiscoveryContext.Provider value={{ discoveryRendering: true }}>
+                {_renderChildren()}
+              </TemplateDiscoveryContext.Provider>,
+              templateContainer,
+            )
+          }
+          <div {...getElementProps()}>
+            <NestedOptionContext.Provider value={context}>
+              {renderContent()}
+            </NestedOptionContext.Provider>
+            <TemplateManager init={setTemplateManagerHooks} onTemplatesRendered={onTemplatesRendered}/>
+              { isPortalComponent
+                && <NestedOptionContext.Provider value={context}>
+                  { renderPortal() }
+                </NestedOptionContext.Provider>
+              }
+          </div>
+        </TemplateDiscoveryContext.Provider>
+      </RestoreTreeContext.Provider>
     );
   },
 ) as <P extends IHtmlOptions>(props: P & ComponentBaseProps & { ref?: React.Ref<ComponentBaseRef> }) => ReactElement | null;

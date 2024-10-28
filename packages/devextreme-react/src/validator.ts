@@ -6,7 +6,7 @@ import dxValidator, {
 } from "devextreme/ui/validator";
 
 import { ExtensionComponent as BaseComponent } from "./core/extension-component";
-import { IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 type IValidatorOptions = React.PropsWithChildren<Properties & IHtmlOptions>
@@ -57,8 +57,8 @@ const _componentValidator = memo(
   ),
 ) as (props: React.PropsWithChildren<IValidatorOptions> & { ref?: Ref<ValidatorRef> }) => ReactElement | null;
 
-const Validator: typeof _componentValidator & { isExtensionComponent: boolean } = Object.assign(_componentValidator, {
-  isExtensionComponent: true,
+const Validator = Object.assign<typeof _componentValidator, NestedComponentMeta>(_componentValidator, {
+  componentType: "extension",
 });
 
 
@@ -72,15 +72,18 @@ type IAdapterProps = React.PropsWithChildren<{
   reset?: (() => void);
   validationRequestsCallbacks?: Array<(() => void)>;
 }>
-const _componentAdapter = memo(
-  (props: IAdapterProps) => {
-    return React.createElement(NestedOption<IAdapterProps>, { ...props });
-  }
-);
+const _componentAdapter = (props: IAdapterProps) => {
+  return React.createElement(NestedOption<IAdapterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "adapter",
+    },
+  });
+};
 
-const Adapter: typeof _componentAdapter & IElementDescriptor = Object.assign(_componentAdapter, {
-  OptionName: "adapter",
-})
+const Adapter = Object.assign<typeof _componentAdapter, NestedComponentMeta>(_componentAdapter, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -91,19 +94,22 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
 }>
-const _componentAsyncRule = memo(
-  (props: IAsyncRuleProps) => {
-    return React.createElement(NestedOption<IAsyncRuleProps>, { ...props });
-  }
-);
+const _componentAsyncRule = (props: IAsyncRuleProps) => {
+  return React.createElement(NestedOption<IAsyncRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "async"
+      },
+    },
+  });
+};
 
-const AsyncRule: typeof _componentAsyncRule & IElementDescriptor = Object.assign(_componentAsyncRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "async"
-  },
-})
+const AsyncRule = Object.assign<typeof _componentAsyncRule, NestedComponentMeta>(_componentAsyncRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -114,19 +120,22 @@ type ICompareRuleProps = React.PropsWithChildren<{
   message?: string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-const _componentCompareRule = memo(
-  (props: ICompareRuleProps) => {
-    return React.createElement(NestedOption<ICompareRuleProps>, { ...props });
-  }
-);
+const _componentCompareRule = (props: ICompareRuleProps) => {
+  return React.createElement(NestedOption<ICompareRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "compare"
+      },
+    },
+  });
+};
 
-const CompareRule: typeof _componentCompareRule & IElementDescriptor = Object.assign(_componentCompareRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "compare"
-  },
-})
+const CompareRule = Object.assign<typeof _componentCompareRule, NestedComponentMeta>(_componentCompareRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -137,19 +146,22 @@ type ICustomRuleProps = React.PropsWithChildren<{
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
 }>
-const _componentCustomRule = memo(
-  (props: ICustomRuleProps) => {
-    return React.createElement(NestedOption<ICustomRuleProps>, { ...props });
-  }
-);
+const _componentCustomRule = (props: ICustomRuleProps) => {
+  return React.createElement(NestedOption<ICustomRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "custom"
+      },
+    },
+  });
+};
 
-const CustomRule: typeof _componentCustomRule & IElementDescriptor = Object.assign(_componentCustomRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "custom"
-  },
-})
+const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMeta>(_componentCustomRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -158,19 +170,22 @@ type IEmailRuleProps = React.PropsWithChildren<{
   message?: string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-const _componentEmailRule = memo(
-  (props: IEmailRuleProps) => {
-    return React.createElement(NestedOption<IEmailRuleProps>, { ...props });
-  }
-);
+const _componentEmailRule = (props: IEmailRuleProps) => {
+  return React.createElement(NestedOption<IEmailRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "email"
+      },
+    },
+  });
+};
 
-const EmailRule: typeof _componentEmailRule & IElementDescriptor = Object.assign(_componentEmailRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "email"
-  },
-})
+const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>(_componentEmailRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -179,19 +194,22 @@ type INumericRuleProps = React.PropsWithChildren<{
   message?: string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-const _componentNumericRule = memo(
-  (props: INumericRuleProps) => {
-    return React.createElement(NestedOption<INumericRuleProps>, { ...props });
-  }
-);
+const _componentNumericRule = (props: INumericRuleProps) => {
+  return React.createElement(NestedOption<INumericRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "numeric"
+      },
+    },
+  });
+};
 
-const NumericRule: typeof _componentNumericRule & IElementDescriptor = Object.assign(_componentNumericRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "numeric"
-  },
-})
+const NumericRule = Object.assign<typeof _componentNumericRule, NestedComponentMeta>(_componentNumericRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -201,19 +219,22 @@ type IPatternRuleProps = React.PropsWithChildren<{
   pattern?: RegExp | string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-const _componentPatternRule = memo(
-  (props: IPatternRuleProps) => {
-    return React.createElement(NestedOption<IPatternRuleProps>, { ...props });
-  }
-);
+const _componentPatternRule = (props: IPatternRuleProps) => {
+  return React.createElement(NestedOption<IPatternRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "pattern"
+      },
+    },
+  });
+};
 
-const PatternRule: typeof _componentPatternRule & IElementDescriptor = Object.assign(_componentPatternRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "pattern"
-  },
-})
+const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentMeta>(_componentPatternRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -225,19 +246,22 @@ type IRangeRuleProps = React.PropsWithChildren<{
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-const _componentRangeRule = memo(
-  (props: IRangeRuleProps) => {
-    return React.createElement(NestedOption<IRangeRuleProps>, { ...props });
-  }
-);
+const _componentRangeRule = (props: IRangeRuleProps) => {
+  return React.createElement(NestedOption<IRangeRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "range"
+      },
+    },
+  });
+};
 
-const RangeRule: typeof _componentRangeRule & IElementDescriptor = Object.assign(_componentRangeRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "range"
-  },
-})
+const RangeRule = Object.assign<typeof _componentRangeRule, NestedComponentMeta>(_componentRangeRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -246,19 +270,22 @@ type IRequiredRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-const _componentRequiredRule = memo(
-  (props: IRequiredRuleProps) => {
-    return React.createElement(NestedOption<IRequiredRuleProps>, { ...props });
-  }
-);
+const _componentRequiredRule = (props: IRequiredRuleProps) => {
+  return React.createElement(NestedOption<IRequiredRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "required"
+      },
+    },
+  });
+};
 
-const RequiredRule: typeof _componentRequiredRule & IElementDescriptor = Object.assign(_componentRequiredRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "required"
-  },
-})
+const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponentMeta>(_componentRequiredRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -270,19 +297,22 @@ type IStringLengthRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-const _componentStringLengthRule = memo(
-  (props: IStringLengthRuleProps) => {
-    return React.createElement(NestedOption<IStringLengthRuleProps>, { ...props });
-  }
-);
+const _componentStringLengthRule = (props: IStringLengthRuleProps) => {
+  return React.createElement(NestedOption<IStringLengthRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "stringLength"
+      },
+    },
+  });
+};
 
-const StringLengthRule: typeof _componentStringLengthRule & IElementDescriptor = Object.assign(_componentStringLengthRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "stringLength"
-  },
-})
+const StringLengthRule = Object.assign<typeof _componentStringLengthRule, NestedComponentMeta>(_componentStringLengthRule, {
+  componentType: "option",
+});
 
 // owners:
 // Validator
@@ -299,19 +329,22 @@ type IValidationRuleProps = React.PropsWithChildren<{
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
   pattern?: RegExp | string;
 }>
-const _componentValidationRule = memo(
-  (props: IValidationRuleProps) => {
-    return React.createElement(NestedOption<IValidationRuleProps>, { ...props });
-  }
-);
+const _componentValidationRule = (props: IValidationRuleProps) => {
+  return React.createElement(NestedOption<IValidationRuleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "validationRules",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        type: "required"
+      },
+    },
+  });
+};
 
-const ValidationRule: typeof _componentValidationRule & IElementDescriptor = Object.assign(_componentValidationRule, {
-  OptionName: "validationRules",
-  IsCollectionItem: true,
-  PredefinedProps: {
-    type: "required"
-  },
-})
+const ValidationRule = Object.assign<typeof _componentValidationRule, NestedComponentMeta>(_componentValidationRule, {
+  componentType: "option",
+});
 
 export default Validator;
 export {

@@ -1363,6 +1363,7 @@ testComponentDefaults(Avatar,
     {
         name: 'Unknown User',
         url: '',
+        alt: '',
     }
 );
 

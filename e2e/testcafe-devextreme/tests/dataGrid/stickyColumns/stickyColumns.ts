@@ -69,6 +69,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`left-position-1(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -81,6 +83,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [900, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 884,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -100,6 +103,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`right-position-1(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -112,6 +117,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [900, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 884,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -131,6 +137,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`left-right-positions-1(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -143,6 +151,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [900, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 884,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -166,6 +175,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`left-right-sticky-positions-1(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -178,6 +189,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -209,6 +221,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`sticky-position-1-(case-1)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -221,6 +235,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -244,6 +259,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`sticky-position-1-(case-2)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -256,6 +273,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -285,6 +303,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`sticky-position-1-(case-3)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rowAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -297,6 +317,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -326,6 +347,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-1)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -338,6 +361,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -386,6 +410,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-2)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -398,6 +424,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -446,6 +473,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-3)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -458,6 +487,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -506,6 +536,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-4)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -518,6 +550,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -564,6 +597,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-5)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -576,6 +611,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -622,6 +658,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-6)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -634,6 +672,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -683,6 +722,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-7)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -695,6 +736,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -744,6 +786,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-8)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -756,6 +800,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -795,6 +840,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-9)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -807,6 +854,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -846,6 +894,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-10)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -858,6 +908,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -897,6 +948,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-11)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -909,6 +962,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -945,6 +999,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-12)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -957,6 +1013,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -993,6 +1050,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-13)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -1005,6 +1064,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -1041,6 +1101,8 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
       const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+      await t.expect(dataGrid.isReady()).ok();
+
       await takeScreenshot(`band-columns-1-(case-14)(rLines_=_${showRowLines}_cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}_rAlt_=_${rowAlternationEnabled}).png`, dataGrid.element);
 
       // act
@@ -1053,6 +1115,7 @@ borderConfigs.forEach(({ showRowLines, showColumnLines, showBorders }) => {
         .ok(compareResults.errorMessages());
     }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
       dataSource: getData(5, 25),
+      width: 984,
       showRowLines,
       showColumnLines,
       showBorders,
@@ -1092,6 +1155,8 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scrollbarVerticalThumbTrack = dataGrid.getScrollBarThumbTrack('horizontal');
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await t.hover(scrollbarVerticalThumbTrack);
   await takeScreenshot('simulated_scrollbar_with_sticky_columns_1.png', dataGrid.element);
 
@@ -1107,6 +1172,7 @@ safeSizeTest('The simulated scrollbar should display correctly when there are st
     .ok(compareResults.errorMessages());
 }, [1000, 800]).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(5, 25),
+  width: 984,
   columnAutoWidth: true,
   scrolling: {
     useNative: false,

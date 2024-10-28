@@ -14,6 +14,8 @@ safeSizeTest('The row edit mode: Edit row when there are sticky columns', async 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiEditRow(1);
   await t.click(dataGrid.getDataCell(1, 1).element);
 
@@ -38,6 +40,8 @@ safeSizeTest('The row edit mode: Edit row when there are sticky columns', async 
 test.skip('The cell edit mode: Edit cell with validation rule when there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.apiCellValue(1, 1, '');
   await t.click(dataGrid.getDataCell(1, 1).element);
@@ -70,6 +74,8 @@ safeSizeTest('The form edit mode: Edit row when there are sticky columns', async
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await dataGrid.apiEditRow(1);
 
   await takeScreenshot('edit_form_with_sticky_columns_1.png', dataGrid.element);
@@ -92,6 +98,8 @@ safeSizeTest('The form edit mode: Edit row when there are sticky columns', async
 safeSizeTest('The batch edit mode: Edit cell whene there are sticky columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(dataGrid.getDataCell(0, 2).element);
 
@@ -120,6 +128,8 @@ safeSizeTest('The batch edit mode: Edit fixed cell', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await t.click(dataGrid.getDataCell(0, 1).element);
 
   await takeScreenshot('edit_fixed_cell_1.png', dataGrid.element);
@@ -146,6 +156,8 @@ safeSizeTest('The batch edit mode: Edit fixed cell', async (t) => {
 safeSizeTest('The batch edit mode: Edit fixed cell with sticky position', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.expect(dataGrid.isReady()).ok();
 
   await t.click(dataGrid.getDataCell(0, 3).element);
 

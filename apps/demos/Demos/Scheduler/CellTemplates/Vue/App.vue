@@ -12,6 +12,7 @@
     data-cell-template="dataCellTemplate"
     date-cell-template="dateCellTemplate"
     time-cell-template="timeCellTemplate"
+    :on-content-ready="onContentReady"
     :on-appointment-form-opening="onAppointmentFormOpening"
     :on-appointment-adding="onAppointmentAdding"
     :on-appointment-updating="onAppointmentUpdating"
@@ -59,6 +60,28 @@ const dataSource = data;
 
 const isMonthView = computed(() => currentView.value === 'month');
 
+const ariaDescription = computed(() => {
+  const disabledDates = holidays
+    .filter((date) => !Utils.isWeekend(date))
+    .map((date) => new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    );
+  if (disabledDates?.length === 1) {
+    return `${disabledDates} is a disabled date`;
+  }
+  if (disabledDates?.length > 1) {
+    return `${disabledDates.join(', ')} are disabled dates`;
+  }
+});
+
+function onContentReady(e: DxSchedulerTypes.ContentReadyEvent) {
+  setComponentAria(e.component?.$element());
+}
+
 function onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent) {
   const startDate = new Date(e.appointmentData.startDate);
   if (!Utils.isValidAppointmentDate(startDate)) {
@@ -90,5 +113,10 @@ function applyDisableDatesToDateEditors(form) {
 
   const endDateEditor = form.getEditor('endDate');
   endDateEditor.option('disabledDates', holidays);
+}
+
+function setComponentAria(element) {
+  const prevAria = element?.attr('aria-label') || '';
+  element?.attr('aria-label', `${prevAria} ${ariaDescription.value}`);
 }
 </script>
