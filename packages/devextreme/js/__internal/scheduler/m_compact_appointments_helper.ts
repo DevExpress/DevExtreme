@@ -191,12 +191,12 @@ export class CompactAppointmentsHelper {
 
   _getStartDate(appointment) {
     const date = appointment.startDate;
-    return new Date(date);
+    return date ? new Date(date) : null;
   }
 
   _getEndDate(appointment) {
     const date = appointment.endDate;
-    return new Date(date);
+    return date ? new Date(date) : null;
   }
 
   _getDateText(appointment) {
