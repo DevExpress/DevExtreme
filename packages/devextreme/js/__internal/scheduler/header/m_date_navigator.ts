@@ -39,8 +39,8 @@ export const getDateNavigator = (header, item) => {
 };
 
 const getPreviousButtonOptions = (header) => {
-  // @ts-expect-error text
-  const ariaMessage = messageLocalization.format('dxScheduler-navigationPrevious', getCurrentViewText(header));
+  const { currentView } = header;
+  const ariaMessage = messageLocalization.format(`dxScheduler-navigationPrevious${currentView}`);
 
   return {
     key: 'previous',
@@ -100,8 +100,8 @@ const getCalendarButtonOptions = (header) => ({
 });
 
 const getNextButtonOptions = (header) => {
-  // @ts-expect-error text
-  const ariaMessage = messageLocalization.format('dxScheduler-navigationNext', getCurrentViewText(header));
+  const { currentView } = header;
+  const ariaMessage = messageLocalization.format(`dxScheduler-navigationNext${currentView}`);
 
   return {
     key: 'next',
@@ -159,17 +159,4 @@ const isNextButtonDisabled = (header) => {
 
   const nextDate = header._getNextDate(1, caption.startDate);
   return nextDate > max;
-};
-
-const getCurrentViewText = (header) => {
-  const { currentView } = header;
-  if (!currentView || typeof currentView !== 'string') {
-    return '';
-  }
-
-  return currentView
-    ?.replace(/([a-z])([A-Z])/g, '$1 $2')
-    .toLowerCase()
-    .split(' ')
-    .join(' ');
 };
