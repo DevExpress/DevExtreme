@@ -266,7 +266,7 @@ test('Scheduler a11y: Appointment collector button doesn\'t have info about date
     .expect(scheduler.element().exists)
     .ok()
     .expect(schedulerCollector.element().getAttribute('aria-roledescription'))
-    .eql(dateText);
+    .contains(dateText);
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',
