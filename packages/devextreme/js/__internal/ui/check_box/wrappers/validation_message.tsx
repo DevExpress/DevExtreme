@@ -1,7 +1,3 @@
-import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
-import _extends from "@babel/runtime/helpers/esm/extends";
-const _excluded = ["accessKey", "activeStateEnabled", "boundary", "className", "contentId", "disabled", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "mode", "offset", "onClick", "onKeyDown", "positionSide", "rtlEnabled", "tabIndex", "target", "validationErrors", "visible", "visualContainer", "width"];
-import { createComponentVNode, normalizeProps } from "inferno";
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import LegacyValidationMessage from '@js/ui/validation_message';
 import { DomComponentWrapper } from '@ts/core/r1/dom_component_wrapper';
@@ -45,8 +41,11 @@ export class ValidationMessage extends BaseInfernoComponent<ValidationMessagePro
     return this.props;
   }
   get restAttributes() {
-    const _this$props = this.props,
-      restProps = _objectWithoutPropertiesLoose(_this$props, _excluded);
+    const {
+      accessKey, activeStateEnabled, boundary, className, contentId, disabled, focusStateEnabled, height, hint, hoverStateEnabled, mode, offset, onClick, onKeyDown, positionSide, rtlEnabled, tabIndex, target, validationErrors, visible, visualContainer, width,
+      ...restProps
+    } = this.props;
+
     return restProps;
   }
   render() {
