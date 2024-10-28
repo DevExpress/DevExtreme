@@ -4,6 +4,7 @@ import Chat from 'ui/chat';
 import MessageList from '__internal/ui/chat/messagelist';
 import ErrorList from '__internal/ui/chat/errorlist';
 import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
+import MessageBubble from '__internal/ui/chat/messagebubble';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
@@ -274,6 +275,30 @@ QUnit.module('Chat', () => {
             const errorList = this.getErrorList();
 
             assert.deepEqual(errorList.option('items'), newErrors, 'items value is updated');
+        });
+    });
+
+    QUnit.module('MessageBubble integration', {
+        beforeEach: function() {
+            moduleConfig.beforeEach.apply(this, arguments);
+
+            this.getMessageBubbles = () => MessageBubble.getInstance(this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`));
+        }
+    }, () => {
+        QUnit.test('MessageBubble should have messageTemplateData with correct fields', function(assert) {
+            this.reinit({
+                items: [{
+                    text: 'text',
+                    author: userFirst,
+                }],
+            });
+
+            const messageBubble = this.getMessageBubbles();
+            const messageTemplateData = messageBubble.option('templateData');
+
+            assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData includes chat instance');
+            assert.strictEqual(messageTemplateData.isLast, true, 'messageTemplateData includes isLast field');
+            assert.deepEqual(messageTemplateData.author, userFirst, 'messageTemplateData includes author field');
         });
     });
 
