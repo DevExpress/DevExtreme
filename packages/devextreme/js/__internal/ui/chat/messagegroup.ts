@@ -24,6 +24,9 @@ export type MessageGroupAlignment = 'start' | 'end';
 export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
+  showAvatar: boolean;
+  showUsername: boolean;
+  showMessageTimestamp: boolean;
 }
 
 class MessageGroup extends Widget<Properties> {
@@ -36,6 +39,9 @@ class MessageGroup extends Widget<Properties> {
       ...super._getDefaultOptions(),
       items: [],
       alignment: 'start',
+      showAvatar: true,
+      showUsername: true,
+      showMessageTimestamp: true,
     };
   }
 
@@ -55,7 +61,7 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _initMarkup(): void {
-    const { alignment, items } = this.option();
+    const { alignment, items, showAvatar } = this.option();
 
     $(this.element())
       .addClass(CHAT_MESSAGEGROUP_CLASS);
@@ -68,7 +74,7 @@ class MessageGroup extends Widget<Properties> {
       return;
     }
 
-    if (alignment === 'start') {
+    if (showAvatar && alignment === 'start') {
       this._renderAvatar();
     }
 
@@ -113,26 +119,30 @@ class MessageGroup extends Widget<Properties> {
   }
 
   _renderMessageGroupInformation(message: Message): void {
-    const { alignment } = this.option();
+    const { alignment, showUsername, showMessageTimestamp } = this.option();
     const { timestamp, author } = message;
 
     const $information = $('<div>')
       .addClass(CHAT_MESSAGEGROUP_INFORMATION_CLASS);
 
-    const authorName = author?.name ?? messageLocalization.format('dxChat-defaultUserName');
-    const authorNameText = alignment === 'start' ? authorName : '';
+    if (showUsername) {
+      const authorName = author?.name ?? messageLocalization.format('dxChat-defaultUserName');
+      const authorNameText = alignment === 'start' ? authorName : '';
 
-    $('<div>')
-      .addClass(CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS)
-      .text(authorNameText)
-      .appendTo($information);
+      $('<div>')
+        .addClass(CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS)
+        .text(authorNameText)
+        .appendTo($information);
+    }
 
-    const $time = $('<div>')
-      .addClass(CHAT_MESSAGEGROUP_TIME_CLASS)
-      .appendTo($information);
+    if (showMessageTimestamp) {
+      const $time = $('<div>')
+        .addClass(CHAT_MESSAGEGROUP_TIME_CLASS)
+        .appendTo($information);
 
-    if (isDefined(timestamp)) {
-      $time.text(this._getTimeValue(timestamp));
+      if (isDefined(timestamp)) {
+        $time.text(this._getTimeValue(timestamp));
+      }
     }
 
     $information.appendTo(this.element());
@@ -152,6 +162,11 @@ class MessageGroup extends Widget<Properties> {
     switch (name) {
       case 'items':
       case 'alignment':
+        this._invalidate();
+        break;
+      case 'showAvatar':
+      case 'showUsername':
+      case 'showMessageTimestamp':
         this._invalidate();
         break;
       default:

@@ -124,7 +124,14 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders = true } = this.option();
+    const {
+      items = [],
+      user,
+      showDayHeaders = true,
+      showAvatar,
+      showUsername,
+      showMessageTimestamp,
+    } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>');
@@ -137,6 +144,9 @@ class Chat extends Widget<Properties> {
       showDayHeaders,
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
+      showAvatar,
+      showUsername,
+      showMessageTimestamp,
     });
   }
 
@@ -298,6 +308,9 @@ class Chat extends Widget<Properties> {
         this._createTypingEndAction();
         break;
       case 'showDayHeaders':
+      case 'showAvatar':
+      case 'showUsername':
+      case 'showMessageTimestamp':
         this._messageList.option(name, value);
         break;
       default:
