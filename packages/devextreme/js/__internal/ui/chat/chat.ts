@@ -31,9 +31,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
-  onTypingStart?: ((e: TypingStartEvent) => void);
-  onTypingEnd?: ((e: TypingEndEvent) => void);
-  showDayHeaders: boolean;
 };
 
 class Chat extends Widget<Properties> {
