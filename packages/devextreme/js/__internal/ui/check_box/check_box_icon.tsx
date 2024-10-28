@@ -3,20 +3,9 @@ import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWith
 const _excluded = ["size"];
 import { createVNode, RefObject } from "inferno";
 import { createRef as infernoCreateRef } from 'inferno';
-import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import { normalizeStyles } from '@devextreme/runtime/inferno';
+import { BaseInfernoComponent, normalizeStyles } from '@devextreme/runtime/inferno';
 import { normalizeStyleProp } from '@js/core/utils/style';
 import '@js/ui/themes';
-
-export const viewFunction = viewModel => {
-  const {
-    cssStyles,
-    elementRef
-  } = viewModel;
-  return createVNode(1, "span", "dx-checkbox-icon", null, 1, {
-    "style": normalizeStyles(cssStyles)
-  }, null, elementRef);
-};
 
 export interface CheckBoxIconProps {
   size?: number | string;
@@ -64,13 +53,14 @@ export class CheckBoxIcon extends BaseInfernoComponent {
   }
 
   render() {
-    const props = this.props;
-    return viewFunction({
-      props: _extends({}, props),
-      elementRef: this.elementRef,
-      cssStyles: this.cssStyles,
-      restAttributes: this.restAttributes
-    });
+    const { elementRef, cssStyles } = this;
+    return (
+      <span
+        className="dx-checkbox-icon"
+        ref={elementRef}
+        style={normalizeStyles(cssStyles)}
+      />
+    );
   }
 }
 
