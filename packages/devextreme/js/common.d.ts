@@ -71,7 +71,7 @@ export type ButtonStyle = 'text' | 'outlined' | 'contained';
  * @public
  * @namespace DevExpress.common
  */
-export type ButtonType = 'danger' | 'default' | 'normal' | 'success' | 'string';
+export type ButtonType = 'danger' | 'default' | 'normal' | 'success';
 
 /**
  * @docid

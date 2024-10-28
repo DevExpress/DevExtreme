@@ -95,7 +95,7 @@ type IItemProps = React.PropsWithChildren<{
   icon?: string;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  type?: "danger" | "default" | "normal" | "success" | "string";
+  type?: "danger" | "default" | "normal" | "success";
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
