@@ -37,8 +37,8 @@ const toggleColumnNoBorderClass = ($cell, value, addWidgetPrefix): void => {
   $cell.toggleClass(addWidgetPrefix(CLASSES.columnNoBorder), value);
 };
 
-const toggleStickyColumnsClass = ($element, isStickyColumns, addWidgetPrefix): void => {
-  $element.toggleClass(addWidgetPrefix(CLASSES.stickyColumns), isStickyColumns);
+const toggleStickyColumnsClass = ($element, hasStickyColumns, addWidgetPrefix): void => {
+  $element.toggleClass(addWidgetPrefix(CLASSES.stickyColumns), hasStickyColumns);
 };
 
 const isStickyCellPinnedToLeft = (

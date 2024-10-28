@@ -116,11 +116,11 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     super._renderCore(options);
 
     const $element = this.element();
-    const isStickyColumns = this.isStickyColumns();
+    const hasStickyColumns = this.hasStickyColumns();
 
     GridCoreStickyColumnsDom.toggleStickyColumnsClass(
       $element,
-      isStickyColumns,
+      hasStickyColumns,
       this.addWidgetPrefix.bind(this),
     );
   }
@@ -129,10 +129,10 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const { column } = options;
     const { rowType } = options;
     const $cell = super._createCell(options);
-    const isStickyColumns = this.isStickyColumns();
+    const hasStickyColumns = this.hasStickyColumns();
     const rowIndex = rowType === 'header' ? options.rowIndex : null;
 
-    if (isStickyColumns) {
+    if (hasStickyColumns) {
       this.updateBorderCellClasses($cell, column, rowIndex);
 
       if (column.fixed) {
@@ -204,25 +204,25 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
   }
 
   protected setColumnWidths(options): void {
-    const isStickyColumns = this.isStickyColumns();
+    const hasStickyColumns = this.hasStickyColumns();
     const columnsResizerController = this.getController('columnsResizer');
     const isColumnResizing = columnsResizerController?.isResizing();
 
     super.setColumnWidths(options);
 
-    if (isStickyColumns && isColumnResizing) {
+    if (hasStickyColumns && isColumnResizing) {
       this.setStickyOffsets();
     }
   }
 
   protected _resizeCore() {
-    const isStickyColumns = this.isStickyColumns();
+    const hasStickyColumns = this.hasStickyColumns();
     const adaptiveColumns = this.getController('adaptiveColumns');
     const hidingColumnsQueue = adaptiveColumns?.getHidingColumnsQueue();
 
     super._resizeCore.apply(this, arguments as any);
 
-    if (isStickyColumns) {
+    if (hasStickyColumns) {
       this.setStickyOffsets();
 
       if (hidingColumnsQueue?.length) {
@@ -231,7 +231,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     }
   }
 
-  public isStickyColumns(): boolean {
+  public hasStickyColumns(): boolean {
     const stickyColumns = this._columnsController?.getStickyColumns();
 
     return this.option('columnFixing.legacyMode') !== true && !!stickyColumns.length;
@@ -253,11 +253,9 @@ const columnHeadersView = (
   }
 
   protected _resizeCore() {
-    const isStickyColumns = this.isStickyColumns();
-
     super._resizeCore();
 
-    if (isStickyColumns) {
+    if (this.hasStickyColumns()) {
       this.updateScrollPadding();
     }
   }
@@ -369,7 +367,7 @@ const rowsView = (
     // @ts-expect-error
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
-    if (this.isStickyColumns()) {
+    if (this.hasStickyColumns()) {
       $detailCell
         .addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft))
         // @ts-expect-error
@@ -390,17 +388,17 @@ const rowsView = (
   }
 
   protected _resizeCore() {
-    const isStickyColumns = this.isStickyColumns();
+    const hasStickyColumns = this.hasStickyColumns();
 
     super._resizeCore.apply(this, arguments as any);
 
-    if (isStickyColumns) {
+    if (hasStickyColumns) {
       this._updateMasterDetailWidths();
     }
   }
 
   protected _renderCellContent($cell, options, renderOptions) {
-    if (!isGroupRow(options) || !this.isStickyColumns()) {
+    if (!isGroupRow(options) || !this.hasStickyColumns()) {
       return super._renderCellContent($cell, options, renderOptions);
     }
 
@@ -426,11 +424,11 @@ const rowsView = (
   }
 
   protected _handleScroll(e): void {
-    const isStickyColumns = this.isStickyColumns();
+    const hasStickyColumns = this.hasStickyColumns();
 
     super._handleScroll(e);
 
-    if (isStickyColumns) {
+    if (hasStickyColumns) {
       const editorFactoryController = this.getController('editorFactory');
       const $focusOverlay = editorFactoryController.getFocusOverlay();
       const hasFixedColumnsWithStickyPosition = !!this._columnsController
@@ -459,12 +457,12 @@ const rowsView = (
 
   public _scrollToElement($element, offset?) {
     let scrollOffset = offset;
-    const isStickyColumns = this.isStickyColumns();
+    const hasStickyColumns = this.hasStickyColumns();
     const $row = $element?.closest('tr');
     const $cells = $row?.children();
     const $scrollContainer = this.getScrollable()?.container();
 
-    if (isStickyColumns && $cells.length) {
+    if (hasStickyColumns && $cells.length) {
       scrollOffset = GridCoreStickyColumnsDom
         .getScrollPadding($cells, $scrollContainer, this.addWidgetPrefix.bind(this));
     }
@@ -523,16 +521,16 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
 
   protected _generatePointsByColumns(): void {
     // @ts-expect-error
-    const isStickyColumns = this._columnHeadersView?.isStickyColumns();
+    const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
 
-    super._generatePointsByColumns(isStickyColumns);
+    super._generatePointsByColumns(hasStickyColumns);
   }
 
   protected _pointCreated(point, cellsLength, columns) {
     // @ts-expect-error
-    const isStickyColumns = this._columnHeadersView?.isStickyColumns();
+    const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
     const result = super._pointCreated(point, cellsLength, columns);
-    const needToCheckPoint = isStickyColumns && cellsLength > 0;
+    const needToCheckPoint = hasStickyColumns && cellsLength > 0;
 
     if (needToCheckPoint && !result) {
       const column = columns[point.index - 1];
@@ -557,10 +555,10 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
 const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderStickyColumnsExtender extends Base {
   public _generatePointsByColumns(options): any[] {
     // @ts-expect-error
-    const isStickyColumns = this._columnHeadersView?.isStickyColumns();
+    const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
     const { sourceLocation, sourceColumn } = options;
 
-    if (isStickyColumns && sourceLocation === 'headers') {
+    if (hasStickyColumns && sourceLocation === 'headers') {
       const columnFixedPosition = getColumnFixedPosition(this._columnsController, sourceColumn);
 
       switch (true) {
@@ -587,14 +585,14 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
       }
     }
 
-    return super._generatePointsByColumns(options, isStickyColumns);
+    return super._generatePointsByColumns(options, hasStickyColumns);
   }
 
   protected _pointCreated(point, columns, location, sourceColumn) {
     // @ts-expect-error
-    const isStickyColumns = this._columnHeadersView.isStickyColumns();
+    const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
     const $cells = this._columnHeadersView.getColumnElements();
-    const needToCheckPoint = isStickyColumns && location === 'headers' && $cells?.length
+    const needToCheckPoint = hasStickyColumns && location === 'headers' && $cells?.length
         && (!sourceColumn.fixed || sourceColumn.fixedPosition === StickyPosition.Sticky);
     const result = super._pointCreated(point, columns, location, sourceColumn);
 
