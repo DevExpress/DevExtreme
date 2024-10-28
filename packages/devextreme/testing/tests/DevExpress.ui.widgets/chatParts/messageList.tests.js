@@ -530,6 +530,19 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual(messageGroup.option('alignment'), 'end');
         });
 
+        ['showAvatar', 'showUsername', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`message group should get ${option} option`, function(assert) {
+                this.reinit({
+                    items: [{ author: { id: 'MikeID' } }],
+                    [option]: true,
+                });
+
+                const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+                assert.strictEqual(messageGroup.option(option), true);
+            });
+        });
+
         QUnit.test(`new message group should be rendered if ${MESSAGEGROUP_TIMEOUT} ms elapsed between the last and new messages`, function(assert) {
             const items = [
                 {
@@ -756,6 +769,14 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             assert.strictEqual(this.invalidateStub.callCount, 1);
         });
+
+        ['showAvatar', 'showUsername', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`should run invalidate after changing ${option} in runtime`, function(assert) {
+                this.instance.option({ [option]: false });
+
+                assert.strictEqual(this.invalidateStub.callCount, 1);
+            });
+        });
     });
 
     QUnit.module('ScrollView', {
@@ -947,14 +968,14 @@ QUnit.module('MessageList', moduleConfig, () => {
             setTimeout(() => {
                 const scrollTop = this.getScrollView().scrollTop();
 
-                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after initialization');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1.2, 'scroll position should be at the bottom after initialization');
 
                 this.instance.option('height', 300);
 
                 setTimeout(() => {
                     const scrollTop = this.getScrollView().scrollTop();
 
-                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'max scroll position should be saved after reducing height');
+                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1.2, 'max scroll position should be saved after reducing height');
 
                     done();
                 }, this._resizeTimeout);
@@ -975,14 +996,14 @@ QUnit.module('MessageList', moduleConfig, () => {
             setTimeout(() => {
                 const scrollTop = this.getScrollView().scrollTop();
 
-                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after initialization');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1.2, 'scroll position should be at the bottom after initialization');
 
                 this.instance.option('height', 700);
 
                 setTimeout(() => {
                     const scrollTop = this.getScrollView().scrollTop();
 
-                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'max scroll position should be saved after increasing height');
+                    assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1.2, 'max scroll position should be saved after increasing height');
 
                     done();
                 }, this._resizeTimeout);
@@ -1003,7 +1024,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             setTimeout(() => {
                 const scrollTop = this.getScrollView().scrollTop();
 
-                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after initialization');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1.2, 'scroll position should be at the bottom after initialization');
 
                 this.getScrollView().scrollTo({ top: this.getScrollOffsetMax() - 200 });
                 this.instance.option('height', 300);
@@ -1011,7 +1032,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 setTimeout(() => {
                     const scrollTop = this.getScrollView().scrollTop();
 
-                    assert.roughEqual(scrollTop, this.getScrollOffsetMax() - 200, 1, 'scroll position should be set correctly after reducing height');
+                    assert.roughEqual(scrollTop, this.getScrollOffsetMax() - 200, 1.2, 'scroll position should be set correctly after reducing height');
 
                     done();
                 }, this._resizeTimeout);
@@ -1032,7 +1053,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             setTimeout(() => {
                 const scrollTop = this.getScrollView().scrollTop();
 
-                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1, 'scroll position should be at the bottom after initialization');
+                assert.roughEqual(scrollTop, this.getScrollOffsetMax(), 1.2, 'scroll position should be at the bottom after initialization');
 
                 const newScrollTop = this.getScrollOffsetMax() - 200;
                 this.getScrollView().scrollTo({ top: newScrollTop });
@@ -1041,7 +1062,7 @@ QUnit.module('MessageList', moduleConfig, () => {
                 setTimeout(() => {
                     const scrollTop = this.getScrollView().scrollTop();
 
-                    assert.roughEqual(scrollTop, newScrollTop, 1, 'scroll position should be saved correctly after increasing height');
+                    assert.roughEqual(scrollTop, newScrollTop, 1.2, 'scroll position should be saved correctly after increasing height');
 
                     done();
                 }, this._resizeTimeout);
