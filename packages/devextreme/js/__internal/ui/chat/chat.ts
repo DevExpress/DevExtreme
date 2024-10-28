@@ -31,6 +31,10 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
+  showDayHeaders: boolean;
+  showAvatar: boolean;
+  showUserName: boolean;
+  showMessageTimestamp: boolean;
 };
 
 class Chat extends Widget<Properties> {
@@ -60,6 +64,9 @@ class Chat extends Widget<Properties> {
       dataSource: null,
       user: { id: new Guid().toString() },
       errors: [],
+      showAvatar: true,
+      showUserName: true,
+      showMessageTimestamp: true,
       onMessageSend: undefined,
       onTypingStart: undefined,
       onTypingEnd: undefined,
@@ -129,7 +136,7 @@ class Chat extends Widget<Properties> {
       user,
       showDayHeaders = true,
       showAvatar,
-      showUsername,
+      showUserName,
       showMessageTimestamp,
     } = this.option();
 
@@ -145,7 +152,7 @@ class Chat extends Widget<Properties> {
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
       showAvatar,
-      showUsername,
+      showUserName,
       showMessageTimestamp,
     });
   }
@@ -309,7 +316,7 @@ class Chat extends Widget<Properties> {
         break;
       case 'showDayHeaders':
       case 'showAvatar':
-      case 'showUsername':
+      case 'showUserName':
       case 'showMessageTimestamp':
         this._messageList.option(name, value);
         break;

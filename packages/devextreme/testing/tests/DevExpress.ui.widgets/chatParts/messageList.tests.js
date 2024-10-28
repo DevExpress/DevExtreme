@@ -530,8 +530,8 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual(messageGroup.option('alignment'), 'end');
         });
 
-        ['showAvatar', 'showUsername', 'showMessageTimestamp'].forEach(option => {
-            QUnit.test(`message group should get ${option} option`, function(assert) {
+        ['showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
+            QUnit.test(`message list should pass option ${option} to message group`, function(assert) {
                 this.reinit({
                     items: [{ author: { id: 'MikeID' } }],
                     [option]: true,
@@ -770,7 +770,7 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual(this.invalidateStub.callCount, 1);
         });
 
-        ['showAvatar', 'showUsername', 'showMessageTimestamp'].forEach(option => {
+        ['showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
             QUnit.test(`should run invalidate after changing ${option} in runtime`, function(assert) {
                 this.instance.option({ [option]: false });
 

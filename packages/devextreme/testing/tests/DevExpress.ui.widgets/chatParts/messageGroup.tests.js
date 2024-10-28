@@ -33,39 +33,39 @@ QUnit.module('MessageGroup', moduleConfig, () => {
     QUnit.module('Render', () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof MessageGroup);
+        });
 
-            QUnit.test('Avatar should not be rendered when showAvatar is set to false', function(assert) {
-                this.reinit({
-                    items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
-                    showAvatar: false,
-                });
-
-                const $avatar = this.getAvatar();
-
-                assert.strictEqual($avatar.length, 0, 'avatar was not added');
+        QUnit.test('Avatar should not be rendered when showAvatar is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showAvatar: false,
             });
 
-            QUnit.test('Username should not be rendered when showUsername is set to false', function(assert) {
-                this.reinit({
-                    items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
-                    showUsername: false,
-                });
+            const $avatar = this.getAvatar();
 
-                const $username = this.getUsername();
+            assert.strictEqual($avatar.length, 0, 'avatar was not added');
+        });
 
-                assert.strictEqual($username.length, 0, 'username was not added');
+        QUnit.test('Username should not be rendered when showUserName is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showUserName: false,
             });
 
-            QUnit.test('Message timestamps should not be rendered when showMessageTimestamp is set to false', function(assert) {
-                this.reinit({
-                    items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
-                    showMessageTimestamp: false,
-                });
+            const $username = this.getUsername();
 
-                const $messageTimestamp = this.getMessageTimestamp();
+            assert.strictEqual($username.length, 0, 'username was not added');
+        });
 
-                assert.strictEqual($messageTimestamp.length, 0, 'message timestamp was not added');
+        QUnit.test('Message timestamps should not be rendered when showMessageTimestamp is set to false', function(assert) {
+            this.reinit({
+                items: [{ timestamp: new Date().getTime(), text: 'ABC' }],
+                showMessageTimestamp: false,
             });
+
+            const $messageTimestamp = this.getMessageTimestamp();
+
+            assert.strictEqual($messageTimestamp.length, 0, 'message timestamp was not added');
         });
     });
 
@@ -244,7 +244,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
             this.invalidateStub.restore();
         }
     }, () => {
-        ['showAvatar', 'showUsername', 'showMessageTimestamp'].forEach(option => {
+        ['showAvatar', 'showUserName', 'showMessageTimestamp'].forEach(option => {
             QUnit.test(`should run invalidate after changing ${option} in runtime`, function(assert) {
                 this.instance.option({ [option]: false });
 
