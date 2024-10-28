@@ -1,7 +1,11 @@
 import { isMaterial, current } from '@js/ui/themes';
-export const EditorLabelProps = {
+
+export interface EditorLabelProps {
+  label?: string;
+  labelMode?: 'static' | 'floating' | 'hidden';
+}
+
+export const defaultEditorLabelProps: EditorLabelProps = {
   label: '',
-  get labelMode() {
-    return isMaterial(current()) ? 'floating' : 'static';
-  }
+  labelMode: isMaterial(current()) ? 'floating' : 'static',
 };

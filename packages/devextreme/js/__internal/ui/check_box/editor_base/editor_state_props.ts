@@ -1,8 +1,15 @@
 import devices from '@js/core/devices';
-export const EditorStateProps = {
+
+export interface EditorStateProps {
+  hoverStateEnabled: boolean;
+
+  activeStateEnabled: boolean;
+
+  focusStateEnabled: boolean;
+}
+
+export const defaultEditorStateProps: EditorStateProps = {
   hoverStateEnabled: true,
   activeStateEnabled: true,
-  get focusStateEnabled() {
-    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
-  }
+  focusStateEnabled: devices.real().deviceType === 'desktop' && !devices.isSimulator(),
 };

@@ -1,10 +1,29 @@
 import { isMaterial, current } from '@js/ui/themes';
-export const TextEditorProps = {
+import { EventCallback } from '@ts/core/r1/event_callback';
+
+export interface TextEditorProps {
+  inputAttr?: unknown;
+
+  maxLength?: string | number | null;
+
+  spellCheck?: boolean;
+
+  valueChangeEvent?: string;
+
+  stylingMode?: 'outlined' | 'underlined' | 'filled';
+
+  // overrides
+  value?: string;
+
+  defaultValue: string;
+
+  valueChange?: EventCallback<string>;
+}
+
+export const defaultTextEditorProps: TextEditorProps = {
   maxLength: null,
   spellCheck: false,
   valueChangeEvent: 'change',
-  get stylingMode() {
-    return isMaterial(current()) ? 'filled' : 'outlined';
-  },
+  stylingMode: isMaterial(current()) ? 'filled' : 'outlined',
   defaultValue: ''
 };
