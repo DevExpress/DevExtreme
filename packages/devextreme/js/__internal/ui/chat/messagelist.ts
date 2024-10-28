@@ -36,6 +36,9 @@ export interface Properties extends WidgetOptions<MessageList> {
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
   isLoading?: boolean;
+  showAvatar: boolean;
+  showUsername: boolean;
+  showMessageTimestamp: boolean;
 }
 
 class MessageList extends Widget<Properties> {
@@ -54,6 +57,9 @@ class MessageList extends Widget<Properties> {
       currentUserId: '',
       showDayHeaders: true,
       isLoading: false,
+      showAvatar: true,
+      showUsername: true,
+      showMessageTimestamp: true,
     };
   }
 
@@ -166,6 +172,9 @@ class MessageList extends Widget<Properties> {
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
+      showAvatar: this.option().showAvatar,
+      showUsername: this.option().showUsername,
+      showMessageTimestamp: this.option().showMessageTimestamp,
     });
 
     this._messageGroups?.push(messageGroup);
@@ -418,6 +427,11 @@ class MessageList extends Widget<Properties> {
         this._invalidate();
         break;
       case 'isLoading':
+        break;
+      case 'showAvatar':
+      case 'showUsername':
+      case 'showMessageTimestamp':
+        this._invalidate();
         break;
       default:
         super._optionChanged(args);

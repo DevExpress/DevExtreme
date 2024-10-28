@@ -29,6 +29,9 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 type Properties = ChatProperties & {
   title: string;
   showDayHeaders: boolean;
+  showAvatar: boolean;
+  showUsername: boolean;
+  showMessageTimestamp: boolean;
 };
 
 class Chat extends Widget<Properties> {
@@ -55,6 +58,9 @@ class Chat extends Widget<Properties> {
       onMessageSend: undefined,
       showDayHeaders: true,
       errors: [],
+      showAvatar: true,
+      showUsername: true,
+      showMessageTimestamp: true,
     };
   }
 
@@ -115,7 +121,14 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageList(): void {
-    const { items = [], user, showDayHeaders } = this.option();
+    const {
+      items = [],
+      user,
+      showDayHeaders,
+      showAvatar,
+      showUsername,
+      showMessageTimestamp,
+    } = this.option();
 
     const currentUserId = user?.id;
     const $messageList = $('<div>');
@@ -128,6 +141,9 @@ class Chat extends Widget<Properties> {
       showDayHeaders,
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
+      showAvatar,
+      showUsername,
+      showMessageTimestamp,
     });
   }
 
@@ -250,6 +266,9 @@ class Chat extends Widget<Properties> {
         this._createMessageSendAction();
         break;
       case 'showDayHeaders':
+      case 'showAvatar':
+      case 'showUsername':
+      case 'showMessageTimestamp':
         this._messageList.option(name, value);
         break;
       default:
