@@ -15,7 +15,7 @@ import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
-import { isRenderer } from 'core/utils/type';
+import { isRenderer, isWindow } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -2337,7 +2337,7 @@ QUnit.module('resize', {
             this.reinit({ width: 2, height: 2 });
             const resizable = this.$overlayContent.dxResizable('instance');
 
-            assert.ok($.isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
+            assert.ok(isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
         } finally {
             viewPort(toSelector(VIEWPORT_CLASS));
         }
