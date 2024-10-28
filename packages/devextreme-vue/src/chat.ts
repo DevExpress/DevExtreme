@@ -19,6 +19,8 @@ type AccessibleOptions = Pick<Properties,
   "onInitialized" |
   "onMessageSend" |
   "onOptionChanged" |
+  "onTypingEnd" |
+  "onTypingStart" |
   "rtlEnabled" |
   "showAvatar" |
   "showDayHeaders" |
@@ -50,6 +52,8 @@ const componentConfig = {
     onInitialized: Function,
     onMessageSend: Function,
     onOptionChanged: Function,
+    onTypingEnd: Function,
+    onTypingStart: Function,
     rtlEnabled: Boolean,
     showAvatar: Boolean,
     showDayHeaders: Boolean,
@@ -77,6 +81,8 @@ const componentConfig = {
     "update:onInitialized": null,
     "update:onMessageSend": null,
     "update:onOptionChanged": null,
+    "update:onTypingEnd": null,
+    "update:onTypingStart": null,
     "update:rtlEnabled": null,
     "update:showAvatar": null,
     "update:showDayHeaders": null,

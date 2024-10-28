@@ -5,7 +5,7 @@ import dxRangeSelector, {
     Properties
 } from "devextreme/viz/range_selector";
 
-import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ValueChangedEvent } from "devextreme/viz/range_selector";
@@ -103,15 +103,18 @@ type IAggregationProps = React.PropsWithChildren<{
   enabled?: boolean;
   method?: "avg" | "count" | "max" | "min" | "ohlc" | "range" | "sum" | "custom";
 }>
-const _componentAggregation = memo(
-  (props: IAggregationProps) => {
-    return React.createElement(NestedOption<IAggregationProps>, { ...props });
-  }
-);
+const _componentAggregation = (props: IAggregationProps) => {
+  return React.createElement(NestedOption<IAggregationProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "aggregation",
+    },
+  });
+};
 
-const Aggregation: typeof _componentAggregation & IElementDescriptor = Object.assign(_componentAggregation, {
-  OptionName: "aggregation",
-})
+const Aggregation = Object.assign<typeof _componentAggregation, NestedComponentMeta>(_componentAggregation, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -126,15 +129,18 @@ type IAggregationIntervalProps = React.PropsWithChildren<{
   weeks?: number;
   years?: number;
 }>
-const _componentAggregationInterval = memo(
-  (props: IAggregationIntervalProps) => {
-    return React.createElement(NestedOption<IAggregationIntervalProps>, { ...props });
-  }
-);
+const _componentAggregationInterval = (props: IAggregationIntervalProps) => {
+  return React.createElement(NestedOption<IAggregationIntervalProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "aggregationInterval",
+    },
+  });
+};
 
-const AggregationInterval: typeof _componentAggregationInterval & IElementDescriptor = Object.assign(_componentAggregationInterval, {
-  OptionName: "aggregationInterval",
-})
+const AggregationInterval = Object.assign<typeof _componentAggregationInterval, NestedComponentMeta>(_componentAggregationInterval, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettingsLabel
@@ -146,15 +152,18 @@ type IArgumentFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentArgumentFormat = memo(
-  (props: IArgumentFormatProps) => {
-    return React.createElement(NestedOption<IArgumentFormatProps>, { ...props });
-  }
-);
+const _componentArgumentFormat = (props: IArgumentFormatProps) => {
+  return React.createElement(NestedOption<IArgumentFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "argumentFormat",
+    },
+  });
+};
 
-const ArgumentFormat: typeof _componentArgumentFormat & IElementDescriptor = Object.assign(_componentArgumentFormat, {
-  OptionName: "argumentFormat",
-})
+const ArgumentFormat = Object.assign<typeof _componentArgumentFormat, NestedComponentMeta>(_componentArgumentFormat, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -166,19 +175,22 @@ type IBackgroundProps = React.PropsWithChildren<{
   };
   visible?: boolean;
 }>
-const _componentBackground = memo(
-  (props: IBackgroundProps) => {
-    return React.createElement(NestedOption<IBackgroundProps>, { ...props });
-  }
-);
+const _componentBackground = (props: IBackgroundProps) => {
+  return React.createElement(NestedOption<IBackgroundProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "background",
+      ExpectedChildren: {
+        backgroundImage: { optionName: "image", isCollectionItem: false },
+        image: { optionName: "image", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Background: typeof _componentBackground & IElementDescriptor = Object.assign(_componentBackground, {
-  OptionName: "background",
-  ExpectedChildren: {
-    backgroundImage: { optionName: "image", isCollectionItem: false },
-    image: { optionName: "image", isCollectionItem: false }
-  },
-})
+const Background = Object.assign<typeof _componentBackground, NestedComponentMeta>(_componentBackground, {
+  componentType: "option",
+});
 
 // owners:
 // Background
@@ -186,15 +198,18 @@ type IBackgroundImageProps = React.PropsWithChildren<{
   location?: "center" | "centerBottom" | "centerTop" | "full" | "leftBottom" | "leftCenter" | "leftTop" | "rightBottom" | "rightCenter" | "rightTop";
   url?: string;
 }>
-const _componentBackgroundImage = memo(
-  (props: IBackgroundImageProps) => {
-    return React.createElement(NestedOption<IBackgroundImageProps>, { ...props });
-  }
-);
+const _componentBackgroundImage = (props: IBackgroundImageProps) => {
+  return React.createElement(NestedOption<IBackgroundImageProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "image",
+    },
+  });
+};
 
-const BackgroundImage: typeof _componentBackgroundImage & IElementDescriptor = Object.assign(_componentBackgroundImage, {
-  OptionName: "image",
-})
+const BackgroundImage = Object.assign<typeof _componentBackgroundImage, NestedComponentMeta>(_componentBackgroundImage, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -207,15 +222,18 @@ type IBehaviorProps = React.PropsWithChildren<{
   snapToTicks?: boolean;
   valueChangeMode?: "onHandleMove" | "onHandleRelease";
 }>
-const _componentBehavior = memo(
-  (props: IBehaviorProps) => {
-    return React.createElement(NestedOption<IBehaviorProps>, { ...props });
-  }
-);
+const _componentBehavior = (props: IBehaviorProps) => {
+  return React.createElement(NestedOption<IBehaviorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "behavior",
+    },
+  });
+};
 
-const Behavior: typeof _componentBehavior & IElementDescriptor = Object.assign(_componentBehavior, {
-  OptionName: "behavior",
-})
+const Behavior = Object.assign<typeof _componentBehavior, NestedComponentMeta>(_componentBehavior, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -231,15 +249,18 @@ type IBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentBorder = memo(
-  (props: IBorderProps) => {
-    return React.createElement(NestedOption<IBorderProps>, { ...props });
-  }
-);
+const _componentBorder = (props: IBorderProps) => {
+  return React.createElement(NestedOption<IBorderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "border",
+    },
+  });
+};
 
-const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
-  OptionName: "border",
-})
+const Border = Object.assign<typeof _componentBorder, NestedComponentMeta>(_componentBorder, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -247,16 +268,19 @@ type IBreakProps = React.PropsWithChildren<{
   endValue?: Date | number | string;
   startValue?: Date | number | string;
 }>
-const _componentBreak = memo(
-  (props: IBreakProps) => {
-    return React.createElement(NestedOption<IBreakProps>, { ...props });
-  }
-);
+const _componentBreak = (props: IBreakProps) => {
+  return React.createElement(NestedOption<IBreakProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "breaks",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const Break: typeof _componentBreak & IElementDescriptor = Object.assign(_componentBreak, {
-  OptionName: "breaks",
-  IsCollectionItem: true,
-})
+const Break = Object.assign<typeof _componentBreak, NestedComponentMeta>(_componentBreak, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -265,15 +289,18 @@ type IBreakStyleProps = React.PropsWithChildren<{
   line?: "straight" | "waved";
   width?: number;
 }>
-const _componentBreakStyle = memo(
-  (props: IBreakStyleProps) => {
-    return React.createElement(NestedOption<IBreakStyleProps>, { ...props });
-  }
-);
+const _componentBreakStyle = (props: IBreakStyleProps) => {
+  return React.createElement(NestedOption<IBreakStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "breakStyle",
+    },
+  });
+};
 
-const BreakStyle: typeof _componentBreakStyle & IElementDescriptor = Object.assign(_componentBreakStyle, {
-  OptionName: "breakStyle",
-})
+const BreakStyle = Object.assign<typeof _componentBreakStyle, NestedComponentMeta>(_componentBreakStyle, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -307,22 +334,25 @@ type IChartProps = React.PropsWithChildren<{
     valueType?: "datetime" | "numeric" | "string";
   };
 }>
-const _componentChart = memo(
-  (props: IChartProps) => {
-    return React.createElement(NestedOption<IChartProps>, { ...props });
-  }
-);
+const _componentChart = (props: IChartProps) => {
+  return React.createElement(NestedOption<IChartProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "chart",
+      ExpectedChildren: {
+        commonSeriesSettings: { optionName: "commonSeriesSettings", isCollectionItem: false },
+        dataPrepareSettings: { optionName: "dataPrepareSettings", isCollectionItem: false },
+        series: { optionName: "series", isCollectionItem: true },
+        seriesTemplate: { optionName: "seriesTemplate", isCollectionItem: false },
+        valueAxis: { optionName: "valueAxis", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Chart: typeof _componentChart & IElementDescriptor = Object.assign(_componentChart, {
-  OptionName: "chart",
-  ExpectedChildren: {
-    commonSeriesSettings: { optionName: "commonSeriesSettings", isCollectionItem: false },
-    dataPrepareSettings: { optionName: "dataPrepareSettings", isCollectionItem: false },
-    series: { optionName: "series", isCollectionItem: true },
-    seriesTemplate: { optionName: "seriesTemplate", isCollectionItem: false },
-    valueAxis: { optionName: "valueAxis", isCollectionItem: false }
-  },
-})
+const Chart = Object.assign<typeof _componentChart, NestedComponentMeta>(_componentChart, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -335,15 +365,18 @@ type IColorProps = React.PropsWithChildren<{
   base?: string;
   fillId?: string;
 }>
-const _componentColor = memo(
-  (props: IColorProps) => {
-    return React.createElement(NestedOption<IColorProps>, { ...props });
-  }
-);
+const _componentColor = (props: IColorProps) => {
+  return React.createElement(NestedOption<IColorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "color",
+    },
+  });
+};
 
-const Color: typeof _componentColor & IElementDescriptor = Object.assign(_componentColor, {
-  OptionName: "color",
-})
+const Color = Object.assign<typeof _componentColor, NestedComponentMeta>(_componentColor, {
+  componentType: "option",
+});
 
 // owners:
 // Chart
@@ -535,30 +568,33 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentCommonSeriesSettings = memo(
-  (props: ICommonSeriesSettingsProps) => {
-    return React.createElement(NestedOption<ICommonSeriesSettingsProps>, { ...props });
-  }
-);
+const _componentCommonSeriesSettings = (props: ICommonSeriesSettingsProps) => {
+  return React.createElement(NestedOption<ICommonSeriesSettingsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "commonSeriesSettings",
+      ExpectedChildren: {
+        aggregation: { optionName: "aggregation", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        commonSeriesSettingsHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        commonSeriesSettingsLabel: { optionName: "label", isCollectionItem: false },
+        commonSeriesSettingsSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        point: { optionName: "point", isCollectionItem: false },
+        reduction: { optionName: "reduction", isCollectionItem: false },
+        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false },
+        valueErrorBar: { optionName: "valueErrorBar", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const CommonSeriesSettings: typeof _componentCommonSeriesSettings & IElementDescriptor = Object.assign(_componentCommonSeriesSettings, {
-  OptionName: "commonSeriesSettings",
-  ExpectedChildren: {
-    aggregation: { optionName: "aggregation", isCollectionItem: false },
-    border: { optionName: "border", isCollectionItem: false },
-    color: { optionName: "color", isCollectionItem: false },
-    commonSeriesSettingsHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-    commonSeriesSettingsLabel: { optionName: "label", isCollectionItem: false },
-    commonSeriesSettingsSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
-    hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-    label: { optionName: "label", isCollectionItem: false },
-    point: { optionName: "point", isCollectionItem: false },
-    reduction: { optionName: "reduction", isCollectionItem: false },
-    selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
-    seriesBorder: { optionName: "border", isCollectionItem: false },
-    valueErrorBar: { optionName: "valueErrorBar", isCollectionItem: false }
-  },
-})
+const CommonSeriesSettings = Object.assign<typeof _componentCommonSeriesSettings, NestedComponentMeta>(_componentCommonSeriesSettings, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -580,21 +616,24 @@ type ICommonSeriesSettingsHoverStyleProps = React.PropsWithChildren<{
   highlight?: boolean;
   width?: number;
 }>
-const _componentCommonSeriesSettingsHoverStyle = memo(
-  (props: ICommonSeriesSettingsHoverStyleProps) => {
-    return React.createElement(NestedOption<ICommonSeriesSettingsHoverStyleProps>, { ...props });
-  }
-);
+const _componentCommonSeriesSettingsHoverStyle = (props: ICommonSeriesSettingsHoverStyleProps) => {
+  return React.createElement(NestedOption<ICommonSeriesSettingsHoverStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const CommonSeriesSettingsHoverStyle: typeof _componentCommonSeriesSettingsHoverStyle & IElementDescriptor = Object.assign(_componentCommonSeriesSettingsHoverStyle, {
-  OptionName: "hoverStyle",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    color: { optionName: "color", isCollectionItem: false },
-    hatching: { optionName: "hatching", isCollectionItem: false },
-    seriesBorder: { optionName: "border", isCollectionItem: false }
-  },
-})
+const CommonSeriesSettingsHoverStyle = Object.assign<typeof _componentCommonSeriesSettingsHoverStyle, NestedComponentMeta>(_componentCommonSeriesSettingsHoverStyle, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -624,23 +663,26 @@ type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   verticalOffset?: number;
   visible?: boolean;
 }>
-const _componentCommonSeriesSettingsLabel = memo(
-  (props: ICommonSeriesSettingsLabelProps) => {
-    return React.createElement(NestedOption<ICommonSeriesSettingsLabelProps>, { ...props });
-  }
-);
+const _componentCommonSeriesSettingsLabel = (props: ICommonSeriesSettingsLabelProps) => {
+  return React.createElement(NestedOption<ICommonSeriesSettingsLabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      ExpectedChildren: {
+        argumentFormat: { optionName: "argumentFormat", isCollectionItem: false },
+        border: { optionName: "border", isCollectionItem: false },
+        connector: { optionName: "connector", isCollectionItem: false },
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const CommonSeriesSettingsLabel: typeof _componentCommonSeriesSettingsLabel & IElementDescriptor = Object.assign(_componentCommonSeriesSettingsLabel, {
-  OptionName: "label",
-  ExpectedChildren: {
-    argumentFormat: { optionName: "argumentFormat", isCollectionItem: false },
-    border: { optionName: "border", isCollectionItem: false },
-    connector: { optionName: "connector", isCollectionItem: false },
-    font: { optionName: "font", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false },
-    seriesBorder: { optionName: "border", isCollectionItem: false }
-  },
-})
+const CommonSeriesSettingsLabel = Object.assign<typeof _componentCommonSeriesSettingsLabel, NestedComponentMeta>(_componentCommonSeriesSettingsLabel, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -662,21 +704,24 @@ type ICommonSeriesSettingsSelectionStyleProps = React.PropsWithChildren<{
   highlight?: boolean;
   width?: number;
 }>
-const _componentCommonSeriesSettingsSelectionStyle = memo(
-  (props: ICommonSeriesSettingsSelectionStyleProps) => {
-    return React.createElement(NestedOption<ICommonSeriesSettingsSelectionStyleProps>, { ...props });
-  }
-);
+const _componentCommonSeriesSettingsSelectionStyle = (props: ICommonSeriesSettingsSelectionStyleProps) => {
+  return React.createElement(NestedOption<ICommonSeriesSettingsSelectionStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "selectionStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hatching: { optionName: "hatching", isCollectionItem: false },
+        seriesBorder: { optionName: "border", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const CommonSeriesSettingsSelectionStyle: typeof _componentCommonSeriesSettingsSelectionStyle & IElementDescriptor = Object.assign(_componentCommonSeriesSettingsSelectionStyle, {
-  OptionName: "selectionStyle",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    color: { optionName: "color", isCollectionItem: false },
-    hatching: { optionName: "hatching", isCollectionItem: false },
-    seriesBorder: { optionName: "border", isCollectionItem: false }
-  },
-})
+const CommonSeriesSettingsSelectionStyle = Object.assign<typeof _componentCommonSeriesSettingsSelectionStyle, NestedComponentMeta>(_componentCommonSeriesSettingsSelectionStyle, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettingsLabel
@@ -685,15 +730,18 @@ type IConnectorProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentConnector = memo(
-  (props: IConnectorProps) => {
-    return React.createElement(NestedOption<IConnectorProps>, { ...props });
-  }
-);
+const _componentConnector = (props: IConnectorProps) => {
+  return React.createElement(NestedOption<IConnectorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "connector",
+    },
+  });
+};
 
-const Connector: typeof _componentConnector & IElementDescriptor = Object.assign(_componentConnector, {
-  OptionName: "connector",
-})
+const Connector = Object.assign<typeof _componentConnector, NestedComponentMeta>(_componentConnector, {
+  componentType: "option",
+});
 
 // owners:
 // Chart
@@ -702,15 +750,18 @@ type IDataPrepareSettingsProps = React.PropsWithChildren<{
   convertToAxisDataType?: boolean;
   sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number);
 }>
-const _componentDataPrepareSettings = memo(
-  (props: IDataPrepareSettingsProps) => {
-    return React.createElement(NestedOption<IDataPrepareSettingsProps>, { ...props });
-  }
-);
+const _componentDataPrepareSettings = (props: IDataPrepareSettingsProps) => {
+  return React.createElement(NestedOption<IDataPrepareSettingsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "dataPrepareSettings",
+    },
+  });
+};
 
-const DataPrepareSettings: typeof _componentDataPrepareSettings & IElementDescriptor = Object.assign(_componentDataPrepareSettings, {
-  OptionName: "dataPrepareSettings",
-})
+const DataPrepareSettings = Object.assign<typeof _componentDataPrepareSettings, NestedComponentMeta>(_componentDataPrepareSettings, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -723,15 +774,18 @@ type IExportProps = React.PropsWithChildren<{
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-const _componentExport = memo(
-  (props: IExportProps) => {
-    return React.createElement(NestedOption<IExportProps>, { ...props });
-  }
-);
+const _componentExport = (props: IExportProps) => {
+  return React.createElement(NestedOption<IExportProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "export",
+    },
+  });
+};
 
-const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
-  OptionName: "export",
-})
+const Export = Object.assign<typeof _componentExport, NestedComponentMeta>(_componentExport, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettingsLabel
@@ -747,15 +801,18 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-const _componentFont = memo(
-  (props: IFontProps) => {
-    return React.createElement(NestedOption<IFontProps>, { ...props });
-  }
-);
+const _componentFont = (props: IFontProps) => {
+  return React.createElement(NestedOption<IFontProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "font",
+    },
+  });
+};
 
-const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
-  OptionName: "font",
-})
+const Font = Object.assign<typeof _componentFont, NestedComponentMeta>(_componentFont, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettingsLabel
@@ -770,15 +827,18 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-const _componentFormat = memo(
-  (props: IFormatProps) => {
-    return React.createElement(NestedOption<IFormatProps>, { ...props });
-  }
-);
+const _componentFormat = (props: IFormatProps) => {
+  return React.createElement(NestedOption<IFormatProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "format",
+    },
+  });
+};
 
-const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
-  OptionName: "format",
-})
+const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettingsHoverStyle
@@ -789,15 +849,18 @@ type IHatchingProps = React.PropsWithChildren<{
   step?: number;
   width?: number;
 }>
-const _componentHatching = memo(
-  (props: IHatchingProps) => {
-    return React.createElement(NestedOption<IHatchingProps>, { ...props });
-  }
-);
+const _componentHatching = (props: IHatchingProps) => {
+  return React.createElement(NestedOption<IHatchingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "hatching",
+    },
+  });
+};
 
-const Hatching: typeof _componentHatching & IElementDescriptor = Object.assign(_componentHatching, {
-  OptionName: "hatching",
-})
+const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_componentHatching, {
+  componentType: "option",
+});
 
 // owners:
 // PointImage
@@ -805,15 +868,18 @@ type IHeightProps = React.PropsWithChildren<{
   rangeMaxPoint?: number;
   rangeMinPoint?: number;
 }>
-const _componentHeight = memo(
-  (props: IHeightProps) => {
-    return React.createElement(NestedOption<IHeightProps>, { ...props });
-  }
-);
+const _componentHeight = (props: IHeightProps) => {
+  return React.createElement(NestedOption<IHeightProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "height",
+    },
+  });
+};
 
-const Height: typeof _componentHeight & IElementDescriptor = Object.assign(_componentHeight, {
-  OptionName: "height",
-})
+const Height = Object.assign<typeof _componentHeight, NestedComponentMeta>(_componentHeight, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -837,15 +903,18 @@ type IHoverStyleProps = React.PropsWithChildren<{
   width?: number;
   size?: number;
 }>
-const _componentHoverStyle = memo(
-  (props: IHoverStyleProps) => {
-    return React.createElement(NestedOption<IHoverStyleProps>, { ...props });
-  }
-);
+const _componentHoverStyle = (props: IHoverStyleProps) => {
+  return React.createElement(NestedOption<IHoverStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "hoverStyle",
+    },
+  });
+};
 
-const HoverStyle: typeof _componentHoverStyle & IElementDescriptor = Object.assign(_componentHoverStyle, {
-  OptionName: "hoverStyle",
-})
+const HoverStyle = Object.assign<typeof _componentHoverStyle, NestedComponentMeta>(_componentHoverStyle, {
+  componentType: "option",
+});
 
 // owners:
 // Background
@@ -865,15 +934,18 @@ type IImageProps = React.PropsWithChildren<{
     rangeMinPoint?: number;
   };
 }>
-const _componentImage = memo(
-  (props: IImageProps) => {
-    return React.createElement(NestedOption<IImageProps>, { ...props });
-  }
-);
+const _componentImage = (props: IImageProps) => {
+  return React.createElement(NestedOption<IImageProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "image",
+    },
+  });
+};
 
-const Image: typeof _componentImage & IElementDescriptor = Object.assign(_componentImage, {
-  OptionName: "image",
-})
+const Image = Object.assign<typeof _componentImage, NestedComponentMeta>(_componentImage, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -881,15 +953,18 @@ type IIndentProps = React.PropsWithChildren<{
   left?: number;
   right?: number;
 }>
-const _componentIndent = memo(
-  (props: IIndentProps) => {
-    return React.createElement(NestedOption<IIndentProps>, { ...props });
-  }
-);
+const _componentIndent = (props: IIndentProps) => {
+  return React.createElement(NestedOption<IIndentProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "indent",
+    },
+  });
+};
 
-const Indent: typeof _componentIndent & IElementDescriptor = Object.assign(_componentIndent, {
-  OptionName: "indent",
-})
+const Indent = Object.assign<typeof _componentIndent, NestedComponentMeta>(_componentIndent, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -923,15 +998,18 @@ type ILabelProps = React.PropsWithChildren<{
   overlappingBehavior?: "hide" | "none";
   topIndent?: number;
 }>
-const _componentLabel = memo(
-  (props: ILabelProps) => {
-    return React.createElement(NestedOption<ILabelProps>, { ...props });
-  }
-);
+const _componentLabel = (props: ILabelProps) => {
+  return React.createElement(NestedOption<ILabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+    },
+  });
+};
 
-const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
-  OptionName: "label",
-})
+const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_componentLabel, {
+  componentType: "option",
+});
 
 // owners:
 // Value
@@ -946,15 +1024,18 @@ type ILengthProps = React.PropsWithChildren<{
   weeks?: number;
   years?: number;
 }>
-const _componentLength = memo(
-  (props: ILengthProps) => {
-    return React.createElement(NestedOption<ILengthProps>, { ...props });
-  }
-);
+const _componentLength = (props: ILengthProps) => {
+  return React.createElement(NestedOption<ILengthProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "length",
+    },
+  });
+};
 
-const Length: typeof _componentLength & IElementDescriptor = Object.assign(_componentLength, {
-  OptionName: "length",
-})
+const Length = Object.assign<typeof _componentLength, NestedComponentMeta>(_componentLength, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -967,21 +1048,24 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-const _componentLoadingIndicator = memo(
-  (props: ILoadingIndicatorProps) => {
-    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
-  }
-);
+const _componentLoadingIndicator = (props: ILoadingIndicatorProps) => {
+  return React.createElement(NestedOption<ILoadingIndicatorProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "loadingIndicator",
+      DefaultsProps: {
+        defaultShow: "show"
+      },
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
-  OptionName: "loadingIndicator",
-  DefaultsProps: {
-    defaultShow: "show"
-  },
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const LoadingIndicator = Object.assign<typeof _componentLoadingIndicator, NestedComponentMeta>(_componentLoadingIndicator, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -992,15 +1076,18 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-const _componentMargin = memo(
-  (props: IMarginProps) => {
-    return React.createElement(NestedOption<IMarginProps>, { ...props });
-  }
-);
+const _componentMargin = (props: IMarginProps) => {
+  return React.createElement(NestedOption<IMarginProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "margin",
+    },
+  });
+};
 
-const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
-  OptionName: "margin",
-})
+const Margin = Object.assign<typeof _componentMargin, NestedComponentMeta>(_componentMargin, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1015,19 +1102,22 @@ type IMarkerProps = React.PropsWithChildren<{
   topIndent?: number;
   visible?: boolean;
 }>
-const _componentMarker = memo(
-  (props: IMarkerProps) => {
-    return React.createElement(NestedOption<IMarkerProps>, { ...props });
-  }
-);
+const _componentMarker = (props: IMarkerProps) => {
+  return React.createElement(NestedOption<IMarkerProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "marker",
+      ExpectedChildren: {
+        label: { optionName: "label", isCollectionItem: false },
+        markerLabel: { optionName: "label", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Marker: typeof _componentMarker & IElementDescriptor = Object.assign(_componentMarker, {
-  OptionName: "marker",
-  ExpectedChildren: {
-    label: { optionName: "label", isCollectionItem: false },
-    markerLabel: { optionName: "label", isCollectionItem: false }
-  },
-})
+const Marker = Object.assign<typeof _componentMarker, NestedComponentMeta>(_componentMarker, {
+  componentType: "option",
+});
 
 // owners:
 // Marker
@@ -1035,18 +1125,21 @@ type IMarkerLabelProps = React.PropsWithChildren<{
   customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string);
   format?: LocalizationTypes.Format;
 }>
-const _componentMarkerLabel = memo(
-  (props: IMarkerLabelProps) => {
-    return React.createElement(NestedOption<IMarkerLabelProps>, { ...props });
-  }
-);
+const _componentMarkerLabel = (props: IMarkerLabelProps) => {
+  return React.createElement(NestedOption<IMarkerLabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      ExpectedChildren: {
+        format: { optionName: "format", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const MarkerLabel: typeof _componentMarkerLabel & IElementDescriptor = Object.assign(_componentMarkerLabel, {
-  OptionName: "label",
-  ExpectedChildren: {
-    format: { optionName: "format", isCollectionItem: false }
-  },
-})
+const MarkerLabel = Object.assign<typeof _componentMarkerLabel, NestedComponentMeta>(_componentMarkerLabel, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1061,15 +1154,18 @@ type IMaxRangeProps = React.PropsWithChildren<{
   weeks?: number;
   years?: number;
 }>
-const _componentMaxRange = memo(
-  (props: IMaxRangeProps) => {
-    return React.createElement(NestedOption<IMaxRangeProps>, { ...props });
-  }
-);
+const _componentMaxRange = (props: IMaxRangeProps) => {
+  return React.createElement(NestedOption<IMaxRangeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "maxRange",
+    },
+  });
+};
 
-const MaxRange: typeof _componentMaxRange & IElementDescriptor = Object.assign(_componentMaxRange, {
-  OptionName: "maxRange",
-})
+const MaxRange = Object.assign<typeof _componentMaxRange, NestedComponentMeta>(_componentMaxRange, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1079,15 +1175,18 @@ type IMinorTickProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentMinorTick = memo(
-  (props: IMinorTickProps) => {
-    return React.createElement(NestedOption<IMinorTickProps>, { ...props });
-  }
-);
+const _componentMinorTick = (props: IMinorTickProps) => {
+  return React.createElement(NestedOption<IMinorTickProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "minorTick",
+    },
+  });
+};
 
-const MinorTick: typeof _componentMinorTick & IElementDescriptor = Object.assign(_componentMinorTick, {
-  OptionName: "minorTick",
-})
+const MinorTick = Object.assign<typeof _componentMinorTick, NestedComponentMeta>(_componentMinorTick, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1102,15 +1201,18 @@ type IMinorTickIntervalProps = React.PropsWithChildren<{
   weeks?: number;
   years?: number;
 }>
-const _componentMinorTickInterval = memo(
-  (props: IMinorTickIntervalProps) => {
-    return React.createElement(NestedOption<IMinorTickIntervalProps>, { ...props });
-  }
-);
+const _componentMinorTickInterval = (props: IMinorTickIntervalProps) => {
+  return React.createElement(NestedOption<IMinorTickIntervalProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "minorTickInterval",
+    },
+  });
+};
 
-const MinorTickInterval: typeof _componentMinorTickInterval & IElementDescriptor = Object.assign(_componentMinorTickInterval, {
-  OptionName: "minorTickInterval",
-})
+const MinorTickInterval = Object.assign<typeof _componentMinorTickInterval, NestedComponentMeta>(_componentMinorTickInterval, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1125,15 +1227,18 @@ type IMinRangeProps = React.PropsWithChildren<{
   weeks?: number;
   years?: number;
 }>
-const _componentMinRange = memo(
-  (props: IMinRangeProps) => {
-    return React.createElement(NestedOption<IMinRangeProps>, { ...props });
-  }
-);
+const _componentMinRange = (props: IMinRangeProps) => {
+  return React.createElement(NestedOption<IMinRangeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "minRange",
+    },
+  });
+};
 
-const MinRange: typeof _componentMinRange & IElementDescriptor = Object.assign(_componentMinRange, {
-  OptionName: "minRange",
-})
+const MinRange = Object.assign<typeof _componentMinRange, NestedComponentMeta>(_componentMinRange, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -1182,26 +1287,29 @@ type IPointProps = React.PropsWithChildren<{
   symbol?: "circle" | "cross" | "polygon" | "square" | "triangle" | "triangleDown" | "triangleUp";
   visible?: boolean;
 }>
-const _componentPoint = memo(
-  (props: IPointProps) => {
-    return React.createElement(NestedOption<IPointProps>, { ...props });
-  }
-);
+const _componentPoint = (props: IPointProps) => {
+  return React.createElement(NestedOption<IPointProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "point",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        image: { optionName: "image", isCollectionItem: false },
+        pointBorder: { optionName: "border", isCollectionItem: false },
+        pointHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
+        pointImage: { optionName: "image", isCollectionItem: false },
+        pointSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
+        selectionStyle: { optionName: "selectionStyle", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Point: typeof _componentPoint & IElementDescriptor = Object.assign(_componentPoint, {
-  OptionName: "point",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    color: { optionName: "color", isCollectionItem: false },
-    hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-    image: { optionName: "image", isCollectionItem: false },
-    pointBorder: { optionName: "border", isCollectionItem: false },
-    pointHoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
-    pointImage: { optionName: "image", isCollectionItem: false },
-    pointSelectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
-    selectionStyle: { optionName: "selectionStyle", isCollectionItem: false }
-  },
-})
+const Point = Object.assign<typeof _componentPoint, NestedComponentMeta>(_componentPoint, {
+  componentType: "option",
+});
 
 // owners:
 // Point
@@ -1212,15 +1320,18 @@ type IPointBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentPointBorder = memo(
-  (props: IPointBorderProps) => {
-    return React.createElement(NestedOption<IPointBorderProps>, { ...props });
-  }
-);
+const _componentPointBorder = (props: IPointBorderProps) => {
+  return React.createElement(NestedOption<IPointBorderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "border",
+    },
+  });
+};
 
-const PointBorder: typeof _componentPointBorder & IElementDescriptor = Object.assign(_componentPointBorder, {
-  OptionName: "border",
-})
+const PointBorder = Object.assign<typeof _componentPointBorder, NestedComponentMeta>(_componentPointBorder, {
+  componentType: "option",
+});
 
 // owners:
 // Point
@@ -1233,20 +1344,23 @@ type IPointHoverStyleProps = React.PropsWithChildren<{
   color?: ChartsColor | string;
   size?: number;
 }>
-const _componentPointHoverStyle = memo(
-  (props: IPointHoverStyleProps) => {
-    return React.createElement(NestedOption<IPointHoverStyleProps>, { ...props });
-  }
-);
+const _componentPointHoverStyle = (props: IPointHoverStyleProps) => {
+  return React.createElement(NestedOption<IPointHoverStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "hoverStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        pointBorder: { optionName: "border", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const PointHoverStyle: typeof _componentPointHoverStyle & IElementDescriptor = Object.assign(_componentPointHoverStyle, {
-  OptionName: "hoverStyle",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    color: { optionName: "color", isCollectionItem: false },
-    pointBorder: { optionName: "border", isCollectionItem: false }
-  },
-})
+const PointHoverStyle = Object.assign<typeof _componentPointHoverStyle, NestedComponentMeta>(_componentPointHoverStyle, {
+  componentType: "option",
+});
 
 // owners:
 // Point
@@ -1264,20 +1378,23 @@ type IPointImageProps = React.PropsWithChildren<{
     rangeMinPoint?: number;
   };
 }>
-const _componentPointImage = memo(
-  (props: IPointImageProps) => {
-    return React.createElement(NestedOption<IPointImageProps>, { ...props });
-  }
-);
+const _componentPointImage = (props: IPointImageProps) => {
+  return React.createElement(NestedOption<IPointImageProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "image",
+      ExpectedChildren: {
+        height: { optionName: "height", isCollectionItem: false },
+        url: { optionName: "url", isCollectionItem: false },
+        width: { optionName: "width", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const PointImage: typeof _componentPointImage & IElementDescriptor = Object.assign(_componentPointImage, {
-  OptionName: "image",
-  ExpectedChildren: {
-    height: { optionName: "height", isCollectionItem: false },
-    url: { optionName: "url", isCollectionItem: false },
-    width: { optionName: "width", isCollectionItem: false }
-  },
-})
+const PointImage = Object.assign<typeof _componentPointImage, NestedComponentMeta>(_componentPointImage, {
+  componentType: "option",
+});
 
 // owners:
 // Point
@@ -1290,20 +1407,23 @@ type IPointSelectionStyleProps = React.PropsWithChildren<{
   color?: ChartsColor | string;
   size?: number;
 }>
-const _componentPointSelectionStyle = memo(
-  (props: IPointSelectionStyleProps) => {
-    return React.createElement(NestedOption<IPointSelectionStyleProps>, { ...props });
-  }
-);
+const _componentPointSelectionStyle = (props: IPointSelectionStyleProps) => {
+  return React.createElement(NestedOption<IPointSelectionStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "selectionStyle",
+      ExpectedChildren: {
+        border: { optionName: "border", isCollectionItem: false },
+        color: { optionName: "color", isCollectionItem: false },
+        pointBorder: { optionName: "border", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const PointSelectionStyle: typeof _componentPointSelectionStyle & IElementDescriptor = Object.assign(_componentPointSelectionStyle, {
-  OptionName: "selectionStyle",
-  ExpectedChildren: {
-    border: { optionName: "border", isCollectionItem: false },
-    color: { optionName: "color", isCollectionItem: false },
-    pointBorder: { optionName: "border", isCollectionItem: false }
-  },
-})
+const PointSelectionStyle = Object.assign<typeof _componentPointSelectionStyle, NestedComponentMeta>(_componentPointSelectionStyle, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -1311,15 +1431,18 @@ type IReductionProps = React.PropsWithChildren<{
   color?: string;
   level?: "close" | "high" | "low" | "open";
 }>
-const _componentReduction = memo(
-  (props: IReductionProps) => {
-    return React.createElement(NestedOption<IReductionProps>, { ...props });
-  }
-);
+const _componentReduction = (props: IReductionProps) => {
+  return React.createElement(NestedOption<IReductionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "reduction",
+    },
+  });
+};
 
-const Reduction: typeof _componentReduction & IElementDescriptor = Object.assign(_componentReduction, {
-  OptionName: "reduction",
-})
+const Reduction = Object.assign<typeof _componentReduction, NestedComponentMeta>(_componentReduction, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -1438,29 +1561,32 @@ type IScaleProps = React.PropsWithChildren<{
   workdaysOnly?: boolean;
   workWeek?: Array<number>;
 }>
-const _componentScale = memo(
-  (props: IScaleProps) => {
-    return React.createElement(NestedOption<IScaleProps>, { ...props });
-  }
-);
+const _componentScale = (props: IScaleProps) => {
+  return React.createElement(NestedOption<IScaleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "scale",
+      ExpectedChildren: {
+        aggregationInterval: { optionName: "aggregationInterval", isCollectionItem: false },
+        break: { optionName: "breaks", isCollectionItem: true },
+        breakStyle: { optionName: "breakStyle", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        marker: { optionName: "marker", isCollectionItem: false },
+        maxRange: { optionName: "maxRange", isCollectionItem: false },
+        minorTick: { optionName: "minorTick", isCollectionItem: false },
+        minorTickInterval: { optionName: "minorTickInterval", isCollectionItem: false },
+        minRange: { optionName: "minRange", isCollectionItem: false },
+        scaleLabel: { optionName: "label", isCollectionItem: false },
+        tick: { optionName: "tick", isCollectionItem: false },
+        tickInterval: { optionName: "tickInterval", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Scale: typeof _componentScale & IElementDescriptor = Object.assign(_componentScale, {
-  OptionName: "scale",
-  ExpectedChildren: {
-    aggregationInterval: { optionName: "aggregationInterval", isCollectionItem: false },
-    break: { optionName: "breaks", isCollectionItem: true },
-    breakStyle: { optionName: "breakStyle", isCollectionItem: false },
-    label: { optionName: "label", isCollectionItem: false },
-    marker: { optionName: "marker", isCollectionItem: false },
-    maxRange: { optionName: "maxRange", isCollectionItem: false },
-    minorTick: { optionName: "minorTick", isCollectionItem: false },
-    minorTickInterval: { optionName: "minorTickInterval", isCollectionItem: false },
-    minRange: { optionName: "minRange", isCollectionItem: false },
-    scaleLabel: { optionName: "label", isCollectionItem: false },
-    tick: { optionName: "tick", isCollectionItem: false },
-    tickInterval: { optionName: "tickInterval", isCollectionItem: false }
-  },
-})
+const Scale = Object.assign<typeof _componentScale, NestedComponentMeta>(_componentScale, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1472,19 +1598,22 @@ type IScaleLabelProps = React.PropsWithChildren<{
   topIndent?: number;
   visible?: boolean;
 }>
-const _componentScaleLabel = memo(
-  (props: IScaleLabelProps) => {
-    return React.createElement(NestedOption<IScaleLabelProps>, { ...props });
-  }
-);
+const _componentScaleLabel = (props: IScaleLabelProps) => {
+  return React.createElement(NestedOption<IScaleLabelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "label",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const ScaleLabel: typeof _componentScaleLabel & IElementDescriptor = Object.assign(_componentScaleLabel, {
-  OptionName: "label",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false }
-  },
-})
+const ScaleLabel = Object.assign<typeof _componentScaleLabel, NestedComponentMeta>(_componentScaleLabel, {
+  componentType: "option",
+});
 
 // owners:
 // Point
@@ -1508,15 +1637,18 @@ type ISelectionStyleProps = React.PropsWithChildren<{
   highlight?: boolean;
   width?: number;
 }>
-const _componentSelectionStyle = memo(
-  (props: ISelectionStyleProps) => {
-    return React.createElement(NestedOption<ISelectionStyleProps>, { ...props });
-  }
-);
+const _componentSelectionStyle = (props: ISelectionStyleProps) => {
+  return React.createElement(NestedOption<ISelectionStyleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "selectionStyle",
+    },
+  });
+};
 
-const SelectionStyle: typeof _componentSelectionStyle & IElementDescriptor = Object.assign(_componentSelectionStyle, {
-  OptionName: "selectionStyle",
-})
+const SelectionStyle = Object.assign<typeof _componentSelectionStyle, NestedComponentMeta>(_componentSelectionStyle, {
+  componentType: "option",
+});
 
 // owners:
 // Chart
@@ -1687,16 +1819,19 @@ type ISeriesProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentSeries = memo(
-  (props: ISeriesProps) => {
-    return React.createElement(NestedOption<ISeriesProps>, { ...props });
-  }
-);
+const _componentSeries = (props: ISeriesProps) => {
+  return React.createElement(NestedOption<ISeriesProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "series",
+      IsCollectionItem: true,
+    },
+  });
+};
 
-const Series: typeof _componentSeries & IElementDescriptor = Object.assign(_componentSeries, {
-  OptionName: "series",
-  IsCollectionItem: true,
-})
+const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_componentSeries, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -1709,15 +1844,18 @@ type ISeriesBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-const _componentSeriesBorder = memo(
-  (props: ISeriesBorderProps) => {
-    return React.createElement(NestedOption<ISeriesBorderProps>, { ...props });
-  }
-);
+const _componentSeriesBorder = (props: ISeriesBorderProps) => {
+  return React.createElement(NestedOption<ISeriesBorderProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "border",
+    },
+  });
+};
 
-const SeriesBorder: typeof _componentSeriesBorder & IElementDescriptor = Object.assign(_componentSeriesBorder, {
-  OptionName: "border",
-})
+const SeriesBorder = Object.assign<typeof _componentSeriesBorder, NestedComponentMeta>(_componentSeriesBorder, {
+  componentType: "option",
+});
 
 // owners:
 // Chart
@@ -1725,15 +1863,18 @@ type ISeriesTemplateProps = React.PropsWithChildren<{
   customizeSeries?: ((seriesName: any) => ChartSeries);
   nameField?: string;
 }>
-const _componentSeriesTemplate = memo(
-  (props: ISeriesTemplateProps) => {
-    return React.createElement(NestedOption<ISeriesTemplateProps>, { ...props });
-  }
-);
+const _componentSeriesTemplate = (props: ISeriesTemplateProps) => {
+  return React.createElement(NestedOption<ISeriesTemplateProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "seriesTemplate",
+    },
+  });
+};
 
-const SeriesTemplate: typeof _componentSeriesTemplate & IElementDescriptor = Object.assign(_componentSeriesTemplate, {
-  OptionName: "seriesTemplate",
-})
+const SeriesTemplate = Object.assign<typeof _componentSeriesTemplate, NestedComponentMeta>(_componentSeriesTemplate, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -1741,15 +1882,18 @@ type IShutterProps = React.PropsWithChildren<{
   color?: string;
   opacity?: number;
 }>
-const _componentShutter = memo(
-  (props: IShutterProps) => {
-    return React.createElement(NestedOption<IShutterProps>, { ...props });
-  }
-);
+const _componentShutter = (props: IShutterProps) => {
+  return React.createElement(NestedOption<IShutterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "shutter",
+    },
+  });
+};
 
-const Shutter: typeof _componentShutter & IElementDescriptor = Object.assign(_componentShutter, {
-  OptionName: "shutter",
-})
+const Shutter = Object.assign<typeof _componentShutter, NestedComponentMeta>(_componentShutter, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -1757,15 +1901,18 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-const _componentSize = memo(
-  (props: ISizeProps) => {
-    return React.createElement(NestedOption<ISizeProps>, { ...props });
-  }
-);
+const _componentSize = (props: ISizeProps) => {
+  return React.createElement(NestedOption<ISizeProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "size",
+    },
+  });
+};
 
-const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
-  OptionName: "size",
-})
+const Size = Object.assign<typeof _componentSize, NestedComponentMeta>(_componentSize, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -1774,15 +1921,18 @@ type ISliderHandleProps = React.PropsWithChildren<{
   opacity?: number;
   width?: number;
 }>
-const _componentSliderHandle = memo(
-  (props: ISliderHandleProps) => {
-    return React.createElement(NestedOption<ISliderHandleProps>, { ...props });
-  }
-);
+const _componentSliderHandle = (props: ISliderHandleProps) => {
+  return React.createElement(NestedOption<ISliderHandleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "sliderHandle",
+    },
+  });
+};
 
-const SliderHandle: typeof _componentSliderHandle & IElementDescriptor = Object.assign(_componentSliderHandle, {
-  OptionName: "sliderHandle",
-})
+const SliderHandle = Object.assign<typeof _componentSliderHandle, NestedComponentMeta>(_componentSliderHandle, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -1797,19 +1947,22 @@ type ISliderMarkerProps = React.PropsWithChildren<{
   placeholderHeight?: number;
   visible?: boolean;
 }>
-const _componentSliderMarker = memo(
-  (props: ISliderMarkerProps) => {
-    return React.createElement(NestedOption<ISliderMarkerProps>, { ...props });
-  }
-);
+const _componentSliderMarker = (props: ISliderMarkerProps) => {
+  return React.createElement(NestedOption<ISliderMarkerProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "sliderMarker",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        format: { optionName: "format", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const SliderMarker: typeof _componentSliderMarker & IElementDescriptor = Object.assign(_componentSliderMarker, {
-  OptionName: "sliderMarker",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false },
-    format: { optionName: "format", isCollectionItem: false }
-  },
-})
+const SliderMarker = Object.assign<typeof _componentSliderMarker, NestedComponentMeta>(_componentSliderMarker, {
+  componentType: "option",
+});
 
 // owners:
 // Title
@@ -1820,18 +1973,21 @@ type ISubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentSubtitle = memo(
-  (props: ISubtitleProps) => {
-    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
-  }
-);
+const _componentSubtitle = (props: ISubtitleProps) => {
+  return React.createElement(NestedOption<ISubtitleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "subtitle",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
-  OptionName: "subtitle",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false }
-  },
-})
+const Subtitle = Object.assign<typeof _componentSubtitle, NestedComponentMeta>(_componentSubtitle, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1840,15 +1996,18 @@ type ITickProps = React.PropsWithChildren<{
   opacity?: number;
   width?: number;
 }>
-const _componentTick = memo(
-  (props: ITickProps) => {
-    return React.createElement(NestedOption<ITickProps>, { ...props });
-  }
-);
+const _componentTick = (props: ITickProps) => {
+  return React.createElement(NestedOption<ITickProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tick",
+    },
+  });
+};
 
-const Tick: typeof _componentTick & IElementDescriptor = Object.assign(_componentTick, {
-  OptionName: "tick",
-})
+const Tick = Object.assign<typeof _componentTick, NestedComponentMeta>(_componentTick, {
+  componentType: "option",
+});
 
 // owners:
 // Scale
@@ -1863,15 +2022,18 @@ type ITickIntervalProps = React.PropsWithChildren<{
   weeks?: number;
   years?: number;
 }>
-const _componentTickInterval = memo(
-  (props: ITickIntervalProps) => {
-    return React.createElement(NestedOption<ITickIntervalProps>, { ...props });
-  }
-);
+const _componentTickInterval = (props: ITickIntervalProps) => {
+  return React.createElement(NestedOption<ITickIntervalProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tickInterval",
+    },
+  });
+};
 
-const TickInterval: typeof _componentTickInterval & IElementDescriptor = Object.assign(_componentTickInterval, {
-  OptionName: "tickInterval",
-})
+const TickInterval = Object.assign<typeof _componentTickInterval, NestedComponentMeta>(_componentTickInterval, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -1897,20 +2059,23 @@ type ITitleProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-const _componentTitle = memo(
-  (props: ITitleProps) => {
-    return React.createElement(NestedOption<ITitleProps>, { ...props });
-  }
-);
+const _componentTitle = (props: ITitleProps) => {
+  return React.createElement(NestedOption<ITitleProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "title",
+      ExpectedChildren: {
+        font: { optionName: "font", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false },
+        subtitle: { optionName: "subtitle", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
-  OptionName: "title",
-  ExpectedChildren: {
-    font: { optionName: "font", isCollectionItem: false },
-    margin: { optionName: "margin", isCollectionItem: false },
-    subtitle: { optionName: "subtitle", isCollectionItem: false }
-  },
-})
+const Title = Object.assign<typeof _componentTitle, NestedComponentMeta>(_componentTitle, {
+  componentType: "option",
+});
 
 // owners:
 // PointImage
@@ -1918,15 +2083,18 @@ type IUrlProps = React.PropsWithChildren<{
   rangeMaxPoint?: string;
   rangeMinPoint?: string;
 }>
-const _componentUrl = memo(
-  (props: IUrlProps) => {
-    return React.createElement(NestedOption<IUrlProps>, { ...props });
-  }
-);
+const _componentUrl = (props: IUrlProps) => {
+  return React.createElement(NestedOption<IUrlProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "url",
+    },
+  });
+};
 
-const Url: typeof _componentUrl & IElementDescriptor = Object.assign(_componentUrl, {
-  OptionName: "url",
-})
+const Url = Object.assign<typeof _componentUrl, NestedComponentMeta>(_componentUrl, {
+  componentType: "option",
+});
 
 // owners:
 // RangeSelector
@@ -1949,22 +2117,25 @@ type IValueProps = React.PropsWithChildren<{
   defaultStartValue?: Date | number | string;
   onStartValueChange?: (value: Date | number | string) => void;
 }>
-const _componentValue = memo(
-  (props: IValueProps) => {
-    return React.createElement(NestedOption<IValueProps>, { ...props });
-  }
-);
+const _componentValue = (props: IValueProps) => {
+  return React.createElement(NestedOption<IValueProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "value",
+      DefaultsProps: {
+        defaultEndValue: "endValue",
+        defaultStartValue: "startValue"
+      },
+      ExpectedChildren: {
+        length: { optionName: "length", isCollectionItem: false }
+      },
+    },
+  });
+};
 
-const Value: typeof _componentValue & IElementDescriptor = Object.assign(_componentValue, {
-  OptionName: "value",
-  DefaultsProps: {
-    defaultEndValue: "endValue",
-    defaultStartValue: "startValue"
-  },
-  ExpectedChildren: {
-    length: { optionName: "length", isCollectionItem: false }
-  },
-})
+const Value = Object.assign<typeof _componentValue, NestedComponentMeta>(_componentValue, {
+  componentType: "option",
+});
 
 // owners:
 // Chart
@@ -1976,15 +2147,18 @@ type IValueAxisProps = React.PropsWithChildren<{
   type?: "continuous" | "logarithmic";
   valueType?: "datetime" | "numeric" | "string";
 }>
-const _componentValueAxis = memo(
-  (props: IValueAxisProps) => {
-    return React.createElement(NestedOption<IValueAxisProps>, { ...props });
-  }
-);
+const _componentValueAxis = (props: IValueAxisProps) => {
+  return React.createElement(NestedOption<IValueAxisProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "valueAxis",
+    },
+  });
+};
 
-const ValueAxis: typeof _componentValueAxis & IElementDescriptor = Object.assign(_componentValueAxis, {
-  OptionName: "valueAxis",
-})
+const ValueAxis = Object.assign<typeof _componentValueAxis, NestedComponentMeta>(_componentValueAxis, {
+  componentType: "option",
+});
 
 // owners:
 // CommonSeriesSettings
@@ -1999,15 +2173,18 @@ type IValueErrorBarProps = React.PropsWithChildren<{
   type?: "fixed" | "percent" | "stdDeviation" | "stdError" | "variance";
   value?: number;
 }>
-const _componentValueErrorBar = memo(
-  (props: IValueErrorBarProps) => {
-    return React.createElement(NestedOption<IValueErrorBarProps>, { ...props });
-  }
-);
+const _componentValueErrorBar = (props: IValueErrorBarProps) => {
+  return React.createElement(NestedOption<IValueErrorBarProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "valueErrorBar",
+    },
+  });
+};
 
-const ValueErrorBar: typeof _componentValueErrorBar & IElementDescriptor = Object.assign(_componentValueErrorBar, {
-  OptionName: "valueErrorBar",
-})
+const ValueErrorBar = Object.assign<typeof _componentValueErrorBar, NestedComponentMeta>(_componentValueErrorBar, {
+  componentType: "option",
+});
 
 // owners:
 // PointImage
@@ -2015,15 +2192,18 @@ type IWidthProps = React.PropsWithChildren<{
   rangeMaxPoint?: number;
   rangeMinPoint?: number;
 }>
-const _componentWidth = memo(
-  (props: IWidthProps) => {
-    return React.createElement(NestedOption<IWidthProps>, { ...props });
-  }
-);
+const _componentWidth = (props: IWidthProps) => {
+  return React.createElement(NestedOption<IWidthProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "width",
+    },
+  });
+};
 
-const Width: typeof _componentWidth & IElementDescriptor = Object.assign(_componentWidth, {
-  OptionName: "width",
-})
+const Width = Object.assign<typeof _componentWidth, NestedComponentMeta>(_componentWidth, {
+  componentType: "option",
+});
 
 export default RangeSelector;
 export {
