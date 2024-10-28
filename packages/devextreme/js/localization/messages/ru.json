@@ -245,25 +245,8 @@
         "dxScheduler-editorLabelDescription": "Описание",
         "dxScheduler-editorLabelRecurrence": "Повторение",
 
-        "dxScheduler-navigationPreviousday": "Previous day",
-        "dxScheduler-navigationPreviousweek": "Previous week",
-        "dxScheduler-navigationPreviousworkWeek": "Previous work week",
-        "dxScheduler-navigationPreviousmonth": "Previous month",
-        "dxScheduler-navigationPrevioustimelineDay": "Previous timeline day",
-        "dxScheduler-navigationPrevioustimelineWeek": "Previous timeline week",
-        "dxScheduler-navigationPrevioustimelineWorkWeek": "Previous timeline work week",
-        "dxScheduler-navigationPrevioustimelineMonth": "Previous timeline month",
-        "dxScheduler-navigationPreviousagenda": "Previous agenda",
-
-        "dxScheduler-navigationNextday": "Next day",
-        "dxScheduler-navigationNextweek": "Next week",
-        "dxScheduler-navigationNextworkWeek": "Next work week",
-        "dxScheduler-navigationNextmonth": "Next month",
-        "dxScheduler-navigationNexttimelineDay": "Next timeline day",
-        "dxScheduler-navigationNexttimelineWeek": "Next timeline week",
-        "dxScheduler-navigationNexttimelineWorkWeek": "Next timeline work week",
-        "dxScheduler-navigationNexttimelineMonth": "Next timeline month",
-        "dxScheduler-navigationNextagenda": "Next agenda",
+        "dxScheduler-navigationPrevious": "Previous page",
+        "dxScheduler-navigationNext": "Next page",
 
         "dxScheduler-openAppointment": "Открыть задачу",
 

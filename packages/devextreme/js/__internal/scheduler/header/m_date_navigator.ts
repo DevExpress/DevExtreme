@@ -39,8 +39,7 @@ export const getDateNavigator = (header, item) => {
 };
 
 const getPreviousButtonOptions = (header) => {
-  const { currentView } = header;
-  const ariaMessage = messageLocalization.format(`dxScheduler-navigationPrevious${currentView}`);
+  const ariaMessage = messageLocalization.format('dxScheduler-navigationPrevious');
 
   return {
     key: 'previous',
@@ -100,8 +99,7 @@ const getCalendarButtonOptions = (header) => ({
 });
 
 const getNextButtonOptions = (header) => {
-  const { currentView } = header;
-  const ariaMessage = messageLocalization.format(`dxScheduler-navigationNext${currentView}`);
+  const ariaMessage = messageLocalization.format('dxScheduler-navigationNext');
 
   return {
     key: 'next',
