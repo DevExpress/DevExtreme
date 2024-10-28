@@ -37,8 +37,8 @@ export interface Properties extends WidgetOptions<MessageList> {
   items: Message[];
   currentUserId: number | string | undefined;
   showDayHeaders: boolean;
-  dayHeaderFormat: Format;
-  messageTimestampFormat: Format;
+  dayHeaderFormat?: Format;
+  messageTimestampFormat?: Format;
   isLoading?: boolean;
 }
 
@@ -173,7 +173,7 @@ class MessageList extends Widget<Properties> {
     const messageGroup = this._createComponent($messageGroup, MessageGroup, {
       items,
       alignment: this._messageGroupAlignment(userId),
-      messageTimestampFormat: messageTimestampFormat ?? 'shorttime',
+      messageTimestampFormat,
     });
 
     this._messageGroups?.push(messageGroup);
@@ -227,7 +227,7 @@ class MessageList extends Widget<Properties> {
 
     $('<div>')
       .addClass(CHAT_MESSAGELIST_DAY_HEADER_CLASS)
-      .text(`${headerDate}`)
+      .text(headerDate as string)
       .appendTo(this._$content());
   }
 

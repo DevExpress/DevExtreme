@@ -26,7 +26,7 @@ export type MessageGroupAlignment = 'start' | 'end';
 export interface Properties extends WidgetOptions<MessageGroup> {
   items: Message[];
   alignment: MessageGroupAlignment;
-  messageTimestampFormat: Format;
+  messageTimestampFormat?: Format;
 }
 
 class MessageGroup extends Widget<Properties> {
@@ -136,24 +136,29 @@ class MessageGroup extends Widget<Properties> {
       .addClass(CHAT_MESSAGEGROUP_TIME_CLASS)
       .appendTo($information);
 
-    const timeValue = this._getTimeValue(timestamp);
-    if (timeValue) {
+    const shouldAddTimeValue = this._shouldAddTimeValue(timestamp);
+
+    if (shouldAddTimeValue) {
+      const timeValue = this._getTimeValue(timestamp);
       $time.text(timeValue);
     }
 
     $information.appendTo(this.element());
   }
 
-  _getTimeValue(timestamp: Date | string | number | undefined): string | boolean {
+  _shouldAddTimeValue(timestamp: Date | string | number | undefined): boolean {
     const deserializedDate = dateSerialization.deserializeDate(timestamp);
 
-    if (!isDate(deserializedDate) || isNaN(deserializedDate.getTime())) {
-      return false;
-    }
+    return isDate(deserializedDate) && !isNaN(deserializedDate.getTime());
+  }
+
+  _getTimeValue(timestamp: Date | string | number | undefined): string {
+    const deserializedDate = dateSerialization.deserializeDate(timestamp);
+
     const { messageTimestampFormat } = this.option();
     const formattedTime = dateLocalization.format(deserializedDate, messageTimestampFormat);
 
-    return `${formattedTime}`;
+    return formattedTime as string;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
