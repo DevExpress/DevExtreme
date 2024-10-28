@@ -214,7 +214,7 @@ test('DataGrid - FilterRow cell loses focus when focusedRowEnabled is true and e
 
     await initStore();
 
-    return await createWidget('dxDataGrid', {
+    return createWidget('dxDataGrid', {
       dataSource: {
         key: 'id',
         load(loadOptions) {
