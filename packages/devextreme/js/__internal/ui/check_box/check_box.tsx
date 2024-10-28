@@ -4,11 +4,11 @@ const _excluded = ["accessKey", "activeStateEnabled", "aria", "className", "defa
 import { createVNode, createFragment, createComponentVNode, normalizeProps } from "inferno";
 import { Fragment } from 'inferno';
 import { InfernoWrapperComponent } from '@devextreme/runtime/inferno';
-import devices from '../../../../core/devices';
-import { Editor, EditorProps } from '../common/editor';
-import { combineClasses } from '../../../utils/combine_classes';
+import devices from '@js/core/devices';
+import { Editor, EditorProps } from './editor_base/editor';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
-import { WidgetProps } from '../../common/widget';
+import { WidgetProps } from '@ts/core/r1/widget';
 const getCssClasses = model => {
   const {
     text,
@@ -175,7 +175,7 @@ export const CheckBoxPropsType = {
     return WidgetProps.aria;
   }
 };
-import { convertRulesToOptions } from '../../../../core/options/utils';
+import { convertRulesToOptions } from '@js/core/options/utils';
 import { createReRenderEffect } from '@devextreme/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
 export class CheckBox extends InfernoWrapperComponent {

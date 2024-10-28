@@ -4,8 +4,8 @@ const _excluded = ["size"];
 import { createVNode } from "inferno";
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { normalizeStyles } from '@devextreme/runtime/inferno';
-import { normalizeStyleProp } from '../../../../core/utils/style';
-import '../../../../ui/themes';
+import { normalizeStyleProp } from '@js/core/utils/style';
+import '@js/ui/themes';
 export const viewFunction = viewModel => {
   const {
     cssStyles,

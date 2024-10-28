@@ -1,4 +1,4 @@
-import Editor from './editor';
+import Editor from './editor_base/wrapper';
 export default class CheckBox extends Editor {
   _useTemplates() {
     return false;

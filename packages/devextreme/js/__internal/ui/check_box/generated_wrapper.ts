@@ -1,5 +1,5 @@
-import registerComponent from '../../../../core/component_registrator';
-import BaseComponent from '../../../component_wrapper/editors/check_box';
+import registerComponent from '@js/core/component_registrator';
+import BaseComponent from './wrapper';
 import { CheckBox as CheckBoxComponent, defaultOptions } from './check_box';
 export default class CheckBox extends BaseComponent {
   getProps() {

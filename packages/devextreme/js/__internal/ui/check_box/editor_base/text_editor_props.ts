@@ -1,4 +1,4 @@
-import { isMaterial, current } from '../../../../ui/themes';
+import { isMaterial, current } from '@js/ui/themes';
 export const TextEditorProps = {
   maxLength: null,
   spellCheck: false,

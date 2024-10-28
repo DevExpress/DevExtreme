@@ -4,11 +4,11 @@ const _excluded = ["accessKey", "activeStateEnabled", "aria", "children", "class
 import { createFragment, createComponentVNode, normalizeProps } from "inferno";
 import { Fragment } from 'inferno';
 import { InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
-import Guid from '../../../../core/guid';
-import { Widget, WidgetProps } from '../../common/widget';
-import { BaseWidgetProps } from '../../common/base_props';
-import { combineClasses } from '../../../utils/combine_classes';
-import { ValidationMessage } from '../../overlays/validation_message';
+import Guid from '@js/core/guid';
+import { Widget, WidgetProps } from '@ts/core/r1/widget';
+import { BaseWidgetProps } from '@ts/core/r1/base_props';
+import { combineClasses } from '@ts/core/utils/combine_classes';
+import { ValidationMessage } from '../wrappers/validation_message';
 const getCssClasses = model => {
   const {
     classes,

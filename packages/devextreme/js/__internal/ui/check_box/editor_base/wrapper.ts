@@ -1,15 +1,15 @@
-import { isDefined } from '../../../core/utils/type';
-import Component from '../common/component';
-import ValidationEngine from '../../../ui/validation_engine';
-import { extend } from '../../../core/utils/extend';
-import $ from '../../../core/renderer';
-import { data } from '../../../core/element_data';
-import Callbacks from '../../../core/utils/callbacks';
-import OldEditor from '../../../ui/editor/editor';
-import { querySelectorInSameDocument } from '../../utils/dom';
+import { isDefined } from '@js/core/utils/type';
+import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
+import ValidationEngine from '@js/ui/validation_engine';
+import { extend } from '@js/core/utils/extend';
+import $ from '@js/core/renderer';
+import { data } from '@js/core/element_data';
+import Callbacks from '@js/core/utils/callbacks';
+import OldEditor from '@js/ui/editor/editor';
+import { querySelectorInSameDocument } from '@ts/core/r1/utils/dom';
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
-export default class Editor extends Component {
+export default class Editor extends ComponentWrapper {
   getProps() {
     const props = super.getProps();
     props.onFocusIn = () => {

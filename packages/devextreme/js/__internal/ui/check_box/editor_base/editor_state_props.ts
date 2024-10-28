@@ -1,4 +1,4 @@
-import devices from '../../../../core/devices';
+import devices from '@js/core/devices';
 export const EditorStateProps = {
   hoverStateEnabled: true,
   activeStateEnabled: true,
