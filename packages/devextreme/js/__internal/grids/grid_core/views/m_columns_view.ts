@@ -1376,7 +1376,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIdentifier;
   }
 
-  public getColumnElements() {}
+  public getColumnElements(): any {}
 
   public getColumns(rowIndex?, $tableElement?) {
     return this._columnsController.getVisibleColumns(rowIndex);
