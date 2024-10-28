@@ -74,7 +74,7 @@ describe('DxTabPanel', () => {
         let component: TestContainerComponent = fixture.componentInstance;
         component.tabPanel.visible = false;
 
-        expect(fixture.detectChanges).bind(fixture).not.toThrow();
+        expect(fixture.detectChanges.bind(fixture)).not.toThrow();
     });
 
     it('dxi-item nested component should render own content', () => {
