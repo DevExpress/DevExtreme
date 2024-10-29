@@ -1,7 +1,7 @@
 import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
 import _extends from "@babel/runtime/helpers/esm/extends";
 const _excluded = ["accessKey", "activeStateEnabled", "aria", "children", "className", "classes", "defaultValue", "disabled", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "inputAttr", "isDirty", "isValid", "name", "onClick", "onFocusIn", "onKeyDown", "readOnly", "rtlEnabled", "tabIndex", "validationError", "validationErrors", "validationMessageMode", "validationMessagePosition", "validationStatus", "value", "valueChange", "visible", "width"];
-import { createFragment, createComponentVNode, normalizeProps } from "inferno";
+import { createFragment, createComponentVNode, normalizeProps, RefObject } from "inferno";
 import { Fragment } from 'inferno';
 import { InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import Guid from '@js/core/guid';
@@ -21,71 +21,6 @@ const getCssClasses = model => {
     [String(classes)]: !!classes
   };
   return combineClasses(classesMap);
-};
-
-export const viewFunction = viewModel => {
-  const {
-    aria,
-    cssClasses: classes,
-    isValidationMessageVisible,
-    onFocusIn,
-    props: {
-      accessKey,
-      activeStateEnabled,
-      children,
-      className,
-      disabled,
-      focusStateEnabled,
-      height,
-      hint,
-      hoverStateEnabled,
-      onClick,
-      onKeyDown,
-      rtlEnabled,
-      tabIndex,
-      validationMessageMode,
-      validationMessagePosition,
-      visible,
-      width
-    },
-    restAttributes,
-    rootElementRef,
-    validationErrors,
-    validationMessageGuid,
-    validationMessageTarget,
-    widgetRef
-  } = viewModel;
-  return normalizeProps(createComponentVNode(2, Widget, _extends({
-    "rootElementRef": rootElementRef,
-    "aria": aria,
-    "classes": classes,
-    "activeStateEnabled": activeStateEnabled,
-    "focusStateEnabled": focusStateEnabled,
-    "hoverStateEnabled": hoverStateEnabled,
-    "accessKey": accessKey,
-    "className": className,
-    "rtlEnabled": rtlEnabled,
-    "hint": hint,
-    "disabled": disabled,
-    "height": height,
-    "width": width,
-    "onFocusIn": onFocusIn,
-    "onClick": onClick,
-    "onKeyDown": onKeyDown,
-    "tabIndex": tabIndex,
-    "visible": visible
-  }, restAttributes, {
-    children: createFragment([children, isValidationMessageVisible && createComponentVNode(2, ValidationMessage, {
-      "validationErrors": validationErrors,
-      "mode": validationMessageMode,
-      "positionSide": validationMessagePosition,
-      "rtlEnabled": rtlEnabled,
-      "target": validationMessageTarget,
-      "boundary": validationMessageTarget,
-      "visualContainer": validationMessageTarget,
-      "contentId": validationMessageGuid
-    })], 0)
-  }), null, widgetRef));
 };
 
 export interface EditorProps extends WidgetProps {
@@ -142,8 +77,19 @@ import { createReRenderEffect } from '@devextreme/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
 
 export class Editor extends InfernoWrapperComponent<EditorProps> {
+  widgetRef!: RefObject<Widget>;
+
+  validationMessageGuid = `dx-${new Guid()}`;
+
+  rootElementRef!: RefObject<HTMLDivElement>;
+
+  isValidationMessageVisible = false;
+
+  __getterCache: any;
+
   constructor(props: EditorProps) {
     super(props);
+    this.state = {};
     this.widgetRef = infernoCreateRef();
     this.rootElementRef = infernoCreateRef();
     this.__getterCache = {};
@@ -177,7 +123,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
   }
   get cssClasses() {
     return `${getCssClasses(_extends({}, this.props, {
-      value: this.props.value !== undefined ? this.props.value : this.state.value
+      value: this.props.value !== undefined ? this.props.value : this.state!.value
     }))}`;
   }
   get shouldShowValidationMessage() {
@@ -194,12 +140,12 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
       isValid,
       readOnly
     } = this.props;
-    const result = {
+    const result: Record<string, unknown> = {
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false'
     };
     if (this.shouldShowValidationMessage) {
-      result.describedBy = this.state.validationMessageGuid;
+      result.describedBy = this.state!.validationMessageGuid;
     }
     return _extends({}, result, this.props.aria);
   }
@@ -225,16 +171,16 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
   }
   get restAttributes() {
     const _this$props$value = _extends({}, this.props, {
-        value: this.props.value !== undefined ? this.props.value : this.state.value
+        value: this.props.value !== undefined ? this.props.value : this.state!.value
       }),
       restProps = _objectWithoutPropertiesLoose(_this$props$value, _excluded);
     return restProps;
   }
   focus() {
-    this.widgetRef.current.focus();
+    this.widgetRef.current!.focus();
   }
   blur() {
-    this.widgetRef.current.blur();
+    this.widgetRef.current!.blur();
   }
   componentWillUpdate(nextProps, nextState, context) {
     super.componentWillUpdate();
@@ -243,23 +189,48 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
     }
   }
   render() {
-    const props = this.props;
-    return viewFunction({
-      props: _extends({}, props, {
-        value: this.props.value !== undefined ? this.props.value : this.state.value
-      }),
-      validationMessageGuid: this.state.validationMessageGuid,
-      isValidationMessageVisible: this.state.isValidationMessageVisible,
-      rootElementRef: this.rootElementRef,
-      widgetRef: this.widgetRef,
-      onFocusIn: this.onFocusIn,
-      cssClasses: this.cssClasses,
-      shouldShowValidationMessage: this.shouldShowValidationMessage,
-      aria: this.aria,
-      validationErrors: this.validationErrors,
-      validationMessageTarget: this.validationMessageTarget,
-      restAttributes: this.restAttributes
-    });
+    const value = this.props.value !== undefined ? this.props.value : this.state!.value
+
+    return (
+      <Widget // eslint-disable-line jsx-a11y/no-access-key
+        ref={this.widgetRef}
+        rootElementRef={this.rootElementRef}
+        aria={this.aria}
+        classes={this.cssClasses}
+        activeStateEnabled={this.props.activeStateEnabled}
+        focusStateEnabled={this.props.focusStateEnabled}
+        hoverStateEnabled={this.props.hoverStateEnabled}
+        accessKey={this.props.accessKey}
+        className={this.props.className}
+        rtlEnabled={this.props.rtlEnabled}
+        hint={this.props.hint}
+        disabled={this.props.disabled}
+        height={this.props.height}
+        width={this.props.width}
+        onFocusIn={this.props.onFocusIn}
+        onClick={this.props.onClick}
+        onKeyDown={this.props.onKeyDown}
+        tabIndex={this.props.tabIndex}
+        visible={this.props.visible}
+        {...this.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+      >
+        <Fragment>
+          {this.props.children}
+          {this.isValidationMessageVisible && (
+            <ValidationMessage
+              validationErrors={this.props.validationErrors}
+              mode={this.props.validationMessageMode}
+              positionSide={this.props.validationMessagePosition}
+              rtlEnabled={this.props.rtlEnabled}
+              target={this.validationMessageTarget}
+              boundary={this.validationMessageTarget}
+              visualContainer={this.validationMessageTarget}
+              contentId={this.validationMessageGuid}
+            />
+          )}
+        </Fragment>
+      </Widget>
+    );
   }
 }
 
@@ -274,7 +245,7 @@ function __processTwoWayProps(defaultProps) {
 }
 
 Editor.defaultProps = defaultEditorProps;
-const __defaultOptionRules = [];
+const __defaultOptionRules: any[] = [];
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
   Editor.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(Editor.defaultProps), Object.getOwnPropertyDescriptors(__processTwoWayProps(convertRulesToOptions(__defaultOptionRules)))));
