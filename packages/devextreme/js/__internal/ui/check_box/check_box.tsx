@@ -5,7 +5,7 @@ import { createVNode, createFragment, createComponentVNode, normalizeProps } fro
 import { Fragment } from 'inferno';
 import { InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import devices from '@js/core/devices';
-import { Editor, EditorProps } from './editor_base/editor';
+import { defaultEditorProps, Editor, EditorProps } from './editor_base/editor';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import { CheckBoxIcon } from './check_box_icon';
 import { WidgetProps } from '@ts/core/r1/widget';
@@ -96,7 +96,29 @@ export const viewFunction = viewModel => {
     }), text && createVNode(1, "span", "dx-checkbox-text", text, 0)], 0)], 4)
   }), null, editorRef));
 };
-export const CheckBoxProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(EditorProps), Object.getOwnPropertyDescriptors({
+
+export interface CheckBoxProps extends EditorProps {
+  text: string;
+
+  iconSize?: number | string;
+
+  enableThreeStateBehavior: boolean;
+
+  // overrides default value
+  activeStateEnabled: boolean;
+
+  hoverStateEnabled: boolean;
+
+  focusStateEnabled: boolean
+
+  value: boolean | null;
+
+  // private
+  saveValueChangeEvent?: (event: Event) => void;
+}
+
+export const defaultCheckBoxProps = {
+  ...defaultEditorProps,
   text: '',
   enableThreeStateBehavior: false,
   activeStateEnabled: true,
@@ -106,80 +128,13 @@ export const CheckBoxProps = Object.create(Object.prototype, Object.assign(Objec
   },
   defaultValue: false,
   valueChange: () => {}
-})));
-export const CheckBoxPropsType = {
-  get text() {
-    return CheckBoxProps.text;
-  },
-  get enableThreeStateBehavior() {
-    return CheckBoxProps.enableThreeStateBehavior;
-  },
-  get activeStateEnabled() {
-    return CheckBoxProps.activeStateEnabled;
-  },
-  get hoverStateEnabled() {
-    return CheckBoxProps.hoverStateEnabled;
-  },
-  get focusStateEnabled() {
-    return CheckBoxProps.focusStateEnabled;
-  },
-  get defaultValue() {
-    return CheckBoxProps.defaultValue;
-  },
-  get valueChange() {
-    return CheckBoxProps.valueChange;
-  },
-  get readOnly() {
-    return CheckBoxProps.readOnly;
-  },
-  get name() {
-    return CheckBoxProps.name;
-  },
-  get validationError() {
-    return CheckBoxProps.validationError;
-  },
-  get validationErrors() {
-    return CheckBoxProps.validationErrors;
-  },
-  get validationMessageMode() {
-    return CheckBoxProps.validationMessageMode;
-  },
-  get validationMessagePosition() {
-    return CheckBoxProps.validationMessagePosition;
-  },
-  get validationStatus() {
-    return CheckBoxProps.validationStatus;
-  },
-  get isValid() {
-    return CheckBoxProps.isValid;
-  },
-  get isDirty() {
-    return CheckBoxProps.isDirty;
-  },
-  get inputAttr() {
-    return CheckBoxProps.inputAttr;
-  },
-  get className() {
-    return CheckBoxProps.className;
-  },
-  get disabled() {
-    return CheckBoxProps.disabled;
-  },
-  get tabIndex() {
-    return CheckBoxProps.tabIndex;
-  },
-  get visible() {
-    return CheckBoxProps.visible;
-  },
-  get aria() {
-    return WidgetProps.aria;
-  }
 };
+
 import { convertRulesToOptions } from '@js/core/options/utils';
 import { createReRenderEffect } from '@devextreme/runtime/inferno';
 import { createRef as infernoCreateRef } from 'inferno';
-export class CheckBox extends InfernoWrapperComponent {
-  constructor(props) {
+export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
+  constructor(props: CheckBoxProps) {
     super(props);
     this.editorRef = infernoCreateRef();
     this.state = {
@@ -296,7 +251,7 @@ function __processTwoWayProps(defaultProps) {
     return props;
   }, {});
 }
-CheckBox.defaultProps = CheckBoxPropsType;
+CheckBox.defaultProps = defaultCheckBoxProps;
 const __defaultOptionRules = [];
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
