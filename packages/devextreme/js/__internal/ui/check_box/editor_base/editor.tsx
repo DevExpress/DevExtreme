@@ -1,7 +1,4 @@
-import _objectWithoutPropertiesLoose from "@babel/runtime/helpers/esm/objectWithoutPropertiesLoose";
-import _extends from "@babel/runtime/helpers/esm/extends";
-const _excluded = ["accessKey", "activeStateEnabled", "aria", "children", "className", "classes", "defaultValue", "disabled", "focusStateEnabled", "height", "hint", "hoverStateEnabled", "inputAttr", "isDirty", "isValid", "name", "onClick", "onFocusIn", "onKeyDown", "readOnly", "rtlEnabled", "tabIndex", "validationError", "validationErrors", "validationMessageMode", "validationMessagePosition", "validationStatus", "value", "valueChange", "visible", "width"];
-import { createFragment, createComponentVNode, normalizeProps, RefObject } from "inferno";
+import { RefObject } from "inferno";
 import { Fragment } from 'inferno';
 import { InfernoEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import Guid from '@js/core/guid';
@@ -122,9 +119,10 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
     onFocusIn === null || onFocusIn === void 0 || onFocusIn(event);
   }
   get cssClasses() {
-    return `${getCssClasses(_extends({}, this.props, {
+    return `${getCssClasses({
+      ...this.props,
       value: this.props.value !== undefined ? this.props.value : this.state!.value
-    }))}`;
+    })}`;
   }
   get shouldShowValidationMessage() {
     const {
@@ -140,14 +138,14 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
       isValid,
       readOnly
     } = this.props;
-    const result: Record<string, unknown> = {
+    const result: Record<string, string> = {
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false'
     };
     if (this.shouldShowValidationMessage) {
-      result.describedBy = this.state!.validationMessageGuid;
+      result.describedBy = this.state!.validationMessageGuid as string;
     }
-    return _extends({}, result, this.props.aria);
+    return {...result, ...this.props.aria};
   }
   get validationErrors() {
     if (this.__getterCache['validationErrors'] !== undefined) {
@@ -160,7 +158,7 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
       } = this.props;
       let allValidationErrors = validationErrors && [...validationErrors];
       if (!allValidationErrors && validationError) {
-        allValidationErrors = [_extends({}, validationError)];
+        allValidationErrors = [{...validationError}];
       }
       return allValidationErrors;
     })();
@@ -170,10 +168,10 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
     return (_this$rootElementRef = this.rootElementRef) === null || _this$rootElementRef === void 0 ? void 0 : _this$rootElementRef.current;
   }
   get restAttributes() {
-    const _this$props$value = _extends({}, this.props, {
-        value: this.props.value !== undefined ? this.props.value : this.state!.value
-      }),
-      restProps = _objectWithoutPropertiesLoose(_this$props$value, _excluded);
+    const {
+      accessKey, activeStateEnabled, aria, children, className, classes, defaultValue, disabled, focusStateEnabled, height, hint, hoverStateEnabled, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, tabIndex, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
+      ...restProps
+    } = this.props
     return restProps;
   }
   focus() {
@@ -192,9 +190,9 @@ export class Editor extends InfernoWrapperComponent<EditorProps> {
     const value = this.props.value !== undefined ? this.props.value : this.state!.value
 
     return (
-      <Widget // eslint-disable-line jsx-a11y/no-access-key
-        ref={this.widgetRef}
-        rootElementRef={this.rootElementRef}
+      <Widget
+        ref={this.widgetRef as any}
+        rootElementRef={this.rootElementRef as any}
         aria={this.aria}
         classes={this.cssClasses}
         activeStateEnabled={this.props.activeStateEnabled}
