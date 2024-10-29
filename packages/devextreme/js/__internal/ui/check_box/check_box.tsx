@@ -1,14 +1,21 @@
-import { RefObject } from "inferno";
-import { Fragment } from 'inferno';
-import { InfernoWrapperComponent } from '@devextreme/runtime/inferno';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import type { InfernoEffect } from '@devextreme/runtime/inferno';
+import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import devices from '@js/core/devices';
-import { defaultEditorProps, Editor, EditorProps } from './editor_base/editor';
+import { convertRulesToOptions } from '@js/core/options/utils';
 import { combineClasses } from '@ts/core/utils/combine_classes';
+import type { RefObject } from 'inferno';
+import { createRef as infernoCreateRef, Fragment } from 'inferno';
+
 import { CheckBoxIcon } from './check_box_icon';
-const getCssClasses = model => {
+import type { EditorProps } from './editor_base/editor';
+import { defaultEditorProps, Editor } from './editor_base/editor';
+
+const getCssClasses = (model: CheckBoxProps): string => {
   const {
     text,
-    value
+    value,
   } = model;
   const checked = value;
   const indeterminate = checked === null;
@@ -16,7 +23,7 @@ const getCssClasses = model => {
     'dx-checkbox': true,
     'dx-checkbox-checked': checked === true,
     'dx-checkbox-has-text': !!text,
-    'dx-checkbox-indeterminate': indeterminate
+    'dx-checkbox-indeterminate': indeterminate,
   };
   return combineClasses(classesMap);
 };
@@ -33,7 +40,7 @@ export interface CheckBoxProps extends EditorProps {
 
   hoverStateEnabled: boolean;
 
-  focusStateEnabled: boolean
+  focusStateEnabled: boolean;
 
   value: boolean | null;
 
@@ -47,77 +54,83 @@ export const defaultCheckBoxProps = {
   enableThreeStateBehavior: false,
   activeStateEnabled: true,
   hoverStateEnabled: true,
-  get focusStateEnabled() {
+  get focusStateEnabled(): boolean {
     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
   },
   defaultValue: false,
-  valueChange: () => {}
+  valueChange: (): void => {},
 };
-
-import { convertRulesToOptions } from '@js/core/options/utils';
-import { createReRenderEffect } from '@devextreme/runtime/inferno';
-import { createRef as infernoCreateRef } from 'inferno';
 export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
   editorRef!: RefObject<Editor>;
-  
+
   constructor(props: CheckBoxProps) {
     super(props);
     this.editorRef = infernoCreateRef();
     this.state = {
-      value: this.props.value !== undefined ? this.props.value : this.props.defaultValue
+      value: this.props.value !== undefined ? this.props.value : this.props.defaultValue,
     };
     this.focus = this.focus.bind(this);
     this.blur = this.blur.bind(this);
     this.onWidgetClick = this.onWidgetClick.bind(this);
     this.keyDown = this.keyDown.bind(this);
   }
-  createEffects() {
+
+  createEffects(): InfernoEffect[] {
     return [createReRenderEffect()];
   }
-  onWidgetClick(event) {
+
+  onWidgetClick(event: Event): void {
     const {
       enableThreeStateBehavior,
       readOnly,
-      saveValueChangeEvent
+      saveValueChangeEvent,
     } = this.props;
     if (!readOnly) {
-      saveValueChangeEvent === null || saveValueChangeEvent === void 0 || saveValueChangeEvent(event);
+      saveValueChangeEvent?.(event);
       if (enableThreeStateBehavior) {
-        {
-          let __newValue;
-          this.setState(__state_argument => {
-            __newValue = (this.props.value !== undefined ? this.props.value : __state_argument.value) === null || (!(this.props.value !== undefined ? this.props.value : __state_argument.value) ? null : false);
-            return {
-              value: __newValue
-            };
-          });
-          this.props.valueChange?.(__newValue);
-        }
+        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @typescript-eslint/init-declarations, @typescript-eslint/naming-convention
+        let __newValue;
+        this.setState((__state_argument) => {
+          // eslint-disable-next-line max-len
+          __newValue = (this.props.value !== undefined ? this.props.value : __state_argument.value) === null || (!(this.props.value !== undefined ? this.props.value : __state_argument.value) ? null : false);
+          return {
+            value: __newValue,
+          };
+        });
+        this.props.valueChange?.(__newValue);
       } else {
-        {
-          let __newValue;
-          this.setState(__state_argument => {
-            __newValue = !((this.props.value !== undefined ? this.props.value : __state_argument.value) ?? false);
-            return {
-              value: __newValue
-            };
-          });
-          this.props.valueChange?.(__newValue);
-        }
+        // eslint-disable-next-line max-len
+        // eslint-disable-next-line @typescript-eslint/init-declarations, @typescript-eslint/naming-convention
+        let __newValue;
+        this.setState((__state_argument) => {
+          // eslint-disable-next-line max-len
+          __newValue = !((this.props.value !== undefined ? this.props.value : __state_argument.value) ?? false);
+          return {
+            value: __newValue,
+          };
+        });
+        this.props.valueChange?.(__newValue);
       }
     }
   }
-  keyDown(e) {
+
+  keyDown(e: {
+    originalEvent: Event & { cancel: boolean };
+    keyName: string;
+    which: string;
+  }): Event | undefined {
     const {
-      onKeyDown
+      onKeyDown,
     } = this.props;
     const {
       keyName,
       originalEvent,
-      which
+      which,
     } = e;
-    const result = onKeyDown === null || onKeyDown === void 0 ? void 0 : onKeyDown(e);
-    if (result !== null && result !== void 0 && result.cancel) {
+    const result = onKeyDown?.(e);
+    if (result?.cancel) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return result;
     }
     if (keyName === 'space' || which === 'space') {
@@ -126,39 +139,52 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
     }
     return undefined;
   }
-  get cssClasses() {
+
+  get cssClasses(): string {
     return getCssClasses({
       ...this.props,
-      value: this.props.value !== undefined ? this.props.value : this.state!.value
+      // @ts-expect-error
+      value: this.props.value !== undefined ? this.props.value : this.state!.value,
     });
   }
-  get aria() {
-    const checked = (this.props.value !== undefined ? this.props.value : this.state!.value) === true;
-    const indeterminate = (this.props.value !== undefined ? this.props.value : this.state!.value) === null;
+
+  get aria(): Record<string, string> {
+    const checked = (
+      this.props.value !== undefined ? this.props.value : this.state!.value
+    ) === true;
+    const indeterminate = (
+      this.props.value !== undefined ? this.props.value : this.state!.value
+    ) === null;
     const result = {
       role: 'checkbox',
-      checked: indeterminate ? 'mixed' : `${checked}`
+      checked: indeterminate ? 'mixed' : `${checked}`,
     };
-    return {...result, ...this.props.aria};
+    return { ...result, ...this.props.aria };
   }
-  get restAttributes() {
+
+  get restAttributes(): Record<string, unknown> {
     const {
+      // eslint-disable-next-line max-len
       accessKey, activeStateEnabled, aria, className, defaultValue, disabled, enableThreeStateBehavior, focusStateEnabled, height, hint, hoverStateEnabled, iconSize, inputAttr, isDirty, isValid, name, onClick, onFocusIn, onKeyDown, readOnly, rtlEnabled, saveValueChangeEvent, tabIndex, text, validationError, validationErrors, validationMessageMode, validationMessagePosition, validationStatus, value, valueChange, visible, width,
       ...restProps
     } = this.props;
     return restProps;
   }
-  focus() {
+
+  focus(): void {
     this.editorRef.current!.focus();
   }
-  blur() {
+
+  blur(): void {
     this.editorRef.current!.blur();
   }
-  render() {
+
+  render(): JSX.Element {
     const value = this.props.value !== undefined ? this.props.value : this.state!.value;
-    
+
     return (
-      <Editor // eslint-disable-line jsx-a11y/no-access-key
+      <Editor
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={this.editorRef as any}
         aria={this.props.aria}
         classes={this.props.classes}
@@ -184,10 +210,9 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
         validationStatus={this.props.validationStatus}
         isValid={this.props.isValid}
         onFocusIn={this.props.onFocusIn}
-        {...this.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
+        {...this.restAttributes}
       >
         <Fragment>
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           <input type="hidden" value={`${value}`} {...this.props.name && { name: this.props.name }} />
           <div className="dx-checkbox-container">
             <CheckBoxIcon size={this.props.iconSize}/>
@@ -195,22 +220,32 @@ export class CheckBox extends InfernoWrapperComponent<CheckBoxProps> {
           </div>
         </Fragment>
       </Editor>
-    )
-
+    );
   }
 }
-function __processTwoWayProps(defaultProps) {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function __processTwoWayProps(defaultProps): Record<string, unknown> {
   const twoWayProps = ['value'];
   return Object.keys(defaultProps).reduce((props, propName) => {
     const propValue = defaultProps[propName];
-    const defaultPropName = twoWayProps.some(p => p === propName) ? 'default' + propName.charAt(0).toUpperCase() + propName.slice(1) : propName;
+    const defaultPropName = twoWayProps.some((p) => p === propName) ? `default${propName.charAt(0).toUpperCase()}${propName.slice(1)}` : propName;
     props[defaultPropName] = propValue;
     return props;
   }, {});
 }
 CheckBox.defaultProps = defaultCheckBoxProps;
+// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any
 const __defaultOptionRules: any[] = [];
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function defaultOptions(rule) {
   __defaultOptionRules.push(rule);
-  CheckBox.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(CheckBox.defaultProps), Object.getOwnPropertyDescriptors(__processTwoWayProps(convertRulesToOptions(__defaultOptionRules)))));
+  CheckBox.defaultProps = Object.create(
+    Object.prototype,
+    Object.assign(
+      Object.getOwnPropertyDescriptors(CheckBox.defaultProps),
+      Object.getOwnPropertyDescriptors(
+        __processTwoWayProps(convertRulesToOptions(__defaultOptionRules)),
+      ),
+    ),
+  );
 }
