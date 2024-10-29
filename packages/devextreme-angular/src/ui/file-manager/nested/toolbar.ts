@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,9 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiFileManagerFileSelectionItemComponent } from './file-selection-item-dxi';
+import { DxiFileManagerItemComponent } from './item-dxi';
+import { DxiFileManagerToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -50,6 +56,30 @@ export class DxoFileManagerToolbarComponent extends NestedOption implements OnDe
         return 'toolbar';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiFileManagerFileSelectionItemComponent))
+    get fileSelectionItemsChildren(): QueryList<DxiFileManagerFileSelectionItemComponent> {
+        return this._getOption('fileSelectionItems');
+    }
+    set fileSelectionItemsChildren(value) {
+        this.setChildren('fileSelectionItems', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
+    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiFileManagerToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiFileManagerToolbarItemComponent> {
+        return this._getOption('items');
+    }
+    set toolbarItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

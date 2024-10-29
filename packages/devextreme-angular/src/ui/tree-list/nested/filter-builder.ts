@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiTreeListCustomOperationComponent } from './custom-operation-dxi';
+import { DxiTreeListFieldComponent } from './field-dxi';
 
 
 @Component({
@@ -258,6 +263,22 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
         return 'filterBuilder';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiTreeListCustomOperationComponent))
+    get customOperationsChildren(): QueryList<DxiTreeListCustomOperationComponent> {
+        return this._getOption('customOperations');
+    }
+    set customOperationsChildren(value) {
+        this.setChildren('customOperations', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListFieldComponent))
+    get fieldsChildren(): QueryList<DxiTreeListFieldComponent> {
+        return this._getOption('fields');
+    }
+    set fieldsChildren(value) {
+        this.setChildren('fields', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

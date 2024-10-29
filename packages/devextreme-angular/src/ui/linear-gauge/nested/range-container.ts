@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiLinearGaugeRangeComponent } from './range-dxi';
 
 
 @Component({
@@ -98,6 +102,14 @@ export class DxoLinearGaugeRangeContainerComponent extends NestedOption implemen
         return 'rangeContainer';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiLinearGaugeRangeComponent))
+    get rangesChildren(): QueryList<DxiLinearGaugeRangeComponent> {
+        return this._getOption('ranges');
+    }
+    set rangesChildren(value) {
+        this.setChildren('ranges', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,7 +10,10 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -25,6 +28,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiDiagramConnectionPointComponent } from './connection-point-dxi';
 
 
 @Component({
@@ -344,6 +348,14 @@ export class DxiDiagramCustomShapeComponent extends CollectionNestedOption imple
         return 'customShapes';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiDiagramConnectionPointComponent))
+    get connectionPointsChildren(): QueryList<DxiDiagramConnectionPointComponent> {
+        return this._getOption('connectionPoints');
+    }
+    set connectionPointsChildren(value) {
+        this.setChildren('connectionPoints', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

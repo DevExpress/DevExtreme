@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -21,6 +24,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiRangeSelectorBreakComponent } from './break-dxi';
 
 
 @Component({
@@ -275,6 +279,14 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
         return 'scale';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiRangeSelectorBreakComponent))
+    get breaksChildren(): QueryList<DxiRangeSelectorBreakComponent> {
+        return this._getOption('breaks');
+    }
+    set breaksChildren(value) {
+        this.setChildren('breaks', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

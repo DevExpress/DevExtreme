@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -21,6 +24,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiRangeSelectorSeriesComponent } from './series-dxi';
 
 
 @Component({
@@ -147,6 +151,14 @@ export class DxoRangeSelectorChartComponent extends NestedOption implements OnDe
         return 'chart';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiRangeSelectorSeriesComponent))
+    get seriessChildren(): QueryList<DxiRangeSelectorSeriesComponent> {
+        return this._getOption('series');
+    }
+    set seriessChildren(value) {
+        this.setChildren('series', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

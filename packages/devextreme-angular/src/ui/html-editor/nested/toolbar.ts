@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiHtmlEditorItemComponent } from './item-dxi';
+import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -58,6 +63,22 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
         return 'toolbar';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
+    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiHtmlEditorToolbarItemComponent> {
+        return this._getOption('items');
+    }
+    set toolbarItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

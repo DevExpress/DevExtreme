@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -19,6 +22,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiDiagramGroupComponent } from './group-dxi';
+import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
 
 
 @Component({
@@ -73,6 +78,22 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
         return 'toolbox';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent))
+    get groupsChildren(): QueryList<DxiDiagramGroupComponent> {
+        return this._getOption('groups');
+    }
+    set groupsChildren(value) {
+        this.setChildren('groups', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDiagramToolboxGroupComponent))
+    get toolboxGroupsChildren(): QueryList<DxiDiagramToolboxGroupComponent> {
+        return this._getOption('groups');
+    }
+    set toolboxGroupsChildren(value) {
+        this.setChildren('groups', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

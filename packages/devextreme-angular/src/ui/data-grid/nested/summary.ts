@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -21,6 +24,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiDataGridGroupItemComponent } from './group-item-dxi';
+import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 
 
 @Component({
@@ -83,6 +88,22 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
         return 'summary';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiDataGridGroupItemComponent))
+    get groupItemsChildren(): QueryList<DxiDataGridGroupItemComponent> {
+        return this._getOption('groupItems');
+    }
+    set groupItemsChildren(value) {
+        this.setChildren('groupItems', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDataGridTotalItemComponent))
+    get totalItemsChildren(): QueryList<DxiDataGridTotalItemComponent> {
+        return this._getOption('totalItems');
+    }
+    set totalItemsChildren(value) {
+        this.setChildren('totalItems', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

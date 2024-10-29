@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -21,6 +24,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiPolarChartConstantLineComponent } from './constant-line-dxi';
+import { DxiPolarChartStripComponent } from './strip-dxi';
 
 
 @Component({
@@ -283,6 +288,22 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
         return 'argumentAxis';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiPolarChartConstantLineComponent))
+    get constantLinesChildren(): QueryList<DxiPolarChartConstantLineComponent> {
+        return this._getOption('constantLines');
+    }
+    set constantLinesChildren(value) {
+        this.setChildren('constantLines', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiPolarChartStripComponent))
+    get stripsChildren(): QueryList<DxiPolarChartStripComponent> {
+        return this._getOption('strips');
+    }
+    set stripsChildren(value) {
+        this.setChildren('strips', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

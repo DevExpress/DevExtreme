@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -24,6 +27,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiTreeListChangeComponent } from './change-dxi';
 
 
 @Component({
@@ -158,6 +162,14 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
         return 'editing';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiTreeListChangeComponent))
+    get changesChildren(): QueryList<DxiTreeListChangeComponent> {
+        return this._getOption('changes');
+    }
+    set changesChildren(value) {
+        this.setChildren('changes', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

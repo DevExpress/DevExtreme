@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -27,6 +30,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiAutocompleteToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -441,6 +445,14 @@ export class DxoAutocompleteDropDownOptionsComponent extends NestedOption implem
         return 'dropDownOptions';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiAutocompleteToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiAutocompleteToolbarItemComponent> {
+        return this._getOption('toolbarItems');
+    }
+    set toolbarItemsChildren(value) {
+        this.setChildren('toolbarItems', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

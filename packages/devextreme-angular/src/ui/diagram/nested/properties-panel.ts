@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiDiagramTabComponent } from './tab-dxi';
 
 
 @Component({
@@ -50,6 +54,14 @@ export class DxoDiagramPropertiesPanelComponent extends NestedOption implements 
         return 'propertiesPanel';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiDiagramTabComponent))
+    get tabsChildren(): QueryList<DxiDiagramTabComponent> {
+        return this._getOption('tabs');
+    }
+    set tabsChildren(value) {
+        this.setChildren('tabs', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

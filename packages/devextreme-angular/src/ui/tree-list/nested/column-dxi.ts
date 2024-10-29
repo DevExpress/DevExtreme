@@ -6,7 +6,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -24,6 +27,17 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiTreeListAsyncRuleComponent } from './async-rule-dxi';
+import { DxiTreeListButtonComponent } from './button-dxi';
+import { DxiTreeListCompareRuleComponent } from './compare-rule-dxi';
+import { DxiTreeListCustomRuleComponent } from './custom-rule-dxi';
+import { DxiTreeListEmailRuleComponent } from './email-rule-dxi';
+import { DxiTreeListNumericRuleComponent } from './numeric-rule-dxi';
+import { DxiTreeListPatternRuleComponent } from './pattern-rule-dxi';
+import { DxiTreeListRangeRuleComponent } from './range-rule-dxi';
+import { DxiTreeListRequiredRuleComponent } from './required-rule-dxi';
+import { DxiTreeListStringLengthRuleComponent } from './string-length-rule-dxi';
+import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
@@ -486,6 +500,94 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
         return 'columns';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiTreeListAsyncRuleComponent))
+    get asyncRulesChildren(): QueryList<DxiTreeListAsyncRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set asyncRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListButtonComponent))
+    get buttonsChildren(): QueryList<DxiTreeListButtonComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsChildren(value) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListCompareRuleComponent))
+    get compareRulesChildren(): QueryList<DxiTreeListCompareRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set compareRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListCustomRuleComponent))
+    get customRulesChildren(): QueryList<DxiTreeListCustomRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set customRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListEmailRuleComponent))
+    get emailRulesChildren(): QueryList<DxiTreeListEmailRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set emailRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListNumericRuleComponent))
+    get numericRulesChildren(): QueryList<DxiTreeListNumericRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set numericRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListPatternRuleComponent))
+    get patternRulesChildren(): QueryList<DxiTreeListPatternRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set patternRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListRangeRuleComponent))
+    get rangeRulesChildren(): QueryList<DxiTreeListRangeRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set rangeRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListRequiredRuleComponent))
+    get requiredRulesChildren(): QueryList<DxiTreeListRequiredRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set requiredRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListStringLengthRuleComponent))
+    get stringLengthRulesChildren(): QueryList<DxiTreeListStringLengthRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set stringLengthRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiTreeListValidationRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set validationRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

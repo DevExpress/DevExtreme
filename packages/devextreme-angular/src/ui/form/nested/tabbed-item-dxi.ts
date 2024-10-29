@@ -6,7 +6,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -19,6 +22,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiFormTabComponent } from './tab-dxi';
 
 
 @Component({
@@ -97,6 +101,14 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiFormTabComponent))
+    get tabsChildren(): QueryList<DxiFormTabComponent> {
+        return this._getOption('tabs');
+    }
+    set tabsChildren(value) {
+        this.setChildren('tabs', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -21,6 +24,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiTreeViewButtonComponent } from './button-dxi';
 
 
 @Component({
@@ -483,6 +487,14 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
         return 'searchEditorOptions';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiTreeViewButtonComponent))
+    get buttonsChildren(): QueryList<DxiTreeViewButtonComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsChildren(value) {
+        this.setChildren('buttons', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

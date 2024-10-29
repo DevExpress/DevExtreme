@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -21,6 +24,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiHtmlEditorTabComponent } from './tab-dxi';
 
 
 @Component({
@@ -75,6 +79,14 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
         return 'imageUpload';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorTabComponent))
+    get tabsChildren(): QueryList<DxiHtmlEditorTabComponent> {
+        return this._getOption('tabs');
+    }
+    set tabsChildren(value) {
+        this.setChildren('tabs', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

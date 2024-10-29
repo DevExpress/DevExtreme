@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -19,6 +22,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiDiagramItemComponent } from './item-dxi';
+import { DxiDiagramPageSizeItemComponent } from './page-size-item-dxi';
 
 
 @Component({
@@ -57,6 +62,22 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
         return 'pageSize';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiDiagramItemComponent))
+    get itemsChildren(): QueryList<DxiDiagramItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiDiagramPageSizeItemComponent))
+    get pageSizeItemsChildren(): QueryList<DxiDiagramPageSizeItemComponent> {
+        return this._getOption('items');
+    }
+    set pageSizeItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiHtmlEditorItemComponent } from './item-dxi';
+import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu-item-dxi';
 
 
 @Component({
@@ -50,6 +55,22 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
         return 'tableContextMenu';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
+    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorTableContextMenuItemComponent))
+    get tableContextMenuItemsChildren(): QueryList<DxiHtmlEditorTableContextMenuItemComponent> {
+        return this._getOption('items');
+    }
+    set tableContextMenuItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

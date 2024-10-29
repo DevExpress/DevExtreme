@@ -10,7 +10,10 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -25,6 +28,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiResponsiveBoxLocationComponent } from './location-dxi';
 
 
 @Component({
@@ -88,6 +92,14 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiResponsiveBoxLocationComponent))
+    get locationsChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
+        return this._getOption('location');
+    }
+    set locationsChildren(value) {
+        this.setChildren('location', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiGanttItemComponent } from './item-dxi';
+import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
 
 
 @Component({
@@ -42,6 +47,22 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
         return 'toolbar';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
+    get itemsChildren(): QueryList<DxiGanttItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiGanttToolbarItemComponent))
+    get toolbarItemsChildren(): QueryList<DxiGanttToolbarItemComponent> {
+        return this._getOption('items');
+    }
+    set toolbarItemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,7 +8,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -20,6 +23,7 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+import { DxiFileManagerColumnComponent } from './column-dxi';
 
 
 @Component({
@@ -42,6 +46,14 @@ export class DxoFileManagerDetailsComponent extends NestedOption implements OnDe
         return 'details';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiFileManagerColumnComponent))
+    get columnsChildren(): QueryList<DxiFileManagerColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        this.setChildren('columns', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
