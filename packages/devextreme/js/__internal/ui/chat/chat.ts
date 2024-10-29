@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 import type { Options as DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
+import type { Format } from '@js/localization';
 import messageLocalization from '@js/localization/message';
 import type {
   Message,
@@ -33,6 +34,8 @@ type Properties = ChatProperties & {
   title: string;
   // eslint-disable-next-line
   messageTemplate: any;
+  dayHeaderFormat?: Format;
+  messageTimestampFormat?: Format;
 };
 
 class Chat extends Widget<Properties> {
@@ -61,6 +64,8 @@ class Chat extends Widget<Properties> {
       items: [],
       dataSource: null,
       user: { id: new Guid().toString() },
+      dayHeaderFormat: 'shortdate',
+      messageTimestampFormat: 'shorttime',
       errors: [],
       onMessageSend: undefined,
       messageTemplate: null,
@@ -132,6 +137,8 @@ class Chat extends Widget<Properties> {
       user,
       showDayHeaders = true,
       messageTemplate,
+      dayHeaderFormat,
+      messageTimestampFormat,
     } = this.option();
 
     const currentUserId = user?.id;
@@ -147,6 +154,8 @@ class Chat extends Widget<Properties> {
       messageTemplateData: { component: this },
       // @ts-expect-error
       isLoading: this._dataController.isLoading(),
+      dayHeaderFormat,
+      messageTimestampFormat,
     });
   }
 
@@ -309,6 +318,8 @@ class Chat extends Widget<Properties> {
         break;
       case 'showDayHeaders':
       case 'messageTemplate':
+      case 'dayHeaderFormat':
+      case 'messageTimestampFormat':
         this._messageList.option(name, value);
         break;
       default:

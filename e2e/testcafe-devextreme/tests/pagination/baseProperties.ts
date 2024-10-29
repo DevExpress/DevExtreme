@@ -37,21 +37,29 @@ test('Pagination elementAttr property', async (t) => {
   },
 }));
 
-test('Pagination hint, disabled and accessKey properties', async (t) => {
+test('Pagination hint and accessKey properties', async (t) => {
   const pagination = new Pagination('#container');
   await t
-    .expect(pagination.element.getAttribute('aria-disabled'))
-    .eql('true')
-    .expect(pagination.element.hasClass('dx-state-disabled'))
-    .ok()
     .expect(pagination.element.getAttribute('accesskey'))
     .eql('F')
     .expect(pagination.element.getAttribute('title'))
     .eql('Best Pagination');
 }).before(async () => createWidget('dxPagination', {
   hint: 'Best Pagination',
-  disabled: true,
   accessKey: 'F',
+  itemCount: 50,
+  focusStateEnabled: true,
+}));
+
+test('Pagination disabled property', async (t) => {
+  const pagination = new Pagination('#container');
+  await t
+    .expect(pagination.element.getAttribute('aria-disabled'))
+    .eql('true')
+    .expect(pagination.element.hasClass('dx-state-disabled'))
+    .ok();
+}).before(async () => createWidget('dxPagination', {
+  disabled: true,
   itemCount: 50,
 }));
 
@@ -90,9 +98,11 @@ test('Pagination tabindex and state properties', async (t) => {
   tabIndex: 7,
 }));
 
-test('Pagination focus method without focusStateEnabled', async (t) => {
+test('Pagination focus method & accessKey propery without focusStateEnabled', async (t) => {
   const pagination = new Pagination('#container');
   await t
+    .expect(pagination.element.getAttribute('accesskey'))
+    .eql(null)
     .expect(pagination.getPageSize(0).element.focused)
     .notOk();
 
@@ -105,6 +115,7 @@ test('Pagination focus method without focusStateEnabled', async (t) => {
     .ok();
 }).before(async () => createWidget('dxPagination', {
   focusStateEnabled: false,
+  accessKey: 'F',
   itemCount: 50,
 }));
 

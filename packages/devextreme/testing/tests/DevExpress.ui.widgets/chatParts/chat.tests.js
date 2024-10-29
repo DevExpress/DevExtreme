@@ -31,7 +31,7 @@ const MOCK_CHAT_HEADER_TEXT = 'Chat title';
 
 export const MOCK_COMPANION_USER_ID = 'COMPANION_USER_ID';
 export const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
-export const NOW = '1721747399083';
+export const NOW = 1721747399083;
 
 export const userFirst = {
     id: MOCK_COMPANION_USER_ID,
@@ -239,6 +239,58 @@ QUnit.module('Chat', () => {
             const messageList = this.getMessageList();
             const messageTemplateData = messageList.option('messageTemplateData');
             assert.strictEqual(messageTemplateData.component, this.instance, 'messageTemplateData with chat instance is passed to messageList');
+        });
+
+        QUnit.test('dayHeaderFormat option value should be passed to messageList on init', function(assert) {
+            const dayHeaderFormat = 'dd of MMMM, yyyy';
+
+            this.reinit({
+                dayHeaderFormat,
+            });
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('dayHeaderFormat'), dayHeaderFormat, 'dayHeaderFormat is passed on init');
+        });
+
+        QUnit.test('messageTimestampFormat option value should be passed to messageList on init', function(assert) {
+            const messageTimestampFormat = 'hh hours and mm minutes';
+
+            this.reinit({
+                messageTimestampFormat,
+            });
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('messageTimestampFormat'), messageTimestampFormat, 'messageTimestampFormat is passed on init');
+        });
+
+        QUnit.test('dayHeaderFormat option value should be passed to messageList at runtime', function(assert) {
+            const dayHeaderFormat = 'dd of MMMM, yyyy';
+
+            this.reinit({
+                dayHeaderFormat: 'yyyy',
+            });
+
+            this.instance.option('dayHeaderFormat', dayHeaderFormat);
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('dayHeaderFormat'), dayHeaderFormat, 'dayHeaderFormat is updated at runtime');
+        });
+
+        QUnit.test('messageTimestampFormat option value should be passed to messageList at runtime', function(assert) {
+            const messageTimestampFormat = 'hh hours and mm minutes';
+
+            this.reinit({
+                messageTimestampFormat: 'hh',
+            });
+
+            this.instance.option('messageTimestampFormat', messageTimestampFormat);
+
+            const messageList = this.getMessageList();
+
+            assert.strictEqual(messageList.option('messageTimestampFormat'), messageTimestampFormat, 'messageTimestampFormat is updated at runtime');
         });
     });
 

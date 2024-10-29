@@ -2,11 +2,16 @@ import $ from 'jquery';
 
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import ChatAvatar from '__internal/ui/chat/avatar';
+import dateLocalization from 'localization/date';
 
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
+
+const getStringTime = (time) => {
+    return dateLocalization.format(time, 'shorttime');
+};
 
 const moduleConfig = {
     beforeEach: function() {
@@ -46,7 +51,7 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
 
                 assert.strictEqual($time.length, 1);
-                assert.strictEqual($time.text(), '21:34', 'time text is correct');
+                assert.strictEqual($time.text(), getStringTime(new Date(timestamp)), 'time text is correct');
             });
         });
 
@@ -63,7 +68,38 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
 
-            assert.strictEqual($time.text(), '21:34');
+            assert.strictEqual($time.text(), getStringTime(messageTimeFirst));
+        });
+
+        QUnit.test('time should have formatted value if messageTimestampFormat is specified on init', function(assert) {
+            const messageTime = new Date(2021, 9, 17, 4, 20);
+
+            this.reinit({
+                items: [
+                    { timestamp: messageTime },
+                ],
+                messageTimestampFormat: 'hh_mm',
+            });
+
+            const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
+
+            assert.strictEqual($time.text(), '04_20');
+        });
+
+        QUnit.test('time should have formatted value if messageTimestampFormat is specified at runtime', function(assert) {
+            const messageTime = new Date(2021, 9, 17, 4, 20);
+
+            this.reinit({
+                items: [
+                    { timestamp: messageTime },
+                ],
+            });
+
+            this.instance.option('messageTimestampFormat', 'hh...mm');
+
+            const $time = this.$element.find(`.${CHAT_MESSAGEGROUP_TIME_CLASS}`);
+
+            assert.strictEqual($time.text(), '04...20');
         });
     });
 

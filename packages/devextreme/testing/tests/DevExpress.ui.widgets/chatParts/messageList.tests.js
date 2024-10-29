@@ -11,6 +11,7 @@ import {
 } from './chat.tests.js';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import localization from 'localization';
+import dateLocalization from 'localization/date';
 
 const CHAT_MESSAGEGROUP_CLASS = 'dx-chat-messagegroup';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
@@ -24,11 +25,7 @@ const SCROLLVIEW_REACHBOTTOM_INDICATOR = 'dx-scrollview-scrollbottom';
 const MS_IN_DAY = 86400000;
 
 const getStringDate = (date) => {
-    return date.toLocaleDateString(undefined, {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    }).replace(/[/-]/g, '.');
+    return dateLocalization.format(date, 'shortdate');
 };
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 
@@ -54,8 +51,8 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('MessageList', moduleConfig, () => {
-    QUnit.module('Render', () => {
+QUnit.module('MessageList', () => {
+    QUnit.module('Render', moduleConfig, () => {
         QUnit.test('should be initialized with correct type', function(assert) {
             assert.ok(this.instance instanceof MessageList);
         });
@@ -357,7 +354,7 @@ QUnit.module('MessageList', moduleConfig, () => {
 
             let $dayHeaders = this.getDayHeaders();
 
-            assert.strictEqual($dayHeaders.length, 1, 'day header was aaded');
+            assert.strictEqual($dayHeaders.length, 1, 'day header was added');
 
             this.instance.option({ items });
 
@@ -411,7 +408,69 @@ QUnit.module('MessageList', moduleConfig, () => {
         });
     });
 
-    QUnit.module('MessageGroup integration', () => {
+    QUnit.module('Options', () => {
+        QUnit.module('dayHeaderFormat', {
+            beforeEach: function() {
+                this.clock = sinon.useFakeTimers(new Date('2021/10/17'));
+                moduleConfig.beforeEach.apply(this, arguments);
+            },
+            afterEach: function() {
+                this.clock.restore();
+            }
+        }, () => {
+            [{
+                getTimestamp: () => new Date(),
+                scenario: 'today',
+                expectedDayHeaderText: 'Today 17 of October, 2021',
+            },
+            {
+                getTimestamp: () => new Date(Date.now() - MS_IN_DAY),
+                dayHeaderPrefix: 'Yesterday ',
+                scenario: 'yesterday',
+                expectedDayHeaderText: 'Yesterday 16 of October, 2021',
+            }, {
+                getTimestamp: () => new Date('10.10.2024'),
+                dayHeaderPrefix: '',
+                scenario: '10.10.2024',
+                expectedDayHeaderText: '10 of October, 2024',
+            }].forEach(({ getTimestamp, scenario, expectedDayHeaderText }) => {
+                QUnit.test(`Day header should be formatted when dayHeaderFormat is specified on init (timestamp=${scenario})`, function(assert) {
+                    const items = [{
+                        timestamp: getTimestamp(),
+                        text: 'A',
+                    }];
+
+                    this.reinit({
+                        items,
+                        dayHeaderFormat: 'dd of MMMM, yyyy',
+                    });
+
+                    const $dayHeaders = this.getDayHeaders();
+
+                    assert.strictEqual($dayHeaders.text(), expectedDayHeaderText, 'day header has formatted text');
+                });
+
+                QUnit.test(`Day header should be formatted when dayHeaderFormat is specified at runtime (timestamp=${scenario})`, function(assert) {
+                    const items = [{
+                        timestamp: getTimestamp(),
+                        text: 'A',
+                    }];
+
+                    this.reinit({
+                        items,
+                    });
+
+                    this.instance.option('dayHeaderFormat', 'dd of MMMM, yyyy');
+
+                    const $dayHeaders = this.getDayHeaders();
+
+                    assert.strictEqual($dayHeaders.text(), expectedDayHeaderText, 'day header has formatted text');
+                });
+            });
+        });
+    });
+
+    QUnit.module('MessageGroup integration', moduleConfig, () => {
         QUnit.test('message group component should not be rendered if items is empty', function(assert) {
             const $messageGroups = this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`);
 
@@ -636,9 +695,32 @@ QUnit.module('MessageList', moduleConfig, () => {
             assert.strictEqual($firstMessageGroupBubbles.length, 2, 'correct bubble count');
             assert.strictEqual($secondMessageGroupBubbles.length, 1, 'correct bubble count');
         });
+
+        QUnit.test('messageTimestampFormat should be passed to message group on init', function(assert) {
+            this.reinit({
+                items: [{ timestamp: '2024-09-26T14:00:00', text: 'text' }],
+                messageTimestampFormat: 'hh.mm',
+            });
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTimestampFormat'), 'hh.mm');
+        });
+
+        QUnit.test('messageTimestampFormat should be passed to message group at runtime', function(assert) {
+            this.reinit({
+                items: [{ timestamp: '2024-09-26T14:00:00', text: 'text' }],
+            });
+
+            this.instance.option('messageTimestampFormat', 'hh.mm');
+
+            const messageGroup = MessageGroup.getInstance(this.$element.find(`.${CHAT_MESSAGEGROUP_CLASS}`));
+
+            assert.strictEqual(messageGroup.option('messageTimestampFormat'), 'hh.mm');
+        });
     });
 
-    QUnit.module('Items option change', () => {
+    QUnit.module('Items option change', moduleConfig, () => {
         QUnit.test('should not be any errors if the new message in items is undefined', function(assert) {
             const newMessage = undefined;
             const items = [{}];
@@ -659,6 +741,8 @@ QUnit.module('MessageList', moduleConfig, () => {
 
     QUnit.module('Items option change performance', {
         beforeEach: function() {
+            moduleConfig.beforeEach.apply(this, arguments);
+
             const createInvalidateStub = () => {
                 this.invalidateStub = sinon.stub(this.instance, '_invalidate');
             };
@@ -760,6 +844,8 @@ QUnit.module('MessageList', moduleConfig, () => {
 
     QUnit.module('ScrollView', {
         beforeEach: function() {
+            moduleConfig.beforeEach.apply(this, arguments);
+
             this.getScrollOffsetMax = () => {
                 const scrollView = this.getScrollView();
                 return $(scrollView.content()).height() - $(scrollView.container()).height();
@@ -1076,7 +1162,7 @@ QUnit.module('MessageList', moduleConfig, () => {
         });
     });
 
-    QUnit.module('localization', () => {
+    QUnit.module('localization', moduleConfig, () => {
         QUnit.test('message, prompt texts should be equal custom localized values from the dictionary', function(assert) {
             const defaultLocale = localization.locale();
 
