@@ -198,6 +198,30 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     errors?: Array<ChatError>;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    showDayHeaders?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showUserName?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showAvatar?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showMessageTimestamp?: boolean;
+    /**
+     * @docid
      * @default undefined
      * @type_function_param1 e:{ui/chat:MessageSendEvent}
      * @action

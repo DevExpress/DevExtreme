@@ -32,7 +32,6 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 type Properties = ChatProperties & {
   title: string;
-  showDayHeaders: boolean;
   dayHeaderFormat?: Format;
   messageTimestampFormat?: Format;
 };
@@ -133,7 +132,7 @@ class Chat extends Widget<Properties> {
     const {
       items = [],
       user,
-      showDayHeaders,
+      showDayHeaders = true,
       dayHeaderFormat,
       messageTimestampFormat,
     } = this.option();
