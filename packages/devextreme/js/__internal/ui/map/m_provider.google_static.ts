@@ -112,6 +112,8 @@ const GoogleStaticProvider = Provider.inherit({
 
   _updateMap() {
     const key = this._keyOption('googleStatic');
+    const providerConfig = this._option('providerConfig');
+    const mapId = providerConfig?.mapId;
     const $container = this._$container;
 
     const requestOptions = [
@@ -125,6 +127,10 @@ const GoogleStaticProvider = Provider.inherit({
     requestOptions.push.apply(requestOptions, this._routeSubstrings());
     if (key) {
       requestOptions.push(`key=${key}`);
+    }
+
+    if (mapId) {
+      requestOptions.push(`map_id=${mapId}`);
     }
 
     const request = GOOGLE_STATIC_URL + requestOptions.join('&');
