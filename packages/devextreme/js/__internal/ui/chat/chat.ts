@@ -329,6 +329,8 @@ class Chat extends Widget<Properties> {
       case 'showAvatar':
       case 'showUserName':
       case 'showMessageTimestamp':
+        this._messageList.option(name, !!value);
+        break;
       case 'messageTemplate':
       case 'dayHeaderFormat':
       case 'messageTimestampFormat':

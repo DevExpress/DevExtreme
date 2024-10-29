@@ -211,6 +211,28 @@ QUnit.module('Chat', () => {
 
                 assert.strictEqual(messageList.option(option), false, `${option} is passed on runtime`);
             });
+
+            QUnit.test(`Chat should pass ${option} with value undefined to messageList as false on init`, function(assert) {
+                this.reinit({
+                    [option]: undefined,
+                });
+
+                const messageList = this.getMessageList();
+
+                assert.strictEqual(messageList.option(option), false, `${option} with value undefined is passed as false on init`);
+            });
+
+            QUnit.test(`Chat should pass ${option} with value undefined to messageList as false on runtime`, function(assert) {
+                this.reinit({
+                    [option]: true,
+                });
+
+                this.instance.option(option, undefined);
+
+                const messageList = this.getMessageList();
+
+                assert.strictEqual(messageList.option(option), false, `${option} with value undefined is passed as false on runtime`);
+            });
         });
 
         QUnit.test('Chat should pass messageTemplate to messageList on init', function(assert) {
