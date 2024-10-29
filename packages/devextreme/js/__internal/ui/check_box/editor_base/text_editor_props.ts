@@ -1,5 +1,5 @@
-import { isMaterial, current } from '@js/ui/themes';
-import { EventCallback } from '@ts/core/r1/event_callback';
+import { current, isMaterial } from '@js/ui/themes';
+import type { EventCallback } from '@ts/core/r1/event_callback';
 
 export interface TextEditorProps {
   inputAttr?: unknown;
@@ -25,5 +25,5 @@ export const defaultTextEditorProps: TextEditorProps = {
   spellCheck: false,
   valueChangeEvent: 'change',
   stylingMode: isMaterial(current()) ? 'filled' : 'outlined',
-  defaultValue: ''
+  defaultValue: '',
 };

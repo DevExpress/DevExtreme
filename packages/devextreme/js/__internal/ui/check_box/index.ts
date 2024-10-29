@@ -1,2 +1,3 @@
-import Button from './generated_wrapper';
-export default Button;
+import CheckBox from './generated_wrapper';
+
+export default CheckBox;

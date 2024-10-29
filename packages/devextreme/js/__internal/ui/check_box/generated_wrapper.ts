@@ -1,41 +1,49 @@
 import registerComponent from '@js/core/component_registrator';
-import BaseComponent from './wrapper';
+
 import { CheckBox as CheckBoxComponent, defaultOptions } from './check_box';
+import BaseComponent from './wrapper';
+
 export default class CheckBox extends BaseComponent {
-  getProps() {
+  getProps(): Record<string, unknown> {
     const props = super.getProps();
     // @ts-expect-error
     props.onKeyDown = this._wrapKeyDownHandler(props.onKeyDown);
     return props;
   }
-  focus() {
-    var _this$viewRef;
-    return (_this$viewRef = this.viewRef) === null || _this$viewRef === void 0 ? void 0 : _this$viewRef.focus(...arguments);
+
+  focus(): unknown {
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, prefer-rest-params
+    return this.viewRef?.focus(...arguments);
   }
-  blur() {
-    var _this$viewRef2;
-    return (_this$viewRef2 = this.viewRef) === null || _this$viewRef2 === void 0 ? void 0 : _this$viewRef2.blur(...arguments);
+
+  blur(): unknown {
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, prefer-rest-params
+    return this.viewRef?.blur(...arguments);
   }
-  _getActionConfigs() {
+
+  // @ts-expect-error
+  _getActionConfigs(): Record<string, unknown> {
     return {
       onFocusIn: {},
-      onClick: {}
+      onClick: {},
     };
   }
 
   // @ts-expect-error
-  get _propsInfo() {
+  get _propsInfo(): Record<string, unknown> {
     return {
       twoWay: [['value', 'defaultValue', 'valueChange']],
       allowNull: ['defaultValue', 'validationError', 'validationErrors', 'value'],
       elements: [],
       templates: [],
-      props: ['text', 'iconSize', 'enableThreeStateBehavior', 'activeStateEnabled', 'hoverStateEnabled', 'focusStateEnabled', 'saveValueChangeEvent', 'defaultValue', 'valueChange', 'readOnly', 'name', 'validationError', 'validationErrors', 'validationMessageMode', 'validationMessagePosition', 'validationStatus', 'isValid', 'isDirty', 'inputAttr', 'onFocusIn', 'className', 'accessKey', 'disabled', 'height', 'hint', 'onClick', 'onKeyDown', 'rtlEnabled', 'tabIndex', 'visible', 'width', 'aria', 'value']
+      props: ['text', 'iconSize', 'enableThreeStateBehavior', 'activeStateEnabled', 'hoverStateEnabled', 'focusStateEnabled', 'saveValueChangeEvent', 'defaultValue', 'valueChange', 'readOnly', 'name', 'validationError', 'validationErrors', 'validationMessageMode', 'validationMessagePosition', 'validationStatus', 'isValid', 'isDirty', 'inputAttr', 'onFocusIn', 'className', 'accessKey', 'disabled', 'height', 'hint', 'onClick', 'onKeyDown', 'rtlEnabled', 'tabIndex', 'visible', 'width', 'aria', 'value'],
     };
   }
 
   // @ts-expect-error
-  get _viewComponent() {
+  get _viewComponent(): unknown {
     return CheckBoxComponent;
   }
 }

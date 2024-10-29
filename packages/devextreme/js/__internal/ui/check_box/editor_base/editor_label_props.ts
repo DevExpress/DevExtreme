@@ -1,4 +1,4 @@
-import { isMaterial, current } from '@js/ui/themes';
+import { current, isMaterial } from '@js/ui/themes';
 
 export interface EditorLabelProps {
   label?: string;
